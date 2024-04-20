@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dir_20961bbdb1a1523d4925c4b08c0a98bf" kind="dir">
+    <compoundname>CastorUtils/Noise</compoundname>
+    <innerfile refid="de/dfd/a02228">BlueNoise.hpp</innerfile>
+    <innerfile refid="d7/da1/a02231">FractalNoise.hpp</innerfile>
+    <innerfile refid="d8/d6f/a02234">NoiseModule.hpp</innerfile>
+    <innerfile refid="d9/d13/a02237">PerlinNoise.hpp</innerfile>
+    <innerfile refid="dc/d35/a02240">SimplexNoise.hpp</innerfile>
+    <innerfile refid="d6/dd2/a02243">WhiteNoise.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Noise/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,337 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d5e/a05351" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::MeshMorphTarget</compoundname>
+    <basecompoundref refid="db/d09/a03131" prot="public" virt="non-virtual">castor3d::AnimationKeyFrame</basecompoundref>
+    <basecompoundref refid="d6/da8/a08227" prot="public" virt="non-virtual">castor::OwnedBy&lt; MeshAnimation &gt;</basecompoundref>
+    <includes local="no">MeshMorphTarget.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/d5e/a05351_1ab4da9f26ac7adb4c1a3ea79b95061d1a" prot="private" static="no" mutable="no">
+        <type>SubmeshTargetWeightMap</type>
+        <definition>SubmeshTargetWeightMap castor3d::MeshMorphTarget::m_submeshesTargets</definition>
+        <argsstring></argsstring>
+        <name>m_submeshesTargets</name>
+        <qualifiedname>castor3d::MeshMorphTarget::m_submeshesTargets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Les tampons, par sous-maillage. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" line="107" column="24" bodyfile="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="df/d5e/a05351_1ace2ded9c03ef560d9154a758200adb80" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryParser&lt; MeshMorphTarget &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryParser&lt; MeshMorphTarget &gt;</name>
+        <qualifiedname>castor3d::MeshMorphTarget::BinaryParser&lt; MeshMorphTarget &gt;</qualifiedname>
+        <param>
+          <type><ref refid="d3/d1b/a03227" kindref="compound">BinaryParser</ref>&lt; <ref refid="df/d5e/a05351" kindref="compound">MeshMorphTarget</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" line="107" column="24" bodyfile="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d5e/a05351_1acc6eeaf28c048558e6c3ee797c9511a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MeshMorphTarget::MeshMorphTarget</definition>
+        <argsstring>(MeshAnimation &amp;parent, castor::Milliseconds const &amp;timeIndex)</argsstring>
+        <name>MeshMorphTarget</name>
+        <qualifiedname>castor3d::MeshMorphTarget::MeshMorphTarget</qualifiedname>
+        <param>
+          <type><ref refid="dd/dd5/a05343" kindref="compound">MeshAnimation</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a9bbae2d5d564fa58ccbb16ec1d0ed7a1" kindref="member">castor::Milliseconds</ref> const &amp;</type>
+          <declname>timeIndex</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;animation parente. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">timeIndex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Quand la key frame commence. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" line="31" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5e/a05351_1a079479a6b6b6897f228a05cd7f360de8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MeshMorphTarget::setTargetsWeights</definition>
+        <argsstring>(Submesh const &amp;submesh, castor::Vector&lt; float &gt; weights)</argsstring>
+        <name>setTargetsWeights</name>
+        <qualifiedname>castor3d::MeshMorphTarget::setTargetsWeights</qualifiedname>
+        <param>
+          <type><ref refid="dd/df1/a05635" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; float &gt;</type>
+          <declname>weights</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute un tampon de sous-maillage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" line="39" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5e/a05351_1add78129265e2bc540d2ce0072885995e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MeshMorphTarget::setTargetWeight</definition>
+        <argsstring>(Submesh const &amp;submesh, uint32_t targetIndex, float targetWeight)</argsstring>
+        <name>setTargetWeight</name>
+        <qualifiedname>castor3d::MeshMorphTarget::setTargetWeight</qualifiedname>
+        <param>
+          <type><ref refid="dd/df1/a05635" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>targetIndex</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>targetWeight</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute un tampon de sous-maillage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" line="47" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5e/a05351_1a65f7a49e1611ac005dbbed74337353ba" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> SubmeshTargetWeightMap::const_iterator</type>
+        <definition>C3D_API SubmeshTargetWeightMap::const_iterator castor3d::MeshMorphTarget::find</definition>
+        <argsstring>(Submesh const &amp;submesh) const</argsstring>
+        <name>find</name>
+        <qualifiedname>castor3d::MeshMorphTarget::find</qualifiedname>
+        <param>
+          <type><ref refid="dd/df1/a05635" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le tampon de sous-maillage correspondant au sous-maillage donné. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" line="56" column="48"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5e/a05351_1aab1da05cf786463468dbcf74d2cfe1f0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SubmeshTargetWeightMap::const_iterator</type>
+        <definition>SubmeshTargetWeightMap::const_iterator castor3d::MeshMorphTarget::begin</definition>
+        <argsstring>() const</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::MeshMorphTarget::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le début des tampons des sous-maillages. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" line="63" column="40" bodyfile="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" bodystart="63" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5e/a05351_1ae3039966c517cd9b0434471217c132ca" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>SubmeshTargetWeightMap::iterator</type>
+        <definition>SubmeshTargetWeightMap::iterator castor3d::MeshMorphTarget::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::MeshMorphTarget::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le début des tampons des sous-maillages. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" line="73" column="34" bodyfile="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" bodystart="73" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5e/a05351_1a3f923b629d00513cf324610065ba9ebc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SubmeshTargetWeightMap::const_iterator</type>
+        <definition>SubmeshTargetWeightMap::const_iterator castor3d::MeshMorphTarget::end</definition>
+        <argsstring>() const</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::MeshMorphTarget::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La fin des tampons des sous-maillages. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" line="83" column="40" bodyfile="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" bodystart="83" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5e/a05351_1a04bac4805748442becad133357af789f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>SubmeshTargetWeightMap::iterator</type>
+        <definition>SubmeshTargetWeightMap::iterator castor3d::MeshMorphTarget::end</definition>
+        <argsstring>()</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::MeshMorphTarget::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La fin des tampons des sous-maillages. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" line="93" column="34" bodyfile="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" bodystart="93" bodyend="96"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="df/d5e/a05351_1a12597c264ed1949794841603d535007c" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::MeshMorphTarget::doSetTimeIndex</definition>
+        <argsstring>(castor::Milliseconds const &amp;time)</argsstring>
+        <name>doSetTimeIndex</name>
+        <qualifiedname>castor3d::MeshMorphTarget::doSetTimeIndex</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a9bbae2d5d564fa58ccbb16ec1d0ed7a1" kindref="member">castor::Milliseconds</ref> const &amp;</type>
+          <declname>time</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" line="99" column="6" bodyfile="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" bodystart="99" bodyend="102"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; MeshAnimation &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; MeshAnimation &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::AnimationKeyFrame</label>
+        <link refid="db/d09/a03131"/>
+      </node>
+      <node id="1">
+        <label>castor3d::MeshMorphTarget</label>
+        <link refid="df/d5e/a05351"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>BoundingContainer3D</label>
+        <link refid="da/dc6/a08731"/>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; MeshAnimation &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; MeshAnimation &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::AnimationKeyFrame</label>
+        <link refid="db/d09/a03131"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_boundingBox</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::MeshMorphTarget</label>
+        <link refid="df/d5e/a05351"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::BoundingBox</label>
+        <link refid="d6/d51/a08727"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" line="16" column="1" bodyfile="Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp" bodystart="19" bodyend="110"/>
+    <listofallmembers>
+      <member refid="db/d09/a03131_1a4c0d4b7afbe022ee8f9dcb9dc1ea54f0" prot="public" virt="non-virtual"><scope>castor3d::MeshMorphTarget</scope><name>AnimationKeyFrame</name></member>
+      <member refid="df/d5e/a05351_1aab1da05cf786463468dbcf74d2cfe1f0" prot="public" virt="non-virtual"><scope>castor3d::MeshMorphTarget</scope><name>begin</name></member>
+      <member refid="df/d5e/a05351_1ae3039966c517cd9b0434471217c132ca" prot="public" virt="non-virtual"><scope>castor3d::MeshMorphTarget</scope><name>begin</name></member>
+      <member refid="df/d5e/a05351_1ace2ded9c03ef560d9154a758200adb80" prot="private" virt="non-virtual"><scope>castor3d::MeshMorphTarget</scope><name>BinaryParser&lt; MeshMorphTarget &gt;</name></member>
+      <member refid="df/d5e/a05351_1a12597c264ed1949794841603d535007c" prot="private" virt="non-virtual"><scope>castor3d::MeshMorphTarget</scope><name>doSetTimeIndex</name></member>
+      <member refid="df/d5e/a05351_1a3f923b629d00513cf324610065ba9ebc" prot="public" virt="non-virtual"><scope>castor3d::MeshMorphTarget</scope><name>end</name></member>
+      <member refid="df/d5e/a05351_1a04bac4805748442becad133357af789f" prot="public" virt="non-virtual"><scope>castor3d::MeshMorphTarget</scope><name>end</name></member>
+      <member refid="df/d5e/a05351_1a65f7a49e1611ac005dbbed74337353ba" prot="public" virt="non-virtual"><scope>castor3d::MeshMorphTarget</scope><name>find</name></member>
+      <member refid="db/d09/a03131_1af95a0ec466f985ac26eeb12603006a8b" prot="public" virt="non-virtual"><scope>castor3d::MeshMorphTarget</scope><name>getBoundingBox</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::MeshMorphTarget</scope><name>getOwner</name></member>
+      <member refid="db/d09/a03131_1a7b65d0aeb639d12908b9d17335702a17" prot="public" virt="non-virtual"><scope>castor3d::MeshMorphTarget</scope><name>getTimeIndex</name></member>
+      <member refid="db/d09/a03131_1a14d9b59106f5406a66f2b8af33367991" prot="public" virt="virtual"><scope>castor3d::MeshMorphTarget</scope><name>initialise</name></member>
+      <member refid="db/d09/a03131_1abc9e4e2a76ef5ec53fe3308add665082" prot="protected" virt="non-virtual"><scope>castor3d::MeshMorphTarget</scope><name>m_boundingBox</name></member>
+      <member refid="df/d5e/a05351_1ab4da9f26ac7adb4c1a3ea79b95061d1a" prot="private" virt="non-virtual"><scope>castor3d::MeshMorphTarget</scope><name>m_submeshesTargets</name></member>
+      <member refid="db/d09/a03131_1a093b74b56f13b6376ea4a51e28893db5" prot="protected" virt="non-virtual"><scope>castor3d::MeshMorphTarget</scope><name>m_timeIndex</name></member>
+      <member refid="df/d5e/a05351_1acc6eeaf28c048558e6c3ee797c9511a5" prot="public" virt="non-virtual"><scope>castor3d::MeshMorphTarget</scope><name>MeshMorphTarget</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::MeshMorphTarget</scope><name>OwnedBy</name></member>
+      <member refid="df/d5e/a05351_1a079479a6b6b6897f228a05cd7f360de8" prot="public" virt="non-virtual"><scope>castor3d::MeshMorphTarget</scope><name>setTargetsWeights</name></member>
+      <member refid="df/d5e/a05351_1add78129265e2bc540d2ce0072885995e" prot="public" virt="non-virtual"><scope>castor3d::MeshMorphTarget</scope><name>setTargetWeight</name></member>
+      <member refid="db/d09/a03131_1a288d44f4374ff49b431a4e859502a76a" prot="public" virt="virtual"><scope>castor3d::MeshMorphTarget</scope><name>~AnimationKeyFrame</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

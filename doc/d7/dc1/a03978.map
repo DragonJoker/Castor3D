@@ -1,0 +1,9 @@
+<map id="castor3d::Material" name="castor3d::Material">
+<area shape="rect" id="Node000001" title=" " alt="" coords="46,168,173,193"/>
+<area shape="rect" id="Node000002" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="5,93,112,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,129,103,166,99,169,73,132"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="136,93,323,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="200,128,130,170,127,166,197,123"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="138,5,321,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="232,45,232,93,227,93,227,45"/>
+</map>

@@ -1,0 +1,21 @@
+<map id="castor3d::BorderPanelOverlay" name="castor3d::BorderPanelOverlay">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1055,39,1249,65"/>
+<area shape="rect" id="Node000002" href="$d0/d47/a05819.html" title=" " alt="" coords="831,39,1005,65"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1019,49,1054,49,1054,55,1019,55"/>
+<area shape="rect" id="Node000003" href="$d6/d37/a05783.html" title=" " alt="" coords="561,14,684,39"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="698,30,831,42,830,47,698,36"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title=" " alt="" coords="325,7,512,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="526,21,561,22,561,27,526,26"/>
+<area shape="rect" id="Node000005" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="5,7,188,33"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="202,17,325,17,325,23,202,23"/>
+<area shape="rect" id="Node000006" href="$d4/dd6/a09023.html" title=" " alt="" coords="577,65,669,90"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="682,70,806,60,830,58,830,63,807,65,683,76"/>
+<area shape="rect" id="Node000007" href="$da/d50/a08167.html" title=" " alt="" coords="350,57,487,97"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="501,75,576,75,576,80,501,80"/>
+<area shape="rect" id="Node000008" href="$da/d50/a08167.html" title="Some data holder." alt="" coords="28,57,165,97"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="179,75,350,75,350,80,179,80"/>
+<area shape="rect" id="Node000009" href="$d9/d6a/a09103.html" title=" " alt="" coords="341,121,496,161"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="495,115,580,88,582,93,497,120"/>
+<area shape="rect" id="Node000010" href="$d9/d6a/a09103.html" title="Templated static dimensions point representation." alt="" coords="31,121,162,161"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="176,139,341,139,341,144,176,144"/>
+</map>

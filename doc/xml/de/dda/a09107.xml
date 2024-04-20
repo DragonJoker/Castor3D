@@ -1,0 +1,1115 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/dda/a09107" kind="class" language="C++" prot="public">
+    <compoundname>castor::LengthT</compoundname>
+    <includes local="no">Length.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename TypeT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="user-defined">
+      <header>Opérateurs arithmétiques.</header>
+      <memberdef kind="function" id="de/dda/a09107_1a418490b83e883c7dd983eb97f9b1c39f" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeT &gt; &amp;</type>
+        <definition>LengthT&lt; TypeT &gt; &amp; castor::LengthT&lt; TypeT &gt;::operator=</definition>
+        <argsstring>(TypeT const &amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::LengthT::operator=</qualifiedname>
+        <param>
+          <type>TypeT const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="279" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a2aa80881bf6fe3871e1164d68c261c1d" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeT &gt; &amp;</type>
+        <definition>LengthT&lt; TypeT &gt; &amp; castor::LengthT&lt; TypeT &gt;::operator-</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>operator-</name>
+        <qualifiedname>castor::LengthT::operator-</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="280" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a4f004ce30b6d13a301cb31cd339f6618" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeT &gt; &amp;</type>
+        <definition>LengthT&lt; TypeT &gt; &amp; castor::LengthT&lt; TypeT &gt;::operator+=</definition>
+        <argsstring>(LengthT&lt; TypeT &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::LengthT::operator+=</qualifiedname>
+        <param>
+          <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeT &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="281" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a7f26cc7b6bfd3ab777020862bfbfac09" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeT &gt; &amp;</type>
+        <definition>LengthT&lt; TypeT &gt; &amp; castor::LengthT&lt; TypeT &gt;::operator-=</definition>
+        <argsstring>(LengthT&lt; TypeT &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::LengthT::operator-=</qualifiedname>
+        <param>
+          <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeT &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="282" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a6b18f83d11d56dae86f4ba453e9b408d" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeT &gt; &amp;</type>
+        <definition>LengthT&lt; TypeT &gt; &amp; castor::LengthT&lt; TypeT &gt;::operator+=</definition>
+        <argsstring>(TypeT const &amp;rhs) noexcept</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::LengthT::operator+=</qualifiedname>
+        <param>
+          <type>TypeT const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="283" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a518da1ac4e33adac6f22dec11819f33a" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeT &gt; &amp;</type>
+        <definition>LengthT&lt; TypeT &gt; &amp; castor::LengthT&lt; TypeT &gt;::operator-=</definition>
+        <argsstring>(TypeT const &amp;rhs) noexcept</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::LengthT::operator-=</qualifiedname>
+        <param>
+          <type>TypeT const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="284" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1afbcee38ed85514b42f4b708f458ea8a3" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeT &gt; &amp;</type>
+        <definition>LengthT&lt; TypeT &gt; &amp; castor::LengthT&lt; TypeT &gt;::operator*=</definition>
+        <argsstring>(double rhs) noexcept</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::LengthT::operator*=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="285" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1abfbcb50c2b5860a2da6fd729d0bf64d7" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeT &gt; &amp;</type>
+        <definition>LengthT&lt; TypeT &gt; &amp; castor::LengthT&lt; TypeT &gt;::operator/=</definition>
+        <argsstring>(double rhs) noexcept</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::LengthT::operator/=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="286" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="de/dda/a09107_1abe6ec3d538d8dfa79e48e2a2c8cd42f1" prot="private" static="no" mutable="no">
+        <type>TypeT</type>
+        <definition>TypeT castor::LengthT&lt; TypeT &gt;::m_value</definition>
+        <argsstring></argsstring>
+        <name>m_value</name>
+        <qualifiedname>castor::LengthT::m_value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="315" column="7" bodyfile="CastorUtils/Math/Length.hpp" bodystart="315" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dda/a09107_1a8faacdcc82a1b0aac5aa76c60cff94a3" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a8cf4a835d2dbebebe00eef5217134a5f" kindref="member">LengthUnit</ref></type>
+        <definition>LengthUnit castor::LengthT&lt; TypeT &gt;::m_unit</definition>
+        <argsstring></argsstring>
+        <name>m_unit</name>
+        <qualifiedname>castor::LengthT::m_unit</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="316" column="12" bodyfile="CastorUtils/Math/Length.hpp" bodystart="316" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="de/dda/a09107_1aeb8d92f721751aef8a95e6b8bea438b7" prot="private" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeU</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::LengthT&lt; TypeT &gt;::LengthT</definition>
+        <argsstring>(TypeU value, LengthUnit unit) noexcept</argsstring>
+        <name>LengthT</name>
+        <qualifiedname>castor::LengthT::LengthT</qualifiedname>
+        <param>
+          <type>TypeU</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8cf4a835d2dbebebe00eef5217134a5f" kindref="member">LengthUnit</ref></type>
+          <declname>unit</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur spécifié </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Privé afin que la construction spécifiée ne soit accessible qu&apos;à partir des constructeurs nommés. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la longueur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">unit</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;unité de la longueur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="30" column="1" bodyfile="CastorUtils/Math/Length.hpp" bodystart="30" bodyend="34"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="de/dda/a09107_1a158b1461286f66b5f5e0dee9784ad1ba" prot="public" static="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeU</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeT &gt;</type>
+        <definition>static LengthT&lt; TypeT &gt; castor::LengthT&lt; TypeT &gt;::fromUnit</definition>
+        <argsstring>(TypeU value, LengthUnit unit) noexcept</argsstring>
+        <name>fromUnit</name>
+        <qualifiedname>castor::LengthT::fromUnit</qualifiedname>
+        <param>
+          <type>TypeU</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8cf4a835d2dbebebe00eef5217134a5f" kindref="member">LengthUnit</ref></type>
+          <declname>unit</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur nommé, à partir d&apos;une valeur exprimée dans l&apos;unité donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">unit</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;unité de la longueur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La longueur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="50" column="16" bodyfile="CastorUtils/Math/Length.hpp" bodystart="50" bodyend="54"/>
+        <references refid="de/dda/a09107_1a9a64884208f923e11242d575c9bf1cba">castor::LengthT&lt; TypeT &gt;::unit</references>
+        <references refid="de/dda/a09107_1afecd2ce66969dff2c8da39ccfadb330d" compoundref="da/da0/a02126" startline="299" endline="302">castor::LengthT&lt; TypeT &gt;::value</references>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1aa8a838e6f313e19a9e8fa244b25d4cd0" prot="public" static="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeU</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeT &gt;</type>
+        <definition>static LengthT&lt; TypeT &gt; castor::LengthT&lt; TypeT &gt;::fromKilometres</definition>
+        <argsstring>(TypeU value) noexcept</argsstring>
+        <name>fromKilometres</name>
+        <qualifiedname>castor::LengthT::fromKilometres</qualifiedname>
+        <param>
+          <type>TypeU</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur nommé, à partir d&apos;une valeur en kilomètres. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La longueur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="66" column="16" bodyfile="CastorUtils/Math/Length.hpp" bodystart="66" bodyend="69"/>
+        <references refid="d2/dd2/a02279_1a8cf4a835d2dbebebe00eef5217134a5fa4529f94c0a88ab9a5a4d475b3a869ffd">castor::eKilometre</references>
+        <references refid="de/dda/a09107_1afecd2ce66969dff2c8da39ccfadb330d" compoundref="da/da0/a02126" startline="299" endline="302">castor::LengthT&lt; TypeT &gt;::value</references>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a8c82447cb45e09f4d78623a536e11a68" prot="public" static="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeU</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeT &gt;</type>
+        <definition>static LengthT&lt; TypeT &gt; castor::LengthT&lt; TypeT &gt;::fromMetres</definition>
+        <argsstring>(TypeU value) noexcept</argsstring>
+        <name>fromMetres</name>
+        <qualifiedname>castor::LengthT::fromMetres</qualifiedname>
+        <param>
+          <type>TypeU</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur nommé, à partir d&apos;une valeur en mètres. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La longueur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="81" column="16" bodyfile="CastorUtils/Math/Length.hpp" bodystart="81" bodyend="84"/>
+        <references refid="d2/dd2/a02279_1a8cf4a835d2dbebebe00eef5217134a5fa72c4b60024431dfaacbf85e7d4531215">castor::eMetre</references>
+        <references refid="de/dda/a09107_1afecd2ce66969dff2c8da39ccfadb330d" compoundref="da/da0/a02126" startline="299" endline="302">castor::LengthT&lt; TypeT &gt;::value</references>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a1928a91349e6c8059bc0fd1df9596268" prot="public" static="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeU</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeT &gt;</type>
+        <definition>static LengthT&lt; TypeT &gt; castor::LengthT&lt; TypeT &gt;::fromCentimetres</definition>
+        <argsstring>(TypeU value) noexcept</argsstring>
+        <name>fromCentimetres</name>
+        <qualifiedname>castor::LengthT::fromCentimetres</qualifiedname>
+        <param>
+          <type>TypeU</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur nommé, à partir d&apos;une valeur en centimètres. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La longueur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="96" column="16" bodyfile="CastorUtils/Math/Length.hpp" bodystart="96" bodyend="99"/>
+        <references refid="d2/dd2/a02279_1a8cf4a835d2dbebebe00eef5217134a5fa9aad14ed0b1cc10a0649098056092bad">castor::eCentimetre</references>
+        <references refid="de/dda/a09107_1afecd2ce66969dff2c8da39ccfadb330d" compoundref="da/da0/a02126" startline="299" endline="302">castor::LengthT&lt; TypeT &gt;::value</references>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a8668131df1b5dafa1f3610c988455b3f" prot="public" static="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeU</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeT &gt;</type>
+        <definition>static LengthT&lt; TypeT &gt; castor::LengthT&lt; TypeT &gt;::fromMillimetres</definition>
+        <argsstring>(TypeU value) noexcept</argsstring>
+        <name>fromMillimetres</name>
+        <qualifiedname>castor::LengthT::fromMillimetres</qualifiedname>
+        <param>
+          <type>TypeU</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur nommé, à partir d&apos;une valeur en millimètres. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La longueur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="111" column="16" bodyfile="CastorUtils/Math/Length.hpp" bodystart="111" bodyend="114"/>
+        <references refid="d2/dd2/a02279_1a8cf4a835d2dbebebe00eef5217134a5faac6a92c11ef1c3ce7d4b8b5a9ecb60eb">castor::eMillimetre</references>
+        <references refid="de/dda/a09107_1afecd2ce66969dff2c8da39ccfadb330d" compoundref="da/da0/a02126" startline="299" endline="302">castor::LengthT&lt; TypeT &gt;::value</references>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a832ddb4aebdc4a74609b27349a8f66ca" prot="public" static="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeU</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeT &gt;</type>
+        <definition>static LengthT&lt; TypeT &gt; castor::LengthT&lt; TypeT &gt;::fromYards</definition>
+        <argsstring>(TypeU value) noexcept</argsstring>
+        <name>fromYards</name>
+        <qualifiedname>castor::LengthT::fromYards</qualifiedname>
+        <param>
+          <type>TypeU</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur nommé, à partir d&apos;une valeur en yards. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La longueur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="126" column="16" bodyfile="CastorUtils/Math/Length.hpp" bodystart="126" bodyend="129"/>
+        <references refid="d2/dd2/a02279_1a8cf4a835d2dbebebe00eef5217134a5fac979bd88323be155378155437825bc7f">castor::eYard</references>
+        <references refid="de/dda/a09107_1afecd2ce66969dff2c8da39ccfadb330d" compoundref="da/da0/a02126" startline="299" endline="302">castor::LengthT&lt; TypeT &gt;::value</references>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1ab2a45a4667ccfa3afd73366ebdc41b11" prot="public" static="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeU</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeT &gt;</type>
+        <definition>static LengthT&lt; TypeT &gt; castor::LengthT&lt; TypeT &gt;::fromFeet</definition>
+        <argsstring>(TypeU value) noexcept</argsstring>
+        <name>fromFeet</name>
+        <qualifiedname>castor::LengthT::fromFeet</qualifiedname>
+        <param>
+          <type>TypeU</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur nommé, à partir d&apos;une valeur en pieds. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La longueur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="141" column="16" bodyfile="CastorUtils/Math/Length.hpp" bodystart="141" bodyend="144"/>
+        <references refid="d2/dd2/a02279_1a8cf4a835d2dbebebe00eef5217134a5fa3df5b8e6d05309d67bada9ff51e63fe3">castor::eFoot</references>
+        <references refid="de/dda/a09107_1afecd2ce66969dff2c8da39ccfadb330d" compoundref="da/da0/a02126" startline="299" endline="302">castor::LengthT&lt; TypeT &gt;::value</references>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1af25e73183efd281cba475aa03998dc22" prot="public" static="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeU</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeT &gt;</type>
+        <definition>static LengthT&lt; TypeT &gt; castor::LengthT&lt; TypeT &gt;::fromInches</definition>
+        <argsstring>(TypeU value) noexcept</argsstring>
+        <name>fromInches</name>
+        <qualifiedname>castor::LengthT::fromInches</qualifiedname>
+        <param>
+          <type>TypeU</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur nommé, à partir d&apos;une valeur en pouces. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La longueur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="156" column="16" bodyfile="CastorUtils/Math/Length.hpp" bodystart="156" bodyend="159"/>
+        <references refid="d2/dd2/a02279_1a8cf4a835d2dbebebe00eef5217134a5faf57426a647f387abd6539a917d545108">castor::eInch</references>
+        <references refid="de/dda/a09107_1afecd2ce66969dff2c8da39ccfadb330d" compoundref="da/da0/a02126" startline="299" endline="302">castor::LengthT&lt; TypeT &gt;::value</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/dda/a09107_1a045d79c293071d3df49c115d1c2376b4" prot="public" static="no" const="no" explicit="yes" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::LengthT&lt; TypeT &gt;::LengthT</definition>
+        <argsstring>(LengthUnit unit=LengthUnit::eMetre) noexcept</argsstring>
+        <name>LengthT</name>
+        <qualifiedname>castor::LengthT::LengthT</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8cf4a835d2dbebebe00eef5217134a5f" kindref="member">LengthUnit</ref></type>
+          <declname>unit</declname>
+          <defval><ref refid="d2/dd2/a02279_1a8cf4a835d2dbebebe00eef5217134a5fa72c4b60024431dfaacbf85e7d4531215" kindref="member">LengthUnit::eMetre</ref></defval>
+        </param>
+        <briefdescription>
+<para>Constructeur par défaut. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="166" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a9a64884208f923e11242d575c9bf1cba" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>TypeT</type>
+        <definition>TypeT castor::LengthT&lt; TypeT &gt;::unit</definition>
+        <argsstring>(LengthUnit u) const noexcept</argsstring>
+        <name>unit</name>
+        <qualifiedname>castor::LengthT::unit</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8cf4a835d2dbebebe00eef5217134a5f" kindref="member">LengthUnit</ref></type>
+          <declname>u</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur convertie dans l&apos;unité donnée. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="173" column="7"/>
+        <referencedby refid="de/dda/a09107_1a158b1461286f66b5f5e0dee9784ad1ba" compoundref="da/da0/a02126" startline="50" endline="54">castor::LengthT&lt; TypeT &gt;::fromUnit</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a9fbd6edeb419249b7c79aa42b032dd3b" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>TypeT</type>
+        <definition>TypeT castor::LengthT&lt; TypeT &gt;::kilometres</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>kilometres</name>
+        <qualifiedname>castor::LengthT::kilometres</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur convertie en kilomètres. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="180" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a8946b7807cb3193ebe21e4eb2b1acaf1" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>TypeT</type>
+        <definition>TypeT castor::LengthT&lt; TypeT &gt;::metres</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>metres</name>
+        <qualifiedname>castor::LengthT::metres</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur convertie en mètres. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="187" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a56755288215e2daed34c02cdd1a61d53" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>TypeT</type>
+        <definition>TypeT castor::LengthT&lt; TypeT &gt;::centimetres</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>centimetres</name>
+        <qualifiedname>castor::LengthT::centimetres</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur convertie en centimètres. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="194" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a7dc6eceeda7030b7195e1a9896e4a951" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>TypeT</type>
+        <definition>TypeT castor::LengthT&lt; TypeT &gt;::millimetres</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>millimetres</name>
+        <qualifiedname>castor::LengthT::millimetres</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur convertie en millimètres. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="201" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1ad8b4e291c0a0b6343512a54f31dba6a0" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>TypeT</type>
+        <definition>TypeT castor::LengthT&lt; TypeT &gt;::yards</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>yards</name>
+        <qualifiedname>castor::LengthT::yards</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur convertie en yards. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="208" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1ac472f590d1558804d948cea504e9e598" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>TypeT</type>
+        <definition>TypeT castor::LengthT&lt; TypeT &gt;::feet</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>feet</name>
+        <qualifiedname>castor::LengthT::feet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur convertie en pieds. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="215" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a79ac822e7f2c28092dc05a3a593e567c" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>TypeT</type>
+        <definition>TypeT castor::LengthT&lt; TypeT &gt;::inches</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>inches</name>
+        <qualifiedname>castor::LengthT::inches</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur convertie en pouces. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="222" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1accddf2a8095a4458944866c76e197620" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::LengthT&lt; TypeT &gt;::kilometres</definition>
+        <argsstring>(double value) noexcept</argsstring>
+        <name>kilometres</name>
+        <qualifiedname>castor::LengthT::kilometres</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La longueur exprimée en kilomètres. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="229" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a33adcee968de42946edd5b28a2c1a0d0" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::LengthT&lt; TypeT &gt;::metres</definition>
+        <argsstring>(double value) noexcept</argsstring>
+        <name>metres</name>
+        <qualifiedname>castor::LengthT::metres</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La longueur exprimée en mètres. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="236" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1ae0394f9c44bbb4eac6db07a881381b59" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::LengthT&lt; TypeT &gt;::centimetres</definition>
+        <argsstring>(double value) noexcept</argsstring>
+        <name>centimetres</name>
+        <qualifiedname>castor::LengthT::centimetres</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La longueur exprimée en centimètres. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="243" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a449e3e64cc29f76068e820ec21f45e73" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::LengthT&lt; TypeT &gt;::millimetres</definition>
+        <argsstring>(double value) noexcept</argsstring>
+        <name>millimetres</name>
+        <qualifiedname>castor::LengthT::millimetres</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La longueur exprimée en millimètres. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="250" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a4efa79c5b6aacd40d7fb90cfdc61b6fb" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::LengthT&lt; TypeT &gt;::yards</definition>
+        <argsstring>(double value) noexcept</argsstring>
+        <name>yards</name>
+        <qualifiedname>castor::LengthT::yards</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La longueur exprimée en yards. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="257" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a53a8effcb0bd932f2871ea363ea08c05" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::LengthT&lt; TypeT &gt;::feet</definition>
+        <argsstring>(double value) noexcept</argsstring>
+        <name>feet</name>
+        <qualifiedname>castor::LengthT::feet</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La longueur exprimée en pieds. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="264" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1aa618467e01e56ea3a9cc308d3b82b896" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::LengthT&lt; TypeT &gt;::inches</definition>
+        <argsstring>(double value) noexcept</argsstring>
+        <name>inches</name>
+        <qualifiedname>castor::LengthT::inches</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La longueur exprimée en pouces. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="271" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a410c929346db458b9b25f5f976e351d5" prot="public" static="no" const="yes" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::LengthT&lt; TypeT &gt;::operator TypeT const &amp;</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>operator TypeT const &amp;</name>
+        <qualifiedname>castor::LengthT::operator TypeT const &amp;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de la longueur, dans son unité. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="294" column="10" bodyfile="CastorUtils/Math/Length.hpp" bodystart="294" bodyend="297"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1afecd2ce66969dff2c8da39ccfadb330d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>TypeT const &amp;</type>
+        <definition>TypeT const  &amp; castor::LengthT&lt; TypeT &gt;::value</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>value</name>
+        <qualifiedname>castor::LengthT::value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="299" column="14" bodyfile="CastorUtils/Math/Length.hpp" bodystart="299" bodyend="302"/>
+        <referencedby refid="de/dda/a09107_1a1928a91349e6c8059bc0fd1df9596268" compoundref="da/da0/a02126" startline="96" endline="99">castor::LengthT&lt; TypeT &gt;::fromCentimetres</referencedby>
+        <referencedby refid="de/dda/a09107_1ab2a45a4667ccfa3afd73366ebdc41b11" compoundref="da/da0/a02126" startline="141" endline="144">castor::LengthT&lt; TypeT &gt;::fromFeet</referencedby>
+        <referencedby refid="de/dda/a09107_1af25e73183efd281cba475aa03998dc22" compoundref="da/da0/a02126" startline="156" endline="159">castor::LengthT&lt; TypeT &gt;::fromInches</referencedby>
+        <referencedby refid="de/dda/a09107_1aa8a838e6f313e19a9e8fa244b25d4cd0" compoundref="da/da0/a02126" startline="66" endline="69">castor::LengthT&lt; TypeT &gt;::fromKilometres</referencedby>
+        <referencedby refid="de/dda/a09107_1a8c82447cb45e09f4d78623a536e11a68" compoundref="da/da0/a02126" startline="81" endline="84">castor::LengthT&lt; TypeT &gt;::fromMetres</referencedby>
+        <referencedby refid="de/dda/a09107_1a8668131df1b5dafa1f3610c988455b3f" compoundref="da/da0/a02126" startline="111" endline="114">castor::LengthT&lt; TypeT &gt;::fromMillimetres</referencedby>
+        <referencedby refid="de/dda/a09107_1a158b1461286f66b5f5e0dee9784ad1ba" compoundref="da/da0/a02126" startline="50" endline="54">castor::LengthT&lt; TypeT &gt;::fromUnit</referencedby>
+        <referencedby refid="de/dda/a09107_1a832ddb4aebdc4a74609b27349a8f66ca" compoundref="da/da0/a02126" startline="126" endline="129">castor::LengthT&lt; TypeT &gt;::fromYards</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a367212959166990926d5b7867968bae3" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>TypeT &amp;</type>
+        <definition>TypeT &amp; castor::LengthT&lt; TypeT &gt;::operator*</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>operator*</name>
+        <qualifiedname>castor::LengthT::operator*</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="304" column="8" bodyfile="CastorUtils/Math/Length.hpp" bodystart="304" bodyend="307"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dda/a09107_1a831595a6f491bf2950b47052e17583e4" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a8cf4a835d2dbebebe00eef5217134a5f" kindref="member">LengthUnit</ref></type>
+        <definition>LengthUnit castor::LengthT&lt; TypeT &gt;::lengthUnit</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>lengthUnit</name>
+        <qualifiedname>castor::LengthT::lengthUnit</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="309" column="12" bodyfile="CastorUtils/Math/Length.hpp" bodystart="309" bodyend="312"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="de/dda/a09107_1a509c6cfaac36a1a73fe35aa5e3f940f7" prot="private" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeU</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool operator==</definition>
+        <argsstring>(LengthT&lt; TypeU &gt; const &amp;lhs, LengthT&lt; TypeU &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator==</name>
+        <qualifiedname>castor::LengthT::operator==</qualifiedname>
+        <param>
+          <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeU &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeU &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="319" column="13"/>
+      </memberdef>
+      <memberdef kind="friend" id="de/dda/a09107_1a8a569d6bf5cb14b7be14103e19ca1284" prot="private" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeU</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool operator&lt;</definition>
+        <argsstring>(LengthT&lt; TypeU &gt; const &amp;lhs, LengthT&lt; TypeU &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>castor::LengthT::operator&lt;</qualifiedname>
+        <param>
+          <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeU &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeU &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="321" column="8"/>
+      </memberdef>
+      <memberdef kind="friend" id="de/dda/a09107_1aab5b787c5b8add7c552cb8ca758bb066" prot="private" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeU</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool operator&gt;</definition>
+        <argsstring>(LengthT&lt; TypeU &gt; const &amp;lhs, LengthT&lt; TypeU &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator&gt;</name>
+        <qualifiedname>castor::LengthT::operator&gt;</qualifiedname>
+        <param>
+          <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeU &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; TypeU &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Length.hpp" line="323" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe de longueur. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Gère les conversions d&apos;unités de longueurs. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="CastorUtils/Math/Length.hpp" line="14" column="1" bodyfile="CastorUtils/Math/Length.hpp" bodystart="15" bodyend="324"/>
+    <listofallmembers>
+      <member refid="de/dda/a09107_1a56755288215e2daed34c02cdd1a61d53" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>centimetres</name></member>
+      <member refid="de/dda/a09107_1ae0394f9c44bbb4eac6db07a881381b59" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>centimetres</name></member>
+      <member refid="de/dda/a09107_1ac472f590d1558804d948cea504e9e598" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>feet</name></member>
+      <member refid="de/dda/a09107_1a53a8effcb0bd932f2871ea363ea08c05" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>feet</name></member>
+      <member refid="de/dda/a09107_1a1928a91349e6c8059bc0fd1df9596268" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>fromCentimetres</name></member>
+      <member refid="de/dda/a09107_1ab2a45a4667ccfa3afd73366ebdc41b11" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>fromFeet</name></member>
+      <member refid="de/dda/a09107_1af25e73183efd281cba475aa03998dc22" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>fromInches</name></member>
+      <member refid="de/dda/a09107_1aa8a838e6f313e19a9e8fa244b25d4cd0" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>fromKilometres</name></member>
+      <member refid="de/dda/a09107_1a8c82447cb45e09f4d78623a536e11a68" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>fromMetres</name></member>
+      <member refid="de/dda/a09107_1a8668131df1b5dafa1f3610c988455b3f" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>fromMillimetres</name></member>
+      <member refid="de/dda/a09107_1a158b1461286f66b5f5e0dee9784ad1ba" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>fromUnit</name></member>
+      <member refid="de/dda/a09107_1a832ddb4aebdc4a74609b27349a8f66ca" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>fromYards</name></member>
+      <member refid="de/dda/a09107_1a79ac822e7f2c28092dc05a3a593e567c" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>inches</name></member>
+      <member refid="de/dda/a09107_1aa618467e01e56ea3a9cc308d3b82b896" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>inches</name></member>
+      <member refid="de/dda/a09107_1a9fbd6edeb419249b7c79aa42b032dd3b" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>kilometres</name></member>
+      <member refid="de/dda/a09107_1accddf2a8095a4458944866c76e197620" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>kilometres</name></member>
+      <member refid="de/dda/a09107_1aeb8d92f721751aef8a95e6b8bea438b7" prot="private" virt="non-virtual"><scope>castor::LengthT</scope><name>LengthT</name></member>
+      <member refid="de/dda/a09107_1a045d79c293071d3df49c115d1c2376b4" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>LengthT</name></member>
+      <member refid="de/dda/a09107_1a831595a6f491bf2950b47052e17583e4" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>lengthUnit</name></member>
+      <member refid="de/dda/a09107_1a8faacdcc82a1b0aac5aa76c60cff94a3" prot="private" virt="non-virtual"><scope>castor::LengthT</scope><name>m_unit</name></member>
+      <member refid="de/dda/a09107_1abe6ec3d538d8dfa79e48e2a2c8cd42f1" prot="private" virt="non-virtual"><scope>castor::LengthT</scope><name>m_value</name></member>
+      <member refid="de/dda/a09107_1a8946b7807cb3193ebe21e4eb2b1acaf1" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>metres</name></member>
+      <member refid="de/dda/a09107_1a33adcee968de42946edd5b28a2c1a0d0" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>metres</name></member>
+      <member refid="de/dda/a09107_1a7dc6eceeda7030b7195e1a9896e4a951" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>millimetres</name></member>
+      <member refid="de/dda/a09107_1a449e3e64cc29f76068e820ec21f45e73" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>millimetres</name></member>
+      <member refid="de/dda/a09107_1a410c929346db458b9b25f5f976e351d5" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>operator TypeT const &amp;</name></member>
+      <member refid="de/dda/a09107_1a367212959166990926d5b7867968bae3" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>operator*</name></member>
+      <member refid="de/dda/a09107_1afbcee38ed85514b42f4b708f458ea8a3" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>operator*=</name></member>
+      <member refid="de/dda/a09107_1a4f004ce30b6d13a301cb31cd339f6618" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>operator+=</name></member>
+      <member refid="de/dda/a09107_1a6b18f83d11d56dae86f4ba453e9b408d" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>operator+=</name></member>
+      <member refid="de/dda/a09107_1a2aa80881bf6fe3871e1164d68c261c1d" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>operator-</name></member>
+      <member refid="de/dda/a09107_1a7f26cc7b6bfd3ab777020862bfbfac09" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>operator-=</name></member>
+      <member refid="de/dda/a09107_1a518da1ac4e33adac6f22dec11819f33a" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>operator-=</name></member>
+      <member refid="de/dda/a09107_1abfbcb50c2b5860a2da6fd729d0bf64d7" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>operator/=</name></member>
+      <member refid="de/dda/a09107_1a8a569d6bf5cb14b7be14103e19ca1284" prot="private" virt="non-virtual"><scope>castor::LengthT</scope><name>operator&lt;</name></member>
+      <member refid="de/dda/a09107_1a418490b83e883c7dd983eb97f9b1c39f" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>operator=</name></member>
+      <member refid="de/dda/a09107_1a509c6cfaac36a1a73fe35aa5e3f940f7" prot="private" virt="non-virtual"><scope>castor::LengthT</scope><name>operator==</name></member>
+      <member refid="de/dda/a09107_1aab5b787c5b8add7c552cb8ca758bb066" prot="private" virt="non-virtual"><scope>castor::LengthT</scope><name>operator&gt;</name></member>
+      <member refid="de/dda/a09107_1a9a64884208f923e11242d575c9bf1cba" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>unit</name></member>
+      <member refid="de/dda/a09107_1afecd2ce66969dff2c8da39ccfadb330d" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>value</name></member>
+      <member refid="de/dda/a09107_1ad8b4e291c0a0b6343512a54f31dba6a0" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>yards</name></member>
+      <member refid="de/dda/a09107_1a4efa79c5b6aacd40d7fb90cfdc61b6fb" prot="public" virt="non-virtual"><scope>castor::LengthT</scope><name>yards</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

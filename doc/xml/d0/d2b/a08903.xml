@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d2b/a08903" kind="struct" language="C++" prot="public">
+    <compoundname>castor::IsD24UComponent</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::false_type</basecompoundref>
+    <includes local="no">GraphicsModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+        <declname>PixelFormatT</declname>
+        <defname>PixelFormatT</defname>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Structure d&apos;aide permettant de dire si un format de pixels utilise une composante profondeur en 24 bits unsigned. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::IsD24UComponent&lt; PixelFormatT &gt;</label>
+        <link refid="d0/d2b/a08903"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::false_type</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::IsD24UComponent&lt; PixelFormatT &gt;</label>
+        <link refid="d0/d2b/a08903"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::false_type</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="719" column="1" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="721" bodyend="722"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

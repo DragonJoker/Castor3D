@@ -1,0 +1,1269 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d96/a06787" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::TransparentPass</compoundname>
+    <basecompoundref refid="df/d90/a06587" prot="public" virt="non-virtual">castor3d::RenderTechniqueNodesPass</basecompoundref>
+    <includes local="no">TransparentPass.hpp</includes>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d1/d96/a06787_1ae3858f226a065b5563d7681b022a8875" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TransparentPass::setDepthFormat</definition>
+        <argsstring>(VkFormat value) noexcept</argsstring>
+        <name>setDepthFormat</name>
+        <qualifiedname>castor3d::TransparentPass::setDepthFormat</qualifiedname>
+        <param>
+          <type>VkFormat</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Accesseurs. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentPass.hpp" line="75" column="6" bodyfile="Castor3D/Render/Transparent/TransparentPass.hpp" bodystart="75" bodyend="78"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d1/d96/a06787_1a913090b95f5e37386facbf26abebdd0d" prot="public" static="yes" mutable="no">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const</type>
+        <definition>C3D_API castor::String const castor3d::TransparentPass::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::TransparentPass::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentPass.hpp" line="94" column="37" bodyfile="Castor3D/Render/Transparent/TransparentPass.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/d96/a06787_1af647ffac7861c46502c8904733748771" prot="private" static="no" mutable="no">
+        <type>VkFormat</type>
+        <definition>VkFormat castor3d::TransparentPass::m_depthFormat</definition>
+        <argsstring></argsstring>
+        <name>m_depthFormat</name>
+        <qualifiedname>castor3d::TransparentPass::m_depthFormat</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentPass.hpp" line="97" column="10" bodyfile="Castor3D/Render/Transparent/TransparentPass.hpp" bodystart="97" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d96/a06787_1ad983aed5676ae33bc345e2fde29087a5" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const  &amp;</type>
+        <definition>Texture const&amp; castor3d::TransparentPass::m_sceneImage</definition>
+        <argsstring></argsstring>
+        <name>m_sceneImage</name>
+        <qualifiedname>castor3d::TransparentPass::m_sceneImage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentPass.hpp" line="98" column="16" bodyfile="Castor3D/Render/Transparent/TransparentPass.hpp" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d96/a06787_1a3806187edd349574464e1e813f1530e9" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const  &amp;</type>
+        <definition>Texture const&amp; castor3d::TransparentPass::m_depthObjImage</definition>
+        <argsstring></argsstring>
+        <name>m_depthObjImage</name>
+        <qualifiedname>castor3d::TransparentPass::m_depthObjImage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentPass.hpp" line="99" column="16" bodyfile="Castor3D/Render/Transparent/TransparentPass.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d96/a06787_1a049fa58cc7d1bbfd50433e0fad79f96d" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const  &amp;</type>
+        <definition>Texture const&amp; castor3d::TransparentPass::m_normalsImage</definition>
+        <argsstring></argsstring>
+        <name>m_normalsImage</name>
+        <qualifiedname>castor3d::TransparentPass::m_normalsImage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentPass.hpp" line="100" column="16" bodyfile="Castor3D/Render/Transparent/TransparentPass.hpp" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d96/a06787_1afcb19a16b71672aaca7d04107693acbc" prot="private" static="no" mutable="no">
+        <type>ashes::CommandBufferPtr</type>
+        <definition>ashes::CommandBufferPtr castor3d::TransparentPass::m_nodesCommands</definition>
+        <argsstring></argsstring>
+        <name>m_nodesCommands</name>
+        <qualifiedname>castor3d::TransparentPass::m_nodesCommands</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentPass.hpp" line="101" column="25" bodyfile="Castor3D/Render/Transparent/TransparentPass.hpp" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d96/a06787_1a2c62761a52666ad8879ee14ce30499b9" prot="private" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::TransparentPass::m_frameBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_frameBuffer</name>
+        <qualifiedname>castor3d::TransparentPass::m_frameBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentPass.hpp" line="102" column="23" bodyfile="Castor3D/Render/Transparent/TransparentPass.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d96/a06787_1a2059b8d67dff0d2dd74bb1b4e8a8b2f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TransparentPass::TransparentPass</definition>
+        <argsstring>(RenderTechnique *parent, crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, RenderDevice const &amp;device, Texture const &amp;sceneImage, Texture const &amp;depthObjImage, Texture const &amp;normalsImage, crg::ImageViewIdArray targetImage, crg::ImageViewIdArray targetDepth, RenderNodesPassDesc const &amp;renderPassDesc, RenderTechniquePassDesc const &amp;techniquePassDesc)</argsstring>
+        <name>TransparentPass</name>
+        <qualifiedname>castor3d::TransparentPass::TransparentPass</qualifiedname>
+        <param>
+          <type><ref refid="d8/dd8/a06575" kindref="compound">RenderTechnique</ref> *</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>crg::GraphContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>crg::RunnableGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>sceneImage</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>depthObjImage</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>normalsImage</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewIdArray</type>
+          <declname>targetImage</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewIdArray</type>
+          <declname>targetDepth</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d35/a06527" kindref="compound">RenderNodesPassDesc</ref> const &amp;</type>
+          <declname>renderPassDesc</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d5f/a06579" kindref="compound">RenderTechniquePassDesc</ref> const &amp;</type>
+          <declname>techniquePassDesc</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La technique parente. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La frame pass parente. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">context</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le contexte de rendu. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">graph</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le runnable graph. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le device GPU. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sceneImage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le résultat actuel du rendu. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">depthObjImage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;image contenant les profondeur/ID d&apos;objet des objets opaques. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">normalsImage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;image contenant les normales des objets opaques. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">targetImage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;image dans laquelle cette passe fait son rendu. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">targetDepth</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;image de profondeur dans laquelle cette passe fait son rendu. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderPassDesc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données de construction de passe de rendu de scène. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">techniquePassDesc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données de construction de passe de rendu de technique. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentPass.hpp" line="50" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d96/a06787_1a005f7ca342ce8a283f4cee773fd42a30" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TransparentPass::accept</definition>
+        <argsstring>(RenderTechniqueVisitor &amp;visitor) override</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::TransparentPass::accept</qualifiedname>
+        <reimplements refid="df/d90/a06587_1a6c855afb6d9815e0b336f529bbd1c3ef">accept</reimplements>
+        <param>
+          <type><ref refid="d1/d7f/a06591" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;acceptation de visiteur.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le ... visiteur.   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentPass.hpp" line="65" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/d96/a06787_1a66a1193830371815c6449cac35756345" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>ashes::PipelineDepthStencilStateCreateInfo</type>
+        <definition>ashes::PipelineDepthStencilStateCreateInfo castor3d::TransparentPass::doCreateDepthStencilState</definition>
+        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
+        <name>doCreateDepthStencilState</name>
+        <qualifiedname>castor3d::TransparentPass::doCreateDepthStencilState</qualifiedname>
+        <reimplements refid="df/d90/a06587_1a719cc90715a348ed3a0a99fca93ca0ef">doCreateDepthStencilState</reimplements>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+<para>Crée l&apos;état de profondeur et stencil. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les indicateurs de pipeline. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentPass.hpp" line="82" column="44"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d96/a06787_1a1bdbac2bc43c236e3ee53f13dfc85194" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>ashes::PipelineColorBlendStateCreateInfo</type>
+        <definition>ashes::PipelineColorBlendStateCreateInfo castor3d::TransparentPass::doCreateBlendState</definition>
+        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
+        <name>doCreateBlendState</name>
+        <qualifiedname>castor3d::TransparentPass::doCreateBlendState</qualifiedname>
+        <reimplements refid="df/d90/a06587_1abb20a657226949e0aa95085dbc747017">doCreateBlendState</reimplements>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+<para>Crée l&apos;état de mélange des couleurs. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les indicateurs de pipeline. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentPass.hpp" line="83" column="42"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d96/a06787_1ab2abd3ba498309c50ec568de3a59ee5d" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::TransparentPass::doFillAdditionalBindings</definition>
+        <argsstring>(PipelineFlags const &amp;flags, ashes::VkDescriptorSetLayoutBindingArray &amp;bindings) const override</argsstring>
+        <name>doFillAdditionalBindings</name>
+        <qualifiedname>castor3d::TransparentPass::doFillAdditionalBindings</qualifiedname>
+        <reimplements refid="df/d90/a06587_1a38c83e1905fd89fa17654ebbf9b7ab86">doFillAdditionalBindings</reimplements>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>ashes::VkDescriptorSetLayoutBindingArray &amp;</type>
+          <declname>bindings</declname>
+        </param>
+        <briefdescription>
+<para>Remplit les attaches de layout de descripteurs spécifiques à une passe de rendu. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les indicateurs de pipeline. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">bindings</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les attaches additionnelles. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentPass.hpp" line="84" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d96/a06787_1a0118a6b6da80c63742d7c8e11beabbe8" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::TransparentPass::doFillAdditionalDescriptor</definition>
+        <argsstring>(PipelineFlags const &amp;flags, ashes::WriteDescriptorSetArray &amp;descriptorWrites, castor3d::ShadowMapLightTypeArray const &amp;shadowMaps, ShadowBuffer const *shadowBuffer) override</argsstring>
+        <name>doFillAdditionalDescriptor</name>
+        <qualifiedname>castor3d::TransparentPass::doFillAdditionalDescriptor</qualifiedname>
+        <reimplements refid="df/d90/a06587_1a4739eb57e85af513a6bb3e6a33cd5fe6">doFillAdditionalDescriptor</reimplements>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>ashes::WriteDescriptorSetArray &amp;</type>
+          <declname>descriptorWrites</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a1e0853cf26ea6ce64763fa7f60d50b00" kindref="member">castor3d::ShadowMapLightTypeArray</ref> const &amp;</type>
+          <declname>shadowMaps</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dab/a07363" kindref="compound">ShadowBuffer</ref> const *</type>
+          <declname>shadowBuffer</declname>
+        </param>
+        <briefdescription>
+<para>Initialise l&apos;ensemble de descripteurs additionnels. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les indicateurs de pipeline. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">descriptorWrites</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les descriptor writes. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">shadowMaps</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les shadow maps. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">shadowBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le buffer contenant les données de configuration des ombres. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentPass.hpp" line="86" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d96/a06787_1a146b032fe0c0ad0fc12a39ca44f67320" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::TransparentPass::doGetPixelShaderSource</definition>
+        <argsstring>(PipelineFlags const &amp;flags, ast::ShaderBuilder &amp;builder) const override</argsstring>
+        <name>doGetPixelShaderSource</name>
+        <qualifiedname>castor3d::TransparentPass::doGetPixelShaderSource</qualifiedname>
+        <reimplements refid="d5/d96/a06531_1a3159226f2779a01404adc302cfbad191">doGetPixelShaderSource</reimplements>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>ast::ShaderBuilder &amp;</type>
+          <declname>builder</declname>
+        </param>
+        <briefdescription>
+<para>Récupère le source du pixel shader qui correspond aux indicateurs donnés. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les indicateurs de pipeline. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">builder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Enregistree le shader. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentPass.hpp" line="90" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>RenderQueueHolder</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="7">
+        <label>SceneCullerHolder</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="3">
+        <label>castor3d::RenderNodesPass</label>
+        <link refid="d5/d96/a06531"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="private-inheritance">
+        </childnode>
+        <childnode refid="8" relation="private-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::RenderTechniqueNodesPass</label>
+        <link refid="df/d90/a06587"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::RenderTechniquePass</label>
+        <link refid="da/d07/a06583"/>
+      </node>
+      <node id="1">
+        <label>castor3d::TransparentPass</label>
+        <link refid="d1/d96/a06787"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="9">
+        <label>crg::RenderPass</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="36">
+        <label>Animable</label>
+        <link refid="d2/d7a/a03115"/>
+        <childnode refid="37" relation="public-inheritance">
+        </childnode>
+        <childnode refid="38" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="47">
+        <label>castor::ChangeTrackedT&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</label>
+        <link refid="d2/def/a08159"/>
+        <childnode refid="48" relation="template-instance">
+          <edgelabel>&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor::Coords&lt; uint32_t, 2 &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+        <childnode refid="24" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor::DataHolderT&lt; SizeData &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="22" relation="template-instance">
+          <edgelabel>&lt; SizeData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor::FlagCombination&lt; ComponentModeFlag &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="19" relation="template-instance">
+          <edgelabel>&lt; ComponentModeFlag &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor::FlagCombination&lt; RenderFilter &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="19" relation="template-instance">
+          <edgelabel>&lt; RenderFilter &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="43">
+        <label>castor::FlagCombination&lt; ShaderFlag &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="19" relation="template-instance">
+          <edgelabel>&lt; ShaderFlag &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="56">
+        <label>castor3d::GBufferT&lt; LpvTexture &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="57" relation="private-inheritance">
+        </childnode>
+        <childnode refid="58" relation="template-instance">
+          <edgelabel>&lt; LpvTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="62">
+        <label>castor::GroupChangeTrackedT&lt; ClusterSplitScheme &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="61" relation="template-instance">
+          <edgelabel>&lt; ClusterSplitScheme &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="60">
+        <label>castor::GroupChangeTrackedT&lt; bool &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="61" relation="template-instance">
+          <edgelabel>&lt; bool &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="63">
+        <label>castor::GroupChangeTrackedT&lt; float &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="61" relation="template-instance">
+          <edgelabel>&lt; float &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="39">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; AnimableHandlerT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="34">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Scene &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="45">
+        <label>castor::RangedValue&lt; int32_t &gt;</label>
+        <link refid="d8/de9/a09211"/>
+        <childnode refid="46" relation="template-instance">
+          <edgelabel>&lt; int32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="49">
+        <label>castor::RangedValue&lt; uint32_t &gt;</label>
+        <link refid="d8/de9/a09211"/>
+        <childnode refid="46" relation="template-instance">
+          <edgelabel>&lt; uint32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>RenderQueueHolder</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="7">
+        <label>SceneCullerHolder</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="31">
+        <label>castor::SignalT&lt; BackgroundChangedFunc &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; BackgroundChangedFunc &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="42">
+        <label>castor::SignalT&lt; OnCameraChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; OnCameraChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="40">
+        <label>castor::SignalT&lt; OnSceneNodeReparentFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; OnSceneNodeReparentFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="30">
+        <label>castor::SignalT&lt; OnSceneUpdateFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; OnSceneUpdateFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor::SignalT&lt; RenderNodesPassChangeSignalFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; RenderNodesPassChangeSignalFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="17" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="38">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d2/d7a/a03115"/>
+        <childnode refid="39" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>castor3d::Camera</label>
+        <link refid="d2/dc3/a06951"/>
+        <childnode refid="33" relation="public-inheritance">
+        </childnode>
+        <childnode refid="42" relation="usage">
+          <edgelabel>onGpuChanged</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::CameraUbo</label>
+        <link refid="d1/ddf/a07743"/>
+      </node>
+      <node id="59">
+        <label>castor3d::ClustersConfig</label>
+        <link refid="db/da7/a05911"/>
+        <childnode refid="60" relation="usage">
+          <edgelabel>enableBVHWarpOptimisation</edgelabel>
+          <edgelabel>enablePostAssignSort</edgelabel>
+          <edgelabel>enableReduceWarpOptimisation</edgelabel>
+          <edgelabel>limitClustersToLightsAABB</edgelabel>
+          <edgelabel>parseDepthBuffer</edgelabel>
+          <edgelabel>sortLights</edgelabel>
+          <edgelabel>useLightsBVH</edgelabel>
+          <edgelabel>useSpotBoundingCone</edgelabel>
+          <edgelabel>useSpotTightBoundingBox</edgelabel>
+        </childnode>
+        <childnode refid="62" relation="usage">
+          <edgelabel>splitScheme</edgelabel>
+        </childnode>
+        <childnode refid="63" relation="usage">
+          <edgelabel>bias</edgelabel>
+        </childnode>
+      </node>
+      <node id="57">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d8/d33/a05959"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="58">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="57" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>castor3d::IndirectLightingData</label>
+        <link refid="dd/d3d/a05967"/>
+        <childnode refid="52" relation="usage">
+          <edgelabel>lpvConfigUbo</edgelabel>
+        </childnode>
+        <childnode refid="53" relation="usage">
+          <edgelabel>llpvConfigUbo</edgelabel>
+        </childnode>
+        <childnode refid="54" relation="usage">
+          <edgelabel>vctConfigUbo</edgelabel>
+        </childnode>
+        <childnode refid="55" relation="usage">
+          <edgelabel>lpvResult</edgelabel>
+        </childnode>
+        <childnode refid="50" relation="usage">
+          <edgelabel>vctFirstBounce</edgelabel>
+          <edgelabel>vctSecondaryBounce</edgelabel>
+        </childnode>
+      </node>
+      <node id="53">
+        <label>castor3d::LayeredLpvGridConfigUbo</label>
+        <link refid="d6/d47/a07775"/>
+      </node>
+      <node id="55">
+        <label>castor3d::LightVolumePassResult</label>
+        <link refid="dc/d72/a06019"/>
+        <childnode refid="56" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>castor3d::LpvGridConfigUbo</label>
+        <link refid="da/dff/a07783"/>
+      </node>
+      <node id="33">
+        <label>castor3d::MovableObject</label>
+        <link refid="da/d09/a07047"/>
+        <childnode refid="34" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+        <childnode refid="41" relation="usage">
+          <edgelabel>m_notifyIndex</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::RenderDevice</label>
+        <link refid="dc/d32/a06415"/>
+        <childnode refid="14" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RenderNodesPass</label>
+        <link refid="d5/d96/a06531"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="private-inheritance">
+        </childnode>
+        <childnode refid="8" relation="private-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>onSortNodes</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>m_renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_cameraUbo</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>m_category</edgelabel>
+          <edgelabel>m_typeName</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_filters</edgelabel>
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>m_size</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_sceneUbo</edgelabel>
+        </childnode>
+        <childnode refid="26" relation="usage">
+          <edgelabel>m_componentsMask</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d5/d4e/a06559"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>castor3d::RenderTechnique</label>
+        <link refid="d8/dd8/a06575"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::RenderTechniqueNodesPass</label>
+        <link refid="df/d90/a06587"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="27" relation="public-inheritance">
+        </childnode>
+        <childnode refid="32" relation="usage">
+          <edgelabel>m_camera</edgelabel>
+        </childnode>
+        <childnode refid="43" relation="usage">
+          <edgelabel>m_shaderFlags</edgelabel>
+        </childnode>
+        <childnode refid="44" relation="usage">
+          <edgelabel>m_ssaoConfig</edgelabel>
+        </childnode>
+        <childnode refid="50" relation="usage">
+          <edgelabel>m_ssao</edgelabel>
+        </childnode>
+        <childnode refid="51" relation="usage">
+          <edgelabel>m_indirectLighting</edgelabel>
+        </childnode>
+        <childnode refid="59" relation="usage">
+          <edgelabel>m_clustersConfig</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor3d::RenderTechniquePass</label>
+        <link refid="da/d07/a06583"/>
+        <childnode refid="28" relation="usage">
+          <edgelabel>m_parent</edgelabel>
+        </childnode>
+        <childnode refid="29" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor3d::Scene</label>
+        <link refid="dc/dc2/a07135"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="30" relation="usage">
+          <edgelabel>onUpdate</edgelabel>
+        </childnode>
+        <childnode refid="31" relation="usage">
+          <edgelabel>onSetBackground</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>CameraRootNode</edgelabel>
+          <edgelabel>ObjectRootNode</edgelabel>
+          <edgelabel>RootNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="35">
+        <label>castor3d::SceneNode</label>
+        <link refid="d4/dc4/a07255"/>
+        <childnode refid="36" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="40" relation="usage">
+          <edgelabel>onParentChanged</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor3d::SceneUbo</label>
+        <link refid="d5/de1/a07827"/>
+      </node>
+      <node id="44">
+        <label>castor3d::SsaoConfig</label>
+        <link refid="dd/daa/a06683"/>
+        <childnode refid="45" relation="usage">
+          <edgelabel>logMaxOffset</edgelabel>
+        </childnode>
+        <childnode refid="47" relation="usage">
+          <edgelabel>blurRadius</edgelabel>
+          <edgelabel>blurStepSize</edgelabel>
+        </childnode>
+        <childnode refid="49" relation="usage">
+          <edgelabel>bendStepCount</edgelabel>
+        </childnode>
+      </node>
+      <node id="50">
+        <label>castor3d::Texture</label>
+        <link refid="d1/d95/a06703"/>
+        <childnode refid="13" relation="usage">
+          <edgelabel>device</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::TransparentPass</label>
+        <link refid="d1/d96/a06787"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>Type</edgelabel>
+        </childnode>
+      </node>
+      <node id="54">
+        <label>castor3d::VoxelizerUbo</label>
+        <link refid="d0/d63/a07931"/>
+      </node>
+      <node id="48">
+        <label>castor::ChangeTrackedT&lt; ValueT, ControlT &gt;</label>
+        <link refid="d2/def/a08159"/>
+      </node>
+      <node id="41">
+        <label>castor::ConnectionT&lt; MySignalT &gt;</label>
+        <link refid="d4/ddb/a08183"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor::Coords&lt; T, Count &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+      </node>
+      <node id="22">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="19">
+        <label>castor::FlagCombination&lt; FlagType &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+      </node>
+      <node id="61">
+        <label>castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+      </node>
+      <node id="6">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="11">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="37">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="46">
+        <label>castor::RangedValue&lt; T &gt;</label>
+        <link refid="d8/de9/a09211"/>
+      </node>
+      <node id="12">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor::Size</label>
+        <link refid="d4/dd6/a09023"/>
+        <childnode refid="21" relation="private-inheritance">
+        </childnode>
+        <childnode refid="23" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>crg::RenderPass</label>
+      </node>
+      <node id="17">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/Transparent/TransparentPass.hpp" line="16" column="1" bodyfile="Castor3D/Render/Transparent/TransparentPass.hpp" bodystart="18" bodyend="103"/>
+    <listofallmembers>
+      <member refid="d1/d96/a06787_1a005f7ca342ce8a283f4cee773fd42a30" prot="public" virt="virtual"><scope>castor3d::TransparentPass</scope><name>accept</name></member>
+      <member refid="d5/d96/a06531_1a414f84c6045877572abf26d3f453a25e" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>addBackgroundBindings</name></member>
+      <member refid="d5/d96/a06531_1a175187d3a21718b8b763004d80632081" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>addBackgroundDescriptor</name></member>
+      <member refid="d5/d96/a06531_1a6246f2ddd55511dc65da0357a4fad267" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>addClusteredLightingBindings</name></member>
+      <member refid="d5/d96/a06531_1a13dacc48c77bfd913c884ececb9ac7ed" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>addClusteredLightingDescriptor</name></member>
+      <member refid="d5/d96/a06531_1a04c87ec305b5b800088426907342d0ab" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>addGIBindings</name></member>
+      <member refid="d5/d96/a06531_1a07d93177bb80fb20c5a5d6b24482537f" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>addGIDescriptor</name></member>
+      <member refid="d5/d96/a06531_1ae630118cbb17cf8c473ba78e1143e8a2" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>addShadowBindings</name></member>
+      <member refid="d5/d96/a06531_1a71b985381d1383869c5b1fd6a5294c9c" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>addShadowBindings</name></member>
+      <member refid="d5/d96/a06531_1a162892ee16c6b21392c0148cb3c503d4" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>addShadowDescriptor</name></member>
+      <member refid="d5/d96/a06531_1a8c65d8809633914687f80a4ade0da304" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>addShadowDescriptor</name></member>
+      <member refid="d5/d96/a06531_1a6512b8ee2afd3fd8a42f2036bf2ae1fc" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>adjustFlags</name></member>
+      <member refid="d5/d96/a06531_1a4ac67e954c117995f57d4564c640f3f3" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>adjustFlags</name></member>
+      <member refid="d5/d96/a06531_1ae7c0725098dbbcaf8ee541543783ef9f" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>adjustFlags</name></member>
+      <member refid="d5/d96/a06531_1a8ae3e04cfcf1b985f40506be53ca5df5" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>adjustFlags</name></member>
+      <member refid="d5/d96/a06531_1a53c9a4847c006814c4df955b6f644cf0" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>adjustFlags</name></member>
+      <member refid="d5/d96/a06531_1a1d742836cc8acca4cffa4f133a59d7ea" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>allowClusteredLighting</name></member>
+      <member refid="df/d90/a06587_1a2ef961d2747018a20f5d27ce02ea020d" prot="public" virt="virtual"><scope>castor3d::TransparentPass</scope><name>areDebugTargetsEnabled</name></member>
+      <member refid="df/d90/a06587_1acb96dc761bd7c12361bb79a02776c4a5" prot="public" virt="virtual"><scope>castor3d::TransparentPass</scope><name>areValidPassFlags</name></member>
+      <member refid="d5/d96/a06531_1a502117a53706318de843396e33070ac1" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>cleanupPipelines</name></member>
+      <member refid="df/d90/a06587_1aed27aa874e94c2eff7254317919fe48c" prot="public" virt="virtual"><scope>castor3d::TransparentPass</scope><name>countNodes</name></member>
+      <member refid="d5/d96/a06531_1a670b6db34472ea0bd4228c3ae86a1865" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>createBlendState</name></member>
+      <member refid="df/d90/a06587_1ab2fe0baeee06fefc299368c0d5f9a3c2" prot="public" virt="virtual"><scope>castor3d::TransparentPass</scope><name>createPipelineFlags</name></member>
+      <member refid="d5/d96/a06531_1a79cb6d7ae1f83f67d907ccccc493aa51" prot="public" virt="non-virtual" ambiguityscope="castor3d::RenderNodesPass::"><scope>castor3d::TransparentPass</scope><name>createPipelineFlags</name></member>
+      <member refid="d5/d96/a06531_1a0b604614f6aad12c3390a315b7ef7893" prot="public" virt="non-virtual" ambiguityscope="castor3d::RenderNodesPass::"><scope>castor3d::TransparentPass</scope><name>createPipelineFlags</name></member>
+      <member refid="df/d90/a06587_1aea65dbdf092631033fd092587ef5c593" prot="protected" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doAccept</name></member>
+      <member refid="d5/d96/a06531_1a95a4620da11c5d138dd318a204922df0" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doAddBackgroundBindings</name></member>
+      <member refid="d5/d96/a06531_1a181bf9378c81a058ba983f4c4467077c" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doAddBackgroundDescriptor</name></member>
+      <member refid="d5/d96/a06531_1ab5b35cf256705a232880eaab76b05e94" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doAddClusteredLightingBindings</name></member>
+      <member refid="d5/d96/a06531_1afc4117b7e3bd55c3bd89f8d7e8bcbe26" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doAddClusteredLightingDescriptor</name></member>
+      <member refid="df/d90/a06587_1afcb7fd111b1e67add4404feb39b53268" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doAddEnvBindings</name></member>
+      <member refid="df/d90/a06587_1a86e01cee1dcbf221310745a2618b2f50" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doAddEnvDescriptor</name></member>
+      <member refid="df/d90/a06587_1af9ca6a7465fa273e533811c3085c1ef4" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doAddGIBindings</name></member>
+      <member refid="df/d90/a06587_1afb1cccfaf08300ab20ea186aaedf58ed" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doAddGIDescriptor</name></member>
+      <member refid="df/d90/a06587_1ad23c7ed1442581a622443452f1931dd2" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doAddPassSpecificsBindings</name></member>
+      <member refid="df/d90/a06587_1a2a2d6038c5b58c420b3e04d08585ed8f" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doAddPassSpecificsDescriptor</name></member>
+      <member refid="d5/d96/a06531_1ac0a58902f8754c6e9fe2afaf7fdc4ce1" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doAddShadowBindings</name></member>
+      <member refid="d5/d96/a06531_1aafabe87e12777941f0c888d54bcd5bde" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doAddShadowDescriptor</name></member>
+      <member refid="df/d90/a06587_1a70f74851f1447085b9dd9e7a2ffcc8b2" prot="protected" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doAdjustProgramFlags</name></member>
+      <member refid="df/d90/a06587_1a469e206a1f08ee5f74a7f5cb28b64348" prot="protected" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doAdjustSceneFlags</name></member>
+      <member refid="d5/d96/a06531_1a1263b6f23e8f2ad82ec140e46891099b" prot="protected" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doAdjustSubmeshComponents</name></member>
+      <member refid="d1/d96/a06787_1a1bdbac2bc43c236e3ee53f13dfc85194" prot="private" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doCreateBlendState</name></member>
+      <member refid="d1/d96/a06787_1a66a1193830371815c6449cac35756345" prot="private" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doCreateDepthStencilState</name></member>
+      <member refid="d1/d96/a06787_1ab2abd3ba498309c50ec568de3a59ee5d" prot="private" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doFillAdditionalBindings</name></member>
+      <member refid="d1/d96/a06787_1a0118a6b6da80c63742d7c8e11beabbe8" prot="private" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doFillAdditionalDescriptor</name></member>
+      <member refid="d1/d96/a06787_1a146b032fe0c0ad0fc12a39ca44f67320" prot="private" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doGetPixelShaderSource</name></member>
+      <member refid="d5/d96/a06531_1a9e7d96d2aa5d3c3cec8e97cbea443fb2" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doGetProgram</name></member>
+      <member refid="d5/d96/a06531_1ad57f4d26855d8750d9df582d5bd9d859" prot="protected" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doIsValidPass</name></member>
+      <member refid="d5/d96/a06531_1a18caa441e8929a13f0858375f207d41e" prot="protected" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doIsValidRenderable</name></member>
+      <member refid="d5/d96/a06531_1abfb05246334007ec0cafb80ca96645b8" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>doUpdateFlags</name></member>
+      <member refid="d5/d96/a06531_1a6fa640d927538884f1f380391f418efe" prot="protected" virt="virtual"><scope>castor3d::TransparentPass</scope><name>doUpdateUbos</name></member>
+      <member refid="d5/d96/a06531_1a1765f464a9e83d13c2b2b593b039a57a" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>filtersNonStatic</name></member>
+      <member refid="d5/d96/a06531_1a814ea959eeafe107a1a3dbec20ec8be1" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>filtersStatic</name></member>
+      <member refid="d5/d96/a06531_1a315239954b7b5cfcb48091098885aaf1" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>forceAdjustFlags</name></member>
+      <member refid="d5/d96/a06531_1a544c3a9960a83220c9138cfd99ed1538" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>forceTwoSided</name></member>
+      <member refid="d5/d96/a06531_1aefacacfc759f56e03f3159f5fa198e68" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getBillboardNodes</name></member>
+      <member refid="df/d90/a06587_1a740871227a3e33ffc18a7d2f78453e97" prot="public" virt="virtual"><scope>castor3d::TransparentPass</scope><name>getClustersConfig</name></member>
+      <member refid="d5/d96/a06531_1a3ebb33c26f82f60d29593b7f6906cde4" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getComponentsMask</name></member>
+      <member refid="d5/d96/a06531_1a2e2a95a6c5f4416897fddfb72f828af7" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getCuller</name></member>
+      <member refid="df/d90/a06587_1adc3c8b7201636e87c2892b42a562861d" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getDebugConfig</name></member>
+      <member refid="d5/d96/a06531_1ab7b2f152311c81ba7e40e929768a323c" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getDeferredLightingFilter</name></member>
+      <member refid="d5/d96/a06531_1a45731387c01aff7c27e3745e409b95c3" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getDrawCallsCount</name></member>
+      <member refid="df/d90/a06587_1a2d8669138c0a4afe55bae1207a2b181a" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getEngine</name></member>
+      <member refid="d5/d96/a06531_1abfe57d089df21849467f5986b55747bb" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getIgnoredNode</name></member>
+      <member refid="da/d07/a06583_1afe44ea7fd2da3532363a632992513571" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getIndirectLighting</name></member>
+      <member refid="d5/d96/a06531_1a342f76bbd2a2d93f8767d505d1d29c1d" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getInstancedSubmeshNodes</name></member>
+      <member refid="d5/d96/a06531_1a50a70e8b9cce71d14a4608816f79ecc1" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getMatrixUbo</name></member>
+      <member refid="d5/d96/a06531_1a4734af0eeeaada8645b51388a9dbcf52" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getMaxPipelineId</name></member>
+      <member refid="d5/d3c/a08223_1abc1fa9ec1a50d2023373baa4d4c79519" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getName</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getOwner</name></member>
+      <member refid="d5/d96/a06531_1acf787d1ba248a445b050059b684036a5" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getParallaxOcclusionFilter</name></member>
+      <member refid="d5/d96/a06531_1a0796814a0755654f0cc104d6662eae35" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getPassPipelineNodes</name></member>
+      <member refid="d5/d96/a06531_1a1d8bb6a81baa2e51664f9b0664ccdf16" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getPipelineNodesIndex</name></member>
+      <member refid="d5/d96/a06531_1a7f9b1b50772eaf791e55948402baca7e" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getPipelinesCount</name></member>
+      <member refid="d5/d96/a06531_1aafa91460eb128c5ba6a3aaa22a2866b6" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getPixelShaderSource</name></member>
+      <member refid="d5/d96/a06531_1af1b6d51420a8619e01e78b0461a7c695" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getRenderFilters</name></member>
+      <member refid="d5/d96/a06531_1ace7bc19e7a5bfeca3bf92be92a4e8ff9" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getRenderQueue</name></member>
+      <member refid="df/d90/a06587_1ad25148ab272e79c3831fde6d4e94197a" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getScene</name></member>
+      <member refid="da/d07/a06583_1a6ba2094bb67a628c7f4119b332ceda8c" prot="public" virt="non-virtual" ambiguityscope="castor3d::RenderTechniquePass::"><scope>castor3d::TransparentPass</scope><name>getScene</name></member>
+      <member refid="df/d90/a06587_1ab6319421d389ebf2f17c5c199625525d" prot="public" virt="virtual"><scope>castor3d::TransparentPass</scope><name>getShaderFlags</name></member>
+      <member refid="d5/d96/a06531_1a0921b805792510d5db80402f6b7f211b" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getSubmeshNodes</name></member>
+      <member refid="d5/d96/a06531_1a06aecd34c3102ad274663e1a7435bb6c" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getSubmeshShaderSource</name></member>
+      <member refid="df/d90/a06587_1ac5f47aa03eeafd5718aedbeb70968c7e" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getTechnique</name></member>
+      <member refid="d5/d96/a06531_1a56908fd9eecc10c13f260dc8b4fbbeda" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getTypeID</name></member>
+      <member refid="d5/d96/a06531_1aec8320461db2e82022829685730ad3b3" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getTypeName</name></member>
+      <member refid="d5/d96/a06531_1a3623cbeff1e438d6d5d75f5efe84019d" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>getVisibleCounts</name></member>
+      <member refid="d5/d96/a06531_1a513d00ebae0f33d194d2850fd955df96" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>handleStatic</name></member>
+      <member refid="d5/d96/a06531_1aaa523fa00c569df52987cea35ed62a3e" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>hasNodes</name></member>
+      <member refid="df/d90/a06587_1a2102e35d08111ec0ab9e012315008a91" prot="public" virt="virtual"><scope>castor3d::TransparentPass</scope><name>hasSsao</name></member>
+      <member refid="d5/d96/a06531_1a056e3b27b2a07a99002eccae51b15b03" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>initialiseAdditionalDescriptor</name></member>
+      <member refid="d5/d96/a06531_1afaa56fab8c657f9787ca749ee0749fa0" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>isDirty</name></member>
+      <member refid="d5/d96/a06531_1a336767d660d1fb33ed7ea1b55e03ea9e" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>isMeshShading</name></member>
+      <member refid="d5/d96/a06531_1a755dd770f27422e825b64332cd4475e1" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>isOrderIndependent</name></member>
+      <member refid="df/d90/a06587_1abf6a5401c10771676dba9361ce352c6d" prot="public" virt="virtual"><scope>castor3d::TransparentPass</scope><name>isPassEnabled</name></member>
+      <member refid="d5/d96/a06531_1a1fc6229eddc94e26ca7862a090f2500c" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>isValidNode</name></member>
+      <member refid="d5/d96/a06531_1aec2397ea54ec6154e12706ade0a77583" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>isValidPass</name></member>
+      <member refid="d5/d96/a06531_1aa193e2fe28d00dfdd2452702a404899e" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>isValidRenderable</name></member>
+      <member refid="d5/d96/a06531_1a513801c9cde3771b93ba7f6d23e583f7" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_allowClusteredLighting</name></member>
+      <member refid="df/d90/a06587_1afbe825590c3e35ef7c75b237f333a106" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_camera</name></member>
+      <member refid="d5/d96/a06531_1afcdf81e5e73989734d00aa99e39d250b" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_cameraUbo</name></member>
+      <member refid="d5/d96/a06531_1a6d6c070855ebca54019a12e7f3490220" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_category</name></member>
+      <member refid="df/d90/a06587_1a11741651404b6ce5cee65d13a8eb27f1" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_clustersConfig</name></member>
+      <member refid="d5/d96/a06531_1abb50286bb743024a7ce458049fa15d4d" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_componentsMask</name></member>
+      <member refid="d5/d96/a06531_1a0e6f60c6661dd007ab6d1ea759e15391" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_deferredLightingFilter</name></member>
+      <member refid="d1/d96/a06787_1af647ffac7861c46502c8904733748771" prot="private" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_depthFormat</name></member>
+      <member refid="d1/d96/a06787_1a3806187edd349574464e1e813f1530e9" prot="private" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_depthObjImage</name></member>
+      <member refid="d5/d96/a06531_1a7869b4d26567e9de01eb5cc2a497f8b6" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_device</name></member>
+      <member refid="da/d07/a06583_1a1a0a94cfc40698bf297f549001114b81" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_drawCalls</name></member>
+      <member refid="d5/d96/a06531_1a99bd721ed2680d641fa3b8a8fa97c14d" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_filters</name></member>
+      <member refid="d5/d96/a06531_1a00e35214ad070e24c4d6781acdafe33e" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_forceTwoSided</name></member>
+      <member refid="d1/d96/a06787_1a2c62761a52666ad8879ee14ce30499b9" prot="private" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_frameBuffer</name></member>
+      <member refid="d5/d96/a06531_1a28210092a913c861c434b78a358abb33" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_handleStatic</name></member>
+      <member refid="d5/d96/a06531_1aec485b6959629cdeafb0888f752837a5" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_index</name></member>
+      <member refid="df/d90/a06587_1ae2e44664c1136e22071e1bd833860307" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_indirectLighting</name></member>
+      <member refid="d5/d96/a06531_1a506d22126296803c8096b5897c506d22" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_isDirty</name></member>
+      <member refid="d5/d96/a06531_1a3f4ae4d22173cd2ecd9200c7a1ca4ea6" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_meshShading</name></member>
+      <member refid="d5/d3c/a08223_1a869b429a7190ecf614d8221b270e6dca" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_name</name></member>
+      <member refid="d1/d96/a06787_1afcb19a16b71672aaca7d04107693acbc" prot="private" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_nodesCommands</name></member>
+      <member refid="d1/d96/a06787_1a049fa58cc7d1bbfd50433e0fad79f96d" prot="private" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_normalsImage</name></member>
+      <member refid="d5/d96/a06531_1aacaa3131286df41ac9f40abe4de8846a" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_oit</name></member>
+      <member refid="da/d07/a06583_1a906a326de4abb619e1188e8e98942e0b" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_outputScattering</name></member>
+      <member refid="d5/d96/a06531_1aba7a52b88df493895c62950013b343ed" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_parallaxOcclusionFilter</name></member>
+      <member refid="da/d07/a06583_1abf3258a90360bca1bb9fd1269356e883" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_parent</name></member>
+      <member refid="d5/d96/a06531_1a1894fb32c0494abfeae9cddc6eecb402" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_renderSystem</name></member>
+      <member refid="d5/d96/a06531_1abe9ae7c14c7abfe881a52f22fecbc9d0" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_safeBand</name></member>
+      <member refid="da/d07/a06583_1a97ef9757bc87714bf0d7f61594a10dc1" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_scene</name></member>
+      <member refid="d1/d96/a06787_1ad983aed5676ae33bc345e2fde29087a5" prot="private" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_sceneImage</name></member>
+      <member refid="d5/d96/a06531_1ac8c58dbac580ea7726e03c4cd8f4d978" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_sceneUbo</name></member>
+      <member refid="df/d90/a06587_1aee5609f0b4a4a96e1d9d0f770dc08dc0" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_shaderFlags</name></member>
+      <member refid="d5/d96/a06531_1a916bbd8f5333ca63b34f1815753b477b" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_size</name></member>
+      <member refid="df/d90/a06587_1a08b3ae729506a1519db28fedb72d4ffc" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_ssao</name></member>
+      <member refid="df/d90/a06587_1a4fec806e2bbe79cff353c1eb31f9df98" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_ssaoConfig</name></member>
+      <member refid="d5/d96/a06531_1ac4c97f4603740198e6692ba3969093d5" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_targetDepth</name></member>
+      <member refid="d5/d96/a06531_1ae14dd1b28e5921d4b57e57e3c158eb19" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_targetImage</name></member>
+      <member refid="d5/d96/a06531_1ad5b1bf0dbc1d04d7f0d78780b7aee2b6" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_typeID</name></member>
+      <member refid="d5/d96/a06531_1af1e2549069672c4b478b76e8c039e4a2" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>m_typeName</name></member>
+      <member refid="d5/d3c/a08223_1a4a6e4748603541685b04f95fb91efb26" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>NamedBaseT</name></member>
+      <member refid="d5/d96/a06531_1a3b7652edc0ab92e892fa4ceb49187718" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>onSortNodes</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>OwnedBy</name></member>
+      <member refid="d5/d96/a06531_1a14fa4038b2be656cabe30eec2ea582fd" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>prepareBackPipeline</name></member>
+      <member refid="d5/d96/a06531_1ad135f3236bae3b299bfb7da40a137a36" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>prepareFrontPipeline</name></member>
+      <member refid="d5/d3c/a08223_1a2d62ce1925efead03c4e0842c06b3e11" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>rename</name></member>
+      <member refid="d5/d96/a06531_1a7d11ed92a0ef46d617aadaffc5ec06e1" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>RenderNodesPass</name></member>
+      <member refid="df/d90/a06587_1a243fd7dd0b0579a9bcca25af943c039e" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>RenderTechniqueNodesPass</name></member>
+      <member refid="da/d07/a06583_1a8a5ed135cbe6345e82fffc1226210135" prot="protected" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>RenderTechniquePass</name></member>
+      <member refid="d1/d96/a06787_1ae3858f226a065b5563d7681b022a8875" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>setDepthFormat</name></member>
+      <member refid="d5/d96/a06531_1aefaeb0db8236eae2d8c2a5e1549e4cc0" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>setIgnoredNode</name></member>
+      <member refid="d1/d96/a06787_1a2059b8d67dff0d2dd74bb1b4e8a8b2f8" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>TransparentPass</name></member>
+      <member refid="d1/d96/a06787_1a913090b95f5e37386facbf26abebdd0d" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>Type</name></member>
+      <member refid="df/d90/a06587_1a39bd7dead3abc23c3214264386eca235" prot="public" virt="virtual"><scope>castor3d::TransparentPass</scope><name>update</name></member>
+      <member refid="d5/d96/a06531_1ab57af373bc7f2601fd4338ccb73ccd72" prot="public" virt="non-virtual"><scope>castor3d::TransparentPass</scope><name>~RenderNodesPass</name></member>
+      <member refid="da/d07/a06583_1a4e929e2aa44f777d74576ded4e416d20" prot="public" virt="virtual"><scope>castor3d::TransparentPass</scope><name>~RenderTechniquePass</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

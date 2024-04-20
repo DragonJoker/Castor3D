@@ -1,0 +1,9 @@
+<map id="castor3d::ChunkWriter&lt; castor::Path &gt;::write" name="castor3d::ChunkWriter&lt; castor::Path &gt;::write">
+<area shape="rect" id="Node000001" title="Writes a subchunk value into a chunk." alt="" coords="5,27,157,67"/>
+<area shape="rect" id="Node000002" href="$d2/dd2/a02279.html#ab0fb14b20a64ca391cfd363dfdf2ea78" title=" " alt="" coords="247,5,347,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,34,232,24,233,29,158,40"/>
+<area shape="rect" id="Node000003" href="$d3/d74/a03411.html#abe80518993510ab4c19bc4f9e67d32a8" title="Writes a subchunk value into a chunk." alt="" coords="205,55,388,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="158,55,192,59,191,64,157,60"/>
+<area shape="rect" id="Node000004" href="$d5/d27/a03183.html#aa21722c40ca9e697b02b6612e81e41c9" title="Sets the chunk&#39;s data." alt="" coords="436,55,591,95"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="388,73,422,73,422,78,388,78"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="castor::littleEndianToSystemEndian" name="castor::littleEndianToSystemEndian">
+<area shape="rect" id="Node000001" title="Convert the given value to little endian if needed." alt="" coords="5,23,195,63"/>
+<area shape="rect" id="Node000002" href="$d2/dd2/a02279.html#aa4e7623135b28fcbdeb6f2d423df6746" title="Detects if the current system is little endian." alt="" coords="256,5,400,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,30,242,25,243,30,195,35"/>
+<area shape="rect" id="Node000003" href="$d2/dd2/a02279.html#a90cf51f94dda321c89fc40fa450d0b91" title="Convert from little or big endian to the other." alt="" coords="243,55,413,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,51,229,54,228,60,195,56"/>
+</map>

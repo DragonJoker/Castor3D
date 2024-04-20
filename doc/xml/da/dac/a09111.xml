@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/dac/a09111" kind="class" language="C++" prot="public">
+    <compoundname>castor::Line2D</compoundname>
+    <includes local="no">Line2D.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/dac/a09111_1a161e4a7acc6a6a42151af0d3cecce3fa" prot="public" static="no" mutable="no">
+        <type>T</type>
+        <definition>T castor::Line2D&lt; T &gt;::a</definition>
+        <argsstring></argsstring>
+        <name>a</name>
+        <qualifiedname>castor::Line2D::a</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La pente </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Line2D.hpp" line="59" column="3" bodyfile="CastorUtils/Math/Line2D.hpp" bodystart="59" bodyend="-1"/>
+        <referencedby refid="da/dac/a09111_1a39b190a43654a1cac52d2b29a9d879e9" compoundref="db/d26/a02129" startline="42" endline="54">castor::Line2D&lt; T &gt;::intersects</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="da/dac/a09111_1a048781476972f640c952d9b986893778" prot="public" static="no" mutable="no">
+        <type>T</type>
+        <definition>T castor::Line2D&lt; T &gt;::b</definition>
+        <argsstring></argsstring>
+        <name>b</name>
+        <qualifiedname>castor::Line2D::b</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>L&apos;offset. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Line2D.hpp" line="62" column="3" bodyfile="CastorUtils/Math/Line2D.hpp" bodystart="62" bodyend="-1"/>
+        <referencedby refid="da/dac/a09111_1a39b190a43654a1cac52d2b29a9d879e9" compoundref="db/d26/a02129" startline="42" endline="54">castor::Line2D&lt; T &gt;::intersects</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/dac/a09111_1ab9696299f7bce5ca8af37eeb7bc2c72d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Line2D&lt; T &gt;::Line2D</definition>
+        <argsstring>(T xA, T yA, T xB, T yB)</argsstring>
+        <name>Line2D</name>
+        <qualifiedname>castor::Line2D::Line2D</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>xA</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>yA</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>xB</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>yB</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">xA</parametername>
+<parametername direction="in">yA</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les coordonnées du point A de la ligne </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">xB</parametername>
+<parametername direction="in">yB</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les coordonnées du point B de la ligne </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Line2D.hpp" line="25" column="1" bodyfile="CastorUtils/Math/Line2D.hpp" bodystart="25" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dac/a09111_1a39b190a43654a1cac52d2b29a9d879e9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::Line2D&lt; T &gt;::intersects</definition>
+        <argsstring>(Line2D const &amp;line, T &amp;x, T &amp;y)</argsstring>
+        <name>intersects</name>
+        <qualifiedname>castor::Line2D::intersects</qualifiedname>
+        <param>
+          <type><ref refid="da/dac/a09111" kindref="compound">Line2D</ref> const &amp;</type>
+          <declname>line</declname>
+        </param>
+        <param>
+          <type>T &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>T &amp;</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+<para>Calcule l&apos;intersection entre cette ligne et l&apos;autre. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">line</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;autre ligne </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">x</parametername>
+<parametername direction="out">y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoivent les coordonnées du point d&apos;intersection </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si une intersection existe </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Line2D.hpp" line="42" column="6" bodyfile="CastorUtils/Math/Line2D.hpp" bodystart="42" bodyend="54"/>
+        <references refid="da/dac/a09111_1a161e4a7acc6a6a42151af0d3cecce3fa" compoundref="db/d26/a02129" startline="59">castor::Line2D&lt; T &gt;::a</references>
+        <references refid="da/dac/a09111_1a048781476972f640c952d9b986893778" compoundref="db/d26/a02129" startline="62">castor::Line2D&lt; T &gt;::b</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Equation d&apos;une ligne 2D. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Vous connaissez y = ax + b ? </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="CastorUtils/Math/Line2D.hpp" line="12" column="1" bodyfile="CastorUtils/Math/Line2D.hpp" bodystart="13" bodyend="63"/>
+    <listofallmembers>
+      <member refid="da/dac/a09111_1a161e4a7acc6a6a42151af0d3cecce3fa" prot="public" virt="non-virtual"><scope>castor::Line2D</scope><name>a</name></member>
+      <member refid="da/dac/a09111_1a048781476972f640c952d9b986893778" prot="public" virt="non-virtual"><scope>castor::Line2D</scope><name>b</name></member>
+      <member refid="da/dac/a09111_1a39b190a43654a1cac52d2b29a9d879e9" prot="public" virt="non-virtual"><scope>castor::Line2D</scope><name>intersects</name></member>
+      <member refid="da/dac/a09111_1ab9696299f7bce5ca8af37eeb7bc2c72d" prot="public" virt="non-virtual"><scope>castor::Line2D</scope><name>Line2D</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

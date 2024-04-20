@@ -1,0 +1,25 @@
+<map id="castor3d::Engine::createFont" name="castor3d::Engine::createFont">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,77,196,102"/>
+<area shape="rect" id="Node000002" href="$d8/da3/a08255.html#aae5b569e26955738733ba4de036629d7" title="Creates an element." alt="" coords="244,37,432,77"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,74,230,69,231,74,195,79"/>
+<area shape="rect" id="Node000012" href="$d8/d4f/a03703.html#a3e8c055c4faafee3fea08412919f39a9" title=" " alt="" coords="252,101,424,141"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="195,99,239,105,238,111,195,105"/>
+<area shape="rect" id="Node000003" href="$d8/da3/a08255.html#adee23d182e1e5ddc942024826978b31e" title=" " alt="" coords="480,5,668,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="432,42,466,37,467,43,433,47"/>
+<area shape="rect" id="Node000004" href="$d8/da3/a08255.html#aa1689ccd9a406fe8dfe9ff473d226b5e" title=" " alt="" coords="480,69,668,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="433,67,467,72,466,77,432,73"/>
+<area shape="rect" id="Node000005" href="$d8/da3/a08255.html#a846eb5869a3b833ce9200edb493a3463" title=" " alt="" coords="716,5,904,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="648,67,722,46,724,51,649,72"/>
+<area shape="rect" id="Node000006" href="$d9/d93/a09063.html#a8053eec12caa69c0ddad74e68e945eab" title="Logs a trace message, from a std::basic_string&lt; CharT &gt;" alt="" coords="733,69,887,109"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="668,87,719,87,719,92,668,92"/>
+<area shape="rect" id="Node000011" href="$d2/dd2/a02279.html#af41ea5b34edb8c4103f57937867ea4d6" title=" " alt="" coords="723,134,897,159"/>
+<area shape="poly" id="edge10_Node000004_Node000011" title=" " alt="" coords="658,107,744,128,743,133,656,112"/>
+<area shape="rect" id="Node000007" href="$d9/d93/a09063.html#af8c57bc4b8bfeb532f32493316e157a1" title="Pushes a message into the queue." alt="" coords="952,69,1107,109"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="888,87,939,87,939,92,888,92"/>
+<area shape="rect" id="Node000008" href="$d9/d93/a09063.html#afa966debfbe3f79d0bea9cf2bc4c7889" title=" " alt="" coords="1161,12,1315,52"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="1102,67,1151,53,1152,58,1103,72"/>
+<area shape="rect" id="Node000009" href="$d2/dd2/a02279.html#a58f3178234ce83e643568e48a0ed6a3f" title=" " alt="" coords="1155,77,1321,102"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="1107,87,1141,87,1141,92,1107,92"/>
+<area shape="rect" id="Node000010" href="$d2/dd2/a02279.html#ab0fb14b20a64ca391cfd363dfdf2ea78" title=" " alt="" coords="1188,126,1288,151"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="1107,105,1175,121,1174,126,1106,110"/>
+</map>

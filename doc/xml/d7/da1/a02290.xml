@@ -1,0 +1,2948 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/da1/a02290" kind="namespace" language="C++">
+    <compoundname>castor::string</compoundname>
+    <innernamespace refid="d4/d8c/a02292">castor::string::details</innernamespace>
+    <innernamespace refid="dd/d3b/a02291">castor::string::utf8</innernamespace>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="d7/da1/a02290_1ad23e005d690b1b4fa361cde346cd9337" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::string::isInteger</definition>
+        <argsstring>(String const &amp;toTest, std::locale const &amp;locale=std::locale(&quot;C&quot;))</argsstring>
+        <name>isInteger</name>
+        <qualifiedname>castor::string::isInteger</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>toTest</declname>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(&quot;C&quot;)</defval>
+        </param>
+        <briefdescription>
+<para>Teste si le String donné réprésente un nombre entier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">toTest</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à tester </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale (inutilisée) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si toTest contient n&apos;importe quel caractère autre que &apos;0123456789&apos; </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="67" column="13" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="67" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1ab4acc893ae203911b4a96ffef55795fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::string::isFloating</definition>
+        <argsstring>(String const &amp;toTest, std::locale const &amp;locale=std::locale(&quot;C&quot;))</argsstring>
+        <name>isFloating</name>
+        <qualifiedname>castor::string::isFloating</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>toTest</declname>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(&quot;C&quot;)</defval>
+        </param>
+        <briefdescription>
+<para>Teste si le String donné réprésente un nombre flottant. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">toTest</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à tester </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée pour déterminer le format du séparateur &apos;.&apos; </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si toTest contient n&apos;importe quel caractère autre que &apos;0123456789.,&apos; ou plus d&apos;un &apos;.&apos;/&apos;,&apos; </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="80" column="13" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="80" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1ac50177438d95d94038b4df52e04a8e41" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> short</type>
+        <definition>CU_API short castor::string::toShort</definition>
+        <argsstring>(String const &amp;str, std::locale const &amp;locale=std::locale(&quot;C&quot;))</argsstring>
+        <name>toShort</name>
+        <qualifiedname>castor::string::toShort</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(&quot;C&quot;)</defval>
+        </param>
+        <briefdescription>
+<para>Récupère un short à partir d&apos;un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Un String </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le short contenu dans le String </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="93" column="14" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="93" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a37017f8e39b34e9c2185139b27da175a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> int</type>
+        <definition>CU_API int castor::string::toInt</definition>
+        <argsstring>(String const &amp;str, std::locale const &amp;locale=std::locale(&quot;C&quot;))</argsstring>
+        <name>toInt</name>
+        <qualifiedname>castor::string::toInt</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(&quot;C&quot;)</defval>
+        </param>
+        <briefdescription>
+<para>Récupère un int à partir d&apos;un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Un String </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;int contenu dans le String </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="106" column="12" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="106" declcolumn="12"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a303012dbc91b3f834fb48620faad0dcc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> long</type>
+        <definition>CU_API long castor::string::toLong</definition>
+        <argsstring>(String const &amp;str, std::locale const &amp;locale=std::locale(&quot;C&quot;))</argsstring>
+        <name>toLong</name>
+        <qualifiedname>castor::string::toLong</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(&quot;C&quot;)</defval>
+        </param>
+        <briefdescription>
+<para>Récupère un long à partir d&apos;un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Un String </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le long contenu dans le String </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="119" column="13" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="119" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a600419524ed7f039a13ada8eb9f9b844" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> long long</type>
+        <definition>CU_API long long castor::string::toLongLong</definition>
+        <argsstring>(String const &amp;str, std::locale const &amp;locale=std::locale(&quot;C&quot;))</argsstring>
+        <name>toLongLong</name>
+        <qualifiedname>castor::string::toLongLong</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(&quot;C&quot;)</defval>
+        </param>
+        <briefdescription>
+<para>Récupère un long long à partir d&apos;un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Un String </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le long long contenu dans le String </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="132" column="18" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="132" declcolumn="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a5119978aa335bced8be5ab9353141675" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> unsigned short</type>
+        <definition>CU_API unsigned short castor::string::toUShort</definition>
+        <argsstring>(String const &amp;str, std::locale const &amp;locale=std::locale(&quot;C&quot;))</argsstring>
+        <name>toUShort</name>
+        <qualifiedname>castor::string::toUShort</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(&quot;C&quot;)</defval>
+        </param>
+        <briefdescription>
+<para>Récupère un unsigned short à partir d&apos;un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Un String </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;unsigned short contenu dans le String </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="145" column="23" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="145" declcolumn="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a1d533a1e1d9510bbe24bd131c7193265" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> unsigned int</type>
+        <definition>CU_API unsigned int castor::string::toUInt</definition>
+        <argsstring>(String const &amp;str, std::locale const &amp;locale=std::locale(&quot;C&quot;))</argsstring>
+        <name>toUInt</name>
+        <qualifiedname>castor::string::toUInt</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(&quot;C&quot;)</defval>
+        </param>
+        <briefdescription>
+<para>Récupère un unsigned int à partir d&apos;un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Un String </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;unsigned int contenu dans le String </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="158" column="21" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="158" declcolumn="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a60923bc59e99f9c5a5f040f4ee4f3dda" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> unsigned long</type>
+        <definition>CU_API unsigned long castor::string::toULong</definition>
+        <argsstring>(String const &amp;str, std::locale const &amp;locale=std::locale(&quot;C&quot;))</argsstring>
+        <name>toULong</name>
+        <qualifiedname>castor::string::toULong</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(&quot;C&quot;)</defval>
+        </param>
+        <briefdescription>
+<para>Récupère un unsigned long à partir d&apos;un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Un String </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;unsigned long contenu dans le String </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="171" column="22" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="171" declcolumn="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a9b1b1c27a329a5a5ada54c23c9b7a443" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> unsigned long long</type>
+        <definition>CU_API unsigned long long castor::string::toULongLong</definition>
+        <argsstring>(String const &amp;str, std::locale const &amp;locale=std::locale(&quot;C&quot;))</argsstring>
+        <name>toULongLong</name>
+        <qualifiedname>castor::string::toULongLong</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(&quot;C&quot;)</defval>
+        </param>
+        <briefdescription>
+<para>Récupère un unsigned long long à partir d&apos;un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Un String </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;unsigned long long contenu dans le String </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="184" column="27" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="184" declcolumn="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a900c58770d4b946c5866c738c95464d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> float</type>
+        <definition>CU_API float castor::string::toFloat</definition>
+        <argsstring>(String const &amp;str, std::locale const &amp;locale=std::locale(&quot;C&quot;))</argsstring>
+        <name>toFloat</name>
+        <qualifiedname>castor::string::toFloat</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(&quot;C&quot;)</defval>
+        </param>
+        <briefdescription>
+<para>Récupère un float à partir d&apos;un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Un String </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le float contenu dans le String </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="197" column="14" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="197" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a5bf1818b81127f63795b3a8a1d2ef293" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> double</type>
+        <definition>CU_API double castor::string::toDouble</definition>
+        <argsstring>(String const &amp;str, std::locale const &amp;locale=std::locale(&quot;C&quot;))</argsstring>
+        <name>toDouble</name>
+        <qualifiedname>castor::string::toDouble</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(&quot;C&quot;)</defval>
+        </param>
+        <briefdescription>
+<para>Récupère un double à partir d&apos;un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Un String </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le double contenu dans le String </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="210" column="15" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="210" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1ae9dda0af7b73c365cdb4f8e099746da2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> long double</type>
+        <definition>CU_API long double castor::string::toLongDouble</definition>
+        <argsstring>(String const &amp;str, std::locale const &amp;locale=std::locale(&quot;C&quot;))</argsstring>
+        <name>toLongDouble</name>
+        <qualifiedname>castor::string::toLongDouble</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(&quot;C&quot;)</defval>
+        </param>
+        <briefdescription>
+<para>Récupère un double à partir d&apos;un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Un String </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le double contenu dans le String </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="223" column="20" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="223" declcolumn="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a81f33772aa01b14c6e9b25ec81832d03" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::string::isUpperCase</definition>
+        <argsstring>(String const &amp;toTest)</argsstring>
+        <name>isUpperCase</name>
+        <qualifiedname>castor::string::isUpperCase</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>toTest</declname>
+        </param>
+        <briefdescription>
+<para>Teste si le String donné est en majuscules. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">toTest</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à tester </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si toTest est en majuscules </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="234" column="13" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="234" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a5eeb308d9835704565ebdcc5b1c04c9e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::string::isLowerCase</definition>
+        <argsstring>(String const &amp;toTest)</argsstring>
+        <name>isLowerCase</name>
+        <qualifiedname>castor::string::isLowerCase</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>toTest</declname>
+        </param>
+        <briefdescription>
+<para>Teste si le String donné est en minuscules. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">toTest</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à tester </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si toTest est en minuscules </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="245" column="13" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="245" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a610bce01066064e8dc565e5cb5c1bdf6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>CU_API String castor::string::upperCase</definition>
+        <argsstring>(String const &amp;str)</argsstring>
+        <name>upperCase</name>
+        <qualifiedname>castor::string::upperCase</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+<para>Met tous les caractères du String donné en majuscules. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à modifier, reçoit le String modifié </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String modifié </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="256" column="15" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="256" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a82f81c0bad6880db423a46d3bd9125b4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>CU_API String castor::string::lowerCase</definition>
+        <argsstring>(String const &amp;str)</argsstring>
+        <name>lowerCase</name>
+        <qualifiedname>castor::string::lowerCase</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+<para>Met tous les caractères du String donné en minuscules. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à modifier, reçoit le String modifié </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String modifié </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="267" column="15" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="267" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a43ce81d5b8293507f7d511d295057c35" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>CU_API String castor::string::snakeToCamelCase</definition>
+        <argsstring>(String const &amp;str)</argsstring>
+        <name>snakeToCamelCase</name>
+        <qualifiedname>castor::string::snakeToCamelCase</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+<para>Convertit la chaine donnée de snake_case vers CamelCase. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="274" column="15" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="274" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a23e6d440b698b3ad60543f31225026f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> &amp;</type>
+        <definition>CU_API String &amp; castor::string::toUpperCase</definition>
+        <argsstring>(String &amp;str)</argsstring>
+        <name>toUpperCase</name>
+        <qualifiedname>castor::string::toUpperCase</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+<para>Met tous les caractères du String donné en majuscules. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à modifier, reçoit le String modifié </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String modifié </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="285" column="16" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="285" declcolumn="16"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1ab9082de2115dd29c56b11d7dc132baf9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> &amp;</type>
+        <definition>CU_API String &amp; castor::string::toLowerCase</definition>
+        <argsstring>(String &amp;str)</argsstring>
+        <name>toLowerCase</name>
+        <qualifiedname>castor::string::toLowerCase</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+<para>Met tous les caractères du String donné en minuscules. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à modifier, reçoit le String modifié </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String modifié </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="296" column="16" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="296" declcolumn="16"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1abd0f267fedc5d640cd8158e76f86a51c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; std::basic_string&lt; CharT &gt; &gt;</type>
+        <definition>Vector&lt; std::basic_string&lt; CharT &gt; &gt; castor::string::split</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; const &amp;str, std::basic_string_view&lt; CharT &gt; delims, uint32_t maxSplits=10, bool keepEmpty=true)</argsstring>
+        <name>split</name>
+        <qualifiedname>castor::string::split</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>delims</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>maxSplits</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>keepEmpty</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>Découpe une chaîne en plusieurs sous-chaînes, en utilisant un/des délimiteur(s) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à découper </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">delims</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le(s) délimiteur(s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">maxSplits</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre maximal de découpes (le retour contiendra 0 &lt; x &lt; maxSplits sous-chaînes) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">keepEmpty</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la fonction garde les sous-chaînes vides ou pas </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le tableau contenant les sous-chaînes </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="314" column="8" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="314" declcolumn="8"/>
+        <referencedby refid="d0/d45/a05315_1a96cb2145223019c28b190229001f6be5" compoundref="df/dbb/a00698" startline="34" endline="59">castor3d::ParametersT&lt; KeyT &gt;::parse</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a8bae64d88d70536630c74d0d5749ec4e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; std::basic_string&lt; CharT &gt; &gt;</type>
+        <definition>Vector&lt; std::basic_string&lt; CharT &gt; &gt; castor::string::split</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; const &amp;str, std::basic_string&lt; CharT &gt; delims, uint32_t maxSplits=10, bool keepEmpty=true)</argsstring>
+        <name>split</name>
+        <qualifiedname>castor::string::split</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::basic_string&lt; CharT &gt;</type>
+          <declname>delims</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>maxSplits</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>keepEmpty</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>Découpe une chaîne en plusieurs sous-chaînes, en utilisant un/des délimiteur(s) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à découper </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">delims</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le(s) délimiteur(s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">maxSplits</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre maximal de découpes (le retour contiendra 0 &lt; x &lt; maxSplits sous-chaînes) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">keepEmpty</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la fonction garde les sous-chaînes vides ou pas </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le tableau contenant les sous-chaînes </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="335" column="8" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="335" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a6e245b6bfab716cffcf43c646f1d8410" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; std::basic_string&lt; CharT &gt; &gt;</type>
+        <definition>Vector&lt; std::basic_string&lt; CharT &gt; &gt; castor::string::split</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; const &amp;str, CharT const *delims, uint32_t maxSplits=10, bool keepEmpty=true)</argsstring>
+        <name>split</name>
+        <qualifiedname>castor::string::split</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>CharT const *</type>
+          <declname>delims</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>maxSplits</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>keepEmpty</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>Découpe une chaîne en plusieurs sous-chaînes, en utilisant un/des délimiteur(s) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à découper </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">delims</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le(s) délimiteur(s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">maxSplits</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre maximal de découpes (le retour contiendra 0 &lt; x &lt; maxSplits sous-chaînes) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">keepEmpty</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la fonction garde les sous-chaînes vides ou pas </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le tableau contenant les sous-chaînes </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="356" column="8" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="356" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a2215fab9984b19641836b213a30aa89f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; std::basic_string_view&lt; CharT &gt; &gt;</type>
+        <definition>Vector&lt; std::basic_string_view&lt; CharT &gt; &gt; castor::string::split</definition>
+        <argsstring>(std::basic_string_view&lt; CharT &gt; str, std::basic_string_view&lt; CharT &gt; delims, uint32_t maxSplits=10, bool keepEmpty=true)</argsstring>
+        <name>split</name>
+        <qualifiedname>castor::string::split</qualifiedname>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>delims</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>maxSplits</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>keepEmpty</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>Découpe une chaîne en plusieurs sous-chaînes, en utilisant un/des délimiteur(s) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à découper </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">delims</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le(s) délimiteur(s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">maxSplits</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre maximal de découpes (le retour contiendra 0 &lt; x &lt; maxSplits sous-chaînes) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">keepEmpty</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la fonction garde les sous-chaînes vides ou pas </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le tableau contenant les sous-chaînes </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="377" column="8" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="377" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1ab659ba1c83cd73e4b93b38ba630c2c7c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; std::basic_string_view&lt; CharT &gt; &gt;</type>
+        <definition>Vector&lt; std::basic_string_view&lt; CharT &gt; &gt; castor::string::split</definition>
+        <argsstring>(std::basic_string_view&lt; CharT &gt; str, std::basic_string&lt; CharT &gt; delims, uint32_t maxSplits=10, bool keepEmpty=true)</argsstring>
+        <name>split</name>
+        <qualifiedname>castor::string::split</qualifiedname>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::basic_string&lt; CharT &gt;</type>
+          <declname>delims</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>maxSplits</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>keepEmpty</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>Découpe une chaîne en plusieurs sous-chaînes, en utilisant un/des délimiteur(s) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à découper </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">delims</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le(s) délimiteur(s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">maxSplits</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre maximal de découpes (le retour contiendra 0 &lt; x &lt; maxSplits sous-chaînes) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">keepEmpty</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la fonction garde les sous-chaînes vides ou pas </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le tableau contenant les sous-chaînes </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="398" column="8" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="398" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a2c5e55f5b6605c53d449163434cd6240" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; std::basic_string_view&lt; CharT &gt; &gt;</type>
+        <definition>Vector&lt; std::basic_string_view&lt; CharT &gt; &gt; castor::string::split</definition>
+        <argsstring>(std::basic_string_view&lt; CharT &gt; str, CharT const *delims, uint32_t maxSplits=10, bool keepEmpty=true)</argsstring>
+        <name>split</name>
+        <qualifiedname>castor::string::split</qualifiedname>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>CharT const *</type>
+          <declname>delims</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>maxSplits</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>keepEmpty</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>Découpe une chaîne en plusieurs sous-chaînes, en utilisant un/des délimiteur(s) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à découper </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">delims</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le(s) délimiteur(s) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">maxSplits</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre maximal de découpes (le retour contiendra 0 &lt; x &lt; maxSplits sous-chaînes) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">keepEmpty</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la fonction garde les sous-chaînes vides ou pas </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le tableau contenant les sous-chaînes </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="419" column="8" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="419" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a9f6e42483888557af524d369b594a265" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>std::basic_string&lt; CharT &gt; &amp;</type>
+        <definition>std::basic_string&lt; CharT &gt; &amp; castor::string::replace</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; &amp;str, CharT toFind, CharT replacement)</argsstring>
+        <name>replace</name>
+        <qualifiedname>castor::string::replace</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>CharT</type>
+          <declname>toFind</declname>
+        </param>
+        <param>
+          <type>CharT</type>
+          <declname>replacement</declname>
+        </param>
+        <briefdescription>
+<para>Remplace toutes les occurences d&apos;un xchar par un autre dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à modifier </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">toFind</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le xchar à remplacer </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">replacement</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le xchar de remplacement </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur la chaîne modifiée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="438" column="20" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="438" declcolumn="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1ad3f50a3380ef4aa9b2a94a19cee09a81" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>std::basic_string&lt; CharT &gt; &amp;</type>
+        <definition>std::basic_string&lt; CharT &gt; &amp; castor::string::replace</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; &amp;str, CharT const *toFind, CharT const *replacement)</argsstring>
+        <name>replace</name>
+        <qualifiedname>castor::string::replace</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>CharT const *</type>
+          <declname>toFind</declname>
+        </param>
+        <param>
+          <type>CharT const *</type>
+          <declname>replacement</declname>
+        </param>
+        <briefdescription>
+<para>Remplace toutes les occurences d&apos;un xchar par un autre dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à modifier </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">toFind</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le xchar à remplacer </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">replacement</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le xchar de remplacement </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur la chaîne modifiée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="456" column="20" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="456" declcolumn="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a2e9dc421ed287735a780483cd071325e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>std::basic_string&lt; CharT &gt; &amp;</type>
+        <definition>std::basic_string&lt; CharT &gt; &amp; castor::string::replace</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; &amp;str, std::basic_string_view&lt; CharT &gt; toFind, CharT replacement)</argsstring>
+        <name>replace</name>
+        <qualifiedname>castor::string::replace</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>toFind</declname>
+        </param>
+        <param>
+          <type>CharT</type>
+          <declname>replacement</declname>
+        </param>
+        <briefdescription>
+<para>Remplace toutes les occurences d&apos;un String par un xchar dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à modifier </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">toFind</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à remplacer </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">replacement</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le xchar de remplacement </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur la chaîne modifiée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="474" column="20" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="474" declcolumn="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a8f529f90fdb8726082b59747d8753628" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>std::basic_string&lt; CharT &gt; &amp;</type>
+        <definition>std::basic_string&lt; CharT &gt; &amp; castor::string::replace</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; &amp;str, CharT toFind, std::basic_string_view&lt; CharT &gt; replacement)</argsstring>
+        <name>replace</name>
+        <qualifiedname>castor::string::replace</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>CharT</type>
+          <declname>toFind</declname>
+        </param>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>replacement</declname>
+        </param>
+        <briefdescription>
+<para>Remplace toutes les occurences d&apos;un xchar par un String dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à modifier </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">toFind</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le xchar à remplacer </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">replacement</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String de remplacement </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur la chaîne modifiée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="492" column="20" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="492" declcolumn="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1ab989263318622dd83d57dad9e2419821" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>std::basic_string&lt; CharT &gt; &amp;</type>
+        <definition>std::basic_string&lt; CharT &gt; &amp; castor::string::replace</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; &amp;str, std::basic_string&lt; CharT &gt; toFind, std::basic_string&lt; CharT &gt; replacement)</argsstring>
+        <name>replace</name>
+        <qualifiedname>castor::string::replace</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::basic_string&lt; CharT &gt;</type>
+          <declname>toFind</declname>
+        </param>
+        <param>
+          <type>std::basic_string&lt; CharT &gt;</type>
+          <declname>replacement</declname>
+        </param>
+        <briefdescription>
+<para>Remplace toutes les occurences d&apos;un String par un autre dans un troisième. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à modifier </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">toFind</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à remplacer </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">replacement</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String de remplacement </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur la chaîne modifiée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="510" column="20" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="510" declcolumn="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1ac9b6cd0453c61a3821d79ce213ef9f43" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>std::basic_string&lt; CharT &gt; &amp;</type>
+        <definition>std::basic_string&lt; CharT &gt; &amp; castor::string::replace</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; &amp;str, std::basic_string_view&lt; CharT &gt; toFind, std::basic_string_view&lt; CharT &gt; replacement)</argsstring>
+        <name>replace</name>
+        <qualifiedname>castor::string::replace</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>toFind</declname>
+        </param>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>replacement</declname>
+        </param>
+        <briefdescription>
+<para>Remplace toutes les occurences d&apos;un String par un autre dans un troisième. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à modifier </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">toFind</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String à remplacer </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">replacement</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String de remplacement </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur la chaîne modifiée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="528" column="20" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="528" declcolumn="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a06a329322d6d64e4037e5ead3388e144" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>std::basic_string&lt; CharT &gt; &amp;</type>
+        <definition>std::basic_string&lt; CharT &gt; &amp; castor::string::trim</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; &amp;text, bool left=true, bool right=true, std::basic_string_view&lt; CharT &gt; seps=details::trimDefaultArgs&lt; CharT &gt;)</argsstring>
+        <name>trim</name>
+        <qualifiedname>castor::string::trim</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; &amp;</type>
+          <declname>text</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>left</declname>
+          <defval>true</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>right</declname>
+          <defval>true</defval>
+        </param>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>seps</declname>
+          <defval><ref refid="d4/d8c/a02292_1af51bd2c3818afef8c526eeab4af2c855" kindref="member">details::trimDefaultArgs</ref>&lt; CharT &gt;</defval>
+        </param>
+        <briefdescription>
+<para>Supprime les espaces à gauche et/ou à droite dans la chaîne donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">text</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La chaîne à modifier, reçoit la chaîne modifiée </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">left</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si on enlève les espaces à gauche </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">right</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si on enlève les espaces à droite </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">seps</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les caractères à supprimer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La chaîne sans espaces </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="548" column="20" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="548" declcolumn="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1ade0aa90d63ba6e3c162221079f86c5f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>std::basic_string_view&lt; CharT &gt; &amp;</type>
+        <definition>std::basic_string_view&lt; CharT &gt; &amp; castor::string::trim</definition>
+        <argsstring>(std::basic_string_view&lt; CharT &gt; &amp;text, bool left=true, bool right=true, std::basic_string_view&lt; CharT &gt; seps=details::trimDefaultArgs&lt; CharT &gt;)</argsstring>
+        <name>trim</name>
+        <qualifiedname>castor::string::trim</qualifiedname>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt; &amp;</type>
+          <declname>text</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>left</declname>
+          <defval>true</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>right</declname>
+          <defval>true</defval>
+        </param>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>seps</declname>
+          <defval><ref refid="d4/d8c/a02292_1af51bd2c3818afef8c526eeab4af2c855" kindref="member">details::trimDefaultArgs</ref>&lt; CharT &gt;</defval>
+        </param>
+        <briefdescription>
+<para>Supprime les espaces à gauche et/ou à droite dans la chaîne donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">text</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La chaîne à modifier, reçoit la chaîne modifiée </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">left</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si on enlève les espaces à gauche </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">right</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si on enlève les espaces à droite </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">seps</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les caractères à supprimer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La chaîne sans espaces </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="569" column="25" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="569" declcolumn="25"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a2bd84804ebfebe773bc318aaea24a8c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>std::basic_string&lt; CharT &gt;</type>
+        <definition>std::basic_string&lt; CharT &gt; castor::string::getLongestCommonSubstring</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; const &amp;lhs, std::basic_string&lt; CharT &gt; const &amp;rhs)</argsstring>
+        <name>getLongestCommonSubstring</name>
+        <qualifiedname>castor::string::getLongestCommonSubstring</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les chaînes d&apos;entrée. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La plus longue chaîne commune aux chaînes d&apos;entrée. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="582" column="19" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="582" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a38f364e3aae7ae585bdf2c9aac290601" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>CU_API String castor::string::toString</definition>
+        <argsstring>(char32_t value)</argsstring>
+        <name>toString</name>
+        <qualifiedname>castor::string::toString</qualifiedname>
+        <param>
+          <type>char32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Met une valeur dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String contenant la valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="594" column="15" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="594" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a803748de8265794e14823cacf991af76" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>CU_API String castor::string::toString</definition>
+        <argsstring>(uint8_t value, int base=10, std::locale const &amp;locale=std::locale(std::locale(&quot;C&quot;), new manip::BaseNumPut&lt; char &gt;()))</argsstring>
+        <name>toString</name>
+        <qualifiedname>castor::string::toString</qualifiedname>
+        <param>
+          <type>uint8_t</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>base</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(std::locale(&quot;C&quot;), new <ref refid="da/d8e/a09527" kindref="compound">manip::BaseNumPut</ref>&lt; char &gt;())</defval>
+        </param>
+        <briefdescription>
+<para>Met une valeur dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">base</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base numérique </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String contenant la valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="609" column="15" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="609" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a909b9f63f2c007ca9d9d14c2de39480d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>CU_API String castor::string::toString</definition>
+        <argsstring>(int16_t value, int base=10, std::locale const &amp;locale=std::locale(std::locale(&quot;C&quot;), new manip::BaseNumPut&lt; char &gt;()))</argsstring>
+        <name>toString</name>
+        <qualifiedname>castor::string::toString</qualifiedname>
+        <param>
+          <type>int16_t</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>base</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(std::locale(&quot;C&quot;), new <ref refid="da/d8e/a09527" kindref="compound">manip::BaseNumPut</ref>&lt; char &gt;())</defval>
+        </param>
+        <briefdescription>
+<para>Met une valeur dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">base</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base numérique </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String contenant la valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="624" column="15" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="624" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a6d53d88efd2b2f0bdcc66a594473563b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>CU_API String castor::string::toString</definition>
+        <argsstring>(uint16_t value, int base=10, std::locale const &amp;locale=std::locale(std::locale(&quot;C&quot;), new manip::BaseNumPut&lt; char &gt;()))</argsstring>
+        <name>toString</name>
+        <qualifiedname>castor::string::toString</qualifiedname>
+        <param>
+          <type>uint16_t</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>base</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(std::locale(&quot;C&quot;), new <ref refid="da/d8e/a09527" kindref="compound">manip::BaseNumPut</ref>&lt; char &gt;())</defval>
+        </param>
+        <briefdescription>
+<para>Met une valeur dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">base</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base numérique </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String contenant la valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="639" column="15" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="639" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1aeb9ec7b55365656c4e069fada6d7b0cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>CU_API String castor::string::toString</definition>
+        <argsstring>(int32_t value, int base=10, std::locale const &amp;locale=std::locale(std::locale(&quot;C&quot;), new manip::BaseNumPut&lt; char &gt;()))</argsstring>
+        <name>toString</name>
+        <qualifiedname>castor::string::toString</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>base</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(std::locale(&quot;C&quot;), new <ref refid="da/d8e/a09527" kindref="compound">manip::BaseNumPut</ref>&lt; char &gt;())</defval>
+        </param>
+        <briefdescription>
+<para>Met une valeur dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">base</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base numérique </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String contenant la valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="654" column="15" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="654" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1ace9e5a4f95210c914fd7c67ec0c64734" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>CU_API String castor::string::toString</definition>
+        <argsstring>(uint32_t value, int base=10, std::locale const &amp;locale=std::locale(std::locale(&quot;C&quot;), new manip::BaseNumPut&lt; char &gt;()))</argsstring>
+        <name>toString</name>
+        <qualifiedname>castor::string::toString</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>base</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(std::locale(&quot;C&quot;), new <ref refid="da/d8e/a09527" kindref="compound">manip::BaseNumPut</ref>&lt; char &gt;())</defval>
+        </param>
+        <briefdescription>
+<para>Met une valeur dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">base</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base numérique </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String contenant la valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="669" column="15" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="669" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a280772ff845b3a1d831345ed1a91a64a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>CU_API String castor::string::toString</definition>
+        <argsstring>(int64_t value, int base=10, std::locale const &amp;locale=std::locale(std::locale(&quot;C&quot;), new manip::BaseNumPut&lt; char &gt;()))</argsstring>
+        <name>toString</name>
+        <qualifiedname>castor::string::toString</qualifiedname>
+        <param>
+          <type>int64_t</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>base</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(std::locale(&quot;C&quot;), new <ref refid="da/d8e/a09527" kindref="compound">manip::BaseNumPut</ref>&lt; char &gt;())</defval>
+        </param>
+        <briefdescription>
+<para>Met une valeur dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">base</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base numérique </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String contenant la valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="684" column="15" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="684" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a331b05535fbb3a60a7949ca9addeed3e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>CU_API String castor::string::toString</definition>
+        <argsstring>(uint64_t value, int base=10, std::locale const &amp;locale=std::locale(std::locale(&quot;C&quot;), new manip::BaseNumPut&lt; char &gt;()))</argsstring>
+        <name>toString</name>
+        <qualifiedname>castor::string::toString</qualifiedname>
+        <param>
+          <type>uint64_t</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>base</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(std::locale(&quot;C&quot;), new <ref refid="da/d8e/a09527" kindref="compound">manip::BaseNumPut</ref>&lt; char &gt;())</defval>
+        </param>
+        <briefdescription>
+<para>Met une valeur dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">base</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base numérique </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String contenant la valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="699" column="15" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="699" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1ad538168c9b09f32dd7bacbe29fd9a036" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref></type>
+        <definition>CU_API MbString castor::string::toMbString</definition>
+        <argsstring>(char32_t value)</argsstring>
+        <name>toMbString</name>
+        <qualifiedname>castor::string::toMbString</qualifiedname>
+        <param>
+          <type>char32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Met une valeur dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String contenant la valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="710" column="17" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="710" declcolumn="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1ae3b6de1282204cfc98a5ca3439fc2109" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref></type>
+        <definition>CU_API MbString castor::string::toMbString</definition>
+        <argsstring>(uint8_t value, int base=10, std::locale const &amp;locale=std::locale(std::locale(&quot;C&quot;), new manip::BaseNumPut&lt; char &gt;()))</argsstring>
+        <name>toMbString</name>
+        <qualifiedname>castor::string::toMbString</qualifiedname>
+        <param>
+          <type>uint8_t</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>base</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(std::locale(&quot;C&quot;), new <ref refid="da/d8e/a09527" kindref="compound">manip::BaseNumPut</ref>&lt; char &gt;())</defval>
+        </param>
+        <briefdescription>
+<para>Met une valeur dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">base</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base numérique </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String contenant la valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="725" column="17" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="725" declcolumn="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a30ac5001d45e30dbfd0d9f7be53c28db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref></type>
+        <definition>CU_API MbString castor::string::toMbString</definition>
+        <argsstring>(int16_t value, int base=10, std::locale const &amp;locale=std::locale(std::locale(&quot;C&quot;), new manip::BaseNumPut&lt; char &gt;()))</argsstring>
+        <name>toMbString</name>
+        <qualifiedname>castor::string::toMbString</qualifiedname>
+        <param>
+          <type>int16_t</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>base</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(std::locale(&quot;C&quot;), new <ref refid="da/d8e/a09527" kindref="compound">manip::BaseNumPut</ref>&lt; char &gt;())</defval>
+        </param>
+        <briefdescription>
+<para>Met une valeur dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">base</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base numérique </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String contenant la valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="740" column="17" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="740" declcolumn="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a382edb6948eb63ab40292e661a45a8b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref></type>
+        <definition>CU_API MbString castor::string::toMbString</definition>
+        <argsstring>(uint16_t value, int base=10, std::locale const &amp;locale=std::locale(std::locale(&quot;C&quot;), new manip::BaseNumPut&lt; char &gt;()))</argsstring>
+        <name>toMbString</name>
+        <qualifiedname>castor::string::toMbString</qualifiedname>
+        <param>
+          <type>uint16_t</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>base</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(std::locale(&quot;C&quot;), new <ref refid="da/d8e/a09527" kindref="compound">manip::BaseNumPut</ref>&lt; char &gt;())</defval>
+        </param>
+        <briefdescription>
+<para>Met une valeur dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">base</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base numérique </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String contenant la valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="755" column="17" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="755" declcolumn="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a9b80251934215728ed57b1701aadcf81" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref></type>
+        <definition>CU_API MbString castor::string::toMbString</definition>
+        <argsstring>(int32_t value, int base=10, std::locale const &amp;locale=std::locale(std::locale(&quot;C&quot;), new manip::BaseNumPut&lt; char &gt;()))</argsstring>
+        <name>toMbString</name>
+        <qualifiedname>castor::string::toMbString</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>base</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(std::locale(&quot;C&quot;), new <ref refid="da/d8e/a09527" kindref="compound">manip::BaseNumPut</ref>&lt; char &gt;())</defval>
+        </param>
+        <briefdescription>
+<para>Met une valeur dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">base</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base numérique </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String contenant la valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="770" column="17" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="770" declcolumn="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1ab16bb923adba131ac01c45858a5da00f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref></type>
+        <definition>CU_API MbString castor::string::toMbString</definition>
+        <argsstring>(uint32_t value, int base=10, std::locale const &amp;locale=std::locale(std::locale(&quot;C&quot;), new manip::BaseNumPut&lt; char &gt;()))</argsstring>
+        <name>toMbString</name>
+        <qualifiedname>castor::string::toMbString</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>base</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(std::locale(&quot;C&quot;), new <ref refid="da/d8e/a09527" kindref="compound">manip::BaseNumPut</ref>&lt; char &gt;())</defval>
+        </param>
+        <briefdescription>
+<para>Met une valeur dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">base</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base numérique </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String contenant la valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="785" column="17" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="785" declcolumn="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a0bee1fb7bca3a8c8305820f7812ca881" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref></type>
+        <definition>CU_API MbString castor::string::toMbString</definition>
+        <argsstring>(int64_t value, int base=10, std::locale const &amp;locale=std::locale(std::locale(&quot;C&quot;), new manip::BaseNumPut&lt; char &gt;()))</argsstring>
+        <name>toMbString</name>
+        <qualifiedname>castor::string::toMbString</qualifiedname>
+        <param>
+          <type>int64_t</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>base</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(std::locale(&quot;C&quot;), new <ref refid="da/d8e/a09527" kindref="compound">manip::BaseNumPut</ref>&lt; char &gt;())</defval>
+        </param>
+        <briefdescription>
+<para>Met une valeur dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">base</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base numérique </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String contenant la valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="800" column="17" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="800" declcolumn="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a1f5a9d4844866b672ce8da47a364958e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref></type>
+        <definition>CU_API MbString castor::string::toMbString</definition>
+        <argsstring>(uint64_t value, int base=10, std::locale const &amp;locale=std::locale(std::locale(&quot;C&quot;), new manip::BaseNumPut&lt; char &gt;()))</argsstring>
+        <name>toMbString</name>
+        <qualifiedname>castor::string::toMbString</qualifiedname>
+        <param>
+          <type>uint64_t</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>base</declname>
+          <defval>10</defval>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(std::locale(&quot;C&quot;), new <ref refid="da/d8e/a09527" kindref="compound">manip::BaseNumPut</ref>&lt; char &gt;())</defval>
+        </param>
+        <briefdescription>
+<para>Met une valeur dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">base</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base numérique </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String contenant la valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="815" column="17" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="815" declcolumn="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1ae4c312d2c4c36d19c4027fceaee6e394" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::string::endsWith</definition>
+        <argsstring>(StringView value, StringView suffix)</argsstring>
+        <name>endsWith</name>
+        <qualifiedname>castor::string::endsWith</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref></type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref></type>
+          <declname>suffix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">suffix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le suffixe. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si <computeroutput>value</computeroutput> se termine par <computeroutput>suffix</computeroutput>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="826" column="13" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="826" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a017b3d45eaec059ae98f61405935432a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::string::startsWith</definition>
+        <argsstring>(StringView value, StringView prefix)</argsstring>
+        <name>startsWith</name>
+        <qualifiedname>castor::string::startsWith</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref></type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref></type>
+          <declname>prefix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">prefix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le suffixe. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si <computeroutput>value</computeroutput> commence par <computeroutput>prefix</computeroutput>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="838" column="13" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="838" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1aeafff1cdbcf58c69f35e4aacba8d2b81" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::string::parse</definition>
+        <argsstring>(String const &amp;str, T &amp;value, std::locale const &amp;locale=std::locale(&quot;C&quot;))</argsstring>
+        <name>parse</name>
+        <qualifiedname>castor::string::parse</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>T &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(&quot;C&quot;)</defval>
+        </param>
+        <briefdescription>
+<para>Récupère une valeur à partir d&apos;un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String contenant normalement la valeur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la valeur récupérée </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="854" column="13" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="854" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1aaf1ff9d6c8a0f3019a0feaeb47c5da84" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::string::extract</definition>
+        <argsstring>(String &amp;str, T &amp;value, std::locale const &amp;locale=std::locale(&quot;C&quot;))</argsstring>
+        <name>extract</name>
+        <qualifiedname>castor::string::extract</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>T &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(&quot;C&quot;)</defval>
+        </param>
+        <briefdescription>
+<para>Récupère une valeur à partir d&apos;un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">str</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String contenant normalement la valeur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la valeur récupérée </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="869" column="13" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="869" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1a6f3975c9a978348c9874f1500bf67d5c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>String castor::string::toString</definition>
+        <argsstring>(T const &amp;value, std::locale const &amp;locale=std::locale(std::locale(&quot;C&quot;), new manip::BaseNumPut&lt; xchar &gt;()))</argsstring>
+        <name>toString</name>
+        <qualifiedname>castor::string::toString</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(std::locale(&quot;C&quot;), new <ref refid="da/d8e/a09527" kindref="compound">manip::BaseNumPut</ref>&lt; <ref refid="d2/dd2/a02279_1a98169622bc976df3189194c2b35fbf60" kindref="member">xchar</ref> &gt;())</defval>
+        </param>
+        <briefdescription>
+<para>Met une valeur dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String contenant la valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="883" column="15" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="883" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a02290_1aaf8727c2ed9dd52f4664d227ba05a5eb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref></type>
+        <definition>MbString castor::string::toMbString</definition>
+        <argsstring>(T const &amp;value, std::locale const &amp;locale=std::locale(std::locale(&quot;C&quot;), new manip::BaseNumPut&lt; xchar &gt;()))</argsstring>
+        <name>toMbString</name>
+        <qualifiedname>castor::string::toMbString</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>std::locale const &amp;</type>
+          <declname>locale</declname>
+          <defval>std::locale(std::locale(&quot;C&quot;), new <ref refid="da/d8e/a09527" kindref="compound">manip::BaseNumPut</ref>&lt; <ref refid="d2/dd2/a02279_1a98169622bc976df3189194c2b35fbf60" kindref="member">xchar</ref> &gt;())</defval>
+        </param>
+        <briefdescription>
+<para>Met une valeur dans un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">locale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La locale utilisée dans la conversion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le String contenant la valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="897" column="17" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="897" declcolumn="17"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Espace de nom regroupant des fonctions sur les chaînes de caractères. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Miscellaneous/MiscellaneousModule.hpp" line="64" column="1"/>
+  </compounddef>
+</doxygen>

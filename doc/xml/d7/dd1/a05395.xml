@@ -1,0 +1,286 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/dd1/a05395" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::MeshContext</compoundname>
+    <includes local="no">Mesh.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/dd1/a05395_1ab92a9013fd0c3a868b0212013808ba3c" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/db2/a07139" kindref="compound">SceneContext</ref> *</type>
+        <definition>SceneContext* castor3d::MeshContext::scene</definition>
+        <argsstring></argsstring>
+        <name>scene</name>
+        <qualifiedname>castor3d::MeshContext::scene</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Mesh.hpp" line="329" column="15" bodyfile="Castor3D/Model/Mesh/Mesh.hpp" bodystart="329" bodyend="329"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dd1/a05395_1a034501778078c81bdf1297592ffca046" prot="public" static="no" mutable="no">
+        <type><ref refid="de/dd6/a07151" kindref="compound">RootContext</ref> *</type>
+        <definition>RootContext* castor3d::MeshContext::root</definition>
+        <argsstring></argsstring>
+        <name>root</name>
+        <qualifiedname>castor3d::MeshContext::root</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Mesh.hpp" line="330" column="14" bodyfile="Castor3D/Model/Mesh/Mesh.hpp" bodystart="330" bodyend="330"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dd1/a05395_1ad78914f7dee579698a3d4cdc94dbc1f2" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/d3f/a06975" kindref="compound">ObjectContext</ref> *</type>
+        <definition>ObjectContext* castor3d::MeshContext::geometry</definition>
+        <argsstring></argsstring>
+        <name>geometry</name>
+        <qualifiedname>castor3d::MeshContext::geometry</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Mesh.hpp" line="331" column="16" bodyfile="Castor3D/Model/Mesh/Mesh.hpp" bodystart="331" bodyend="331"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dd1/a05395_1ad7c9acc8194f4c97daa3a7ebf62163ac" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a7d8532306df73c4691abd21c2e2c623e" kindref="member">MeshResPtr</ref></type>
+        <definition>MeshResPtr castor3d::MeshContext::mesh</definition>
+        <argsstring></argsstring>
+        <name>mesh</name>
+        <qualifiedname>castor3d::MeshContext::mesh</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Mesh.hpp" line="332" column="12" bodyfile="Castor3D/Model/Mesh/Mesh.hpp" bodystart="332" bodyend="332"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dd1/a05395_1af7a00e1693766e945ae2f08ef611f655" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a2ab9b9e260e178d2e13a9376ea56f5c3" kindref="member">MeshRes</ref></type>
+        <definition>MeshRes castor3d::MeshContext::ownMesh</definition>
+        <argsstring></argsstring>
+        <name>ownMesh</name>
+        <qualifiedname>castor3d::MeshContext::ownMesh</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Mesh.hpp" line="333" column="9" bodyfile="Castor3D/Model/Mesh/Mesh.hpp" bodystart="333" bodyend="333"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dd1/a05395_1a0a2a7c5c9ea673b3519ba1232785ab5c" prot="public" static="no" mutable="no">
+        <type>MeshAnimationUPtr</type>
+        <definition>MeshAnimationUPtr castor3d::MeshContext::morphAnimation</definition>
+        <argsstring></argsstring>
+        <name>morphAnimation</name>
+        <qualifiedname>castor3d::MeshContext::morphAnimation</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Mesh.hpp" line="334" column="19" bodyfile="Castor3D/Model/Mesh/Mesh.hpp" bodystart="334" bodyend="334"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dd1/a05395_1a2044dbbca637048b15c706464ea5fa3d" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/df1/a05635" kindref="compound">Submesh</ref> *</type>
+        <definition>Submesh* castor3d::MeshContext::submesh</definition>
+        <argsstring></argsstring>
+        <name>submesh</name>
+        <qualifiedname>castor3d::MeshContext::submesh</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Mesh.hpp" line="335" column="10" bodyfile="Castor3D/Model/Mesh/Mesh.hpp" bodystart="335" bodyend="335"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dd1/a05395_1a6ef9fec1869fca0c6e36db5eab078db4" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/df6/a05611" kindref="compound">SubmeshComponent</ref> *</type>
+        <definition>SubmeshComponent* castor3d::MeshContext::submeshComponent</definition>
+        <argsstring></argsstring>
+        <name>submeshComponent</name>
+        <qualifiedname>castor3d::MeshContext::submeshComponent</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Mesh.hpp" line="336" column="19" bodyfile="Castor3D/Model/Mesh/Mesh.hpp" bodystart="336" bodyend="336"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="16">
+        <label>castor::OwnedBy&lt; Mesh &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="17" relation="template-instance">
+          <edgelabel>&lt; Mesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="17" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="6" relation="private-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::MeshContext</label>
+        <link refid="d7/dd1/a05395"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>scene</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>geometry</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>submesh</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>submeshComponent</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::MovableContext</label>
+        <link refid="d1/d84/a07063"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>scene</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::ObjectContext</label>
+        <link refid="d0/d3f/a06975"/>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::ProgressBar</label>
+        <link refid="d6/daf/a05323"/>
+      </node>
+      <node id="8">
+        <label>castor3d::RenderWindowDesc</label>
+        <link refid="de/d75/a06503"/>
+        <childnode refid="9" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RootContext</label>
+        <link refid="de/dd6/a07151"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>engine</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>window</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>logger</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>progress</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SceneContext</label>
+        <link refid="d3/db2/a07139"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>fontName</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::Submesh</label>
+        <link refid="dd/df1/a05635"/>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::SubmeshComponent</label>
+        <link refid="d6/df6/a05611"/>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::LoggerInstance</label>
+        <link refid="d9/d93/a09063"/>
+      </node>
+      <node id="6">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="17">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="7">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="6" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Model/Mesh/Mesh.hpp" line="327" column="1" bodyfile="Castor3D/Model/Mesh/Mesh.hpp" bodystart="328" bodyend="337"/>
+    <listofallmembers>
+      <member refid="d7/dd1/a05395_1ad78914f7dee579698a3d4cdc94dbc1f2" prot="public" virt="non-virtual"><scope>castor3d::MeshContext</scope><name>geometry</name></member>
+      <member refid="d7/dd1/a05395_1ad7c9acc8194f4c97daa3a7ebf62163ac" prot="public" virt="non-virtual"><scope>castor3d::MeshContext</scope><name>mesh</name></member>
+      <member refid="d7/dd1/a05395_1a0a2a7c5c9ea673b3519ba1232785ab5c" prot="public" virt="non-virtual"><scope>castor3d::MeshContext</scope><name>morphAnimation</name></member>
+      <member refid="d7/dd1/a05395_1af7a00e1693766e945ae2f08ef611f655" prot="public" virt="non-virtual"><scope>castor3d::MeshContext</scope><name>ownMesh</name></member>
+      <member refid="d7/dd1/a05395_1a034501778078c81bdf1297592ffca046" prot="public" virt="non-virtual"><scope>castor3d::MeshContext</scope><name>root</name></member>
+      <member refid="d7/dd1/a05395_1ab92a9013fd0c3a868b0212013808ba3c" prot="public" virt="non-virtual"><scope>castor3d::MeshContext</scope><name>scene</name></member>
+      <member refid="d7/dd1/a05395_1a2044dbbca637048b15c706464ea5fa3d" prot="public" virt="non-virtual"><scope>castor3d::MeshContext</scope><name>submesh</name></member>
+      <member refid="d7/dd1/a05395_1a6ef9fec1869fca0c6e36db5eab078db4" prot="public" virt="non-virtual"><scope>castor3d::MeshContext</scope><name>submeshComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

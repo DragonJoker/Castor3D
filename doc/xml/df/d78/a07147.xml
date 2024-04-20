@@ -1,0 +1,407 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d78/a07147" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SceneFileParser</compoundname>
+    <basecompoundref refid="d6/da8/a08227" prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <basecompoundref refid="da/d50/a08167" prot="public" virt="non-virtual">castor::DataHolderT&lt; RootContext &gt;</basecompoundref>
+    <basecompoundref refid="d6/d08/a08367" prot="public" virt="non-virtual">castor::FileParser</basecompoundref>
+    <includes local="no">SceneFileParser.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d78/a07147_1a73cd2bf628014532be06943edf66bc54" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneFileParser::SceneFileParser</definition>
+        <argsstring>(Engine &amp;engine, ProgressBar *progress=nullptr)</argsstring>
+        <name>SceneFileParser</name>
+        <qualifiedname>castor3d::SceneFileParser::SceneFileParser</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Barre de progression optionnelle. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneFileParser.hpp" line="33" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d78/a07147_1a0125c344e2677d1690c8e2d7ce7a04e8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::FileParserContextUPtr</type>
+        <definition>C3D_API castor::FileParserContextUPtr castor3d::SceneFileParser::initialiseParser</definition>
+        <argsstring>(castor::Path const &amp;path)</argsstring>
+        <name>initialiseParser</name>
+        <qualifiedname>castor3d::SceneFileParser::initialiseParser</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneFileParser.hpp" line="35" column="39"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d78/a07147_1ad2ee8decf5f9aaf348296772ae70599a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d75/a06503" kindref="compound">RenderWindowDesc</ref></type>
+        <definition>RenderWindowDesc castor3d::SceneFileParser::getRenderWindow</definition>
+        <argsstring>()</argsstring>
+        <name>getRenderWindow</name>
+        <qualifiedname>castor3d::SceneFileParser::getRenderWindow</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La fenêtre de rendu définie par la scène. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneFileParser.hpp" line="42" column="18" bodyfile="Castor3D/Scene/SceneFileParser.hpp" bodystart="42" bodyend="45"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; RootContext &gt;::getData</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d78/a07147_1a996c08bbc6e0caf3c47a5a57eef8aa2b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ScenePtrStrMap::iterator</type>
+        <definition>ScenePtrStrMap::iterator castor3d::SceneFileParser::scenesBegin</definition>
+        <argsstring>()</argsstring>
+        <name>scenesBegin</name>
+        <qualifiedname>castor3d::SceneFileParser::scenesBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneFileParser.hpp" line="47" column="26" bodyfile="Castor3D/Scene/SceneFileParser.hpp" bodystart="47" bodyend="50"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; RootContext &gt;::getData</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d78/a07147_1a2ad21444affdb09f89b717f810208c3a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ScenePtrStrMap::const_iterator</type>
+        <definition>ScenePtrStrMap::const_iterator castor3d::SceneFileParser::scenesBegin</definition>
+        <argsstring>() const</argsstring>
+        <name>scenesBegin</name>
+        <qualifiedname>castor3d::SceneFileParser::scenesBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneFileParser.hpp" line="52" column="32" bodyfile="Castor3D/Scene/SceneFileParser.hpp" bodystart="52" bodyend="55"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; RootContext &gt;::getData</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d78/a07147_1a03e9f73ea25b93b4b35fdb5bace293bd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ScenePtrStrMap::const_iterator</type>
+        <definition>ScenePtrStrMap::const_iterator castor3d::SceneFileParser::scenesEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>scenesEnd</name>
+        <qualifiedname>castor3d::SceneFileParser::scenesEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneFileParser.hpp" line="57" column="32" bodyfile="Castor3D/Scene/SceneFileParser.hpp" bodystart="57" bodyend="60"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; RootContext &gt;::getData</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="df/d78/a07147_1aa5b302c60a0c2074254a40315335609f" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::FileParserContextUPtr</type>
+        <definition>C3D_API castor::FileParserContextUPtr castor3d::SceneFileParser::doInitialiseParser</definition>
+        <argsstring>(castor::Path const &amp;path) override</argsstring>
+        <name>doInitialiseParser</name>
+        <qualifiedname>castor3d::SceneFileParser::doInitialiseParser</qualifiedname>
+        <reimplements refid="d6/d08/a08367_1a082e92c876e6a24b4342e9ff25700302">doInitialiseParser</reimplements>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <briefdescription>
+<para>Initialisation spécifique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin d&apos;accès au fichier. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneFileParser.hpp" line="63" column="39"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d78/a07147_1ad73ae76aef49a3cb006ed3c5722d2836" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneFileParser::doCleanupParser</definition>
+        <argsstring>(castor::PreprocessedFile &amp;preprocessed) override</argsstring>
+        <name>doCleanupParser</name>
+        <qualifiedname>castor3d::SceneFileParser::doCleanupParser</qualifiedname>
+        <reimplements refid="d6/d08/a08367_1abe8d05a31c8314d434726a981f6b8736">doCleanupParser</reimplements>
+        <param>
+          <type><ref refid="d3/d11/a08359" kindref="compound">castor::PreprocessedFile</ref> &amp;</type>
+          <declname>preprocessed</declname>
+        </param>
+        <briefdescription>
+<para>Nettoyage spécifique. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneFileParser.hpp" line="64" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d78/a07147_1aced042a0783ab955e874445526361a80" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneFileParser::doValidate</definition>
+        <argsstring>(castor::PreprocessedFile &amp;preprocessed) override</argsstring>
+        <name>doValidate</name>
+        <qualifiedname>castor3d::SceneFileParser::doValidate</qualifiedname>
+        <reimplements refid="d6/d08/a08367_1af77e5728b100eb3f7707b02380a73804">doValidate</reimplements>
+        <param>
+          <type><ref refid="d3/d11/a08359" kindref="compound">castor::PreprocessedFile</ref> &amp;</type>
+          <declname>preprocessed</declname>
+        </param>
+        <briefdescription>
+<para>Fonction appelée si l&apos;analyse est complétée sans erreurs. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneFileParser.hpp" line="65" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d78/a07147_1a4e4ec7d01c1725593d406c6d2c740f07" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>C3D_API castor::String castor3d::SceneFileParser::doGetSectionName</definition>
+        <argsstring>(castor::SectionId section) const override</argsstring>
+        <name>doGetSectionName</name>
+        <qualifiedname>castor3d::SceneFileParser::doGetSectionName</qualifiedname>
+        <reimplements refid="d6/d08/a08367_1a66ccfcf491144b8e7e6ecfdf0137aa47">doGetSectionName</reimplements>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aa08facceac53d1149fecf7d7d6b739bf" kindref="member">castor::SectionId</ref></type>
+          <declname>section</declname>
+        </param>
+        <briefdescription>
+<para>donne le nom associé à l&apos;ID de section. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">section</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;ID de section </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le nom. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneFileParser.hpp" line="66" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d78/a07147_1a1cc26a2505ea8fa1d74fe8d256ff13dc" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; <ref refid="d6/d08/a08367_1a3fa6ef26507e733dd379c8f664ecd5a9" kindref="member">FileParser</ref> &gt;</type>
+        <definition>C3D_API castor::RawUniquePtr&lt; FileParser &gt; castor3d::SceneFileParser::doCreateParser</definition>
+        <argsstring>() const override</argsstring>
+        <name>doCreateParser</name>
+        <qualifiedname>castor3d::SceneFileParser::doCreateParser</qualifiedname>
+        <reimplements refid="d6/d08/a08367_1a83e1302a5ebf5fdc020da316fbfd7bdd">doCreateParser</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneFileParser.hpp" line="67" column="30"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>castor::DataHolderT&lt; RootContext &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; RootContext &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SceneFileParser</label>
+        <link refid="df/d78/a07147"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="6">
+        <label>castor::FileParser</label>
+        <link refid="d6/d08/a08367"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>castor::DataHolderT&lt; RootContext &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; RootContext &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SceneFileParser</label>
+        <link refid="df/d78/a07147"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="6">
+        <label>castor::FileParser</label>
+        <link refid="d6/d08/a08367"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_logger</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::LoggerInstance</label>
+        <link refid="d9/d93/a09063"/>
+      </node>
+      <node id="7">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/SceneFileParser.hpp" line="17" column="1" bodyfile="Castor3D/Scene/SceneFileParser.hpp" bodystart="21" bodyend="68"/>
+    <listofallmembers>
+      <member refid="d6/d08/a08367_1a7fbfbc9df3393f545d23bd235b360a35" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>addParser</name></member>
+      <member refid="d6/d08/a08367_1a8661a5c97822a2c40292b1b8b7b85d63" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>addParser</name></member>
+      <member refid="d6/d08/a08367_1a76406107e73cbd9a7a47052636edf9b4" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>cleanupParser</name></member>
+      <member refid="da/d50/a08167_1a10e2d04d7ff8cdd35fc4a4767374a7ee" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>DataHolderT</name></member>
+      <member refid="da/d50/a08167_1a8c916c15a317fb9496b0f0cd6d2e6631" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>DataHolderT</name></member>
+      <member refid="df/d78/a07147_1ad73ae76aef49a3cb006ed3c5722d2836" prot="private" virt="virtual"><scope>castor3d::SceneFileParser</scope><name>doCleanupParser</name></member>
+      <member refid="df/d78/a07147_1a1cc26a2505ea8fa1d74fe8d256ff13dc" prot="private" virt="virtual"><scope>castor3d::SceneFileParser</scope><name>doCreateParser</name></member>
+      <member refid="d6/d08/a08367_1a9e496323fde19e9113801522697b4ec2" prot="protected" virt="virtual"><scope>castor3d::SceneFileParser</scope><name>doDiscardParser</name></member>
+      <member refid="df/d78/a07147_1a4e4ec7d01c1725593d406c6d2c740f07" prot="private" virt="virtual"><scope>castor3d::SceneFileParser</scope><name>doGetSectionName</name></member>
+      <member refid="df/d78/a07147_1aa5b302c60a0c2074254a40315335609f" prot="private" virt="virtual"><scope>castor3d::SceneFileParser</scope><name>doInitialiseParser</name></member>
+      <member refid="df/d78/a07147_1aced042a0783ab955e874445526361a80" prot="private" virt="virtual"><scope>castor3d::SceneFileParser</scope><name>doValidate</name></member>
+      <member refid="d6/d08/a08367_1a3fa6ef26507e733dd379c8f664ecd5a9" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>FileParser</name></member>
+      <member refid="d6/d08/a08367_1a83c9a4ef333d065f300e6440543d4bcf" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>FileParser</name></member>
+      <member refid="d6/d08/a08367_1a86ca53fd1dae6bc9f6fd71b636359af2" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>getAdditionalParsers</name></member>
+      <member refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>getData</name></member>
+      <member refid="da/d50/a08167_1abfb8cb106cf96be2481ab1f88cd2c006" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>getData</name></member>
+      <member refid="d6/d08/a08367_1a9f1b94e474dc9771d7a15d41988c1a72" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>getLogger</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>getOwner</name></member>
+      <member refid="df/d78/a07147_1ad2ee8decf5f9aaf348296772ae70599a" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>getRenderWindow</name></member>
+      <member refid="d6/d08/a08367_1a76f7f58d8016619f4ef8b3de15249d76" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>getRootBlockContext</name></member>
+      <member refid="d6/d08/a08367_1aee844be2f2a3d6cf3f9e97301ded9357" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>getRootSectionId</name></member>
+      <member refid="d6/d08/a08367_1afc66dc3f58024b1bf717c7c03fa55a51" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>getSectionName</name></member>
+      <member refid="d6/d08/a08367_1ac2115125a72930f40a38fbd58a1dde3f" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>ignore</name></member>
+      <member refid="df/d78/a07147_1a0125c344e2677d1690c8e2d7ce7a04e8" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>initialiseParser</name></member>
+      <member refid="d6/d08/a08367_1ad23df941fabd725341fdc3d336f7d52a" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>isIgnored</name></member>
+      <member refid="d6/d08/a08367_1a679241f5507c8dfb3cf236a0e0b40c66" prot="protected" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>m_defines</name></member>
+      <member refid="d6/d08/a08367_1a8afef7975a963fa9c8f2340bd1681ed7" prot="protected" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>m_ignored</name></member>
+      <member refid="d6/d08/a08367_1afbf48e671fb1ab421100f0bed05edf12" prot="protected" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>m_logger</name></member>
+      <member refid="d6/d08/a08367_1a19e29d2651db267e978b00f1891c88d9" prot="protected" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>m_parsers</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>NonMovable</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>OwnedBy</name></member>
+      <member refid="d6/d08/a08367_1a49898ba87837c544c5ed1f4f2aeb5504" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>parseError</name></member>
+      <member refid="d6/d08/a08367_1a5bd457b4468a69579b8e6709cba75ea6" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>parseFile</name></member>
+      <member refid="d6/d08/a08367_1a7ee30118cfb9c2e970f9d6402505a175" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>parseFile</name></member>
+      <member refid="d6/d08/a08367_1a674c345f94026f9b035dc753e7c43dbf" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>parseFile</name></member>
+      <member refid="d6/d08/a08367_1a6b53e1b6b50f6284409cdd4290a7381c" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>parseWarning</name></member>
+      <member refid="d6/d08/a08367_1a40638360a4ae1bfe73f6b47619460b39" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>processFile</name></member>
+      <member refid="d6/d08/a08367_1a3b35c94a70cb57cac99236aef856ddba" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>processFile</name></member>
+      <member refid="d6/d08/a08367_1abb44c9587ada01415b639d5671904615" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>processFile</name></member>
+      <member refid="d6/d08/a08367_1a0d145d3c45583f7f376a88fc9f8e5458" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>processFile</name></member>
+      <member refid="d6/d08/a08367_1ab2df3562f708a786553fd761ef596d8b" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>processFile</name></member>
+      <member refid="d6/d08/a08367_1a1ffc798afa9a120e41c1421d38e9d3c7" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>processFile</name></member>
+      <member refid="d6/d08/a08367_1a1785d9e27e3838b7b2785c0f2f1c1568" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>registerParsers</name></member>
+      <member refid="df/d78/a07147_1a73cd2bf628014532be06943edf66bc54" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>SceneFileParser</name></member>
+      <member refid="df/d78/a07147_1a996c08bbc6e0caf3c47a5a57eef8aa2b" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>scenesBegin</name></member>
+      <member refid="df/d78/a07147_1a2ad21444affdb09f89b717f810208c3a" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>scenesBegin</name></member>
+      <member refid="df/d78/a07147_1a03e9f73ea25b93b4b35fdb5bace293bd" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>scenesEnd</name></member>
+      <member refid="da/d50/a08167_1ab8599478c3a26dfcc9571c920644b562" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>setData</name></member>
+      <member refid="d6/d08/a08367_1a3fe3058658d251d8959d305ec59cae0c" prot="public" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>validate</name></member>
+      <member refid="d6/d08/a08367_1a52ed0e45dfb2ab854ede7d1d5c9cbfeb" prot="public" virt="virtual"><scope>castor3d::SceneFileParser</scope><name>~FileParser</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor3d::SceneFileParser</scope><name>~NonMovable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

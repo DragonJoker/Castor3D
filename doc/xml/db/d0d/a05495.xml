@@ -1,0 +1,319 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d0d/a05495" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::InstantiationComponent</compoundname>
+    <basecompoundref refid="d6/df6/a05611" prot="public" virt="non-virtual">castor3d::SubmeshComponent</basecompoundref>
+    <includes local="no">InstantiationComponent.hpp</includes>
+    <innerclass refid="d0/d2f/a05507" prot="public">castor3d::InstantiationComponent::ComponentData</innerclass>
+    <innerclass refid="d6/d15/a05503" prot="public">castor3d::InstantiationComponent::Data</innerclass>
+    <innerclass refid="df/d7e/a05499" prot="public">castor3d::InstantiationComponent::Plugin</innerclass>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="db/d0d/a05495_1a849245a7255468a4778951878883e4bf" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a93b53452a3c421817a14b649ccec1fb7" kindref="member">castor::Map</ref>&lt; uint32_t, <ref refid="d6/d15/a05503" kindref="compound">Data</ref> &gt;</type>
+        <definition>using castor3d::InstantiationComponent::InstanceDataMap =  castor::Map&lt; uint32_t, Data &gt;</definition>
+        <argsstring></argsstring>
+        <name>InstanceDataMap</name>
+        <qualifiedname>castor3d::InstantiationComponent::InstanceDataMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="61" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="db/d0d/a05495_1a16a280e585f1a11029906ea3c59e8965" prot="public" static="yes" mutable="no">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const</type>
+        <definition>C3D_API castor::String const castor3d::InstantiationComponent::TypeName</definition>
+        <argsstring></argsstring>
+        <name>TypeName</name>
+        <qualifiedname>castor3d::InstantiationComponent::TypeName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="209" column="37" bodyfile="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="209" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="db/d0d/a05495_1aa37db9eb6922b14a71bb470ec11cf9e3" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>SubmeshComponentPluginUPtr</type>
+        <definition>static SubmeshComponentPluginUPtr castor3d::InstantiationComponent::createPlugin</definition>
+        <argsstring>(SubmeshComponentRegister const &amp;submeshComponents)</argsstring>
+        <name>createPlugin</name>
+        <qualifiedname>castor3d::InstantiationComponent::createPlugin</qualifiedname>
+        <param>
+          <type><ref refid="da/d5c/a05615" kindref="compound">SubmeshComponentRegister</ref> const &amp;</type>
+          <declname>submeshComponents</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="42" column="35" bodyfile="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="42" bodyend="45"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d0d/a05495_1adc964fb38fe175c0649f95ac4b66fbc8" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::InstantiationComponent::InstantiationComponent</definition>
+        <argsstring>(Submesh &amp;submesh, uint32_t threshold=1u)</argsstring>
+        <name>InstantiationComponent</name>
+        <qualifiedname>castor3d::InstantiationComponent::InstantiationComponent</qualifiedname>
+        <param>
+          <type><ref refid="dd/df1/a05635" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>threshold</declname>
+          <defval>1u</defval>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le sous-maillage parent. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">threshold</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le seuil à partir duquel un sous-maillage sera instancié. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="176" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d0d/a05495_1a17dee7f84d0a9ab810870ef84019ffa0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> SubmeshComponentUPtr</type>
+        <definition>C3D_API SubmeshComponentUPtr castor3d::InstantiationComponent::clone</definition>
+        <argsstring>(Submesh &amp;submesh) const override</argsstring>
+        <name>clone</name>
+        <qualifiedname>castor3d::InstantiationComponent::clone</qualifiedname>
+        <reimplements refid="d6/df6/a05611_1a224e17a10afdbc9ed8479c034b21aca3">clone</reimplements>
+        <param>
+          <type><ref refid="dd/df1/a05635" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+<para>Clone ce composant dans le submesh donné.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit le composant cloné.   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="181" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d0d/a05495_1a4c5d7d730b6ce93a4a4c595f1f4e52fa" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dba/a02278_1af5a65b91a7a6659a75e289b1fdc8822e" kindref="member">ProgramFlags</ref></type>
+        <definition>C3D_API ProgramFlags castor3d::InstantiationComponent::getProgramFlags</definition>
+        <argsstring>(Pass const &amp;pass) const noexcept override</argsstring>
+        <name>getProgramFlags</name>
+        <qualifiedname>castor3d::InstantiationComponent::getProgramFlags</qualifiedname>
+        <reimplements refid="d6/df6/a05611_1aa17497af9514861bedd026fc39c0bf24">getProgramFlags</reimplements>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Les indicateurs de programme. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La passe de matériau.   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="185" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d0d/a05495_1ad52758c69b0c2e38f7adf482bba596b3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::InstantiationComponent::isInstanced</definition>
+        <argsstring>(Pass const &amp;pass) const</argsstring>
+        <name>isInstanced</name>
+        <qualifiedname>castor3d::InstantiationComponent::isInstanced</qualifiedname>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La passe de matériau. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si le nombre d&apos;instances pour le matériau donné est plus grand que le seuil. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="194" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d0d/a05495_1a45f62aff2b28327a5775f556716489c4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::InstantiationComponent::isInstanced</definition>
+        <argsstring>() const</argsstring>
+        <name>isInstanced</name>
+        <qualifiedname>castor3d::InstantiationComponent::isInstanced</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> si le nombre d&apos;instances max est plus grand que le seuil. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="201" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d0d/a05495_1aa7666a08642908b6d85d3d9d6789b3d3" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d0/d2f/a05507" kindref="compound">ComponentData</ref> &amp;</type>
+        <definition>ComponentData &amp; castor3d::InstantiationComponent::getData</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::InstantiationComponent::getData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="203" column="16" bodyfile="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="203" bodyend="206"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::InstantiationComponent</label>
+        <link refid="db/d0d/a05495"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SubmeshComponent</label>
+        <link refid="d6/df6/a05611"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::InstantiationComponent</label>
+        <link refid="db/d0d/a05495"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>TypeName</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SubmeshComponent</label>
+        <link refid="d6/df6/a05611"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="5">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="21" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="23" bodyend="210"/>
+    <listofallmembers>
+      <member refid="d6/df6/a05611_1afccdadca13f33adf739b7cd593130dc6" prot="public" virt="virtual"><scope>castor3d::InstantiationComponent</scope><name>accept</name></member>
+      <member refid="db/d0d/a05495_1a17dee7f84d0a9ab810870ef84019ffa0" prot="public" virt="virtual"><scope>castor3d::InstantiationComponent</scope><name>clone</name></member>
+      <member refid="db/d0d/a05495_1aa37db9eb6922b14a71bb470ec11cf9e3" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>createPlugin</name></member>
+      <member refid="d6/df6/a05611_1ad360da8b6205b1f52e2ab4ad16829483" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>getBaseData</name></member>
+      <member refid="db/d0d/a05495_1aa7666a08642908b6d85d3d9d6789b3d3" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>getData</name></member>
+      <member refid="d6/df6/a05611_1a74c236198ac0330d4af2e318b2dab8eb" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>getDataT</name></member>
+      <member refid="d6/df6/a05611_1a927bf2897f158a69b9e43f3d4084692a" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>getDependencies</name></member>
+      <member refid="d6/df6/a05611_1a9685bcd15e1882d93daa63b0c31a8c92" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>getId</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>getOwner</name></member>
+      <member refid="d6/df6/a05611_1a0b00d7bb6a4ae2d465cb1b69bfe62edb" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>getPlugin</name></member>
+      <member refid="db/d0d/a05495_1a4c5d7d730b6ce93a4a4c595f1f4e52fa" prot="public" virt="virtual"><scope>castor3d::InstantiationComponent</scope><name>getProgramFlags</name></member>
+      <member refid="d6/df6/a05611_1a7f99899e65f9cbad88ee17b96874eb69" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>getRenderData</name></member>
+      <member refid="d6/df6/a05611_1af976b217cbb63fe1c0a929f9e917da08" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>getRenderDataT</name></member>
+      <member refid="d6/df6/a05611_1aee9f0bcf21dd6ac63bd8c29329376aec" prot="public" virt="virtual"><scope>castor3d::InstantiationComponent</scope><name>getSubmeshFlags</name></member>
+      <member refid="d6/df6/a05611_1ae55cef384a41ade6fb2a3570eea35fca" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>getType</name></member>
+      <member refid="d6/df6/a05611_1a12c193675ee85f12ff61bee5f59593c9" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>initialiseRenderData</name></member>
+      <member refid="db/d0d/a05495_1a849245a7255468a4778951878883e4bf" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>InstanceDataMap</name></member>
+      <member refid="db/d0d/a05495_1adc964fb38fe175c0649f95ac4b66fbc8" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>InstantiationComponent</name></member>
+      <member refid="db/d0d/a05495_1ad52758c69b0c2e38f7adf482bba596b3" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>isInstanced</name></member>
+      <member refid="db/d0d/a05495_1a45f62aff2b28327a5775f556716489c4" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>isInstanced</name></member>
+      <member refid="d6/df6/a05611_1aaf5f04eb5b927528d0af706ef91ff3f1" prot="protected" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>m_data</name></member>
+      <member refid="d6/df6/a05611_1a1f08e2ca2b28d7e35afe6c19b431dd4e" prot="protected" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>m_renderData</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>OwnedBy</name></member>
+      <member refid="d6/df6/a05611_1ad694c20183dd5aca617f4e602d49d722" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>SubmeshComponent</name></member>
+      <member refid="db/d0d/a05495_1a16a280e585f1a11029906ea3c59e8965" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent</scope><name>TypeName</name></member>
+      <member refid="d6/df6/a05611_1a16a32c6196f9a4a70f24f18e537af89c" prot="public" virt="virtual"><scope>castor3d::InstantiationComponent</scope><name>writeText</name></member>
+      <member refid="d6/df6/a05611_1a30231a167367ba38b41f9bf5b3bcd005" prot="public" virt="virtual"><scope>castor3d::InstantiationComponent</scope><name>~SubmeshComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

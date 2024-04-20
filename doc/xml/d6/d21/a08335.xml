@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d21/a08335" kind="struct" language="C++" prot="public">
+    <compoundname>castor::MinValue&lt; A, B, std::enable_if_t&lt;(A&lt;=B) &gt; &gt;</compoundname>
+    <includes local="no">Templates.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>A</declname>
+        <defname>A</defname>
+      </param>
+      <param>
+        <type>uint32_t</type>
+        <declname>B</declname>
+        <defname>B</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d6/d21/a08335_1acca821122616ee6916f97e53b8793c7c" prot="public" static="yes" mutable="no">
+        <type>const uint32_t</type>
+        <definition>const uint32_t castor::MinValue&lt; A, B, std::enable_if_t&lt;(A&lt;=B) &gt; &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>castor::MinValue&lt; A, B, std::enable_if_t&lt;(A&lt;=B) &gt; &gt;::value</qualifiedname>
+        <initializer>= A</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Templates.hpp" line="57" column="23" bodyfile="CastorUtils/Design/Templates.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Utilisé pour obtenir la valeur minimale entre deux, à la compilation. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>spécialisation de <ref refid="da/d26/a08215" kindref="compound">MinValue</ref> pour A &lt;= B. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="CastorUtils/Design/Templates.hpp" line="55" column="1" bodyfile="CastorUtils/Design/Templates.hpp" bodystart="56" bodyend="58"/>
+    <listofallmembers>
+      <member refid="d6/d21/a08335_1acca821122616ee6916f97e53b8793c7c" prot="public" virt="non-virtual"><scope>castor::MinValue&lt; A, B, std::enable_if_t&lt;(A&lt;=B) &gt; &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

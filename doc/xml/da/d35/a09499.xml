@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d35/a09499" kind="struct" language="C++" prot="public">
+    <compoundname>castor::manip::BasicBaseManip</compoundname>
+    <includes local="no">StreamBaseManipulators.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename CharType</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d35/a09499_1a980987f3a9aa72c105c0a182b422a7de" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int castor::manip::BasicBaseManip&lt; CharType &gt;::m_base</definition>
+        <argsstring></argsstring>
+        <name>m_base</name>
+        <qualifiedname>castor::manip::BasicBaseManip::m_base</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="21" column="5" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="21" bodyend="-1"/>
+        <referencedby refid="da/d35/a09499_1a42384383c0b8c4e5ebd76417110de56b" compoundref="d7/d70/a02252" startline="38" endline="42">castor::manip::BasicBaseManip&lt; CharType &gt;::apply</referencedby>
+        <referencedby refid="da/d35/a09499_1a457b9b6ad43063cd7da16b5dba37a351" compoundref="d7/d70/a02252" startline="23" endline="28">castor::manip::BasicBaseManip&lt; CharType &gt;::BasicBaseManip</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d35/a09499_1a457b9b6ad43063cd7da16b5dba37a351" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::manip::BasicBaseManip&lt; CharType &gt;::BasicBaseManip</definition>
+        <argsstring>(int base)</argsstring>
+        <name>BasicBaseManip</name>
+        <qualifiedname>castor::manip::BasicBaseManip::BasicBaseManip</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>base</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="23" column="10" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="23" bodyend="28"/>
+        <references refid="da/d35/a09499_1a980987f3a9aa72c105c0a182b422a7de" compoundref="d7/d70/a02252" startline="21">castor::manip::BasicBaseManip&lt; CharType &gt;::m_base</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d35/a09499_1a42384383c0b8c4e5ebd76417110de56b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::manip::BasicBaseManip&lt; CharType &gt;::apply</definition>
+        <argsstring>(std::basic_ostream&lt; CharType &gt; &amp;os) const</argsstring>
+        <name>apply</name>
+        <qualifiedname>castor::manip::BasicBaseManip::apply</qualifiedname>
+        <param>
+          <type>std::basic_ostream&lt; CharType &gt; &amp;</type>
+          <declname>os</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="38" column="6" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="38" bodyend="42"/>
+        <references refid="da/d35/a09499_1a5f871ef56781b9c7ce064dad17b30f12" compoundref="d7/d70/a02252" startline="30" endline="36">castor::manip::BasicBaseManip&lt; CharType &gt;::getIWord</references>
+        <references refid="da/d35/a09499_1a980987f3a9aa72c105c0a182b422a7de" compoundref="d7/d70/a02252" startline="21">castor::manip::BasicBaseManip&lt; CharType &gt;::m_base</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="da/d35/a09499_1a5f871ef56781b9c7ce064dad17b30f12" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>static int castor::manip::BasicBaseManip&lt; CharType &gt;::getIWord</definition>
+        <argsstring>()</argsstring>
+        <name>getIWord</name>
+        <qualifiedname>castor::manip::BasicBaseManip::getIWord</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="30" column="12" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="30" bodyend="36"/>
+        <referencedby refid="da/d35/a09499_1a42384383c0b8c4e5ebd76417110de56b" compoundref="d7/d70/a02252" startline="38" endline="42">castor::manip::BasicBaseManip&lt; CharType &gt;::apply</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Définit un type manipulateur de base, c&apos;est ce que font les manipulateurs de flux lorsqu&apos;ils prennent des paramètres, sauf qu&apos;ils retournent un type opaque. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="19" column="1" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="20" bodyend="43"/>
+    <listofallmembers>
+      <member refid="da/d35/a09499_1a42384383c0b8c4e5ebd76417110de56b" prot="public" virt="non-virtual"><scope>castor::manip::BasicBaseManip</scope><name>apply</name></member>
+      <member refid="da/d35/a09499_1a457b9b6ad43063cd7da16b5dba37a351" prot="public" virt="non-virtual"><scope>castor::manip::BasicBaseManip</scope><name>BasicBaseManip</name></member>
+      <member refid="da/d35/a09499_1a5f871ef56781b9c7ce064dad17b30f12" prot="public" virt="non-virtual"><scope>castor::manip::BasicBaseManip</scope><name>getIWord</name></member>
+      <member refid="da/d35/a09499_1a980987f3a9aa72c105c0a182b422a7de" prot="public" virt="non-virtual"><scope>castor::manip::BasicBaseManip</scope><name>m_base</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,273 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/def/a07903" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlayUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/def/a07903_1ac4cf97255de79f752723a957c7748508" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::OverlayUboConfiguration::uv</definition>
+        <argsstring></argsstring>
+        <name>uv</name>
+        <qualifiedname>castor3d::OverlayUboConfiguration::uv</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="360" column="17" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="360" bodyend="360"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/def/a07903_1ad5240ac9beb37df1dd8ae2a199f0ee2a" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::OverlayUboConfiguration::parentRect</definition>
+        <argsstring></argsstring>
+        <name>parentRect</name>
+        <qualifiedname>castor3d::OverlayUboConfiguration::parentRect</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="361" column="17" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="361" bodyend="361"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/def/a07903_1a4cb7eea55fdee824cefe8868c88c1cfe" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::OverlayUboConfiguration::renderArea</definition>
+        <argsstring></argsstring>
+        <name>renderArea</name>
+        <qualifiedname>castor3d::OverlayUboConfiguration::renderArea</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="362" column="17" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="362" bodyend="362"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/def/a07903_1a6dc81666d855db0b80967be93113012b" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::OverlayUboConfiguration::relativePosition</definition>
+        <argsstring></argsstring>
+        <name>relativePosition</name>
+        <qualifiedname>castor3d::OverlayUboConfiguration::relativePosition</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="363" column="17" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="363" bodyend="363"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/def/a07903_1a5615ae3d5cd675bce75bd12d9a63de9d" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::OverlayUboConfiguration::relativeSize</definition>
+        <argsstring></argsstring>
+        <name>relativeSize</name>
+        <qualifiedname>castor3d::OverlayUboConfiguration::relativeSize</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="364" column="17" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="364" bodyend="364"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/def/a07903_1a0dbde9d0bc8923ed5c07cfb7b89b12cc" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::OverlayUboConfiguration::border</definition>
+        <argsstring></argsstring>
+        <name>border</name>
+        <qualifiedname>castor3d::OverlayUboConfiguration::border</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="365" column="17" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="365" bodyend="365"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/def/a07903_1a535afbf36a8a5c349e1c65ca7d4558d9" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::OverlayUboConfiguration::borderInnerUV</definition>
+        <argsstring></argsstring>
+        <name>borderInnerUV</name>
+        <qualifiedname>castor3d::OverlayUboConfiguration::borderInnerUV</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="366" column="17" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="366" bodyend="366"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/def/a07903_1a0b49857eccfe0edf4e02e895ee16c83a" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::OverlayUboConfiguration::borderOuterUV</definition>
+        <argsstring></argsstring>
+        <name>borderOuterUV</name>
+        <qualifiedname>castor3d::OverlayUboConfiguration::borderOuterUV</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="367" column="17" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="367" bodyend="367"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/def/a07903_1a26d29369d4cde9bed376d4abbadab4f1" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlayUboConfiguration::vertexOffset</definition>
+        <argsstring></argsstring>
+        <name>vertexOffset</name>
+        <qualifiedname>castor3d::OverlayUboConfiguration::vertexOffset</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="368" column="10" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="368" bodyend="368"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/def/a07903_1a0bfb42cfb3d2a1234ef78a75cf1e1cee" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlayUboConfiguration::materialId</definition>
+        <argsstring></argsstring>
+        <name>materialId</name>
+        <qualifiedname>castor3d::OverlayUboConfiguration::materialId</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="369" column="10" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="369" bodyend="369"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/def/a07903_1a8580d6b7d97e718ab2a5006a079164e6" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlayUboConfiguration::borderPosition</definition>
+        <argsstring></argsstring>
+        <name>borderPosition</name>
+        <qualifiedname>castor3d::OverlayUboConfiguration::borderPosition</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="370" column="10" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="370" bodyend="370"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/def/a07903_1a02a5e1959c6159406b3cf01517df8fb9" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlayUboConfiguration::textTexturingMode</definition>
+        <argsstring></argsstring>
+        <name>textTexturingMode</name>
+        <qualifiedname>castor3d::OverlayUboConfiguration::textTexturingMode</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="371" column="10" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="371" bodyend="371"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/def/a07903_1a072f6aa030904caba9efef584d451f10" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlayUboConfiguration::textWordOffset</definition>
+        <argsstring></argsstring>
+        <name>textWordOffset</name>
+        <qualifiedname>castor3d::OverlayUboConfiguration::textWordOffset</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="372" column="10" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="372" bodyend="372"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/def/a07903_1a4f6c9f61cdee12f7ae762f94aeb52018" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlayUboConfiguration::textLineOffset</definition>
+        <argsstring></argsstring>
+        <name>textLineOffset</name>
+        <qualifiedname>castor3d::OverlayUboConfiguration::textLineOffset</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="373" column="10" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="373" bodyend="373"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/def/a07903_1acb7ee478fafb116a1456bd7f42e55bad" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::OverlayUboConfiguration::textTopOffset</definition>
+        <argsstring></argsstring>
+        <name>textTopOffset</name>
+        <qualifiedname>castor3d::OverlayUboConfiguration::textTopOffset</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="374" column="7" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="374" bodyend="374"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/def/a07903_1a52ccd79110927b13da024d568c81a9b8" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlayUboConfiguration::pad1</definition>
+        <argsstring></argsstring>
+        <name>pad1</name>
+        <qualifiedname>castor3d::OverlayUboConfiguration::pad1</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="375" column="10" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="375" bodyend="375"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Données d&apos;overlays. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="358" column="1" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="359" bodyend="376"/>
+    <listofallmembers>
+      <member refid="d8/def/a07903_1a0dbde9d0bc8923ed5c07cfb7b89b12cc" prot="public" virt="non-virtual"><scope>castor3d::OverlayUboConfiguration</scope><name>border</name></member>
+      <member refid="d8/def/a07903_1a535afbf36a8a5c349e1c65ca7d4558d9" prot="public" virt="non-virtual"><scope>castor3d::OverlayUboConfiguration</scope><name>borderInnerUV</name></member>
+      <member refid="d8/def/a07903_1a0b49857eccfe0edf4e02e895ee16c83a" prot="public" virt="non-virtual"><scope>castor3d::OverlayUboConfiguration</scope><name>borderOuterUV</name></member>
+      <member refid="d8/def/a07903_1a8580d6b7d97e718ab2a5006a079164e6" prot="public" virt="non-virtual"><scope>castor3d::OverlayUboConfiguration</scope><name>borderPosition</name></member>
+      <member refid="d8/def/a07903_1a0bfb42cfb3d2a1234ef78a75cf1e1cee" prot="public" virt="non-virtual"><scope>castor3d::OverlayUboConfiguration</scope><name>materialId</name></member>
+      <member refid="d8/def/a07903_1a52ccd79110927b13da024d568c81a9b8" prot="public" virt="non-virtual"><scope>castor3d::OverlayUboConfiguration</scope><name>pad1</name></member>
+      <member refid="d8/def/a07903_1ad5240ac9beb37df1dd8ae2a199f0ee2a" prot="public" virt="non-virtual"><scope>castor3d::OverlayUboConfiguration</scope><name>parentRect</name></member>
+      <member refid="d8/def/a07903_1a6dc81666d855db0b80967be93113012b" prot="public" virt="non-virtual"><scope>castor3d::OverlayUboConfiguration</scope><name>relativePosition</name></member>
+      <member refid="d8/def/a07903_1a5615ae3d5cd675bce75bd12d9a63de9d" prot="public" virt="non-virtual"><scope>castor3d::OverlayUboConfiguration</scope><name>relativeSize</name></member>
+      <member refid="d8/def/a07903_1a4cb7eea55fdee824cefe8868c88c1cfe" prot="public" virt="non-virtual"><scope>castor3d::OverlayUboConfiguration</scope><name>renderArea</name></member>
+      <member refid="d8/def/a07903_1a4f6c9f61cdee12f7ae762f94aeb52018" prot="public" virt="non-virtual"><scope>castor3d::OverlayUboConfiguration</scope><name>textLineOffset</name></member>
+      <member refid="d8/def/a07903_1a02a5e1959c6159406b3cf01517df8fb9" prot="public" virt="non-virtual"><scope>castor3d::OverlayUboConfiguration</scope><name>textTexturingMode</name></member>
+      <member refid="d8/def/a07903_1acb7ee478fafb116a1456bd7f42e55bad" prot="public" virt="non-virtual"><scope>castor3d::OverlayUboConfiguration</scope><name>textTopOffset</name></member>
+      <member refid="d8/def/a07903_1a072f6aa030904caba9efef584d451f10" prot="public" virt="non-virtual"><scope>castor3d::OverlayUboConfiguration</scope><name>textWordOffset</name></member>
+      <member refid="d8/def/a07903_1ac4cf97255de79f752723a957c7748508" prot="public" virt="non-virtual"><scope>castor3d::OverlayUboConfiguration</scope><name>uv</name></member>
+      <member refid="d8/def/a07903_1a26d29369d4cde9bed376d4abbadab4f1" prot="public" virt="non-virtual"><scope>castor3d::OverlayUboConfiguration</scope><name>vertexOffset</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

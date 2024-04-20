@@ -1,0 +1,13 @@
+<map id="castor3d::Engine::tryFindImage" name="castor3d::Engine::tryFindImage">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,37,173,77"/>
+<area shape="rect" id="Node000002" href="$d8/d4f/a03703.html#a8c9229e35e7c50a5f2d1eecb3954ee58" title=" " alt="" coords="225,5,406,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="173,43,211,37,211,43,174,48"/>
+<area shape="rect" id="Node000003" href="$d8/da3/a08255.html#a1057aebd572ac71378ea519f7c0288ab" title="Looks for an element with given name." alt="" coords="221,69,409,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="174,67,208,71,207,77,173,72"/>
+<area shape="rect" id="Node000004" href="$d8/da3/a08255.html#a0186ef49bd625ae3669d94657845237f" title=" " alt="" coords="457,5,645,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="389,67,463,46,465,51,391,72"/>
+<area shape="rect" id="Node000005" href="$d8/da3/a08255.html#a16408750c3e49683268744e1f35761df" title=" " alt="" coords="457,69,645,109"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="410,87,443,87,443,92,410,92"/>
+<area shape="rect" id="Node000006" href="$d2/dd2/a02279.html#a58f3178234ce83e643568e48a0ed6a3f" title=" " alt="" coords="468,134,635,159"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="399,107,486,128,484,133,398,112"/>
+</map>

@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/d1d/a07143" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserEnumTraits&lt; castor3d::FogType &gt;</compoundname>
+    <includes local="no">Scene.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d3/d1d/a07143_1afb7e10a6f4ecd44ea08931686e77f6d9" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a98169622bc976df3189194c2b35fbf60" kindref="member">xchar</ref> const  *const</type>
+        <definition>xchar const* const castor::ParserEnumTraits&lt; castor3d::FogType &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::FogType &gt;::Name</qualifiedname>
+        <initializer>= <ref refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" kindref="member">cuT</ref>( &quot;FogType&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Scene.hpp" line="564" column="34" bodyfile="Castor3D/Scene/Scene.hpp" bodystart="564" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d1d/a07143_1af8b9c2ae9b28958cca2c4a90413a2c42" prot="public" static="yes" mutable="no">
+        <type>UInt32StrMap const</type>
+        <definition>UInt32StrMap const castor::ParserEnumTraits&lt; castor3d::FogType &gt;::Values</definition>
+        <argsstring></argsstring>
+        <name>Values</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::FogType &gt;::Values</qualifiedname>
+        <initializer>= []()
+			{
+				UInt32StrMap result;
+				result = <ref refid="d9/dba/a02278_1a89ee8e4edb4c883ef7c66b8dc60cc430" kindref="member">castor3d::getEnumMapT</ref>&lt; <ref refid="d9/dba/a02278_1a99a6b51dbe68abcf95c70f03008dd3a3" kindref="member">castor3d::FogType</ref> &gt;();
+				return result;
+			}( )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Scene.hpp" line="565" column="34" bodyfile="Castor3D/Scene/Scene.hpp" bodystart="565" bodyend="570"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserEnumTraits&lt; castor3d::FogType &gt;</label>
+        <link refid="d3/d1d/a07143"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>Values</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>UInt32StrMap</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/Scene.hpp" line="562" column="1" bodyfile="Castor3D/Scene/Scene.hpp" bodystart="563" bodyend="571"/>
+    <listofallmembers>
+      <member refid="d3/d1d/a07143_1afb7e10a6f4ecd44ea08931686e77f6d9" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::FogType &gt;</scope><name>Name</name></member>
+      <member refid="d3/d1d/a07143_1af8b9c2ae9b28958cca2c4a90413a2c42" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::FogType &gt;</scope><name>Values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,641 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/db0/a09059" kind="class" language="C++" prot="public">
+    <compoundname>castor::LoggerImpl</compoundname>
+    <includes local="no">LoggerImpl.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/db0/a09059_1a92a8a933716517b072d429db7fd7fd9b" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/d93/a09063" kindref="compound">LoggerInstance</ref> &amp;</type>
+        <definition>LoggerInstance&amp; castor::LoggerImpl::m_parent</definition>
+        <argsstring></argsstring>
+        <name>m_parent</name>
+        <qualifiedname>castor::LoggerImpl::m_parent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="141" column="17" bodyfile="CastorUtils/Log/LoggerImpl.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/db0/a09059_1a5c037303fd819c2a8f6578944dd126ac" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/d0c/a09055" kindref="compound">ProgramConsole</ref> *</type>
+        <definition>ProgramConsole* castor::LoggerImpl::m_console</definition>
+        <argsstring></argsstring>
+        <name>m_console</name>
+        <qualifiedname>castor::LoggerImpl::m_console</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="142" column="17" bodyfile="CastorUtils/Log/LoggerImpl.hpp" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/db0/a09059_1aa444f0e90bdcbac21238ed19d8f6cca4" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">Array</ref>&lt; <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref>, size_t(<ref refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59ae558bb69fadec037d9eae46601a4df8e" kindref="member">LogType::eCount</ref>) &gt;</type>
+        <definition>Array&lt; String, size_t( LogType::eCount ) &gt; castor::LoggerImpl::m_logFilePath</definition>
+        <argsstring></argsstring>
+        <name>m_logFilePath</name>
+        <qualifiedname>castor::LoggerImpl::m_logFilePath</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="143" column="7" bodyfile="CastorUtils/Log/LoggerImpl.hpp" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/db0/a09059_1a33f9f4d0fa5d4d0b39533095cb6785da" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aac3763b795438810958473f0b84908fb" kindref="member">castor::Mutex</ref></type>
+        <definition>castor::Mutex castor::LoggerImpl::m_mutexFiles</definition>
+        <argsstring></argsstring>
+        <name>m_mutexFiles</name>
+        <qualifiedname>castor::LoggerImpl::m_mutexFiles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="144" column="15" bodyfile="CastorUtils/Log/LoggerImpl.hpp" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/db0/a09059_1a12991e7cbf4cc544ec6a3aa648be1d19" prot="private" static="no" mutable="no">
+        <type>LoggerCallbackMap</type>
+        <definition>LoggerCallbackMap castor::LoggerImpl::m_mapCallbacks</definition>
+        <argsstring></argsstring>
+        <name>m_mapCallbacks</name>
+        <qualifiedname>castor::LoggerImpl::m_mapCallbacks</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="145" column="19" bodyfile="CastorUtils/Log/LoggerImpl.hpp" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/db0/a09059_1a3dea8863d75bc616e492a46a2b637db7" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aac3763b795438810958473f0b84908fb" kindref="member">castor::Mutex</ref></type>
+        <definition>castor::Mutex castor::LoggerImpl::m_mutexCallbacks</definition>
+        <argsstring></argsstring>
+        <name>m_mutexCallbacks</name>
+        <qualifiedname>castor::LoggerImpl::m_mutexCallbacks</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="146" column="15" bodyfile="CastorUtils/Log/LoggerImpl.hpp" bodystart="146" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="db/db0/a09059_1a9d92af80b4c1a799fdf25366842c3642" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::LoggerImpl::CU_DeclareMap</definition>
+        <argsstring>(void *, LogCallback, LoggerCallback)</argsstring>
+        <name>CU_DeclareMap</name>
+        <qualifiedname>castor::LoggerImpl::CU_DeclareMap</qualifiedname>
+        <param>
+          <type>void *</type>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a5645bcfec67b15512d704592da29ac2d" kindref="member">LogCallback</ref></type>
+        </param>
+        <param>
+          <type>LoggerCallback</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="20" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/db0/a09059_1a3ab4e8d47d4b521066e096f986587373" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::LoggerImpl::doPrintMessage</definition>
+        <argsstring>(LogType logLevel, MbString const &amp;message, bool newLine)</argsstring>
+        <name>doPrintMessage</name>
+        <qualifiedname>castor::LoggerImpl::doPrintMessage</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59" kindref="member">LogType</ref></type>
+          <declname>logLevel</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref> const &amp;</type>
+          <declname>message</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>newLine</declname>
+        </param>
+        <briefdescription>
+<para>Affiche un message dans la console. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">logLevel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le niveau de log </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">message</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le message </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">newLine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si le caractère de nouvelle ligne doit être ajouté </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="108" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/db0/a09059_1a553f88eb398f7d067f8779c1e863e976" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::LoggerImpl::doPrintLine</definition>
+        <argsstring>(MbString const &amp;line, LogType logLevel, bool newLine)</argsstring>
+        <name>doPrintLine</name>
+        <qualifiedname>castor::LoggerImpl::doPrintLine</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref> const &amp;</type>
+          <declname>line</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59" kindref="member">LogType</ref></type>
+          <declname>logLevel</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>newLine</declname>
+        </param>
+        <briefdescription>
+<para>Affiche une ligne de texte sur la console. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">line</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne de texte </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">logLevel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le niveau de log </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">newLine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si le caractère de nouvelle ligne doit être ajouté </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="121" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/db0/a09059_1af4659aca2a10c07dca71fa7ff96333e5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::LoggerImpl::doLogLine</definition>
+        <argsstring>(MbString const &amp;timestamp, MbString const &amp;line, MbStringStream &amp;stream, LogType logLevel, bool newLine)</argsstring>
+        <name>doLogLine</name>
+        <qualifiedname>castor::LoggerImpl::doLogLine</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref> const &amp;</type>
+          <declname>timestamp</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref> const &amp;</type>
+          <declname>line</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a367b87022dc0d81717379070ea34fa16" kindref="member">MbStringStream</ref> &amp;</type>
+          <declname>stream</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59" kindref="member">LogType</ref></type>
+          <declname>logLevel</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>newLine</declname>
+        </param>
+        <briefdescription>
+<para>Affiche une ligne de texte dans le flux donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">timestamp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le timestamp de la ligne </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">line</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne de texte </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">stream</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le flux </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">logLevel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le niveau de log </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">newLine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si le caractère de nouvelle ligne doit être ajouté </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="138" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/db0/a09059_1a3ccd1bc8d6519a960486f665ff660e6f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::LoggerImpl::LoggerImpl</definition>
+        <argsstring>(LoggerImpl const &amp;)=delete</argsstring>
+        <name>LoggerImpl</name>
+        <qualifiedname>castor::LoggerImpl::LoggerImpl</qualifiedname>
+        <param>
+          <type><ref refid="db/db0/a09059" kindref="compound">LoggerImpl</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="23" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/db0/a09059_1a73cf35ad83897e6c65c6c82e18a3ab8c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/db0/a09059" kindref="compound">LoggerImpl</ref> &amp;</type>
+        <definition>LoggerImpl &amp; castor::LoggerImpl::operator=</definition>
+        <argsstring>(LoggerImpl const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::LoggerImpl::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/db0/a09059" kindref="compound">LoggerImpl</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="24" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="db/db0/a09059_1a888e44c85fa46d64dceba3767ea2d78f" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::LoggerImpl::LoggerImpl</definition>
+        <argsstring>(LoggerImpl &amp;&amp;rhs) noexcept</argsstring>
+        <name>LoggerImpl</name>
+        <qualifiedname>castor::LoggerImpl::LoggerImpl</qualifiedname>
+        <param>
+          <type><ref refid="db/db0/a09059" kindref="compound">LoggerImpl</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="25" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="db/db0/a09059_1aadd353cf20e19305b87ba4965abacfb7" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="db/db0/a09059" kindref="compound">LoggerImpl</ref> &amp;</type>
+        <definition>CU_API LoggerImpl &amp; castor::LoggerImpl::operator=</definition>
+        <argsstring>(LoggerImpl &amp;&amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::LoggerImpl::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/db0/a09059" kindref="compound">LoggerImpl</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="26" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="db/db0/a09059_1a598af8f15ef050aef49242dba9a82aeb" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::LoggerImpl::~LoggerImpl</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~LoggerImpl</name>
+        <qualifiedname>castor::LoggerImpl::~LoggerImpl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="27" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/db0/a09059_1af75f6acf0e32fc8bec8d5f9496e660c3" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::LoggerImpl::LoggerImpl</definition>
+        <argsstring>(ProgramConsole &amp;console, LogType level, LoggerInstance &amp;parent)</argsstring>
+        <name>LoggerImpl</name>
+        <qualifiedname>castor::LoggerImpl::LoggerImpl</qualifiedname>
+        <param>
+          <type><ref refid="d0/d0c/a09055" kindref="compound">ProgramConsole</ref> &amp;</type>
+          <declname>console</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59" kindref="member">LogType</ref></type>
+          <declname>level</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d93/a09063" kindref="compound">LoggerInstance</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="34" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="db/db0/a09059_1a5929c389434325182a96725f005869d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::LoggerImpl::registerCallback</definition>
+        <argsstring>(LogCallback callback, void *caller)</argsstring>
+        <name>registerCallback</name>
+        <qualifiedname>castor::LoggerImpl::registerCallback</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a5645bcfec67b15512d704592da29ac2d" kindref="member">LogCallback</ref></type>
+          <declname>callback</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>caller</declname>
+        </param>
+        <briefdescription>
+<para>Enregistre un callback. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">callback</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le callback </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">caller</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;appelant </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="47" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="db/db0/a09059_1a125ca40b91ffd0be065de0f16bc4db82" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::LoggerImpl::unregisterCallback</definition>
+        <argsstring>(void *caller)</argsstring>
+        <name>unregisterCallback</name>
+        <qualifiedname>castor::LoggerImpl::unregisterCallback</qualifiedname>
+        <param>
+          <type>void *</type>
+          <declname>caller</declname>
+        </param>
+        <briefdescription>
+<para>Désenregistre un callback. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">caller</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;appelant </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="56" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="db/db0/a09059_1adad7039a982b1bfbe946eb3d6ce7ba5b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::LoggerImpl::setFileName</definition>
+        <argsstring>(String const &amp;logFilePath, LogType logLevel)</argsstring>
+        <name>setFileName</name>
+        <qualifiedname>castor::LoggerImpl::setFileName</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>logFilePath</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59" kindref="member">LogType</ref></type>
+          <declname>logLevel</declname>
+        </param>
+        <briefdescription>
+<para>Définit le fichier pour le niveau de log donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">logFilePath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin du fichier </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">logLevel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le niveau de log. Si <ref refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59ae558bb69fadec037d9eae46601a4df8e" kindref="member">LogType::eCount</ref>, définit le fichier pour tous les niveaux </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="67" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="db/db0/a09059_1a76ccb11d2d15480aca726307e956c44f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::LoggerImpl::printMessage</definition>
+        <argsstring>(LogType logLevel, std::basic_string&lt; CharT &gt; const &amp;message, bool newLine)</argsstring>
+        <name>printMessage</name>
+        <qualifiedname>castor::LoggerImpl::printMessage</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59" kindref="member">LogType</ref></type>
+          <declname>logLevel</declname>
+        </param>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>message</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>newLine</declname>
+        </param>
+        <briefdescription>
+<para>Affiche un message dans la console. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">logLevel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le niveau de log </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">message</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le message </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">newLine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si le caractère de nouvelle ligne doit être ajouté </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="81" column="6" bodyfile="CastorUtils/Log/LoggerImpl.hpp" bodystart="81" bodyend="84"/>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="db/db0/a09059_1a26d42d81c1683d5a69c8a516bfa24079" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::LoggerImpl::logMessageQueue</definition>
+        <argsstring>(MessageQueue const &amp;queue)</argsstring>
+        <name>logMessageQueue</name>
+        <qualifiedname>castor::LoggerImpl::logMessageQueue</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a4073aba22fdf3f40d36bc88f2890cb52" kindref="member">MessageQueue</ref> const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <briefdescription>
+<para>Logge une file de messages. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La file de messages </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerImpl.hpp" line="93" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Log/LoggerImpl.hpp" line="17" column="1" bodyfile="CastorUtils/Log/LoggerImpl.hpp" bodystart="18" bodyend="147"/>
+    <listofallmembers>
+      <member refid="db/db0/a09059_1a9d92af80b4c1a799fdf25366842c3642" prot="private" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>CU_DeclareMap</name></member>
+      <member refid="db/db0/a09059_1af4659aca2a10c07dca71fa7ff96333e5" prot="private" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>doLogLine</name></member>
+      <member refid="db/db0/a09059_1a553f88eb398f7d067f8779c1e863e976" prot="private" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>doPrintLine</name></member>
+      <member refid="db/db0/a09059_1a3ab4e8d47d4b521066e096f986587373" prot="private" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>doPrintMessage</name></member>
+      <member refid="db/db0/a09059_1a3ccd1bc8d6519a960486f665ff660e6f" prot="public" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>LoggerImpl</name></member>
+      <member refid="db/db0/a09059_1a888e44c85fa46d64dceba3767ea2d78f" prot="public" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>LoggerImpl</name></member>
+      <member refid="db/db0/a09059_1af75f6acf0e32fc8bec8d5f9496e660c3" prot="public" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>LoggerImpl</name></member>
+      <member refid="db/db0/a09059_1a26d42d81c1683d5a69c8a516bfa24079" prot="public" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>logMessageQueue</name></member>
+      <member refid="db/db0/a09059_1a5c037303fd819c2a8f6578944dd126ac" prot="private" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>m_console</name></member>
+      <member refid="db/db0/a09059_1aa444f0e90bdcbac21238ed19d8f6cca4" prot="private" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>m_logFilePath</name></member>
+      <member refid="db/db0/a09059_1a12991e7cbf4cc544ec6a3aa648be1d19" prot="private" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>m_mapCallbacks</name></member>
+      <member refid="db/db0/a09059_1a3dea8863d75bc616e492a46a2b637db7" prot="private" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>m_mutexCallbacks</name></member>
+      <member refid="db/db0/a09059_1a33f9f4d0fa5d4d0b39533095cb6785da" prot="private" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>m_mutexFiles</name></member>
+      <member refid="db/db0/a09059_1a92a8a933716517b072d429db7fd7fd9b" prot="private" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>m_parent</name></member>
+      <member refid="db/db0/a09059_1a73cf35ad83897e6c65c6c82e18a3ab8c" prot="public" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>operator=</name></member>
+      <member refid="db/db0/a09059_1aadd353cf20e19305b87ba4965abacfb7" prot="public" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>operator=</name></member>
+      <member refid="db/db0/a09059_1a76ccb11d2d15480aca726307e956c44f" prot="public" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>printMessage</name></member>
+      <member refid="db/db0/a09059_1a5929c389434325182a96725f005869d6" prot="public" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>registerCallback</name></member>
+      <member refid="db/db0/a09059_1adad7039a982b1bfbe946eb3d6ce7ba5b" prot="public" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>setFileName</name></member>
+      <member refid="db/db0/a09059_1a125ca40b91ffd0be065de0f16bc4db82" prot="public" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>unregisterCallback</name></member>
+      <member refid="db/db0/a09059_1a598af8f15ef050aef49242dba9a82aeb" prot="public" virt="non-virtual"><scope>castor::LoggerImpl</scope><name>~LoggerImpl</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

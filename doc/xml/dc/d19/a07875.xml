@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d19/a07875" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LayeredLpvGridConfigUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/d19/a07875_1a87effd49d5bc0d9be85c9398a55c07d4" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; castor::Point4f, <ref refid="d9/dba/a02278_1acc8aa3b866f0302d8af30d15093b0ec8" kindref="member">LpvMaxCascadesCount</ref> &gt;</type>
+        <definition>castor::Array&lt; castor::Point4f, LpvMaxCascadesCount &gt; castor3d::LayeredLpvGridConfigUboConfiguration::allMinVolumeCorners</definition>
+        <argsstring></argsstring>
+        <name>allMinVolumeCorners</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUboConfiguration::allMinVolumeCorners</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="161" column="15" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="161" bodyend="161"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d19/a07875_1af1a2cecd07348243eed30b2901f0b520" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::LayeredLpvGridConfigUboConfiguration::allCellSizes</definition>
+        <argsstring></argsstring>
+        <name>allCellSizes</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUboConfiguration::allCellSizes</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="162" column="17" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="162" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d19/a07875_1ad9359afe1ec0aea2a2fec57dd8f68841" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::LayeredLpvGridConfigUboConfiguration::gridSizeAtt</definition>
+        <argsstring></argsstring>
+        <name>gridSizeAtt</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUboConfiguration::gridSizeAtt</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="163" column="17" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="163" bodyend="163"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Données de light propagation. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="159" column="1" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="160" bodyend="164"/>
+    <listofallmembers>
+      <member refid="dc/d19/a07875_1af1a2cecd07348243eed30b2901f0b520" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUboConfiguration</scope><name>allCellSizes</name></member>
+      <member refid="dc/d19/a07875_1a87effd49d5bc0d9be85c9398a55c07d4" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUboConfiguration</scope><name>allMinVolumeCorners</name></member>
+      <member refid="dc/d19/a07875_1ad9359afe1ec0aea2a2fec57dd8f68841" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUboConfiguration</scope><name>gridSizeAtt</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

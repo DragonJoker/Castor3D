@@ -1,0 +1,366 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d82/a08075" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextFile</compoundname>
+    <basecompoundref refid="d4/d10/a08003" prot="public" virt="non-virtual">castor::File</basecompoundref>
+    <includes local="no">TextFile.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d82/a08075_1a1067310975d331c1820d7017c89d68ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::TextFile::TextFile</definition>
+        <argsstring>(Path const &amp;fileName, FlagCombination&lt; OpenMode &gt; const &amp;mode, EncodingMode encoding=EncodingMode::eASCII)</argsstring>
+        <name>TextFile</name>
+        <qualifiedname>castor::TextFile::TextFile</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>fileName</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dbb/a08207" kindref="compound">FlagCombination</ref>&lt; <ref refid="d4/d10/a08003_1a68eddcef6261f1852e55e010bdc23f95" kindref="member">OpenMode</ref> &gt; const &amp;</type>
+          <declname>mode</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d10/a08003_1a130e0284a5fcc0413ab10d8f4ff20ba8" kindref="member">EncodingMode</ref></type>
+          <declname>encoding</declname>
+          <defval><ref refid="d4/d10/a08003_1a130e0284a5fcc0413ab10d8f4ff20ba8a6b90ff532c402c0d9b3f38ee8b3dc3c2" kindref="member">EncodingMode::eASCII</ref></defval>
+        </param>
+        <briefdescription>
+<para>Ouvre le fichier situé au chemin donné, avec le mode et l&apos;encodage donnés. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">fileName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin du fichier </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">mode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le mode d&apos;ouverture, combinaison d&apos;un ou plusieurs OpenMode </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">encoding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;encodage pour un fichier en mode texte </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextFile.hpp" line="48" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d82/a08075_1a51134ad31bec401e73115ae78887f9c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> uint64_t</type>
+        <definition>CU_API uint64_t castor::TextFile::readLine</definition>
+        <argsstring>(String &amp;toRead, uint64_t size, StringView separators=cuT(&quot;\r\n&quot;))</argsstring>
+        <name>readLine</name>
+        <qualifiedname>castor::TextFile::readLine</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> &amp;</type>
+          <declname>toRead</declname>
+        </param>
+        <param>
+          <type>uint64_t</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref></type>
+          <declname>separators</declname>
+          <defval><ref refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" kindref="member">cuT</ref>(&quot;\r\n&quot;)</defval>
+        </param>
+        <briefdescription>
+<para>Lit une ligne à partir du fichier (s&apos;arrête au premier séparateur rencontré ou quand la taille est atteinte) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">toRead</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la ligne lue </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La taille maximale de la ligne </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">separators</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La liste des séparateurs de ligne </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le nombre d&apos;octets lus </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextFile.hpp" line="65" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d82/a08075_1aadb259f25e046f5527af184661a08fe2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> uint64_t</type>
+        <definition>CU_API uint64_t castor::TextFile::readWord</definition>
+        <argsstring>(String &amp;toRead)</argsstring>
+        <name>readWord</name>
+        <qualifiedname>castor::TextFile::readWord</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> &amp;</type>
+          <declname>toRead</declname>
+        </param>
+        <briefdescription>
+<para>Lit un mot à partir du fichier (s&apos;arrête au premier &apos; &apos; rencontré) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">toRead</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit le mot lu </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le nombre d&apos;octets lus </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextFile.hpp" line="76" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d82/a08075_1a01b824dce2cb6f970e5236b650535ccc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> uint64_t</type>
+        <definition>CU_API uint64_t castor::TextFile::readChar</definition>
+        <argsstring>(xchar &amp;toRead)</argsstring>
+        <name>readChar</name>
+        <qualifiedname>castor::TextFile::readChar</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a98169622bc976df3189194c2b35fbf60" kindref="member">xchar</ref> &amp;</type>
+          <declname>toRead</declname>
+        </param>
+        <briefdescription>
+<para>Lit un caractère à partir du fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">toRead</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit le caractère lu </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le nombre d&apos;octets lus </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextFile.hpp" line="87" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d82/a08075_1a10bb871bae0cb70faca24fc2e978b0da" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> uint64_t</type>
+        <definition>CU_API uint64_t castor::TextFile::copyToString</definition>
+        <argsstring>(String &amp;out)</argsstring>
+        <name>copyToString</name>
+        <qualifiedname>castor::TextFile::copyToString</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> &amp;</type>
+          <declname>out</declname>
+        </param>
+        <briefdescription>
+<para>Copie tout le contenu de ce fichier dans une chaîne de caractères. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">out</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit le contenu </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le nombre d&apos;octets lus </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextFile.hpp" line="98" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d82/a08075_1a4df09f54433de1ca40fdb29c8ca223d9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> uint64_t</type>
+        <definition>CU_API uint64_t castor::TextFile::writeText</definition>
+        <argsstring>(String const &amp;text)</argsstring>
+        <name>writeText</name>
+        <qualifiedname>castor::TextFile::writeText</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+<para>Ecrit une texte dans le fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">text</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le texte </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le nombre d&apos;octets écrits </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextFile.hpp" line="109" column="17"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe de gestion de fichier texte. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::File</label>
+        <link refid="d4/d10/a08003"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="1">
+        <label>castor::TextFile</label>
+        <link refid="dc/d82/a08075"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>castor::FlagCombination&lt; OpenMode &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; OpenMode &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>String</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::File</label>
+        <link refid="d4/d10/a08003"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_mode</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_fileFullPath</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::FlagCombination&lt; FlagType &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+      </node>
+      <node id="3">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="6">
+        <label>castor::Path</label>
+        <link refid="d1/de1/a08011"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::TextFile</label>
+        <link refid="dc/d82/a08075"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Data/TextFile.hpp" line="32" column="1" bodyfile="CastorUtils/Data/TextFile.hpp" bodystart="34" bodyend="110"/>
+    <listofallmembers>
+      <member refid="d4/d10/a08003_1a8b2dfe1d0621223f02a197fb8a7f57d7" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>copyFile</name></member>
+      <member refid="d4/d10/a08003_1ac8092ffb9d8d2acbec545d760e5a65b1" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>copyFileName</name></member>
+      <member refid="dc/d82/a08075_1a10bb871bae0cb70faca24fc2e978b0da" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>copyToString</name></member>
+      <member refid="d4/d10/a08003_1a463ae685301229606c32746ba6800548" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>CreateMode</name></member>
+      <member refid="d4/d10/a08003_1aa6ee83e0d80b8feb8101c126ca5947c2" prot="protected" virt="non-virtual"><scope>castor::TextFile</scope><name>CU_DeclareInvariantBlock</name></member>
+      <member refid="d4/d10/a08003_1a9b702d7f5ff0d52fba3fe75f830e2745" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>deleteFile</name></member>
+      <member refid="d4/d10/a08003_1afb3e0522b98e30df8a1b7cf462a2284f" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>directoryCreate</name></member>
+      <member refid="d4/d10/a08003_1a35bd33d4e6f24dc9ca22fa5bd57fbaf5" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>directoryDelete</name></member>
+      <member refid="d4/d10/a08003_1af36167ffa1e870b4dc069439952b63c4" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>directoryExists</name></member>
+      <member refid="d4/d10/a08003_1abc4c42be831338d06615e8e13bc8ecde" prot="protected" virt="non-virtual"><scope>castor::TextFile</scope><name>doRead</name></member>
+      <member refid="d4/d10/a08003_1a2e247e86a0521e7fbba94d6b98b3a2ff" prot="protected" virt="non-virtual"><scope>castor::TextFile</scope><name>doWrite</name></member>
+      <member refid="d4/d10/a08003_1a130e0284a5fcc0413ab10d8f4ff20ba8" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>EncodingMode</name></member>
+      <member refid="d4/d10/a08003_1a75f6c4f5075361a0b95858b6eb3179b5" prot="protected" virt="non-virtual"><scope>castor::TextFile</scope><name>File</name></member>
+      <member refid="d4/d10/a08003_1af6be9c9a3363804c52591b4104d3a198" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>fileExists</name></member>
+      <member refid="d4/d10/a08003_1a91e4401c024cb93037259c2b2c894dd4" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>filterDirectoryFiles</name></member>
+      <member refid="d4/d10/a08003_1ac73c90bf5b3cdbfa0c3af07258300909" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>FilterFunction</name></member>
+      <member refid="d4/d10/a08003_1abfc768a522393be48398ada0fa4b587f" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>getExecutableDirectory</name></member>
+      <member refid="d4/d10/a08003_1aa465cc53643d8404a32a349265fb8f23" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>getFileFullPath</name></member>
+      <member refid="d4/d10/a08003_1a9b3f822268d6300fa8a816bf6fdbed32" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>getFileName</name></member>
+      <member refid="d4/d10/a08003_1a376c0e917c4da03a641d8dd3f1f1503d" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>getFilePath</name></member>
+      <member refid="d4/d10/a08003_1a55c43b3d78331caeae33c2426b294f35" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>getLength</name></member>
+      <member refid="d4/d10/a08003_1a3b93f73496721579346543b5b6d7646d" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>getUserDirectory</name></member>
+      <member refid="d4/d10/a08003_1ad1c8e1c6cfc95972ba363f271f19b877" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>HitFileFunction</name></member>
+      <member refid="d4/d10/a08003_1a5f2cc85958dde16a3793977d2f4e990b" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>isOk</name></member>
+      <member refid="d4/d10/a08003_1ad7adcfae5d489d33d2a2a9d076fa74d8" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>listDirectoryFiles</name></member>
+      <member refid="d4/d10/a08003_1a1a8334c094efe5116d260302b227dea6" prot="protected" virt="non-virtual"><scope>castor::TextFile</scope><name>m_cursor</name></member>
+      <member refid="d4/d10/a08003_1acf11a2594281adecf00f7d4911ce3608" prot="protected" virt="non-virtual"><scope>castor::TextFile</scope><name>m_encoding</name></member>
+      <member refid="d4/d10/a08003_1a1bea7ad7a82f1d6b70b08a556b7560e3" prot="protected" virt="non-virtual"><scope>castor::TextFile</scope><name>m_file</name></member>
+      <member refid="d4/d10/a08003_1a312a6d588cc619b9f61b39683bc64b79" prot="protected" virt="non-virtual"><scope>castor::TextFile</scope><name>m_fileFullPath</name></member>
+      <member refid="d4/d10/a08003_1a6e61e402e1c184678526bc2e5a5b0a2d" prot="protected" virt="non-virtual"><scope>castor::TextFile</scope><name>m_length</name></member>
+      <member refid="d4/d10/a08003_1a24dd154c6389092dcc881b3ac30daec9" prot="protected" virt="non-virtual"><scope>castor::TextFile</scope><name>m_mode</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::TextFile</scope><name>NonMovable</name></member>
+      <member refid="d4/d10/a08003_1a83921652df0d77dec5a2738d6167bf28" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>normaliseFileName</name></member>
+      <member refid="d4/d10/a08003_1a2d75cd840e492ab9fffd4221afbfb54b" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>OffsetMode</name></member>
+      <member refid="d4/d10/a08003_1a68eddcef6261f1852e55e010bdc23f95" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>OpenMode</name></member>
+      <member refid="dc/d82/a08075_1a01b824dce2cb6f970e5236b650535ccc" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>readChar</name></member>
+      <member refid="dc/d82/a08075_1a51134ad31bec401e73115ae78887f9c4" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>readLine</name></member>
+      <member refid="dc/d82/a08075_1aadb259f25e046f5527af184661a08fe2" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>readWord</name></member>
+      <member refid="d4/d10/a08003_1a68e4988e182c38e0e81fc25e939ffd6a" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>seek</name></member>
+      <member refid="d4/d10/a08003_1acc5807a8213e745c150dc763f2f75708" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>tell</name></member>
+      <member refid="dc/d82/a08075_1a1067310975d331c1820d7017c89d68ef" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>TextFile</name></member>
+      <member refid="d4/d10/a08003_1a54fa6ffc7651e924ef653f5469a51ba5" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>traverseDirectory</name></member>
+      <member refid="d4/d10/a08003_1a59d4b384b23323dc018c3ac2e786f2a0" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>TraverseDirFunction</name></member>
+      <member refid="dc/d82/a08075_1a4df09f54433de1ca40fdb29c8ca223d9" prot="public" virt="non-virtual"><scope>castor::TextFile</scope><name>writeText</name></member>
+      <member refid="d4/d10/a08003_1a19873784f5a2580579e009ed11850c47" prot="public" virt="virtual"><scope>castor::TextFile</scope><name>~File</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::TextFile</scope><name>~NonMovable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

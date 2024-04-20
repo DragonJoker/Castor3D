@@ -1,0 +1,15 @@
+<map id="castor3d::RenderTechniquePass" name="castor3d::RenderTechniquePass">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,108,216,133"/>
+<area shape="rect" id="Node000002" href="$df/d90/a06587.html" title=" " alt="" coords="276,71,456,111"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="230,104,276,99,276,104,230,110"/>
+<area shape="rect" id="Node000007" href="$d1/d10/a06147.html" title=" " alt="" coords="264,136,468,161"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="230,131,264,135,264,140,229,136"/>
+<area shape="rect" id="Node000003" href="$d8/dcb/a06367.html" title=" " alt="" coords="572,5,716,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="434,64,515,39,571,27,573,32,517,45,435,69"/>
+<area shape="rect" id="Node000004" href="$da/d78/a06259.html" title=" " alt="" coords="516,55,772,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="470,80,516,76,516,81,470,85"/>
+<area shape="rect" id="Node000005" href="$d1/d96/a06787.html" title=" " alt="" coords="555,104,733,129"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="470,98,555,106,554,111,470,103"/>
+<area shape="rect" id="Node000006" href="$dc/d1d/a06379.html" title=" " alt="" coords="565,153,723,179"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="442,113,469,122,517,139,565,151,564,156,515,145,467,127,441,118"/>
+</map>

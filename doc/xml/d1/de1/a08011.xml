@@ -1,0 +1,727 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/de1/a08011" kind="class" language="C++" prot="public">
+    <compoundname>castor::Path</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::basic_string&lt; xchar &gt;</basecompoundref>
+    <includes local="no">Path.hpp</includes>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d1/de1/a08011_1acdcaecced48486a0ae0adb3d65c79214" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> const <ref refid="d2/dd2/a02279_1a98169622bc976df3189194c2b35fbf60" kindref="member">xchar</ref></type>
+        <definition>CU_API const xchar castor::Path::NativeSeparator</definition>
+        <argsstring></argsstring>
+        <name>NativeSeparator</name>
+        <qualifiedname>castor::Path::NativeSeparator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Séparateur de chemin (dépendant de l&apos;OS) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="21" column="27" bodyfile="CastorUtils/Data/Path.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/de1/a08011_1aa4c4113db11d1eb20252382270927042" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> const <ref refid="d2/dd2/a02279_1a98169622bc976df3189194c2b35fbf60" kindref="member">xchar</ref></type>
+        <definition>CU_API const xchar castor::Path::GenericSeparator</definition>
+        <argsstring></argsstring>
+        <name>GenericSeparator</name>
+        <qualifiedname>castor::Path::GenericSeparator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Séparateur de chemin (indépendant de l&apos;OS) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="24" column="27" bodyfile="CastorUtils/Data/Path.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/de1/a08011_1af3fb896ff178cdae2e4036322f19140d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Path::Path</definition>
+        <argsstring>()=default</argsstring>
+        <name>Path</name>
+        <qualifiedname>castor::Path::Path</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="27" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1ad2f016e0e49ca70536f89c0b556ddd23" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Path::~Path</definition>
+        <argsstring>()=default</argsstring>
+        <name>~Path</name>
+        <qualifiedname>castor::Path::~Path</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="28" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1a3189aec31a1c663725d0933c88046829" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Path::Path</definition>
+        <argsstring>(char const *data)</argsstring>
+        <name>Path</name>
+        <qualifiedname>castor::Path::Path</qualifiedname>
+        <param>
+          <type>char const *</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un tableau de char. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le tableau de char </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="37" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1a7d5510c5353137706bde3c0e407cd305" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Path::Path</definition>
+        <argsstring>(wchar_t const *data)</argsstring>
+        <name>Path</name>
+        <qualifiedname>castor::Path::Path</qualifiedname>
+        <param>
+          <type>wchar_t const *</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un tableau de wchar_t. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le tableau de wchar_t </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="46" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1aaa31f5e19fd610a6e97c4c8350aa99a9" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Path::Path</definition>
+        <argsstring>(String const &amp;data)</argsstring>
+        <name>Path</name>
+        <qualifiedname>castor::Path::Path</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="55" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1afd72200c251b481c4c90788f438e600f" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Path::Path</definition>
+        <argsstring>(StringView data)</argsstring>
+        <name>Path</name>
+        <qualifiedname>castor::Path::Path</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref></type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un String. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le String </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="64" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1a1b716e635fa98db2510cf7e3aea277b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Path::Path</definition>
+        <argsstring>(Path const &amp;data)</argsstring>
+        <name>Path</name>
+        <qualifiedname>castor::Path::Path</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par copie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet <ref refid="d1/de1/a08011" kindref="compound">Path</ref> à copier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="73" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1aaffa2763d34c75242d82af93475f5e74" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Path::Path</definition>
+        <argsstring>(Path &amp;&amp;data) noexcept</argsstring>
+        <name>Path</name>
+        <qualifiedname>castor::Path::Path</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> &amp;&amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet <ref refid="d1/de1/a08011" kindref="compound">Path</ref> à déplacer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="82" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1a9aa953a1e7bbae539ea95ba9465904b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d1/de1/a08011" kindref="compound">Path</ref> &amp;</type>
+        <definition>CU_API Path &amp; castor::Path::operator=</definition>
+        <argsstring>(Path const &amp;data)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Path::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par copie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet <ref refid="d1/de1/a08011" kindref="compound">Path</ref> à copier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet <ref refid="d1/de1/a08011" kindref="compound">Path</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="93" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1a6d62afb4114b59444f5a2f63f058eb73" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d1/de1/a08011" kindref="compound">Path</ref> &amp;</type>
+        <definition>CU_API Path &amp; castor::Path::operator=</definition>
+        <argsstring>(Path &amp;&amp;data) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Path::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> &amp;&amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet <ref refid="d1/de1/a08011" kindref="compound">Path</ref> à déplacer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet <ref refid="d1/de1/a08011" kindref="compound">Path</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="104" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1a7b246f3d2c07a7de0713e2f4239620cb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d1/de1/a08011" kindref="compound">Path</ref> &amp;</type>
+        <definition>CU_API Path &amp; castor::Path::operator/=</definition>
+        <argsstring>(Path const &amp;path)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::Path::operator/=</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <briefdescription>
+<para>Concatène un chemin à celui-ci. Ajoute le séparateur si besoin est. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin à concaténer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="113" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1ab6f8a57363928bd36808b1423ff3c9eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d1/de1/a08011" kindref="compound">Path</ref> &amp;</type>
+        <definition>CU_API Path &amp; castor::Path::operator/=</definition>
+        <argsstring>(StringView string)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::Path::operator/=</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref></type>
+          <declname>string</declname>
+        </param>
+        <briefdescription>
+<para>Concatène une chaîne de caractères à ce chemin. Ajoute le séparateur si besoin est. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">string</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La chaîne de caractères à concaténer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="122" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1a796164fb42b4e17a133da8f5ece96aef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d1/de1/a08011" kindref="compound">Path</ref> &amp;</type>
+        <definition>CU_API Path &amp; castor::Path::operator/=</definition>
+        <argsstring>(char const *buffer)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::Path::operator/=</qualifiedname>
+        <param>
+          <type>char const *</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Concatène une chaîne de caractères C MBCS à ce chemin. Ajoute le séparateur si besoin est. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La chaîne de caractères C à concaténer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="131" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1a33b4bbfb8549932b7514b2624d49d0b0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d1/de1/a08011" kindref="compound">Path</ref> &amp;</type>
+        <definition>CU_API Path &amp; castor::Path::operator/=</definition>
+        <argsstring>(wchar_t const *buffer)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::Path::operator/=</qualifiedname>
+        <param>
+          <type>wchar_t const *</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Concatène une chaîne de caractères C Unicode à ce chemin. Ajoute le séparateur si besoin est. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La chaîne de caractères C à concaténer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="140" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1ab24d061148f8416a51b13af30c92e2c3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d1/de1/a08011" kindref="compound">Path</ref> &amp;</type>
+        <definition>CU_API Path &amp; castor::Path::operator+=</definition>
+        <argsstring>(Path const &amp;path)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::Path::operator+=</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <briefdescription>
+<para>Concatène un chemin à celui-ci. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin à concaténer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="149" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1a9d6a581b9a611e27c46989e77e2199d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d1/de1/a08011" kindref="compound">Path</ref> &amp;</type>
+        <definition>CU_API Path &amp; castor::Path::operator+=</definition>
+        <argsstring>(StringView string)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::Path::operator+=</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref></type>
+          <declname>string</declname>
+        </param>
+        <briefdescription>
+<para>Concatène une chaîne de caractères à ce chemin. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">string</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La chaîne de caractères à concaténer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="158" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1aca71f12b6d6198c2ed9b7cb161615fb1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d1/de1/a08011" kindref="compound">Path</ref> &amp;</type>
+        <definition>CU_API Path &amp; castor::Path::operator+=</definition>
+        <argsstring>(char const *buffer)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::Path::operator+=</qualifiedname>
+        <param>
+          <type>char const *</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Concatène une chaîne de caractères C MBCS à ce chemin. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La chaîne de caractères C à concaténer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="167" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1a0d33b7b7e6206d1d7f138969ddd0ae93" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d1/de1/a08011" kindref="compound">Path</ref> &amp;</type>
+        <definition>CU_API Path &amp; castor::Path::operator+=</definition>
+        <argsstring>(wchar_t const *buffer)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::Path::operator+=</qualifiedname>
+        <param>
+          <type>wchar_t const *</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Concatène une chaîne de caractères C Unicode à ce chemin. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La chaîne de caractères C à concaténer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="176" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1a021cada3b105818664b03215854c2564" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d1/de1/a08011" kindref="compound">Path</ref></type>
+        <definition>CU_API Path castor::Path::getPath</definition>
+        <argsstring>() const</argsstring>
+        <name>getPath</name>
+        <qualifiedname>castor::Path::getPath</qualifiedname>
+        <briefdescription>
+<para>Récupère le dossier parent. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le dossier parent </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="185" column="13"/>
+        <referencedby refid="d4/d10/a08003_1a376c0e917c4da03a641d8dd3f1f1503d" compoundref="d6/dbd/a01829" startline="446" endline="449">castor::File::getFilePath</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1acbf2e7cef6d47ee92cc24ec82553f9a2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d1/de1/a08011" kindref="compound">Path</ref></type>
+        <definition>CU_API Path castor::Path::getFileName</definition>
+        <argsstring>(bool withExtension=false) const</argsstring>
+        <name>getFileName</name>
+        <qualifiedname>castor::Path::getFileName</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>withExtension</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Récupère la feuille de ce chemin (nom du fichier et extension, pour les fichiers). </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">withExtension</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si on veur l&apos;extension ou pas, pour les fichiers. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La feuille. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="196" column="13"/>
+        <referencedby refid="db/df9/a03951_1a3c9336f1271abed1011a7bf7e93fcfbc" compoundref="df/d70/a00431" startline="143" endline="146">castor3d::ImporterFile::getName</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1a40af5ed69127b3ff27afbb51d9aa59d1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d1/de1/a08011" kindref="compound">Path</ref></type>
+        <definition>CU_API Path castor::Path::getFullFileName</definition>
+        <argsstring>() const</argsstring>
+        <name>getFullFileName</name>
+        <qualifiedname>castor::Path::getFullFileName</qualifiedname>
+        <briefdescription>
+<para>Récupère le chemin complet. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le chemin complet </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="205" column="13"/>
+        <referencedby refid="d4/d10/a08003_1a9b3f822268d6300fa8a816bf6fdbed32" compoundref="d6/dbd/a01829" startline="458" endline="461">castor::File::getFileName</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1ad8cab6985d3d36a306dd96e7b91bd6c7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>CU_API String castor::Path::getExtension</definition>
+        <argsstring>() const</argsstring>
+        <name>getExtension</name>
+        <qualifiedname>castor::Path::getExtension</qualifiedname>
+        <briefdescription>
+<para>Récupère l&apos;extension du nom de fichier, s&apos;il y en a. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;extension </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="214" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/de1/a08011_1a7fd0fa89500407fb44ebf5d7429d8288" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>CU_API String castor::Path::toGeneric</definition>
+        <argsstring>() const</argsstring>
+        <name>toGeneric</name>
+        <qualifiedname>castor::Path::toGeneric</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le chemin, avec des / génériques. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="221" column="15"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/de1/a08011_1a93e80d6f7134f0d9e1d389adc6ae870b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Path::doNormalise</definition>
+        <argsstring>()</argsstring>
+        <name>doNormalise</name>
+        <qualifiedname>castor::Path::doNormalise</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Path.hpp" line="224" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>String</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::Path</label>
+        <link refid="d1/de1/a08011"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>String</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::Path</label>
+        <link refid="d1/de1/a08011"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Data/Path.hpp" line="15" column="1" bodyfile="CastorUtils/Data/Path.hpp" bodystart="17" bodyend="225"/>
+    <listofallmembers>
+      <member refid="d1/de1/a08011_1a93e80d6f7134f0d9e1d389adc6ae870b" prot="private" virt="non-virtual"><scope>castor::Path</scope><name>doNormalise</name></member>
+      <member refid="d1/de1/a08011_1aa4c4113db11d1eb20252382270927042" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>GenericSeparator</name></member>
+      <member refid="d1/de1/a08011_1ad8cab6985d3d36a306dd96e7b91bd6c7" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>getExtension</name></member>
+      <member refid="d1/de1/a08011_1acbf2e7cef6d47ee92cc24ec82553f9a2" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>getFileName</name></member>
+      <member refid="d1/de1/a08011_1a40af5ed69127b3ff27afbb51d9aa59d1" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>getFullFileName</name></member>
+      <member refid="d1/de1/a08011_1a021cada3b105818664b03215854c2564" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>getPath</name></member>
+      <member refid="d1/de1/a08011_1acdcaecced48486a0ae0adb3d65c79214" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>NativeSeparator</name></member>
+      <member refid="d1/de1/a08011_1ab24d061148f8416a51b13af30c92e2c3" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>operator+=</name></member>
+      <member refid="d1/de1/a08011_1a9d6a581b9a611e27c46989e77e2199d7" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>operator+=</name></member>
+      <member refid="d1/de1/a08011_1aca71f12b6d6198c2ed9b7cb161615fb1" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>operator+=</name></member>
+      <member refid="d1/de1/a08011_1a0d33b7b7e6206d1d7f138969ddd0ae93" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>operator+=</name></member>
+      <member refid="d1/de1/a08011_1a7b246f3d2c07a7de0713e2f4239620cb" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>operator/=</name></member>
+      <member refid="d1/de1/a08011_1ab6f8a57363928bd36808b1423ff3c9eb" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>operator/=</name></member>
+      <member refid="d1/de1/a08011_1a796164fb42b4e17a133da8f5ece96aef" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>operator/=</name></member>
+      <member refid="d1/de1/a08011_1a33b4bbfb8549932b7514b2624d49d0b0" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>operator/=</name></member>
+      <member refid="d1/de1/a08011_1a9aa953a1e7bbae539ea95ba9465904b3" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>operator=</name></member>
+      <member refid="d1/de1/a08011_1a6d62afb4114b59444f5a2f63f058eb73" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>operator=</name></member>
+      <member refid="d1/de1/a08011_1af3fb896ff178cdae2e4036322f19140d" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>Path</name></member>
+      <member refid="d1/de1/a08011_1a3189aec31a1c663725d0933c88046829" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>Path</name></member>
+      <member refid="d1/de1/a08011_1a7d5510c5353137706bde3c0e407cd305" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>Path</name></member>
+      <member refid="d1/de1/a08011_1aaa31f5e19fd610a6e97c4c8350aa99a9" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>Path</name></member>
+      <member refid="d1/de1/a08011_1afd72200c251b481c4c90788f438e600f" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>Path</name></member>
+      <member refid="d1/de1/a08011_1a1b716e635fa98db2510cf7e3aea277b2" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>Path</name></member>
+      <member refid="d1/de1/a08011_1aaffa2763d34c75242d82af93475f5e74" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>Path</name></member>
+      <member refid="d1/de1/a08011_1a7fd0fa89500407fb44ebf5d7429d8288" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>toGeneric</name></member>
+      <member refid="d1/de1/a08011_1ad2f016e0e49ca70536f89c0b556ddd23" prot="public" virt="non-virtual"><scope>castor::Path</scope><name>~Path</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,292 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d5e/a07123" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ParticleUpdater</compoundname>
+    <includes local="no">ParticleUpdater.hpp</includes>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="dc/d5e/a07123_1a3f2b8c9ae3e114fcd7225b240d49a60f" prot="protected" static="no" mutable="no">
+        <type><ref refid="de/dde/a07107" kindref="compound">ParticleSystem</ref> const  &amp;</type>
+        <definition>ParticleSystem const&amp; castor3d::ParticleUpdater::m_system</definition>
+        <argsstring></argsstring>
+        <name>m_system</name>
+        <qualifiedname>castor3d::ParticleUpdater::m_system</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/ParticleSystem/ParticleUpdater.hpp" line="32" column="23" bodyfile="Castor3D/Scene/ParticleSystem/ParticleUpdater.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d5e/a07123_1a4450f37a4a193ea4c342a414c902961b" prot="protected" static="no" mutable="no">
+        <type><ref refid="dc/dfb/a07087" kindref="compound">ParticleDeclaration</ref> const  &amp;</type>
+        <definition>ParticleDeclaration const&amp; castor3d::ParticleUpdater::m_inputs</definition>
+        <argsstring></argsstring>
+        <name>m_inputs</name>
+        <qualifiedname>castor3d::ParticleUpdater::m_inputs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/ParticleSystem/ParticleUpdater.hpp" line="33" column="28" bodyfile="Castor3D/Scene/ParticleSystem/ParticleUpdater.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d5e/a07123_1afb3bc374b716316cbf15926a1f40a145" prot="protected" static="no" mutable="no">
+        <type>ParticleEmitterArray &amp;</type>
+        <definition>ParticleEmitterArray&amp; castor3d::ParticleUpdater::m_emitters</definition>
+        <argsstring></argsstring>
+        <name>m_emitters</name>
+        <qualifiedname>castor3d::ParticleUpdater::m_emitters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/ParticleSystem/ParticleUpdater.hpp" line="34" column="23" bodyfile="Castor3D/Scene/ParticleSystem/ParticleUpdater.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d5e/a07123_1ad275841dad5eacaa37bf0f661ba4ee1a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ParticleUpdater::ParticleUpdater</definition>
+        <argsstring>(ParticleSystem const &amp;system, ParticleDeclaration const &amp;inputs, ParticleEmitterArray &amp;emitters)</argsstring>
+        <name>ParticleUpdater</name>
+        <qualifiedname>castor3d::ParticleUpdater::ParticleUpdater</qualifiedname>
+        <param>
+          <type><ref refid="de/dde/a07107" kindref="compound">ParticleSystem</ref> const &amp;</type>
+          <declname>system</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dfb/a07087" kindref="compound">ParticleDeclaration</ref> const &amp;</type>
+          <declname>inputs</declname>
+        </param>
+        <param>
+          <type>ParticleEmitterArray &amp;</type>
+          <declname>emitters</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/ParticleSystem/ParticleUpdater.hpp" line="14" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d5e/a07123_1a69eac021ae43ba2c3c77ba6cb5691a6c" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::ParticleUpdater::~ParticleUpdater</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~ParticleUpdater</name>
+        <qualifiedname>castor3d::ParticleUpdater::~ParticleUpdater</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/ParticleSystem/ParticleUpdater.hpp" line="17" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d5e/a07123_1a15ddb7d41dddee1be052fc849709b80f" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::ParticleUpdater::update</definition>
+        <argsstring>(castor::Milliseconds const &amp;time, Particle &amp;particle)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::ParticleUpdater::update</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a9bbae2d5d564fa58ccbb16ec1d0ed7a1" kindref="member">castor::Milliseconds</ref> const &amp;</type>
+          <declname>time</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d63/a07083" kindref="compound">Particle</ref> &amp;</type>
+          <declname>particle</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour une particle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">time</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le temps écoulé depuis la denière mise à jour. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">particle</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La particule. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/ParticleSystem/ParticleUpdater.hpp" line="28" column="22"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="8">
+        <label>Animable</label>
+        <link refid="d2/d7a/a03115"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; AnimableHandlerT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Scene &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor::SignalT&lt; OnSceneNodeReparentFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; OnSceneNodeReparentFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="17" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d2/d7a/a03115"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::MovableObject</label>
+        <link refid="da/d09/a07047"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_notifyIndex</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::ParticleDeclaration</label>
+        <link refid="dc/dfb/a07087"/>
+      </node>
+      <node id="2">
+        <label>castor3d::ParticleSystem</label>
+        <link refid="de/dde/a07107"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>m_particleType</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_inputs</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>m_timer</edgelabel>
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>m_impl</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor3d::ParticleSystemImpl</label>
+        <link refid="d8/d75/a07119"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_parent</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ParticleUpdater</label>
+        <link refid="dc/d5e/a07123"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_system</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_inputs</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::SceneNode</label>
+        <link refid="d4/dc4/a07255"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>onParentChanged</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor::ConnectionT&lt; MySignalT &gt;</label>
+        <link refid="d4/ddb/a08183"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="13">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="9">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="19">
+        <label>castor::PreciseTimer</label>
+        <link refid="d5/d7e/a09419"/>
+      </node>
+      <node id="14">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/ParticleSystem/ParticleUpdater.hpp" line="11" column="1" bodyfile="Castor3D/Scene/ParticleSystem/ParticleUpdater.hpp" bodystart="12" bodyend="35"/>
+    <listofallmembers>
+      <member refid="dc/d5e/a07123_1afb3bc374b716316cbf15926a1f40a145" prot="protected" virt="non-virtual"><scope>castor3d::ParticleUpdater</scope><name>m_emitters</name></member>
+      <member refid="dc/d5e/a07123_1a4450f37a4a193ea4c342a414c902961b" prot="protected" virt="non-virtual"><scope>castor3d::ParticleUpdater</scope><name>m_inputs</name></member>
+      <member refid="dc/d5e/a07123_1a3f2b8c9ae3e114fcd7225b240d49a60f" prot="protected" virt="non-virtual"><scope>castor3d::ParticleUpdater</scope><name>m_system</name></member>
+      <member refid="dc/d5e/a07123_1ad275841dad5eacaa37bf0f661ba4ee1a" prot="public" virt="non-virtual"><scope>castor3d::ParticleUpdater</scope><name>ParticleUpdater</name></member>
+      <member refid="dc/d5e/a07123_1a15ddb7d41dddee1be052fc849709b80f" prot="public" virt="virtual"><scope>castor3d::ParticleUpdater</scope><name>update</name></member>
+      <member refid="dc/d5e/a07123_1a69eac021ae43ba2c3c77ba6cb5691a6c" prot="public" virt="virtual"><scope>castor3d::ParticleUpdater</scope><name>~ParticleUpdater</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

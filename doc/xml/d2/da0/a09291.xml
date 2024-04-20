@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/da0/a09291" kind="struct" language="C++" prot="public">
+    <compoundname>castor::PointData&lt; T, 3u &gt;</compoundname>
+    <includes local="no">PointData.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/da0/a09291_1afb6b49cb45c58ebe40f4d417bd0eefcc" prot="public" static="no" mutable="no">
+        <type>T</type>
+        <definition>T castor::PointData&lt; T, 3u &gt;::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>castor::PointData&lt; T, 3u &gt;::x</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PointData.hpp" line="27" column="3" bodyfile="CastorUtils/Math/PointData.hpp" bodystart="27" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/da0/a09291_1a4bcc44abf248b1eef728b8b9f92bfa64" prot="public" static="no" mutable="no">
+        <type>T</type>
+        <definition>T castor::PointData&lt; T, 3u &gt;::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>castor::PointData&lt; T, 3u &gt;::y</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PointData.hpp" line="28" column="3" bodyfile="CastorUtils/Math/PointData.hpp" bodystart="28" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/da0/a09291_1ac2cdc8433049a36e45e137cee47a8715" prot="public" static="no" mutable="no">
+        <type>T</type>
+        <definition>T castor::PointData&lt; T, 3u &gt;::z</definition>
+        <argsstring></argsstring>
+        <name>z</name>
+        <qualifiedname>castor::PointData&lt; T, 3u &gt;::z</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PointData.hpp" line="29" column="3" bodyfile="CastorUtils/Math/PointData.hpp" bodystart="29" bodyend="29"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/PointData.hpp" line="25" column="1" bodyfile="CastorUtils/Math/PointData.hpp" bodystart="26" bodyend="30"/>
+    <listofallmembers>
+      <member refid="d2/da0/a09291_1afb6b49cb45c58ebe40f4d417bd0eefcc" prot="public" virt="non-virtual"><scope>castor::PointData&lt; T, 3u &gt;</scope><name>x</name></member>
+      <member refid="d2/da0/a09291_1a4bcc44abf248b1eef728b8b9f92bfa64" prot="public" virt="non-virtual"><scope>castor::PointData&lt; T, 3u &gt;</scope><name>y</name></member>
+      <member refid="d2/da0/a09291_1ac2cdc8433049a36e45e137cee47a8715" prot="public" virt="non-virtual"><scope>castor::PointData&lt; T, 3u &gt;</scope><name>z</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

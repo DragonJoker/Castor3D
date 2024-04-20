@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/d88/a09127" kind="struct" language="C++" prot="public">
+    <compoundname>castor::Power</compoundname>
+    <includes local="no">Math.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+      <param>
+        <type>int</type>
+        <declname>N</declname>
+        <defname>N</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d88/a09127_1a605e5b3b981b232e9aa58949afc50ccc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>T</type>
+        <definition>T castor::Power&lt; T, N &gt;::operator()</definition>
+        <argsstring>(T x) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::Power::operator()</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Math.hpp" line="45" column="10" bodyfile="CastorUtils/Math/Math.hpp" bodystart="45" bodyend="48"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Cas récursif pour Puissance. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/Math.hpp" line="43" column="15" bodyfile="CastorUtils/Math/Math.hpp" bodystart="44" bodyend="49"/>
+    <listofallmembers>
+      <member refid="d3/d88/a09127_1a605e5b3b981b232e9aa58949afc50ccc" prot="public" virt="non-virtual"><scope>castor::Power</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

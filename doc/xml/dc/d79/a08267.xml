@@ -1,0 +1,638 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d79/a08267" kind="class" language="C++" prot="public">
+    <compoundname>castor::SignalT</compoundname>
+    <basecompoundref refid="da/d36/a08315" prot="public" virt="non-virtual">castor::NonCopyable</basecompoundref>
+    <includes local="no">Signal.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename <ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">Function</ref></type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="dc/d79/a08267_1a0fb51e50d982d2d5ea9243d94ccc103c" prot="private" static="no">
+        <type><ref refid="d4/ddb/a08183" kindref="compound">ConnectionT</ref>&lt; <ref refid="dc/d79/a08267" kindref="compound">SignalT</ref>&lt; <ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">Function</ref> &gt; &gt;</type>
+        <definition>using castor::SignalT&lt; Function &gt;::my_connection =  ConnectionT&lt; SignalT&lt; Function &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>my_connection</name>
+        <qualifiedname>castor::SignalT::my_connection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="195" column="1" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="195" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d79/a08267_1a355f9bf3b7139f59cea9e982da7b2be5" prot="private" static="no">
+        <type><ref refid="d4/ddb/a08183" kindref="compound">my_connection</ref> *</type>
+        <definition>using castor::SignalT&lt; Function &gt;::my_connection_ptr =  my_connection *</definition>
+        <argsstring></argsstring>
+        <name>my_connection_ptr</name>
+        <qualifiedname>castor::SignalT::my_connection_ptr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="196" column="1" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="196" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dc/d79/a08267_1aea6d41678f91c9fb0fb2334009626e4d" prot="public" static="no">
+        <type><ref refid="d4/ddb/a08183" kindref="compound">my_connection</ref></type>
+        <definition>using castor::SignalT&lt; Function &gt;::connection =  my_connection</definition>
+        <argsstring></argsstring>
+        <name>connection</name>
+        <qualifiedname>castor::SignalT::connection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="199" column="1" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="199" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="dc/d79/a08267_1ad152018eb2f90adc981d546d0f345f7c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class ConnectionT&lt; SignalT&lt; Function &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>ConnectionT&lt; SignalT&lt; Function &gt; &gt;</name>
+        <qualifiedname>castor::SignalT::ConnectionT&lt; SignalT&lt; Function &gt; &gt;</qualifiedname>
+        <param>
+          <type><ref refid="d4/ddb/a08183" kindref="compound">ConnectionT</ref>&lt; <ref refid="dc/d79/a08267" kindref="compound">SignalT</ref>&lt; <ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">Function</ref> &gt; &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="186" column="8" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="194" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/d79/a08267_1a601bda917085c7d0b61ac611b7a290fe" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a93b53452a3c421817a14b649ccec1fb7" kindref="member">Map</ref>&lt; uint32_t, <ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">Function</ref> &gt;</type>
+        <definition>Map&lt; uint32_t, Function &gt; castor::SignalT&lt; Function &gt;::m_slots</definition>
+        <argsstring></argsstring>
+        <name>m_slots</name>
+        <qualifiedname>castor::SignalT::m_slots</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La liste des fonctions connectées. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="355" column="5" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="355" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d79/a08267_1a1ff1e8fea9bf5981491dea9ed5f0e608" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ae55d0b1917b046899c7780d186c58c37" kindref="member">Set</ref>&lt; <ref refid="d4/ddb/a08183" kindref="compound">my_connection_ptr</ref> &gt;</type>
+        <definition>Set&lt; my_connection_ptr &gt; castor::SignalT&lt; Function &gt;::m_connections</definition>
+        <argsstring></argsstring>
+        <name>m_connections</name>
+        <qualifiedname>castor::SignalT::m_connections</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La liste des connections à ce signal. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="358" column="5" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="358" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d79/a08267_1a83091fb1243362b30fbe529a15b3ca14" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::SignalT&lt; Function &gt;::SignalT</definition>
+        <argsstring>(SignalT &amp;&amp;) noexcept=default</argsstring>
+        <name>SignalT</name>
+        <qualifiedname>castor::SignalT::SignalT</qualifiedname>
+        <param>
+          <type><ref refid="dc/d79/a08267" kindref="compound">SignalT</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="202" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d79/a08267_1a4a2f10de7a8d285ea3151e4a95a33680" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="dc/d79/a08267" kindref="compound">SignalT</ref> &amp;</type>
+        <definition>SignalT &amp; castor::SignalT&lt; Function &gt;::operator=</definition>
+        <argsstring>(SignalT &amp;&amp;) noexcept=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::SignalT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dc/d79/a08267" kindref="compound">SignalT</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="203" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d79/a08267_1a7c2bf8ab0cd896629d9a4754af3a7a18" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::SignalT&lt; Function &gt;::SignalT</definition>
+        <argsstring>()=default</argsstring>
+        <name>SignalT</name>
+        <qualifiedname>castor::SignalT::SignalT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="204" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d79/a08267_1a9698da4382989355d18d85ce75dff9fb" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::SignalT&lt; Function &gt;::~SignalT</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~SignalT</name>
+        <qualifiedname>castor::SignalT::~SignalT</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Déconnecte toutes les connexions restantes. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="213" column="1" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="213" bodyend="231"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d79/a08267_1a0b35117515607a064602130b12b86834" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/ddb/a08183" kindref="compound">my_connection</ref></type>
+        <definition>my_connection castor::SignalT&lt; Function &gt;::connect</definition>
+        <argsstring>(Function function)</argsstring>
+        <name>connect</name>
+        <qualifiedname>castor::SignalT::connect</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">Function</ref></type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+<para>Connecte une nouvelle fonction, qui sera appelée lorsque le signal est émis. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La fonction. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;indice de la fonction, afin de pouvoir la déconnecter. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="242" column="15" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="242" bodyend="253"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d79/a08267_1ac1bbd1bda8039dfd0f4c3a0f1ed2f07d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::SignalT&lt; Function &gt;::operator()</definition>
+        <argsstring>() const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::SignalT::operator()</qualifiedname>
+        <briefdescription>
+<para>Emet le signal, appelant toutes les fonctions connectées. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="260" column="6" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="260" bodyend="266"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d79/a08267_1ac336a0de401a5aa7a5b6746098ee4d11" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>Params</declname>
+            <defname>Params</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::SignalT&lt; Function &gt;::operator()</definition>
+        <argsstring>(Params &amp;&amp;... params) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::SignalT::operator()</qualifiedname>
+        <param>
+          <type>Params &amp;&amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+<para>Emet le signal, appelant toutes les fonctions connectées. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les paramètres des fonctions. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="276" column="6" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="276" bodyend="282"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="dc/d79/a08267_1a4a281636a50102db390a6cad355783ae" prot="private" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::SignalT&lt; Function &gt;::disconnect</definition>
+        <argsstring>(uint32_t index) noexcept</argsstring>
+        <name>disconnect</name>
+        <qualifiedname>castor::SignalT::disconnect</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Déconnecte une fonction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;indice de la fonction. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="293" column="6" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="293" bodyend="301"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d79/a08267_1a6c883f3c8a2d3c78f95e59d0cee177a3" prot="private" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::SignalT&lt; Function &gt;::addConnection</definition>
+        <argsstring>(my_connection &amp;connection) noexcept</argsstring>
+        <name>addConnection</name>
+        <qualifiedname>castor::SignalT::addConnection</qualifiedname>
+        <param>
+          <type><ref refid="d4/ddb/a08183" kindref="compound">my_connection</ref> &amp;</type>
+          <declname>connection</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute une connexion à la liste. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">connection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La connexion à ajouter. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="310" column="6" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="310" bodyend="321"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d79/a08267_1a13ebcf121db5189b9a7adb9f9a196d54" prot="private" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::SignalT&lt; Function &gt;::removeConnection</definition>
+        <argsstring>(my_connection &amp;connection) noexcept</argsstring>
+        <name>removeConnection</name>
+        <qualifiedname>castor::SignalT::removeConnection</qualifiedname>
+        <param>
+          <type><ref refid="d4/ddb/a08183" kindref="compound">my_connection</ref> &amp;</type>
+          <declname>connection</declname>
+        </param>
+        <briefdescription>
+<para>Enlève une connexion de la liste. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">connection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La connexion à enlever. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="330" column="6" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="330" bodyend="334"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d79/a08267_1a197f4311d3e901e5cdb253d6c0459835" prot="private" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::SignalT&lt; Function &gt;::replaceConnection</definition>
+        <argsstring>(my_connection &amp;oldConnection, my_connection &amp;newConnection) noexcept</argsstring>
+        <name>replaceConnection</name>
+        <qualifiedname>castor::SignalT::replaceConnection</qualifiedname>
+        <param>
+          <type><ref refid="d4/ddb/a08183" kindref="compound">my_connection</ref> &amp;</type>
+          <declname>oldConnection</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/ddb/a08183" kindref="compound">my_connection</ref> &amp;</type>
+          <declname>newConnection</declname>
+        </param>
+        <briefdescription>
+<para>Enlève une connexion de la liste. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">oldConnection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La connexion à enlever. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">newConnection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La connexion à ajouter. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="345" column="6" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="345" bodyend="350"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe basique de signal. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="28">
+        <label>castor::SignalT&lt; ActionFunc &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ActionFunc &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor::SignalT&lt; BackgroundChangedFunc &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; BackgroundChangedFunc &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor::SignalT&lt; Changed &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Changed &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::SignalT&lt; ClustersBuffersChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ClustersBuffersChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor::SignalT&lt; EnableFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; EnableFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::SignalT&lt; OnAnimatedMeshChangeFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OnAnimatedMeshChangeFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::SignalT&lt; OnAnimatedSceneNodeChangeFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OnAnimatedSceneNodeChangeFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::SignalT&lt; OnAnimatedSkeletonChangeFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OnAnimatedSkeletonChangeFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::SignalT&lt; OnAnimatedTextureChangeFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OnAnimatedTextureChangeFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::SignalT&lt; OnCameraChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OnCameraChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::SignalT&lt; OnChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OnChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor::SignalT&lt; OnControlChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OnControlChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor::SignalT&lt; OnEmitFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OnEmitFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor::SignalT&lt; OnInitialisedFunc &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OnInitialisedFunc &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor::SignalT&lt; OnLightChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OnLightChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor::SignalT&lt; OnMaterialChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OnMaterialChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor::SignalT&lt; OnPassChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OnPassChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor::SignalT&lt; OnResourceFunc &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OnResourceFunc &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor::SignalT&lt; OnSceneNodeReparentFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OnSceneNodeReparentFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor::SignalT&lt; OnSceneUpdateFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OnSceneUpdateFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor::SignalT&lt; OnScrollContentFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OnScrollContentFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor::SignalT&lt; OnTextureUnitChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OnTextureUnitChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor::SignalT&lt; RenderNodesPassChangeSignalFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; RenderNodesPassChangeSignalFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor::SignalT&lt; SceneCullerBillboardSignalFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SceneCullerBillboardSignalFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor::SignalT&lt; SceneCullerSignalFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SceneCullerSignalFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor::SignalT&lt; SceneCullerSubmeshSignalFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SceneCullerSubmeshSignalFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor::SignalT&lt; SssProfileChangedFunc &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SssProfileChangedFunc &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="30">
+        <label>castor::SignalT&lt; castor::Function&lt; void(WorkerThread const &amp;) &gt; &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::Function&lt; void(WorkerThread const &amp;) &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="1">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="1">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Design/Signal.hpp" line="191" column="1" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="193" bodyend="359"/>
+    <listofallmembers>
+      <member refid="dc/d79/a08267_1a6c883f3c8a2d3c78f95e59d0cee177a3" prot="private" virt="non-virtual"><scope>castor::SignalT</scope><name>addConnection</name></member>
+      <member refid="dc/d79/a08267_1a0b35117515607a064602130b12b86834" prot="public" virt="non-virtual"><scope>castor::SignalT</scope><name>connect</name></member>
+      <member refid="dc/d79/a08267_1aea6d41678f91c9fb0fb2334009626e4d" prot="public" virt="non-virtual"><scope>castor::SignalT</scope><name>connection</name></member>
+      <member refid="dc/d79/a08267_1ad152018eb2f90adc981d546d0f345f7c" prot="private" virt="non-virtual"><scope>castor::SignalT</scope><name>ConnectionT&lt; SignalT&lt; Function &gt; &gt;</name></member>
+      <member refid="dc/d79/a08267_1a4a281636a50102db390a6cad355783ae" prot="private" virt="non-virtual"><scope>castor::SignalT</scope><name>disconnect</name></member>
+      <member refid="dc/d79/a08267_1a1ff1e8fea9bf5981491dea9ed5f0e608" prot="private" virt="non-virtual"><scope>castor::SignalT</scope><name>m_connections</name></member>
+      <member refid="dc/d79/a08267_1a601bda917085c7d0b61ac611b7a290fe" prot="private" virt="non-virtual"><scope>castor::SignalT</scope><name>m_slots</name></member>
+      <member refid="dc/d79/a08267_1a0fb51e50d982d2d5ea9243d94ccc103c" prot="private" virt="non-virtual"><scope>castor::SignalT</scope><name>my_connection</name></member>
+      <member refid="dc/d79/a08267_1a355f9bf3b7139f59cea9e982da7b2be5" prot="private" virt="non-virtual"><scope>castor::SignalT</scope><name>my_connection_ptr</name></member>
+      <member refid="da/d36/a08315_1af371ca9e56bb5b114989ad58eebac673" prot="protected" virt="non-virtual"><scope>castor::SignalT</scope><name>NonCopyable</name></member>
+      <member refid="dc/d79/a08267_1ac1bbd1bda8039dfd0f4c3a0f1ed2f07d" prot="public" virt="non-virtual"><scope>castor::SignalT</scope><name>operator()</name></member>
+      <member refid="dc/d79/a08267_1ac336a0de401a5aa7a5b6746098ee4d11" prot="public" virt="non-virtual"><scope>castor::SignalT</scope><name>operator()</name></member>
+      <member refid="dc/d79/a08267_1a4a2f10de7a8d285ea3151e4a95a33680" prot="public" virt="non-virtual"><scope>castor::SignalT</scope><name>operator=</name></member>
+      <member refid="dc/d79/a08267_1a13ebcf121db5189b9a7adb9f9a196d54" prot="private" virt="non-virtual"><scope>castor::SignalT</scope><name>removeConnection</name></member>
+      <member refid="dc/d79/a08267_1a197f4311d3e901e5cdb253d6c0459835" prot="private" virt="non-virtual"><scope>castor::SignalT</scope><name>replaceConnection</name></member>
+      <member refid="dc/d79/a08267_1a83091fb1243362b30fbe529a15b3ca14" prot="public" virt="non-virtual"><scope>castor::SignalT</scope><name>SignalT</name></member>
+      <member refid="dc/d79/a08267_1a7c2bf8ab0cd896629d9a4754af3a7a18" prot="public" virt="non-virtual"><scope>castor::SignalT</scope><name>SignalT</name></member>
+      <member refid="da/d36/a08315_1a9eaacdfe711925eea3bb79a74b941684" prot="protected" virt="non-virtual"><scope>castor::SignalT</scope><name>~NonCopyable</name></member>
+      <member refid="dc/d79/a08267_1a9698da4382989355d18d85ce75dff9fb" prot="public" virt="non-virtual"><scope>castor::SignalT</scope><name>~SignalT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

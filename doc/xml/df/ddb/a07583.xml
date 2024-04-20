@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/ddb/a07583" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::MeshletBuffers</compoundname>
+    <basecompoundref refid="da/db4/a07575" prot="public" virt="non-virtual">castor3d::shader::MeshBuffersBase</basecompoundref>
+    <includes local="no">GlslMeshVertex.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/ddb/a07583_1a462e49efda9ad59b6b9dd555fd22e8e6" prot="public" static="no" mutable="no">
+        <type>sdw::Array&lt; <ref refid="df/dcb/a07559" kindref="compound">Meshlet</ref> &gt;</type>
+        <definition>sdw::Array&lt; Meshlet &gt; castor3d::shader::MeshletBuffers::meshlets</definition>
+        <argsstring></argsstring>
+        <name>meshlets</name>
+        <qualifiedname>castor3d::shader::MeshletBuffers::meshlets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" line="169" column="12" bodyfile="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" bodystart="169" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/ddb/a07583_1a43232a8795a3f74566f881ae207500bb" prot="public" static="no" mutable="no">
+        <type>sdw::Array&lt; <ref refid="d6/d84/a07587" kindref="compound">ObjectIds</ref> &gt;</type>
+        <definition>sdw::Array&lt; ObjectIds &gt; castor3d::shader::MeshletBuffers::instances</definition>
+        <argsstring></argsstring>
+        <name>instances</name>
+        <qualifiedname>castor3d::shader::MeshletBuffers::instances</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" line="170" column="12" bodyfile="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" bodystart="170" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="df/ddb/a07583_1a5a84a2c828e7d8bbf710a7bdc318cec9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::MeshletBuffers::MeshletBuffers</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, PipelineFlags const &amp;flags, uint32_t baseBinding, uint32_t firstBinding, uint32_t set, uint32_t stride)</argsstring>
+        <name>MeshletBuffers</name>
+        <qualifiedname>castor3d::shader::MeshletBuffers::MeshletBuffers</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>baseBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>firstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>stride</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" line="156" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/ddb/a07583_1addac1387fe436f3f75280a6291453b9d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::MeshletBuffers::MeshletBuffers</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, PipelineFlags const &amp;flags, uint32_t firstBinding, uint32_t set)</argsstring>
+        <name>MeshletBuffers</name>
+        <qualifiedname>castor3d::shader::MeshletBuffers::MeshletBuffers</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>firstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" line="164" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::shader::MeshBuffersBase</label>
+        <link refid="da/db4/a07575"/>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::MeshletBuffers</label>
+        <link refid="df/ddb/a07583"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::shader::MeshBuffersBase</label>
+        <link refid="da/db4/a07575"/>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::MeshletBuffers</label>
+        <link refid="df/ddb/a07583"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" line="152" column="1" bodyfile="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" bodystart="154" bodyend="171"/>
+    <listofallmembers>
+      <member refid="da/db4/a07575_1a7525b46192066152d8cb2dbb7954eecb" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshletBuffers</scope><name>bitangents</name></member>
+      <member refid="da/db4/a07575_1a56d31324322a817358ae761a06b96e51" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshletBuffers</scope><name>colours</name></member>
+      <member refid="df/ddb/a07583_1a43232a8795a3f74566f881ae207500bb" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshletBuffers</scope><name>instances</name></member>
+      <member refid="da/db4/a07575_1a5db58907c6bfd54f1a2932ea168ed0a9" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshletBuffers</scope><name>MeshBuffersBase</name></member>
+      <member refid="df/ddb/a07583_1a5a84a2c828e7d8bbf710a7bdc318cec9" prot="private" virt="non-virtual"><scope>castor3d::shader::MeshletBuffers</scope><name>MeshletBuffers</name></member>
+      <member refid="df/ddb/a07583_1addac1387fe436f3f75280a6291453b9d" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshletBuffers</scope><name>MeshletBuffers</name></member>
+      <member refid="df/ddb/a07583_1a462e49efda9ad59b6b9dd555fd22e8e6" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshletBuffers</scope><name>meshlets</name></member>
+      <member refid="da/db4/a07575_1af7fb9878b0901fca6cdc61ef10316033" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshletBuffers</scope><name>normals</name></member>
+      <member refid="da/db4/a07575_1a2e111b88174f07013594bcda71f49e80" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshletBuffers</scope><name>passMasks</name></member>
+      <member refid="da/db4/a07575_1ac572e9e7430435182939ce4d932c93ec" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshletBuffers</scope><name>positions</name></member>
+      <member refid="da/db4/a07575_1a6c0dec5d0577092c5951d607cc59e0b0" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshletBuffers</scope><name>tangents</name></member>
+      <member refid="da/db4/a07575_1ad728856d2ce273993dd1efc53c51334c" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshletBuffers</scope><name>textures0</name></member>
+      <member refid="da/db4/a07575_1a78cf0be8391c97b1b3a9a633c7875d53" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshletBuffers</scope><name>textures1</name></member>
+      <member refid="da/db4/a07575_1ac1d7fd63c23b1332079c3beeafc598f6" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshletBuffers</scope><name>textures2</name></member>
+      <member refid="da/db4/a07575_1ad685cc72a846900527112c7e7807d8b9" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshletBuffers</scope><name>textures3</name></member>
+      <member refid="da/db4/a07575_1a91858bfd397ab181ea8cb22fba8b21b7" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshletBuffers</scope><name>velocities</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

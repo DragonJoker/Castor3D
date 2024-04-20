@@ -1,0 +1,323 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/de1/a07827" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SceneUbo</compoundname>
+    <includes local="no">SceneUbo.hpp</includes>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d5/de1/a07827_1a5e3597a5d376e1c7955bf5b4fc04cfe0" prot="private" static="no">
+        <type><ref refid="db/d15/a07911" kindref="compound">SceneUboConfiguration</ref></type>
+        <definition>using castor3d::SceneUbo::Configuration =  SceneUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <qualifiedname>castor3d::SceneUbo::Configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/SceneUbo.hpp" line="58" column="1" bodyfile="Castor3D/Shader/Ubos/SceneUbo.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d5/de1/a07827_1abfe1e884363256c3781366db9f1852fc" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::SceneUbo::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::SceneUbo::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/SceneUbo.hpp" line="110" column="21" bodyfile="Castor3D/Shader/Ubos/SceneUbo.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de1/a07827_1a02071042de1227c6bd556aa4587e0c81" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d63/a03459" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="db/d15/a07911" kindref="compound">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::SceneUbo::m_ubo</definition>
+        <argsstring></argsstring>
+        <name>m_ubo</name>
+        <qualifiedname>castor3d::SceneUbo::m_ubo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/SceneUbo.hpp" line="111" column="22" bodyfile="Castor3D/Shader/Ubos/SceneUbo.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/de1/a07827_1aa8553ab949f8d56b2033564a1e016cab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneUbo::SceneUbo</definition>
+        <argsstring>(SceneUbo const &amp;rhs)=delete</argsstring>
+        <name>SceneUbo</name>
+        <qualifiedname>castor3d::SceneUbo::SceneUbo</qualifiedname>
+        <param>
+          <type><ref refid="d5/de1/a07827" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/SceneUbo.hpp" line="61" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de1/a07827_1af41c93ed5638ff3f885a41e4fc547d5c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/de1/a07827" kindref="compound">SceneUbo</ref> &amp;</type>
+        <definition>C3D_API SceneUbo &amp; castor3d::SceneUbo::operator=</definition>
+        <argsstring>(SceneUbo const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::SceneUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d5/de1/a07827" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/SceneUbo.hpp" line="62" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de1/a07827_1a1011b212ae8d203332ac7a5fbed9a0bc" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneUbo::SceneUbo</definition>
+        <argsstring>(SceneUbo &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>SceneUbo</name>
+        <qualifiedname>castor3d::SceneUbo::SceneUbo</qualifiedname>
+        <param>
+          <type><ref refid="d5/de1/a07827" kindref="compound">SceneUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/SceneUbo.hpp" line="63" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de1/a07827_1a0d1af89113151d68067b4f8700fb7e40" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/de1/a07827" kindref="compound">SceneUbo</ref> &amp;</type>
+        <definition>C3D_API SceneUbo &amp; castor3d::SceneUbo::operator=</definition>
+        <argsstring>(SceneUbo &amp;&amp;rhs) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::SceneUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d5/de1/a07827" kindref="compound">SceneUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/SceneUbo.hpp" line="64" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de1/a07827_1abcf9f650a8dcdba36d2a09e2c1270b36" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneUbo::SceneUbo</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>SceneUbo</name>
+        <qualifiedname>castor3d::SceneUbo::SceneUbo</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/SceneUbo.hpp" line="65" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de1/a07827_1a01a91217529f966d7163d28803be0228" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneUbo::~SceneUbo</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~SceneUbo</name>
+        <qualifiedname>castor3d::SceneUbo::~SceneUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/SceneUbo.hpp" line="66" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de1/a07827_1a6ca60d85fb0cea0ff7d62a965b257fa1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/d15/a07911" kindref="compound">Configuration</ref> &amp;</type>
+        <definition>C3D_API Configuration &amp; castor3d::SceneUbo::cpuUpdate</definition>
+        <argsstring>(Fog const &amp;fog)</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::SceneUbo::cpuUpdate</qualifiedname>
+        <param>
+          <type><ref refid="d7/d3e/a06967" kindref="compound">Fog</ref> const &amp;</type>
+          <declname>fog</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour l&apos;UBO avec les valeurs données. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">fog</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La configuration du brouillard. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/SceneUbo.hpp" line="75" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de1/a07827_1a98803b6837a341dde708b2fdc01ece98" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/d15/a07911" kindref="compound">Configuration</ref> &amp;</type>
+        <definition>C3D_API Configuration &amp; castor3d::SceneUbo::cpuUpdate</definition>
+        <argsstring>(Scene const &amp;scene)</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::SceneUbo::cpuUpdate</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> const &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour l&apos;UBO avec les valeurs données. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La scène dessinée. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/SceneUbo.hpp" line="84" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de1/a07827_1a441a8d45274e918ec93fdc3dba4c3520" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneUbo::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t binding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::SceneUbo::createPassBinding</qualifiedname>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/SceneUbo.hpp" line="86" column="6" bodyfile="Castor3D/Shader/Ubos/SceneUbo.hpp" bodystart="86" bodyend="90"/>
+        <references refid="d4/d63/a03459_1a926b4f99af45e4423f45a276b7d72505" compoundref="dd/d52/a00221" startline="86" endline="94">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createPassBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/de1/a07827_1a3820ea1f3fdb87e2fe8b95009c8a55fa" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <qualifiedname>castor3d::SceneUbo::createSizedBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/SceneUbo.hpp" line="92" column="6" bodyfile="Castor3D/Shader/Ubos/SceneUbo.hpp" bodystart="92" bodyend="96"/>
+        <references refid="d4/d63/a03459_1a2c6ad146d4910651544564c25ca7dccd" compoundref="dd/d52/a00221" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/de1/a07827_1ae5f71b06a038fe75dc103fe5d834e405" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>ashes::WriteDescriptorSet castor3d::SceneUbo::getDescriptorWrite</definition>
+        <argsstring>(uint32_t dstBinding, uint32_t dstArrayElement=0u) const</argsstring>
+        <name>getDescriptorWrite</name>
+        <qualifiedname>castor3d::SceneUbo::getDescriptorWrite</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/SceneUbo.hpp" line="98" column="27" bodyfile="Castor3D/Shader/Ubos/SceneUbo.hpp" bodystart="98" bodyend="102"/>
+        <references refid="d4/d63/a03459_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="dd/d52/a00221" startline="107" endline="120">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/de1/a07827_1a0d5615c670fe6c3baa04d495faedd9e7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d63/a03459" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="db/d15/a07911" kindref="compound">Configuration</ref> &gt; const &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const  &amp; castor3d::SceneUbo::getUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getUbo</name>
+        <qualifiedname>castor3d::SceneUbo::getUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/SceneUbo.hpp" line="104" column="29" bodyfile="Castor3D/Shader/Ubos/SceneUbo.hpp" bodystart="104" bodyend="107"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/Ubos/SceneUbo.hpp" line="55" column="1" bodyfile="Castor3D/Shader/Ubos/SceneUbo.hpp" bodystart="56" bodyend="112"/>
+    <listofallmembers>
+      <member refid="d5/de1/a07827_1a5e3597a5d376e1c7955bf5b4fc04cfe0" prot="private" virt="non-virtual"><scope>castor3d::SceneUbo</scope><name>Configuration</name></member>
+      <member refid="d5/de1/a07827_1a6ca60d85fb0cea0ff7d62a965b257fa1" prot="public" virt="non-virtual"><scope>castor3d::SceneUbo</scope><name>cpuUpdate</name></member>
+      <member refid="d5/de1/a07827_1a98803b6837a341dde708b2fdc01ece98" prot="public" virt="non-virtual"><scope>castor3d::SceneUbo</scope><name>cpuUpdate</name></member>
+      <member refid="d5/de1/a07827_1a441a8d45274e918ec93fdc3dba4c3520" prot="public" virt="non-virtual"><scope>castor3d::SceneUbo</scope><name>createPassBinding</name></member>
+      <member refid="d5/de1/a07827_1a3820ea1f3fdb87e2fe8b95009c8a55fa" prot="public" virt="non-virtual"><scope>castor3d::SceneUbo</scope><name>createSizedBinding</name></member>
+      <member refid="d5/de1/a07827_1ae5f71b06a038fe75dc103fe5d834e405" prot="public" virt="non-virtual"><scope>castor3d::SceneUbo</scope><name>getDescriptorWrite</name></member>
+      <member refid="d5/de1/a07827_1a0d5615c670fe6c3baa04d495faedd9e7" prot="public" virt="non-virtual"><scope>castor3d::SceneUbo</scope><name>getUbo</name></member>
+      <member refid="d5/de1/a07827_1abfe1e884363256c3781366db9f1852fc" prot="private" virt="non-virtual"><scope>castor3d::SceneUbo</scope><name>m_device</name></member>
+      <member refid="d5/de1/a07827_1a02071042de1227c6bd556aa4587e0c81" prot="private" virt="non-virtual"><scope>castor3d::SceneUbo</scope><name>m_ubo</name></member>
+      <member refid="d5/de1/a07827_1af41c93ed5638ff3f885a41e4fc547d5c" prot="public" virt="non-virtual"><scope>castor3d::SceneUbo</scope><name>operator=</name></member>
+      <member refid="d5/de1/a07827_1a0d1af89113151d68067b4f8700fb7e40" prot="public" virt="non-virtual"><scope>castor3d::SceneUbo</scope><name>operator=</name></member>
+      <member refid="d5/de1/a07827_1aa8553ab949f8d56b2033564a1e016cab" prot="public" virt="non-virtual"><scope>castor3d::SceneUbo</scope><name>SceneUbo</name></member>
+      <member refid="d5/de1/a07827_1a1011b212ae8d203332ac7a5fbed9a0bc" prot="public" virt="non-virtual"><scope>castor3d::SceneUbo</scope><name>SceneUbo</name></member>
+      <member refid="d5/de1/a07827_1abcf9f650a8dcdba36d2a09e2c1270b36" prot="public" virt="non-virtual"><scope>castor3d::SceneUbo</scope><name>SceneUbo</name></member>
+      <member refid="d5/de1/a07827_1a01a91217529f966d7163d28803be0228" prot="public" virt="non-virtual"><scope>castor3d::SceneUbo</scope><name>~SceneUbo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

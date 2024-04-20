@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dir_1f951589f8acf476d21b7aaa617ace7f" kind="dir">
+    <compoundname>Buffer</compoundname>
+    <innerfile refid="dc/d57/a00194">BufferModule.hpp</innerfile>
+    <innerfile refid="de/db1/a00197">GeometryBuffers.hpp</innerfile>
+    <innerfile refid="d3/db1/a00200">GpuBuffer.hpp</innerfile>
+    <innerfile refid="de/d79/a00203">GpuBufferBuddyAllocator.hpp</innerfile>
+    <innerfile refid="d5/df1/a00206">GpuBufferLinearAllocator.hpp</innerfile>
+    <innerfile refid="d3/de5/a00209">GpuBufferOffset.hpp</innerfile>
+    <innerfile refid="dd/dc1/a00212">GpuBufferPackedAllocator.hpp</innerfile>
+    <innerfile refid="d3/dd5/a00215">GpuBufferPool.hpp</innerfile>
+    <innerfile refid="dc/d9a/a00218">ObjectBufferOffset.hpp</innerfile>
+    <innerfile refid="dd/d52/a00221">ObjectBufferPool.hpp</innerfile>
+    <innerfile refid="d5/ddf/a00224">PoolUniformBuffer.hpp</innerfile>
+    <innerfile refid="d9/d01/a00227">UniformBuffer.hpp</innerfile>
+    <innerfile refid="d1/da8/a00230">UniformBufferBase.hpp</innerfile>
+    <innerfile refid="d6/de1/a00233">UniformBufferOffset.hpp</innerfile>
+    <innerfile refid="d7/d40/a00236">UniformBufferPool.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Buffer/"/>
+  </compounddef>
+</doxygen>

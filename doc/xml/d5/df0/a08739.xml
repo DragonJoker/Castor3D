@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/df0/a08739" kind="struct" language="C++" prot="public">
+    <compoundname>castor::KernelBoxFilterT</compoundname>
+    <includes local="no">BoxFilterKernel.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+        <declname>PFT</declname>
+        <defname>PFT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d5/df0/a08739_1ac965b60d4f4e0686a95ddb6551533999" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor::KernelBoxFilterT&lt; PFT &gt;::compute</definition>
+        <argsstring>(VkExtent2D const &amp;fullExtent, uint8_t const *srcBuffer, uint8_t *dstBuffer, uint32_t level, uint32_t levelSize)</argsstring>
+        <name>compute</name>
+        <qualifiedname>castor::KernelBoxFilterT::compute</qualifiedname>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>fullExtent</declname>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>srcBuffer</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>dstBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>levelSize</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoxFilterKernel.hpp" line="14" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/BoxFilterKernel.hpp" line="12" column="1" bodyfile="CastorUtils/Graphics/BoxFilterKernel.hpp" bodystart="13" bodyend="19"/>
+    <listofallmembers>
+      <member refid="d5/df0/a08739_1ac965b60d4f4e0686a95ddb6551533999" prot="public" virt="non-virtual"><scope>castor::KernelBoxFilterT</scope><name>compute</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

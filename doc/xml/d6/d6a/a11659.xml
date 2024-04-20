@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d6a/a11659" kind="page">
+    <compoundname>md_Z_1_2Projets_2C_09_09_2Castor3D_2doc_2Castor3D_2Render-French</compoundname>
+    <title>Explications du rendu</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><anchor id="d6/d6a/a11659_1autotoc_md131"/> </para>
+<sect1 id="d6/d6a/a11659_1autotoc_md132">
+<title>Général</title><para>Le rendu dans Castor3D est découpé en plusieurs passes.<itemizedlist>
+<listitem><para>Passes d&apos;environment</para>
+</listitem><listitem><para>Passes d&apos;ombres</para>
+</listitem><listitem><para>Deferred rendering pour les objets opaques</para>
+</listitem><listitem><para>Passe de background</para>
+</listitem><listitem><para>Weighted Blended rendering pour les objets transparents</para>
+</listitem></itemizedlist>
+</para>
+<para><image type="html" name="../../render.png">render</image>
+ <image type="latex" name="../../render.png">render</image>
+ <image type="rtf" name="../../render.png">render</image>
+ <image type="docbook" name="../../render.png">render</image>
+ <image type="xml" name="../../render.png">render</image>
+</para>
+</sect1>
+<sect1 id="d6/d6a/a11659_1autotoc_md133">
+<title>Passe d&apos;environment</title><para>Cette passe génère la texture d&apos;environnement pour un noeud en ayant besoin.</para>
+<para>Notez que plusieurs noeuds peuvent avoir besoin de textures d&apos;environnement différentes, générant ainsi plusieurs passes d&apos;environnement.</para>
+<para>Elle est divisée en 3 passes distinctes:<itemizedlist>
+<listitem><para>Passe opaque (utilisant le forward rendering)</para>
+</listitem><listitem><para>Passe de background</para>
+</listitem><listitem><para>Passe transparente (utilisant le forward rendering)</para>
+</listitem></itemizedlist>
+</para>
+<para>Son résultat est stocké dans une cube map.</para>
+<para><image type="html" name="../../environment_pass.png">environment_pass</image>
+ <image type="latex" name="../../environment_pass.png">environment_pass</image>
+ <image type="rtf" name="../../environment_pass.png">environment_pass</image>
+ <image type="docbook" name="../../environment_pass.png">environment_pass</image>
+ <image type="xml" name="../../environment_pass.png">environment_pass</image>
+</para>
+</sect1>
+<sect1 id="d6/d6a/a11659_1autotoc_md134">
+<title>Passe d&apos;ombres</title><para>Cette passe génère la texture d&apos;ombres pour une source lumineuse.</para>
+<para>Le moteur supporte pour l&apos;instant trois types de sources lumineuses, ayant leur passe d&apos;ombres spécifique :<itemizedlist>
+<listitem><para>Directionelle: Cette passe génère des cascaded shadow maps (avec un maximum de 4 cascades)</para>
+</listitem><listitem><para>Omnidirectionnelle: Cette passe dessine dans une cube map, et est donc divisée en 6 passes (une par face du cube)</para>
+</listitem><listitem><para>Projecteur: Cette passe dessine dans une simple texture 2D</para>
+</listitem></itemizedlist>
+</para>
+<para>Cela dit, il est important de noter que les shadow maps omnidirectionnelle et projecteur sont stockées dans des texture arrays (respectivement Cube et 2D).</para>
+<para>Les cascades de la shadow map directionnelle sont elles aussi stockées dans un texture 2D array.</para>
+<para>Cela permet de limiter le nombre de bindings, notamment lors des passes utilisant le forward rendering.</para>
+<para>Comme Castor3D permet à l&apos;utilisateur de choisir le type d&apos;ombres qu&apos;il souhaite (Raw, PCF or VSM), Les résultats sont toujours stockés dans des textures au format R32G32_SFLOAT.</para>
+<para><image type="html" name="../../shadow_pass.png">shadow_pass</image>
+ <image type="latex" name="../../shadow_pass.png">shadow_pass</image>
+ <image type="rtf" name="../../shadow_pass.png">shadow_pass</image>
+ <image type="docbook" name="../../shadow_pass.png">shadow_pass</image>
+ <image type="xml" name="../../shadow_pass.png">shadow_pass</image>
+</para>
+</sect1>
+<sect1 id="d6/d6a/a11659_1autotoc_md135">
+<title>Deferred rendering</title><para>Cette passe de rendu est la plus complexe, et est divisée en de multiples passes:<itemizedlist>
+<listitem><para>Passe opaque</para>
+</listitem><listitem><para>Passe SSAO</para>
+</listitem><listitem><para>Passe de Subsurface Scattering</para>
+</listitem><listitem><para>Passe d&apos;éclairage</para>
+</listitem><listitem><para>Passe de réflexions</para>
+</listitem></itemizedlist>
+</para>
+<para><image type="html" name="../../deferred_rendering.png">deferred_rendering</image>
+ <image type="latex" name="../../deferred_rendering.png">deferred_rendering</image>
+ <image type="rtf" name="../../deferred_rendering.png">deferred_rendering</image>
+ <image type="docbook" name="../../deferred_rendering.png">deferred_rendering</image>
+ <image type="xml" name="../../deferred_rendering.png">deferred_rendering</image>
+</para>
+<sect2 id="d6/d6a/a11659_1autotoc_md136">
+<title>Passe opaque</title><para>Cette passe est la geometry pass, et génère les buffers dont les autres passes ont besoin.</para>
+<para>Castor3D utilise actuellement 5 (+1) buffers :<itemizedlist>
+<listitem><para><bold>Depth buffer</bold> Utilise le format D24_UNORM_S8_UINT.</para>
+</listitem><listitem><para><bold>Data 1 buffer</bold> Utilise le format R32G32B32A32_SFLOAT. Les canaux RGB stockent la normale en coordonnées monde. Le canal A stocke les flags de matériau de l&apos;objet.</para>
+</listitem><listitem><para><bold>Data 2 buffer</bold> Utilise le format R16G16B16A16_SFLOAT. Les canaux RGB stockent la couleur diffuse/albedo. Le canal A est utilisé pour stocker:<itemizedlist>
+<listitem><para>La Shininess en Phong</para>
+</listitem><listitem><para>La Glossiness en PBR Specular/Glossiness</para>
+</listitem><listitem><para>Inutilisé en PBR Metallic/Roughness</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>Data 3 buffer</bold> Utilise le format R16G16B16A16_SFLOAT. Les canaux RGB stockent la couleur spéculaire, pour les pipelines en ayant besoin. Pour le PBR Metallic/Roughness, R stocke la valeur Metallic, G stocke la valeur de Roughness, B est inutilisé. Le canal A stocke la valeur d&apos;Ambient Occlusion.</para>
+</listitem><listitem><para><bold>Data 4 buffer</bold> Utilise le format R16G16B16A16_SFLOAT. Les canaux RGB stockent la couleur émissive. Le canal A stocke la valeur de transmittance.</para>
+</listitem><listitem><para><bold>Data 5 buffer</bold> Utilise le format R16G16B16A16_SFLOAT. Les canaux RG stockent la valeur de vélocité (calculée avec la frame précédente). Le canal B stocke l&apos;indice du matériau. Le canal A est inutilisé.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d6/d6a/a11659_1autotoc_md137">
+<title>Passe SSAO</title><para>Cette passe implémente l&apos;algorithme Scalable Ambient Obscurance décrit ici : <ulink url="https://research.nvidia.com/sites/default/files/pubs/2012-06_Scalable-Ambient-Obscurance/McGuire12SAO.pdf">https://research.nvidia.com/sites/default/files/pubs/2012-06_Scalable-Ambient-Obscurance/McGuire12SAO.pdf</ulink></para>
+<para>Elle est donc scindée en 3 sous-passes :<itemizedlist>
+<listitem><para>Passe de linéarisation de la profondeur</para>
+</listitem><listitem><para>Pass de SSAO brut</para>
+</listitem><listitem><para>Pass de flou</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d6/d6a/a11659_1autotoc_md138">
+<title>Passe d&apos;éclairage</title><para>Cette passe est en fait un ensemble de sous-passes d&apos;éclairage, une par source lumineuse.</para>
+<para>Si la source lumineuse génère des ombres, sa shadow map sera utilisée, pour produire les ombres choisies par l&apos;utilisateur.</para>
+<para>Les sources omnidirectionnelles et projecteurs effectuent d&apos;abord une passe de stencil, afin de déterminer leur zone d&apos;application.</para>
+</sect2>
+<sect2 id="d6/d6a/a11659_1autotoc_md139">
+<title>Passe Subsurface Scattering</title><para>Cette passe implémente l&apos;algorithme de Screen-Space Subsurface Scattering décrit ici : <ulink url="http://www.iryoku.com/sssss/">http://www.iryoku.com/sssss/</ulink></para>
+<para>Elle est donc scindée en 4 sous-passes :<itemizedlist>
+<listitem><para>Trois passes de blur successives</para>
+</listitem><listitem><para>Une passe de combinaison</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d6/d6a/a11659_1autotoc_md140">
+<title>Passe de réflexions</title><para>Cette passe combine les résultats des passes précédentes :<itemizedlist>
+<listitem><para>Elle applique le facteur d&apos;ambiant avec l&apos;occlusion ambiante fournie.</para>
+</listitem><listitem><para>Elle applique les résultats diffus et spéculaire de la passe d&apos;éclairage.</para>
+</listitem><listitem><para>Elle applique aussi la réflexion et/ou la réfraction, en utilisant la skybox ou les environment maps fournies.</para>
+</listitem><listitem><para>Pour les pipelines PBR, elle applique aussi l&apos;IBL, si aucune réflexion n&apos;est demandée pour le fragment traité.</para>
+</listitem><listitem><para>Si la scène a besoin de brouillard, il est appliqué ici.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+</sect1>
+<sect1 id="d6/d6a/a11659_1autotoc_md141">
+<title>Passe de background</title><para>Cette passe est la plus simple, il s&apos;agit juste de dessiner la skybox de la scène.</para>
+<para>Elle est appliquée après la passe de rendu des objets opaques afin de profiter du depth test, avec le depth buffer rempli par la passe opaque.</para>
+</sect1>
+<sect1 id="d6/d6a/a11659_1autotoc_md142">
+<title>Weighted Blended rendering</title><para>Cette passe implémente le blended weighted rendering décrit ici : <ulink url="http://jcgt.org/published/0002/02/09/paper.pdf">http://jcgt.org/published/0002/02/09/paper.pdf</ulink></para>
+<para>Elle est donc scindée en deux passes :<itemizedlist>
+<listitem><para>Accumulation pass</para>
+</listitem><listitem><para>Resolve pass</para>
+</listitem></itemizedlist>
+</para>
+<para><image type="html" name="../../weighted_blended_rendering.png">weighted_blended_rendering</image>
+ <image type="latex" name="../../weighted_blended_rendering.png">weighted_blended_rendering</image>
+ <image type="rtf" name="../../weighted_blended_rendering.png">weighted_blended_rendering</image>
+ <image type="docbook" name="../../weighted_blended_rendering.png">weighted_blended_rendering</image>
+ <image type="xml" name="../../weighted_blended_rendering.png">weighted_blended_rendering</image>
+ </para>
+</sect1>
+    </detaileddescription>
+    <location file="Z:/Projets/C++/Castor3D/doc/Castor3D/Render-French.md"/>
+  </compounddef>
+</doxygen>

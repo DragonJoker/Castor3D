@@ -1,0 +1,365 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d4a/a02204" kind="file" language="C++">
+    <compoundname>PreciseTimer.hpp</compoundname>
+    <includes refid="d4/de1/a11702" local="yes">CastorUtils/Miscellaneous/MiscellaneousModule.hpp</includes>
+    <includes local="no">cstdint</includes>
+    <includes local="no">chrono</includes>
+    <includedby refid="dc/d5d/a00278" local="no">Castor3D/Castor3DPch.hpp</includedby>
+    <includedby refid="dd/d08/a00884" local="no">Castor3D/Overlay/DebugOverlays.hpp</includedby>
+    <includedby refid="d0/d67/a01232" local="no">Castor3D/Render/RenderTarget.hpp</includedby>
+    <includedby refid="d8/dbe/a01370" local="no">Castor3D/Scene/Animation/AnimatedObjectGroup.hpp</includedby>
+    <includedby refid="da/d50/a01511" local="no">Castor3D/Scene/ParticleSystem/ParticleSystem.hpp</includedby>
+    <includedby refid="d5/d4d/a02186" local="yes">CastorUtils/Miscellaneous/BlockTimer.hpp</includedby>
+    <incdepgraph>
+      <node id="5">
+        <label>CastorUtils/config.hpp</label>
+      </node>
+      <node id="3">
+        <label>CastorUtils/CastorUtils.hpp</label>
+        <link refid="d6/d3d/a01784"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>CastorUtils/Config/BeginExternHeaderGuard.hpp</label>
+        <link refid="d4/dc6/a01793"/>
+      </node>
+      <node id="6">
+        <label>CastorUtils/Config/CompilerConfig.hpp</label>
+        <link refid="d3/d92/a01796"/>
+      </node>
+      <node id="4">
+        <label>CastorUtils/Config/ConfigModule.hpp</label>
+        <link refid="d5/d12/a01799"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>CastorUtils/Config/EndExternHeaderGuard.hpp</label>
+        <link refid="dd/ddc/a01802"/>
+      </node>
+      <node id="7">
+        <label>CastorUtils/Config/Macros.hpp</label>
+        <link refid="d7/d62/a01805"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>CastorUtils/Config/MultiThreadConfig.hpp</label>
+        <link refid="d7/d02/a01808"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>CastorUtils/Config/PlatformConfig.hpp</label>
+        <link refid="d2/d31/a01811"/>
+      </node>
+      <node id="10">
+        <label>CastorUtils/Config/SmartPtr.hpp</label>
+        <link refid="d6/dfc/a01814"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>CastorUtils/Miscellaneous/Debug.hpp</label>
+        <link refid="df/d0e/a02195"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>CastorUtils/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d4/de1/a11702"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>CastorUtils/Miscellaneous/PreciseTimer.hpp</label>
+        <link refid="df/d4a/a02204"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>array</label>
+      </node>
+      <node id="20">
+        <label>atomic</label>
+      </node>
+      <node id="19">
+        <label>cassert</label>
+      </node>
+      <node id="24">
+        <label>chrono</label>
+      </node>
+      <node id="23">
+        <label>condition_variable</label>
+      </node>
+      <node id="34">
+        <label>cstdarg</label>
+      </node>
+      <node id="35">
+        <label>cstdint</label>
+      </node>
+      <node id="25">
+        <label>deque</label>
+      </node>
+      <node id="26">
+        <label>functional</label>
+      </node>
+      <node id="27">
+        <label>iostream</label>
+      </node>
+      <node id="17">
+        <label>list</label>
+      </node>
+      <node id="36">
+        <label>locale</label>
+      </node>
+      <node id="13">
+        <label>map</label>
+      </node>
+      <node id="11">
+        <label>memory</label>
+      </node>
+      <node id="22">
+        <label>mutex</label>
+      </node>
+      <node id="39">
+        <label>ostream</label>
+      </node>
+      <node id="37">
+        <label>regex</label>
+      </node>
+      <node id="14">
+        <label>set</label>
+      </node>
+      <node id="28">
+        <label>sstream</label>
+      </node>
+      <node id="29">
+        <label>stack</label>
+      </node>
+      <node id="30">
+        <label>string</label>
+      </node>
+      <node id="31">
+        <label>string_view</label>
+      </node>
+      <node id="21">
+        <label>thread</label>
+      </node>
+      <node id="32">
+        <label>unordered_map</label>
+      </node>
+      <node id="33">
+        <label>unordered_set</label>
+      </node>
+      <node id="15">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="7">
+        <label>Castor3D/Cache/AnimatedObjectGroupCache.hpp</label>
+        <link refid="d1/da8/a00230"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Castor3D/Castor3DPch.hpp</label>
+        <link refid="dc/d5d/a00278"/>
+      </node>
+      <node id="3">
+        <label>Castor3D/Overlay/DebugOverlays.hpp</label>
+        <link refid="dd/d08/a00884"/>
+      </node>
+      <node id="5">
+        <label>Castor3D/Render/PostEffect/PostEffect.hpp</label>
+        <link refid="d6/db6/a01172"/>
+      </node>
+      <node id="4">
+        <label>Castor3D/Render/RenderTarget.hpp</label>
+        <link refid="d0/d67/a01232"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>Castor3D/Scene/Animation/AnimatedObjectGroup.hpp</label>
+        <link refid="d8/dbe/a01370"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>Castor3D/Scene/ParticleSystem/ParticleSystem.hpp</label>
+        <link refid="da/d50/a01511"/>
+      </node>
+      <node id="8">
+        <label>Castor3D/Scene/Scene.hpp</label>
+        <link refid="db/d8e/a01523"/>
+      </node>
+      <node id="10">
+        <label>CastorUtils/Miscellaneous/BlockTimer.hpp</label>
+        <link refid="d5/d4d/a02186"/>
+      </node>
+      <node id="1">
+        <label>CastorUtils/Miscellaneous/PreciseTimer.hpp</label>
+        <link refid="df/d4a/a02204"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="d5/d7e/a09419" prot="public">castor::PreciseTimer</innerclass>
+    <innernamespace refid="d2/dd2/a02279">castor</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Miscellaneous/PreciseTimer.hpp"/>
+  </compounddef>
+</doxygen>

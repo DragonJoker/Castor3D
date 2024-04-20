@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d12/a07271" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SceneNodeMergerT</compoundname>
+    <basecompoundref refid="d5/d3c/a08223" prot="public" virt="non-virtual">castor::NamedBaseT&lt; String &gt;</basecompoundref>
+    <includes local="no">SceneNode.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename CacheT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d12/a07271_1a7be358ae2ba73c61c1186308dee13c23" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::SceneNodeMergerT&lt; CacheT &gt;::SceneNodeMergerT</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>SceneNodeMergerT</name>
+        <qualifiedname>castor3d::SceneNodeMergerT::SceneNodeMergerT</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNode.hpp" line="428" column="10" bodyfile="Castor3D/Scene/SceneNode.hpp" bodystart="428" bodyend="431"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d12/a07271_1a63c30cc9ea9687b20311400faad7c851" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneNodeMergerT&lt; CacheT &gt;::operator()</definition>
+        <argsstring>(typename CacheT::ElementObjectCacheT const &amp;source, typename CacheT::ElementContT &amp;destination, typename CacheT::ElementPtrT element, SceneNodeRPtr rootCameraNode, SceneNodeRPtr rootObjectNode) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor3d::SceneNodeMergerT::operator()</qualifiedname>
+        <param>
+          <type>typename CacheT::ElementObjectCacheT const &amp;</type>
+          <declname>source</declname>
+        </param>
+        <param>
+          <type>typename CacheT::ElementContT &amp;</type>
+          <declname>destination</declname>
+        </param>
+        <param>
+          <type>typename CacheT::ElementPtrT</type>
+          <declname>element</declname>
+        </param>
+        <param>
+          <type>SceneNodeRPtr</type>
+          <declname>rootCameraNode</declname>
+        </param>
+        <param>
+          <type>SceneNodeRPtr</type>
+          <declname>rootObjectNode</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNode.hpp" line="433" column="6" bodyfile="Castor3D/Scene/SceneNode.hpp" bodystart="433" bodyend="463"/>
+        <references refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" compoundref="d5/d12/a01799" startline="51">cuT</references>
+        <references refid="d5/d3c/a08223_1abc1fa9ec1a50d2023373baa4d4c79519" compoundref="de/dca/a01907" startline="35" endline="38">castor::NamedBaseT&lt; T &gt;::getName</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::SceneNodeMergerT&lt; CacheT &gt;</label>
+        <link refid="d0/d12/a07271"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::SceneNodeMergerT&lt; CacheT &gt;</label>
+        <link refid="d0/d12/a07271"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/SceneNode.hpp" line="425" column="1" bodyfile="Castor3D/Scene/SceneNode.hpp" bodystart="427" bodyend="464"/>
+    <listofallmembers>
+      <member refid="d5/d3c/a08223_1abc1fa9ec1a50d2023373baa4d4c79519" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeMergerT</scope><name>getName</name></member>
+      <member refid="d5/d3c/a08223_1a869b429a7190ecf614d8221b270e6dca" prot="protected" virt="non-virtual"><scope>castor3d::SceneNodeMergerT</scope><name>m_name</name></member>
+      <member refid="d5/d3c/a08223_1a4a6e4748603541685b04f95fb91efb26" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeMergerT</scope><name>NamedBaseT</name></member>
+      <member refid="d0/d12/a07271_1a63c30cc9ea9687b20311400faad7c851" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeMergerT</scope><name>operator()</name></member>
+      <member refid="d5/d3c/a08223_1a2d62ce1925efead03c4e0842c06b3e11" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeMergerT</scope><name>rename</name></member>
+      <member refid="d0/d12/a07271_1a7be358ae2ba73c61c1186308dee13c23" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeMergerT</scope><name>SceneNodeMergerT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

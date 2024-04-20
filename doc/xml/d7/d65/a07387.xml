@@ -1,0 +1,397 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/d65/a07387" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::TextureConfigurationBuffer</compoundname>
+    <includes local="no">TextureConfigurationBuffer.hpp</includes>
+    <innerclass refid="d5/d54/a07391" prot="public">castor3d::TextureConfigurationBuffer::Data</innerclass>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d7/d65/a07387_1a7021a2bbce508e695f86eb26af29db2a" prot="public" static="no">
+        <type><ref refid="d4/dcc/a08151" kindref="compound">castor::ArrayView</ref>&lt; <ref refid="d5/d54/a07391" kindref="compound">Data</ref> &gt;</type>
+        <definition>using castor3d::TextureConfigurationBuffer::TextureConfigurationsData =  castor::ArrayView&lt; Data &gt;</definition>
+        <argsstring></argsstring>
+        <name>TextureConfigurationsData</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::TextureConfigurationsData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="123" column="1" bodyfile="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d7/d65/a07387_1abc3b4accaf525caee5e6c3702d2142a3" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::TextureConfigurationBuffer::DataSize</definition>
+        <argsstring></argsstring>
+        <name>DataSize</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::DataSize</qualifiedname>
+        <initializer>= uint32_t( sizeof( <ref refid="d5/d54/a07391" kindref="compound">Data</ref> ) )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="125" column="27" bodyfile="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/d65/a07387_1a893b74c542944db3e64e80d7e6a98e81" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/de5/a07315" kindref="compound">ShaderBuffer</ref></type>
+        <definition>ShaderBuffer castor3d::TextureConfigurationBuffer::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="129" column="14" bodyfile="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d65/a07387_1a30c3729ac28db8e0b1bda59aa365495a" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d5/dc1/a04943" kindref="compound">TextureConfiguration</ref> &gt;</type>
+        <definition>castor::Vector&lt; TextureConfiguration &gt; castor3d::TextureConfigurationBuffer::m_configurations</definition>
+        <argsstring></argsstring>
+        <name>m_configurations</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::m_configurations</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="130" column="16" bodyfile="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d65/a07387_1a7cbd0042bf2858d683522a0ee8b61886" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d9/d7c/a04999" kindref="compound">TextureUnit</ref> const * &gt;</type>
+        <definition>castor::Vector&lt; TextureUnit const * &gt; castor3d::TextureConfigurationBuffer::m_dirty</definition>
+        <argsstring></argsstring>
+        <name>m_dirty</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::m_dirty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="131" column="16" bodyfile="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d65/a07387_1a27c1dc3c662dd6dd2007bc2eceef71e1" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d9/dba/a02278_1acef193d18e43d96235395c736e084435" kindref="member">OnTextureUnitChangedConnection</ref> &gt;</type>
+        <definition>castor::Vector&lt; OnTextureUnitChangedConnection &gt; castor3d::TextureConfigurationBuffer::m_connections</definition>
+        <argsstring></argsstring>
+        <name>m_connections</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::m_connections</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="132" column="16" bodyfile="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d65/a07387_1abde3ae8f40b0ff6099d68b65561a54a6" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d65/a07387_1a7021a2bbce508e695f86eb26af29db2a" kindref="member">TextureConfigurationsData</ref></type>
+        <definition>TextureConfigurationsData castor3d::TextureConfigurationBuffer::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::m_data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="133" column="27" bodyfile="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="133" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d65/a07387_1a11c8e03f3f4001193eb89f93d6cff3d7" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aac3763b795438810958473f0b84908fb" kindref="member">castor::Mutex</ref></type>
+        <definition>castor::Mutex castor3d::TextureConfigurationBuffer::m_mutex</definition>
+        <argsstring></argsstring>
+        <name>m_mutex</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::m_mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="134" column="15" bodyfile="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="134" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d65/a07387_1a833c981748d148c14ced64c964db09f2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TextureConfigurationBuffer::TextureConfigurationBuffer</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, uint32_t count)</argsstring>
+        <name>TextureConfigurationBuffer</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::TextureConfigurationBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le device GPU. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre maximal de configurations. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="33" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d65/a07387_1ae49b9b7fb2dc714b18bce43883750f8f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::TextureConfigurationBuffer::addTextureConfiguration</definition>
+        <argsstring>(TextureUnit &amp;unit)</argsstring>
+        <name>addTextureConfiguration</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::addTextureConfiguration</qualifiedname>
+        <param>
+          <type><ref refid="d9/d7c/a04999" kindref="compound">TextureUnit</ref> &amp;</type>
+          <declname>unit</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute une configuration au tampon. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">unit</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La texture. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="44" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d65/a07387_1a52ae2f7d04cb52031ad7d64b81e1f4c4" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureConfigurationBuffer::removeTextureConfiguration</definition>
+        <argsstring>(TextureUnit &amp;unit) noexcept</argsstring>
+        <name>removeTextureConfiguration</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::removeTextureConfiguration</qualifiedname>
+        <param>
+          <type><ref refid="d9/d7c/a04999" kindref="compound">TextureUnit</ref> &amp;</type>
+          <declname>unit</declname>
+        </param>
+        <briefdescription>
+<para>Supprime une configuration du tampon. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">unit</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La texture. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="53" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d65/a07387_1af4250dde6cec5be9397a5cda2bc510ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureConfigurationBuffer::update</definition>
+        <argsstring>(UploadData &amp;uploader)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::update</qualifiedname>
+        <param>
+          <type><ref refid="d7/d12/a03583" kindref="compound">UploadData</ref> &amp;</type>
+          <declname>uploader</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour le tampon de configurations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="60" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d65/a07387_1ae05ca699bfe1ba1f1dd876ef51d1ae77" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkDescriptorSetLayoutBinding</type>
+        <definition>C3D_API VkDescriptorSetLayoutBinding castor3d::TextureConfigurationBuffer::createLayoutBinding</definition>
+        <argsstring>(uint32_t binding, VkShaderStageFlags stages=(VK_SHADER_STAGE_FRAGMENT_BIT|VK_SHADER_STAGE_GEOMETRY_BIT|VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT|VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT|VK_SHADER_STAGE_VERTEX_BIT)) const</argsstring>
+        <name>createLayoutBinding</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::createLayoutBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>stages</declname>
+          <defval>(VK_SHADER_STAGE_FRAGMENT_BIT|VK_SHADER_STAGE_GEOMETRY_BIT|VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT|VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT|VK_SHADER_STAGE_VERTEX_BIT)</defval>
+        </param>
+        <briefdescription>
+<para>Crée une attache de layout de set de descripteurs. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="67" column="38"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d65/a07387_1aa29fe58144df557ff36313f5f7fa490e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::WriteDescriptorSet</type>
+        <definition>C3D_API ashes::WriteDescriptorSet castor3d::TextureConfigurationBuffer::getBinding</definition>
+        <argsstring>(uint32_t binding) const</argsstring>
+        <name>getBinding</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::getBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Crée le descriptor write pour ce tampon. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="79" column="35"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d65/a07387_1a5b35be8d96b7a06453674ece612697b4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TextureConfigurationBuffer::createBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;binding) const</argsstring>
+        <name>createBinding</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::createBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Crée une attache de set de descripteurs au point donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">descriptorSet</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le set de descripteurs recevant l&apos;attache. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">binding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;attache de layout de set de descripteurs. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="90" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d65/a07387_1a1dc2d5dc7aceb14724706df91c0a7b10" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+        <definition>C3D_API RenderDevice const  &amp; castor3d::TextureConfigurationBuffer::getDevice</definition>
+        <argsstring>() const</argsstring>
+        <name>getDevice</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::getDevice</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="93" column="29"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d65/a07387_1a670c55556390fc06774f7073ae36b3bb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint8_t *</type>
+        <definition>uint8_t * castor3d::TextureConfigurationBuffer::getPtr</definition>
+        <argsstring>()</argsstring>
+        <name>getPtr</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::getPtr</qualifiedname>
+        <briefdescription>
+<para>Le pointeur sur le tampon. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="100" column="17" bodyfile="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="100" bodyend="103"/>
+        <references refid="d3/de5/a07315_1aab3e4f6ec159dfbd374a5bbf30175e66" compoundref="d2/dc1/a01562" startline="129" endline="132">castor3d::ShaderBuffer::getPtr</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="18" column="1" bodyfile="Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="19" bodyend="135"/>
+    <listofallmembers>
+      <member refid="d7/d65/a07387_1ae49b9b7fb2dc714b18bce43883750f8f" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer</scope><name>addTextureConfiguration</name></member>
+      <member refid="d7/d65/a07387_1a5b35be8d96b7a06453674ece612697b4" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer</scope><name>createBinding</name></member>
+      <member refid="d7/d65/a07387_1ae05ca699bfe1ba1f1dd876ef51d1ae77" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer</scope><name>createLayoutBinding</name></member>
+      <member refid="d7/d65/a07387_1abc3b4accaf525caee5e6c3702d2142a3" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer</scope><name>DataSize</name></member>
+      <member refid="d7/d65/a07387_1aa29fe58144df557ff36313f5f7fa490e" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer</scope><name>getBinding</name></member>
+      <member refid="d7/d65/a07387_1a1dc2d5dc7aceb14724706df91c0a7b10" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer</scope><name>getDevice</name></member>
+      <member refid="d7/d65/a07387_1a670c55556390fc06774f7073ae36b3bb" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer</scope><name>getPtr</name></member>
+      <member refid="d7/d65/a07387_1a893b74c542944db3e64e80d7e6a98e81" prot="private" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer</scope><name>m_buffer</name></member>
+      <member refid="d7/d65/a07387_1a30c3729ac28db8e0b1bda59aa365495a" prot="private" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer</scope><name>m_configurations</name></member>
+      <member refid="d7/d65/a07387_1a27c1dc3c662dd6dd2007bc2eceef71e1" prot="private" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer</scope><name>m_connections</name></member>
+      <member refid="d7/d65/a07387_1abde3ae8f40b0ff6099d68b65561a54a6" prot="private" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer</scope><name>m_data</name></member>
+      <member refid="d7/d65/a07387_1a7cbd0042bf2858d683522a0ee8b61886" prot="private" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer</scope><name>m_dirty</name></member>
+      <member refid="d7/d65/a07387_1a11c8e03f3f4001193eb89f93d6cff3d7" prot="private" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer</scope><name>m_mutex</name></member>
+      <member refid="d7/d65/a07387_1a52ae2f7d04cb52031ad7d64b81e1f4c4" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer</scope><name>removeTextureConfiguration</name></member>
+      <member refid="d7/d65/a07387_1a833c981748d148c14ced64c964db09f2" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer</scope><name>TextureConfigurationBuffer</name></member>
+      <member refid="d7/d65/a07387_1a7021a2bbce508e695f86eb26af29db2a" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer</scope><name>TextureConfigurationsData</name></member>
+      <member refid="d7/d65/a07387_1af4250dde6cec5be9397a5cda2bc510ad" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

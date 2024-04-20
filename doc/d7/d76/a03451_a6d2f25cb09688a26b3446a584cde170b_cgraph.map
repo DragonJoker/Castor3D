@@ -1,0 +1,13 @@
+<map id="castor3d::GpuBufferOffsetT::createOutputStoragePassBinding" name="castor3d::GpuBufferOffsetT::createOutputStoragePassBinding">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,101,236,141"/>
+<area shape="rect" id="Node000002" href="$d9/dba/a02278.html#aa3d0165008b5fe49115acfe94a243b75" title=" " alt="" coords="284,5,484,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="170,99,283,55,305,47,306,52,285,60,172,104"/>
+<area shape="rect" id="Node000003" href="$d7/d76/a03451.html#aaf498e1f12b8c86de5b613e41e9fb87e" title=" " alt="" coords="299,69,469,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="236,105,285,99,286,104,237,110"/>
+<area shape="rect" id="Node000005" href="$d7/d76/a03451.html#a97b5122f677a123e2bd2c7853927aa94" title=" " alt="" coords="299,133,469,173"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="237,133,286,139,285,144,236,138"/>
+<area shape="rect" id="Node000006" href="$d7/d76/a03451.html#a44e450480561c1253f21a8a3fd548b69" title=" " alt="" coords="299,197,469,237"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="172,139,285,183,306,190,305,195,283,188,170,144"/>
+<area shape="rect" id="Node000004" href="$dc/d5c/a03483.html#a9b7138bb3a0846953e5c7c64f1bcffd8" title=" " alt="" coords="532,69,699,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="470,87,518,87,518,92,470,92"/>
+</map>

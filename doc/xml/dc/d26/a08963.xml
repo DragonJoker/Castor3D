@@ -1,0 +1,567 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d26/a08963" kind="class" language="C++" prot="public">
+    <compoundname>castor::ImageLoader</compoundname>
+    <basecompoundref refid="da/d87/a08319" prot="public" virt="non-virtual">castor::NonMovable</basecompoundref>
+    <includes local="no">ImageLoader.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/d26/a08963_1a431f5a63d529edb92917dae5035b0d54" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; <ref refid="d2/dd2/a02279_1a32d0eef732dd10d9ba9aa271457136f7" kindref="member">ImageLoaderPtr</ref> &gt;</type>
+        <definition>Vector&lt; ImageLoaderPtr &gt; castor::ImageLoader::m_loaders</definition>
+        <argsstring></argsstring>
+        <name>m_loaders</name>
+        <qualifiedname>castor::ImageLoader::m_loaders</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLoader.hpp" line="232" column="8" bodyfile="CastorUtils/Graphics/ImageLoader.hpp" bodystart="232" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d26/a08963_1a5091afbc9214161393786dcf12ea15d2" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af776079ca1d2ee2d1b993f2d34011159" kindref="member">StringMap</ref>&lt; <ref refid="d6/ded/a08959" kindref="compound">ImageLoaderImpl</ref> * &gt;</type>
+        <definition>StringMap&lt; ImageLoaderImpl * &gt; castor::ImageLoader::m_extLoaders</definition>
+        <argsstring></argsstring>
+        <name>m_extLoaders</name>
+        <qualifiedname>castor::ImageLoader::m_extLoaders</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLoader.hpp" line="233" column="11" bodyfile="CastorUtils/Graphics/ImageLoader.hpp" bodystart="233" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d26/a08963_1a9fe515283c8127e3cacd9eea8dba6dab" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d51/a08983" kindref="compound">PxBufferConvertOptions</ref></type>
+        <definition>PxBufferConvertOptions castor::ImageLoader::m_options</definition>
+        <argsstring></argsstring>
+        <name>m_options</name>
+        <qualifiedname>castor::ImageLoader::m_options</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLoader.hpp" line="234" column="24" bodyfile="CastorUtils/Graphics/ImageLoader.hpp" bodystart="234" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d26/a08963_1ac46a968c88278aab892e23c02b17cd68" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::ImageLoader::ImageLoader</definition>
+        <argsstring>(PxCompressionSupport support={})</argsstring>
+        <name>ImageLoader</name>
+        <qualifiedname>castor::ImageLoader::ImageLoader</qualifiedname>
+        <param>
+          <type><ref refid="de/d58/a08979" kindref="compound">PxCompressionSupport</ref></type>
+          <declname>support</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLoader.hpp" line="110" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d26/a08963_1a962be9e502c40b66f1c792290d5ce7d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::ImageLoader::registerLoader</definition>
+        <argsstring>(String const &amp;extension, ImageLoaderPtr loader)</argsstring>
+        <name>registerLoader</name>
+        <qualifiedname>castor::ImageLoader::registerLoader</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>extension</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a32d0eef732dd10d9ba9aa271457136f7" kindref="member">ImageLoaderPtr</ref></type>
+          <declname>loader</declname>
+        </param>
+        <briefdescription>
+<para>Enregistre un loader d&apos;image. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">extension</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;extension de fichier image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">loader</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le loader. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLoader.hpp" line="121" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d26/a08963_1adf633b4c2928f1a312b87fa151f52566" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::ImageLoader::registerLoader</definition>
+        <argsstring>(StringArray const &amp;extensions, ImageLoaderPtr loader)</argsstring>
+        <name>registerLoader</name>
+        <qualifiedname>castor::ImageLoader::registerLoader</qualifiedname>
+        <param>
+          <type>StringArray const &amp;</type>
+          <declname>extensions</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a32d0eef732dd10d9ba9aa271457136f7" kindref="member">ImageLoaderPtr</ref></type>
+          <declname>loader</declname>
+        </param>
+        <briefdescription>
+<para>Enregistre un loader d&apos;image. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">extensions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La liste d&apos;extensions de fichier image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">loader</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le loader. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLoader.hpp" line="132" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d26/a08963_1aaed847459d5b918b0f4cb04bc3c8a4e6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::ImageLoader::unregisterLoader</definition>
+        <argsstring>(String const &amp;extension)</argsstring>
+        <name>unregisterLoader</name>
+        <qualifiedname>castor::ImageLoader::unregisterLoader</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>extension</declname>
+        </param>
+        <briefdescription>
+<para>Désenregistre le loader pour l&apos;extension de fichier d&apos;image donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">extension</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;extension de fichier image. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLoader.hpp" line="141" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d26/a08963_1a901c851ae8d94381874e66859160412d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::ImageLoader::unregisterLoader</definition>
+        <argsstring>(StringArray const &amp;extensions)</argsstring>
+        <name>unregisterLoader</name>
+        <qualifiedname>castor::ImageLoader::unregisterLoader</qualifiedname>
+        <param>
+          <type>StringArray const &amp;</type>
+          <declname>extensions</declname>
+        </param>
+        <briefdescription>
+<para>Désenregistre le loader pour l&apos;extension de fichier d&apos;image donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">extensions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La liste d&apos;extensions de fichier image. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLoader.hpp" line="150" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d26/a08963_1a9e15b7915b8a25ee1d990caba77b07eb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/d3e/a08939" kindref="compound">Image</ref></type>
+        <definition>CU_API Image castor::ImageLoader::load</definition>
+        <argsstring>(String const &amp;name, Path const &amp;path, ImageLoaderConfig const &amp;config) const</argsstring>
+        <name>load</name>
+        <qualifiedname>castor::ImageLoader::load</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d09/a08787" kindref="compound">ImageLoaderConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+<para>Charge les données d&apos;un fichier image. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin d&apos;accès au fichier image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La configuration du loader. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;image. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLoader.hpp" line="165" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d26/a08963_1abfe837aae3f3aa99fc7e6deb5cc5f42e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/d3e/a08939" kindref="compound">Image</ref></type>
+        <definition>CU_API Image castor::ImageLoader::load</definition>
+        <argsstring>(String const &amp;name, Path const &amp;imagePath, uint8_t const *data, uint32_t size, ImageLoaderConfig const &amp;config) const</argsstring>
+        <name>load</name>
+        <qualifiedname>castor::ImageLoader::load</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>imagePath</declname>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d09/a08787" kindref="compound">ImageLoaderConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+<para>Charge les données d&apos;un fichier image. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">imagePath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Chemin d&apos;accès au fichier. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La taille des données de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La configuration du loader. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;image. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLoader.hpp" line="186" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d26/a08963_1aae6d0da95ee4955cdc22ec33f761fd04" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/d3e/a08939" kindref="compound">Image</ref></type>
+        <definition>CU_API Image castor::ImageLoader::load</definition>
+        <argsstring>(String const &amp;name, String const &amp;imageFormat, uint8_t const *data, uint32_t size, ImageLoaderConfig const &amp;config) const</argsstring>
+        <name>load</name>
+        <qualifiedname>castor::ImageLoader::load</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>imageFormat</declname>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d09/a08787" kindref="compound">ImageLoaderConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+<para>Charge les données d&apos;un fichier image. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">imageFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le format de l&apos;image, niveau loader. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La taille des données de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La configuration du loader. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;image. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLoader.hpp" line="209" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d26/a08963_1ad2670db2ef51d9509ba87443f1285aba" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ImageLoader::setCompressionSupport</definition>
+        <argsstring>(PxCompressionSupport support)</argsstring>
+        <name>setCompressionSupport</name>
+        <qualifiedname>castor::ImageLoader::setCompressionSupport</qualifiedname>
+        <param>
+          <type><ref refid="de/d58/a08979" kindref="compound">PxCompressionSupport</ref></type>
+          <declname>support</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLoader.hpp" line="215" column="6" bodyfile="CastorUtils/Graphics/ImageLoader.hpp" bodystart="215" bodyend="218"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d26/a08963_1a496ed9f0ef4f54cca61c9285aea1ce08" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d51/a08983" kindref="compound">PxBufferConvertOptions</ref> const &amp;</type>
+        <definition>PxBufferConvertOptions const  &amp; castor::ImageLoader::getOptions</definition>
+        <argsstring>() const</argsstring>
+        <name>getOptions</name>
+        <qualifiedname>castor::ImageLoader::getOptions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLoader.hpp" line="220" column="31" bodyfile="CastorUtils/Graphics/ImageLoader.hpp" bodystart="220" bodyend="223"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="dc/d26/a08963_1af553b820f817cb4853bfad05775f1b8f" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::ImageLoader::checkData</definition>
+        <argsstring>(uint8_t const *data, uint32_t size) const</argsstring>
+        <name>checkData</name>
+        <qualifiedname>castor::ImageLoader::checkData</qualifiedname>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLoader.hpp" line="226" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d26/a08963_1a7178bfbc86db246877bc4e474329fd8e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/ded/a08959" kindref="compound">ImageLoaderImpl</ref> *</type>
+        <definition>CU_API ImageLoaderImpl * castor::ImageLoader::findLoader</definition>
+        <argsstring>(Path const &amp;imagePath) const</argsstring>
+        <name>findLoader</name>
+        <qualifiedname>castor::ImageLoader::findLoader</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>imagePath</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLoader.hpp" line="228" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d26/a08963_1abba0ee45e25598163abc946ff250fd73" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/ded/a08959" kindref="compound">ImageLoaderImpl</ref> *</type>
+        <definition>CU_API ImageLoaderImpl * castor::ImageLoader::findLoader</definition>
+        <argsstring>(String const &amp;imageFormat) const</argsstring>
+        <name>findLoader</name>
+        <qualifiedname>castor::ImageLoader::findLoader</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>imageFormat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLoader.hpp" line="229" column="25"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::ImageLoader</label>
+        <link refid="dc/d26/a08963"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ImageLoader</label>
+        <link refid="dc/d26/a08963"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/ImageLoader.hpp" line="106" column="1" bodyfile="CastorUtils/Graphics/ImageLoader.hpp" bodystart="108" bodyend="235"/>
+    <listofallmembers>
+      <member refid="dc/d26/a08963_1af553b820f817cb4853bfad05775f1b8f" prot="private" virt="non-virtual"><scope>castor::ImageLoader</scope><name>checkData</name></member>
+      <member refid="dc/d26/a08963_1a7178bfbc86db246877bc4e474329fd8e" prot="private" virt="non-virtual"><scope>castor::ImageLoader</scope><name>findLoader</name></member>
+      <member refid="dc/d26/a08963_1abba0ee45e25598163abc946ff250fd73" prot="private" virt="non-virtual"><scope>castor::ImageLoader</scope><name>findLoader</name></member>
+      <member refid="dc/d26/a08963_1a496ed9f0ef4f54cca61c9285aea1ce08" prot="public" virt="non-virtual"><scope>castor::ImageLoader</scope><name>getOptions</name></member>
+      <member refid="dc/d26/a08963_1ac46a968c88278aab892e23c02b17cd68" prot="public" virt="non-virtual"><scope>castor::ImageLoader</scope><name>ImageLoader</name></member>
+      <member refid="dc/d26/a08963_1a9e15b7915b8a25ee1d990caba77b07eb" prot="public" virt="non-virtual"><scope>castor::ImageLoader</scope><name>load</name></member>
+      <member refid="dc/d26/a08963_1abfe837aae3f3aa99fc7e6deb5cc5f42e" prot="public" virt="non-virtual"><scope>castor::ImageLoader</scope><name>load</name></member>
+      <member refid="dc/d26/a08963_1aae6d0da95ee4955cdc22ec33f761fd04" prot="public" virt="non-virtual"><scope>castor::ImageLoader</scope><name>load</name></member>
+      <member refid="dc/d26/a08963_1a5091afbc9214161393786dcf12ea15d2" prot="private" virt="non-virtual"><scope>castor::ImageLoader</scope><name>m_extLoaders</name></member>
+      <member refid="dc/d26/a08963_1a431f5a63d529edb92917dae5035b0d54" prot="private" virt="non-virtual"><scope>castor::ImageLoader</scope><name>m_loaders</name></member>
+      <member refid="dc/d26/a08963_1a9fe515283c8127e3cacd9eea8dba6dab" prot="private" virt="non-virtual"><scope>castor::ImageLoader</scope><name>m_options</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::ImageLoader</scope><name>NonMovable</name></member>
+      <member refid="dc/d26/a08963_1a962be9e502c40b66f1c792290d5ce7d3" prot="public" virt="non-virtual"><scope>castor::ImageLoader</scope><name>registerLoader</name></member>
+      <member refid="dc/d26/a08963_1adf633b4c2928f1a312b87fa151f52566" prot="public" virt="non-virtual"><scope>castor::ImageLoader</scope><name>registerLoader</name></member>
+      <member refid="dc/d26/a08963_1ad2670db2ef51d9509ba87443f1285aba" prot="public" virt="non-virtual"><scope>castor::ImageLoader</scope><name>setCompressionSupport</name></member>
+      <member refid="dc/d26/a08963_1aaed847459d5b918b0f4cb04bc3c8a4e6" prot="public" virt="non-virtual"><scope>castor::ImageLoader</scope><name>unregisterLoader</name></member>
+      <member refid="dc/d26/a08963_1a901c851ae8d94381874e66859160412d" prot="public" virt="non-virtual"><scope>castor::ImageLoader</scope><name>unregisterLoader</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::ImageLoader</scope><name>~NonMovable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

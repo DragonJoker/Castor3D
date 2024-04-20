@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/da4/a05367" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Icosahedron</compoundname>
+    <basecompoundref refid="d1/d5e/a05403" prot="public" virt="non-virtual">castor3d::MeshGenerator</basecompoundref>
+    <includes local="no">Icosahedron.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/da4/a05367_1a82d9ab876779d2549ccf8a2dd004cefc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Icosahedron::Icosahedron</definition>
+        <argsstring>()</argsstring>
+        <name>Icosahedron</name>
+        <qualifiedname>castor3d::Icosahedron::Icosahedron</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Generator/Icosahedron.hpp" line="22" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="db/da4/a05367_1ac6287b3ffe480c7a9f95f70a48788f12" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> MeshGeneratorUPtr</type>
+        <definition>static C3D_API MeshGeneratorUPtr castor3d::Icosahedron::create</definition>
+        <argsstring>()</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::Icosahedron::create</qualifiedname>
+        <briefdescription>
+<para>Fonction de création, utilisée par la Factory.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Un cylindre   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Generator/Icosahedron.hpp" line="26" column="34"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="db/da4/a05367_1a56836bcb222bc19dbf2816b9d0fff872" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Icosahedron::doGenerate</definition>
+        <argsstring>(Mesh &amp;mesh, Parameters const &amp;parameters) override</argsstring>
+        <name>doGenerate</name>
+        <qualifiedname>castor3d::Icosahedron::doGenerate</qualifiedname>
+        <reimplements refid="d1/d5e/a05403_1a690745122d7e670b311e317ae86c9b45">doGenerate</reimplements>
+        <param>
+          <type><ref refid="d2/dc7/a05391" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Génère le maillage. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le maillage. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les paramètres du générateur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Generator/Icosahedron.hpp" line="29" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::Icosahedron</label>
+        <link refid="db/da4/a05367"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="d1/d5e/a05403"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::Icosahedron</label>
+        <link refid="db/da4/a05367"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="d1/d5e/a05403"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Model/Mesh/Generator/Icosahedron.hpp" line="12" column="1" bodyfile="Castor3D/Model/Mesh/Generator/Icosahedron.hpp" bodystart="14" bodyend="31"/>
+    <listofallmembers>
+      <member refid="d1/d5e/a05403_1a3207825be521c851f6fc654751f54cf1" prot="public" virt="virtual"><scope>castor3d::Icosahedron</scope><name>computeNormals</name></member>
+      <member refid="db/da4/a05367_1ac6287b3ffe480c7a9f95f70a48788f12" prot="public" virt="non-virtual"><scope>castor3d::Icosahedron</scope><name>create</name></member>
+      <member refid="db/da4/a05367_1a56836bcb222bc19dbf2816b9d0fff872" prot="private" virt="virtual"><scope>castor3d::Icosahedron</scope><name>doGenerate</name></member>
+      <member refid="d1/d5e/a05403_1a9fdc140f2d871ca6cb81029250c346ae" prot="public" virt="virtual"><scope>castor3d::Icosahedron</scope><name>generate</name></member>
+      <member refid="db/da4/a05367_1a82d9ab876779d2549ccf8a2dd004cefc" prot="public" virt="non-virtual"><scope>castor3d::Icosahedron</scope><name>Icosahedron</name></member>
+      <member refid="d1/d5e/a05403_1a3ccec3fd88667bbca33c6e81afdeff19" prot="public" virt="non-virtual"><scope>castor3d::Icosahedron</scope><name>MeshGenerator</name></member>
+      <member refid="d1/d5e/a05403_1a2cf442c1a0d331b4b62158bbdb711b9c" prot="public" virt="virtual"><scope>castor3d::Icosahedron</scope><name>~MeshGenerator</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/dc5/a05419" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::MeshletDrawConstants</compoundname>
+    <includes local="no">MeshModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/dc5/a05419_1ade0b4f539b67f2aab279b767973bb2a0" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::MeshletDrawConstants::pipelineId</definition>
+        <argsstring></argsstring>
+        <name>pipelineId</name>
+        <qualifiedname>castor3d::MeshletDrawConstants::pipelineId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshModule.hpp" line="126" column="10" bodyfile="Castor3D/Model/Mesh/MeshModule.hpp" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dc5/a05419_1a9c551320a862dbb3afac051cbfba292c" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::MeshletDrawConstants::drawId</definition>
+        <argsstring></argsstring>
+        <name>drawId</name>
+        <qualifiedname>castor3d::MeshletDrawConstants::drawId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshModule.hpp" line="127" column="10" bodyfile="Castor3D/Model/Mesh/MeshModule.hpp" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dc5/a05419_1aae3c2b459a6c4eb8983fcb67d1e3bcd1" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::MeshletDrawConstants::drawOffset</definition>
+        <argsstring></argsstring>
+        <name>drawOffset</name>
+        <qualifiedname>castor3d::MeshletDrawConstants::drawOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshModule.hpp" line="128" column="10" bodyfile="Castor3D/Model/Mesh/MeshModule.hpp" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dc5/a05419_1a2a97989295400ec1bde07778a86d23cf" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::MeshletDrawConstants::meshletOffset</definition>
+        <argsstring></argsstring>
+        <name>meshletOffset</name>
+        <qualifiedname>castor3d::MeshletDrawConstants::meshletOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshModule.hpp" line="129" column="10" bodyfile="Castor3D/Model/Mesh/MeshModule.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Données de dessin pour un meshlet. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Model/Mesh/MeshModule.hpp" line="124" column="1" bodyfile="Castor3D/Model/Mesh/MeshModule.hpp" bodystart="125" bodyend="130"/>
+    <listofallmembers>
+      <member refid="d5/dc5/a05419_1a9c551320a862dbb3afac051cbfba292c" prot="public" virt="non-virtual"><scope>castor3d::MeshletDrawConstants</scope><name>drawId</name></member>
+      <member refid="d5/dc5/a05419_1aae3c2b459a6c4eb8983fcb67d1e3bcd1" prot="public" virt="non-virtual"><scope>castor3d::MeshletDrawConstants</scope><name>drawOffset</name></member>
+      <member refid="d5/dc5/a05419_1a2a97989295400ec1bde07778a86d23cf" prot="public" virt="non-virtual"><scope>castor3d::MeshletDrawConstants</scope><name>meshletOffset</name></member>
+      <member refid="d5/dc5/a05419_1ade0b4f539b67f2aab279b767973bb2a0" prot="public" virt="non-virtual"><scope>castor3d::MeshletDrawConstants</scope><name>pipelineId</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

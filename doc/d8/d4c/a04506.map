@@ -1,0 +1,11 @@
+<map id="castor3d::IridescenceThicknessMapComponent" name="castor3d::IridescenceThicknessMapComponent">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,317,211,357"/>
+<area shape="rect" id="Node000002" href="$da/d9f/a04859.html" title=" " alt="" coords="7,243,209,268"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,282,111,317,105,317,105,282"/>
+<area shape="rect" id="Node000003" href="$db/db4/a04835.html" title=" " alt="" coords="20,168,196,193"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="111,208,111,242,105,242,105,208"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title=" " alt="" coords="20,93,196,119"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="111,133,111,168,105,168,105,133"/>
+<area shape="rect" id="Node000005" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="17,5,199,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="111,45,111,93,105,93,105,45"/>
+</map>

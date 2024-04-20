@@ -1,0 +1,326 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d46/a07399" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ShaderModule</compoundname>
+    <includes local="no">ShaderModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d46/a07399_1a428803e0813e289a4e34b54e7f46be94" prot="public" static="no" mutable="no">
+        <type>VkShaderStageFlagBits</type>
+        <definition>VkShaderStageFlagBits castor3d::ShaderModule::stage</definition>
+        <argsstring></argsstring>
+        <name>stage</name>
+        <qualifiedname>castor3d::ShaderModule::stage</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderModule.hpp" line="59" column="23" bodyfile="Castor3D/Shader/ShaderModule.hpp" bodystart="59" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d46/a07399_1a27f72abc476ac53b453b7c2056b3f981" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::ShaderModule::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>castor3d::ShaderModule::name</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderModule.hpp" line="60" column="16" bodyfile="Castor3D/Shader/ShaderModule.hpp" bodystart="60" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d46/a07399_1a1955d2b3b4fa287b622804815dda6653" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">castor::MbString</ref></type>
+        <definition>castor::MbString castor3d::ShaderModule::source</definition>
+        <argsstring></argsstring>
+        <name>source</name>
+        <qualifiedname>castor3d::ShaderModule::source</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderModule.hpp" line="61" column="18" bodyfile="Castor3D/Shader/ShaderModule.hpp" bodystart="61" bodyend="61"/>
+        <referencedby refid="db/dc2/a05011_1a0ed116d6e1c34a5e63f5093297a1a16d" compoundref="d8/d13/a00671" startline="160" endline="176">castor3d::ConfigurationVisitorBase::visit</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="db/d46/a07399_1ae7377c33dfa458a5065bf2f5e93f1b6c" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1ac2bec83e0026bb5e8a5f25a8a591652c" kindref="member">ShaderPtr</ref></type>
+        <definition>ShaderPtr castor3d::ShaderModule::shader</definition>
+        <argsstring></argsstring>
+        <name>shader</name>
+        <qualifiedname>castor3d::ShaderModule::shader</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderModule.hpp" line="62" column="11" bodyfile="Castor3D/Shader/ShaderModule.hpp" bodystart="62" bodyend="62"/>
+        <referencedby refid="db/dc2/a05011_1a0ed116d6e1c34a5e63f5093297a1a16d" compoundref="d8/d13/a00671" startline="160" endline="176">castor3d::ConfigurationVisitorBase::visit</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="db/d46/a07399_1a6f6f45f9c89604064a2888003ae40570" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d27/a07395" kindref="compound">SpirVShader</ref></type>
+        <definition>SpirVShader castor3d::ShaderModule::compiled</definition>
+        <argsstring></argsstring>
+        <name>compiled</name>
+        <qualifiedname>castor3d::ShaderModule::compiled</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderModule.hpp" line="63" column="13" bodyfile="Castor3D/Shader/ShaderModule.hpp" bodystart="63" bodyend="63"/>
+        <referencedby refid="db/dc2/a05011_1a0ed116d6e1c34a5e63f5093297a1a16d" compoundref="d8/d13/a00671" startline="160" endline="176">castor3d::ConfigurationVisitorBase::visit</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d46/a07399_1a990703e9e11d654950a9e29ae6dc38e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ShaderModule::ShaderModule</definition>
+        <argsstring>(ShaderModule const &amp;)=delete</argsstring>
+        <name>ShaderModule</name>
+        <qualifiedname>castor3d::ShaderModule::ShaderModule</qualifiedname>
+        <param>
+          <type><ref refid="db/d46/a07399" kindref="compound">ShaderModule</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderModule.hpp" line="43" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d46/a07399_1af9eeb3f2b6125df4e53a0953c3daa840" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/d46/a07399" kindref="compound">ShaderModule</ref> &amp;</type>
+        <definition>ShaderModule &amp; castor3d::ShaderModule::operator=</definition>
+        <argsstring>(ShaderModule const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ShaderModule::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/d46/a07399" kindref="compound">ShaderModule</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderModule.hpp" line="44" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d46/a07399_1a888b545beb34e5798399ece09cfaf8d0" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShaderModule::ShaderModule</definition>
+        <argsstring>(ShaderModule &amp;&amp;rhs) noexcept</argsstring>
+        <name>ShaderModule</name>
+        <qualifiedname>castor3d::ShaderModule::ShaderModule</qualifiedname>
+        <param>
+          <type><ref refid="db/d46/a07399" kindref="compound">ShaderModule</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderModule.hpp" line="45" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d46/a07399_1a1847074e6f52a8559bf92c496e19cd70" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/d46/a07399" kindref="compound">ShaderModule</ref> &amp;</type>
+        <definition>C3D_API ShaderModule &amp; castor3d::ShaderModule::operator=</definition>
+        <argsstring>(ShaderModule &amp;&amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ShaderModule::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/d46/a07399" kindref="compound">ShaderModule</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderModule.hpp" line="46" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d46/a07399_1a11184df230700a731f26d54d773710ab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShaderModule::ShaderModule</definition>
+        <argsstring>()=default</argsstring>
+        <name>ShaderModule</name>
+        <qualifiedname>castor3d::ShaderModule::ShaderModule</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderModule.hpp" line="47" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d46/a07399_1ae63a6d899e46bd69808f30c80200016e" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShaderModule::~ShaderModule</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~ShaderModule</name>
+        <qualifiedname>castor3d::ShaderModule::~ShaderModule</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderModule.hpp" line="48" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d46/a07399_1a00ab6d85efe9b0f7f6f2219b4141dd8e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShaderModule::ShaderModule</definition>
+        <argsstring>(VkShaderStageFlagBits stage, castor::String const &amp;name)</argsstring>
+        <name>ShaderModule</name>
+        <qualifiedname>castor3d::ShaderModule::ShaderModule</qualifiedname>
+        <param>
+          <type>VkShaderStageFlagBits</type>
+          <declname>stage</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderModule.hpp" line="50" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d46/a07399_1a2d35e423f234f825949b76fb00431d2c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShaderModule::ShaderModule</definition>
+        <argsstring>(VkShaderStageFlagBits stage, castor::String const &amp;name, castor::MbString source)</argsstring>
+        <name>ShaderModule</name>
+        <qualifiedname>castor3d::ShaderModule::ShaderModule</qualifiedname>
+        <param>
+          <type>VkShaderStageFlagBits</type>
+          <declname>stage</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">castor::MbString</ref></type>
+          <declname>source</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderModule.hpp" line="52" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d46/a07399_1abadfb194e21ec8e3078c3012956fc1cd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShaderModule::ShaderModule</definition>
+        <argsstring>(VkShaderStageFlagBits stage, castor::String const &amp;name, ShaderPtr shader)</argsstring>
+        <name>ShaderModule</name>
+        <qualifiedname>castor3d::ShaderModule::ShaderModule</qualifiedname>
+        <param>
+          <type>VkShaderStageFlagBits</type>
+          <declname>stage</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1ac2bec83e0026bb5e8a5f25a8a591652c" kindref="member">ShaderPtr</ref></type>
+          <declname>shader</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderModule.hpp" line="55" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Un module shader non compilé, avec sa source. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>std::basic_string&lt; mbchar &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; mbchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ShaderModule</label>
+        <link refid="db/d46/a07399"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>source</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>compiled</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::SpirVShader</label>
+        <link refid="d1/d27/a07395"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>spirv</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>text</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>UInt32Array</label>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/ShaderModule.hpp" line="41" column="1" bodyfile="Castor3D/Shader/ShaderModule.hpp" bodystart="42" bodyend="64"/>
+    <listofallmembers>
+      <member refid="db/d46/a07399_1a6f6f45f9c89604064a2888003ae40570" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>compiled</name></member>
+      <member refid="db/d46/a07399_1a27f72abc476ac53b453b7c2056b3f981" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>name</name></member>
+      <member refid="db/d46/a07399_1af9eeb3f2b6125df4e53a0953c3daa840" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>operator=</name></member>
+      <member refid="db/d46/a07399_1a1847074e6f52a8559bf92c496e19cd70" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>operator=</name></member>
+      <member refid="db/d46/a07399_1ae7377c33dfa458a5065bf2f5e93f1b6c" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>shader</name></member>
+      <member refid="db/d46/a07399_1a990703e9e11d654950a9e29ae6dc38e0" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>ShaderModule</name></member>
+      <member refid="db/d46/a07399_1a888b545beb34e5798399ece09cfaf8d0" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>ShaderModule</name></member>
+      <member refid="db/d46/a07399_1a11184df230700a731f26d54d773710ab" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>ShaderModule</name></member>
+      <member refid="db/d46/a07399_1a00ab6d85efe9b0f7f6f2219b4141dd8e" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>ShaderModule</name></member>
+      <member refid="db/d46/a07399_1a2d35e423f234f825949b76fb00431d2c" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>ShaderModule</name></member>
+      <member refid="db/d46/a07399_1abadfb194e21ec8e3078c3012956fc1cd" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>ShaderModule</name></member>
+      <member refid="db/d46/a07399_1a1955d2b3b4fa287b622804815dda6653" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>source</name></member>
+      <member refid="db/d46/a07399_1a428803e0813e289a4e34b54e7f46be94" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>stage</name></member>
+      <member refid="db/d46/a07399_1ae63a6d899e46bd69808f30c80200016e" prot="public" virt="non-virtual"><scope>castor3d::ShaderModule</scope><name>~ShaderModule</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

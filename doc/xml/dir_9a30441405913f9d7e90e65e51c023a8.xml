@@ -1,18 +1,18 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_9a30441405913f9d7e90e65e51c023a8" kind="dir">
-    <compoundname>Event/UserInput</compoundname>
-    <innerfile refid="d0/d39/a00314">EventHandler.hpp</innerfile>
-    <innerfile refid="da/de0/a00317">HandlerEvent.hpp</innerfile>
-    <innerfile refid="dd/de2/a00320">KeyboardEvent.hpp</innerfile>
-    <innerfile refid="de/d55/a00323">MouseEvent.hpp</innerfile>
-    <innerfile refid="d8/d23/a00326">UserInputEvent.hpp</innerfile>
-    <innerfile refid="dd/d4e/a00329">UserInputEventModule.hpp</innerfile>
-    <innerfile refid="dc/d50/a00332">UserInputListener.hpp</innerfile>
+    <compoundname>Castor3D/Event/UserInput</compoundname>
+    <innerfile refid="d3/d07/a00305">EventHandler.hpp</innerfile>
+    <innerfile refid="d5/d0f/a00308">HandlerEvent.hpp</innerfile>
+    <innerfile refid="d1/d5d/a00311">KeyboardEvent.hpp</innerfile>
+    <innerfile refid="d0/d39/a00314">MouseEvent.hpp</innerfile>
+    <innerfile refid="da/de0/a00317">UserInputEvent.hpp</innerfile>
+    <innerfile refid="dd/de2/a00320">UserInputEventModule.hpp</innerfile>
+    <innerfile refid="de/d55/a00323">UserInputListener.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Event/UserInput/"/>
+    <location file="Castor3D/Event/UserInput/"/>
   </compounddef>
 </doxygen>

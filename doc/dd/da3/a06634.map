@@ -1,0 +1,9 @@
+<map id="castor3d::ShadowMapDirectional" name="castor3d::ShadowMapDirectional">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,243,217,268"/>
+<area shape="rect" id="Node000002" href="$dc/d4f/a06619.html" title=" " alt="" coords="36,168,187,193"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,208,114,242,109,242,109,208"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="18,93,205,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="114,133,114,168,109,168,109,133"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="20,5,203,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="114,45,114,93,109,93,109,45"/>
+</map>

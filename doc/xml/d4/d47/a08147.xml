@@ -1,0 +1,176 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/d47/a08147" kind="struct" language="C++" prot="public" abstract="yes">
+    <compoundname>castor::ZipArchive::ZipImpl</compoundname>
+    <basecompoundref refid="da/d87/a08319" prot="public" virt="non-virtual">castor::NonMovable</basecompoundref>
+    <includes local="no">ZipArchive.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/d47/a08147_1a027956cbe839909be8945c83efb2237a" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type></type>
+        <definition>virtual castor::ZipArchive::ZipImpl::~ZipImpl</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~ZipImpl</name>
+        <qualifiedname>castor::ZipArchive::ZipImpl::~ZipImpl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/ZipArchive.hpp" line="39" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d47/a08147_1ab4e32f62554b3e65189283d33f7f0792" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor::ZipArchive::ZipImpl::open</definition>
+        <argsstring>(Path const &amp;path, File::OpenMode mode)=0</argsstring>
+        <name>open</name>
+        <qualifiedname>castor::ZipArchive::ZipImpl::open</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d10/a08003_1a68eddcef6261f1852e55e010bdc23f95" kindref="member">File::OpenMode</ref></type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/ZipArchive.hpp" line="40" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d47/a08147_1a1e232875719b491be3a8b19c1310a940" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor::ZipArchive::ZipImpl::close</definition>
+        <argsstring>()=0</argsstring>
+        <name>close</name>
+        <qualifiedname>castor::ZipArchive::ZipImpl::close</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/ZipArchive.hpp" line="41" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d47/a08147_1a4c5f0c77574270f6ff9f2437215a86ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor::ZipArchive::ZipImpl::deflate</definition>
+        <argsstring>(Folder const &amp;files)=0</argsstring>
+        <name>deflate</name>
+        <qualifiedname>castor::ZipArchive::ZipImpl::deflate</qualifiedname>
+        <param>
+          <type><ref refid="da/ddf/a08143" kindref="compound">Folder</ref> const &amp;</type>
+          <declname>files</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/ZipArchive.hpp" line="42" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d47/a08147_1a6abc672c8b70f43364594664b09dae1d" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>StringArray</type>
+        <definition>virtual StringArray castor::ZipArchive::ZipImpl::inflate</definition>
+        <argsstring>(Path const &amp;outFolder, Folder &amp;folder)=0</argsstring>
+        <name>inflate</name>
+        <qualifiedname>castor::ZipArchive::ZipImpl::inflate</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>outFolder</declname>
+        </param>
+        <param>
+          <type><ref refid="da/ddf/a08143" kindref="compound">Folder</ref> &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/ZipArchive.hpp" line="43" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d47/a08147_1aca76e1cc5246e59d9e39ab47669210b4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type>bool</type>
+        <definition>virtual bool castor::ZipArchive::ZipImpl::findFolder</definition>
+        <argsstring>(String const &amp;folder) const =0</argsstring>
+        <name>findFolder</name>
+        <qualifiedname>castor::ZipArchive::ZipImpl::findFolder</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/ZipArchive.hpp" line="44" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d47/a08147_1aa842684f6ce45bf933619fa0b2100144" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type>bool</type>
+        <definition>virtual bool castor::ZipArchive::ZipImpl::findFile</definition>
+        <argsstring>(String const &amp;file) const =0</argsstring>
+        <name>findFile</name>
+        <qualifiedname>castor::ZipArchive::ZipImpl::findFile</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/ZipArchive.hpp" line="45" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="1">
+        <label>castor::ZipArchive::ZipImpl</label>
+        <link refid="d4/d47/a08147"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="1">
+        <label>castor::ZipArchive::ZipImpl</label>
+        <link refid="d4/d47/a08147"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Data/ZipArchive.hpp" line="36" column="1" bodyfile="CastorUtils/Data/ZipArchive.hpp" bodystart="38" bodyend="46"/>
+    <listofallmembers>
+      <member refid="d4/d47/a08147_1a1e232875719b491be3a8b19c1310a940" prot="public" virt="pure-virtual"><scope>castor::ZipArchive::ZipImpl</scope><name>close</name></member>
+      <member refid="d4/d47/a08147_1a4c5f0c77574270f6ff9f2437215a86ed" prot="public" virt="pure-virtual"><scope>castor::ZipArchive::ZipImpl</scope><name>deflate</name></member>
+      <member refid="d4/d47/a08147_1aa842684f6ce45bf933619fa0b2100144" prot="public" virt="pure-virtual"><scope>castor::ZipArchive::ZipImpl</scope><name>findFile</name></member>
+      <member refid="d4/d47/a08147_1aca76e1cc5246e59d9e39ab47669210b4" prot="public" virt="pure-virtual"><scope>castor::ZipArchive::ZipImpl</scope><name>findFolder</name></member>
+      <member refid="d4/d47/a08147_1a6abc672c8b70f43364594664b09dae1d" prot="public" virt="pure-virtual"><scope>castor::ZipArchive::ZipImpl</scope><name>inflate</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::ZipArchive::ZipImpl</scope><name>NonMovable</name></member>
+      <member refid="d4/d47/a08147_1ab4e32f62554b3e65189283d33f7f0792" prot="public" virt="pure-virtual"><scope>castor::ZipArchive::ZipImpl</scope><name>open</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::ZipArchive::ZipImpl</scope><name>~NonMovable</name></member>
+      <member refid="d4/d47/a08147_1a027956cbe839909be8945c83efb2237a" prot="public" virt="virtual"><scope>castor::ZipArchive::ZipImpl</scope><name>~ZipImpl</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,14 @@
+<map id="castor3d::HeightComponent" name="castor3d::HeightComponent">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1547,20,1729,45"/>
+<area shape="rect" id="Node000002" href="$df/dc6/a04087.html" title=" " alt="" coords="1247,5,1497,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1511,30,1547,30,1547,35,1511,35"/>
+<area shape="rect" id="Node000003" href="$db/db4/a04835.html" title=" " alt="" coords="520,11,696,36"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="710,19,944,18,1223,22,1246,23,1246,28,1223,27,944,24,710,25"/>
+<area shape="rect" id="Node000006" href="$df/dc6/a04087.html" title="Pass component holding base pass data." alt="" coords="745,43,979,83"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="703,36,746,42,745,48,702,41"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title=" " alt="" coords="295,11,471,36"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="484,21,520,21,520,26,484,26"/>
+<area shape="rect" id="Node000005" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="5,11,188,36"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="201,21,294,21,294,26,201,26"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="992,61,1104,58,1222,51,1246,49,1247,54,1223,57,1105,64,992,66"/>
+</map>

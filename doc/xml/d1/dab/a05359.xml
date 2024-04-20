@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/dab/a05359" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Cube</compoundname>
+    <basecompoundref refid="d1/d5e/a05403" prot="public" virt="non-virtual">castor3d::MeshGenerator</basecompoundref>
+    <includes local="no">Cube.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/dab/a05359_1a078076d81df069f7b3225c30445b1279" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Cube::Cube</definition>
+        <argsstring>()</argsstring>
+        <name>Cube</name>
+        <qualifiedname>castor3d::Cube::Cube</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Generator/Cube.hpp" line="22" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d1/dab/a05359_1a16213a5e236cedf438f1697ec7041824" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> MeshGeneratorUPtr</type>
+        <definition>static C3D_API MeshGeneratorUPtr castor3d::Cube::create</definition>
+        <argsstring>()</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::Cube::create</qualifiedname>
+        <briefdescription>
+<para>Fonction de création, utilisée par la Factory.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Un cylindre   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Generator/Cube.hpp" line="26" column="34"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/dab/a05359_1a3f6bcd646f3410ba5c37378d18fd248b" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Cube::doGenerate</definition>
+        <argsstring>(Mesh &amp;mesh, Parameters const &amp;parameters) override</argsstring>
+        <name>doGenerate</name>
+        <qualifiedname>castor3d::Cube::doGenerate</qualifiedname>
+        <reimplements refid="d1/d5e/a05403_1a690745122d7e670b311e317ae86c9b45">doGenerate</reimplements>
+        <param>
+          <type><ref refid="d2/dc7/a05391" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Génère le maillage. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le maillage. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les paramètres du générateur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Generator/Cube.hpp" line="29" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::Cube</label>
+        <link refid="d1/dab/a05359"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="d1/d5e/a05403"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::Cube</label>
+        <link refid="d1/dab/a05359"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="d1/d5e/a05403"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Model/Mesh/Generator/Cube.hpp" line="12" column="1" bodyfile="Castor3D/Model/Mesh/Generator/Cube.hpp" bodystart="14" bodyend="31"/>
+    <listofallmembers>
+      <member refid="d1/d5e/a05403_1a3207825be521c851f6fc654751f54cf1" prot="public" virt="virtual"><scope>castor3d::Cube</scope><name>computeNormals</name></member>
+      <member refid="d1/dab/a05359_1a16213a5e236cedf438f1697ec7041824" prot="public" virt="non-virtual"><scope>castor3d::Cube</scope><name>create</name></member>
+      <member refid="d1/dab/a05359_1a078076d81df069f7b3225c30445b1279" prot="public" virt="non-virtual"><scope>castor3d::Cube</scope><name>Cube</name></member>
+      <member refid="d1/dab/a05359_1a3f6bcd646f3410ba5c37378d18fd248b" prot="private" virt="virtual"><scope>castor3d::Cube</scope><name>doGenerate</name></member>
+      <member refid="d1/d5e/a05403_1a9fdc140f2d871ca6cb81029250c346ae" prot="public" virt="virtual"><scope>castor3d::Cube</scope><name>generate</name></member>
+      <member refid="d1/d5e/a05403_1a3ccec3fd88667bbca33c6e81afdeff19" prot="public" virt="non-virtual"><scope>castor3d::Cube</scope><name>MeshGenerator</name></member>
+      <member refid="d1/d5e/a05403_1a2cf442c1a0d331b4b62158bbdb711b9c" prot="public" virt="virtual"><scope>castor3d::Cube</scope><name>~MeshGenerator</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

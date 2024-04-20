@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/d7e/a09419" kind="class" language="C++" prot="public">
+    <compoundname>castor::PreciseTimer</compoundname>
+    <includes local="no">PreciseTimer.hpp</includes>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d5/d7e/a09419_1a811a7623ca2e8c81ad83ea22dc815732" prot="private" static="no">
+        <type>std::chrono::high_resolution_clock</type>
+        <definition>using castor::PreciseTimer::clock =  std::chrono::high_resolution_clock</definition>
+        <argsstring></argsstring>
+        <name>clock</name>
+        <qualifiedname>castor::PreciseTimer::clock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/PreciseTimer.hpp" line="16" column="1" bodyfile="CastorUtils/Miscellaneous/PreciseTimer.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d5/d7e/a09419_1a0c3bb768b44449c038eb2f41cb576a93" prot="private" static="no" mutable="no">
+        <type>clock::time_point</type>
+        <definition>clock::time_point castor::PreciseTimer::m_savedTime</definition>
+        <argsstring></argsstring>
+        <name>m_savedTime</name>
+        <qualifiedname>castor::PreciseTimer::m_savedTime</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/PreciseTimer.hpp" line="38" column="19" bodyfile="CastorUtils/Miscellaneous/PreciseTimer.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d7e/a09419_1a34cb2254eef229508ed8ef9c1a4a061a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::PreciseTimer::PreciseTimer</definition>
+        <argsstring>()</argsstring>
+        <name>PreciseTimer</name>
+        <qualifiedname>castor::PreciseTimer::PreciseTimer</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/PreciseTimer.hpp" line="25" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d7e/a09419_1aaa06ba1e986869dc1a2df9cd6dd1f6bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a57f7b67526f72e5483ea563f44eef9ef" kindref="member">Nanoseconds</ref></type>
+        <definition>CU_API Nanoseconds castor::PreciseTimer::getElapsed</definition>
+        <argsstring>()</argsstring>
+        <name>getElapsed</name>
+        <qualifiedname>castor::PreciseTimer::getElapsed</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le temps écoulé depuis le dernier appel. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/PreciseTimer.hpp" line="32" column="20"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d5/d7e/a09419_1a575febc12983b8254165e7fb8d4e3171" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>clock::time_point</type>
+        <definition>clock::time_point castor::PreciseTimer::doGetElapsed</definition>
+        <argsstring>() const</argsstring>
+        <name>doGetElapsed</name>
+        <qualifiedname>castor::PreciseTimer::doGetElapsed</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/PreciseTimer.hpp" line="35" column="19"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Miscellaneous/PreciseTimer.hpp" line="14" column="1" bodyfile="CastorUtils/Miscellaneous/PreciseTimer.hpp" bodystart="15" bodyend="39"/>
+    <listofallmembers>
+      <member refid="d5/d7e/a09419_1a811a7623ca2e8c81ad83ea22dc815732" prot="private" virt="non-virtual"><scope>castor::PreciseTimer</scope><name>clock</name></member>
+      <member refid="d5/d7e/a09419_1a575febc12983b8254165e7fb8d4e3171" prot="private" virt="non-virtual"><scope>castor::PreciseTimer</scope><name>doGetElapsed</name></member>
+      <member refid="d5/d7e/a09419_1aaa06ba1e986869dc1a2df9cd6dd1f6bc" prot="public" virt="non-virtual"><scope>castor::PreciseTimer</scope><name>getElapsed</name></member>
+      <member refid="d5/d7e/a09419_1a0c3bb768b44449c038eb2f41cb576a93" prot="private" virt="non-virtual"><scope>castor::PreciseTimer</scope><name>m_savedTime</name></member>
+      <member refid="d5/d7e/a09419_1a34cb2254eef229508ed8ef9c1a4a061a" prot="public" virt="non-virtual"><scope>castor::PreciseTimer</scope><name>PreciseTimer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

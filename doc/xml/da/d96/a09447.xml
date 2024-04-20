@@ -1,0 +1,326 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d96/a09447" kind="class" language="C++" prot="public">
+    <compoundname>castor::AsyncJobQueue</compoundname>
+    <basecompoundref refid="da/d87/a08319" prot="public" virt="non-virtual">castor::NonMovable</basecompoundref>
+    <includes local="no">AsyncJobQueue.hpp</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="da/d96/a09447_1a692ee44c351ca744119e88a8b5596c71" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void() &gt;</type>
+        <definition>using castor::AsyncJobQueue::Job =  castor::Function&lt; void() &gt;</definition>
+        <argsstring></argsstring>
+        <name>Job</name>
+        <qualifiedname>castor::AsyncJobQueue::Job</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/AsyncJobQueue.hpp" line="20" column="1" bodyfile="CastorUtils/Multithreading/AsyncJobQueue.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="da/d96/a09447_1af0d4714658664b60eadb4f2b788521e9" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; <ref refid="da/d96/a09447_1a692ee44c351ca744119e88a8b5596c71" kindref="member">Job</ref> &gt;</type>
+        <definition>using castor::AsyncJobQueue::JobArray =  Vector&lt; Job &gt;</definition>
+        <argsstring></argsstring>
+        <name>JobArray</name>
+        <qualifiedname>castor::AsyncJobQueue::JobArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/AsyncJobQueue.hpp" line="21" column="1" bodyfile="CastorUtils/Multithreading/AsyncJobQueue.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="da/d96/a09447_1afd6e2b5e72ce728c55b7a8ba2d7688ce" prot="private" static="no" mutable="no">
+        <type>std::atomic_bool</type>
+        <definition>std::atomic_bool castor::AsyncJobQueue::m_ended</definition>
+        <argsstring></argsstring>
+        <name>m_ended</name>
+        <qualifiedname>castor::AsyncJobQueue::m_ended</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/AsyncJobQueue.hpp" line="79" column="18" bodyfile="CastorUtils/Multithreading/AsyncJobQueue.hpp" bodystart="79" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d96/a09447_1a316e362aa5df34fd9bffbe49f415d51b" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d96/a09447_1af0d4714658664b60eadb4f2b788521e9" kindref="member">JobArray</ref></type>
+        <definition>JobArray castor::AsyncJobQueue::m_pending</definition>
+        <argsstring></argsstring>
+        <name>m_pending</name>
+        <qualifiedname>castor::AsyncJobQueue::m_pending</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/AsyncJobQueue.hpp" line="80" column="10" bodyfile="CastorUtils/Multithreading/AsyncJobQueue.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d96/a09447_1a5a4aedeaaf79b1febff1373d76a4dffb" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/dd4/a09455" kindref="compound">ThreadPool</ref></type>
+        <definition>ThreadPool castor::AsyncJobQueue::m_pool</definition>
+        <argsstring></argsstring>
+        <name>m_pool</name>
+        <qualifiedname>castor::AsyncJobQueue::m_pool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/AsyncJobQueue.hpp" line="81" column="12" bodyfile="CastorUtils/Multithreading/AsyncJobQueue.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d96/a09447_1ae7e63d8b2e14e5fb825cc23dea5df5af" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aac3763b795438810958473f0b84908fb" kindref="member">castor::Mutex</ref></type>
+        <definition>castor::Mutex castor::AsyncJobQueue::m_mutex</definition>
+        <argsstring></argsstring>
+        <name>m_mutex</name>
+        <qualifiedname>castor::AsyncJobQueue::m_mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/AsyncJobQueue.hpp" line="82" column="15" bodyfile="CastorUtils/Multithreading/AsyncJobQueue.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d96/a09447_1a83c0cc68b54b7dc762beec80d7da6114" prot="private" static="no" mutable="no">
+        <type>std::thread</type>
+        <definition>std::thread castor::AsyncJobQueue::m_worker</definition>
+        <argsstring></argsstring>
+        <name>m_worker</name>
+        <qualifiedname>castor::AsyncJobQueue::m_worker</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/AsyncJobQueue.hpp" line="83" column="13" bodyfile="CastorUtils/Multithreading/AsyncJobQueue.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d96/a09447_1ac522665662bac1bddacbba16b4fd4f89" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::AsyncJobQueue::AsyncJobQueue</definition>
+        <argsstring>(size_t count)</argsstring>
+        <name>AsyncJobQueue</name>
+        <qualifiedname>castor::AsyncJobQueue::AsyncJobQueue</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur, initialise le pool au nombre de threads donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre de threads du pool. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/AsyncJobQueue.hpp" line="32" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d96/a09447_1a8e9493fa029cf2e520daed699c0e2607" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::AsyncJobQueue::~AsyncJobQueue</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~AsyncJobQueue</name>
+        <qualifiedname>castor::AsyncJobQueue::~AsyncJobQueue</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/AsyncJobQueue.hpp" line="39" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d96/a09447_1a798af39263b1e8a3b123935da5ee1348" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::AsyncJobQueue::pushJob</definition>
+        <argsstring>(Job job)</argsstring>
+        <name>pushJob</name>
+        <qualifiedname>castor::AsyncJobQueue::pushJob</qualifiedname>
+        <param>
+          <type><ref refid="da/d96/a09447_1a692ee44c351ca744119e88a8b5596c71" kindref="member">Job</ref></type>
+          <declname>job</declname>
+        </param>
+        <briefdescription>
+<para>donne à un thread de travail la tâche donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Si aucun thread n&apos;est disponible, attend que l&apos;un d&apos;eux finisse sa tâche. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">job</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La tâche. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/AsyncJobQueue.hpp" line="50" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d96/a09447_1a90373a550fdd048d24bbe01dec36a5d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::AsyncJobQueue::waitAll</definition>
+        <argsstring>()</argsstring>
+        <name>waitAll</name>
+        <qualifiedname>castor::AsyncJobQueue::waitAll</qualifiedname>
+        <briefdescription>
+<para>Attend que tous les jobs soient terminés. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/AsyncJobQueue.hpp" line="57" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d96/a09447_1a330f402658f29935839205138e50b63b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::AsyncJobQueue::finish</definition>
+        <argsstring>()</argsstring>
+        <name>finish</name>
+        <qualifiedname>castor::AsyncJobQueue::finish</qualifiedname>
+        <briefdescription>
+<para>Attend que tous les jobs soient terminés, prévient tout nouveau job, iles juste jeté. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/AsyncJobQueue.hpp" line="64" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d96/a09447_1aaf45d16bde7bd0a346c36c103533b1d8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::AsyncJobQueue::reset</definition>
+        <argsstring>()</argsstring>
+        <name>reset</name>
+        <qualifiedname>castor::AsyncJobQueue::reset</qualifiedname>
+        <briefdescription>
+<para>Réinitialise la file à son état initial. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/AsyncJobQueue.hpp" line="71" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="da/d96/a09447_1a5e3fd035628aed8fac5adfbb86bdcf48" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::AsyncJobQueue::doRun</definition>
+        <argsstring>()</argsstring>
+        <name>doRun</name>
+        <qualifiedname>castor::AsyncJobQueue::doRun</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/AsyncJobQueue.hpp" line="74" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d96/a09447_1a540d4d1d5a8f347747465d6e1eaf7a90" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="da/d96/a09447_1a692ee44c351ca744119e88a8b5596c71" kindref="member">Job</ref></type>
+        <definition>Job castor::AsyncJobQueue::doPopJob</definition>
+        <argsstring>()</argsstring>
+        <name>doPopJob</name>
+        <qualifiedname>castor::AsyncJobQueue::doPopJob</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/AsyncJobQueue.hpp" line="75" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d96/a09447_1a94ab477f4756cbe092a4469008dc9930" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::AsyncJobQueue::doCheckEnded</definition>
+        <argsstring>()</argsstring>
+        <name>doCheckEnded</name>
+        <qualifiedname>castor::AsyncJobQueue::doCheckEnded</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/AsyncJobQueue.hpp" line="76" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::AsyncJobQueue</label>
+        <link refid="da/d96/a09447"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::AsyncJobQueue</label>
+        <link refid="da/d96/a09447"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Multithreading/AsyncJobQueue.hpp" line="16" column="1" bodyfile="CastorUtils/Multithreading/AsyncJobQueue.hpp" bodystart="18" bodyend="84"/>
+    <listofallmembers>
+      <member refid="da/d96/a09447_1ac522665662bac1bddacbba16b4fd4f89" prot="public" virt="non-virtual"><scope>castor::AsyncJobQueue</scope><name>AsyncJobQueue</name></member>
+      <member refid="da/d96/a09447_1a94ab477f4756cbe092a4469008dc9930" prot="private" virt="non-virtual"><scope>castor::AsyncJobQueue</scope><name>doCheckEnded</name></member>
+      <member refid="da/d96/a09447_1a540d4d1d5a8f347747465d6e1eaf7a90" prot="private" virt="non-virtual"><scope>castor::AsyncJobQueue</scope><name>doPopJob</name></member>
+      <member refid="da/d96/a09447_1a5e3fd035628aed8fac5adfbb86bdcf48" prot="private" virt="non-virtual"><scope>castor::AsyncJobQueue</scope><name>doRun</name></member>
+      <member refid="da/d96/a09447_1a330f402658f29935839205138e50b63b" prot="public" virt="non-virtual"><scope>castor::AsyncJobQueue</scope><name>finish</name></member>
+      <member refid="da/d96/a09447_1a692ee44c351ca744119e88a8b5596c71" prot="public" virt="non-virtual"><scope>castor::AsyncJobQueue</scope><name>Job</name></member>
+      <member refid="da/d96/a09447_1af0d4714658664b60eadb4f2b788521e9" prot="public" virt="non-virtual"><scope>castor::AsyncJobQueue</scope><name>JobArray</name></member>
+      <member refid="da/d96/a09447_1afd6e2b5e72ce728c55b7a8ba2d7688ce" prot="private" virt="non-virtual"><scope>castor::AsyncJobQueue</scope><name>m_ended</name></member>
+      <member refid="da/d96/a09447_1ae7e63d8b2e14e5fb825cc23dea5df5af" prot="private" virt="non-virtual"><scope>castor::AsyncJobQueue</scope><name>m_mutex</name></member>
+      <member refid="da/d96/a09447_1a316e362aa5df34fd9bffbe49f415d51b" prot="private" virt="non-virtual"><scope>castor::AsyncJobQueue</scope><name>m_pending</name></member>
+      <member refid="da/d96/a09447_1a5a4aedeaaf79b1febff1373d76a4dffb" prot="private" virt="non-virtual"><scope>castor::AsyncJobQueue</scope><name>m_pool</name></member>
+      <member refid="da/d96/a09447_1a83c0cc68b54b7dc762beec80d7da6114" prot="private" virt="non-virtual"><scope>castor::AsyncJobQueue</scope><name>m_worker</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::AsyncJobQueue</scope><name>NonMovable</name></member>
+      <member refid="da/d96/a09447_1a798af39263b1e8a3b123935da5ee1348" prot="public" virt="non-virtual"><scope>castor::AsyncJobQueue</scope><name>pushJob</name></member>
+      <member refid="da/d96/a09447_1aaf45d16bde7bd0a346c36c103533b1d8" prot="public" virt="non-virtual"><scope>castor::AsyncJobQueue</scope><name>reset</name></member>
+      <member refid="da/d96/a09447_1a90373a550fdd048d24bbe01dec36a5d3" prot="public" virt="non-virtual"><scope>castor::AsyncJobQueue</scope><name>waitAll</name></member>
+      <member refid="da/d96/a09447_1a8e9493fa029cf2e520daed699c0e2607" prot="public" virt="non-virtual"><scope>castor::AsyncJobQueue</scope><name>~AsyncJobQueue</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::AsyncJobQueue</scope><name>~NonMovable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

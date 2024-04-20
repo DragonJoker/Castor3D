@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/dff/a08975" kind="struct" language="C++" prot="public">
+    <compoundname>castor::KernelLanczosFilterT</compoundname>
+    <includes local="no">LanczosFilterKernel.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+        <declname>PFT</declname>
+        <defname>PFT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="da/dff/a08975_1a78a6d631c49d2f9ecb59eac508b5cfb5" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor::KernelLanczosFilterT&lt; PFT &gt;::compute</definition>
+        <argsstring>(VkExtent2D const &amp;fullExtent, uint8_t const *srcBuffer, uint8_t *dstBuffer, uint32_t level, uint32_t levelSize)</argsstring>
+        <name>compute</name>
+        <qualifiedname>castor::KernelLanczosFilterT::compute</qualifiedname>
+        <param>
+          <type>VkExtent2D const &amp;</type>
+          <declname>fullExtent</declname>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>srcBuffer</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>dstBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>levelSize</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/LanczosFilterKernel.hpp" line="16" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/LanczosFilterKernel.hpp" line="14" column="1" bodyfile="CastorUtils/Graphics/LanczosFilterKernel.hpp" bodystart="15" bodyend="21"/>
+    <listofallmembers>
+      <member refid="da/dff/a08975_1a78a6d631c49d2f9ecb59eac508b5cfb5" prot="public" virt="non-virtual"><scope>castor::KernelLanczosFilterT</scope><name>compute</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d47/a06387" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::VkStructure</compoundname>
+    <includes local="no">RenderDevice.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d47/a06387_1acf8f57a16b643a808dbeca0acf8523fb" prot="public" static="no" mutable="no">
+        <type>VkStructureType</type>
+        <definition>VkStructureType castor3d::VkStructure::sType</definition>
+        <argsstring></argsstring>
+        <name>sType</name>
+        <qualifiedname>castor3d::VkStructure::sType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="29" column="17" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d47/a06387_1ac9f55a1f3121add5683fba08e1714611" prot="public" static="no" mutable="no">
+        <type><ref refid="db/d47/a06387" kindref="compound">VkStructure</ref> *</type>
+        <definition>VkStructure* castor3d::VkStructure::pNext</definition>
+        <argsstring></argsstring>
+        <name>pNext</name>
+        <qualifiedname>castor3d::VkStructure::pNext</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="30" column="14" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="db/d47/a06387_1ac9d58b7f72555c2e04de78493b4ac4f2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::VkStructure::VkStructure</definition>
+        <argsstring>()</argsstring>
+        <name>VkStructure</name>
+        <qualifiedname>castor3d::VkStructure::VkStructure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="26" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::VkStructure</label>
+        <link refid="db/d47/a06387"/>
+        <childnode refid="1" relation="usage">
+          <edgelabel>pNext</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/RenderDevice.hpp" line="23" column="1" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="24" bodyend="31"/>
+    <listofallmembers>
+      <member refid="db/d47/a06387_1ac9f55a1f3121add5683fba08e1714611" prot="public" virt="non-virtual"><scope>castor3d::VkStructure</scope><name>pNext</name></member>
+      <member refid="db/d47/a06387_1acf8f57a16b643a808dbeca0acf8523fb" prot="public" virt="non-virtual"><scope>castor3d::VkStructure</scope><name>sType</name></member>
+      <member refid="db/d47/a06387_1ac9d58b7f72555c2e04de78493b4ac4f2" prot="private" virt="non-virtual"><scope>castor3d::VkStructure</scope><name>VkStructure</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

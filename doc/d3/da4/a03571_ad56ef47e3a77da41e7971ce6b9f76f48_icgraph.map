@@ -1,0 +1,11 @@
+<map id="castor3d::UniformBufferBase::upload" name="castor3d::UniformBufferBase::upload">
+<area shape="rect" id="Node000001" title="Transfers data to the GPU buffer from RAM." alt="" coords="240,101,427,141"/>
+<area shape="rect" id="Node000002" href="$d3/da4/a03571.html#aabcfe5ba88e3e3ea931631f640bb8f80" title="Transfers data to the GPU buffer from RAM." alt="" coords="5,5,192,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="278,98,191,60,159,48,161,43,193,55,280,93"/>
+<area shape="rect" id="Node000003" href="$d3/da4/a03571.html#a8fefef056ad181dd1626900a2324082b" title="Transfers data to the GPU buffer from RAM." alt="" coords="5,69,192,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="226,109,192,105,193,99,227,104"/>
+<area shape="rect" id="Node000004" href="$d3/da4/a03571.html#ab66278b315c90593aa870cd3ef04447c" title="Transfers data to the GPU buffer from RAM." alt="" coords="5,133,192,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="227,139,193,143,192,138,226,133"/>
+<area shape="rect" id="Node000005" href="$d3/da4/a03571.html#a6404c98a33153b320e140dd9727f8ecf" title="Transfers data to the GPU buffer from RAM." alt="" coords="5,197,192,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="280,150,193,188,161,200,159,195,191,183,278,145"/>
+</map>

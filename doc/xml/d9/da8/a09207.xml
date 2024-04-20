@@ -1,0 +1,384 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/da8/a09207" kind="class" language="C++" prot="public">
+    <compoundname>castor::Range</compoundname>
+    <derivedcompoundref refid="d5/d0b/a09215" prot="public" virt="non-virtual">castor::IndexedRangeT&lt; T &gt;</derivedcompoundref>
+    <derivedcompoundref refid="da/d49/a09219" prot="public" virt="non-virtual">castor::RangeSequenceT&lt; T &gt;</derivedcompoundref>
+    <includes local="no">Range.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/da8/a09207_1a0eca30061a9133658d1ae2dccce31170" prot="private" static="no" mutable="no">
+        <type>T</type>
+        <definition>T castor::Range&lt; T &gt;::m_min</definition>
+        <argsstring></argsstring>
+        <name>m_min</name>
+        <qualifiedname>castor::Range::m_min</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La borne inférieure. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Range.hpp" line="179" column="3" bodyfile="CastorUtils/Math/Range.hpp" bodystart="179" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/da8/a09207_1a50ce84adc551503402176e85509ff8a3" prot="private" static="no" mutable="no">
+        <type>T</type>
+        <definition>T castor::Range&lt; T &gt;::m_max</definition>
+        <argsstring></argsstring>
+        <name>m_max</name>
+        <qualifiedname>castor::Range::m_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La borne supérieure. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Range.hpp" line="182" column="3" bodyfile="CastorUtils/Math/Range.hpp" bodystart="182" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/da8/a09207_1a5f7acbd7dcb3c70e63e24272421e08e3" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Range&lt; T &gt;::Range</definition>
+        <argsstring>(T const &amp;min, T const &amp;max) noexcept</argsstring>
+        <name>Range</name>
+        <qualifiedname>castor::Range::Range</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>min</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>max</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">min</parametername>
+<parametername direction="in">max</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les bornes de l&apos;intervalle. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Range.hpp" line="32" column="1" bodyfile="CastorUtils/Math/Range.hpp" bodystart="32" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/da8/a09207_1a1905ba672068865603e55a41343cf17d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>T const &amp;</type>
+        <definition>T const  &amp; castor::Range&lt; T &gt;::clamp</definition>
+        <argsstring>(T const &amp;value) const noexcept</argsstring>
+        <name>clamp</name>
+        <qualifiedname>castor::Range::clamp</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Remet une valeur dans l&apos;intervalle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>m_min</computeroutput> si la valeur y est inférieure.<linebreak/>
+ <computeroutput>m_max</computeroutput> si la valeur y est supérieure.<linebreak/>
+ <computeroutput>value</computeroutput> sinon. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Range.hpp" line="51" column="10" bodyfile="CastorUtils/Math/Range.hpp" bodystart="51" bodyend="64"/>
+        <references refid="d9/da8/a09207_1a068135b0cd55ff059544f0b4f467ebe7" compoundref="d4/d9b/a02159" startline="132" endline="135">castor::Range&lt; T &gt;::value</references>
+        <referencedby refid="d9/da8/a09207_1a18a23ae9545aca1b31a8e13fbeede614" compoundref="d4/d9b/a02159" startline="91" endline="96">castor::Range&lt; T &gt;::percent</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/da8/a09207_1af957dbebdd5330f15a76cc855eb03652" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::Range&lt; T &gt;::has</definition>
+        <argsstring>(T const &amp;value) const noexcept</argsstring>
+        <name>has</name>
+        <qualifiedname>castor::Range::has</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> si <computeroutput>value</computeroutput> est dans l&apos;intervalle. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Range.hpp" line="71" column="6" bodyfile="CastorUtils/Math/Range.hpp" bodystart="71" bodyend="74"/>
+        <references refid="d9/da8/a09207_1a068135b0cd55ff059544f0b4f467ebe7" compoundref="d4/d9b/a02159" startline="132" endline="135">castor::Range&lt; T &gt;::value</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/da8/a09207_1a18a23ae9545aca1b31a8e13fbeede614" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor::Range&lt; T &gt;::percent</definition>
+        <argsstring>(T const &amp;value) const noexcept</argsstring>
+        <name>percent</name>
+        <qualifiedname>castor::Range::percent</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Retourne le pourcentage correspondant à la valeur donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>0.0 si <computeroutput>value</computeroutput> est égal à ou inférieur à <computeroutput>m_min</computeroutput>.<linebreak/>
+ 1.0 si <computeroutput>value</computeroutput> est égal à ou supérieur à <computeroutput>m_max</computeroutput>.<linebreak/>
+ Une pourcentage allant de 0.0 à 1.0, selon que la valeur est plus proche de <computeroutput>m_min</computeroutput> ou de <computeroutput>m_max</computeroutput>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Range.hpp" line="91" column="7" bodyfile="CastorUtils/Math/Range.hpp" bodystart="91" bodyend="96"/>
+        <references refid="d9/da8/a09207_1a1905ba672068865603e55a41343cf17d" compoundref="d4/d9b/a02159" startline="51" endline="64">castor::Range&lt; T &gt;::clamp</references>
+        <references refid="d9/da8/a09207_1a068135b0cd55ff059544f0b4f467ebe7" compoundref="d4/d9b/a02159" startline="132" endline="135">castor::Range&lt; T &gt;::value</references>
+        <referencedby refid="d9/da8/a09207_1a3ba21b7ce4847f2b9f9557289c36bd36" compoundref="d4/d9b/a02159" startline="113" endline="116">castor::Range&lt; T &gt;::invPercent</referencedby>
+        <referencedby refid="d9/da8/a09207_1ae4789643a936b9eda9dcfc1328a54b7f" compoundref="d4/d9b/a02159" startline="151" endline="154">castor::Range&lt; T &gt;::invValue</referencedby>
+        <referencedby refid="d9/da8/a09207_1a068135b0cd55ff059544f0b4f467ebe7" compoundref="d4/d9b/a02159" startline="132" endline="135">castor::Range&lt; T &gt;::value</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/da8/a09207_1a3ba21b7ce4847f2b9f9557289c36bd36" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor::Range&lt; T &gt;::invPercent</definition>
+        <argsstring>(T const &amp;value) const noexcept</argsstring>
+        <name>invPercent</name>
+        <qualifiedname>castor::Range::invPercent</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Retourne le pourcentage correspondant à la valeur donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>0.0 si <computeroutput>value</computeroutput> est égal à ou supérieur à <computeroutput>m_max</computeroutput>.<linebreak/>
+ 1.0 si <computeroutput>value</computeroutput> est égal à ou inférieur à <computeroutput>m_min</computeroutput>.<linebreak/>
+ Une pourcentage allant de 0.0 à 1.0, selon que la valeur est plus proche de <computeroutput>m_max</computeroutput> ou de <computeroutput>m_min</computeroutput>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Range.hpp" line="113" column="7" bodyfile="CastorUtils/Math/Range.hpp" bodystart="113" bodyend="116"/>
+        <references refid="d9/da8/a09207_1a18a23ae9545aca1b31a8e13fbeede614" compoundref="d4/d9b/a02159" startline="91" endline="96">castor::Range&lt; T &gt;::percent</references>
+        <references refid="d9/da8/a09207_1a068135b0cd55ff059544f0b4f467ebe7" compoundref="d4/d9b/a02159" startline="132" endline="135">castor::Range&lt; T &gt;::value</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/da8/a09207_1a068135b0cd55ff059544f0b4f467ebe7" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>T</type>
+        <definition>T castor::Range&lt; T &gt;::value</definition>
+        <argsstring>(float const &amp;percent) const noexcept</argsstring>
+        <name>value</name>
+        <qualifiedname>castor::Range::value</qualifiedname>
+        <param>
+          <type>float const &amp;</type>
+          <declname>percent</declname>
+        </param>
+        <briefdescription>
+<para>Retourne la valeur correspondant au pourcentage donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">percent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le pourcentage. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>m_min</computeroutput> si <computeroutput>percent</computeroutput> vaut 0.0.<linebreak/>
+ <computeroutput>m_max</computeroutput> si <computeroutput>percent</computeroutput> vaut 1.0.<linebreak/>
+ Une valeur comprise entre <computeroutput>m_min</computeroutput> et <computeroutput>m_max</computeroutput>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Range.hpp" line="132" column="3" bodyfile="CastorUtils/Math/Range.hpp" bodystart="132" bodyend="135"/>
+        <references refid="d9/da8/a09207_1a18a23ae9545aca1b31a8e13fbeede614" compoundref="d4/d9b/a02159" startline="91" endline="96">castor::Range&lt; T &gt;::percent</references>
+        <referencedby refid="d9/da8/a09207_1a1905ba672068865603e55a41343cf17d" compoundref="d4/d9b/a02159" startline="51" endline="64">castor::Range&lt; T &gt;::clamp</referencedby>
+        <referencedby refid="da/d49/a09219_1af828ed71d93407cfc1cbe242046cd235" compoundref="d7/d4c/a02165" startline="49" endline="63">castor::RangeSequenceT&lt; T &gt;::getRange</referencedby>
+        <referencedby refid="d9/da8/a09207_1af957dbebdd5330f15a76cc855eb03652" compoundref="d4/d9b/a02159" startline="71" endline="74">castor::Range&lt; T &gt;::has</referencedby>
+        <referencedby refid="d9/da8/a09207_1a3ba21b7ce4847f2b9f9557289c36bd36" compoundref="d4/d9b/a02159" startline="113" endline="116">castor::Range&lt; T &gt;::invPercent</referencedby>
+        <referencedby refid="d9/da8/a09207_1a18a23ae9545aca1b31a8e13fbeede614" compoundref="d4/d9b/a02159" startline="91" endline="96">castor::Range&lt; T &gt;::percent</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/da8/a09207_1ae4789643a936b9eda9dcfc1328a54b7f" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>T</type>
+        <definition>T castor::Range&lt; T &gt;::invValue</definition>
+        <argsstring>(float const &amp;percent) const noexcept</argsstring>
+        <name>invValue</name>
+        <qualifiedname>castor::Range::invValue</qualifiedname>
+        <param>
+          <type>float const &amp;</type>
+          <declname>percent</declname>
+        </param>
+        <briefdescription>
+<para>Retourne la valeur correspondant au pourcentage donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">percent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le pourcentage. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>m_max</computeroutput> si <computeroutput>percent</computeroutput> vaut 0.0.<linebreak/>
+ <computeroutput>m_min</computeroutput> si <computeroutput>percent</computeroutput> vaut 1.0.<linebreak/>
+ Une valeur comprise entre <computeroutput>m_min</computeroutput> et <computeroutput>m_max</computeroutput>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Range.hpp" line="151" column="3" bodyfile="CastorUtils/Math/Range.hpp" bodystart="151" bodyend="154"/>
+        <references refid="d9/da8/a09207_1a18a23ae9545aca1b31a8e13fbeede614" compoundref="d4/d9b/a02159" startline="91" endline="96">castor::Range&lt; T &gt;::percent</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/da8/a09207_1a0f0e99c4817d3689253818d82a8afc8d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>T const &amp;</type>
+        <definition>T const  &amp; castor::Range&lt; T &gt;::getMin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getMin</name>
+        <qualifiedname>castor::Range::getMin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La borne minimale. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Range.hpp" line="161" column="10" bodyfile="CastorUtils/Math/Range.hpp" bodystart="161" bodyend="164"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/da8/a09207_1a124df373e8f199d56b9bb21351e577f7" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>T const &amp;</type>
+        <definition>T const  &amp; castor::Range&lt; T &gt;::getMax</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getMax</name>
+        <qualifiedname>castor::Range::getMax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La borne maximale. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Range.hpp" line="171" column="10" bodyfile="CastorUtils/Math/Range.hpp" bodystart="171" bodyend="174"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Une classe d&apos;intervalle. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="7">
+        <label>castor::Range&lt; ValueType &gt;</label>
+        <link refid="d9/da8/a09207"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ValueType &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::Range&lt; float &gt;</label>
+        <link refid="d9/da8/a09207"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; float &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Range&lt; int32_t &gt;</label>
+        <link refid="d9/da8/a09207"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; int32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Range&lt; uint32_t &gt;</label>
+        <link refid="d9/da8/a09207"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; uint32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::IndexedRangeT&lt; T &gt;</label>
+        <link refid="d5/d0b/a09215"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::Range&lt; T &gt;</label>
+        <link refid="d9/da8/a09207"/>
+      </node>
+      <node id="3">
+        <label>castor::RangeSequenceT&lt; T &gt;</label>
+        <link refid="da/d49/a09219"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/Math/Range.hpp" line="21" column="1" bodyfile="CastorUtils/Math/Range.hpp" bodystart="22" bodyend="183"/>
+    <listofallmembers>
+      <member refid="d9/da8/a09207_1a1905ba672068865603e55a41343cf17d" prot="public" virt="non-virtual"><scope>castor::Range</scope><name>clamp</name></member>
+      <member refid="d9/da8/a09207_1a124df373e8f199d56b9bb21351e577f7" prot="public" virt="non-virtual"><scope>castor::Range</scope><name>getMax</name></member>
+      <member refid="d9/da8/a09207_1a0f0e99c4817d3689253818d82a8afc8d" prot="public" virt="non-virtual"><scope>castor::Range</scope><name>getMin</name></member>
+      <member refid="d9/da8/a09207_1af957dbebdd5330f15a76cc855eb03652" prot="public" virt="non-virtual"><scope>castor::Range</scope><name>has</name></member>
+      <member refid="d9/da8/a09207_1a3ba21b7ce4847f2b9f9557289c36bd36" prot="public" virt="non-virtual"><scope>castor::Range</scope><name>invPercent</name></member>
+      <member refid="d9/da8/a09207_1ae4789643a936b9eda9dcfc1328a54b7f" prot="public" virt="non-virtual"><scope>castor::Range</scope><name>invValue</name></member>
+      <member refid="d9/da8/a09207_1a50ce84adc551503402176e85509ff8a3" prot="private" virt="non-virtual"><scope>castor::Range</scope><name>m_max</name></member>
+      <member refid="d9/da8/a09207_1a0eca30061a9133658d1ae2dccce31170" prot="private" virt="non-virtual"><scope>castor::Range</scope><name>m_min</name></member>
+      <member refid="d9/da8/a09207_1a18a23ae9545aca1b31a8e13fbeede614" prot="public" virt="non-virtual"><scope>castor::Range</scope><name>percent</name></member>
+      <member refid="d9/da8/a09207_1a5f7acbd7dcb3c70e63e24272421e08e3" prot="public" virt="non-virtual"><scope>castor::Range</scope><name>Range</name></member>
+      <member refid="d9/da8/a09207_1a068135b0cd55ff059544f0b4f467ebe7" prot="public" virt="non-virtual"><scope>castor::Range</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,14 @@
+<map id="castor3d::ChunkParser&lt; castor::String &gt;::parse" name="castor3d::ChunkParser&lt; castor::String &gt;::parse">
+<area shape="rect" id="Node000001" title="Retrieves a value from a chunk." alt="" coords="5,56,169,96"/>
+<area shape="rect" id="Node000002" href="$d5/d27/a03183.html#af711032d94753cb2d482fe2bcf3afb17" title="Checks that the remaining place can hold the given size." alt="" coords="463,27,618,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,53,164,30,217,12,278,4,341,4,401,11,455,21,454,26,400,16,341,10,279,9,218,17,166,35,122,58"/>
+<area shape="rect" id="Node000003" href="$d5/d27/a03183.html#a2819c7ddf95251296b5a61bf40435358" title="Retrieves the remaining place." alt="" coords="233,27,387,67"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="169,63,218,56,219,61,170,68"/>
+<area shape="rect" id="Node000004" href="$d2/dd2/a02279.html#ab063f33ab8c390c2522ef198128a0d77" title=" " alt="" coords="244,91,376,117"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="170,84,231,91,230,97,169,89"/>
+<area shape="rect" id="Node000005" href="$d6/d0e/a03395.html#a062463121032ba679336be2382c508d0" title="Retrieves a value array from a chunk." alt="" coords="217,141,403,181"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="136,94,218,127,238,134,236,139,216,132,134,99"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="373,139,402,127,452,100,497,72,500,76,455,105,404,132,375,144"/>
+<area shape="rect" id="Node000006" href="$d5/d27/a03183.html#a7c1bb3cf53d6b4a6856c9964c54fac11" title="Retrieves data from the chunk." alt="" coords="451,149,631,174"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="403,159,437,159,437,164,403,164"/>
+</map>

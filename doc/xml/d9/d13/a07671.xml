@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/d13/a07671" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::SubmeshShaders</compoundname>
+    <includes local="no">GlslSubmeshShaders.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/d13/a07671_1a800ea63592dd96c9a3f4b9a594ef4665" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d5c/a05615" kindref="compound">SubmeshComponentRegister</ref> const  &amp;</type>
+        <definition>SubmeshComponentRegister const&amp; castor3d::shader::SubmeshShaders::m_compRegister</definition>
+        <argsstring></argsstring>
+        <name>m_compRegister</name>
+        <qualifiedname>castor3d::shader::SubmeshShaders::m_compRegister</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp" line="30" column="33" bodyfile="Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d13/a07671_1a600756e083479478c61af35dcbe4d428" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="dc/d4a/a05587" kindref="compound">SubmeshVertexSurfaceShader</ref> * &gt;</type>
+        <definition>castor::Vector&lt; SubmeshVertexSurfaceShader * &gt; castor3d::shader::SubmeshShaders::m_vertexShaders</definition>
+        <argsstring></argsstring>
+        <name>m_vertexShaders</name>
+        <qualifiedname>castor3d::shader::SubmeshShaders::m_vertexShaders</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp" line="31" column="16" bodyfile="Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d13/a07671_1a7cbd1b1ddc2a9acf482d87a184bcedb3" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d0/db9/a05591" kindref="compound">SubmeshRasterSurfaceShader</ref> * &gt;</type>
+        <definition>castor::Vector&lt; SubmeshRasterSurfaceShader * &gt; castor3d::shader::SubmeshShaders::m_rasterShaders</definition>
+        <argsstring></argsstring>
+        <name>m_rasterShaders</name>
+        <qualifiedname>castor3d::shader::SubmeshShaders::m_rasterShaders</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp" line="32" column="16" bodyfile="Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d13/a07671_1a7aaeeaea2879bdbc62f031ca7a2ea20d" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const  &amp;</type>
+        <definition>PipelineFlags const&amp; castor3d::shader::SubmeshShaders::m_flags</definition>
+        <argsstring></argsstring>
+        <name>m_flags</name>
+        <qualifiedname>castor3d::shader::SubmeshShaders::m_flags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp" line="33" column="22" bodyfile="Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d13/a07671_1acff939451ca2044c53059a34741dad48" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::SubmeshShaders::SubmeshShaders</definition>
+        <argsstring>(SubmeshComponentRegister const &amp;compRegister, PipelineFlags const &amp;flags)</argsstring>
+        <name>SubmeshShaders</name>
+        <qualifiedname>castor3d::shader::SubmeshShaders::SubmeshShaders</qualifiedname>
+        <param>
+          <type><ref refid="da/d5c/a05615" kindref="compound">SubmeshComponentRegister</ref> const &amp;</type>
+          <declname>compRegister</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp" line="19" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d13/a07671_1aec880490e20ad3edae297bb8e05ac32b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::SubmeshShaders::fillVertexSurface</definition>
+        <argsstring>(sdw::type::IOStruct &amp;surface) const</argsstring>
+        <name>fillVertexSurface</name>
+        <qualifiedname>castor3d::shader::SubmeshShaders::fillVertexSurface</qualifiedname>
+        <param>
+          <type>sdw::type::IOStruct &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp" line="22" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d13/a07671_1affc739b0f30d8f841b2e923e05ccfc7e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::SubmeshShaders::fillVertexSurface</definition>
+        <argsstring>(sdw::type::BaseStruct &amp;surface) const</argsstring>
+        <name>fillVertexSurface</name>
+        <qualifiedname>castor3d::shader::SubmeshShaders::fillVertexSurface</qualifiedname>
+        <param>
+          <type>sdw::type::BaseStruct &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp" line="23" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d13/a07671_1a8a5f96c7277c6e1aa3719b60e3a3c5ff" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::SubmeshShaders::fillRasterSurface</definition>
+        <argsstring>(sdw::type::IOStruct &amp;surface, uint32_t &amp;index) const</argsstring>
+        <name>fillRasterSurface</name>
+        <qualifiedname>castor3d::shader::SubmeshShaders::fillRasterSurface</qualifiedname>
+        <param>
+          <type>sdw::type::IOStruct &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp" line="25" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d13/a07671_1a897be0a0df1a19dd77e03467c528f6f5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::SubmeshShaders::fillRasterSurface</definition>
+        <argsstring>(sdw::type::BaseStruct &amp;surface) const</argsstring>
+        <name>fillRasterSurface</name>
+        <qualifiedname>castor3d::shader::SubmeshShaders::fillRasterSurface</qualifiedname>
+        <param>
+          <type>sdw::type::BaseStruct &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp" line="27" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp" line="16" column="1" bodyfile="Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp" bodystart="17" bodyend="34"/>
+    <listofallmembers>
+      <member refid="d9/d13/a07671_1a8a5f96c7277c6e1aa3719b60e3a3c5ff" prot="public" virt="non-virtual"><scope>castor3d::shader::SubmeshShaders</scope><name>fillRasterSurface</name></member>
+      <member refid="d9/d13/a07671_1a897be0a0df1a19dd77e03467c528f6f5" prot="public" virt="non-virtual"><scope>castor3d::shader::SubmeshShaders</scope><name>fillRasterSurface</name></member>
+      <member refid="d9/d13/a07671_1aec880490e20ad3edae297bb8e05ac32b" prot="public" virt="non-virtual"><scope>castor3d::shader::SubmeshShaders</scope><name>fillVertexSurface</name></member>
+      <member refid="d9/d13/a07671_1affc739b0f30d8f841b2e923e05ccfc7e" prot="public" virt="non-virtual"><scope>castor3d::shader::SubmeshShaders</scope><name>fillVertexSurface</name></member>
+      <member refid="d9/d13/a07671_1a800ea63592dd96c9a3f4b9a594ef4665" prot="private" virt="non-virtual"><scope>castor3d::shader::SubmeshShaders</scope><name>m_compRegister</name></member>
+      <member refid="d9/d13/a07671_1a7aaeeaea2879bdbc62f031ca7a2ea20d" prot="private" virt="non-virtual"><scope>castor3d::shader::SubmeshShaders</scope><name>m_flags</name></member>
+      <member refid="d9/d13/a07671_1a7cbd1b1ddc2a9acf482d87a184bcedb3" prot="private" virt="non-virtual"><scope>castor3d::shader::SubmeshShaders</scope><name>m_rasterShaders</name></member>
+      <member refid="d9/d13/a07671_1a600756e083479478c61af35dcbe4d428" prot="private" virt="non-virtual"><scope>castor3d::shader::SubmeshShaders</scope><name>m_vertexShaders</name></member>
+      <member refid="d9/d13/a07671_1acff939451ca2044c53059a34741dad48" prot="public" virt="non-virtual"><scope>castor3d::shader::SubmeshShaders</scope><name>SubmeshShaders</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

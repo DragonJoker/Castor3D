@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/db4/a09019" kind="struct" language="C++" prot="public">
+    <compoundname>castor::SizeData::Mbr</compoundname>
+    <includes local="no">Size.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/db4/a09019_1acdfc25fed4a56c578945c56e5e772635" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::SizeData::Mbr::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>castor::SizeData::Mbr::x</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="18" column="10" bodyfile="CastorUtils/Graphics/Size.hpp" bodystart="18" bodyend="-1"/>
+        <referencedby refid="d4/dd6/a09023_1a3cef6d7fb9e7e9e4e373f689b2b23b0c" compoundref="d9/d95/a02075" startline="113" endline="116">castor::Size::getWidth</referencedby>
+        <referencedby refid="d4/dd6/a09023_1a2c95f66f6dcf8f063e8ff619c9e0de51" compoundref="d9/d95/a02075" startline="125" endline="128">castor::Size::getWidth</referencedby>
+        <referencedby refid="d4/dd6/a09023_1af416f9c4a66c127781c438ba9f94ee9a" compoundref="d9/d95/a02075" startline="165" endline="170">castor::Size::operator&lt;&lt;=</referencedby>
+        <referencedby refid="d4/dd6/a09023_1a6b1efd897f1f9b8c6be31241ee5620a8" compoundref="d9/d95/a02075" startline="172" endline="177">castor::Size::operator&gt;&gt;=</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db4/a09019_1a6daac478fab839b883f99e600ee6528f" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::SizeData::Mbr::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>castor::SizeData::Mbr::y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="19" column="10" bodyfile="CastorUtils/Graphics/Size.hpp" bodystart="19" bodyend="-1"/>
+        <referencedby refid="d4/dd6/a09023_1ab8e3c320eefc853f8fb36db35939844c" compoundref="d9/d95/a02075" startline="137" endline="140">castor::Size::getHeight</referencedby>
+        <referencedby refid="d4/dd6/a09023_1a62edd788d8db8fa9418ee0d207ae4bb6" compoundref="d9/d95/a02075" startline="149" endline="152">castor::Size::getHeight</referencedby>
+        <referencedby refid="d4/dd6/a09023_1af416f9c4a66c127781c438ba9f94ee9a" compoundref="d9/d95/a02075" startline="165" endline="170">castor::Size::operator&lt;&lt;=</referencedby>
+        <referencedby refid="d4/dd6/a09023_1a6b1efd897f1f9b8c6be31241ee5620a8" compoundref="d9/d95/a02075" startline="172" endline="177">castor::Size::operator&gt;&gt;=</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/Size.hpp" line="16" column="1" bodyfile="CastorUtils/Graphics/Size.hpp" bodystart="17" bodyend="20"/>
+    <listofallmembers>
+      <member refid="d2/db4/a09019_1acdfc25fed4a56c578945c56e5e772635" prot="public" virt="non-virtual"><scope>castor::SizeData::Mbr</scope><name>x</name></member>
+      <member refid="d2/db4/a09019_1a6daac478fab839b883f99e600ee6528f" prot="public" virt="non-virtual"><scope>castor::SizeData::Mbr</scope><name>y</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

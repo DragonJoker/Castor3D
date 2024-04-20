@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/d83/a08031" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; Font &gt;</compoundname>
+    <basecompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; Font &gt;</basecompoundref>
+    <includes local="no">TextFont.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d3/d83/a08031_1a18fff3b063e9188b154dbd9085b6f077" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref></type>
+        <definition>Path castor::TextWriter&lt; Font &gt;::m_folder</definition>
+        <argsstring></argsstring>
+        <name>m_folder</name>
+        <qualifiedname>castor::TextWriter&lt; Font &gt;::m_folder</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Text/TextFont.hpp" line="22" column="6" bodyfile="CastorUtils/Data/Text/TextFont.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d83/a08031_1a0d4639983e8fb3dad45d115bd7878a0d" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::TextWriter&lt; Font &gt;::TextWriter</definition>
+        <argsstring>(String const &amp;tabs, Path const &amp;folder)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; Font &gt;::TextWriter</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Text/TextFont.hpp" line="18" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d83/a08031_1a1feed15fa54243d3074eb69a0f81106d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::TextWriter&lt; Font &gt;::operator()</definition>
+        <argsstring>(Font const &amp;object, StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; Font &gt;::operator()</qualifiedname>
+        <param>
+          <type><ref refid="d0/dbd/a08755" kindref="compound">Font</ref> const &amp;</type>
+          <declname>object</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae7002b6add23b6f33bfde31351b5e8c9" kindref="member">StringStream</ref> &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Text/TextFont.hpp" line="19" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::TextWriterT&lt; Font &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; Font &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::Writer&lt; T, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; T, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; Font &gt;</label>
+        <link refid="d3/d83/a08031"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::TextWriterBase</label>
+        <link refid="da/d1b/a08083"/>
+      </node>
+      <node id="6">
+        <label>castor::TextWriterT&lt; T &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::Writer&lt; DataT, StreamT &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Writer&lt; DataT, StreamT &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::TextWriterT&lt; Font &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; Font &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::Writer&lt; T, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; T, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; Font &gt;</label>
+        <link refid="d3/d83/a08031"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::TextWriterBase</label>
+        <link refid="da/d1b/a08083"/>
+      </node>
+      <node id="6">
+        <label>castor::TextWriterT&lt; T &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::Writer&lt; DataT, StreamT &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Writer&lt; DataT, StreamT &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Data/Text/TextFont.hpp" line="14" column="1" bodyfile="CastorUtils/Data/Text/TextFont.hpp" bodystart="16" bodyend="23"/>
+    <listofallmembers>
+      <member refid="da/d1b/a08083_1ace2fbef04b6ba93bca9552f2fe797fbd" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>beginBlock</name></member>
+      <member refid="da/d1b/a08083_1aca688db26c86bc2c072c66c2172240fb" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>beginBlock</name></member>
+      <member refid="da/d1b/a08083_1ac86f27be7e7e1897cadb02128cf011e1" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>beginBlock</name></member>
+      <member refid="da/d1b/a08083_1a108e58badf9b6d5dd61508d08df1bdbb" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>checkError</name></member>
+      <member refid="da/d1b/a08083_1a53fb2658eeef2b877f22605bd0cf42f3" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>checkError</name></member>
+      <member refid="da/d1b/a08083_1a44934883da5e3b2aaab7530cf7e5852b" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>checkError</name></member>
+      <member refid="da/d1b/a08083_1aaad5221a0191c4d56ed2e6adfbcbbcf7" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>copyFile</name></member>
+      <member refid="d3/d83/a08031_1a18fff3b063e9188b154dbd9085b6f077" prot="private" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>m_folder</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>NonMovable</name></member>
+      <member refid="d3/d83/a08031_1a1feed15fa54243d3074eb69a0f81106d" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>operator()</name></member>
+      <member refid="dc/d3a/a07991_1acce0e94bd93e1dd12b330034532ff036" prot="public" virt="virtual" ambiguityscope="TextWriterT&lt; Font &gt;::"><scope>castor::TextWriter&lt; Font &gt;</scope><name>operator()</name></member>
+      <member refid="da/d1b/a08083_1a61a3e3c5d97e5ad73ff5230062a5c11e" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>operator=</name></member>
+      <member refid="da/d1b/a08083_1aaa466b29e4920bc3f1c0720331fd7f77" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>operator=</name></member>
+      <member refid="da/d1b/a08083_1aec8358e53543535b78e173df23b48d8d" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>tabs</name></member>
+      <member refid="d3/d83/a08031_1a0d4639983e8fb3dad45d115bd7878a0d" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>TextWriter</name></member>
+      <member refid="da/d1b/a08083_1a7a07df95be09c99a171920f4cd01cf93" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>TextWriterBase</name></member>
+      <member refid="da/d1b/a08083_1afa237bfea104c8d759c3777df70ce20c" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>TextWriterBase</name></member>
+      <member refid="da/d1b/a08083_1a3a77b22f10f6a5456b7cc1fd826ee2ec" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>TextWriterBase</name></member>
+      <member refid="de/d30/a07987_1a19498f2809f412af506702141a6cfcd9" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>TextWriterT</name></member>
+      <member refid="de/d30/a07987_1a828b8c704c76c56f74f49cbeb1e3e536" prot="protected" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>Type</name></member>
+      <member refid="da/d1b/a08083_1a3e25e147e9bd77844eb5ea02a92b077e" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>write</name></member>
+      <member refid="da/d1b/a08083_1a5d7e647eeff21f813e236c2131a80511" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>write</name></member>
+      <member refid="da/d1b/a08083_1a13fe1e28d310389b7611d10daecc92a1" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>write</name></member>
+      <member refid="da/d1b/a08083_1a8dccbcfe81d8d31c8e9cbc0e9a65da96" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>write</name></member>
+      <member refid="da/d1b/a08083_1a14fa6eb06587f77ab2f2c9210afe9c2f" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>write</name></member>
+      <member refid="da/d1b/a08083_1a8664cdb1273dead3d065cc17ddf7100d" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>write</name></member>
+      <member refid="da/d1b/a08083_1acc6cd7b5c073dbd746747f62d038a8eb" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>write</name></member>
+      <member refid="da/d1b/a08083_1a7b091d432fdbd836f677b64553411c75" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>write</name></member>
+      <member refid="da/d1b/a08083_1a810c416212f32c3f4db387a18f567df5" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>write</name></member>
+      <member refid="da/d1b/a08083_1a7d15c7923c06fabcf3b2e26e6b0ae7ee" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>write</name></member>
+      <member refid="da/d1b/a08083_1aa133858d4ff42bf690f86b65aa60223d" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>write</name></member>
+      <member refid="da/d1b/a08083_1a9ee8eb05767fa02523d41b26d0b7beea" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>write</name></member>
+      <member refid="da/d1b/a08083_1ab61d60e67ae5c621440dad21e3c9375b" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>write</name></member>
+      <member refid="da/d1b/a08083_1ac7166dde9afa30334ee4b9feb0b537ae" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>write</name></member>
+      <member refid="da/d1b/a08083_1a5c9347f27b378615f265c40db6f9ce74" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>write</name></member>
+      <member refid="da/d1b/a08083_1a4d071f10ccff5e4ab2b2f4ed5a2ea4b5" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>write</name></member>
+      <member refid="da/d1b/a08083_1ab8c6bba46d1f387934021f41015df61e" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>write</name></member>
+      <member refid="da/d1b/a08083_1aaf444641b86c827e8f9cc70a3f1a6f46" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>write</name></member>
+      <member refid="da/d1b/a08083_1a307ce780fbb85ce8c2f6e17cfd9fee2a" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>writeComment</name></member>
+      <member refid="da/d1b/a08083_1a0f80cd3e073003fc11ecf57b57f0ff52" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>writeFile</name></member>
+      <member refid="da/d1b/a08083_1a072121eeaeb647dea39f67590301f89a" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>writeMask</name></member>
+      <member refid="da/d1b/a08083_1a8761c40c4103c7c2e54bad6b597bb41f" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>writeMask</name></member>
+      <member refid="da/d1b/a08083_1ac26e95bcc5bbc8fbacf0bec27c7bad55" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>writeName</name></member>
+      <member refid="da/d1b/a08083_1a18b9e2d4c4c6722f6411449306d9b386" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>writeName</name></member>
+      <member refid="da/d1b/a08083_1ae0fa52c7c936bdbc12677c82cae7d7bf" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>writeNamedSub</name></member>
+      <member refid="da/d1b/a08083_1a62bd20dc6c25270ece5f05e73adcc6a9" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>writeNamedSubOpt</name></member>
+      <member refid="da/d1b/a08083_1a4ec212b43122d9c6ae70bea942fe04a2" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>writeNameOpt</name></member>
+      <member refid="da/d1b/a08083_1aa0ba9968f428f7f3c854f412ac241364" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>writeNameOpt</name></member>
+      <member refid="da/d1b/a08083_1a814fed60f51edec122d6c9dfa7cd8984" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>writeOpt</name></member>
+      <member refid="da/d1b/a08083_1a8fa91030697f45c9104e3c6a996ef75f" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>writeOpt</name></member>
+      <member refid="da/d1b/a08083_1ad5ae65d37fc89bbb9eb81121ecb1f174" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>writePath</name></member>
+      <member refid="da/d1b/a08083_1ad8e777fb19f4bb1013f051260de25471" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>writeSub</name></member>
+      <member refid="da/d1b/a08083_1a97f6c9dd9dfceb40043c2bd184b2c8f0" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>writeSubOpt</name></member>
+      <member refid="da/d1b/a08083_1a34150a915032c7b3be48b547c9f3d133" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>writeText</name></member>
+      <member refid="da/d1b/a08083_1aa4a5f67fd68baac975c4f6405a0240b4" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>writeText</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>~NonMovable</name></member>
+      <member refid="da/d1b/a08083_1aaad7fba1d75430b1adcc349d0b75b8e8" prot="public" virt="virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>~TextWriterBase</name></member>
+      <member refid="dc/d3a/a07991_1a0a52e8b5ddf994f9832bf0a600342999" prot="public" virt="virtual"><scope>castor::TextWriter&lt; Font &gt;</scope><name>~Writer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

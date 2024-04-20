@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dir_abc4c8c3198c34801214fa735dba0a7d" kind="dir">
+    <compoundname>CastorUtils/Stream</compoundname>
+    <innerfile refid="d7/d70/a02252">StreamBaseManipulators.hpp</innerfile>
+    <innerfile refid="d1/dda/a02255">StreamIndentBuffer.hpp</innerfile>
+    <innerfile refid="dc/db6/a02258">StreamIndentBufferManager.hpp</innerfile>
+    <innerfile refid="d7/d24/a02261">StreamIndentManipulators.hpp</innerfile>
+    <innerfile refid="d7/dc8/a02264">StreamModule.hpp</innerfile>
+    <innerfile refid="d5/d95/a02267">StreamPrefixBuffer.hpp</innerfile>
+    <innerfile refid="d4/de7/a02270">StreamPrefixBufferManager.hpp</innerfile>
+    <innerfile refid="d7/d6e/a02273">StreamPrefixManipulators.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Stream/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,361 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/dae/a07407" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::StructuredShaderBuffer</compoundname>
+    <includes local="no">StructuredShaderBuffer.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ElementTypeTraits</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="da/dae/a07407_1ac871c6867fd96e3f487cc1eff2fb8f2b" prot="public" static="no">
+        <type>typename ElementTypeTraits::ElementType</type>
+        <definition>using castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::ElementType =  typename ElementTypeTraits::ElementType</definition>
+        <argsstring></argsstring>
+        <name>ElementType</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::ElementType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/StructuredShaderBuffer.hpp" line="15" column="1" bodyfile="Castor3D/Shader/StructuredShaderBuffer.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="da/dae/a07407_1aa510b563154634f8dd1984847dcf71ff" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::ElementSize</definition>
+        <argsstring></argsstring>
+        <name>ElementSize</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::ElementSize</qualifiedname>
+        <initializer>= ElementTypeTraits::ElementSize</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/StructuredShaderBuffer.hpp" line="16" column="27" bodyfile="Castor3D/Shader/StructuredShaderBuffer.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="da/dae/a07407_1a8ebe3a55079bc65e52f62b141ed26256" prot="protected" static="no" mutable="no">
+        <type><ref refid="d3/de5/a07315" kindref="compound">ShaderBuffer</ref> &amp;</type>
+        <definition>ShaderBuffer&amp; castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le <ref refid="d3/de5/a07315" kindref="compound">ShaderBuffer</ref>. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/StructuredShaderBuffer.hpp" line="77" column="15" bodyfile="Castor3D/Shader/StructuredShaderBuffer.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/dae/a07407_1a8f31a1099d315c0b3e0990b534b78e8b" prot="protected" static="no" mutable="no">
+        <type>uint32_t &amp;</type>
+        <definition>uint32_t&amp; castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_elementID</definition>
+        <argsstring></argsstring>
+        <name>m_elementID</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_elementID</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>L&apos;ID de l&apos;élément suivant. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/StructuredShaderBuffer.hpp" line="80" column="11" bodyfile="Castor3D/Shader/StructuredShaderBuffer.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/dae/a07407_1a3b987f796fa562ac0727b2664e7bb778" prot="protected" static="no" mutable="no">
+        <type>ElementTypeTraits</type>
+        <definition>ElementTypeTraits castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_traits</definition>
+        <argsstring></argsstring>
+        <name>m_traits</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_traits</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Les traits. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/StructuredShaderBuffer.hpp" line="83" column="19" bodyfile="Castor3D/Shader/StructuredShaderBuffer.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/dae/a07407_1aafaa9e581c845e1b75488668ac7016b6" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; ashes::AttributeFormat * &gt;</type>
+        <definition>castor::Vector&lt; ashes::AttributeFormat * &gt; castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_elements</definition>
+        <argsstring></argsstring>
+        <name>m_elements</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_elements</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Les éléments actuels. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/StructuredShaderBuffer.hpp" line="86" column="16" bodyfile="Castor3D/Shader/StructuredShaderBuffer.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/dae/a07407_1abc6b2bc652c71da7c9211be613af105d" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; ashes::AttributeFormat const * &gt;</type>
+        <definition>castor::Vector&lt; ashes::AttributeFormat const * &gt; castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_dirty</definition>
+        <argsstring></argsstring>
+        <name>m_dirty</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_dirty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Les éléments modifiés. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/StructuredShaderBuffer.hpp" line="89" column="16" bodyfile="Castor3D/Shader/StructuredShaderBuffer.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/dae/a07407_1acdf85146cab98dbf6e4cc2515877f56b" prot="protected" static="no" mutable="no">
+        <type>uint32_t const</type>
+        <definition>uint32_t const castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_maxElemCount</definition>
+        <argsstring></argsstring>
+        <name>m_maxElemCount</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_maxElemCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le nombre maximal d&apos;éléments. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/StructuredShaderBuffer.hpp" line="92" column="16" bodyfile="Castor3D/Shader/StructuredShaderBuffer.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/dae/a07407_1ad3f8a5f56fb8b10cc71e578999559b59" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; typename ElementType::OnChangedConnection &gt;</type>
+        <definition>castor::Vector&lt; typename ElementType::OnChangedConnection &gt; castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::m_connections</definition>
+        <argsstring></argsstring>
+        <name>m_connections</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::m_connections</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Les connexions aux signaux de changement des éléments actuels. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/StructuredShaderBuffer.hpp" line="95" column="16" bodyfile="Castor3D/Shader/StructuredShaderBuffer.hpp" bodystart="95" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/dae/a07407_1a5c294ad3bfb643ce7cfd15596ef6998f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::StructuredShaderBuffer</definition>
+        <argsstring>(Engine &amp;engine, ShaderBuffer &amp;buffer, uint32_t &amp;elementID, uint32_t count)</argsstring>
+        <name>StructuredShaderBuffer</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::StructuredShaderBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/de5/a07315" kindref="compound">ShaderBuffer</ref> &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>elementID</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le tampon shader. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">elementID</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;ID du prochain élément à ajouter. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre maximal d&apos;éléments. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/StructuredShaderBuffer.hpp" line="33" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dae/a07407_1a2028872542be80a393caaf05c7747534" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::add</definition>
+        <argsstring>(ElementType &amp;element)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::add</qualifiedname>
+        <param>
+          <type><ref refid="da/dae/a07407_1ac871c6867fd96e3f487cc1eff2fb8f2b" kindref="member">ElementType</ref> &amp;</type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute un élément au tampon. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Définit l&apos;ID de l&apos;élément. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">element</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/StructuredShaderBuffer.hpp" line="47" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dae/a07407_1a340cff2cf011c5e204f9cbc9b87dea31" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::remove</definition>
+        <argsstring>(ElementType &amp;element)</argsstring>
+        <name>remove</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::remove</qualifiedname>
+        <param>
+          <type><ref refid="da/dae/a07407_1ac871c6867fd96e3f487cc1eff2fb8f2b" kindref="member">ElementType</ref> &amp;</type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+<para>Supprime un élément du tampon. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">element</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/StructuredShaderBuffer.hpp" line="56" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dae/a07407_1ae2f3e575377a788a0496787e9b91324c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::update</definition>
+        <argsstring>()</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::update</qualifiedname>
+        <briefdescription>
+<para>Met à jour le tampon. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/StructuredShaderBuffer.hpp" line="63" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dae/a07407_1af9182a5585487cf0c837561822919bcf" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;::bind</definition>
+        <argsstring>(uint32_t index) const</argsstring>
+        <name>bind</name>
+        <qualifiedname>castor3d::StructuredShaderBuffer::bind</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Active le tampon. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point d&apos;activation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/StructuredShaderBuffer.hpp" line="72" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe permettant de choisir entre SSBO et TBO. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Permet d&apos;utiliser l&apos;un comme l&apos;autre de la même manière. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::ShaderBuffer</label>
+        <link refid="d3/de5/a07315"/>
+      </node>
+      <node id="1">
+        <label>castor3d::StructuredShaderBuffer&lt; ElementTypeTraits &gt;</label>
+        <link refid="da/dae/a07407"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_buffer</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/StructuredShaderBuffer.hpp" line="12" column="1" bodyfile="Castor3D/Shader/StructuredShaderBuffer.hpp" bodystart="13" bodyend="96"/>
+    <listofallmembers>
+      <member refid="da/dae/a07407_1a2028872542be80a393caaf05c7747534" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>add</name></member>
+      <member refid="da/dae/a07407_1af9182a5585487cf0c837561822919bcf" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>bind</name></member>
+      <member refid="da/dae/a07407_1aa510b563154634f8dd1984847dcf71ff" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>ElementSize</name></member>
+      <member refid="da/dae/a07407_1ac871c6867fd96e3f487cc1eff2fb8f2b" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>ElementType</name></member>
+      <member refid="da/dae/a07407_1a8ebe3a55079bc65e52f62b141ed26256" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_buffer</name></member>
+      <member refid="da/dae/a07407_1ad3f8a5f56fb8b10cc71e578999559b59" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_connections</name></member>
+      <member refid="da/dae/a07407_1abc6b2bc652c71da7c9211be613af105d" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_dirty</name></member>
+      <member refid="da/dae/a07407_1a8f31a1099d315c0b3e0990b534b78e8b" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_elementID</name></member>
+      <member refid="da/dae/a07407_1aafaa9e581c845e1b75488668ac7016b6" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_elements</name></member>
+      <member refid="da/dae/a07407_1acdf85146cab98dbf6e4cc2515877f56b" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_maxElemCount</name></member>
+      <member refid="da/dae/a07407_1a3b987f796fa562ac0727b2664e7bb778" prot="protected" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>m_traits</name></member>
+      <member refid="da/dae/a07407_1a340cff2cf011c5e204f9cbc9b87dea31" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>remove</name></member>
+      <member refid="da/dae/a07407_1a5c294ad3bfb643ce7cfd15596ef6998f" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>StructuredShaderBuffer</name></member>
+      <member refid="da/dae/a07407_1ae2f3e575377a788a0496787e9b91324c" prot="public" virt="non-virtual"><scope>castor3d::StructuredShaderBuffer</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/de6/a07919" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SkinningTransformsConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/de6/a07919_1a9c490bdc566f75b5f85749f680eb4547" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; castor::Matrix4x4f, <ref refid="d9/dba/a02278_1ace710aa8241d782d15b0e5b275b46c62" kindref="member">MaxBonesCount</ref> &gt;</type>
+        <definition>castor::Array&lt; castor::Matrix4x4f, MaxBonesCount &gt; castor3d::SkinningTransformsConfiguration::bonesMatrix</definition>
+        <argsstring></argsstring>
+        <name>bonesMatrix</name>
+        <qualifiedname>castor3d::SkinningTransformsConfiguration::bonesMatrix</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="468" column="15" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="468" bodyend="468"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Données de skinning. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="466" column="1" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="467" bodyend="469"/>
+    <listofallmembers>
+      <member refid="dc/de6/a07919_1a9c490bdc566f75b5f85749f680eb4547" prot="public" virt="non-virtual"><scope>castor3d::SkinningTransformsConfiguration</scope><name>bonesMatrix</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

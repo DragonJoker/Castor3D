@@ -1,0 +1,16 @@
+<map id="castor3d::PrepassResult" name="castor3d::PrepassResult">
+<area shape="rect" id="Node000001" title=" " alt="" coords="833,42,999,67"/>
+<area shape="rect" id="Node000002" href="$da/d50/a08167.html" title=" " alt="" coords="647,5,784,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="798,35,833,40,833,45,797,40"/>
+<area shape="rect" id="Node000003" href="$da/d50/a08167.html" title="Some data holder." alt="" coords="364,5,501,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="515,23,646,23,646,28,515,28"/>
+<area shape="rect" id="Node000004" href="$d0/d22/a05963.html" title=" " alt="" coords="650,69,781,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="794,73,842,65,843,70,795,78"/>
+<area shape="rect" id="Node000005" href="$d8/d33/a05959.html" title=" " alt="" coords="161,90,315,115"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="328,97,650,88,650,94,329,103"/>
+<area shape="rect" id="Node000007" href="$d0/d22/a05963.html" title=" " alt="" coords="367,123,498,163"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="314,116,368,127,367,132,313,121"/>
+<area shape="rect" id="Node000006" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="5,90,112,115"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="126,100,161,100,161,105,126,105"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="511,133,622,116,656,107,658,112,623,121,512,139"/>
+</map>

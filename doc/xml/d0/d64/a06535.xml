@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d64/a06535" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::RenderNodesPass::PassDescriptors</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d64/a06535_1a6975487cdc316a268d3cc4269f15b444" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::RenderNodesPass::PassDescriptors::pool</definition>
+        <argsstring></argsstring>
+        <name>pool</name>
+        <qualifiedname>castor3d::RenderNodesPass::PassDescriptors::pool</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="1048" column="29" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="1048" bodyend="1048"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d64/a06535_1ac5c72404db985687f07693349fbbbb89" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::RenderNodesPass::PassDescriptors::layout</definition>
+        <argsstring></argsstring>
+        <name>layout</name>
+        <qualifiedname>castor3d::RenderNodesPass::PassDescriptors::layout</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="1049" column="31" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="1049" bodyend="1049"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d64/a06535_1a4acccca72f68d68ed2933fea0b967ac7" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::RenderNodesPass::PassDescriptors::set</definition>
+        <argsstring></argsstring>
+        <name>set</name>
+        <qualifiedname>castor3d::RenderNodesPass::PassDescriptors::set</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="1050" column="25" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="1050" bodyend="1050"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d64/a06535_1ab0bd83509df09c3a2d3ca022dbf24b09" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderNodesPass::PassDescriptors::PassDescriptors</definition>
+        <argsstring>()=default</argsstring>
+        <name>PassDescriptors</name>
+        <qualifiedname>castor3d::RenderNodesPass::PassDescriptors::PassDescriptors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="1046" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/RenderNodesPass.hpp" line="1044" column="1" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="1045" bodyend="1051"/>
+    <listofallmembers>
+      <member refid="d0/d64/a06535_1ac5c72404db985687f07693349fbbbb89" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPass::PassDescriptors</scope><name>layout</name></member>
+      <member refid="d0/d64/a06535_1ab0bd83509df09c3a2d3ca022dbf24b09" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPass::PassDescriptors</scope><name>PassDescriptors</name></member>
+      <member refid="d0/d64/a06535_1a6975487cdc316a268d3cc4269f15b444" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPass::PassDescriptors</scope><name>pool</name></member>
+      <member refid="d0/d64/a06535_1a4acccca72f68d68ed2933fea0b967ac7" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPass::PassDescriptors</scope><name>set</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

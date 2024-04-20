@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/d8e/a08791" kind="struct" language="C++" prot="public">
+    <compoundname>castor::TextLineMetrics</compoundname>
+    <includes local="no">GraphicsModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d8e/a08791_1accc95a27035f479348a242a68c2852ed" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::TextLineMetrics::top</definition>
+        <argsstring></argsstring>
+        <name>top</name>
+        <qualifiedname>castor::TextLineMetrics::top</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="202" column="10" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="202" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d8e/a08791_1a77a6f4689feba57d6d918a83d7f772b8" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::TextLineMetrics::width</definition>
+        <argsstring></argsstring>
+        <name>width</name>
+        <qualifiedname>castor::TextLineMetrics::width</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="203" column="10" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="203" bodyend="203"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d8e/a08791_1a2e12e677e715a1283b589425cdce9e1c" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor::TextLineMetrics::yMin</definition>
+        <argsstring></argsstring>
+        <name>yMin</name>
+        <qualifiedname>castor::TextLineMetrics::yMin</qualifiedname>
+        <initializer>{ 100 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="204" column="9" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="204" bodyend="204"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d8e/a08791_1a53829a108efe33ec9db1144c7d7a8ab0" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor::TextLineMetrics::yMax</definition>
+        <argsstring></argsstring>
+        <name>yMax</name>
+        <qualifiedname>castor::TextLineMetrics::yMax</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="205" column="9" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="205" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d8e/a08791_1ae1eb02306a6b7c3d7c0fa4d31a55c9c4" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::TextLineMetrics::firstCharIndex</definition>
+        <argsstring></argsstring>
+        <name>firstCharIndex</name>
+        <qualifiedname>castor::TextLineMetrics::firstCharIndex</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="206" column="10" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="206" bodyend="206"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d8e/a08791_1a32a8b1e8ce76cbafd061cb7a30aea6ce" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; uint32_t &gt;</type>
+        <definition>Vector&lt; uint32_t &gt; castor::TextLineMetrics::chars</definition>
+        <argsstring></argsstring>
+        <name>chars</name>
+        <qualifiedname>castor::TextLineMetrics::chars</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="207" column="8" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="207" bodyend="207"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Les métriques d&apos;une ligne de texte. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="200" column="1" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="201" bodyend="208"/>
+    <listofallmembers>
+      <member refid="de/d8e/a08791_1a32a8b1e8ce76cbafd061cb7a30aea6ce" prot="public" virt="non-virtual"><scope>castor::TextLineMetrics</scope><name>chars</name></member>
+      <member refid="de/d8e/a08791_1ae1eb02306a6b7c3d7c0fa4d31a55c9c4" prot="public" virt="non-virtual"><scope>castor::TextLineMetrics</scope><name>firstCharIndex</name></member>
+      <member refid="de/d8e/a08791_1accc95a27035f479348a242a68c2852ed" prot="public" virt="non-virtual"><scope>castor::TextLineMetrics</scope><name>top</name></member>
+      <member refid="de/d8e/a08791_1a77a6f4689feba57d6d918a83d7f772b8" prot="public" virt="non-virtual"><scope>castor::TextLineMetrics</scope><name>width</name></member>
+      <member refid="de/d8e/a08791_1a53829a108efe33ec9db1144c7d7a8ab0" prot="public" virt="non-virtual"><scope>castor::TextLineMetrics</scope><name>yMax</name></member>
+      <member refid="de/d8e/a08791_1a2e12e677e715a1283b589425cdce9e1c" prot="public" virt="non-virtual"><scope>castor::TextLineMetrics</scope><name>yMin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

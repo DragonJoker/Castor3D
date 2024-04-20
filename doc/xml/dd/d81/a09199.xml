@@ -1,0 +1,383 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d81/a09199" kind="struct" language="C++" prot="public">
+    <compoundname>castor::PtAssignOperators</compoundname>
+    <includes local="no">PointOperators.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T1</type>
+      </param>
+      <param>
+        <type>typename T2</type>
+      </param>
+      <param>
+        <type>uint32_t</type>
+        <declname>C1</declname>
+        <defname>C1</defname>
+      </param>
+      <param>
+        <type>uint32_t</type>
+        <declname>C2</declname>
+        <defname>C2</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dd/d81/a09199_1ac1c527dd4f9ab4cb3f53a114d71152c7" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename PtType1</type>
+          </param>
+        </templateparamlist>
+        <type>PtType1 &amp;</type>
+        <definition>static PtType1 &amp; castor::PtAssignOperators&lt; T1, T2, C1, C2 &gt;::add</definition>
+        <argsstring>(PtType1 &amp;lhs, T2 const &amp;rhs)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor::PtAssignOperators::add</qualifiedname>
+        <param>
+          <type>PtType1 &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>T2 const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PointOperators.hpp" line="55" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d81/a09199_1a40ea7543f514171143899a31408d96ea" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename PtType1</type>
+          </param>
+        </templateparamlist>
+        <type>PtType1 &amp;</type>
+        <definition>static PtType1 &amp; castor::PtAssignOperators&lt; T1, T2, C1, C2 &gt;::sub</definition>
+        <argsstring>(PtType1 &amp;lhs, T2 const &amp;rhs)</argsstring>
+        <name>sub</name>
+        <qualifiedname>castor::PtAssignOperators::sub</qualifiedname>
+        <param>
+          <type>PtType1 &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>T2 const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PointOperators.hpp" line="58" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d81/a09199_1a5caa8cf41d1aa7209940969972124485" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename PtType1</type>
+          </param>
+        </templateparamlist>
+        <type>PtType1 &amp;</type>
+        <definition>static PtType1 &amp; castor::PtAssignOperators&lt; T1, T2, C1, C2 &gt;::mul</definition>
+        <argsstring>(PtType1 &amp;lhs, T2 const &amp;rhs)</argsstring>
+        <name>mul</name>
+        <qualifiedname>castor::PtAssignOperators::mul</qualifiedname>
+        <param>
+          <type>PtType1 &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>T2 const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PointOperators.hpp" line="61" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d81/a09199_1aa7ac6c04a9eabe1b4522a70da490f114" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename PtType1</type>
+          </param>
+        </templateparamlist>
+        <type>PtType1 &amp;</type>
+        <definition>static PtType1 &amp; castor::PtAssignOperators&lt; T1, T2, C1, C2 &gt;::div</definition>
+        <argsstring>(PtType1 &amp;lhs, T2 const &amp;rhs)</argsstring>
+        <name>div</name>
+        <qualifiedname>castor::PtAssignOperators::div</qualifiedname>
+        <param>
+          <type>PtType1 &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>T2 const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PointOperators.hpp" line="64" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d81/a09199_1a00af1cd3beffd020f19671ea90acfdf5" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename PtType1</type>
+          </param>
+        </templateparamlist>
+        <type>PtType1 &amp;</type>
+        <definition>static PtType1 &amp; castor::PtAssignOperators&lt; T1, T2, C1, C2 &gt;::add</definition>
+        <argsstring>(PtType1 &amp;lhs, T2 const *rhs)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor::PtAssignOperators::add</qualifiedname>
+        <param>
+          <type>PtType1 &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>T2 const *</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PointOperators.hpp" line="67" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d81/a09199_1a28c674bacc0f8c2e75aa62bf97b29988" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename PtType1</type>
+          </param>
+        </templateparamlist>
+        <type>PtType1 &amp;</type>
+        <definition>static PtType1 &amp; castor::PtAssignOperators&lt; T1, T2, C1, C2 &gt;::sub</definition>
+        <argsstring>(PtType1 &amp;lhs, T2 const *rhs)</argsstring>
+        <name>sub</name>
+        <qualifiedname>castor::PtAssignOperators::sub</qualifiedname>
+        <param>
+          <type>PtType1 &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>T2 const *</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PointOperators.hpp" line="70" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d81/a09199_1a79c824141968ac714c24ef9cdfaad058" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename PtType1</type>
+          </param>
+        </templateparamlist>
+        <type>PtType1 &amp;</type>
+        <definition>static PtType1 &amp; castor::PtAssignOperators&lt; T1, T2, C1, C2 &gt;::mul</definition>
+        <argsstring>(PtType1 &amp;lhs, T2 const *rhs)</argsstring>
+        <name>mul</name>
+        <qualifiedname>castor::PtAssignOperators::mul</qualifiedname>
+        <param>
+          <type>PtType1 &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>T2 const *</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PointOperators.hpp" line="73" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d81/a09199_1a0e086fdcf3f56339e744f289d216e71a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename PtType1</type>
+          </param>
+        </templateparamlist>
+        <type>PtType1 &amp;</type>
+        <definition>static PtType1 &amp; castor::PtAssignOperators&lt; T1, T2, C1, C2 &gt;::div</definition>
+        <argsstring>(PtType1 &amp;lhs, T2 const *rhs)</argsstring>
+        <name>div</name>
+        <qualifiedname>castor::PtAssignOperators::div</qualifiedname>
+        <param>
+          <type>PtType1 &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>T2 const *</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PointOperators.hpp" line="76" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d81/a09199_1a52376a0eddf00dcac6ac05ece509e721" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename PtType1</type>
+          </param>
+          <param>
+            <type>typename PtType2</type>
+          </param>
+        </templateparamlist>
+        <type>PtType1 &amp;</type>
+        <definition>static PtType1 &amp; castor::PtAssignOperators&lt; T1, T2, C1, C2 &gt;::add</definition>
+        <argsstring>(PtType1 &amp;lhs, PtType2 const &amp;rhs)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor::PtAssignOperators::add</qualifiedname>
+        <param>
+          <type>PtType1 &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>PtType2 const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PointOperators.hpp" line="79" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d81/a09199_1a5d3d99b9cf6bd5a2f13f5eda066c8002" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename PtType1</type>
+          </param>
+          <param>
+            <type>typename PtType2</type>
+          </param>
+        </templateparamlist>
+        <type>PtType1 &amp;</type>
+        <definition>static PtType1 &amp; castor::PtAssignOperators&lt; T1, T2, C1, C2 &gt;::sub</definition>
+        <argsstring>(PtType1 &amp;lhs, PtType2 const &amp;rhs)</argsstring>
+        <name>sub</name>
+        <qualifiedname>castor::PtAssignOperators::sub</qualifiedname>
+        <param>
+          <type>PtType1 &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>PtType2 const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PointOperators.hpp" line="82" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d81/a09199_1a739162e71d2e52777d2142e52e95f06c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename PtType1</type>
+          </param>
+          <param>
+            <type>typename PtType2</type>
+          </param>
+        </templateparamlist>
+        <type>PtType1 &amp;</type>
+        <definition>static PtType1 &amp; castor::PtAssignOperators&lt; T1, T2, C1, C2 &gt;::mul</definition>
+        <argsstring>(PtType1 &amp;lhs, PtType2 const &amp;rhs)</argsstring>
+        <name>mul</name>
+        <qualifiedname>castor::PtAssignOperators::mul</qualifiedname>
+        <param>
+          <type>PtType1 &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>PtType2 const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PointOperators.hpp" line="85" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d81/a09199_1a41cfaff3bc6284dc8d9308f9c81c20d8" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename PtType1</type>
+          </param>
+          <param>
+            <type>typename PtType2</type>
+          </param>
+        </templateparamlist>
+        <type>PtType1 &amp;</type>
+        <definition>static PtType1 &amp; castor::PtAssignOperators&lt; T1, T2, C1, C2 &gt;::div</definition>
+        <argsstring>(PtType1 &amp;lhs, PtType2 const &amp;rhs)</argsstring>
+        <name>div</name>
+        <qualifiedname>castor::PtAssignOperators::div</qualifiedname>
+        <param>
+          <type>PtType1 &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>PtType2 const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PointOperators.hpp" line="88" column="17"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Opérateurs d&apos;affectation de <ref refid="db/dcf/a09187" kindref="compound">Point</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/PointOperators.hpp" line="52" column="1" bodyfile="CastorUtils/Math/PointOperators.hpp" bodystart="53" bodyend="89"/>
+    <listofallmembers>
+      <member refid="dd/d81/a09199_1ac1c527dd4f9ab4cb3f53a114d71152c7" prot="public" virt="non-virtual"><scope>castor::PtAssignOperators</scope><name>add</name></member>
+      <member refid="dd/d81/a09199_1a00af1cd3beffd020f19671ea90acfdf5" prot="public" virt="non-virtual"><scope>castor::PtAssignOperators</scope><name>add</name></member>
+      <member refid="dd/d81/a09199_1a52376a0eddf00dcac6ac05ece509e721" prot="public" virt="non-virtual"><scope>castor::PtAssignOperators</scope><name>add</name></member>
+      <member refid="dd/d81/a09199_1aa7ac6c04a9eabe1b4522a70da490f114" prot="public" virt="non-virtual"><scope>castor::PtAssignOperators</scope><name>div</name></member>
+      <member refid="dd/d81/a09199_1a0e086fdcf3f56339e744f289d216e71a" prot="public" virt="non-virtual"><scope>castor::PtAssignOperators</scope><name>div</name></member>
+      <member refid="dd/d81/a09199_1a41cfaff3bc6284dc8d9308f9c81c20d8" prot="public" virt="non-virtual"><scope>castor::PtAssignOperators</scope><name>div</name></member>
+      <member refid="dd/d81/a09199_1a5caa8cf41d1aa7209940969972124485" prot="public" virt="non-virtual"><scope>castor::PtAssignOperators</scope><name>mul</name></member>
+      <member refid="dd/d81/a09199_1a79c824141968ac714c24ef9cdfaad058" prot="public" virt="non-virtual"><scope>castor::PtAssignOperators</scope><name>mul</name></member>
+      <member refid="dd/d81/a09199_1a739162e71d2e52777d2142e52e95f06c" prot="public" virt="non-virtual"><scope>castor::PtAssignOperators</scope><name>mul</name></member>
+      <member refid="dd/d81/a09199_1a40ea7543f514171143899a31408d96ea" prot="public" virt="non-virtual"><scope>castor::PtAssignOperators</scope><name>sub</name></member>
+      <member refid="dd/d81/a09199_1a28c674bacc0f8c2e75aa62bf97b29988" prot="public" virt="non-virtual"><scope>castor::PtAssignOperators</scope><name>sub</name></member>
+      <member refid="dd/d81/a09199_1a5d3d99b9cf6bd5a2f13f5eda066c8002" prot="public" virt="non-virtual"><scope>castor::PtAssignOperators</scope><name>sub</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

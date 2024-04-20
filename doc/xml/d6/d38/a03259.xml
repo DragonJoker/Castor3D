@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d38/a03259" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ChunkTyper&lt; SceneNodeAnimation &gt;</compoundname>
+    <includes local="no">BinarySceneNodeAnimation.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d6/d38/a03259_1a379e5541ef86dfbebc7547f54ae3401d" prot="public" static="yes" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref> const</type>
+        <definition>ChunkType const castor3d::ChunkTyper&lt; SceneNodeAnimation &gt;::Value</definition>
+        <argsstring></argsstring>
+        <name>Value</name>
+        <qualifiedname>castor3d::ChunkTyper&lt; SceneNodeAnimation &gt;::Value</qualifiedname>
+        <initializer>= <ref refid="d9/dba/a02278_1a742783d4e4b7354fac3e375ae107414dab3d66d98e718e0f60002f51d24f36e4f" kindref="member">ChunkType::eSceneNodeAnimation</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/BinarySceneNodeAnimation.hpp" line="25" column="24" bodyfile="Castor3D/Binary/BinarySceneNodeAnimation.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe d&apos;aide pour récupéer un ChunkType depuis un type. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Spécialisation pour <ref refid="d2/dfb/a06863" kindref="compound">SceneNodeAnimation</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Castor3D/Binary/BinarySceneNodeAnimation.hpp" line="23" column="1" bodyfile="Castor3D/Binary/BinarySceneNodeAnimation.hpp" bodystart="24" bodyend="26"/>
+    <listofallmembers>
+      <member refid="d6/d38/a03259_1a379e5541ef86dfbebc7547f54ae3401d" prot="public" virt="non-virtual"><scope>castor3d::ChunkTyper&lt; SceneNodeAnimation &gt;</scope><name>Value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

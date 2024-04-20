@@ -1,0 +1,23 @@
+<map id="castor3d::ControlStyle::doCreateMaterial" name="castor3d::ControlStyle::doCreateMaterial">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,207,156,247"/>
+<area shape="rect" id="Node000002" href="$d2/da0/a08923.html#a1e133d02735e7b297387fda7de2f2f8f" title="Retrieves the blue component value." alt="" coords="228,5,361,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,205,132,133,164,91,202,55,214,47,217,52,206,59,168,95,136,136,94,208"/>
+<area shape="rect" id="Node000004" href="$d9/dba/a02278.html#a876b197b6ec7e31983c864cb50808924" title=" " alt="" coords="213,70,376,95"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="95,205,140,155,170,128,203,106,219,98,221,103,205,110,173,133,144,159,99,208"/>
+<area shape="rect" id="Node000005" href="$d0/d33/a03899.html#a3ff11fb205d455ddc07b6986c4a804f2" title=" " alt="" coords="219,120,370,160"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="123,204,203,170,222,162,223,167,205,174,126,209"/>
+<area shape="rect" id="Node000006" href="$d9/dba/a02278.html#a0bbd15785f5089812e3540d5a9b50258" title=" " alt="" coords="204,185,385,210"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="156,214,190,209,191,214,157,219"/>
+<area shape="rect" id="Node000007" href="$d5/d3c/a08223.html#abc1fa9ec1a50d2023373baa4d4c79519" title="Retrieves the name." alt="" coords="223,235,367,275"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="157,234,209,241,208,246,156,239"/>
+<area shape="rect" id="Node000008" href="$d1/d42/a03979.html#a7b75bca3ab9df5804296d59974f64667" title="Retrieves a pass and returns it." alt="" coords="231,299,358,339"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="121,244,205,284,223,291,221,296,203,289,119,249"/>
+<area shape="rect" id="Node000009" href="$d2/da0/a08923.html#a046308466d170b20e74cd36c8b449ad4" title="Retrieves the green component value." alt="" coords="228,363,361,403"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="99,245,144,296,173,324,205,348,217,355,214,360,203,353,170,328,140,300,95,249"/>
+<area shape="rect" id="Node000010" href="$d2/da0/a08923.html#af14ff16a26be4cf583c31e90d9903b55" title="Retrieves the red component value." alt="" coords="215,427,374,453"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="92,246,108,282,132,327,165,373,206,413,217,419,214,424,202,417,161,377,128,330,103,285,87,248"/>
+<area shape="rect" id="Node000003" href="$d2/da0/a08923.html#ab16395ae5c76bf72b1700115ca40c811" title="Retrieves the asked component value." alt="" coords="433,370,592,395"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="363,39,387,55,417,90,443,130,463,172,479,215,501,295,511,355,506,356,495,296,474,216,458,174,438,132,413,94,384,59,360,43"/>
+<area shape="poly" id="edge9_Node000009_Node000003" title=" " alt="" coords="362,380,420,380,420,385,362,385"/>
+<area shape="poly" id="edge11_Node000010_Node000003" title=" " alt="" coords="343,425,450,396,451,401,344,430"/>
+</map>

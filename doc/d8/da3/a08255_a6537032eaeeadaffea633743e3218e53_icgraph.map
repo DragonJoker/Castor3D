@@ -1,0 +1,21 @@
+<map id="castor::ResourceCacheBaseT::reportUnknown" name="castor::ResourceCacheBaseT::reportUnknown">
+<area shape="rect" id="Node000001" title=" " alt="" coords="484,150,672,190"/>
+<area shape="rect" id="Node000002" href="$d8/da3/a08255.html#ae2bc50ccc5e4f323a14a1a6f39d3ec14" title="Logging version of tryRemove." alt="" coords="248,22,436,62"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="539,144,491,109,435,76,407,64,410,60,437,72,494,105,542,139"/>
+<area shape="rect" id="Node000005" href="$d8/da3/a08255.html#a4978d020ac192e539d60ce384b714753" title="Logging version of tryRemove." alt="" coords="248,86,436,126"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="490,149,416,129,417,123,491,144"/>
+<area shape="rect" id="Node000006" href="$d8/da3/a08255.html#a21d0ef274f434e61b1d0c336a8c7253a" title="Logging version of tryRemove." alt="" coords="248,150,436,190"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="470,173,436,173,436,167,470,167"/>
+<area shape="rect" id="Node000009" href="$d8/da3/a08255.html#a55752549d182d7d232c432746b6b5312" title="Logging version of tryRemove." alt="" coords="248,214,436,254"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="491,196,417,217,416,211,490,191"/>
+<area shape="rect" id="Node000010" href="$d8/da3/a08255.html#a6318e3a64926730b389ee55727eacb3e" title="Renames a resource." alt="" coords="248,278,436,318"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="542,201,494,235,437,268,410,280,407,276,435,264,491,231,539,196"/>
+<area shape="rect" id="Node000003" href="$d8/d4f/a03703.html#ad1ce4f92f240c0fa3c1c4ede63942bac" title=" " alt="" coords="15,5,190,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="234,34,190,29,190,24,235,29"/>
+<area shape="rect" id="Node000004" href="$d8/d4f/a03703.html#a0e3cae5eb336c27b42a7225bdbd1b38f" title=" " alt="" coords="11,55,194,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="235,56,195,60,194,55,234,51"/>
+<area shape="rect" id="Node000007" href="$d8/d4f/a03703.html#addc711e1060765415a0812574efb17a7" title=" " alt="" coords="5,131,200,156"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="234,161,200,157,200,152,235,155"/>
+<area shape="rect" id="Node000008" href="$d8/d4f/a03703.html#a5df7c3836acec8a82912d16172ef0b01" title=" " alt="" coords="18,181,187,221"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="234,186,188,193,187,187,234,181"/>
+</map>

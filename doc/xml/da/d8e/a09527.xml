@@ -1,0 +1,272 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d8e/a09527" kind="struct" language="C++" prot="public">
+    <compoundname>castor::manip::BaseNumPut</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::num_put&lt; CharType &gt;</basecompoundref>
+    <includes local="no">StreamBaseManipulators.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename CharType</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="da/d8e/a09527_1a341b31741da6b4051deb0c8999ba0243" prot="public" static="no">
+        <type>typename std::num_put&lt; CharType &gt;::iter_type</type>
+        <definition>using castor::manip::BaseNumPut&lt; CharType &gt;::iter_type =  typename std::num_put&lt; CharType &gt;::iter_type</definition>
+        <argsstring></argsstring>
+        <name>iter_type</name>
+        <qualifiedname>castor::manip::BaseNumPut::iter_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="239" column="1" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="239" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d8e/a09527_1a486affd432f2b589731bc5675e55935a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>unsigned short</type>
+        <definition>unsigned short castor::manip::BaseNumPut&lt; CharType &gt;::absVal</definition>
+        <argsstring>(unsigned short a) const</argsstring>
+        <name>absVal</name>
+        <qualifiedname>castor::manip::BaseNumPut::absVal</qualifiedname>
+        <param>
+          <type>unsigned short</type>
+          <declname>a</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="243" column="16" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="243" bodyend="246"/>
+        <referencedby refid="da/d8e/a09527_1af2ee7dbf8f3f57b897571ea04e067c12" compoundref="d7/d70/a02252" startline="270" endline="337">castor::manip::BaseNumPut&lt; CharType &gt;::doPutHelper</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d8e/a09527_1a210b3fb26834df06b6e34b1442f7e3d5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>unsigned int</type>
+        <definition>unsigned int castor::manip::BaseNumPut&lt; CharType &gt;::absVal</definition>
+        <argsstring>(unsigned int a) const</argsstring>
+        <name>absVal</name>
+        <qualifiedname>castor::manip::BaseNumPut::absVal</qualifiedname>
+        <param>
+          <type>unsigned int</type>
+          <declname>a</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="248" column="14" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="248" bodyend="251"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d8e/a09527_1a84f18bae7b5d3bbcc0552fe217281004" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>unsigned long</type>
+        <definition>unsigned long castor::manip::BaseNumPut&lt; CharType &gt;::absVal</definition>
+        <argsstring>(unsigned long a) const</argsstring>
+        <name>absVal</name>
+        <qualifiedname>castor::manip::BaseNumPut::absVal</qualifiedname>
+        <param>
+          <type>unsigned long</type>
+          <declname>a</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="253" column="15" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="253" bodyend="256"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d8e/a09527_1a3a5fa7aba1902acde7cafa9959dbc155" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>unsigned long long</type>
+        <definition>unsigned long long castor::manip::BaseNumPut&lt; CharType &gt;::absVal</definition>
+        <argsstring>(unsigned long long a) const</argsstring>
+        <name>absVal</name>
+        <qualifiedname>castor::manip::BaseNumPut::absVal</qualifiedname>
+        <param>
+          <type>unsigned long long</type>
+          <declname>a</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="258" column="20" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="258" bodyend="261"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d8e/a09527_1a184e1a23cdffe66f63e44b503707bcbd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class NumType</type>
+          </param>
+        </templateparamlist>
+        <type>NumType</type>
+        <definition>NumType castor::manip::BaseNumPut&lt; CharType &gt;::absVal</definition>
+        <argsstring>(NumType a) const</argsstring>
+        <name>absVal</name>
+        <qualifiedname>castor::manip::BaseNumPut::absVal</qualifiedname>
+        <param>
+          <type>NumType</type>
+          <declname>a</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="264" column="9" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="264" bodyend="267"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d8e/a09527_1af2ee7dbf8f3f57b897571ea04e067c12" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>class NumType</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="da/d8e/a09527_1a341b31741da6b4051deb0c8999ba0243" kindref="member">iter_type</ref></type>
+        <definition>iter_type castor::manip::BaseNumPut&lt; CharType &gt;::doPutHelper</definition>
+        <argsstring>(iter_type out, std::ios_base &amp;str, CharType fill, NumType val) const</argsstring>
+        <name>doPutHelper</name>
+        <qualifiedname>castor::manip::BaseNumPut::doPutHelper</qualifiedname>
+        <param>
+          <type><ref refid="da/d8e/a09527_1a341b31741da6b4051deb0c8999ba0243" kindref="member">iter_type</ref></type>
+          <declname>out</declname>
+        </param>
+        <param>
+          <type>std::ios_base &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>CharType</type>
+          <declname>fill</declname>
+        </param>
+        <param>
+          <type>NumType</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="270" column="11" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="270" bodyend="337"/>
+        <references refid="da/d8e/a09527_1a486affd432f2b589731bc5675e55935a" compoundref="d7/d70/a02252" startline="243" endline="246">castor::manip::BaseNumPut&lt; CharType &gt;::absVal</references>
+        <references refid="dd/dae/a02294_1a366f5a2b50ccb63d522ea341a4c8a8d9" compoundref="d7/d70/a02252" startline="76" endline="79">castor::manip::base</references>
+        <referencedby refid="da/d8e/a09527_1a3b3f505a6cf3d01e27db74328d6f84c8" compoundref="d7/d70/a02252" startline="340" endline="343">castor::manip::BaseNumPut&lt; CharType &gt;::do_put</referencedby>
+        <referencedby refid="da/d8e/a09527_1aec006d20b9f7d2dc87bef95500a202c8" compoundref="d7/d70/a02252" startline="345" endline="348">castor::manip::BaseNumPut&lt; CharType &gt;::do_put</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d8e/a09527_1a3b3f505a6cf3d01e27db74328d6f84c8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d8e/a09527_1a341b31741da6b4051deb0c8999ba0243" kindref="member">iter_type</ref></type>
+        <definition>iter_type castor::manip::BaseNumPut&lt; CharType &gt;::do_put</definition>
+        <argsstring>(iter_type out, std::ios_base &amp;str, CharType fill, long val) const override</argsstring>
+        <name>do_put</name>
+        <qualifiedname>castor::manip::BaseNumPut::do_put</qualifiedname>
+        <param>
+          <type><ref refid="da/d8e/a09527_1a341b31741da6b4051deb0c8999ba0243" kindref="member">iter_type</ref></type>
+          <declname>out</declname>
+        </param>
+        <param>
+          <type>std::ios_base &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>CharType</type>
+          <declname>fill</declname>
+        </param>
+        <param>
+          <type>long</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="340" column="11" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="340" bodyend="343"/>
+        <references refid="da/d8e/a09527_1af2ee7dbf8f3f57b897571ea04e067c12" compoundref="d7/d70/a02252" startline="270" endline="337">castor::manip::BaseNumPut&lt; CharType &gt;::doPutHelper</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d8e/a09527_1aec006d20b9f7d2dc87bef95500a202c8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d8e/a09527_1a341b31741da6b4051deb0c8999ba0243" kindref="member">iter_type</ref></type>
+        <definition>iter_type castor::manip::BaseNumPut&lt; CharType &gt;::do_put</definition>
+        <argsstring>(iter_type out, std::ios_base &amp;str, CharType fill, unsigned long val) const override</argsstring>
+        <name>do_put</name>
+        <qualifiedname>castor::manip::BaseNumPut::do_put</qualifiedname>
+        <param>
+          <type><ref refid="da/d8e/a09527_1a341b31741da6b4051deb0c8999ba0243" kindref="member">iter_type</ref></type>
+          <declname>out</declname>
+        </param>
+        <param>
+          <type>std::ios_base &amp;</type>
+          <declname>str</declname>
+        </param>
+        <param>
+          <type>CharType</type>
+          <declname>fill</declname>
+        </param>
+        <param>
+          <type>unsigned long</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="345" column="11" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="345" bodyend="348"/>
+        <references refid="da/d8e/a09527_1af2ee7dbf8f3f57b897571ea04e067c12" compoundref="d7/d70/a02252" startline="270" endline="337">castor::manip::BaseNumPut&lt; CharType &gt;::doPutHelper</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Une facet d&apos;écriture de nombre. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Généralement utilisées par le code std::locale dans les flux. <linebreak/>
+La facet num_put gère la sortie de valeurs numériques en tant que caractères dans le flux <linebreak/>
+Ici nous en créons une qui connait notre manipulateur. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::manip::BaseNumPut&lt; CharType &gt;</label>
+        <link refid="da/d8e/a09527"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::num_put&lt; CharType &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::manip::BaseNumPut&lt; CharType &gt;</label>
+        <link refid="da/d8e/a09527"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::num_put&lt; CharType &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="236" column="1" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="238" bodyend="349"/>
+    <listofallmembers>
+      <member refid="da/d8e/a09527_1a486affd432f2b589731bc5675e55935a" prot="public" virt="non-virtual"><scope>castor::manip::BaseNumPut</scope><name>absVal</name></member>
+      <member refid="da/d8e/a09527_1a210b3fb26834df06b6e34b1442f7e3d5" prot="public" virt="non-virtual"><scope>castor::manip::BaseNumPut</scope><name>absVal</name></member>
+      <member refid="da/d8e/a09527_1a84f18bae7b5d3bbcc0552fe217281004" prot="public" virt="non-virtual"><scope>castor::manip::BaseNumPut</scope><name>absVal</name></member>
+      <member refid="da/d8e/a09527_1a3a5fa7aba1902acde7cafa9959dbc155" prot="public" virt="non-virtual"><scope>castor::manip::BaseNumPut</scope><name>absVal</name></member>
+      <member refid="da/d8e/a09527_1a184e1a23cdffe66f63e44b503707bcbd" prot="public" virt="non-virtual"><scope>castor::manip::BaseNumPut</scope><name>absVal</name></member>
+      <member refid="da/d8e/a09527_1a3b3f505a6cf3d01e27db74328d6f84c8" prot="public" virt="non-virtual"><scope>castor::manip::BaseNumPut</scope><name>do_put</name></member>
+      <member refid="da/d8e/a09527_1aec006d20b9f7d2dc87bef95500a202c8" prot="public" virt="non-virtual"><scope>castor::manip::BaseNumPut</scope><name>do_put</name></member>
+      <member refid="da/d8e/a09527_1af2ee7dbf8f3f57b897571ea04e067c12" prot="public" virt="non-virtual"><scope>castor::manip::BaseNumPut</scope><name>doPutHelper</name></member>
+      <member refid="da/d8e/a09527_1a341b31741da6b4051deb0c8999ba0243" prot="public" virt="non-virtual"><scope>castor::manip::BaseNumPut</scope><name>iter_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

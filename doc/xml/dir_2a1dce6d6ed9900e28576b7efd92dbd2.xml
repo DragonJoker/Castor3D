@@ -1,22 +1,16 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_2a1dce6d6ed9900e28576b7efd92dbd2" kind="dir">
-    <compoundname>Render/Opaque</compoundname>
-    <innerdir refid="dir_1596247420299b93fb3af8cc87d8d5ce">Render/Opaque/Lighting</innerdir>
-    <innerfile refid="d2/d41/a01037">DeferredRendering.hpp</innerfile>
-    <innerfile refid="db/d14/a01040">IndirectLightingPass.hpp</innerfile>
-    <innerfile refid="d9/d7c/a01073">LightingPass.hpp</innerfile>
-    <innerfile refid="d6/d80/a01076">OpaqueModule.hpp</innerfile>
-    <innerfile refid="d2/d4d/a01079">OpaquePass.hpp</innerfile>
-    <innerfile refid="dd/df1/a01082">OpaquePassResult.hpp</innerfile>
-    <innerfile refid="d2/df3/a01085">OpaqueRendering.hpp</innerfile>
-    <innerfile refid="da/db7/a01088">OpaqueResolvePass.hpp</innerfile>
-    <innerfile refid="d6/d0d/a01091">VisibilityReorderPass.hpp</innerfile>
-    <innerfile refid="d6/dea/a01094">VisibilityResolvePass.hpp</innerfile>
+    <compoundname>Castor3D/Render/Opaque</compoundname>
+    <innerfile refid="da/db7/a01088">OpaqueModule.hpp</innerfile>
+    <innerfile refid="d6/d0d/a01091">OpaqueRendering.hpp</innerfile>
+    <innerfile refid="d6/dea/a01094">SubsurfaceScatteringPass.hpp</innerfile>
+    <innerfile refid="d1/dfa/a01097">VisibilityReorderPass.hpp</innerfile>
+    <innerfile refid="d3/dbd/a01100">VisibilityResolvePass.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Opaque/"/>
+    <location file="Castor3D/Render/Opaque/"/>
   </compounddef>
 </doxygen>

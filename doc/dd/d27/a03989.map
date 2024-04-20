@@ -1,5 +1,9 @@
-<map id="castor3d::ReflectionComponent::MaterialShader" name="castor3d::ReflectionComponent::MaterialShader">
-<area shape="rect" id="node1" title=" " alt="" coords="5,167,208,207"/>
-<area shape="rect" id="node2" href="$dc/d86/a04022.html" title=" " alt="" coords="5,79,208,119"/>
-<area shape="rect" id="node3" href="$d0/dee/a04014.html" title=" " alt="" coords="7,5,206,31"/>
+<map id="castor3d::PtrCacheTraitsT&lt; Material, castor::String &gt;" name="castor3d::PtrCacheTraitsT&lt; Material, castor::String &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="580,60,765,100"/>
+<area shape="rect" id="Node000002" href="$d7/d6e/a03615.html" title=" " alt="" coords="327,7,493,62"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="508,49,580,61,579,67,507,54"/>
+<area shape="rect" id="Node000003" href="$d7/d6e/a03615.html" title=" " alt="" coords="5,15,172,55"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="186,32,326,32,326,37,186,37"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="347,87,473,127"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="487,96,579,87,580,92,487,102"/>
 </map>

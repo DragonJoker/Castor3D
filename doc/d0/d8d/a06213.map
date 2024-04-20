@@ -1,0 +1,18 @@
+<map id="castor3d::OverlayDrawNode" name="castor3d::OverlayDrawNode">
+<area shape="rect" id="Node000001" title=" " alt="" coords="77,359,260,384"/>
+<area shape="rect" id="Node000002" href="$d4/d7a/a06203.html" title=" " alt="" coords="5,271,204,296"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,305,162,357,158,360,119,309"/>
+<area shape="rect" id="Node000003" href="$df/d6c/a04863.html" title=" " alt="" coords="228,271,339,296"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="259,306,186,361,183,356,255,302"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title=" " alt="" coords="50,175,242,201"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="176,206,268,268,265,273,173,211"/>
+<area shape="rect" id="Node000005" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="55,80,237,105"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="149,119,149,175,143,175,143,119"/>
+<area shape="rect" id="Node000006" href="$dc/d79/a08267.html" title=" " alt="" coords="266,168,485,208"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="349,220,297,272,293,268,345,216"/>
+<area shape="rect" id="Node000007" href="$da/d36/a08315.html" title=" " alt="" coords="279,5,421,31"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="344,44,338,74,339,105,351,138,366,166,361,169,346,140,334,106,333,73,339,43"/>
+<area shape="rect" id="Node000008" href="$dc/d79/a08267.html" title="Basic signal class." alt="" coords="348,80,531,105"/>
+<area shape="poly" id="edge8_Node000008_Node000007" title=" " alt="" coords="377,37,426,77,423,82,373,42"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="426,118,391,169,386,166,421,115"/>
+</map>

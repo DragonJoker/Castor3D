@@ -1,7 +1,9 @@
-<map id="castor3d::VoxelizePass" name="castor3d::VoxelizePass">
-<area shape="rect" id="node1" title=" " alt="" coords="196,152,356,177"/>
-<area shape="rect" id="node2" href="$dd/d9c/a05530.html" title=" " alt="" coords="182,79,370,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,31"/>
-<area shape="rect" id="node4" title=" " alt="" coords="217,5,335,31"/>
-<area shape="rect" id="node5" title=" " alt="" coords="360,5,467,31"/>
+<map id="castor3d::TextureUnitData" name="castor3d::TextureUnitData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="156,181,329,207"/>
+<area shape="rect" id="Node000002" href="$d1/da2/a04991.html" title=" " alt="" coords="22,93,173,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,123,224,179,222,183,127,128"/>
+<area shape="rect" id="Node000003" href="$db/d40/a04987.html" title=" " alt="" coords="5,5,189,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="100,45,100,93,95,93,95,45"/>
+<area shape="rect" id="Node000004" href="$d7/dda/a04947.html" title=" " alt="" coords="197,93,387,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="281,132,252,182,247,179,276,129"/>
 </map>

@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/dd2/a09561" kind="concept">
+    <compoundname>castor3d::ControlFlagTypeT</compoundname>
+    <includes local="no">GuiModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename TypeT</type>
+      </param>
+    </templateparamlist>
+    <initializer>template&lt;typename TypeT&gt;
+concept <ref refid="d7/dd2/a09561" kindref="compound">castor3d::ControlFlagTypeT</ref> =  ( std::is_same_v&lt; TypeT, ControlFlagType &gt;
+		|| std::is_same_v&lt; std::underlying_type_t&lt; TypeT &gt;, ControlFlagType &gt; )    </initializer>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Gui/GuiModule.hpp" line="470" column="1"/>
+  </compounddef>
+</doxygen>

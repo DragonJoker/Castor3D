@@ -1,0 +1,338 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/dc1/a06763" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TransformPipeline</compoundname>
+    <includes local="no">TransformPipeline.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/dc1/a06763_1ab4705f5ea2a20183442029744290151d" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a731b7f9025f4319c2fd92648979ea5bf" kindref="member">SubmeshComponentCombineID</ref></type>
+        <definition>SubmeshComponentCombineID castor3d::TransformPipeline::combineID</definition>
+        <argsstring></argsstring>
+        <name>combineID</name>
+        <qualifiedname>castor3d::TransformPipeline::combineID</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="34" column="27" bodyfile="Castor3D/Render/Transform/TransformPipeline.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc1/a06763_1a6797ead8e2e117d9687568950b99d8c4" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1abfe0d19d9a8360b163ff4fac97560a77" kindref="member">MorphFlags</ref></type>
+        <definition>MorphFlags castor3d::TransformPipeline::morphFlags</definition>
+        <argsstring></argsstring>
+        <name>morphFlags</name>
+        <qualifiedname>castor3d::TransformPipeline::morphFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="35" column="12" bodyfile="Castor3D/Render/Transform/TransformPipeline.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc1/a06763_1aeaea0c4b6059f0298e77e54facae3607" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::TransformPipeline::meshletsBounds</definition>
+        <argsstring></argsstring>
+        <name>meshletsBounds</name>
+        <qualifiedname>castor3d::TransformPipeline::meshletsBounds</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="36" column="6" bodyfile="Castor3D/Render/Transform/TransformPipeline.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc1/a06763_1a3945363257bf457bf0a42934602c02ac" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::TransformPipeline::hasMorphingWeights</definition>
+        <argsstring></argsstring>
+        <name>hasMorphingWeights</name>
+        <qualifiedname>castor3d::TransformPipeline::hasMorphingWeights</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="37" column="6" bodyfile="Castor3D/Render/Transform/TransformPipeline.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc1/a06763_1a74ae720b2496009f74e66c873dbece14" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TransformPipeline::index</definition>
+        <argsstring></argsstring>
+        <name>index</name>
+        <qualifiedname>castor3d::TransformPipeline::index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="38" column="10" bodyfile="Castor3D/Render/Transform/TransformPipeline.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc1/a06763_1a189892c16d6fc266d23396a213f90be6" prot="public" static="no" mutable="no">
+        <type><ref refid="db/d46/a07399" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::TransformPipeline::shader</definition>
+        <argsstring></argsstring>
+        <name>shader</name>
+        <qualifiedname>castor3d::TransformPipeline::shader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="40" column="14" bodyfile="Castor3D/Render/Transform/TransformPipeline.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc1/a06763_1abcb500781391d83e1d6dc9e61fe13963" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::TransformPipeline::descriptorSetLayout</definition>
+        <argsstring></argsstring>
+        <name>descriptorSetLayout</name>
+        <qualifiedname>castor3d::TransformPipeline::descriptorSetLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="41" column="31" bodyfile="Castor3D/Render/Transform/TransformPipeline.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc1/a06763_1a3220798999067e46b74a38e3c5613567" prot="public" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::TransformPipeline::pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>pipelineLayout</name>
+        <qualifiedname>castor3d::TransformPipeline::pipelineLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="42" column="26" bodyfile="Castor3D/Render/Transform/TransformPipeline.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc1/a06763_1aaab62caa183d6288b3847e5c2bab534d" prot="public" static="no" mutable="no">
+        <type>ashes::ComputePipelinePtr</type>
+        <definition>ashes::ComputePipelinePtr castor3d::TransformPipeline::pipeline</definition>
+        <argsstring></argsstring>
+        <name>pipeline</name>
+        <qualifiedname>castor3d::TransformPipeline::pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="43" column="27" bodyfile="Castor3D/Render/Transform/TransformPipeline.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dc1/a06763_1a2c87baa9a1d5a10f97813e461d88a009" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::TransformPipeline::descriptorSetPool</definition>
+        <argsstring></argsstring>
+        <name>descriptorSetPool</name>
+        <qualifiedname>castor3d::TransformPipeline::descriptorSetPool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="44" column="29" bodyfile="Castor3D/Render/Transform/TransformPipeline.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/dc1/a06763_1a245c602f294450a465090e276659675d" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TransformPipeline::TransformPipeline</definition>
+        <argsstring>(uint32_t index)</argsstring>
+        <name>TransformPipeline</name>
+        <qualifiedname>castor3d::TransformPipeline::TransformPipeline</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="21" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dc1/a06763_1a703a6d371c640b37a7f697b0c37e15e6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>C3D_API castor::String castor3d::TransformPipeline::getName</definition>
+        <argsstring>(Engine const &amp;engine) const</argsstring>
+        <name>getName</name>
+        <qualifiedname>castor3d::TransformPipeline::getName</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="23" column="24"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dd/dc1/a06763_1a4cbb49992d82cf0063a22a542483c19c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>static C3D_API castor::String castor3d::TransformPipeline::getName</definition>
+        <argsstring>(Engine const &amp;engine, SubmeshComponentCombineID combine, MorphFlags const &amp;morphFlags, bool meshletsBounds, bool hasMorphingWeights)</argsstring>
+        <name>getName</name>
+        <qualifiedname>castor3d::TransformPipeline::getName</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a731b7f9025f4319c2fd92648979ea5bf" kindref="member">SubmeshComponentCombineID</ref></type>
+          <declname>combine</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1abfe0d19d9a8360b163ff4fac97560a77" kindref="member">MorphFlags</ref> const &amp;</type>
+          <declname>morphFlags</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>meshletsBounds</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>hasMorphingWeights</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="24" column="31"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dc1/a06763_1a3746295689986483762424de51bfe741" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>static C3D_API uint32_t castor3d::TransformPipeline::getIndex</definition>
+        <argsstring>(SubmeshComponentCombineID combine, MorphFlags const &amp;morphFlags, ProgramFlags const &amp;programFlags, bool morphingWeights)</argsstring>
+        <name>getIndex</name>
+        <qualifiedname>castor3d::TransformPipeline::getIndex</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a731b7f9025f4319c2fd92648979ea5bf" kindref="member">SubmeshComponentCombineID</ref></type>
+          <declname>combine</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1abfe0d19d9a8360b163ff4fac97560a77" kindref="member">MorphFlags</ref> const &amp;</type>
+          <declname>morphFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1af5a65b91a7a6659a75e289b1fdc8822e" kindref="member">ProgramFlags</ref> const &amp;</type>
+          <declname>programFlags</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>morphingWeights</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="29" column="25"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::FlagCombination&lt; MorphFlag &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; MorphFlag &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::basic_string&lt; mbchar &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; mbchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::ShaderModule</label>
+        <link refid="db/d46/a07399"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>source</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>compiled</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::SpirVShader</label>
+        <link refid="d1/d27/a07395"/>
+        <childnode refid="9" relation="usage">
+          <edgelabel>spirv</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>text</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::TransformPipeline</label>
+        <link refid="dd/dc1/a06763"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>morphFlags</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>shader</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::FlagCombination&lt; FlagType &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+      </node>
+      <node id="9">
+        <label>UInt32Array</label>
+      </node>
+      <node id="6">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="19" column="1" bodyfile="Castor3D/Render/Transform/TransformPipeline.hpp" bodystart="20" bodyend="45"/>
+    <listofallmembers>
+      <member refid="dd/dc1/a06763_1ab4705f5ea2a20183442029744290151d" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>combineID</name></member>
+      <member refid="dd/dc1/a06763_1abcb500781391d83e1d6dc9e61fe13963" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>descriptorSetLayout</name></member>
+      <member refid="dd/dc1/a06763_1a2c87baa9a1d5a10f97813e461d88a009" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>descriptorSetPool</name></member>
+      <member refid="dd/dc1/a06763_1a3746295689986483762424de51bfe741" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>getIndex</name></member>
+      <member refid="dd/dc1/a06763_1a703a6d371c640b37a7f697b0c37e15e6" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>getName</name></member>
+      <member refid="dd/dc1/a06763_1a4cbb49992d82cf0063a22a542483c19c" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>getName</name></member>
+      <member refid="dd/dc1/a06763_1a3945363257bf457bf0a42934602c02ac" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>hasMorphingWeights</name></member>
+      <member refid="dd/dc1/a06763_1a74ae720b2496009f74e66c873dbece14" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>index</name></member>
+      <member refid="dd/dc1/a06763_1aeaea0c4b6059f0298e77e54facae3607" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>meshletsBounds</name></member>
+      <member refid="dd/dc1/a06763_1a6797ead8e2e117d9687568950b99d8c4" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>morphFlags</name></member>
+      <member refid="dd/dc1/a06763_1aaab62caa183d6288b3847e5c2bab534d" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>pipeline</name></member>
+      <member refid="dd/dc1/a06763_1a3220798999067e46b74a38e3c5613567" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>pipelineLayout</name></member>
+      <member refid="dd/dc1/a06763_1a189892c16d6fc266d23396a213f90be6" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>shader</name></member>
+      <member refid="dd/dc1/a06763_1a245c602f294450a465090e276659675d" prot="public" virt="non-virtual"><scope>castor3d::TransformPipeline</scope><name>TransformPipeline</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

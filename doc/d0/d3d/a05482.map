@@ -1,0 +1,13 @@
+<map id="castor3d::IndexMapping" name="castor3d::IndexMapping">
+<area shape="rect" id="Node000001" title=" " alt="" coords="100,243,260,268"/>
+<area shape="rect" id="Node000005" href="$de/d01/a05519.html" title=" " alt="" coords="5,317,165,343"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="155,279,102,319,99,315,152,274"/>
+<area shape="rect" id="Node000006" href="$d3/d4e/a05623.html" title=" " alt="" coords="190,317,362,343"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="208,274,262,315,259,319,205,279"/>
+<area shape="rect" id="Node000002" href="$d6/df6/a05611.html" title=" " alt="" coords="79,168,281,193"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="183,208,183,242,177,242,177,208"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="79,93,281,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="183,133,183,168,177,168,177,133"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="89,5,271,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="183,45,183,93,177,93,177,45"/>
+</map>

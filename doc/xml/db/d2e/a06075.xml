@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d2e/a06075" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::InstantiatedPipelinesNodesT::PipelineNodes</compoundname>
+    <includes local="no">InstantiatedPipelinesNodes.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d2e/a06075_1ad0cc1cbcafaef08182d217538af89f5e" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d1f/a06491" kindref="compound">PipelineAndID</ref></type>
+        <definition>PipelineAndID castor3d::InstantiatedPipelinesNodesT&lt; NodeT &gt;::PipelineNodes::pipeline</definition>
+        <argsstring></argsstring>
+        <name>pipeline</name>
+        <qualifiedname>castor3d::InstantiatedPipelinesNodesT::PipelineNodes::pipeline</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp" line="228" column="15" bodyfile="Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp" bodystart="228" bodyend="228"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2e/a06075_1abca2eaea13fe9350b966f38a2fe1f482" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::InstantiatedPipelinesNodesT&lt; NodeT &gt;::PipelineNodes::isFrontCulled</definition>
+        <argsstring></argsstring>
+        <name>isFrontCulled</name>
+        <qualifiedname>castor3d::InstantiatedPipelinesNodesT::PipelineNodes::isFrontCulled</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp" line="229" column="6" bodyfile="Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp" bodystart="229" bodyend="229"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2e/a06075_1a4171174e143bae5d56d78c2a68c4ca68" prot="public" static="no" mutable="no">
+        <type><ref refid="df/d40/a06071_1a36fa156e2ba8724c8422d7cbc7cd9999" kindref="member">NodesView</ref></type>
+        <definition>NodesView castor3d::InstantiatedPipelinesNodesT&lt; NodeT &gt;::PipelineNodes::nodes</definition>
+        <argsstring></argsstring>
+        <name>nodes</name>
+        <qualifiedname>castor3d::InstantiatedPipelinesNodesT::PipelineNodes::nodes</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp" line="230" column="11" bodyfile="Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp" bodystart="230" bodyend="230"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d2e/a06075_1a263b2c5475a04d180b32bad80de38565" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::InstantiatedPipelinesNodesT&lt; NodeT &gt;::PipelineNodes::PipelineNodes</definition>
+        <argsstring>(PipelineAndID pipeline, bool isFrontCulled)</argsstring>
+        <name>PipelineNodes</name>
+        <qualifiedname>castor3d::InstantiatedPipelinesNodesT::PipelineNodes::PipelineNodes</qualifiedname>
+        <param>
+          <type><ref refid="d2/d1f/a06491" kindref="compound">PipelineAndID</ref></type>
+          <declname>pipeline</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isFrontCulled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp" line="221" column="1" bodyfile="Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp" bodystart="221" bodyend="226"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>castor::OwnedBy&lt; RenderNodesPass &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; RenderNodesPass &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::InstantiatedPipelinesNodesT&lt; NodeT &gt;::PipelineNodes</label>
+        <link refid="db/d2e/a06075"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>pipeline</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PipelineAndID</label>
+        <link refid="d2/d1f/a06491"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>pipeline</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RenderPipeline</label>
+        <link refid="d3/deb/a06543"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp" line="219" column="1" bodyfile="Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp" bodystart="220" bodyend="231"/>
+    <listofallmembers>
+      <member refid="db/d2e/a06075_1abca2eaea13fe9350b966f38a2fe1f482" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedPipelinesNodesT::PipelineNodes</scope><name>isFrontCulled</name></member>
+      <member refid="db/d2e/a06075_1a4171174e143bae5d56d78c2a68c4ca68" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedPipelinesNodesT::PipelineNodes</scope><name>nodes</name></member>
+      <member refid="db/d2e/a06075_1ad0cc1cbcafaef08182d217538af89f5e" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedPipelinesNodesT::PipelineNodes</scope><name>pipeline</name></member>
+      <member refid="db/d2e/a06075_1a263b2c5475a04d180b32bad80de38565" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedPipelinesNodesT::PipelineNodes</scope><name>PipelineNodes</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

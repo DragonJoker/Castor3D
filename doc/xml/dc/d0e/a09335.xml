@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d0e/a09335" kind="struct" language="C++" prot="public">
+    <compoundname>castor::SpeedTraitsT&lt; AngleT&lt; ValueT &gt; &gt;</compoundname>
+    <includes local="no">Speed.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ValueT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dc/d0e/a09335_1ac8cf9b863dca0be49d6af27297b1bda5" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; ValueT &gt;</type>
+        <definition>static AngleT&lt; ValueT &gt; castor::SpeedTraitsT&lt; AngleT&lt; ValueT &gt; &gt;::convert</definition>
+        <argsstring>(double d)</argsstring>
+        <name>convert</name>
+        <qualifiedname>castor::SpeedTraitsT&lt; AngleT&lt; ValueT &gt; &gt;::convert</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>d</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="51" column="15" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="51" bodyend="54"/>
+        <references refid="d4/df4/a09099_1ace4bb05b475a91b50d6b0034af964cbe" compoundref="d3/d23/a02120" startline="109" endline="112">castor::AngleT&lt; Type &gt;::fromRadians</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/Speed.hpp" line="49" column="1" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="50" bodyend="55"/>
+    <listofallmembers>
+      <member refid="dc/d0e/a09335_1ac8cf9b863dca0be49d6af27297b1bda5" prot="public" virt="non-virtual"><scope>castor::SpeedTraitsT&lt; AngleT&lt; ValueT &gt; &gt;</scope><name>convert</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

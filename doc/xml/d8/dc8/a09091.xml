@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/dc8/a09091" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ErrorLoggerStreambufTraitsT</compoundname>
+    <includes local="no">LoggerStreambuf.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename CharType</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d8/dc8/a09091_1a3106727279dfc2a04a56828c8f8f43d4" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor::ErrorLoggerStreambufTraitsT&lt; CharType &gt;::log</definition>
+        <argsstring>(LoggerInstance &amp;logger, std::basic_string&lt; CharType &gt; const &amp;text)</argsstring>
+        <name>log</name>
+        <qualifiedname>castor::ErrorLoggerStreambufTraitsT::log</qualifiedname>
+        <param>
+          <type><ref refid="d9/d93/a09063" kindref="compound">LoggerInstance</ref> &amp;</type>
+          <declname>logger</declname>
+        </param>
+        <param>
+          <type>std::basic_string&lt; CharType &gt; const &amp;</type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="214" column="13" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="214" bodyend="218"/>
+        <references refid="d9/d93/a09063_1a36031590962ad449dd5c58e87622eb1e" compoundref="d8/dd8/a02108" startline="424" endline="427">castor::LoggerInstance::lockedLogError</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/dc8/a09091_1a0bc17f86f1a339146fd864e2aa6fa47d" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor::ErrorLoggerStreambufTraitsT&lt; CharType &gt;::logNoLF</definition>
+        <argsstring>(LoggerInstance &amp;logger, std::basic_string&lt; CharType &gt; const &amp;text)</argsstring>
+        <name>logNoLF</name>
+        <qualifiedname>castor::ErrorLoggerStreambufTraitsT::logNoLF</qualifiedname>
+        <param>
+          <type><ref refid="d9/d93/a09063" kindref="compound">LoggerInstance</ref> &amp;</type>
+          <declname>logger</declname>
+        </param>
+        <param>
+          <type>std::basic_string&lt; CharType &gt; const &amp;</type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="219" column="13" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="219" bodyend="223"/>
+        <references refid="d9/d93/a09063_1a4941cbe1ad639a27e1464d97db9d170c" compoundref="d8/dd8/a02108" startline="437" endline="440">castor::LoggerInstance::lockedLogErrorNoLF</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Traits de streambuf pour du log d&apos;erreur. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="212" column="1" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="213" bodyend="224"/>
+    <listofallmembers>
+      <member refid="d8/dc8/a09091_1a3106727279dfc2a04a56828c8f8f43d4" prot="public" virt="non-virtual"><scope>castor::ErrorLoggerStreambufTraitsT</scope><name>log</name></member>
+      <member refid="d8/dc8/a09091_1a0bc17f86f1a339146fd864e2aa6fa47d" prot="public" virt="non-virtual"><scope>castor::ErrorLoggerStreambufTraitsT</scope><name>logNoLF</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

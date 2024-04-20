@@ -1,0 +1,270 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/db3/a08783" kind="class" language="C++" prot="public">
+    <compoundname>castor::Glyph</compoundname>
+    <includes local="no">Glyph.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/db3/a08783_1a52e1e01cf2c0a38e4dcfa7c3bfe27ccf" prot="private" static="no" mutable="no">
+        <type><ref refid="df/dba/a08999" kindref="compound">Position</ref> const</type>
+        <definition>Position const castor::Glyph::m_bearing</definition>
+        <argsstring></argsstring>
+        <name>m_bearing</name>
+        <qualifiedname>castor::Glyph::m_bearing</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> de la glyphe par rapport au curseur. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Glyph.hpp" line="105" column="16" bodyfile="CastorUtils/Graphics/Glyph.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/db3/a08783_1adb943284d33df4fd0a9a467b389c5bf6" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const</type>
+        <definition>Size const castor::Glyph::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>castor::Glyph::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Dimensions de la glyphe. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Glyph.hpp" line="108" column="12" bodyfile="CastorUtils/Graphics/Glyph.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/db3/a08783_1a60f204b113e44959ccd6dd3c92c91cba" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor::Glyph::m_advance</definition>
+        <argsstring></argsstring>
+        <name>m_advance</name>
+        <qualifiedname>castor::Glyph::m_advance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Nombre de pixels pour placer le caractère suivant. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Glyph.hpp" line="111" column="9" bodyfile="CastorUtils/Graphics/Glyph.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/db3/a08783_1afc1f96f1e3c6f4b625bb5efe301bbb3f" prot="private" static="no" mutable="no">
+        <type>ByteArray const</type>
+        <definition>ByteArray const castor::Glyph::m_bitmap</definition>
+        <argsstring></argsstring>
+        <name>m_bitmap</name>
+        <qualifiedname>castor::Glyph::m_bitmap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><ref refid="d6/d3e/a08939" kindref="compound">Image</ref> de la glyphe. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Glyph.hpp" line="114" column="17" bodyfile="CastorUtils/Graphics/Glyph.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/db3/a08783_1a52264c68ff0c618d91897794f8889c28" prot="private" static="no" mutable="no">
+        <type>char32_t const</type>
+        <definition>char32_t const castor::Glyph::m_character</definition>
+        <argsstring></argsstring>
+        <name>m_character</name>
+        <qualifiedname>castor::Glyph::m_character</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Caractère de la glyphe. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Glyph.hpp" line="117" column="16" bodyfile="CastorUtils/Graphics/Glyph.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/db3/a08783_1ace50e3076fc3237b12b83104653d7455" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Glyph::Glyph</definition>
+        <argsstring>(char32_t c, Size const &amp;size, Position const &amp;bearing, int32_t advance, ByteArray const &amp;bitmap)</argsstring>
+        <name>Glyph</name>
+        <qualifiedname>castor::Glyph::Glyph</qualifiedname>
+        <param>
+          <type>char32_t</type>
+          <declname>c</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="df/dba/a08999" kindref="compound">Position</ref> const &amp;</type>
+          <declname>bearing</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>advance</declname>
+        </param>
+        <param>
+          <type>ByteArray const &amp;</type>
+          <declname>bitmap</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le caractère de la glyphe </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les dimensions de la glyphe </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bearing</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La position de la glyphe par rapport au curseur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">advance</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Nombre de pixels pour placer le caractère suivant </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bitmap</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;image de la glyphe </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Glyph.hpp" line="31" column="1" bodyfile="CastorUtils/Graphics/Glyph.hpp" bodystart="31" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/db3/a08783_1a92184d0b3f3adcc6ef9e7cebcf112834" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>char32_t</type>
+        <definition>char32_t castor::Glyph::getCharacter</definition>
+        <argsstring>() const</argsstring>
+        <name>getCharacter</name>
+        <qualifiedname>castor::Glyph::getCharacter</qualifiedname>
+        <briefdescription>
+<para>Récupère le caractère de la glyphe. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Glyph.hpp" line="51" column="10" bodyfile="CastorUtils/Graphics/Glyph.hpp" bodystart="51" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/db3/a08783_1adbe44bfbe7fd1413929e9d4908cb424c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+        <definition>Size const  &amp; castor::Glyph::getSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getSize</name>
+        <qualifiedname>castor::Glyph::getSize</qualifiedname>
+        <briefdescription>
+<para>Récupère les dimensions de la glyphe. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Les dimensions de la glyphe </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Glyph.hpp" line="63" column="13" bodyfile="CastorUtils/Graphics/Glyph.hpp" bodystart="63" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/db3/a08783_1af365cedd3caa5a2ebe5c0c0ad2c246be" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="df/dba/a08999" kindref="compound">Position</ref> const &amp;</type>
+        <definition>Position const  &amp; castor::Glyph::getBearing</definition>
+        <argsstring>() const</argsstring>
+        <name>getBearing</name>
+        <qualifiedname>castor::Glyph::getBearing</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La position de la glyphe par rapport au curseur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Glyph.hpp" line="73" column="17" bodyfile="CastorUtils/Graphics/Glyph.hpp" bodystart="73" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/db3/a08783_1a4df1b260e41838e5a57163351b94b354" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t castor::Glyph::getAdvance</definition>
+        <argsstring>() const</argsstring>
+        <name>getAdvance</name>
+        <qualifiedname>castor::Glyph::getAdvance</qualifiedname>
+        <briefdescription>
+<para>Récupère le nombre de pixels pour place la prchaine glyphe. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Glyph.hpp" line="85" column="9" bodyfile="CastorUtils/Graphics/Glyph.hpp" bodystart="85" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/db3/a08783_1a38b570a7396ac63d8840535f7ae0f1f0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ByteArray const &amp;</type>
+        <definition>ByteArray const  &amp; castor::Glyph::getBitmap</definition>
+        <argsstring>() const</argsstring>
+        <name>getBitmap</name>
+        <qualifiedname>castor::Glyph::getBitmap</qualifiedname>
+        <briefdescription>
+<para>Récupère l&apos;image de la glyphe. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Une référence constante sur l&apos;image de la glyphe </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Glyph.hpp" line="97" column="18" bodyfile="CastorUtils/Graphics/Glyph.hpp" bodystart="97" bodyend="100"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/Glyph.hpp" line="12" column="1" bodyfile="CastorUtils/Graphics/Glyph.hpp" bodystart="13" bodyend="118"/>
+    <listofallmembers>
+      <member refid="d0/db3/a08783_1a4df1b260e41838e5a57163351b94b354" prot="public" virt="non-virtual"><scope>castor::Glyph</scope><name>getAdvance</name></member>
+      <member refid="d0/db3/a08783_1af365cedd3caa5a2ebe5c0c0ad2c246be" prot="public" virt="non-virtual"><scope>castor::Glyph</scope><name>getBearing</name></member>
+      <member refid="d0/db3/a08783_1a38b570a7396ac63d8840535f7ae0f1f0" prot="public" virt="non-virtual"><scope>castor::Glyph</scope><name>getBitmap</name></member>
+      <member refid="d0/db3/a08783_1a92184d0b3f3adcc6ef9e7cebcf112834" prot="public" virt="non-virtual"><scope>castor::Glyph</scope><name>getCharacter</name></member>
+      <member refid="d0/db3/a08783_1adbe44bfbe7fd1413929e9d4908cb424c" prot="public" virt="non-virtual"><scope>castor::Glyph</scope><name>getSize</name></member>
+      <member refid="d0/db3/a08783_1ace50e3076fc3237b12b83104653d7455" prot="public" virt="non-virtual"><scope>castor::Glyph</scope><name>Glyph</name></member>
+      <member refid="d0/db3/a08783_1a60f204b113e44959ccd6dd3c92c91cba" prot="private" virt="non-virtual"><scope>castor::Glyph</scope><name>m_advance</name></member>
+      <member refid="d0/db3/a08783_1a52e1e01cf2c0a38e4dcfa7c3bfe27ccf" prot="private" virt="non-virtual"><scope>castor::Glyph</scope><name>m_bearing</name></member>
+      <member refid="d0/db3/a08783_1afc1f96f1e3c6f4b625bb5efe301bbb3f" prot="private" virt="non-virtual"><scope>castor::Glyph</scope><name>m_bitmap</name></member>
+      <member refid="d0/db3/a08783_1a52264c68ff0c618d91897794f8889c28" prot="private" virt="non-virtual"><scope>castor::Glyph</scope><name>m_character</name></member>
+      <member refid="d0/db3/a08783_1adb943284d33df4fd0a9a467b389c5bf6" prot="private" virt="non-virtual"><scope>castor::Glyph</scope><name>m_size</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

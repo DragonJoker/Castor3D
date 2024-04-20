@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dir_cf15dedf31366765b807c510073cd2d5" kind="dir">
+    <compoundname>CastorUtils/Config</compoundname>
+    <innerfile refid="d4/dc6/a01793">BeginExternHeaderGuard.hpp</innerfile>
+    <innerfile refid="d3/d92/a01796">CompilerConfig.hpp</innerfile>
+    <innerfile refid="d5/d12/a01799">ConfigModule.hpp</innerfile>
+    <innerfile refid="dd/ddc/a01802">EndExternHeaderGuard.hpp</innerfile>
+    <innerfile refid="d7/d62/a01805">Macros.hpp</innerfile>
+    <innerfile refid="d7/d02/a01808">MultiThreadConfig.hpp</innerfile>
+    <innerfile refid="d2/d31/a01811">PlatformConfig.hpp</innerfile>
+    <innerfile refid="d6/dfc/a01814">SmartPtr.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Config/"/>
+  </compounddef>
+</doxygen>

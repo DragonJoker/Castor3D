@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/db9/a09463" kind="class" language="C++" prot="public">
+    <compoundname>castor::BlueNoise</compoundname>
+    <includes local="no">BlueNoise.hpp</includes>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d6/db9/a09463_1abc91b69f7d8c6c4ebd851b1ab7597a65" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>static float castor::BlueNoise::generate</definition>
+        <argsstring>(uint32_t x, uint32_t y)</argsstring>
+        <name>generate</name>
+        <qualifiedname>castor::BlueNoise::generate</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/BlueNoise.hpp" line="23" column="14" bodyfile="CastorUtils/Noise/BlueNoise.hpp" bodystart="23" bodyend="53"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="d6/db9/a09463_1ac8582e345445b80f5d6b5d167f93ce6f" prot="private" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor::BlueNoise::adjust</definition>
+        <argsstring>(uint32_t &amp;x, uint32_t &amp;y)</argsstring>
+        <name>adjust</name>
+        <qualifiedname>castor::BlueNoise::adjust</qualifiedname>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/BlueNoise.hpp" line="56" column="20" bodyfile="CastorUtils/Noise/BlueNoise.hpp" bodystart="56" bodyend="68"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Noise/BlueNoise.hpp" line="20" column="1" bodyfile="CastorUtils/Noise/BlueNoise.hpp" bodystart="21" bodyend="69"/>
+    <listofallmembers>
+      <member refid="d6/db9/a09463_1ac8582e345445b80f5d6b5d167f93ce6f" prot="private" virt="non-virtual"><scope>castor::BlueNoise</scope><name>adjust</name></member>
+      <member refid="d6/db9/a09463_1abc91b69f7d8c6c4ebd851b1ab7597a65" prot="public" virt="non-virtual"><scope>castor::BlueNoise</scope><name>generate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

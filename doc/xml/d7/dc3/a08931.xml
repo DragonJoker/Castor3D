@@ -1,0 +1,537 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/dc3/a08931" kind="class" language="C++" prot="public">
+    <compoundname>castor::Grid</compoundname>
+    <includes local="no">Grid.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/dc3/a08931_1a82ea6efd2956b03ca3f95dbe01f7a3e1" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::Grid::m_maxGridSize</definition>
+        <argsstring></argsstring>
+        <name>m_maxGridSize</name>
+        <qualifiedname>castor::Grid::m_maxGridSize</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="73" column="10" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="73" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dc3/a08931_1a0b71fd204e59d2f8620969fc23508fc5" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor::Grid::m_maxCellSize</definition>
+        <argsstring></argsstring>
+        <name>m_maxCellSize</name>
+        <qualifiedname>castor::Grid::m_maxCellSize</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="74" column="7" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="74" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dc3/a08931_1a0eb0d8af7e1920b7e08bdb857b8ddef4" prot="private" static="no" mutable="no">
+        <type>Point3f</type>
+        <definition>Point3f castor::Grid::m_min</definition>
+        <argsstring></argsstring>
+        <name>m_min</name>
+        <qualifiedname>castor::Grid::m_min</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="75" column="9" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dc3/a08931_1a6a6bc67be83ac3430b966f457859ebf5" prot="private" static="no" mutable="no">
+        <type>Point3f</type>
+        <definition>Point3f castor::Grid::m_max</definition>
+        <argsstring></argsstring>
+        <name>m_max</name>
+        <qualifiedname>castor::Grid::m_max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="76" column="9" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dc3/a08931_1a1683c48a3cf3ea6482d47305515c71b0" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor::Grid::m_scale</definition>
+        <argsstring></argsstring>
+        <name>m_scale</name>
+        <qualifiedname>castor::Grid::m_scale</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="77" column="7" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="77" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dc3/a08931_1a51beb7fd1a378695f1c2a8732592f71c" prot="private" static="no" mutable="no">
+        <type>Point3f</type>
+        <definition>Point3f castor::Grid::m_center</definition>
+        <argsstring></argsstring>
+        <name>m_center</name>
+        <qualifiedname>castor::Grid::m_center</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="79" column="9" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dc3/a08931_1ac4e201c58ed311b2ef35a91c7dfcc960" prot="private" static="no" mutable="no">
+        <type>Point3f</type>
+        <definition>Point3f castor::Grid::m_offset</definition>
+        <argsstring></argsstring>
+        <name>m_offset</name>
+        <qualifiedname>castor::Grid::m_offset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="80" column="9" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dc3/a08931_1aaa120da301c85384ab31e3ec1e00d8a7" prot="private" static="no" mutable="no">
+        <type>Point3f</type>
+        <definition>Point3f castor::Grid::m_centerToMin</definition>
+        <argsstring></argsstring>
+        <name>m_centerToMin</name>
+        <qualifiedname>castor::Grid::m_centerToMin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="81" column="9" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dc3/a08931_1a3f2c57a09a5317b96be48ec150d8239b" prot="private" static="no" mutable="no">
+        <type>Point3f</type>
+        <definition>Point3f castor::Grid::m_centerToMax</definition>
+        <argsstring></argsstring>
+        <name>m_centerToMax</name>
+        <qualifiedname>castor::Grid::m_centerToMax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="82" column="9" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dc3/a08931_1a56a7e952aab0011d1cd14585db01d06a" prot="private" static="no" mutable="no">
+        <type>Point3f</type>
+        <definition>Point3f castor::Grid::m_origMin</definition>
+        <argsstring></argsstring>
+        <name>m_origMin</name>
+        <qualifiedname>castor::Grid::m_origMin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="83" column="9" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dc3/a08931_1a687d1978fead9f7cf12d2d170f4cbf11" prot="private" static="no" mutable="no">
+        <type>Point3f</type>
+        <definition>Point3f castor::Grid::m_origMax</definition>
+        <argsstring></argsstring>
+        <name>m_origMax</name>
+        <qualifiedname>castor::Grid::m_origMax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="84" column="9" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dc3/a08931_1ad70f689e7e0ec96a70b48bbbc076a91b" prot="private" static="no" mutable="no">
+        <type>Point3ui</type>
+        <definition>Point3ui castor::Grid::m_dimensions</definition>
+        <argsstring></argsstring>
+        <name>m_dimensions</name>
+        <qualifiedname>castor::Grid::m_dimensions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="85" column="10" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dc3/a08931_1a43b32cd6cfcd7996d4e1d784dc2dd337" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor::Grid::m_cellSize</definition>
+        <argsstring></argsstring>
+        <name>m_cellSize</name>
+        <qualifiedname>castor::Grid::m_cellSize</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="86" column="7" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="86" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dc3/a08931_1a565277781076b4cc5030c53ed554d8b6" prot="private" static="no" mutable="no">
+        <type>Matrix4x4f</type>
+        <definition>Matrix4x4f castor::Grid::m_matrix</definition>
+        <argsstring></argsstring>
+        <name>m_matrix</name>
+        <qualifiedname>castor::Grid::m_matrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="87" column="12" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/dc3/a08931_1affebbb2e5a6fa59c0ec49b06d779dc9b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Grid::Grid</definition>
+        <argsstring>()=default</argsstring>
+        <name>Grid</name>
+        <qualifiedname>castor::Grid::Grid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="17" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dc3/a08931_1ab0435c5f48912e1ab952a4d84b00874f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Grid::Grid</definition>
+        <argsstring>(Grid const &amp;)=default</argsstring>
+        <name>Grid</name>
+        <qualifiedname>castor::Grid::Grid</qualifiedname>
+        <param>
+          <type><ref refid="d7/dc3/a08931" kindref="compound">Grid</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="18" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dc3/a08931_1a6538597f88bfdd3c9f3c75bb55f4f1d2" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Grid::Grid</definition>
+        <argsstring>(Grid &amp;&amp;) noexcept=default</argsstring>
+        <name>Grid</name>
+        <qualifiedname>castor::Grid::Grid</qualifiedname>
+        <param>
+          <type><ref refid="d7/dc3/a08931" kindref="compound">Grid</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="19" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dc3/a08931_1a03656dd10942a59d09617600e88a4823" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d7/dc3/a08931" kindref="compound">Grid</ref> &amp;</type>
+        <definition>CU_API Grid &amp; castor::Grid::operator=</definition>
+        <argsstring>(Grid const &amp;)=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Grid::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/dc3/a08931" kindref="compound">Grid</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="20" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dc3/a08931_1a46c1d5babaf5a993bc1fb17c78c11575" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d7/dc3/a08931" kindref="compound">Grid</ref> &amp;</type>
+        <definition>CU_API Grid &amp; castor::Grid::operator=</definition>
+        <argsstring>(Grid &amp;&amp;) noexcept=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Grid::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/dc3/a08931" kindref="compound">Grid</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="21" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dc3/a08931_1a82388e77f2d08cb16871bfc9f76d517a" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Grid::~Grid</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~Grid</name>
+        <qualifiedname>castor::Grid::~Grid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="22" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dc3/a08931_1aebeb16f8e0c83348d8aa073d73ed894f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Grid::Grid</definition>
+        <argsstring>(uint32_t gridSize, float cellSize, Point3f max, Point3f min, float scale)</argsstring>
+        <name>Grid</name>
+        <qualifiedname>castor::Grid::Grid</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>gridSize</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>cellSize</declname>
+        </param>
+        <param>
+          <type>Point3f</type>
+          <declname>max</declname>
+        </param>
+        <param>
+          <type>Point3f</type>
+          <declname>min</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>scale</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="24" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dc3/a08931_1a6dcb925796c1c8a161d44aa3d5b9af2e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Grid::Grid</definition>
+        <argsstring>(Grid const &amp;old, float scale)</argsstring>
+        <name>Grid</name>
+        <qualifiedname>castor::Grid::Grid</qualifiedname>
+        <param>
+          <type><ref refid="d7/dc3/a08931" kindref="compound">Grid</ref> const &amp;</type>
+          <declname>old</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>scale</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="29" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dc3/a08931_1a5153114da2dd317253f410b0e3a2cc94" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::Grid::transform</definition>
+        <argsstring>(Point3f pos, Point3f dir)</argsstring>
+        <name>transform</name>
+        <qualifiedname>castor::Grid::transform</qualifiedname>
+        <param>
+          <type>Point3f</type>
+          <declname>pos</declname>
+        </param>
+        <param>
+          <type>Point3f</type>
+          <declname>dir</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="32" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dc3/a08931_1ae6e3e04599afe062301c1192b7ef1f96" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Point3f const &amp;</type>
+        <definition>Point3f const  &amp; castor::Grid::getMin</definition>
+        <argsstring>() const</argsstring>
+        <name>getMin</name>
+        <qualifiedname>castor::Grid::getMin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="34" column="16" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="34" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dc3/a08931_1a13122af82bd4392fa6e36314221d20a0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Point3f const &amp;</type>
+        <definition>Point3f const  &amp; castor::Grid::getMax</definition>
+        <argsstring>() const</argsstring>
+        <name>getMax</name>
+        <qualifiedname>castor::Grid::getMax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="39" column="16" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="39" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dc3/a08931_1afba6457d0190e1e2f8d558560b9046cd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Point3ui const &amp;</type>
+        <definition>Point3ui const  &amp; castor::Grid::getDimensions</definition>
+        <argsstring>() const</argsstring>
+        <name>getDimensions</name>
+        <qualifiedname>castor::Grid::getDimensions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="44" column="17" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="44" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dc3/a08931_1ad5acac5e23568c6fb04abda4fb31c648" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor::Grid::getScale</definition>
+        <argsstring>() const</argsstring>
+        <name>getScale</name>
+        <qualifiedname>castor::Grid::getScale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="49" column="7" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="49" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dc3/a08931_1a14c97ffd7950ba043a2ed34f4ae6304d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor::Grid::getCellSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getCellSize</name>
+        <qualifiedname>castor::Grid::getCellSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="54" column="7" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="54" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dc3/a08931_1a04c4a6e7f631498ac08cd1da21955d6a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Matrix4x4f const &amp;</type>
+        <definition>Matrix4x4f const  &amp; castor::Grid::getModelMatrix</definition>
+        <argsstring>() const</argsstring>
+        <name>getModelMatrix</name>
+        <qualifiedname>castor::Grid::getModelMatrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="59" column="19" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="59" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dc3/a08931_1a7bd8f66f305080da94c9c9614510462b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Point3f</type>
+        <definition>Point3f castor::Grid::getCenter</definition>
+        <argsstring>() const</argsstring>
+        <name>getCenter</name>
+        <qualifiedname>castor::Grid::getCenter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="64" column="9" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="64" bodyend="67"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d7/dc3/a08931_1ae4543872d4751fe438b2c43ac4b22b11" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Grid::setUp</definition>
+        <argsstring>()</argsstring>
+        <name>setUp</name>
+        <qualifiedname>castor::Grid::setUp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Grid.hpp" line="70" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/Grid.hpp" line="14" column="1" bodyfile="CastorUtils/Graphics/Grid.hpp" bodystart="15" bodyend="88"/>
+    <listofallmembers>
+      <member refid="d7/dc3/a08931_1a14c97ffd7950ba043a2ed34f4ae6304d" prot="public" virt="non-virtual"><scope>castor::Grid</scope><name>getCellSize</name></member>
+      <member refid="d7/dc3/a08931_1a7bd8f66f305080da94c9c9614510462b" prot="public" virt="non-virtual"><scope>castor::Grid</scope><name>getCenter</name></member>
+      <member refid="d7/dc3/a08931_1afba6457d0190e1e2f8d558560b9046cd" prot="public" virt="non-virtual"><scope>castor::Grid</scope><name>getDimensions</name></member>
+      <member refid="d7/dc3/a08931_1a13122af82bd4392fa6e36314221d20a0" prot="public" virt="non-virtual"><scope>castor::Grid</scope><name>getMax</name></member>
+      <member refid="d7/dc3/a08931_1ae6e3e04599afe062301c1192b7ef1f96" prot="public" virt="non-virtual"><scope>castor::Grid</scope><name>getMin</name></member>
+      <member refid="d7/dc3/a08931_1a04c4a6e7f631498ac08cd1da21955d6a" prot="public" virt="non-virtual"><scope>castor::Grid</scope><name>getModelMatrix</name></member>
+      <member refid="d7/dc3/a08931_1ad5acac5e23568c6fb04abda4fb31c648" prot="public" virt="non-virtual"><scope>castor::Grid</scope><name>getScale</name></member>
+      <member refid="d7/dc3/a08931_1affebbb2e5a6fa59c0ec49b06d779dc9b" prot="public" virt="non-virtual"><scope>castor::Grid</scope><name>Grid</name></member>
+      <member refid="d7/dc3/a08931_1ab0435c5f48912e1ab952a4d84b00874f" prot="public" virt="non-virtual"><scope>castor::Grid</scope><name>Grid</name></member>
+      <member refid="d7/dc3/a08931_1a6538597f88bfdd3c9f3c75bb55f4f1d2" prot="public" virt="non-virtual"><scope>castor::Grid</scope><name>Grid</name></member>
+      <member refid="d7/dc3/a08931_1aebeb16f8e0c83348d8aa073d73ed894f" prot="public" virt="non-virtual"><scope>castor::Grid</scope><name>Grid</name></member>
+      <member refid="d7/dc3/a08931_1a6dcb925796c1c8a161d44aa3d5b9af2e" prot="public" virt="non-virtual"><scope>castor::Grid</scope><name>Grid</name></member>
+      <member refid="d7/dc3/a08931_1a43b32cd6cfcd7996d4e1d784dc2dd337" prot="private" virt="non-virtual"><scope>castor::Grid</scope><name>m_cellSize</name></member>
+      <member refid="d7/dc3/a08931_1a51beb7fd1a378695f1c2a8732592f71c" prot="private" virt="non-virtual"><scope>castor::Grid</scope><name>m_center</name></member>
+      <member refid="d7/dc3/a08931_1a3f2c57a09a5317b96be48ec150d8239b" prot="private" virt="non-virtual"><scope>castor::Grid</scope><name>m_centerToMax</name></member>
+      <member refid="d7/dc3/a08931_1aaa120da301c85384ab31e3ec1e00d8a7" prot="private" virt="non-virtual"><scope>castor::Grid</scope><name>m_centerToMin</name></member>
+      <member refid="d7/dc3/a08931_1ad70f689e7e0ec96a70b48bbbc076a91b" prot="private" virt="non-virtual"><scope>castor::Grid</scope><name>m_dimensions</name></member>
+      <member refid="d7/dc3/a08931_1a565277781076b4cc5030c53ed554d8b6" prot="private" virt="non-virtual"><scope>castor::Grid</scope><name>m_matrix</name></member>
+      <member refid="d7/dc3/a08931_1a6a6bc67be83ac3430b966f457859ebf5" prot="private" virt="non-virtual"><scope>castor::Grid</scope><name>m_max</name></member>
+      <member refid="d7/dc3/a08931_1a0b71fd204e59d2f8620969fc23508fc5" prot="private" virt="non-virtual"><scope>castor::Grid</scope><name>m_maxCellSize</name></member>
+      <member refid="d7/dc3/a08931_1a82ea6efd2956b03ca3f95dbe01f7a3e1" prot="private" virt="non-virtual"><scope>castor::Grid</scope><name>m_maxGridSize</name></member>
+      <member refid="d7/dc3/a08931_1a0eb0d8af7e1920b7e08bdb857b8ddef4" prot="private" virt="non-virtual"><scope>castor::Grid</scope><name>m_min</name></member>
+      <member refid="d7/dc3/a08931_1ac4e201c58ed311b2ef35a91c7dfcc960" prot="private" virt="non-virtual"><scope>castor::Grid</scope><name>m_offset</name></member>
+      <member refid="d7/dc3/a08931_1a687d1978fead9f7cf12d2d170f4cbf11" prot="private" virt="non-virtual"><scope>castor::Grid</scope><name>m_origMax</name></member>
+      <member refid="d7/dc3/a08931_1a56a7e952aab0011d1cd14585db01d06a" prot="private" virt="non-virtual"><scope>castor::Grid</scope><name>m_origMin</name></member>
+      <member refid="d7/dc3/a08931_1a1683c48a3cf3ea6482d47305515c71b0" prot="private" virt="non-virtual"><scope>castor::Grid</scope><name>m_scale</name></member>
+      <member refid="d7/dc3/a08931_1a03656dd10942a59d09617600e88a4823" prot="public" virt="non-virtual"><scope>castor::Grid</scope><name>operator=</name></member>
+      <member refid="d7/dc3/a08931_1a46c1d5babaf5a993bc1fb17c78c11575" prot="public" virt="non-virtual"><scope>castor::Grid</scope><name>operator=</name></member>
+      <member refid="d7/dc3/a08931_1ae4543872d4751fe438b2c43ac4b22b11" prot="private" virt="non-virtual"><scope>castor::Grid</scope><name>setUp</name></member>
+      <member refid="d7/dc3/a08931_1a5153114da2dd317253f410b0e3a2cc94" prot="public" virt="non-virtual"><scope>castor::Grid</scope><name>transform</name></member>
+      <member refid="d7/dc3/a08931_1a82388e77f2d08cb16871bfc9f76d517a" prot="public" virt="non-virtual"><scope>castor::Grid</scope><name>~Grid</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

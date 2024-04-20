@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d42/a03623" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ObjectCacheTraitsT</compoundname>
+    <templateparamlist>
+      <param>
+        <type>typename ElementT</type>
+      </param>
+      <param>
+        <type>typename KeyT</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Structure permettant de spécialiser le comportement d&apos;un cache d&apos;objets de scène. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Doit contenir: <itemizedlist>
+<listitem>
+<para>Name: Le nom du type d&apos;élément. </para>
+</listitem>
+<listitem>
+<para>ElementT: Le type de ressource. </para>
+</listitem>
+<listitem>
+<para>ElementPtrT: Le type de pointeur sur une ressource. </para>
+</listitem>
+<listitem>
+<para>ElementObjT: Le type d&apos;observateur sur une ressource. </para>
+</listitem>
+<listitem>
+<para>ElementContT: Le type de conteneur de ressources. </para>
+</listitem>
+<listitem>
+<para>ElementCacheT: Le type de base de cache de ressources. </para>
+</listitem>
+<listitem>
+<para>ElementInitialiserT: Le prototype de la fonction pour initialiser une ressource. </para>
+</listitem>
+<listitem>
+<para>ElementCleanerT: Le prototype de la fonction pour nettoyer une ressource. </para>
+</listitem>
+<listitem>
+<para>ElementMergerT: Le prototype de la fonction pour fusionner un élément d&apos;un cache dans un autre cache. </para>
+</listitem>
+<listitem>
+<para>ElementAttacherT: Le prototype de la fonction pour attacher un élément d&apos;un cache à un scene node. </para>
+</listitem>
+<listitem>
+<para>ElementDetacherT: Le prototype de la fonction pour détacher un élément d&apos;un cache d&apos;un scene node. </para>
+</listitem>
+<listitem>
+<para>static ElementPtrT makeElement( ElementKeyT const &amp;, ParametersT &amp;&amp; ... ): La fonction de création d&apos;un élément. </para>
+</listitem>
+</itemizedlist>
+</para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Castor3D/Cache/CacheModule.hpp" line="134" column="1" bodyfile="Castor3D/Cache/CacheModule.hpp" bodystart="134" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

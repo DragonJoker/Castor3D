@@ -1,0 +1,17 @@
+<map id="castor::Font::BinaryLoader" name="castor::Font::BinaryLoader">
+<area shape="rect" id="Node000001" title="Font loader." alt="" coords="38,445,214,471"/>
+<area shape="rect" id="Node000002" href="$d5/d12/a07975.html" title=" " alt="" coords="55,356,197,396"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,410,129,445,123,445,123,410"/>
+<area shape="rect" id="Node000003" href="$d3/d77/a07999.html" title="Main resource loader class." alt="" coords="5,129,164,155"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="91,168,113,293,125,355,120,356,107,294,86,169"/>
+<area shape="rect" id="Node000004" href="$da/d87/a08319.html" title=" " alt="" coords="117,5,253,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="169,43,96,131,92,128,165,40"/>
+<area shape="rect" id="Node000006" href="$d3/d77/a07999.html" title=" " alt="" coords="139,179,278,219"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="191,44,209,178,204,179,185,45"/>
+<area shape="rect" id="Node000007" href="$d3/d77/a07999.html" title="Main resource loader class." alt="" coords="223,80,381,105"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="217,36,285,78,282,82,214,40"/>
+<area shape="rect" id="Node000005" href="$d5/d12/a07975.html" title="Partial castor::Loader specialisation for binary files." alt="" coords="122,268,295,293"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="191,306,145,358,141,354,187,302"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="211,232,211,268,206,268,206,232"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="284,118,228,180,224,177,280,114"/>
+</map>

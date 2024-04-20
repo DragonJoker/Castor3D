@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d86/a08523" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserParameterHelper&lt; ParameterType::eCheckedText &gt;</compoundname>
+    <includes local="no">ParserParameterHelpers.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d1/d86/a08523_1a3f8a803184d816ebbdd5e1dc4a1d4563" prot="public" static="no">
+        <type>uint32_t</type>
+        <definition>using castor::ParserParameterHelper&lt; ParameterType::eCheckedText &gt;::ValueType =  uint32_t</definition>
+        <argsstring></argsstring>
+        <name>ValueType</name>
+        <qualifiedname>castor::ParserParameterHelper&lt; ParameterType::eCheckedText &gt;::ValueType</qualifiedname>
+        <briefdescription>
+<para>~english The parameter value type. Le type de valeur du paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="232" column="1" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="232" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d1/d86/a08523_1a9e87a02099da6025e0704c9e11c220dc" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> constexpr <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222" kindref="member">ParameterType</ref></type>
+        <definition>CU_API constexpr ParameterType castor::ParserParameterHelper&lt; ParameterType::eCheckedText &gt;::ParamType</definition>
+        <argsstring></argsstring>
+        <name>ParamType</name>
+        <qualifiedname>castor::ParserParameterHelper&lt; ParameterType::eCheckedText &gt;::ParamType</qualifiedname>
+        <initializer>= <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222a70c5250c584262dcb9afc9171feaad71" kindref="member">ParameterType::eCheckedText</ref></initializer>
+        <briefdescription>
+<para>~english The parameter type. Le type de paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="234" column="39" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="234" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d86/a08523_1afe374e528cd8be921791996f3af08caf" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> const <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222" kindref="member">ParameterType</ref></type>
+        <definition>CU_API const ParameterType castor::ParserParameterHelper&lt; ParameterType::eCheckedText &gt;::ParameterBaseType</definition>
+        <argsstring></argsstring>
+        <name>ParameterBaseType</name>
+        <qualifiedname>castor::ParserParameterHelper&lt; ParameterType::eCheckedText &gt;::ParameterBaseType</qualifiedname>
+        <initializer>= <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222a0fdef21bbeab2c5de5749662bda11d15" kindref="member">ParameterType::eUInt32</ref></initializer>
+        <briefdescription>
+<para>~english The parameter base type. Le type de base du paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="236" column="35" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="236" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d86/a08523_1afc67c94a0f5a46e585328eb4569e4bb6" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref> constexpr</type>
+        <definition>CU_API StringView constexpr castor::ParserParameterHelper&lt; ParameterType::eCheckedText &gt;::StringType</definition>
+        <argsstring></argsstring>
+        <name>StringType</name>
+        <qualifiedname>castor::ParserParameterHelper&lt; ParameterType::eCheckedText &gt;::StringType</qualifiedname>
+        <initializer>= <ref refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" kindref="member">cuT</ref>( &quot;checked text&quot; )</initializer>
+        <briefdescription>
+<para>~english The parameter type name. Le nom du type de paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="238" column="36" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="238" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Specialisation de <ref refid="de/db2/a08403" kindref="compound">ParserParameterHelper</ref> pour <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222a70c5250c584262dcb9afc9171feaad71" kindref="member">ParameterType::eCheckedText</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserParameterHelper&lt; ParameterType::eCheckedText &gt;</label>
+        <link refid="d1/d86/a08523"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>StringType</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::basic_string_view&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="229" column="10" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="230" bodyend="239"/>
+    <listofallmembers>
+      <member refid="d1/d86/a08523_1afe374e528cd8be921791996f3af08caf" prot="public" virt="non-virtual"><scope>castor::ParserParameterHelper&lt; ParameterType::eCheckedText &gt;</scope><name>ParameterBaseType</name></member>
+      <member refid="d1/d86/a08523_1a9e87a02099da6025e0704c9e11c220dc" prot="public" virt="non-virtual"><scope>castor::ParserParameterHelper&lt; ParameterType::eCheckedText &gt;</scope><name>ParamType</name></member>
+      <member refid="d1/d86/a08523_1afc67c94a0f5a46e585328eb4569e4bb6" prot="public" virt="non-virtual"><scope>castor::ParserParameterHelper&lt; ParameterType::eCheckedText &gt;</scope><name>StringType</name></member>
+      <member refid="d1/d86/a08523_1a3f8a803184d816ebbdd5e1dc4a1d4563" prot="public" virt="non-virtual"><scope>castor::ParserParameterHelper&lt; ParameterType::eCheckedText &gt;</scope><name>ValueType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,816 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/db7/a03863" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::GuiContext</compoundname>
+    <includes local="no">ControlsManager.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/db7/a03863_1a7602f5b32cd41cab3dec3d1e92843551" prot="public" static="no" mutable="no">
+        <type><ref refid="de/dd6/a07151" kindref="compound">RootContext</ref> *</type>
+        <definition>RootContext* castor3d::GuiContext::root</definition>
+        <argsstring></argsstring>
+        <name>root</name>
+        <qualifiedname>castor3d::GuiContext::root</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="411" column="14" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="411" bodyend="411"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a647ccdb6a5c10d2ed7e536503dc9e333" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/db2/a07139" kindref="compound">SceneContext</ref> *</type>
+        <definition>SceneContext* castor3d::GuiContext::scene</definition>
+        <argsstring></argsstring>
+        <name>scene</name>
+        <qualifiedname>castor3d::GuiContext::scene</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="412" column="15" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="412" bodyend="412"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a3b120967a5aff536f0ba8ffcc1ced394" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/d16/a03859" kindref="compound">ControlsManager</ref> *</type>
+        <definition>ControlsManager* castor3d::GuiContext::controls</definition>
+        <argsstring></argsstring>
+        <name>controls</name>
+        <qualifiedname>castor3d::GuiContext::controls</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="413" column="18" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="413" bodyend="413"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a539ec3060431425687ee2b99af1ed1ca" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a8fa348db8b901a4d5d1be99ba6cc7a23" kindref="member">castor::Stack</ref>&lt; ControlRPtr &gt;</type>
+        <definition>castor::Stack&lt; ControlRPtr &gt; castor3d::GuiContext::parents</definition>
+        <argsstring></argsstring>
+        <name>parents</name>
+        <qualifiedname>castor3d::GuiContext::parents</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="414" column="15" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="414" bodyend="414"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1aaf6ebbfc4b2788ed85d82d103594659d" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a8fa348db8b901a4d5d1be99ba6cc7a23" kindref="member">castor::Stack</ref>&lt; ControlStyleRPtr &gt;</type>
+        <definition>castor::Stack&lt; ControlStyleRPtr &gt; castor3d::GuiContext::styles</definition>
+        <argsstring></argsstring>
+        <name>styles</name>
+        <qualifiedname>castor3d::GuiContext::styles</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="415" column="15" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="415" bodyend="415"/>
+        <referencedby refid="d4/db7/a03863_1a172dae0b20af59f4dd8aa977136fb0bf" compoundref="d8/d21/a00368" startline="453" endline="468">pushStyle</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a17fee816b5d38adbc2ae066e17fd769b" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a8fa348db8b901a4d5d1be99ba6cc7a23" kindref="member">castor::Stack</ref>&lt; StylesHolderRPtr &gt;</type>
+        <definition>castor::Stack&lt; StylesHolderRPtr &gt; castor3d::GuiContext::stylesHolder</definition>
+        <argsstring></argsstring>
+        <name>stylesHolder</name>
+        <qualifiedname>castor3d::GuiContext::stylesHolder</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="416" column="15" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="416" bodyend="416"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a810d3b5be2498b91e8058f3d63af8149" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::GuiContext::controlName</definition>
+        <argsstring></argsstring>
+        <name>controlName</name>
+        <qualifiedname>castor3d::GuiContext::controlName</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="417" column="16" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="417" bodyend="417"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1af674216806e3bfc5cdfde6cfadd1ed0e" prot="public" static="no" mutable="no">
+        <type>ButtonCtrlRPtr</type>
+        <definition>ButtonCtrlRPtr castor3d::GuiContext::button</definition>
+        <argsstring></argsstring>
+        <name>button</name>
+        <qualifiedname>castor3d::GuiContext::button</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="418" column="16" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="418" bodyend="418"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a87400878f775927be9e4f7acc478d16c" prot="public" static="no" mutable="no">
+        <type>ComboBoxCtrlRPtr</type>
+        <definition>ComboBoxCtrlRPtr castor3d::GuiContext::combo</definition>
+        <argsstring></argsstring>
+        <name>combo</name>
+        <qualifiedname>castor3d::GuiContext::combo</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="419" column="18" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="419" bodyend="419"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a6386ccdf2510b1b8b6b07fac5943a07e" prot="public" static="no" mutable="no">
+        <type>EditCtrlRPtr</type>
+        <definition>EditCtrlRPtr castor3d::GuiContext::edit</definition>
+        <argsstring></argsstring>
+        <name>edit</name>
+        <qualifiedname>castor3d::GuiContext::edit</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="420" column="14" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="420" bodyend="420"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a8daf8a7ce53246c448b0aea93b42592d" prot="public" static="no" mutable="no">
+        <type>ListBoxCtrlRPtr</type>
+        <definition>ListBoxCtrlRPtr castor3d::GuiContext::listbox</definition>
+        <argsstring></argsstring>
+        <name>listbox</name>
+        <qualifiedname>castor3d::GuiContext::listbox</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="421" column="17" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="421" bodyend="421"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1aa2bf362a801c789a1ac3dbfae48d4fcf" prot="public" static="no" mutable="no">
+        <type>SliderCtrlRPtr</type>
+        <definition>SliderCtrlRPtr castor3d::GuiContext::slider</definition>
+        <argsstring></argsstring>
+        <name>slider</name>
+        <qualifiedname>castor3d::GuiContext::slider</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="422" column="16" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="422" bodyend="422"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1affe45d758c9d1d9b247e3d492dc960ad" prot="public" static="no" mutable="no">
+        <type>StaticCtrlRPtr</type>
+        <definition>StaticCtrlRPtr castor3d::GuiContext::staticTxt</definition>
+        <argsstring></argsstring>
+        <name>staticTxt</name>
+        <qualifiedname>castor3d::GuiContext::staticTxt</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="423" column="16" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="423" bodyend="423"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a3f8ee33dd40db43e9ca74bba25a8830a" prot="public" static="no" mutable="no">
+        <type>PanelCtrlRPtr</type>
+        <definition>PanelCtrlRPtr castor3d::GuiContext::panel</definition>
+        <argsstring></argsstring>
+        <name>panel</name>
+        <qualifiedname>castor3d::GuiContext::panel</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="424" column="15" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="424" bodyend="424"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a6ca2bc34992d63772d80549ebb0ebe1b" prot="public" static="no" mutable="no">
+        <type>ProgressCtrlRPtr</type>
+        <definition>ProgressCtrlRPtr castor3d::GuiContext::progress</definition>
+        <argsstring></argsstring>
+        <name>progress</name>
+        <qualifiedname>castor3d::GuiContext::progress</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="425" column="18" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="425" bodyend="425"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1acb6de88fddade305f4f14338c8cce45f" prot="public" static="no" mutable="no">
+        <type>ExpandablePanelCtrlRPtr</type>
+        <definition>ExpandablePanelCtrlRPtr castor3d::GuiContext::expandablePanel</definition>
+        <argsstring></argsstring>
+        <name>expandablePanel</name>
+        <qualifiedname>castor3d::GuiContext::expandablePanel</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="426" column="25" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="426" bodyend="426"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a417d66fb621a86e35c0bbd1bce29ea44" prot="public" static="no" mutable="no">
+        <type>FrameCtrlRPtr</type>
+        <definition>FrameCtrlRPtr castor3d::GuiContext::frame</definition>
+        <argsstring></argsstring>
+        <name>frame</name>
+        <qualifiedname>castor3d::GuiContext::frame</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="427" column="15" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="427" bodyend="427"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1acd34e311ac13b3d422d0c091cb93c032" prot="public" static="no" mutable="no">
+        <type>ScrollableCtrlRPtr</type>
+        <definition>ScrollableCtrlRPtr castor3d::GuiContext::scrollable</definition>
+        <argsstring></argsstring>
+        <name>scrollable</name>
+        <qualifiedname>castor3d::GuiContext::scrollable</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="428" column="20" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="428" bodyend="428"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1af7fab56f5d8ff1988e48d0a49da498d2" prot="public" static="no" mutable="no">
+        <type>ThemeRPtr</type>
+        <definition>ThemeRPtr castor3d::GuiContext::theme</definition>
+        <argsstring></argsstring>
+        <name>theme</name>
+        <qualifiedname>castor3d::GuiContext::theme</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="429" column="11" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="429" bodyend="429"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a68a61511975de6cef7dfcf543fef7853" prot="public" static="no" mutable="no">
+        <type>ButtonStyleRPtr</type>
+        <definition>ButtonStyleRPtr castor3d::GuiContext::buttonStyle</definition>
+        <argsstring></argsstring>
+        <name>buttonStyle</name>
+        <qualifiedname>castor3d::GuiContext::buttonStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="430" column="17" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="430" bodyend="430"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a39f841d614a9f70b49765fbc2588391e" prot="public" static="no" mutable="no">
+        <type>ComboBoxStyleRPtr</type>
+        <definition>ComboBoxStyleRPtr castor3d::GuiContext::comboStyle</definition>
+        <argsstring></argsstring>
+        <name>comboStyle</name>
+        <qualifiedname>castor3d::GuiContext::comboStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="431" column="19" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="431" bodyend="431"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a7477f2a902d3e7539665f6397ec36747" prot="public" static="no" mutable="no">
+        <type>EditStyleRPtr</type>
+        <definition>EditStyleRPtr castor3d::GuiContext::editStyle</definition>
+        <argsstring></argsstring>
+        <name>editStyle</name>
+        <qualifiedname>castor3d::GuiContext::editStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="432" column="15" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="432" bodyend="432"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1ac4ced82b69bc59dd2f8e86623639417b" prot="public" static="no" mutable="no">
+        <type>ListBoxStyleRPtr</type>
+        <definition>ListBoxStyleRPtr castor3d::GuiContext::listboxStyle</definition>
+        <argsstring></argsstring>
+        <name>listboxStyle</name>
+        <qualifiedname>castor3d::GuiContext::listboxStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="433" column="18" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="433" bodyend="433"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a2681eda03896543ba684268b1e027a9b" prot="public" static="no" mutable="no">
+        <type>SliderStyleRPtr</type>
+        <definition>SliderStyleRPtr castor3d::GuiContext::sliderStyle</definition>
+        <argsstring></argsstring>
+        <name>sliderStyle</name>
+        <qualifiedname>castor3d::GuiContext::sliderStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="434" column="17" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="434" bodyend="434"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1acfe9d7c1640eb66ef47c3f24ab4afb0f" prot="public" static="no" mutable="no">
+        <type>StaticStyleRPtr</type>
+        <definition>StaticStyleRPtr castor3d::GuiContext::staticStyle</definition>
+        <argsstring></argsstring>
+        <name>staticStyle</name>
+        <qualifiedname>castor3d::GuiContext::staticStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="435" column="17" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="435" bodyend="435"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a412f25aef6eedb0cf6a745e465d7b455" prot="public" static="no" mutable="no">
+        <type>PanelStyleRPtr</type>
+        <definition>PanelStyleRPtr castor3d::GuiContext::panelStyle</definition>
+        <argsstring></argsstring>
+        <name>panelStyle</name>
+        <qualifiedname>castor3d::GuiContext::panelStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="436" column="16" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="436" bodyend="436"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a4406b8e2604099f39f0f688d97039178" prot="public" static="no" mutable="no">
+        <type>ProgressStyleRPtr</type>
+        <definition>ProgressStyleRPtr castor3d::GuiContext::progressStyle</definition>
+        <argsstring></argsstring>
+        <name>progressStyle</name>
+        <qualifiedname>castor3d::GuiContext::progressStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="437" column="19" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="437" bodyend="437"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1ab061c9aecb39a5b8e821db40fb487749" prot="public" static="no" mutable="no">
+        <type>ExpandablePanelStyleRPtr</type>
+        <definition>ExpandablePanelStyleRPtr castor3d::GuiContext::expandablePanelStyle</definition>
+        <argsstring></argsstring>
+        <name>expandablePanelStyle</name>
+        <qualifiedname>castor3d::GuiContext::expandablePanelStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="438" column="26" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="438" bodyend="438"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1ab69e8f07154eb7d3cc1ad333ca04d68f" prot="public" static="no" mutable="no">
+        <type>FrameStyleRPtr</type>
+        <definition>FrameStyleRPtr castor3d::GuiContext::frameStyle</definition>
+        <argsstring></argsstring>
+        <name>frameStyle</name>
+        <qualifiedname>castor3d::GuiContext::frameStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="439" column="16" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="439" bodyend="439"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a6c62e956b119842d47e24bbfb7d82a27" prot="public" static="no" mutable="no">
+        <type>ScrollBarStyleRPtr</type>
+        <definition>ScrollBarStyleRPtr castor3d::GuiContext::scrollBarStyle</definition>
+        <argsstring></argsstring>
+        <name>scrollBarStyle</name>
+        <qualifiedname>castor3d::GuiContext::scrollBarStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="440" column="20" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="440" bodyend="440"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a4b825bd1e62f2725403dbe12a27a2e50" prot="public" static="no" mutable="no">
+        <type>ScrollableStyleRPtr</type>
+        <definition>ScrollableStyleRPtr castor3d::GuiContext::scrollableStyle</definition>
+        <argsstring></argsstring>
+        <name>scrollableStyle</name>
+        <qualifiedname>castor3d::GuiContext::scrollableStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="441" column="21" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="441" bodyend="441"/>
+        <referencedby refid="d4/db7/a03863_1a172dae0b20af59f4dd8aa977136fb0bf" compoundref="d8/d21/a00368" startline="453" endline="468">pushStyle</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1a9542fd3ff3d6c595be84041f260882fe" prot="public" static="no" mutable="no">
+        <type>LayoutUPtr</type>
+        <definition>LayoutUPtr castor3d::GuiContext::layout</definition>
+        <argsstring></argsstring>
+        <name>layout</name>
+        <qualifiedname>castor3d::GuiContext::layout</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="442" column="12" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="442" bodyend="442"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db7/a03863_1af7514f582478bd302d16808dee9e1cce" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/d45/a03887" kindref="compound">LayoutItemFlags</ref></type>
+        <definition>LayoutItemFlags castor3d::GuiContext::layoutCtrlFlags</definition>
+        <argsstring></argsstring>
+        <name>layoutCtrlFlags</name>
+        <qualifiedname>castor3d::GuiContext::layoutCtrlFlags</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="443" column="17" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="443" bodyend="443"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/db7/a03863_1a91b91cdbb30b0c1c6787df674275dcca" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ControlRPtr</type>
+        <definition>C3D_API ControlRPtr castor3d::GuiContext::getTopControl</definition>
+        <argsstring>() const</argsstring>
+        <name>getTopControl</name>
+        <qualifiedname>castor3d::GuiContext::getTopControl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="445" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/db7/a03863_1a6a871db0e18028aa022e63ed825af899" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GuiContext::popControl</definition>
+        <argsstring>()</argsstring>
+        <name>popControl</name>
+        <qualifiedname>castor3d::GuiContext::popControl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="446" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/db7/a03863_1ab16ddf3e393de26fcda26bcab0699486" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GuiContext::pushStylesHolder</definition>
+        <argsstring>(StylesHolder *style)</argsstring>
+        <name>pushStylesHolder</name>
+        <qualifiedname>castor3d::GuiContext::pushStylesHolder</qualifiedname>
+        <param>
+          <type><ref refid="d0/ddf/a03935" kindref="compound">StylesHolder</ref> *</type>
+          <declname>style</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="447" column="14"/>
+        <referencedby refid="d4/db7/a03863_1a172dae0b20af59f4dd8aa977136fb0bf" compoundref="d8/d21/a00368" startline="453" endline="468">pushStyle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/db7/a03863_1a60e68976b84772619d14fdc84589fc03" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GuiContext::popStylesHolder</definition>
+        <argsstring>(StylesHolder const *style)</argsstring>
+        <name>popStylesHolder</name>
+        <qualifiedname>castor3d::GuiContext::popStylesHolder</qualifiedname>
+        <param>
+          <type><ref refid="d0/ddf/a03935" kindref="compound">StylesHolder</ref> const *</type>
+          <declname>style</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="448" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/db7/a03863_1a4cac808081d024a2a2678bd0ee34e2ce" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ControlStyleRPtr</type>
+        <definition>C3D_API ControlStyleRPtr castor3d::GuiContext::getTopStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getTopStyle</name>
+        <qualifiedname>castor3d::GuiContext::getTopStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="449" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/db7/a03863_1a7bd6f59453ce603475e5d0ed02ed0fcb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GuiContext::popStyle</definition>
+        <argsstring>()</argsstring>
+        <name>popStyle</name>
+        <qualifiedname>castor3d::GuiContext::popStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="450" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/db7/a03863_1a172dae0b20af59f4dd8aa977136fb0bf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename StyleT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::GuiContext::pushStyle</definition>
+        <argsstring>(StyleT *style, StyleT *&amp;result)</argsstring>
+        <name>pushStyle</name>
+        <qualifiedname>castor3d::GuiContext::pushStyle</qualifiedname>
+        <param>
+          <type>StyleT *</type>
+          <declname>style</declname>
+        </param>
+        <param>
+          <type>StyleT *&amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/ControlsManager.hpp" line="453" column="6" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="453" bodyend="468"/>
+        <references refid="d4/db7/a03863_1ab16ddf3e393de26fcda26bcab0699486">pushStylesHolder</references>
+        <references refid="d4/db7/a03863_1a4b825bd1e62f2725403dbe12a27a2e50" compoundref="d8/d21/a00368" startline="441" endline="441">scrollableStyle</references>
+        <references refid="d4/db7/a03863_1aaf6ebbfc4b2788ed85d82d103594659d" compoundref="d8/d21/a00368" startline="415" endline="415">styles</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="15">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="16" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="5" relation="private-inheritance">
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::ControlsManager</label>
+        <link refid="d4/d16/a03859"/>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>Name</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::GuiContext</label>
+        <link refid="d4/db7/a03863"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>scene</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>controls</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>controlName</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>layoutCtrlFlags</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::LayoutItemFlags</label>
+        <link refid="d5/d45/a03887"/>
+      </node>
+      <node id="11">
+        <label>castor3d::ProgressBar</label>
+        <link refid="d6/daf/a05323"/>
+      </node>
+      <node id="7">
+        <label>castor3d::RenderWindowDesc</label>
+        <link refid="de/d75/a06503"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::RootContext</label>
+        <link refid="de/dd6/a07151"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>engine</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>window</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>logger</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>progress</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::SceneContext</label>
+        <link refid="d3/db2/a07139"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>fontName</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::StylesHolder</label>
+        <link refid="d0/ddf/a03935"/>
+      </node>
+      <node id="14">
+        <label>castor3d::UserInputListener</label>
+        <link refid="dc/d17/a03783"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>m_mutexHandlers</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor::LoggerInstance</label>
+        <link refid="d9/d93/a09063"/>
+      </node>
+      <node id="5">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="16">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="6">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="5" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="17">
+        <label>std::mutex</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Gui/ControlsManager.hpp" line="409" column="1" bodyfile="Castor3D/Gui/ControlsManager.hpp" bodystart="410" bodyend="469"/>
+    <listofallmembers>
+      <member refid="d4/db7/a03863_1af674216806e3bfc5cdfde6cfadd1ed0e" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>button</name></member>
+      <member refid="d4/db7/a03863_1a68a61511975de6cef7dfcf543fef7853" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>buttonStyle</name></member>
+      <member refid="d4/db7/a03863_1a87400878f775927be9e4f7acc478d16c" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>combo</name></member>
+      <member refid="d4/db7/a03863_1a39f841d614a9f70b49765fbc2588391e" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>comboStyle</name></member>
+      <member refid="d4/db7/a03863_1a810d3b5be2498b91e8058f3d63af8149" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>controlName</name></member>
+      <member refid="d4/db7/a03863_1a3b120967a5aff536f0ba8ffcc1ced394" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>controls</name></member>
+      <member refid="d4/db7/a03863_1a6386ccdf2510b1b8b6b07fac5943a07e" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>edit</name></member>
+      <member refid="d4/db7/a03863_1a7477f2a902d3e7539665f6397ec36747" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>editStyle</name></member>
+      <member refid="d4/db7/a03863_1acb6de88fddade305f4f14338c8cce45f" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>expandablePanel</name></member>
+      <member refid="d4/db7/a03863_1ab061c9aecb39a5b8e821db40fb487749" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>expandablePanelStyle</name></member>
+      <member refid="d4/db7/a03863_1a417d66fb621a86e35c0bbd1bce29ea44" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>frame</name></member>
+      <member refid="d4/db7/a03863_1ab69e8f07154eb7d3cc1ad333ca04d68f" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>frameStyle</name></member>
+      <member refid="d4/db7/a03863_1a91b91cdbb30b0c1c6787df674275dcca" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>getTopControl</name></member>
+      <member refid="d4/db7/a03863_1a4cac808081d024a2a2678bd0ee34e2ce" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>getTopStyle</name></member>
+      <member refid="d4/db7/a03863_1a9542fd3ff3d6c595be84041f260882fe" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>layout</name></member>
+      <member refid="d4/db7/a03863_1af7514f582478bd302d16808dee9e1cce" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>layoutCtrlFlags</name></member>
+      <member refid="d4/db7/a03863_1a8daf8a7ce53246c448b0aea93b42592d" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>listbox</name></member>
+      <member refid="d4/db7/a03863_1ac4ced82b69bc59dd2f8e86623639417b" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>listboxStyle</name></member>
+      <member refid="d4/db7/a03863_1a3f8ee33dd40db43e9ca74bba25a8830a" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>panel</name></member>
+      <member refid="d4/db7/a03863_1a412f25aef6eedb0cf6a745e465d7b455" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>panelStyle</name></member>
+      <member refid="d4/db7/a03863_1a539ec3060431425687ee2b99af1ed1ca" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>parents</name></member>
+      <member refid="d4/db7/a03863_1a6a871db0e18028aa022e63ed825af899" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>popControl</name></member>
+      <member refid="d4/db7/a03863_1a7bd6f59453ce603475e5d0ed02ed0fcb" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>popStyle</name></member>
+      <member refid="d4/db7/a03863_1a60e68976b84772619d14fdc84589fc03" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>popStylesHolder</name></member>
+      <member refid="d4/db7/a03863_1a6ca2bc34992d63772d80549ebb0ebe1b" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>progress</name></member>
+      <member refid="d4/db7/a03863_1a4406b8e2604099f39f0f688d97039178" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>progressStyle</name></member>
+      <member refid="d4/db7/a03863_1a172dae0b20af59f4dd8aa977136fb0bf" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>pushStyle</name></member>
+      <member refid="d4/db7/a03863_1ab16ddf3e393de26fcda26bcab0699486" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>pushStylesHolder</name></member>
+      <member refid="d4/db7/a03863_1a7602f5b32cd41cab3dec3d1e92843551" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>root</name></member>
+      <member refid="d4/db7/a03863_1a647ccdb6a5c10d2ed7e536503dc9e333" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>scene</name></member>
+      <member refid="d4/db7/a03863_1acd34e311ac13b3d422d0c091cb93c032" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>scrollable</name></member>
+      <member refid="d4/db7/a03863_1a4b825bd1e62f2725403dbe12a27a2e50" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>scrollableStyle</name></member>
+      <member refid="d4/db7/a03863_1a6c62e956b119842d47e24bbfb7d82a27" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>scrollBarStyle</name></member>
+      <member refid="d4/db7/a03863_1aa2bf362a801c789a1ac3dbfae48d4fcf" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>slider</name></member>
+      <member refid="d4/db7/a03863_1a2681eda03896543ba684268b1e027a9b" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>sliderStyle</name></member>
+      <member refid="d4/db7/a03863_1acfe9d7c1640eb66ef47c3f24ab4afb0f" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>staticStyle</name></member>
+      <member refid="d4/db7/a03863_1affe45d758c9d1d9b247e3d492dc960ad" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>staticTxt</name></member>
+      <member refid="d4/db7/a03863_1aaf6ebbfc4b2788ed85d82d103594659d" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>styles</name></member>
+      <member refid="d4/db7/a03863_1a17fee816b5d38adbc2ae066e17fd769b" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>stylesHolder</name></member>
+      <member refid="d4/db7/a03863_1af7fab56f5d8ff1988e48d0a49da498d2" prot="public" virt="non-virtual"><scope>castor3d::GuiContext</scope><name>theme</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

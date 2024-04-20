@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d97/a09367" kind="class" language="C++" prot="public">
+    <compoundname>castor::BlockTracker</compoundname>
+    <basecompoundref refid="da/d87/a08319" prot="public" virt="non-virtual">castor::NonMovable</basecompoundref>
+    <includes local="no">BlockTracker.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/d97/a09367_1adc8a27848495aa06e116b94b951297db" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>String castor::BlockTracker::m_strFile</definition>
+        <argsstring></argsstring>
+        <name>m_strFile</name>
+        <qualifiedname>castor::BlockTracker::m_strFile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/BlockTracker.hpp" line="40" column="8" bodyfile="CastorUtils/Miscellaneous/BlockTracker.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d97/a09367_1a3aeaafb2ec18acf8967d891626704dd5" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>String castor::BlockTracker::m_strFunction</definition>
+        <argsstring></argsstring>
+        <name>m_strFunction</name>
+        <qualifiedname>castor::BlockTracker::m_strFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/BlockTracker.hpp" line="41" column="8" bodyfile="CastorUtils/Miscellaneous/BlockTracker.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d97/a09367_1a05c8d045454fe128a2791ae9fa3f5993" prot="private" static="no" mutable="no">
+        <type>uint32_t const</type>
+        <definition>uint32_t const castor::BlockTracker::m_uiLine</definition>
+        <argsstring></argsstring>
+        <name>m_uiLine</name>
+        <qualifiedname>castor::BlockTracker::m_uiLine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/BlockTracker.hpp" line="42" column="16" bodyfile="CastorUtils/Miscellaneous/BlockTracker.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d97/a09367_1aa111937f384f9836b8c1d548ec1f574a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::BlockTracker::BlockTracker</definition>
+        <argsstring>(char const *function, char const *file, uint32_t line)</argsstring>
+        <name>BlockTracker</name>
+        <qualifiedname>castor::BlockTracker::BlockTracker</qualifiedname>
+        <param>
+          <type>char const *</type>
+          <declname>function</declname>
+        </param>
+        <param>
+          <type>char const *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>line</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La fonction appelante </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le fichier où se trouve la fonction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">line</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne dans la fonction </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/BlockTracker.hpp" line="28" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d97/a09367_1a32d07bdafbb80fa390956358e22f3945" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::BlockTracker::~BlockTracker</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~BlockTracker</name>
+        <qualifiedname>castor::BlockTracker::~BlockTracker</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/BlockTracker.hpp" line="37" column="8"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::BlockTracker</label>
+        <link refid="d6/d97/a09367"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::BlockTracker</label>
+        <link refid="d6/d97/a09367"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Miscellaneous/BlockTracker.hpp" line="12" column="1" bodyfile="CastorUtils/Miscellaneous/BlockTracker.hpp" bodystart="14" bodyend="43"/>
+    <listofallmembers>
+      <member refid="d6/d97/a09367_1aa111937f384f9836b8c1d548ec1f574a" prot="public" virt="non-virtual"><scope>castor::BlockTracker</scope><name>BlockTracker</name></member>
+      <member refid="d6/d97/a09367_1adc8a27848495aa06e116b94b951297db" prot="private" virt="non-virtual"><scope>castor::BlockTracker</scope><name>m_strFile</name></member>
+      <member refid="d6/d97/a09367_1a3aeaafb2ec18acf8967d891626704dd5" prot="private" virt="non-virtual"><scope>castor::BlockTracker</scope><name>m_strFunction</name></member>
+      <member refid="d6/d97/a09367_1a05c8d045454fe128a2791ae9fa3f5993" prot="private" virt="non-virtual"><scope>castor::BlockTracker</scope><name>m_uiLine</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::BlockTracker</scope><name>NonMovable</name></member>
+      <member refid="d6/d97/a09367_1a32d07bdafbb80fa390956358e22f3945" prot="public" virt="non-virtual"><scope>castor::BlockTracker</scope><name>~BlockTracker</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::BlockTracker</scope><name>~NonMovable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

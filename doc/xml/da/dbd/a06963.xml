@@ -1,0 +1,306 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/dbd/a06963" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::CameraImporter</compoundname>
+    <basecompoundref refid="d6/da8/a08227" prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">CameraImporter.hpp</includes>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="da/dbd/a06963_1a37d7977a1253bec21741bae0c40fada1" prot="protected" static="no" mutable="no">
+        <type><ref refid="db/df9/a03951" kindref="compound">ImporterFile</ref> *</type>
+        <definition>ImporterFile* castor3d::CameraImporter::m_file</definition>
+        <argsstring></argsstring>
+        <name>m_file</name>
+        <qualifiedname>castor3d::CameraImporter::m_file</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/CameraImporter.hpp" line="78" column="15" bodyfile="Castor3D/Scene/CameraImporter.hpp" bodystart="78" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/dbd/a06963_1ac7c69f7bfb7de43ac656d72a87951c6e" prot="protected" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref></type>
+        <definition>Parameters castor3d::CameraImporter::m_parameters</definition>
+        <argsstring></argsstring>
+        <name>m_parameters</name>
+        <qualifiedname>castor3d::CameraImporter::m_parameters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/CameraImporter.hpp" line="79" column="12" bodyfile="Castor3D/Scene/CameraImporter.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/dbd/a06963_1a7bb24ade651921b6fcd2eccaf8f3ba3e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual castor3d::CameraImporter::~CameraImporter</definition>
+        <argsstring>()=default</argsstring>
+        <name>~CameraImporter</name>
+        <qualifiedname>castor3d::CameraImporter::~CameraImporter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/CameraImporter.hpp" line="19" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbd/a06963_1a22d772de0006e989de4fc8517f1c8f9b" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::CameraImporter::CameraImporter</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>CameraImporter</name>
+        <qualifiedname>castor3d::CameraImporter::CameraImporter</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/CameraImporter.hpp" line="28" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbd/a06963_1a4686ec9a8a8f0f853b6fb4dfabeb5f93" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::CameraImporter::import</definition>
+        <argsstring>(Camera &amp;camera, ImporterFile *file, Parameters const &amp;parameters)</argsstring>
+        <name>import</name>
+        <qualifiedname>castor3d::CameraImporter::import</qualifiedname>
+        <param>
+          <type><ref refid="d2/dc3/a06951" kindref="compound">Camera</ref> &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <param>
+          <type><ref refid="db/df9/a03951" kindref="compound">ImporterFile</ref> *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;import de <ref refid="d2/dc3/a06951" kindref="compound">Camera</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les données importées. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin vers le fichier à importer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Paramètres de configuration de l&apos;import. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un problème quelconque est survenu. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/CameraImporter.hpp" line="43" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="da/dbd/a06963_1a1c000e3b41166b2012debeac3f00d98a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>static C3D_API bool castor3d::CameraImporter::import</definition>
+        <argsstring>(Camera &amp;camera, castor::Path const &amp;pathFile, Parameters const &amp;parameters)</argsstring>
+        <name>import</name>
+        <qualifiedname>castor3d::CameraImporter::import</qualifiedname>
+        <param>
+          <type><ref refid="d2/dc3/a06951" kindref="compound">Camera</ref> &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>pathFile</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;import de <ref refid="d2/dc3/a06951" kindref="compound">Camera</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les données importées. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pathFile</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin vers le fichier à importer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Paramètres de configuration de l&apos;import. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un problème quelconque est survenu. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/CameraImporter.hpp" line="60" column="21"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="da/dbd/a06963_1a0664c4a3866560bca3ad4b5057723df6" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>bool</type>
+        <definition>virtual bool castor3d::CameraImporter::doImportCamera</definition>
+        <argsstring>(Camera &amp;camera)=0</argsstring>
+        <name>doImportCamera</name>
+        <qualifiedname>castor3d::CameraImporter::doImportCamera</qualifiedname>
+        <param>
+          <type><ref refid="d2/dc3/a06951" kindref="compound">Camera</ref> &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;import de <ref refid="d2/dc3/a06951" kindref="compound">Camera</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les données importées. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un problème quelconque est survenu. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/CameraImporter.hpp" line="75" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::CameraImporter</label>
+        <link refid="da/dbd/a06963"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::ParametersT&lt; castor::String &gt;</label>
+        <link refid="d0/d45/a05315"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::CameraImporter</label>
+        <link refid="da/dbd/a06963"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_file</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_parameters</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::ImporterFile</label>
+        <link refid="db/df9/a03951"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::ParametersT&lt; KeyT &gt;</label>
+        <link refid="d0/d45/a05315"/>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/CameraImporter.hpp" line="15" column="1" bodyfile="Castor3D/Scene/CameraImporter.hpp" bodystart="17" bodyend="80"/>
+    <listofallmembers>
+      <member refid="da/dbd/a06963_1a22d772de0006e989de4fc8517f1c8f9b" prot="public" virt="non-virtual"><scope>castor3d::CameraImporter</scope><name>CameraImporter</name></member>
+      <member refid="da/dbd/a06963_1a0664c4a3866560bca3ad4b5057723df6" prot="private" virt="pure-virtual"><scope>castor3d::CameraImporter</scope><name>doImportCamera</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::CameraImporter</scope><name>getOwner</name></member>
+      <member refid="da/dbd/a06963_1a4686ec9a8a8f0f853b6fb4dfabeb5f93" prot="public" virt="non-virtual"><scope>castor3d::CameraImporter</scope><name>import</name></member>
+      <member refid="da/dbd/a06963_1a1c000e3b41166b2012debeac3f00d98a" prot="public" virt="non-virtual"><scope>castor3d::CameraImporter</scope><name>import</name></member>
+      <member refid="da/dbd/a06963_1a37d7977a1253bec21741bae0c40fada1" prot="protected" virt="non-virtual"><scope>castor3d::CameraImporter</scope><name>m_file</name></member>
+      <member refid="da/dbd/a06963_1ac7c69f7bfb7de43ac656d72a87951c6e" prot="protected" virt="non-virtual"><scope>castor3d::CameraImporter</scope><name>m_parameters</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::CameraImporter</scope><name>OwnedBy</name></member>
+      <member refid="da/dbd/a06963_1a7bb24ade651921b6fcd2eccaf8f3ba3e" prot="public" virt="virtual"><scope>castor3d::CameraImporter</scope><name>~CameraImporter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

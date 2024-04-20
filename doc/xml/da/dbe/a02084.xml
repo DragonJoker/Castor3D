@@ -1,0 +1,999 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/dbe/a02084" kind="file" language="C++">
+    <compoundname>stb_image.h</compoundname>
+    <includes local="no">stdio.h</includes>
+    <incdepgraph>
+      <node id="1">
+        <label>CastorUtils/Graphics/stb_image.h</label>
+        <link refid="da/dbe/a02084"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>stdio.h</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="de/ddb/a09027" prot="public">stbi_io_callbacks</innerclass>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="da/dbe/a02084_1aed6cd14a3bf678808c4c179e808866aa" prot="public" static="no">
+        <name>STBI_VERSION</name>
+        <initializer>1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="383" column="9" bodyfile="CastorUtils/Graphics/stb_image.h" bodystart="383" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="da/dbe/a02084_1a2d9ec9850cd12aefe7641b456266a4c2" prot="public" static="no">
+        <name>STBIDEF</name>
+        <initializer>extern</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="405" column="10" bodyfile="CastorUtils/Graphics/stb_image.h" bodystart="405" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="enum">
+      <memberdef kind="enum" id="da/dbe/a02084_1a06fc87d81c62e9abb8790b6e5713c55b" prot="public" static="no" strong="no">
+        <type></type>
+        <name></name>
+        <enumvalue id="da/dbe/a02084_1a06fc87d81c62e9abb8790b6e5713c55ba0177ac2c5002f4f251bb766d41752029" prot="public">
+          <name>STBI_default</name>
+          <initializer>= 0</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="da/dbe/a02084_1a06fc87d81c62e9abb8790b6e5713c55bad1eb95ca1fa7706bf732bf35a0ed40aa" prot="public">
+          <name>STBI_grey</name>
+          <initializer>= 1</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="da/dbe/a02084_1a06fc87d81c62e9abb8790b6e5713c55baf5829d16d4cca6077465c5abd346e2f8" prot="public">
+          <name>STBI_grey_alpha</name>
+          <initializer>= 2</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="da/dbe/a02084_1a06fc87d81c62e9abb8790b6e5713c55baa59123e5d0af25f9b1539f5cf1facddf" prot="public">
+          <name>STBI_rgb</name>
+          <initializer>= 3</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="da/dbe/a02084_1a06fc87d81c62e9abb8790b6e5713c55baa7b1af0c9f0310c3ada2aa29a32de293" prot="public">
+          <name>STBI_rgb_alpha</name>
+          <initializer>= 4</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="385" column="1" bodyfile="CastorUtils/Graphics/stb_image.h" bodystart="386" bodyend="393"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="da/dbe/a02084_1a28eb51a1512ce382ee50f20e1d04d50d" prot="public" static="no">
+        <type>unsigned char</type>
+        <definition>typedef unsigned char stbi_uc</definition>
+        <argsstring></argsstring>
+        <name>stbi_uc</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="395" column="23" bodyfile="CastorUtils/Graphics/stb_image.h" bodystart="395" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="da/dbe/a02084_1a648037d4c55689328ba08c8f5d293df2" prot="public" static="no">
+        <type>unsigned short</type>
+        <definition>typedef unsigned short stbi_us</definition>
+        <argsstring></argsstring>
+        <name>stbi_us</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="396" column="24" bodyfile="CastorUtils/Graphics/stb_image.h" bodystart="396" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="da/dbe/a02084_1a149aa1fd631726f15d66ac4c9b38e4f3" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="da/dbe/a02084_1a28eb51a1512ce382ee50f20e1d04d50d" kindref="member">stbi_uc</ref> *</type>
+        <definition>stbi_uc * stbi_load</definition>
+        <argsstring>(char const *filename, int *x, int *y, int *channels_in_file, int desired_channels)</argsstring>
+        <name>stbi_load</name>
+        <param>
+          <type>char const *</type>
+          <declname>filename</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>channels_in_file</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>desired_channels</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="429" column="18" declfile="CastorUtils/Graphics/stb_image.h" declline="429" declcolumn="18"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1afeaaae906f3d6c8696721fc5dcc5acf5" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="da/dbe/a02084_1a28eb51a1512ce382ee50f20e1d04d50d" kindref="member">stbi_uc</ref> *</type>
+        <definition>stbi_uc * stbi_load_from_memory</definition>
+        <argsstring>(stbi_uc const *buffer, int len, int *x, int *y, int *channels_in_file, int desired_channels)</argsstring>
+        <name>stbi_load_from_memory</name>
+        <param>
+          <type><ref refid="da/dbe/a02084_1a28eb51a1512ce382ee50f20e1d04d50d" kindref="member">stbi_uc</ref> const *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>len</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>channels_in_file</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>desired_channels</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="430" column="18" declfile="CastorUtils/Graphics/stb_image.h" declline="430" declcolumn="18"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a240fdd2f95c5be13b0cce4d91e2045db" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="da/dbe/a02084_1a28eb51a1512ce382ee50f20e1d04d50d" kindref="member">stbi_uc</ref> *</type>
+        <definition>stbi_uc * stbi_load_from_callbacks</definition>
+        <argsstring>(stbi_io_callbacks const *clbk, void *user, int *x, int *y, int *channels_in_file, int desired_channels)</argsstring>
+        <name>stbi_load_from_callbacks</name>
+        <param>
+          <type><ref refid="de/ddb/a09027" kindref="compound">stbi_io_callbacks</ref> const *</type>
+          <declname>clbk</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>user</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>channels_in_file</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>desired_channels</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="431" column="18" declfile="CastorUtils/Graphics/stb_image.h" declline="431" declcolumn="18"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a80db2d82d607dd437686715d7b1166ce" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="da/dbe/a02084_1a28eb51a1512ce382ee50f20e1d04d50d" kindref="member">stbi_uc</ref> *</type>
+        <definition>stbi_uc * stbi_load_from_file</definition>
+        <argsstring>(FILE *f, int *x, int *y, int *channels_in_file, int desired_channels)</argsstring>
+        <name>stbi_load_from_file</name>
+        <param>
+          <type>FILE *</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>channels_in_file</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>desired_channels</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="434" column="18" declfile="CastorUtils/Graphics/stb_image.h" declline="434" declcolumn="18"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1abcef3e6dabe2c905afcc600ed9ab9afe" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="da/dbe/a02084_1a648037d4c55689328ba08c8f5d293df2" kindref="member">stbi_us</ref> *</type>
+        <definition>stbi_us * stbi_load_16</definition>
+        <argsstring>(char const *filename, int *x, int *y, int *channels_in_file, int desired_channels)</argsstring>
+        <name>stbi_load_16</name>
+        <param>
+          <type>char const *</type>
+          <declname>filename</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>channels_in_file</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>desired_channels</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="443" column="18" declfile="CastorUtils/Graphics/stb_image.h" declline="443" declcolumn="18"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a9a51ab1c40a28822b12c7ca7f905f01b" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="da/dbe/a02084_1a648037d4c55689328ba08c8f5d293df2" kindref="member">stbi_us</ref> *</type>
+        <definition>stbi_us * stbi_load_from_file_16</definition>
+        <argsstring>(FILE *f, int *x, int *y, int *channels_in_file, int desired_channels)</argsstring>
+        <name>stbi_load_from_file_16</name>
+        <param>
+          <type>FILE *</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>channels_in_file</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>desired_channels</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="445" column="18" declfile="CastorUtils/Graphics/stb_image.h" declline="445" declcolumn="18"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a513890a058cac6d0233a6fa0f5bbda26" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>float *</type>
+        <definition>float * stbi_loadf</definition>
+        <argsstring>(char const *filename, int *x, int *y, int *channels_in_file, int desired_channels)</argsstring>
+        <name>stbi_loadf</name>
+        <param>
+          <type>char const *</type>
+          <declname>filename</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>channels_in_file</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>desired_channels</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="454" column="19" declfile="CastorUtils/Graphics/stb_image.h" declline="454" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1aca86bd40827ae7963fbfc1a0f8055c88" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>float *</type>
+        <definition>float * stbi_loadf_from_memory</definition>
+        <argsstring>(stbi_uc const *buffer, int len, int *x, int *y, int *channels_in_file, int desired_channels)</argsstring>
+        <name>stbi_loadf_from_memory</name>
+        <param>
+          <type><ref refid="da/dbe/a02084_1a28eb51a1512ce382ee50f20e1d04d50d" kindref="member">stbi_uc</ref> const *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>len</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>channels_in_file</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>desired_channels</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="455" column="19" declfile="CastorUtils/Graphics/stb_image.h" declline="455" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1aa37e2c74fb285b64e7f712e6599bb129" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>float *</type>
+        <definition>float * stbi_loadf_from_callbacks</definition>
+        <argsstring>(stbi_io_callbacks const *clbk, void *user, int *x, int *y, int *channels_in_file, int desired_channels)</argsstring>
+        <name>stbi_loadf_from_callbacks</name>
+        <param>
+          <type><ref refid="de/ddb/a09027" kindref="compound">stbi_io_callbacks</ref> const *</type>
+          <declname>clbk</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>user</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>channels_in_file</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>desired_channels</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="456" column="19" declfile="CastorUtils/Graphics/stb_image.h" declline="456" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a69dc0a491151b166e4b7b1f9b7202fdd" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>float *</type>
+        <definition>float * stbi_loadf_from_file</definition>
+        <argsstring>(FILE *f, int *x, int *y, int *channels_in_file, int desired_channels)</argsstring>
+        <name>stbi_loadf_from_file</name>
+        <param>
+          <type>FILE *</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>channels_in_file</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>desired_channels</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="459" column="19" declfile="CastorUtils/Graphics/stb_image.h" declline="459" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a981084e66668ed998832b84dad50bed7" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void stbi_hdr_to_ldr_gamma</definition>
+        <argsstring>(float gamma)</argsstring>
+        <name>stbi_hdr_to_ldr_gamma</name>
+        <param>
+          <type>float</type>
+          <declname>gamma</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="464" column="20" declfile="CastorUtils/Graphics/stb_image.h" declline="464" declcolumn="20"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a269aa666e5df1051c04f28479add324e" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void stbi_hdr_to_ldr_scale</definition>
+        <argsstring>(float scale)</argsstring>
+        <name>stbi_hdr_to_ldr_scale</name>
+        <param>
+          <type>float</type>
+          <declname>scale</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="465" column="20" declfile="CastorUtils/Graphics/stb_image.h" declline="465" declcolumn="20"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a392b50c731d9969456006783e2a6f012" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void stbi_ldr_to_hdr_gamma</definition>
+        <argsstring>(float gamma)</argsstring>
+        <name>stbi_ldr_to_hdr_gamma</name>
+        <param>
+          <type>float</type>
+          <declname>gamma</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="469" column="20" declfile="CastorUtils/Graphics/stb_image.h" declline="469" declcolumn="20"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a1457f71183493d5a6100ee6a9785e744" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void stbi_ldr_to_hdr_scale</definition>
+        <argsstring>(float scale)</argsstring>
+        <name>stbi_ldr_to_hdr_scale</name>
+        <param>
+          <type>float</type>
+          <declname>scale</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="470" column="20" declfile="CastorUtils/Graphics/stb_image.h" declline="470" declcolumn="20"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a894f9f42a78d83fa913bfa6190b5fb8d" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_is_hdr_from_callbacks</definition>
+        <argsstring>(stbi_io_callbacks const *clbk, void *user)</argsstring>
+        <name>stbi_is_hdr_from_callbacks</name>
+        <param>
+          <type><ref refid="de/ddb/a09027" kindref="compound">stbi_io_callbacks</ref> const *</type>
+          <declname>clbk</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>user</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="474" column="17" declfile="CastorUtils/Graphics/stb_image.h" declline="474" declcolumn="17"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1acd0819e90be8de94e8841d7140d4262c" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_is_hdr_from_memory</definition>
+        <argsstring>(stbi_uc const *buffer, int len)</argsstring>
+        <name>stbi_is_hdr_from_memory</name>
+        <param>
+          <type><ref refid="da/dbe/a02084_1a28eb51a1512ce382ee50f20e1d04d50d" kindref="member">stbi_uc</ref> const *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>len</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="475" column="17" declfile="CastorUtils/Graphics/stb_image.h" declline="475" declcolumn="17"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a828738812bd834ea9af464ce9826008a" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_is_hdr</definition>
+        <argsstring>(char const *filename)</argsstring>
+        <name>stbi_is_hdr</name>
+        <param>
+          <type>char const *</type>
+          <declname>filename</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="477" column="19" declfile="CastorUtils/Graphics/stb_image.h" declline="477" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a6b45e9af5f0b0f76cc33bcb5b08bb7d8" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_is_hdr_from_file</definition>
+        <argsstring>(FILE *f)</argsstring>
+        <name>stbi_is_hdr_from_file</name>
+        <param>
+          <type>FILE *</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="478" column="19" declfile="CastorUtils/Graphics/stb_image.h" declline="478" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a69d3ed7ef9b520b8a42f75ef479e3ede" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>const char *</type>
+        <definition>const char * stbi_failure_reason</definition>
+        <argsstring>(void)</argsstring>
+        <name>stbi_failure_reason</name>
+        <param>
+          <type>void</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="484" column="21" declfile="CastorUtils/Graphics/stb_image.h" declline="484" declcolumn="21"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1ad47e820c6695b0cf5cfb63a29f4452d0" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void stbi_image_free</definition>
+        <argsstring>(void *retval_from_stbi_load)</argsstring>
+        <name>stbi_image_free</name>
+        <param>
+          <type>void *</type>
+          <declname>retval_from_stbi_load</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="487" column="19" declfile="CastorUtils/Graphics/stb_image.h" declline="487" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a8a876cda0f7ca91dcb0acb0206799ad7" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_info_from_memory</definition>
+        <argsstring>(stbi_uc const *buffer, int len, int *x, int *y, int *comp)</argsstring>
+        <name>stbi_info_from_memory</name>
+        <param>
+          <type><ref refid="da/dbe/a02084_1a28eb51a1512ce382ee50f20e1d04d50d" kindref="member">stbi_uc</ref> const *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>len</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>comp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="490" column="19" declfile="CastorUtils/Graphics/stb_image.h" declline="490" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1adda3645c29ab5a4cd7762e758687de06" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_info_from_callbacks</definition>
+        <argsstring>(stbi_io_callbacks const *clbk, void *user, int *x, int *y, int *comp)</argsstring>
+        <name>stbi_info_from_callbacks</name>
+        <param>
+          <type><ref refid="de/ddb/a09027" kindref="compound">stbi_io_callbacks</ref> const *</type>
+          <declname>clbk</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>user</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>comp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="491" column="19" declfile="CastorUtils/Graphics/stb_image.h" declline="491" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1ac94b9565008cb24823826506f9e97def" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_info</definition>
+        <argsstring>(char const *filename, int *x, int *y, int *comp)</argsstring>
+        <name>stbi_info</name>
+        <param>
+          <type>char const *</type>
+          <declname>filename</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>comp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="494" column="19" declfile="CastorUtils/Graphics/stb_image.h" declline="494" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a5560f2807ab53f12ab062235b14f3a3c" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_info_from_file</definition>
+        <argsstring>(FILE *f, int *x, int *y, int *comp)</argsstring>
+        <name>stbi_info_from_file</name>
+        <param>
+          <type>FILE *</type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>comp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="495" column="19" declfile="CastorUtils/Graphics/stb_image.h" declline="495" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1acce0a2f278f8e003648f9c76c149e42a" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void stbi_set_unpremultiply_on_load</definition>
+        <argsstring>(int flag_true_if_should_unpremultiply)</argsstring>
+        <name>stbi_set_unpremultiply_on_load</name>
+        <param>
+          <type>int</type>
+          <declname>flag_true_if_should_unpremultiply</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="504" column="15" declfile="CastorUtils/Graphics/stb_image.h" declline="504" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1afbb4acd1b28fb72059bed9e6285a2961" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void stbi_convert_iphone_png_to_rgb</definition>
+        <argsstring>(int flag_true_if_should_convert)</argsstring>
+        <name>stbi_convert_iphone_png_to_rgb</name>
+        <param>
+          <type>int</type>
+          <declname>flag_true_if_should_convert</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="508" column="15" declfile="CastorUtils/Graphics/stb_image.h" declline="508" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a2578a821fc6c223ac6dd94ec9d73d5ef" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void stbi_set_flip_vertically_on_load</definition>
+        <argsstring>(int flag_true_if_should_flip)</argsstring>
+        <name>stbi_set_flip_vertically_on_load</name>
+        <param>
+          <type>int</type>
+          <declname>flag_true_if_should_flip</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="511" column="15" declfile="CastorUtils/Graphics/stb_image.h" declline="511" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1ad58a5fbe941f1cc170dba564f6d2bdc3" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>char *</type>
+        <definition>char * stbi_zlib_decode_malloc_guesssize</definition>
+        <argsstring>(const char *buffer, int len, int initial_size, int *outlen)</argsstring>
+        <name>stbi_zlib_decode_malloc_guesssize</name>
+        <param>
+          <type>const char *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>len</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>initial_size</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>outlen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="515" column="15" declfile="CastorUtils/Graphics/stb_image.h" declline="515" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a85453cb86c180f1478d4df4913078800" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>char *</type>
+        <definition>char * stbi_zlib_decode_malloc_guesssize_headerflag</definition>
+        <argsstring>(const char *buffer, int len, int initial_size, int *outlen, int parse_header)</argsstring>
+        <name>stbi_zlib_decode_malloc_guesssize_headerflag</name>
+        <param>
+          <type>const char *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>len</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>initial_size</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>outlen</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>parse_header</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="516" column="15" declfile="CastorUtils/Graphics/stb_image.h" declline="516" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a22c3096e4a8005d1376003d62f59351e" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>char *</type>
+        <definition>char * stbi_zlib_decode_malloc</definition>
+        <argsstring>(const char *buffer, int len, int *outlen)</argsstring>
+        <name>stbi_zlib_decode_malloc</name>
+        <param>
+          <type>const char *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>len</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>outlen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="517" column="15" declfile="CastorUtils/Graphics/stb_image.h" declline="517" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a5bb68fa61fe9bba85a1ed744e33599dc" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_zlib_decode_buffer</definition>
+        <argsstring>(char *obuffer, int olen, const char *ibuffer, int ilen)</argsstring>
+        <name>stbi_zlib_decode_buffer</name>
+        <param>
+          <type>char *</type>
+          <declname>obuffer</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>olen</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>ibuffer</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>ilen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="518" column="16" declfile="CastorUtils/Graphics/stb_image.h" declline="518" declcolumn="16"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1a9ac0a7b2514e7b6069bcb79ee21ebc06" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>char *</type>
+        <definition>char * stbi_zlib_decode_noheader_malloc</definition>
+        <argsstring>(const char *buffer, int len, int *outlen)</argsstring>
+        <name>stbi_zlib_decode_noheader_malloc</name>
+        <param>
+          <type>const char *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>len</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>outlen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="520" column="15" declfile="CastorUtils/Graphics/stb_image.h" declline="520" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dbe/a02084_1af84d32350b9a983570a9b28204ee62f4" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_zlib_decode_noheader_buffer</definition>
+        <argsstring>(char *obuffer, int olen, const char *ibuffer, int ilen)</argsstring>
+        <name>stbi_zlib_decode_noheader_buffer</name>
+        <param>
+          <type>char *</type>
+          <declname>obuffer</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>olen</declname>
+        </param>
+        <param>
+          <type>const char *</type>
+          <declname>ibuffer</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>ilen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="521" column="16" declfile="CastorUtils/Graphics/stb_image.h" declline="521" declcolumn="16"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/stb_image.h"/>
+  </compounddef>
+</doxygen>

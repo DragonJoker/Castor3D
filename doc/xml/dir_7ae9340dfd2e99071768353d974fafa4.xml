@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_7ae9340dfd2e99071768353d974fafa4" kind="dir">
-    <compoundname>Scene/Animation/Skeleton</compoundname>
-    <innerfile refid="dc/d35/a01400">SkeletonAnimationInstance.hpp</innerfile>
-    <innerfile refid="da/d06/a01403">SkeletonAnimationInstanceBone.hpp</innerfile>
-    <innerfile refid="dc/d25/a01406">SkeletonAnimationInstanceKeyFrame.hpp</innerfile>
-    <innerfile refid="d9/d6e/a01409">SkeletonAnimationInstanceNode.hpp</innerfile>
-    <innerfile refid="dc/d10/a01412">SkeletonAnimationInstanceObject.hpp</innerfile>
-    <innerfile refid="df/d5d/a14848">SkeletonAnimationModule.hpp</innerfile>
+    <compoundname>Castor3D/Scene/Animation/Skeleton</compoundname>
+    <innerfile refid="da/d06/a01403">SkeletonAnimationInstance.hpp</innerfile>
+    <innerfile refid="dc/d25/a01406">SkeletonAnimationInstanceBone.hpp</innerfile>
+    <innerfile refid="d9/d6e/a01409">SkeletonAnimationInstanceKeyFrame.hpp</innerfile>
+    <innerfile refid="dc/d10/a01412">SkeletonAnimationInstanceNode.hpp</innerfile>
+    <innerfile refid="de/d70/a01415">SkeletonAnimationInstanceObject.hpp</innerfile>
+    <innerfile refid="d9/dc8/a11714">SkeletonAnimationModule.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Scene/Animation/Skeleton/"/>
+    <location file="Castor3D/Scene/Animation/Skeleton/"/>
   </compounddef>
 </doxygen>

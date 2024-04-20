@@ -1,4 +1,7 @@
-<map id="castor3d::HeightComponent::Plugin" name="castor3d::HeightComponent::Plugin">
-<area shape="rect" id="node1" title=" " alt="" coords="20,79,203,119"/>
-<area shape="rect" id="node2" href="$db/df2/a04026.html" title=" " alt="" coords="5,5,217,31"/>
+<map id="castor3d::ImporterFile::GeometryData" name="castor3d::ImporterFile::GeometryData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,240,153,280"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="16,108,143,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,162,82,240,77,240,77,162"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="16,5,143,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="82,59,82,108,77,108,77,59"/>
 </map>

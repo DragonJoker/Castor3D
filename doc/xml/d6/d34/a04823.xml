@@ -1,0 +1,316 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d34/a04823" kind="struct" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::shader::PassReflRefrShader</compoundname>
+    <basecompoundref refid="d2/d04/a04815" prot="public" virt="non-virtual">castor3d::shader::PassShader</basecompoundref>
+    <derivedcompoundref refid="d5/d13/a04739" prot="public" virt="non-virtual">castor3d::DefaultReflRefrComponent::ReflRefrShader</derivedcompoundref>
+    <includes local="no">PassComponent.hpp</includes>
+    <sectiondef kind="user-defined">
+      <description><para>Getters. </para>
+</description>
+      <memberdef kind="function" id="d6/d34/a04823_1a759264d18ebe146947f1803e60d7e7e7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dba/a02278_1a11544af0f8079d1c8711ccf824ad3ec6" kindref="member">PassComponentID</ref></type>
+        <definition>C3D_API PassComponentID castor3d::shader::PassReflRefrShader::getId</definition>
+        <argsstring>() const</argsstring>
+        <name>getId</name>
+        <qualifiedname>castor3d::shader::PassReflRefrShader::getId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponent.hpp" line="401" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d34/a04823_1a0a24465e7529b7a3adf5727b08e55a93" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/d2e/a04831" kindref="compound">PassComponentPlugin</ref> const &amp;</type>
+        <definition>PassComponentPlugin const  &amp; castor3d::shader::PassReflRefrShader::getPlugin</definition>
+        <argsstring>() const</argsstring>
+        <name>getPlugin</name>
+        <qualifiedname>castor3d::shader::PassReflRefrShader::getPlugin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponent.hpp" line="403" column="28" bodyfile="Castor3D/Material/Pass/Component/PassComponent.hpp" bodystart="403" bodyend="406"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/d34/a04823_1a7f920fd177f0e9a364cb75c2fb5f78c0" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/d2e/a04831" kindref="compound">PassComponentPlugin</ref> const  &amp;</type>
+        <definition>PassComponentPlugin const&amp; castor3d::shader::PassReflRefrShader::m_plugin</definition>
+        <argsstring></argsstring>
+        <name>m_plugin</name>
+        <qualifiedname>castor3d::shader::PassReflRefrShader::m_plugin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponent.hpp" line="410" column="28" bodyfile="Castor3D/Material/Pass/Component/PassComponent.hpp" bodystart="410" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d34/a04823_1a7d6020bb15c748f735cb1b42b07993e7" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::PassReflRefrShader::PassReflRefrShader</definition>
+        <argsstring>(PassComponentPlugin const &amp;plugin)</argsstring>
+        <name>PassReflRefrShader</name>
+        <qualifiedname>castor3d::shader::PassReflRefrShader::PassReflRefrShader</qualifiedname>
+        <param>
+          <type><ref refid="d2/d2e/a04831" kindref="compound">PassComponentPlugin</ref> const &amp;</type>
+          <declname>plugin</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponent.hpp" line="351" column="10" bodyfile="Castor3D/Material/Pass/Component/PassComponent.hpp" bodystart="351" bodyend="354"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d34/a04823_1a4aa8851dfcf8adb3f4f95e0e16c51a4d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::PassReflRefrShader::computeReflRefr</definition>
+        <argsstring>(ReflectionModel &amp;reflections, BlendComponents &amp;components, LightSurface const &amp;lightSurface, sdw::Vec4 const &amp;position, BackgroundModel &amp;background, sdw::CombinedImage2DRgba32 const &amp;mippedScene, CameraData const &amp;camera, DirectLighting &amp;lighting, IndirectLighting &amp;indirect, sdw::Vec2 const &amp;sceneUv, sdw::UInt const &amp;envMapIndex, sdw::Vec3 const &amp;incident, sdw::UInt const &amp;hasReflection, sdw::UInt const &amp;hasRefraction, sdw::Float const &amp;refractionRatio, sdw::Vec3 &amp;reflectedDiffuse, sdw::Vec3 &amp;reflectedSpecular, sdw::Vec3 &amp;refracted, sdw::Vec3 &amp;coatReflected, sdw::Vec3 &amp;sheenReflected, DebugOutput &amp;debugOutput) const =0</argsstring>
+        <name>computeReflRefr</name>
+        <qualifiedname>castor3d::shader::PassReflRefrShader::computeReflRefr</qualifiedname>
+        <reimplementedby refid="d5/d13/a04739_1a2b5819d6ea22ba9333c6c13c79eb9f2d">computeReflRefr</reimplementedby>
+        <param>
+          <type><ref refid="d4/d4f/a07623" kindref="compound">ReflectionModel</ref> &amp;</type>
+          <declname>reflections</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d81/a07547" kindref="compound">LightSurface</ref> const &amp;</type>
+          <declname>lightSurface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d79/a07435" kindref="compound">BackgroundModel</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>mippedScene</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dc4/a07739" kindref="compound">CameraData</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dd8/a07591" kindref="compound">DirectLighting</ref> &amp;</type>
+          <declname>lighting</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d55/a07595" kindref="compound">IndirectLighting</ref> &amp;</type>
+          <declname>indirect</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>sceneUv</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>incident</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>hasReflection</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>hasRefraction</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedSpecular</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refracted</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>coatReflected</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>sheenReflected</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d68/a07491" kindref="compound">DebugOutput</ref> &amp;</type>
+          <declname>debugOutput</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponent.hpp" line="356" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d34/a04823_1aa1fd82014b8ab0e486963e6a1bbc7d94" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::PassReflRefrShader::computeReflRefr</definition>
+        <argsstring>(ReflectionModel &amp;reflections, BlendComponents &amp;components, LightSurface const &amp;lightSurface, BackgroundModel &amp;background, CameraData const &amp;camera, DirectLighting &amp;lighting, IndirectLighting &amp;indirect, sdw::Vec2 const &amp;sceneUv, sdw::UInt const &amp;envMapIndex, sdw::Vec3 const &amp;incident, sdw::UInt const &amp;hasReflection, sdw::UInt const &amp;hasRefraction, sdw::Float const &amp;refractionRatio, sdw::Vec3 &amp;reflectedDiffuse, sdw::Vec3 &amp;reflectedSpecular, sdw::Vec3 &amp;refracted, sdw::Vec3 &amp;coatReflected, sdw::Vec3 &amp;sheenReflected, DebugOutput &amp;debugOutput) const =0</argsstring>
+        <name>computeReflRefr</name>
+        <qualifiedname>castor3d::shader::PassReflRefrShader::computeReflRefr</qualifiedname>
+        <reimplementedby refid="d5/d13/a04739_1afd2fdf0fbc149a5d764c6950b0b29431">computeReflRefr</reimplementedby>
+        <param>
+          <type><ref refid="d4/d4f/a07623" kindref="compound">ReflectionModel</ref> &amp;</type>
+          <declname>reflections</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d81/a07547" kindref="compound">LightSurface</ref> const &amp;</type>
+          <declname>lightSurface</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d79/a07435" kindref="compound">BackgroundModel</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dc4/a07739" kindref="compound">CameraData</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dd8/a07591" kindref="compound">DirectLighting</ref> &amp;</type>
+          <declname>lighting</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d55/a07595" kindref="compound">IndirectLighting</ref> &amp;</type>
+          <declname>indirect</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>sceneUv</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>incident</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>hasReflection</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>hasRefraction</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedSpecular</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refracted</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>coatReflected</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>sheenReflected</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d68/a07491" kindref="compound">DebugOutput</ref> &amp;</type>
+          <declname>debugOutput</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponent.hpp" line="377" column="22"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor3d::DefaultReflRefrComponent::ReflRefrShader</label>
+        <link refid="d5/d13/a04739"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::PassReflRefrShader</label>
+        <link refid="d6/d34/a04823"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::PassReflRefrShader</label>
+        <link refid="d6/d34/a04823"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Component/PassComponent.hpp" line="348" column="1" bodyfile="Castor3D/Material/Pass/Component/PassComponent.hpp" bodystart="350" bodyend="411"/>
+    <listofallmembers>
+      <member refid="d6/d34/a04823_1a4aa8851dfcf8adb3f4f95e0e16c51a4d" prot="public" virt="pure-virtual"><scope>castor3d::shader::PassReflRefrShader</scope><name>computeReflRefr</name></member>
+      <member refid="d6/d34/a04823_1aa1fd82014b8ab0e486963e6a1bbc7d94" prot="public" virt="pure-virtual"><scope>castor3d::shader::PassReflRefrShader</scope><name>computeReflRefr</name></member>
+      <member refid="d6/d34/a04823_1a759264d18ebe146947f1803e60d7e7e7" prot="public" virt="non-virtual"><scope>castor3d::shader::PassReflRefrShader</scope><name>getId</name></member>
+      <member refid="d6/d34/a04823_1a0a24465e7529b7a3adf5727b08e55a93" prot="public" virt="non-virtual"><scope>castor3d::shader::PassReflRefrShader</scope><name>getPlugin</name></member>
+      <member refid="d6/d34/a04823_1a7f920fd177f0e9a364cb75c2fb5f78c0" prot="private" virt="non-virtual"><scope>castor3d::shader::PassReflRefrShader</scope><name>m_plugin</name></member>
+      <member refid="d2/d04/a04815_1a06fad613f64fa717de3e8032393fdbd7" prot="public" virt="non-virtual"><scope>castor3d::shader::PassReflRefrShader</scope><name>operator=</name></member>
+      <member refid="d2/d04/a04815_1a0e5c7fea4f6928009d6da51c4d78a9df" prot="public" virt="non-virtual"><scope>castor3d::shader::PassReflRefrShader</scope><name>operator=</name></member>
+      <member refid="d6/d34/a04823_1a7d6020bb15c748f735cb1b42b07993e7" prot="public" virt="non-virtual"><scope>castor3d::shader::PassReflRefrShader</scope><name>PassReflRefrShader</name></member>
+      <member refid="d2/d04/a04815_1ab439edbbb2da660939e0209d9bfba3b0" prot="public" virt="non-virtual"><scope>castor3d::shader::PassReflRefrShader</scope><name>PassShader</name></member>
+      <member refid="d2/d04/a04815_1ae0263dc410ae3d05ddea8cc9ad7eac73" prot="public" virt="non-virtual"><scope>castor3d::shader::PassReflRefrShader</scope><name>PassShader</name></member>
+      <member refid="d2/d04/a04815_1aee18e0dfda227ed54fb966d7d75a1ea5" prot="public" virt="non-virtual"><scope>castor3d::shader::PassReflRefrShader</scope><name>PassShader</name></member>
+      <member refid="d2/d04/a04815_1a56338db0aed5f44427291aa6c631872b" prot="public" virt="virtual"><scope>castor3d::shader::PassReflRefrShader</scope><name>~PassShader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

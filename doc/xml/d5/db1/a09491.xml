@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/db1/a09491" kind="struct" language="C++" prot="public">
+    <compoundname>castor::BuddyAllocatorTraits::Block</compoundname>
+    <includes local="no">BuddyAllocator.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/db1/a09491_1a08978e63ede0129ae0d71bea3915a8a0" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/dc1/a09487_1acb276b3d1b73424ed896fb61fd956278" kindref="member">PointerType</ref></type>
+        <definition>PointerType castor::BuddyAllocatorTraits::Block::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>castor::BuddyAllocatorTraits::Block::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="16" column="13" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="16" bodyend="-1"/>
+        <referencedby refid="dc/dc1/a09487_1aaaff0defd7449f7326d7c87cdb206778" compoundref="de/db2/a02246" startline="85" endline="88">castor::BuddyAllocatorTraits::isNull</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="14" column="1" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="15" bodyend="17"/>
+    <listofallmembers>
+      <member refid="d5/db1/a09491_1a08978e63ede0129ae0d71bea3915a8a0" prot="public" virt="non-virtual"><scope>castor::BuddyAllocatorTraits::Block</scope><name>data</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

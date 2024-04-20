@@ -1,0 +1,607 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/d73/a09411" kind="class" language="C++" prot="public">
+    <compoundname>castor::string::utf8::iterator</compoundname>
+    <includes local="no">StringUtils.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename CharT</type>
+      </param>
+      <param>
+        <type>typename StringT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/d73/a09411_1ae25f0cf834c92851c14adbacef8ec00c" prot="public" static="no">
+        <type>StringT</type>
+        <definition>using castor::string::utf8::iterator&lt; CharT, StringT &gt;::string_type =  StringT</definition>
+        <argsstring></argsstring>
+        <name>string_type</name>
+        <qualifiedname>castor::string::utf8::iterator::string_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="920" column="1" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="920" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d73/a09411_1a075e1f05551660cfe0a950be2ee4a633" prot="public" static="no">
+        <type>typename string_type::iterator</type>
+        <definition>using castor::string::utf8::iterator&lt; CharT, StringT &gt;::iterator_type =  typename string_type::iterator</definition>
+        <argsstring></argsstring>
+        <name>iterator_type</name>
+        <qualifiedname>castor::string::utf8::iterator::iterator_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="921" column="1" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="921" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d73/a09411_1a9b9d3b9a2ceef72d053e95f2f609e5cb" prot="public" static="no">
+        <type>std::bidirectional_iterator_tag</type>
+        <definition>using castor::string::utf8::iterator&lt; CharT, StringT &gt;::iterator_category =  std::bidirectional_iterator_tag</definition>
+        <argsstring></argsstring>
+        <name>iterator_category</name>
+        <qualifiedname>castor::string::utf8::iterator::iterator_category</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="922" column="1" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="922" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d73/a09411_1a6477261ccb7b56e8fbb72c71cb257a4b" prot="public" static="no">
+        <type>char32_t</type>
+        <definition>using castor::string::utf8::iterator&lt; CharT, StringT &gt;::value_type =  char32_t</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>castor::string::utf8::iterator::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="923" column="1" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="923" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d73/a09411_1a7f040efa78ecf24700f98cda67721934" prot="public" static="no">
+        <type>typename string_type::difference_type</type>
+        <definition>using castor::string::utf8::iterator&lt; CharT, StringT &gt;::difference_type =  typename string_type::difference_type</definition>
+        <argsstring></argsstring>
+        <name>difference_type</name>
+        <qualifiedname>castor::string::utf8::iterator::difference_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="924" column="1" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="924" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d73/a09411_1a1d21b7d385369a9ca3d2f14a465c389e" prot="public" static="no">
+        <type>const char32_t *</type>
+        <definition>using castor::string::utf8::iterator&lt; CharT, StringT &gt;::pointer =  const char32_t *</definition>
+        <argsstring></argsstring>
+        <name>pointer</name>
+        <qualifiedname>castor::string::utf8::iterator::pointer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="925" column="1" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="925" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d73/a09411_1af03cba9656ea967e39e6baf9bfc4eb27" prot="public" static="no">
+        <type>const char32_t &amp;</type>
+        <definition>using castor::string::utf8::iterator&lt; CharT, StringT &gt;::reference =  const char32_t &amp;</definition>
+        <argsstring></argsstring>
+        <name>reference</name>
+        <qualifiedname>castor::string::utf8::iterator::reference</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="926" column="1" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="926" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="de/d73/a09411_1a11e0e7b8f2de3805fa9f1deeb3ea4a2f" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d73/a09411_1a075e1f05551660cfe0a950be2ee4a633" kindref="member">iterator_type</ref></type>
+        <definition>iterator_type castor::string::utf8::iterator&lt; CharT, StringT &gt;::m_it</definition>
+        <argsstring></argsstring>
+        <name>m_it</name>
+        <qualifiedname>castor::string::utf8::iterator::m_it</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1068" column="15" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="1068" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d73/a09411_1a0d8db62379ff235f8c5cb7f516541537" prot="private" static="no" mutable="yes">
+        <type>char32_t</type>
+        <definition>char32_t castor::string::utf8::iterator&lt; CharT, StringT &gt;::m_lastCodePoint</definition>
+        <argsstring></argsstring>
+        <name>m_lastCodePoint</name>
+        <qualifiedname>castor::string::utf8::iterator::m_lastCodePoint</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1070" column="18" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="1070" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d73/a09411_1a8f1f5c5b98b6d2f13377dbce3f359404" prot="private" static="no" mutable="yes">
+        <type>bool</type>
+        <definition>bool castor::string::utf8::iterator&lt; CharT, StringT &gt;::m_dirty</definition>
+        <argsstring></argsstring>
+        <name>m_dirty</name>
+        <qualifiedname>castor::string::utf8::iterator::m_dirty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1072" column="14" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="1072" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d73/a09411_1aa3e89dd65a61581a0a85bcdf33472d10" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::string::utf8::iterator&lt; CharT, StringT &gt;::iterator</definition>
+        <argsstring>(iterator const &amp;it)</argsstring>
+        <name>iterator</name>
+        <qualifiedname>castor::string::utf8::iterator::iterator</qualifiedname>
+        <param>
+          <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref> const &amp;</type>
+          <declname>it</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="929" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d73/a09411_1a7ee51a0e62aa839389a32015055df9c1" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::string::utf8::iterator&lt; CharT, StringT &gt;::iterator</definition>
+        <argsstring>(iterator &amp;&amp;it) noexcept</argsstring>
+        <name>iterator</name>
+        <qualifiedname>castor::string::utf8::iterator::iterator</qualifiedname>
+        <param>
+          <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref> &amp;&amp;</type>
+          <declname>it</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="930" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d73/a09411_1ab87d4f47ce1253f9ee880267f4ba8677" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref> &amp;</type>
+        <definition>iterator &amp; castor::string::utf8::iterator&lt; CharT, StringT &gt;::operator=</definition>
+        <argsstring>(iterator const &amp;it)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::string::utf8::iterator::operator=</qualifiedname>
+        <param>
+          <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref> const &amp;</type>
+          <declname>it</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="931" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d73/a09411_1a7eb48ecb70cc7a80d8b25c73c169b6ed" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref> &amp;</type>
+        <definition>iterator &amp; castor::string::utf8::iterator&lt; CharT, StringT &gt;::operator=</definition>
+        <argsstring>(iterator &amp;&amp;it) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::string::utf8::iterator::operator=</qualifiedname>
+        <param>
+          <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref> &amp;&amp;</type>
+          <declname>it</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="932" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d73/a09411_1ad8d5df6328b5cb41db54cba4c5cb1d0b" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::string::utf8::iterator&lt; CharT, StringT &gt;::~iterator</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~iterator</name>
+        <qualifiedname>castor::string::utf8::iterator::~iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="933" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d73/a09411_1a744fa1e2bdf82b4e85c0cf293e606fe0" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::string::utf8::iterator&lt; CharT, StringT &gt;::iterator</definition>
+        <argsstring>(iterator_type const &amp;it)</argsstring>
+        <name>iterator</name>
+        <qualifiedname>castor::string::utf8::iterator::iterator</qualifiedname>
+        <param>
+          <type><ref refid="de/d73/a09411_1a075e1f05551660cfe0a950be2ee4a633" kindref="member">iterator_type</ref> const &amp;</type>
+          <declname>it</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">it</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;itérateur sur la chaîne. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="942" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d73/a09411_1a4bbae8c0950e474c1f2686e207d96ee1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref> &amp;</type>
+        <definition>iterator &amp; castor::string::utf8::iterator&lt; CharT, StringT &gt;::operator=</definition>
+        <argsstring>(iterator_type const &amp;it)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::string::utf8::iterator::operator=</qualifiedname>
+        <param>
+          <type><ref refid="de/d73/a09411_1a075e1f05551660cfe0a950be2ee4a633" kindref="member">iterator_type</ref> const &amp;</type>
+          <declname>it</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">it</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;itérateur sur la chaîne originale. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="953" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d73/a09411_1a380a5fdc3b101e4c82bb064db16d8bc2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref> &amp;</type>
+        <definition>iterator &amp; castor::string::utf8::iterator&lt; CharT, StringT &gt;::operator+=</definition>
+        <argsstring>(size_t offset)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::string::utf8::iterator::operator+=</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affection par addition. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le décalage à appliquer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="964" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d73/a09411_1ade3e59a248f279ea1c5e9397b738a42d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref> &amp;</type>
+        <definition>iterator &amp; castor::string::utf8::iterator&lt; CharT, StringT &gt;::operator-=</definition>
+        <argsstring>(size_t offset)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::string::utf8::iterator::operator-=</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par soustraction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le décalage à appliquer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="975" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d73/a09411_1a5701daca759f5106799e2138f3743351" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref> &amp;</type>
+        <definition>iterator &amp; castor::string::utf8::iterator&lt; CharT, StringT &gt;::operator++</definition>
+        <argsstring>()</argsstring>
+        <name>operator++</name>
+        <qualifiedname>castor::string::utf8::iterator::operator++</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="984" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d73/a09411_1a46a5c6f27174642b2223e5545e8377e4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref></type>
+        <definition>iterator castor::string::utf8::iterator&lt; CharT, StringT &gt;::operator++</definition>
+        <argsstring>(int)</argsstring>
+        <name>operator++</name>
+        <qualifiedname>castor::string::utf8::iterator::operator++</qualifiedname>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+<para>Opérateur de post-increment. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Une copie de cet itérateur, avant l&apos;incrémentation. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="993" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d73/a09411_1a0a998c56220c02889599c9021068955d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref> &amp;</type>
+        <definition>iterator &amp; castor::string::utf8::iterator&lt; CharT, StringT &gt;::operator--</definition>
+        <argsstring>()</argsstring>
+        <name>operator--</name>
+        <qualifiedname>castor::string::utf8::iterator::operator--</qualifiedname>
+        <briefdescription>
+<para>Opérateur de pré-décrement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Une référence sur cet objet. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1002" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d73/a09411_1a43e4150367d9ca077c93d0cb484393dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref></type>
+        <definition>iterator castor::string::utf8::iterator&lt; CharT, StringT &gt;::operator--</definition>
+        <argsstring>(int)</argsstring>
+        <name>operator--</name>
+        <qualifiedname>castor::string::utf8::iterator::operator--</qualifiedname>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+<para>Opérateur de post-décrement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Une copie de cet itérateur, avant la décrémentation. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1011" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d73/a09411_1aaaad14c0896c963cca2e73748036bb7f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>char32_t</type>
+        <definition>char32_t castor::string::utf8::iterator&lt; CharT, StringT &gt;::operator*</definition>
+        <argsstring>() const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>castor::string::utf8::iterator::operator*</qualifiedname>
+        <briefdescription>
+<para>Accès à la valeur UTF-8 courante. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1020" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d73/a09411_1ac1d5f2fa59e97e6df11f49a9e4eb8f07" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::string::utf8::iterator&lt; CharT, StringT &gt;::operator==</definition>
+        <argsstring>(const iterator &amp;it) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>castor::string::utf8::iterator::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="de/d73/a09411" kindref="compound">iterator</ref> &amp;</type>
+          <declname>it</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;égalité. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1027" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d73/a09411_1a0413a8e9135ab2f9d17d3bb40bd3c121" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::string::utf8::iterator&lt; CharT, StringT &gt;::operator==</definition>
+        <argsstring>(const iterator_type &amp;it) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>castor::string::utf8::iterator::operator==</qualifiedname>
+        <param>
+          <type>const <ref refid="de/d73/a09411_1a075e1f05551660cfe0a950be2ee4a633" kindref="member">iterator_type</ref> &amp;</type>
+          <declname>it</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;égalité. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1034" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d73/a09411_1aee65843f6cffd0fd4917445f126ef4c4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::string::utf8::iterator&lt; CharT, StringT &gt;::operator!=</definition>
+        <argsstring>(const iterator &amp;it) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>castor::string::utf8::iterator::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="de/d73/a09411" kindref="compound">iterator</ref> &amp;</type>
+          <declname>it</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de différence. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1041" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d73/a09411_1ab50312711f6bb20e8723ed490c57ba94" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::string::utf8::iterator&lt; CharT, StringT &gt;::operator!=</definition>
+        <argsstring>(const iterator_type &amp;it) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>castor::string::utf8::iterator::operator!=</qualifiedname>
+        <param>
+          <type>const <ref refid="de/d73/a09411_1a075e1f05551660cfe0a950be2ee4a633" kindref="member">iterator_type</ref> &amp;</type>
+          <declname>it</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de différence. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1048" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d73/a09411_1af4ad0c7a1e050cdd079defbe33a3bcec" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="de/d73/a09411_1a075e1f05551660cfe0a950be2ee4a633" kindref="member">iterator_type</ref></type>
+        <definition>iterator_type castor::string::utf8::iterator&lt; CharT, StringT &gt;::internal</definition>
+        <argsstring>() const</argsstring>
+        <name>internal</name>
+        <qualifiedname>castor::string::utf8::iterator::internal</qualifiedname>
+        <briefdescription>
+<para>Récupère la&apos;itérateur interne. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1055" column="15"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="de/d73/a09411_1aa322314bd2f3ad970c5d60734fadddb6" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::string::utf8::iterator&lt; CharT, StringT &gt;::doCalculateCurrentCodePoint</definition>
+        <argsstring>() const</argsstring>
+        <name>doCalculateCurrentCodePoint</name>
+        <qualifiedname>castor::string::utf8::iterator::doCalculateCurrentCodePoint</qualifiedname>
+        <briefdescription>
+<para>Calcule la valeur UTF-8 cachée. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1064" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Un itérateur sur une chaîne UTF-8. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="917" column="1" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="918" bodyend="1073"/>
+    <listofallmembers>
+      <member refid="de/d73/a09411_1a7f040efa78ecf24700f98cda67721934" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>difference_type</name></member>
+      <member refid="de/d73/a09411_1aa322314bd2f3ad970c5d60734fadddb6" prot="private" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>doCalculateCurrentCodePoint</name></member>
+      <member refid="de/d73/a09411_1af4ad0c7a1e050cdd079defbe33a3bcec" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>internal</name></member>
+      <member refid="de/d73/a09411_1aa3e89dd65a61581a0a85bcdf33472d10" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>iterator</name></member>
+      <member refid="de/d73/a09411_1a7ee51a0e62aa839389a32015055df9c1" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>iterator</name></member>
+      <member refid="de/d73/a09411_1a744fa1e2bdf82b4e85c0cf293e606fe0" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>iterator</name></member>
+      <member refid="de/d73/a09411_1a9b9d3b9a2ceef72d053e95f2f609e5cb" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>iterator_category</name></member>
+      <member refid="de/d73/a09411_1a075e1f05551660cfe0a950be2ee4a633" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>iterator_type</name></member>
+      <member refid="de/d73/a09411_1a8f1f5c5b98b6d2f13377dbce3f359404" prot="private" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>m_dirty</name></member>
+      <member refid="de/d73/a09411_1a11e0e7b8f2de3805fa9f1deeb3ea4a2f" prot="private" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>m_it</name></member>
+      <member refid="de/d73/a09411_1a0d8db62379ff235f8c5cb7f516541537" prot="private" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>m_lastCodePoint</name></member>
+      <member refid="de/d73/a09411_1aee65843f6cffd0fd4917445f126ef4c4" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>operator!=</name></member>
+      <member refid="de/d73/a09411_1ab50312711f6bb20e8723ed490c57ba94" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>operator!=</name></member>
+      <member refid="de/d73/a09411_1aaaad14c0896c963cca2e73748036bb7f" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>operator*</name></member>
+      <member refid="de/d73/a09411_1a5701daca759f5106799e2138f3743351" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>operator++</name></member>
+      <member refid="de/d73/a09411_1a46a5c6f27174642b2223e5545e8377e4" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>operator++</name></member>
+      <member refid="de/d73/a09411_1a380a5fdc3b101e4c82bb064db16d8bc2" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>operator+=</name></member>
+      <member refid="de/d73/a09411_1a0a998c56220c02889599c9021068955d" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>operator--</name></member>
+      <member refid="de/d73/a09411_1a43e4150367d9ca077c93d0cb484393dd" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>operator--</name></member>
+      <member refid="de/d73/a09411_1ade3e59a248f279ea1c5e9397b738a42d" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>operator-=</name></member>
+      <member refid="de/d73/a09411_1ab87d4f47ce1253f9ee880267f4ba8677" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>operator=</name></member>
+      <member refid="de/d73/a09411_1a7eb48ecb70cc7a80d8b25c73c169b6ed" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>operator=</name></member>
+      <member refid="de/d73/a09411_1a4bbae8c0950e474c1f2686e207d96ee1" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>operator=</name></member>
+      <member refid="de/d73/a09411_1ac1d5f2fa59e97e6df11f49a9e4eb8f07" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>operator==</name></member>
+      <member refid="de/d73/a09411_1a0413a8e9135ab2f9d17d3bb40bd3c121" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>operator==</name></member>
+      <member refid="de/d73/a09411_1a1d21b7d385369a9ca3d2f14a465c389e" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>pointer</name></member>
+      <member refid="de/d73/a09411_1af03cba9656ea967e39e6baf9bfc4eb27" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>reference</name></member>
+      <member refid="de/d73/a09411_1ae25f0cf834c92851c14adbacef8ec00c" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>string_type</name></member>
+      <member refid="de/d73/a09411_1a6477261ccb7b56e8fbb72c71cb257a4b" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>value_type</name></member>
+      <member refid="de/d73/a09411_1ad8d5df6328b5cb41db54cba4c5cb1d0b" prot="public" virt="non-virtual"><scope>castor::string::utf8::iterator</scope><name>~iterator</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/df5/a07635" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::PointShadowData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_PointShadowData&quot;, sdw::type::MemoryLayout::eStd140, sdw::StructFieldT&lt; ShadowData, &quot;base&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">GlslShadow.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/df5/a07635_1a093c894c6d71b5d567483457f8c3b261" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::PointShadowData::PointShadowData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>PointShadowData</name>
+        <qualifiedname>castor3d::shader::PointShadowData::PointShadowData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="85" column="1" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="85" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/df5/a07635_1a03618686c4728687c34ebca32912b943" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::PointShadowData::base</definition>
+        <argsstring>() const</argsstring>
+        <name>base</name>
+        <qualifiedname>castor3d::shader::PointShadowData::base</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="92" column="6" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="92" bodyend="92"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::PointShadowData</label>
+        <link refid="d7/df5/a07635"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_PointShadowData&quot;, sdw::type::MemoryLayout::eStd140, sdw::StructFieldT&lt; ShadowData, &quot;base&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::PointShadowData</label>
+        <link refid="d7/df5/a07635"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_PointShadowData&quot;, sdw::type::MemoryLayout::eStd140, sdw::StructFieldT&lt; ShadowData, &quot;base&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="80" column="1" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="84" bodyend="93"/>
+    <listofallmembers>
+      <member refid="d7/df5/a07635_1a03618686c4728687c34ebca32912b943" prot="public" virt="non-virtual"><scope>castor3d::shader::PointShadowData</scope><name>base</name></member>
+      <member refid="d7/df5/a07635_1a093c894c6d71b5d567483457f8c3b261" prot="public" virt="non-virtual"><scope>castor3d::shader::PointShadowData</scope><name>PointShadowData</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

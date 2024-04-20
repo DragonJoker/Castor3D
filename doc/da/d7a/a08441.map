@@ -1,0 +1,13 @@
+<map id="castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;" name="castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;">
+<area shape="rect" id="Node000001" title="ParserParameter specialisation for ParameterType::eBitwiseOred64BitsCheckedText." alt="" coords="680,62,901,117"/>
+<area shape="rect" id="Node000002" href="$d3/d9a/a08387.html" title=" " alt="" coords="387,5,573,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="587,45,680,64,679,69,586,50"/>
+<area shape="rect" id="Node000003" href="$d3/d9a/a08387.html" title="Specified parser parameter." alt="" coords="5,5,169,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="183,23,386,23,386,28,183,28"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="405,69,555,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="568,87,680,87,680,92,568,92"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="13,69,162,109"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="175,87,405,87,405,92,175,92"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="429,134,531,159"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="544,132,679,107,680,112,545,138"/>
+</map>

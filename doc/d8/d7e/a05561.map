@@ -1,0 +1,13 @@
+<map id="castor3d::PassMasksComponent::ComponentData" name="castor3d::PassMasksComponent::ComponentData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="71,331,286,371"/>
+<area shape="rect" id="Node000002" href="$db/dd0/a05603.html" title=" " alt="" coords="65,256,293,281"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,295,181,331,176,331,176,295"/>
+<area shape="rect" id="Node000003" href="$d0/d52/a05583.html" title=" " alt="" coords="5,168,229,193"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="136,203,172,254,168,257,132,206"/>
+<area shape="rect" id="Node000004" href="$dd/df1/a05635.html" title=" " alt="" coords="254,168,389,193"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="292,203,199,258,197,253,289,198"/>
+<area shape="rect" id="Node000005" href="$d6/da8/a08227.html" title=" " alt="" coords="232,93,411,119"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="324,133,324,168,319,168,319,133"/>
+<area shape="rect" id="Node000006" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="230,5,413,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="324,45,324,93,319,93,319,45"/>
+</map>

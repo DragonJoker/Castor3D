@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/dd9/a09131" kind="struct" language="C++" prot="public">
+    <compoundname>castor::Power&lt; T, 1 &gt;</compoundname>
+    <includes local="no">Math.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/dd9/a09131_1a005a0a2bf645ff3924ce01e3905aa86f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>T</type>
+        <definition>T castor::Power&lt; T, 1 &gt;::operator()</definition>
+        <argsstring>(T x) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::Power&lt; T, 1 &gt;::operator()</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Math.hpp" line="58" column="10" bodyfile="CastorUtils/Math/Math.hpp" bodystart="58" bodyend="61"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Cas d&apos;arrêt pour Puissance. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/Math.hpp" line="56" column="13" bodyfile="CastorUtils/Math/Math.hpp" bodystart="57" bodyend="62"/>
+    <listofallmembers>
+      <member refid="d5/dd9/a09131_1a005a0a2bf645ff3924ce01e3905aa86f" prot="public" virt="non-virtual"><scope>castor::Power&lt; T, 1 &gt;</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,10 @@
+<map id="castor3d::BinaryChunk::getSubChunk" name="castor3d::BinaryChunk::getSubChunk">
+<area shape="rect" id="Node000001" title="Retrieves a subchunk." alt="" coords="472,37,627,77"/>
+<area shape="rect" id="Node000002" href="$dd/de1/a03223.html#ab5f9ba53ad5865f967b41e5a27ed73a9" title="Retrieves a subchunk." alt="" coords="239,5,424,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="458,47,424,42,424,36,458,41"/>
+<area shape="rect" id="Node000003" href="$dd/de1/a03223.html#a035881aba2b64571b30a5efd3faaf3d9" title="Parses the header chunk." alt="" coords="239,69,424,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="458,73,424,78,424,73,458,68"/>
+<area shape="rect" id="Node000004" href="$dd/de1/a03223.html#a5db83668684ca219f67de3a381898e64" title="From file reader function." alt="" coords="5,69,191,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="225,92,191,92,191,87,225,87"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="137,58,124,51,98,48,76,50,62,55,57,61,60,68,55,70,52,60,59,50,74,45,98,43,125,46,140,53"/>
+</map>

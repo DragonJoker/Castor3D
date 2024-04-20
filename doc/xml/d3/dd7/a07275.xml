@@ -1,0 +1,231 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/dd7/a07275" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::NodeContext</compoundname>
+    <includes local="no">SceneNode.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/dd7/a07275_1a5f9d6ab0d524da002a9c098515a7d303" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/db2/a07139" kindref="compound">SceneContext</ref> *</type>
+        <definition>SceneContext* castor3d::NodeContext::scene</definition>
+        <argsstring></argsstring>
+        <name>scene</name>
+        <qualifiedname>castor3d::NodeContext::scene</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNode.hpp" line="470" column="15" bodyfile="Castor3D/Scene/SceneNode.hpp" bodystart="470" bodyend="470"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dd7/a07275_1a2df190645cff3a6c54d019efa760762d" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::NodeContext::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>castor3d::NodeContext::name</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNode.hpp" line="471" column="16" bodyfile="Castor3D/Scene/SceneNode.hpp" bodystart="471" bodyend="471"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dd7/a07275_1ad3d8a104b5bdd5b0b6ee8b153803100f" prot="public" static="no" mutable="no">
+        <type>SceneNodeRPtr</type>
+        <definition>SceneNodeRPtr castor3d::NodeContext::parentNode</definition>
+        <argsstring></argsstring>
+        <name>parentNode</name>
+        <qualifiedname>castor3d::NodeContext::parentNode</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNode.hpp" line="472" column="15" bodyfile="Castor3D/Scene/SceneNode.hpp" bodystart="472" bodyend="472"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dd7/a07275_1aeaf486188d56d5d5b4ff799a6cb17723" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::NodeContext::isCameraNode</definition>
+        <argsstring></argsstring>
+        <name>isCameraNode</name>
+        <qualifiedname>castor3d::NodeContext::isCameraNode</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNode.hpp" line="473" column="6" bodyfile="Castor3D/Scene/SceneNode.hpp" bodystart="473" bodyend="473"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dd7/a07275_1af1299cca2d348b02611ddb40d73916f3" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::NodeContext::isStatic</definition>
+        <argsstring></argsstring>
+        <name>isStatic</name>
+        <qualifiedname>castor3d::NodeContext::isStatic</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNode.hpp" line="474" column="6" bodyfile="Castor3D/Scene/SceneNode.hpp" bodystart="474" bodyend="474"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dd7/a07275_1a2c2c781c29f995bb84e229494e7a5749" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::NodeContext::position</definition>
+        <argsstring></argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::NodeContext::position</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNode.hpp" line="475" column="17" bodyfile="Castor3D/Scene/SceneNode.hpp" bodystart="475" bodyend="475"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dd7/a07275_1a1d062cdf63fb3a47c74e5987f8a4f485" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a09d3481f4a05ba6fbf3d4dede82380d8" kindref="member">castor::Quaternion</ref></type>
+        <definition>castor::Quaternion castor3d::NodeContext::orientation</definition>
+        <argsstring></argsstring>
+        <name>orientation</name>
+        <qualifiedname>castor3d::NodeContext::orientation</qualifiedname>
+        <initializer>{ <ref refid="dc/dc3/a09203_1a43771864df402f56ec61328c4791fd7d" kindref="member">castor::Quaternion::identity</ref>() }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNode.hpp" line="476" column="20" bodyfile="Castor3D/Scene/SceneNode.hpp" bodystart="476" bodyend="476"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dd7/a07275_1a2bf246b0103a14262df6e087750cf4a2" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::NodeContext::scale</definition>
+        <argsstring></argsstring>
+        <name>scale</name>
+        <qualifiedname>castor3d::NodeContext::scale</qualifiedname>
+        <initializer>{ 1.0f, 1.0f, 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNode.hpp" line="477" column="17" bodyfile="Castor3D/Scene/SceneNode.hpp" bodystart="477" bodyend="477"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="5">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="6" relation="private-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::NodeContext</label>
+        <link refid="d3/dd7/a07275"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>scene</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::ProgressBar</label>
+        <link refid="d6/daf/a05323"/>
+      </node>
+      <node id="8">
+        <label>castor3d::RenderWindowDesc</label>
+        <link refid="de/d75/a06503"/>
+        <childnode refid="9" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RootContext</label>
+        <link refid="de/dd6/a07151"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>engine</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>window</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>logger</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>progress</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SceneContext</label>
+        <link refid="d3/db2/a07139"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>fontName</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::LoggerInstance</label>
+        <link refid="d9/d93/a09063"/>
+      </node>
+      <node id="6">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="7">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="6" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/SceneNode.hpp" line="468" column="1" bodyfile="Castor3D/Scene/SceneNode.hpp" bodystart="469" bodyend="478"/>
+    <listofallmembers>
+      <member refid="d3/dd7/a07275_1aeaf486188d56d5d5b4ff799a6cb17723" prot="public" virt="non-virtual"><scope>castor3d::NodeContext</scope><name>isCameraNode</name></member>
+      <member refid="d3/dd7/a07275_1af1299cca2d348b02611ddb40d73916f3" prot="public" virt="non-virtual"><scope>castor3d::NodeContext</scope><name>isStatic</name></member>
+      <member refid="d3/dd7/a07275_1a2df190645cff3a6c54d019efa760762d" prot="public" virt="non-virtual"><scope>castor3d::NodeContext</scope><name>name</name></member>
+      <member refid="d3/dd7/a07275_1a1d062cdf63fb3a47c74e5987f8a4f485" prot="public" virt="non-virtual"><scope>castor3d::NodeContext</scope><name>orientation</name></member>
+      <member refid="d3/dd7/a07275_1ad3d8a104b5bdd5b0b6ee8b153803100f" prot="public" virt="non-virtual"><scope>castor3d::NodeContext</scope><name>parentNode</name></member>
+      <member refid="d3/dd7/a07275_1a2c2c781c29f995bb84e229494e7a5749" prot="public" virt="non-virtual"><scope>castor3d::NodeContext</scope><name>position</name></member>
+      <member refid="d3/dd7/a07275_1a2bf246b0103a14262df6e087750cf4a2" prot="public" virt="non-virtual"><scope>castor3d::NodeContext</scope><name>scale</name></member>
+      <member refid="d3/dd7/a07275_1a5f9d6ab0d524da002a9c098515a7d303" prot="public" virt="non-virtual"><scope>castor3d::NodeContext</scope><name>scene</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

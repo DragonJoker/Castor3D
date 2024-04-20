@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/d08/a05831" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TextChar</compoundname>
+    <includes local="no">OverlayModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d08/a05831_1aa23d7b2c1508f669ca4b46683fb3fab6" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::TextChar::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>castor3d::TextChar::size</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Les dimensions du caractère. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/OverlayModule.hpp" line="279" column="17" bodyfile="Castor3D/Overlay/OverlayModule.hpp" bodystart="279" bodyend="279"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d08/a05831_1a3deaed9607b95fe817f54cba7f852c63" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::TextChar::uvPosition</definition>
+        <argsstring></argsstring>
+        <name>uvPosition</name>
+        <qualifiedname>castor3d::TextChar::uvPosition</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La position de l&apos;UV du caractère. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/OverlayModule.hpp" line="282" column="17" bodyfile="Castor3D/Overlay/OverlayModule.hpp" bodystart="282" bodyend="282"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d08/a05831_1a4ce8f7ff38826fb0b3d86a3ecd7503cf" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::TextChar::bearing</definition>
+        <argsstring></argsstring>
+        <name>bearing</name>
+        <qualifiedname>castor3d::TextChar::bearing</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La position de la glyphe par rapport au curseur. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/OverlayModule.hpp" line="285" column="17" bodyfile="Castor3D/Overlay/OverlayModule.hpp" bodystart="285" bodyend="285"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d08/a05831_1a0c0746b607ef820533c5b9cb9c93ac9c" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::TextChar::left</definition>
+        <argsstring></argsstring>
+        <name>left</name>
+        <qualifiedname>castor3d::TextChar::left</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La position du caractère, relative à sa ligne. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/OverlayModule.hpp" line="288" column="7" bodyfile="Castor3D/Overlay/OverlayModule.hpp" bodystart="288" bodyend="288"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d08/a05831_1aa8b4ff811bb2b9d7d3719869a854d0d5" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextChar::word</definition>
+        <argsstring></argsstring>
+        <name>word</name>
+        <qualifiedname>castor3d::TextChar::word</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>L&apos;index du mot contenant ce caractère. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/OverlayModule.hpp" line="291" column="10" bodyfile="Castor3D/Overlay/OverlayModule.hpp" bodystart="291" bodyend="291"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d08/a05831_1a50c339ae2c50878b998163809fbee048" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextChar::overlay</definition>
+        <argsstring></argsstring>
+        <name>overlay</name>
+        <qualifiedname>castor3d::TextChar::overlay</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>L&apos;overlay de la ligne contenant ce caractère. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/OverlayModule.hpp" line="294" column="10" bodyfile="Castor3D/Overlay/OverlayModule.hpp" bodystart="294" bodyend="294"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d08/a05831_1a28849a3814e657bb391a40be6e669900" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextChar::index</definition>
+        <argsstring></argsstring>
+        <name>index</name>
+        <qualifiedname>castor3d::TextChar::index</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>L&apos;indice de ce caractère dans les caractères de l&apos;incrustation. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/OverlayModule.hpp" line="297" column="10" bodyfile="Castor3D/Overlay/OverlayModule.hpp" bodystart="297" bodyend="297"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Un caractère, avec ses dimensions et sa position relative. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Overlay/OverlayModule.hpp" line="275" column="1" bodyfile="Castor3D/Overlay/OverlayModule.hpp" bodystart="276" bodyend="298"/>
+    <listofallmembers>
+      <member refid="d8/d08/a05831_1a4ce8f7ff38826fb0b3d86a3ecd7503cf" prot="public" virt="non-virtual"><scope>castor3d::TextChar</scope><name>bearing</name></member>
+      <member refid="d8/d08/a05831_1a28849a3814e657bb391a40be6e669900" prot="public" virt="non-virtual"><scope>castor3d::TextChar</scope><name>index</name></member>
+      <member refid="d8/d08/a05831_1a0c0746b607ef820533c5b9cb9c93ac9c" prot="public" virt="non-virtual"><scope>castor3d::TextChar</scope><name>left</name></member>
+      <member refid="d8/d08/a05831_1a50c339ae2c50878b998163809fbee048" prot="public" virt="non-virtual"><scope>castor3d::TextChar</scope><name>overlay</name></member>
+      <member refid="d8/d08/a05831_1aa23d7b2c1508f669ca4b46683fb3fab6" prot="public" virt="non-virtual"><scope>castor3d::TextChar</scope><name>size</name></member>
+      <member refid="d8/d08/a05831_1a3deaed9607b95fe817f54cba7f852c63" prot="public" virt="non-virtual"><scope>castor3d::TextChar</scope><name>uvPosition</name></member>
+      <member refid="d8/d08/a05831_1aa8b4ff811bb2b9d7d3719869a854d0d5" prot="public" virt="non-virtual"><scope>castor3d::TextChar</scope><name>word</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

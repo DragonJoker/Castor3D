@@ -1,0 +1,290 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d28/a09115" kind="class" language="C++" prot="public">
+    <compoundname>castor::Line3D</compoundname>
+    <includes local="no">Line3D.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d28/a09115_1a7f56bddc1bd8c4381c64f093d7ad1848" prot="public" static="no" mutable="no">
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, 3 &gt;</type>
+        <definition>Point&lt; T, 3 &gt; castor::Line3D&lt; T &gt;::m_slope</definition>
+        <argsstring></argsstring>
+        <name>m_slope</name>
+        <qualifiedname>castor::Line3D::m_slope</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le point de pente. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Line3D.hpp" line="157" column="7" bodyfile="CastorUtils/Math/Line3D.hpp" bodystart="157" bodyend="-1"/>
+        <referencedby refid="da/d28/a09115_1a1b792120bd254cdaeb32b324247525bd" compoundref="dd/d07/a02132" startline="73" endline="136">castor::Line3D&lt; T &gt;::intersects</referencedby>
+        <referencedby refid="da/d28/a09115_1a0d1bc65fdae05919f37af60d5674d806" compoundref="dd/d07/a02132" startline="147" endline="152">castor::Line3D&lt; T &gt;::isIn</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="da/d28/a09115_1a584a1e9fe16786a86c1abdd3ef715487" prot="public" static="no" mutable="no">
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, 3 &gt;</type>
+        <definition>Point&lt; T, 3 &gt; castor::Line3D&lt; T &gt;::m_origin</definition>
+        <argsstring></argsstring>
+        <name>m_origin</name>
+        <qualifiedname>castor::Line3D::m_origin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le point d&apos;origine. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Line3D.hpp" line="160" column="7" bodyfile="CastorUtils/Math/Line3D.hpp" bodystart="160" bodyend="-1"/>
+        <referencedby refid="da/d28/a09115_1a1b792120bd254cdaeb32b324247525bd" compoundref="dd/d07/a02132" startline="73" endline="136">castor::Line3D&lt; T &gt;::intersects</referencedby>
+        <referencedby refid="da/d28/a09115_1a0d1bc65fdae05919f37af60d5674d806" compoundref="dd/d07/a02132" startline="147" endline="152">castor::Line3D&lt; T &gt;::isIn</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="da/d28/a09115_1a5ec59d07296099a7cfa4b15370130d9f" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Line3D&lt; T &gt;::Line3D</definition>
+        <argsstring>(Point&lt; T, 3 &gt; const &amp;point, Point&lt; T, 3 &gt; const &amp;slope)</argsstring>
+        <name>Line3D</name>
+        <qualifiedname>castor::Line3D::Line3D</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, 3 &gt; const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, 3 &gt; const &amp;</type>
+          <declname>slope</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir de 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Un point de la droite </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">slope</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La pente de la droite </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Line3D.hpp" line="28" column="1" bodyfile="CastorUtils/Math/Line3D.hpp" bodystart="28" bodyend="32"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="da/d28/a09115_1a2e2f789457faf2de75ea39d3c0dd639e" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d28/a09115" kindref="compound">Line3D</ref>&lt; T &gt;</type>
+        <definition>static Line3D&lt; T &gt; castor::Line3D&lt; T &gt;::fromPointAndSlope</definition>
+        <argsstring>(Point&lt; T, 3 &gt; const &amp;point, Point&lt; T, 3 &gt; const &amp;slope)</argsstring>
+        <name>fromPointAndSlope</name>
+        <qualifiedname>castor::Line3D::fromPointAndSlope</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, 3 &gt; const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, 3 &gt; const &amp;</type>
+          <declname>slope</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir de 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Un point de la droite </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">slope</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La pente de la droite </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Line3D.hpp" line="45" column="15" bodyfile="CastorUtils/Math/Line3D.hpp" bodystart="45" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d28/a09115_1ae1902d0378745d12f8a60902eecfc3d0" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d28/a09115" kindref="compound">Line3D</ref>&lt; T &gt;</type>
+        <definition>static Line3D&lt; T &gt; castor::Line3D&lt; T &gt;::fromPoints</definition>
+        <argsstring>(Point&lt; T, 3 &gt; const &amp;a, Point&lt; T, 3 &gt; const &amp;b)</argsstring>
+        <name>fromPoints</name>
+        <qualifiedname>castor::Line3D::fromPoints</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, 3 &gt; const &amp;</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, 3 &gt; const &amp;</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir de 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">a</parametername>
+<parametername direction="in">b</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Deux points de la droite </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Line3D.hpp" line="57" column="15" bodyfile="CastorUtils/Math/Line3D.hpp" bodystart="57" bodyend="60"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d28/a09115_1a1b792120bd254cdaeb32b324247525bd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::Line3D&lt; T &gt;::intersects</definition>
+        <argsstring>(Line3D const &amp;line, Point&lt; T, 3 &gt; &amp;point)</argsstring>
+        <name>intersects</name>
+        <qualifiedname>castor::Line3D::intersects</qualifiedname>
+        <param>
+          <type><ref refid="da/d28/a09115" kindref="compound">Line3D</ref> const &amp;</type>
+          <declname>line</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, 3 &gt; &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Calcule l&apos;intersection entre cette ligne et l&apos;autre. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">line</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;autre ligne </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit le point d&apos;intersection </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si une intersection existe </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Line3D.hpp" line="73" column="6" bodyfile="CastorUtils/Math/Line3D.hpp" bodystart="73" bodyend="136"/>
+        <references refid="da/d28/a09115_1a584a1e9fe16786a86c1abdd3ef715487" compoundref="dd/d07/a02132" startline="160">castor::Line3D&lt; T &gt;::m_origin</references>
+        <references refid="da/d28/a09115_1a7f56bddc1bd8c4381c64f093d7ad1848" compoundref="dd/d07/a02132" startline="157">castor::Line3D&lt; T &gt;::m_slope</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d28/a09115_1a0d1bc65fdae05919f37af60d5674d806" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::Line3D&lt; T &gt;::isIn</definition>
+        <argsstring>(Point&lt; T, 3 &gt; const &amp;point)</argsstring>
+        <name>isIn</name>
+        <qualifiedname>castor::Line3D::isIn</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, 3 &gt; const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Teste si un point appartient à la ligne. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point à tester </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si le point appartient à la ligne </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Line3D.hpp" line="147" column="6" bodyfile="CastorUtils/Math/Line3D.hpp" bodystart="147" bodyend="152"/>
+        <references refid="da/d28/a09115_1a584a1e9fe16786a86c1abdd3ef715487" compoundref="dd/d07/a02132" startline="160">castor::Line3D&lt; T &gt;::m_origin</references>
+        <references refid="da/d28/a09115_1a7f56bddc1bd8c4381c64f093d7ad1848" compoundref="dd/d07/a02132" startline="157">castor::Line3D&lt; T &gt;::m_slope</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Equation d&apos;une droite 3D. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Une pente et une origine <linebreak/>
+x = m_slope[0] * t + m_origin[0] <linebreak/>
+y = m_slope[1] * t + m_origin[1] <linebreak/>
+z = m_slope[2] * t + m_origin[2] </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::Point&lt; T, 3 &gt;</label>
+        <link refid="db/dcf/a09187"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; T, 3 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::Line3D&lt; T &gt;</label>
+        <link refid="da/d28/a09115"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_origin</edgelabel>
+          <edgelabel>m_slope</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Point&lt; T, TCount &gt;</label>
+        <link refid="db/dcf/a09187"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Math/Line3D.hpp" line="15" column="1" bodyfile="CastorUtils/Math/Line3D.hpp" bodystart="16" bodyend="161"/>
+    <listofallmembers>
+      <member refid="da/d28/a09115_1a2e2f789457faf2de75ea39d3c0dd639e" prot="public" virt="non-virtual"><scope>castor::Line3D</scope><name>fromPointAndSlope</name></member>
+      <member refid="da/d28/a09115_1ae1902d0378745d12f8a60902eecfc3d0" prot="public" virt="non-virtual"><scope>castor::Line3D</scope><name>fromPoints</name></member>
+      <member refid="da/d28/a09115_1a1b792120bd254cdaeb32b324247525bd" prot="public" virt="non-virtual"><scope>castor::Line3D</scope><name>intersects</name></member>
+      <member refid="da/d28/a09115_1a0d1bc65fdae05919f37af60d5674d806" prot="public" virt="non-virtual"><scope>castor::Line3D</scope><name>isIn</name></member>
+      <member refid="da/d28/a09115_1a5ec59d07296099a7cfa4b15370130d9f" prot="private" virt="non-virtual"><scope>castor::Line3D</scope><name>Line3D</name></member>
+      <member refid="da/d28/a09115_1a584a1e9fe16786a86c1abdd3ef715487" prot="public" virt="non-virtual"><scope>castor::Line3D</scope><name>m_origin</name></member>
+      <member refid="da/d28/a09115_1a7f56bddc1bd8c4381c64f093d7ad1848" prot="public" virt="non-virtual"><scope>castor::Line3D</scope><name>m_slope</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

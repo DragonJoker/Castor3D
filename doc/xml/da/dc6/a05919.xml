@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/dc6/a05919" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::FrustumClusters::AABB</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/dc6/a05919_1a911d313385ae3b110b59a0a0e9f5a88c" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::FrustumClusters::AABB::min</definition>
+        <argsstring></argsstring>
+        <name>min</name>
+        <qualifiedname>castor3d::FrustumClusters::AABB::min</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="293" column="17" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="293" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/dc6/a05919_1a5d3aa9508931a4513cee842596bf9063" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::FrustumClusters::AABB::max</definition>
+        <argsstring></argsstring>
+        <name>max</name>
+        <qualifiedname>castor3d::FrustumClusters::AABB::max</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="294" column="17" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="294" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="291" column="1" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="292" bodyend="295"/>
+    <listofallmembers>
+      <member refid="da/dc6/a05919_1a5d3aa9508931a4513cee842596bf9063" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters::AABB</scope><name>max</name></member>
+      <member refid="da/dc6/a05919_1a911d313385ae3b110b59a0a0e9f5a88c" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters::AABB</scope><name>min</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

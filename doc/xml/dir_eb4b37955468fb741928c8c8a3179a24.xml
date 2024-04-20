@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dir_eb4b37955468fb741928c8c8a3179a24" kind="dir">
+    <compoundname>CastorUtils/Align</compoundname>
+    <innerfile refid="dd/d20/a01772">Aligned.hpp</innerfile>
+    <innerfile refid="d1/d6b/a01775">AlignedMemoryAllocator.hpp</innerfile>
+    <innerfile refid="df/d21/a01778">AlignModule.hpp</innerfile>
+    <innerfile refid="d6/d27/a01781">NonAlignedMemoryAllocator.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Align/"/>
+  </compounddef>
+</doxygen>

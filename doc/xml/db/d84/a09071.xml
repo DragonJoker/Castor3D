@@ -1,0 +1,368 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d84/a09071" kind="class" language="C++" prot="public">
+    <compoundname>castor::LoggerStreambufT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::basic_streambuf&lt; CharT &gt;</basecompoundref>
+    <includes local="no">LoggerStreambuf.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename CharT</type>
+      </param>
+      <param>
+        <type>typename TraitsT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="db/d84/a09071_1ab617360623ce895d0905093c05f62d39" prot="public" static="no">
+        <type>std::basic_string&lt; CharT &gt;</type>
+        <definition>using castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::string_type =  std::basic_string&lt; CharT &gt;</definition>
+        <argsstring></argsstring>
+        <name>string_type</name>
+        <qualifiedname>castor::LoggerStreambufT::string_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="27" column="1" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/d84/a09071_1a9f5bc414b988710c7ba708fb782beac5" prot="public" static="no">
+        <type>std::basic_ostream&lt; CharT &gt;</type>
+        <definition>using castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::ostream_type =  std::basic_ostream&lt; CharT &gt;</definition>
+        <argsstring></argsstring>
+        <name>ostream_type</name>
+        <qualifiedname>castor::LoggerStreambufT::ostream_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="28" column="1" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/d84/a09071_1a31e5a9a5b3dbab4d60fcf76cf19633f8" prot="public" static="no">
+        <type>std::basic_streambuf&lt; CharT &gt;</type>
+        <definition>using castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::streambuf_type =  std::basic_streambuf&lt; CharT &gt;</definition>
+        <argsstring></argsstring>
+        <name>streambuf_type</name>
+        <qualifiedname>castor::LoggerStreambufT::streambuf_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="29" column="1" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/d84/a09071_1a3072e04d2f5c825d126001304075c6a1" prot="public" static="no">
+        <type>typename std::basic_streambuf&lt; CharT &gt;::int_type</type>
+        <definition>using castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::int_type =  typename std::basic_streambuf&lt; CharT &gt;::int_type</definition>
+        <argsstring></argsstring>
+        <name>int_type</name>
+        <qualifiedname>castor::LoggerStreambufT::int_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="30" column="1" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/d84/a09071_1ac113dd30b1bc7c92373bef31fe24d488" prot="public" static="no">
+        <type>typename std::basic_streambuf&lt; CharT &gt;::traits_type</type>
+        <definition>using castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::traits_type =  typename std::basic_streambuf&lt; CharT &gt;::traits_type</definition>
+        <argsstring></argsstring>
+        <name>traits_type</name>
+        <qualifiedname>castor::LoggerStreambufT::traits_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="31" column="1" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/d84/a09071_1ae836e3500c6ca1f51ee0c1d014891b12" prot="private" static="no" mutable="no">
+        <type><ref refid="db/d84/a09071_1a9f5bc414b988710c7ba708fb782beac5" kindref="member">ostream_type</ref> &amp;</type>
+        <definition>ostream_type&amp; castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::m_stream</definition>
+        <argsstring></argsstring>
+        <name>m_stream</name>
+        <qualifiedname>castor::LoggerStreambufT::m_stream</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="120" column="15" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d84/a09071_1ae7248ddceb70618367f7e997838b592c" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/d93/a09063" kindref="compound">LoggerInstance</ref> *</type>
+        <definition>LoggerInstance* castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::m_logger</definition>
+        <argsstring></argsstring>
+        <name>m_logger</name>
+        <qualifiedname>castor::LoggerStreambufT::m_logger</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="121" column="17" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d84/a09071_1ae378738b1962bab57c9c29c1bc05c888" prot="private" static="no" mutable="no">
+        <type><ref refid="db/d84/a09071_1a31e5a9a5b3dbab4d60fcf76cf19633f8" kindref="member">streambuf_type</ref> *</type>
+        <definition>streambuf_type* castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::m_old</definition>
+        <argsstring></argsstring>
+        <name>m_old</name>
+        <qualifiedname>castor::LoggerStreambufT::m_old</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="122" column="17" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d84/a09071_1af86cdffc1c73f71e241b98621ba1d533" prot="private" static="no" mutable="no">
+        <type><ref refid="db/d84/a09071_1ab617360623ce895d0905093c05f62d39" kindref="member">string_type</ref></type>
+        <definition>string_type castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor::LoggerStreambufT::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="123" column="13" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="db/d84/a09071_1acecc702f0da84a9c48cb405ab7e6349d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::LoggerStreambufT</definition>
+        <argsstring>(LoggerStreambufT const &amp;)=delete</argsstring>
+        <name>LoggerStreambufT</name>
+        <qualifiedname>castor::LoggerStreambufT::LoggerStreambufT</qualifiedname>
+        <param>
+          <type><ref refid="db/d84/a09071" kindref="compound">LoggerStreambufT</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="21" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d84/a09071_1a42c25028d66dc8d0bcb518549bed2993" prot="private" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::LoggerStreambufT</definition>
+        <argsstring>(LoggerStreambufT &amp;&amp;) noexcept=delete</argsstring>
+        <name>LoggerStreambufT</name>
+        <qualifiedname>castor::LoggerStreambufT::LoggerStreambufT</qualifiedname>
+        <param>
+          <type><ref refid="db/d84/a09071" kindref="compound">LoggerStreambufT</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="22" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d84/a09071_1aaf251e0cab8b47a3b375295f02e284ac" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/d84/a09071" kindref="compound">LoggerStreambufT</ref> &amp;</type>
+        <definition>LoggerStreambufT &amp; castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::operator=</definition>
+        <argsstring>(LoggerStreambufT const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::LoggerStreambufT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/d84/a09071" kindref="compound">LoggerStreambufT</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="23" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d84/a09071_1ade57a64094757209b9067518ae1f4311" prot="private" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="db/d84/a09071" kindref="compound">LoggerStreambufT</ref> &amp;</type>
+        <definition>LoggerStreambufT &amp; castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::operator=</definition>
+        <argsstring>(LoggerStreambufT &amp;&amp;) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::LoggerStreambufT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/d84/a09071" kindref="compound">LoggerStreambufT</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="24" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d84/a09071_1afad43c90d43aaa0d20165b184e200dec" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::doSync</definition>
+        <argsstring>()</argsstring>
+        <name>doSync</name>
+        <qualifiedname>castor::LoggerStreambufT::doSync</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="93" column="5" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="93" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d84/a09071_1a847e1a203292c1ddad70cbdceed6794d" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::doSyncNoLF</definition>
+        <argsstring>()</argsstring>
+        <name>doSyncNoLF</name>
+        <qualifiedname>castor::LoggerStreambufT::doSyncNoLF</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="108" column="5" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="108" bodyend="117"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d84/a09071_1a880ffd8f498c0bffe3c994636f71debe" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::LoggerStreambufT</definition>
+        <argsstring>(std::basic_ostream&lt; CharT &gt; &amp;stream)</argsstring>
+        <name>LoggerStreambufT</name>
+        <qualifiedname>castor::LoggerStreambufT::LoggerStreambufT</qualifiedname>
+        <param>
+          <type>std::basic_ostream&lt; CharT &gt; &amp;</type>
+          <declname>stream</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="33" column="10" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="33" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d84/a09071_1a8b49560cdeb9b711672f69e85ac2cf4c" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::LoggerStreambufT</definition>
+        <argsstring>(LoggerInstance &amp;logger, ostream_type &amp;stream)</argsstring>
+        <name>LoggerStreambufT</name>
+        <qualifiedname>castor::LoggerStreambufT::LoggerStreambufT</qualifiedname>
+        <param>
+          <type><ref refid="d9/d93/a09063" kindref="compound">LoggerInstance</ref> &amp;</type>
+          <declname>logger</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d84/a09071_1a9f5bc414b988710c7ba708fb782beac5" kindref="member">ostream_type</ref> &amp;</type>
+          <declname>stream</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="40" column="10" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="40" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d84/a09071_1a268eb145890526afba4120fbe2fbfafc" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::~LoggerStreambufT</definition>
+        <argsstring>() noexcept override</argsstring>
+        <name>~LoggerStreambufT</name>
+        <qualifiedname>castor::LoggerStreambufT::~LoggerStreambufT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="48" column="1" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="48" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d84/a09071_1a7ed139232ed80ff7be075f2d09db1608" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d84/a09071_1a3072e04d2f5c825d126001304075c6a1" kindref="member">int_type</ref></type>
+        <definition>int_type castor::LoggerStreambufT&lt; CharT, TraitsT &gt;::overflow</definition>
+        <argsstring>(int_type c=traits_type::eof()) override</argsstring>
+        <name>overflow</name>
+        <qualifiedname>castor::LoggerStreambufT::overflow</qualifiedname>
+        <param>
+          <type><ref refid="db/d84/a09071_1a3072e04d2f5c825d126001304075c6a1" kindref="member">int_type</ref></type>
+          <declname>c</declname>
+          <defval>traits_type::eof()</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="61" column="10" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="61" bodyend="90"/>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::LoggerStreambufT&lt; CharT, TraitsT &gt;</label>
+        <link refid="db/d84/a09071"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::basic_streambuf&lt; CharT &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::LoggerStreambufT&lt; CharT, TraitsT &gt;</label>
+        <link refid="db/d84/a09071"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::basic_streambuf&lt; CharT &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Log/LoggerStreambuf.hpp" line="18" column="1" bodyfile="CastorUtils/Log/LoggerStreambuf.hpp" bodystart="20" bodyend="124"/>
+    <listofallmembers>
+      <member refid="db/d84/a09071_1afad43c90d43aaa0d20165b184e200dec" prot="private" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>doSync</name></member>
+      <member refid="db/d84/a09071_1a847e1a203292c1ddad70cbdceed6794d" prot="private" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>doSyncNoLF</name></member>
+      <member refid="db/d84/a09071_1a3072e04d2f5c825d126001304075c6a1" prot="public" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>int_type</name></member>
+      <member refid="db/d84/a09071_1acecc702f0da84a9c48cb405ab7e6349d" prot="private" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>LoggerStreambufT</name></member>
+      <member refid="db/d84/a09071_1a42c25028d66dc8d0bcb518549bed2993" prot="private" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>LoggerStreambufT</name></member>
+      <member refid="db/d84/a09071_1a880ffd8f498c0bffe3c994636f71debe" prot="public" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>LoggerStreambufT</name></member>
+      <member refid="db/d84/a09071_1a8b49560cdeb9b711672f69e85ac2cf4c" prot="public" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>LoggerStreambufT</name></member>
+      <member refid="db/d84/a09071_1af86cdffc1c73f71e241b98621ba1d533" prot="private" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>m_buffer</name></member>
+      <member refid="db/d84/a09071_1ae7248ddceb70618367f7e997838b592c" prot="private" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>m_logger</name></member>
+      <member refid="db/d84/a09071_1ae378738b1962bab57c9c29c1bc05c888" prot="private" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>m_old</name></member>
+      <member refid="db/d84/a09071_1ae836e3500c6ca1f51ee0c1d014891b12" prot="private" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>m_stream</name></member>
+      <member refid="db/d84/a09071_1aaf251e0cab8b47a3b375295f02e284ac" prot="private" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>operator=</name></member>
+      <member refid="db/d84/a09071_1ade57a64094757209b9067518ae1f4311" prot="private" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>operator=</name></member>
+      <member refid="db/d84/a09071_1a9f5bc414b988710c7ba708fb782beac5" prot="public" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>ostream_type</name></member>
+      <member refid="db/d84/a09071_1a7ed139232ed80ff7be075f2d09db1608" prot="public" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>overflow</name></member>
+      <member refid="db/d84/a09071_1a31e5a9a5b3dbab4d60fcf76cf19633f8" prot="public" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>streambuf_type</name></member>
+      <member refid="db/d84/a09071_1ab617360623ce895d0905093c05f62d39" prot="public" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>string_type</name></member>
+      <member refid="db/d84/a09071_1ac113dd30b1bc7c92373bef31fe24d488" prot="public" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>traits_type</name></member>
+      <member refid="db/d84/a09071_1a268eb145890526afba4120fbe2fbfafc" prot="public" virt="non-virtual"><scope>castor::LoggerStreambufT</scope><name>~LoggerStreambufT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

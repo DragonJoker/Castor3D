@@ -1,0 +1,28 @@
+<map id="castor3d::BinaryWriterBase::write" name="castor3d::BinaryWriterBase::write">
+<area shape="rect" id="Node000001" title="Writes an object to a file." alt="" coords="5,95,188,135"/>
+<area shape="poly" id="edge13_Node000001_Node000001" title=" " alt="" coords="54,96,51,86,58,76,73,71,97,69,123,72,138,79,136,84,122,77,97,74,75,76,61,81,56,87,59,94"/>
+<area shape="rect" id="Node000002" href="$d4/d9c/a03231.html#a8828d359b7a61ea2b657d5aada2dd87b" title="Writes the header chunk." alt="" coords="236,95,419,135"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,113,222,113,222,118,188,118"/>
+<area shape="rect" id="Node000003" href="$d5/d27/a03183.html#a05ffb50a92f97be91612f8f91ceeed8e" title="Writes a subchunk into a chunk." alt="" coords="481,31,635,71"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="399,93,472,72,473,78,401,98"/>
+<area shape="rect" id="Node000004" href="$d4/d9c/a03231.html#a95685db95521fe46169767620976688c" title="Writes a subchunk value into a chunk." alt="" coords="467,95,649,135"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="419,113,453,113,453,118,419,118"/>
+<area shape="rect" id="Node000013" href="$d2/dd2/a02279.html#af41ea5b34edb8c4103f57937867ea4d6" title=" " alt="" coords="471,160,645,185"/>
+<area shape="poly" id="edge12_Node000002_Node000013" title=" " alt="" coords="409,133,494,154,492,159,408,138"/>
+<area shape="rect" id="Node000005" href="$d0/d4b/a03415.html#ac4cf51584e348def2f360b81e6ec7a9a" title="Writes a subchunk value into a chunk." alt="" coords="697,95,849,135"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="650,113,684,113,684,118,650,118"/>
+<area shape="rect" id="Node000006" href="$d9/dba/a02278.html#ac8fd79a65bf3d510536e2f77797a5df7" title="Prepares chunk data for read/write." alt="" coords="897,68,1092,93"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="850,101,899,93,900,98,850,106"/>
+<area shape="rect" id="Node000011" href="$d3/d74/a03411.html#abe80518993510ab4c19bc4f9e67d32a8" title="Writes a subchunk value into a chunk." alt="" coords="903,130,1086,170"/>
+<area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="850,125,890,131,889,136,850,130"/>
+<area shape="rect" id="Node000007" href="$d2/dd2/a02279.html#aa4e7623135b28fcbdeb6f2d423df6746" title="Detects if the current system is little endian." alt="" coords="1161,5,1305,31"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="1043,65,1139,39,1169,32,1171,37,1141,45,1044,70"/>
+<area shape="rect" id="Node000008" href="$d9/dba/a02278.html#a18b75386e45b81504fc6c5e9ece3d006" title=" " alt="" coords="1154,55,1313,80"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="1092,73,1140,70,1140,75,1092,78"/>
+<area shape="rect" id="Node000009" href="$d9/dba/a02278.html#a430f3de9071e7d03358bb1b39d07c2b8" title="Sets given value to big endian." alt="" coords="1140,104,1327,129"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="1080,91,1136,99,1135,105,1079,96"/>
+<area shape="rect" id="Node000010" href="$d2/dd2/a02279.html#a90cf51f94dda321c89fc40fa450d0b91" title="Convert from little or big endian to the other." alt="" coords="1375,104,1545,129"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="1327,114,1361,114,1361,119,1327,119"/>
+<area shape="rect" id="Node000012" href="$d5/d27/a03183.html#aa21722c40ca9e697b02b6612e81e41c9" title="Sets the chunk&#39;s data." alt="" coords="1156,154,1311,194"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="1087,157,1142,162,1142,167,1086,162"/>
+</map>

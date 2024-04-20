@@ -1,0 +1,20 @@
+<map id="castor3d::DefaultReflRefrComponent" name="castor3d::DefaultReflRefrComponent">
+<area shape="rect" id="Node000001" title=" " alt="" coords="908,13,1073,53"/>
+<area shape="rect" id="Node000002" href="$db/db4/a04835.html" title=" " alt="" coords="683,98,859,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="820,91,932,51,934,56,821,96"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="331,98,507,123"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="521,108,682,108,682,113,521,113"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="13,98,196,123"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="210,108,331,108,331,113,210,113"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="356,33,483,73"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="497,63,659,89,695,95,694,101,658,95,496,68"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="41,5,168,45"/>
+<area shape="poly" id="edge9_Node000001_Node000006" title=" " alt="" coords="181,17,228,15,289,15,634,21,908,28,908,33,634,26,289,20,228,20,181,22"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="182,29,356,45,355,50,181,35"/>
+<area shape="rect" id="Node000007" href="$d2/d2e/a04831.html" title=" " alt="" coords="313,213,525,238"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="486,207,525,197,592,183,658,164,706,143,746,121,749,126,708,148,660,169,593,188,526,203,487,212"/>
+<area shape="rect" id="Node000008" href="$d6/da6/a04827.html" title=" " alt="" coords="318,148,521,188"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="534,148,658,128,700,121,701,126,659,133,535,153"/>
+<area shape="rect" id="Node000009" href="$d2/d04/a04815.html" title=" " alt="" coords="5,155,204,181"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="218,165,318,165,318,171,218,171"/>
+</map>

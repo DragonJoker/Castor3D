@@ -1,0 +1,358 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/ddb/a08183" kind="class" language="C++" prot="public">
+    <compoundname>castor::ConnectionT</compoundname>
+    <basecompoundref refid="da/d36/a08315" prot="public" virt="non-virtual">castor::NonCopyable</basecompoundref>
+    <includes local="no">Signal.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename MySignalT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d4/ddb/a08183_1ab79a89d45602b3bcb0ec787d71b5baee" prot="private" static="no">
+        <type>MySignalT</type>
+        <definition>using castor::ConnectionT&lt; MySignalT &gt;::signal_type =  MySignalT</definition>
+        <argsstring></argsstring>
+        <name>signal_type</name>
+        <qualifiedname>castor::ConnectionT::signal_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="23" column="1" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/ddb/a08183_1a4566ada162db2df1d5f863101193720e" prot="private" static="no">
+        <type>signal_type *</type>
+        <definition>using castor::ConnectionT&lt; MySignalT &gt;::signal_ptr =  signal_type *</definition>
+        <argsstring></argsstring>
+        <name>signal_ptr</name>
+        <qualifiedname>castor::ConnectionT::signal_ptr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="24" column="1" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d4/ddb/a08183_1a90789a80ec926dae85070451b8ed098a" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::ConnectionT&lt; MySignalT &gt;::m_connection</definition>
+        <argsstring></argsstring>
+        <name>m_connection</name>
+        <qualifiedname>castor::ConnectionT::m_connection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>L&apos;identifiant de la connection. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="179" column="10" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="179" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/ddb/a08183_1a91a6f41e5e4aa9af2f915d7b6df445d1" prot="private" static="no" mutable="no">
+        <type>signal_ptr</type>
+        <definition>signal_ptr castor::ConnectionT&lt; MySignalT &gt;::m_signal</definition>
+        <argsstring></argsstring>
+        <name>m_signal</name>
+        <qualifiedname>castor::ConnectionT::m_signal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le signal. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="182" column="12" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="182" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/ddb/a08183_1aeb517601a8ec9c012eef663d7ce7d9f4" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>String castor::ConnectionT&lt; MySignalT &gt;::m_stack</definition>
+        <argsstring></argsstring>
+        <name>m_stack</name>
+        <qualifiedname>castor::ConnectionT::m_stack</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La pile d&apos;appels de la création. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="186" column="8" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="186" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/ddb/a08183_1aada53d44b6d7881ecf6568944d9ef923" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ConnectionT&lt; MySignalT &gt;::ConnectionT</definition>
+        <argsstring>()</argsstring>
+        <name>ConnectionT</name>
+        <qualifiedname>castor::ConnectionT::ConnectionT</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="33" column="1" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="33" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddb/a08183_1ac2c906e2a0bc035bfc901295e45fa52b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ConnectionT&lt; MySignalT &gt;::ConnectionT</definition>
+        <argsstring>(uint32_t connection, signal_type &amp;signal)</argsstring>
+        <name>ConnectionT</name>
+        <qualifiedname>castor::ConnectionT::ConnectionT</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>connection</declname>
+        </param>
+        <param>
+          <type>signal_type &amp;</type>
+          <declname>signal</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">connection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La connexion au signal. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">signal</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le signal. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="48" column="1" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="48" bodyend="61"/>
+        <references refid="d2/dd2/a02279_1af41ea5b34edb8c4103f57937867ea4d6" compoundref="d5/d12/a01799" startline="197" endline="200">castor::makeStringStream</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddb/a08183_1a0ba23f5aeea363e1299890cedf206bb5" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ConnectionT&lt; MySignalT &gt;::ConnectionT</definition>
+        <argsstring>(ConnectionT&lt; signal_type &gt; &amp;&amp;rhs) noexcept</argsstring>
+        <name>ConnectionT</name>
+        <qualifiedname>castor::ConnectionT::ConnectionT</qualifiedname>
+        <param>
+          <type><ref refid="d4/ddb/a08183" kindref="compound">ConnectionT</ref>&lt; signal_type &gt; &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à déplacer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="70" column="1" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="70" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddb/a08183_1a67db2f38c08a422ef937e8bdfe03cc2a" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/ddb/a08183" kindref="compound">ConnectionT</ref> &amp;</type>
+        <definition>ConnectionT &amp; castor::ConnectionT&lt; MySignalT &gt;::operator=</definition>
+        <argsstring>(ConnectionT&lt; signal_type &gt; &amp;&amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ConnectionT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d4/ddb/a08183" kindref="compound">ConnectionT</ref>&lt; signal_type &gt; &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à déplacer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="93" column="14" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="93" bodyend="114"/>
+        <references refid="d4/ddb/a08183_1a84b2af19bf7ce91c0a53842dddae8988" compoundref="d1/db0/a01928" startline="133" endline="147">castor::ConnectionT&lt; MySignalT &gt;::disconnect</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddb/a08183_1a2d04937aeddf6055946d96981bda9c73" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ConnectionT&lt; MySignalT &gt;::~ConnectionT</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~ConnectionT</name>
+        <qualifiedname>castor::ConnectionT::~ConnectionT</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Déconnecte la fonction du signal. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="123" column="1" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="123" bodyend="126"/>
+        <references refid="d4/ddb/a08183_1a84b2af19bf7ce91c0a53842dddae8988" compoundref="d1/db0/a01928" startline="133" endline="147">castor::ConnectionT&lt; MySignalT &gt;::disconnect</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddb/a08183_1a84b2af19bf7ce91c0a53842dddae8988" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::ConnectionT&lt; MySignalT &gt;::disconnect</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>disconnect</name>
+        <qualifiedname>castor::ConnectionT::disconnect</qualifiedname>
+        <briefdescription>
+<para>Déconnecte la fonction du signal. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="133" column="6" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="133" bodyend="147"/>
+        <referencedby refid="d4/ddb/a08183_1a67db2f38c08a422ef937e8bdfe03cc2a" compoundref="d1/db0/a01928" startline="93" endline="114">castor::ConnectionT&lt; MySignalT &gt;::operator=</referencedby>
+        <referencedby refid="d4/ddb/a08183_1a2d04937aeddf6055946d96981bda9c73" compoundref="d1/db0/a01928" startline="123" endline="126">castor::ConnectionT&lt; MySignalT &gt;::~ConnectionT</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/ddb/a08183_1a965dc280b1df171f1ddfdb21e0dac08d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ConnectionT&lt; MySignalT &gt;::operator bool</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>operator bool</name>
+        <qualifiedname>castor::ConnectionT::operator bool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="149" column="1" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="149" bodyend="152"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d4/ddb/a08183_1aa129d49785178f1634b484773a5b2004" prot="private" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ConnectionT&lt; MySignalT &gt;::swap</definition>
+        <argsstring>(ConnectionT &amp;lhs, ConnectionT &amp;rhs) const noexcept</argsstring>
+        <name>swap</name>
+        <qualifiedname>castor::ConnectionT::swap</qualifiedname>
+        <param>
+          <type><ref refid="d4/ddb/a08183" kindref="compound">ConnectionT</ref> &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/ddb/a08183" kindref="compound">ConnectionT</ref> &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Echange deux connexions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Signal.hpp" line="161" column="6" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="161" bodyend="174"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Représente une connexion à un signal. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="6">
+        <label>castor::ConnectionT&lt; RenderNodesPassChangeSignal &gt;</label>
+        <link refid="d4/ddb/a08183"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; RenderNodesPassChangeSignal &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::ConnectionT&lt; SceneCullerBillboardSignal &gt;</label>
+        <link refid="d4/ddb/a08183"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SceneCullerBillboardSignal &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::ConnectionT&lt; SceneCullerSignal &gt;</label>
+        <link refid="d4/ddb/a08183"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SceneCullerSignal &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::ConnectionT&lt; SceneCullerSubmeshSignal &gt;</label>
+        <link refid="d4/ddb/a08183"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SceneCullerSubmeshSignal &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::ConnectionT&lt; MySignalT &gt;</label>
+        <link refid="d4/ddb/a08183"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ConnectionT&lt; MySignalT &gt;</label>
+        <link refid="d4/ddb/a08183"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Design/Signal.hpp" line="19" column="1" bodyfile="CastorUtils/Design/Signal.hpp" bodystart="21" bodyend="188"/>
+    <listofallmembers>
+      <member refid="d4/ddb/a08183_1aada53d44b6d7881ecf6568944d9ef923" prot="public" virt="non-virtual"><scope>castor::ConnectionT</scope><name>ConnectionT</name></member>
+      <member refid="d4/ddb/a08183_1ac2c906e2a0bc035bfc901295e45fa52b" prot="public" virt="non-virtual"><scope>castor::ConnectionT</scope><name>ConnectionT</name></member>
+      <member refid="d4/ddb/a08183_1a0ba23f5aeea363e1299890cedf206bb5" prot="public" virt="non-virtual"><scope>castor::ConnectionT</scope><name>ConnectionT</name></member>
+      <member refid="d4/ddb/a08183_1a84b2af19bf7ce91c0a53842dddae8988" prot="public" virt="non-virtual"><scope>castor::ConnectionT</scope><name>disconnect</name></member>
+      <member refid="d4/ddb/a08183_1a90789a80ec926dae85070451b8ed098a" prot="private" virt="non-virtual"><scope>castor::ConnectionT</scope><name>m_connection</name></member>
+      <member refid="d4/ddb/a08183_1a91a6f41e5e4aa9af2f915d7b6df445d1" prot="private" virt="non-virtual"><scope>castor::ConnectionT</scope><name>m_signal</name></member>
+      <member refid="d4/ddb/a08183_1aeb517601a8ec9c012eef663d7ce7d9f4" prot="private" virt="non-virtual"><scope>castor::ConnectionT</scope><name>m_stack</name></member>
+      <member refid="da/d36/a08315_1af371ca9e56bb5b114989ad58eebac673" prot="protected" virt="non-virtual"><scope>castor::ConnectionT</scope><name>NonCopyable</name></member>
+      <member refid="d4/ddb/a08183_1a965dc280b1df171f1ddfdb21e0dac08d" prot="public" virt="non-virtual"><scope>castor::ConnectionT</scope><name>operator bool</name></member>
+      <member refid="d4/ddb/a08183_1a67db2f38c08a422ef937e8bdfe03cc2a" prot="public" virt="non-virtual"><scope>castor::ConnectionT</scope><name>operator=</name></member>
+      <member refid="d4/ddb/a08183_1a4566ada162db2df1d5f863101193720e" prot="private" virt="non-virtual"><scope>castor::ConnectionT</scope><name>signal_ptr</name></member>
+      <member refid="d4/ddb/a08183_1ab79a89d45602b3bcb0ec787d71b5baee" prot="private" virt="non-virtual"><scope>castor::ConnectionT</scope><name>signal_type</name></member>
+      <member refid="d4/ddb/a08183_1aa129d49785178f1634b484773a5b2004" prot="private" virt="non-virtual"><scope>castor::ConnectionT</scope><name>swap</name></member>
+      <member refid="d4/ddb/a08183_1a2d04937aeddf6055946d96981bda9c73" prot="public" virt="non-virtual"><scope>castor::ConnectionT</scope><name>~ConnectionT</name></member>
+      <member refid="da/d36/a08315_1a9eaacdfe711925eea3bb79a74b941684" prot="protected" virt="non-virtual"><scope>castor::ConnectionT</scope><name>~NonCopyable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

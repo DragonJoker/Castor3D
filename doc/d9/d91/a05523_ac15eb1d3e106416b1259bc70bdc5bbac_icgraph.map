@@ -1,0 +1,9 @@
+<map id="castor3d::LinesMapping::ComponentData::addLineGroup" name="castor3d::LinesMapping::ComponentData::addLineGroup">
+<area shape="rect" id="Node000001" title="Creates and adds lines to the submesh." alt="" coords="264,69,475,109"/>
+<area shape="rect" id="Node000002" href="$d9/d91/a05523.html#ac2687e5d9e8ba9360af99553a05808e5" title="Creates and adds lines to the submesh." alt="" coords="5,5,216,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="274,69,191,48,193,43,275,63"/>
+<area shape="rect" id="Node000003" href="$d9/d91/a05523.html#a80ef15ae4ca5c33054c7da902334ef6b" title="Creates and adds lines to the submesh." alt="" coords="5,69,216,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="250,92,216,92,216,87,250,87"/>
+<area shape="rect" id="Node000004" href="$d9/d91/a05523.html#a20d9e875503b2e893631c83183c1ccf1" title="Creates and adds lines to the submesh." alt="" coords="5,133,216,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="275,115,193,136,191,131,274,110"/>
+</map>

@@ -1,0 +1,275 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d24/a05459" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::DefaultRenderComponent::RenderShader</compoundname>
+    <basecompoundref refid="d8/d26/a05599" prot="public" virt="non-virtual">castor3d::SubmeshRenderShader</basecompoundref>
+    <includes local="no">DefaultRenderComponent.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d24/a05459_1a8e7131e1f3ae1b946ec1d672f3c2bbe4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d9/dba/a02278_1ad29d150a18d6a28a932964404526ebee" kindref="member">SubmeshRenderDataPtr</ref></type>
+        <definition>SubmeshRenderDataPtr castor3d::DefaultRenderComponent::RenderShader::createData</definition>
+        <argsstring>(castor3d::SubmeshComponent const &amp;component) override</argsstring>
+        <name>createData</name>
+        <qualifiedname>castor3d::DefaultRenderComponent::RenderShader::createData</qualifiedname>
+        <reimplements refid="d8/d26/a05599_1a64c099efa5315987977636ef1ec44530">createData</reimplements>
+        <param>
+          <type><ref refid="d6/df6/a05611" kindref="compound">castor3d::SubmeshComponent</ref> const &amp;</type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Les données du shader de rendu. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp" line="20" column="22" bodyfile="Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp" bodystart="20" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d24/a05459_1add45b97147831b7cd8391bc46e25140e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::DefaultRenderComponent::RenderShader::getShaderSource</definition>
+        <argsstring>(Engine const &amp;engine, PipelineFlags const &amp;flags, ComponentModeFlags const &amp;componentsMask, ast::ShaderBuilder &amp;builder) const override</argsstring>
+        <name>getShaderSource</name>
+        <qualifiedname>castor3d::DefaultRenderComponent::RenderShader::getShaderSource</qualifiedname>
+        <reimplements refid="d8/d26/a05599_1a13daf778c15d86aae3d199f17861281b">getShaderSource</reimplements>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a924293b8f4fc39410f651e98ed535eb0" kindref="member">ComponentModeFlags</ref> const &amp;</type>
+          <declname>componentsMask</declname>
+        </param>
+        <param>
+          <type>ast::ShaderBuilder &amp;</type>
+          <declname>builder</declname>
+        </param>
+        <briefdescription>
+<para>Récupère le source du shader qui correspond aux indicateurs donnés.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les indicateurs de pipeline. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">componentsMask</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les indicateurs de composants de la passe de noeuds. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">builder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le shader builder.   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp" line="27" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="db/d24/a05459_1aaaad79af8f7fd27e5ac6a03853e1a897" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DefaultRenderComponent::RenderShader::doGetBillboardShaderSource</definition>
+        <argsstring>(Engine const &amp;engine, PipelineFlags const &amp;flags, ComponentModeFlags const &amp;componentsMask, ast::ShaderBuilder &amp;builder) const</argsstring>
+        <name>doGetBillboardShaderSource</name>
+        <qualifiedname>castor3d::DefaultRenderComponent::RenderShader::doGetBillboardShaderSource</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a924293b8f4fc39410f651e98ed535eb0" kindref="member">ComponentModeFlags</ref> const &amp;</type>
+          <declname>componentsMask</declname>
+        </param>
+        <param>
+          <type>ast::ShaderBuilder &amp;</type>
+          <declname>builder</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp" line="33" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d24/a05459_1af557b6e33f5f9197fd733ad812d97f70" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DefaultRenderComponent::RenderShader::doGetTraditionalShaderSource</definition>
+        <argsstring>(Engine const &amp;engine, PipelineFlags const &amp;flags, ComponentModeFlags const &amp;componentsMask, ast::ShaderBuilder &amp;builder) const</argsstring>
+        <name>doGetTraditionalShaderSource</name>
+        <qualifiedname>castor3d::DefaultRenderComponent::RenderShader::doGetTraditionalShaderSource</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a924293b8f4fc39410f651e98ed535eb0" kindref="member">ComponentModeFlags</ref> const &amp;</type>
+          <declname>componentsMask</declname>
+        </param>
+        <param>
+          <type>ast::ShaderBuilder &amp;</type>
+          <declname>builder</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp" line="37" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d24/a05459_1ac097d54f56f1105053f41d0e3d29548b" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DefaultRenderComponent::RenderShader::doGetModernShaderSourceEXT</definition>
+        <argsstring>(Engine const &amp;engine, PipelineFlags const &amp;flags, ComponentModeFlags const &amp;componentsMask, ast::ShaderBuilder &amp;builder) const</argsstring>
+        <name>doGetModernShaderSourceEXT</name>
+        <qualifiedname>castor3d::DefaultRenderComponent::RenderShader::doGetModernShaderSourceEXT</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a924293b8f4fc39410f651e98ed535eb0" kindref="member">ComponentModeFlags</ref> const &amp;</type>
+          <declname>componentsMask</declname>
+        </param>
+        <param>
+          <type>ast::ShaderBuilder &amp;</type>
+          <declname>builder</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp" line="41" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d24/a05459_1a96282a79c34c24fa9872dd2fc99d9017" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DefaultRenderComponent::RenderShader::doGetModernShaderSourceNV</definition>
+        <argsstring>(Engine const &amp;engine, PipelineFlags const &amp;flags, ComponentModeFlags const &amp;componentsMask, ast::ShaderBuilder &amp;builder) const</argsstring>
+        <name>doGetModernShaderSourceNV</name>
+        <qualifiedname>castor3d::DefaultRenderComponent::RenderShader::doGetModernShaderSourceNV</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a924293b8f4fc39410f651e98ed535eb0" kindref="member">ComponentModeFlags</ref> const &amp;</type>
+          <declname>componentsMask</declname>
+        </param>
+        <param>
+          <type>ast::ShaderBuilder &amp;</type>
+          <declname>builder</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp" line="45" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::DefaultRenderComponent::RenderShader</label>
+        <link refid="db/d24/a05459"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SubmeshRenderShader</label>
+        <link refid="d8/d26/a05599"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::SubmeshSubComponent</label>
+        <link refid="d0/d52/a05583"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::DefaultRenderComponent::RenderShader</label>
+        <link refid="db/d24/a05459"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SubmeshRenderShader</label>
+        <link refid="d8/d26/a05599"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::SubmeshSubComponent</label>
+        <link refid="d0/d52/a05583"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp" line="17" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp" bodystart="19" bodyend="49"/>
+    <listofallmembers>
+      <member refid="db/d24/a05459_1a8e7131e1f3ae1b946ec1d672f3c2bbe4" prot="public" virt="virtual"><scope>castor3d::DefaultRenderComponent::RenderShader</scope><name>createData</name></member>
+      <member refid="db/d24/a05459_1aaaad79af8f7fd27e5ac6a03853e1a897" prot="private" virt="non-virtual"><scope>castor3d::DefaultRenderComponent::RenderShader</scope><name>doGetBillboardShaderSource</name></member>
+      <member refid="db/d24/a05459_1ac097d54f56f1105053f41d0e3d29548b" prot="private" virt="non-virtual"><scope>castor3d::DefaultRenderComponent::RenderShader</scope><name>doGetModernShaderSourceEXT</name></member>
+      <member refid="db/d24/a05459_1a96282a79c34c24fa9872dd2fc99d9017" prot="private" virt="non-virtual"><scope>castor3d::DefaultRenderComponent::RenderShader</scope><name>doGetModernShaderSourceNV</name></member>
+      <member refid="db/d24/a05459_1af557b6e33f5f9197fd733ad812d97f70" prot="private" virt="non-virtual"><scope>castor3d::DefaultRenderComponent::RenderShader</scope><name>doGetTraditionalShaderSource</name></member>
+      <member refid="db/d24/a05459_1add45b97147831b7cd8391bc46e25140e" prot="public" virt="virtual"><scope>castor3d::DefaultRenderComponent::RenderShader</scope><name>getShaderSource</name></member>
+      <member refid="d0/d52/a05583_1ab6fe013c6773203dd48b0fd7982db090" prot="public" virt="non-virtual"><scope>castor3d::DefaultRenderComponent::RenderShader</scope><name>operator=</name></member>
+      <member refid="d0/d52/a05583_1ae5f575a4591e2482f38424d28fc593a4" prot="public" virt="non-virtual"><scope>castor3d::DefaultRenderComponent::RenderShader</scope><name>operator=</name></member>
+      <member refid="d0/d52/a05583_1aed4d0f8a4af9dfcf351a935a13f380da" prot="public" virt="non-virtual"><scope>castor3d::DefaultRenderComponent::RenderShader</scope><name>SubmeshSubComponent</name></member>
+      <member refid="d0/d52/a05583_1a49b002073f7df721f770f332691120a0" prot="public" virt="non-virtual"><scope>castor3d::DefaultRenderComponent::RenderShader</scope><name>SubmeshSubComponent</name></member>
+      <member refid="d0/d52/a05583_1aa2061ea6819aeddaf3038c5d08a10f0a" prot="public" virt="non-virtual"><scope>castor3d::DefaultRenderComponent::RenderShader</scope><name>SubmeshSubComponent</name></member>
+      <member refid="d0/d52/a05583_1a4dd3a2ac9b9363029f713a87fb14f66b" prot="public" virt="virtual"><scope>castor3d::DefaultRenderComponent::RenderShader</scope><name>~SubmeshSubComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

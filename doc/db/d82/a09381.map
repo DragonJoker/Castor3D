@@ -1,0 +1,7 @@
+<map id="castor::debug::Backtraced" name="castor::debug::Backtraced">
+<area shape="rect" id="Node000001" title="Helper class used to enable allocation backtrace retrieval." alt="" coords="5,211,180,236"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="29,108,156,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,162,95,210,90,210,90,162"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="29,5,156,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,59,95,108,90,108,90,59"/>
+</map>

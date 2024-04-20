@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d9f/a09319" kind="struct" language="C++" prot="public">
+    <compoundname>castor::RangedValueGetterT&lt; RangedValue&lt; T &gt; &gt;</compoundname>
+    <includes local="no">RangedValue.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="da/d9f/a09319_1a03e98c042eb6fbbb13d0462ae1b624a5" prot="public" static="no">
+        <type>T</type>
+        <definition>using castor::RangedValueGetterT&lt; RangedValue&lt; T &gt; &gt;::Type =  T</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor::RangedValueGetterT&lt; RangedValue&lt; T &gt; &gt;::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangedValue.hpp" line="443" column="1" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="443" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/RangedValue.hpp" line="441" column="1" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="442" bodyend="444"/>
+    <listofallmembers>
+      <member refid="da/d9f/a09319_1a03e98c042eb6fbbb13d0462ae1b624a5" prot="public" virt="non-virtual"><scope>castor::RangedValueGetterT&lt; RangedValue&lt; T &gt; &gt;</scope><name>Type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

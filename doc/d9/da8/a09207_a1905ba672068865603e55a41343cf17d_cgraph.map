@@ -1,0 +1,9 @@
+<map id="castor::Range::clamp" name="castor::Range::clamp">
+<area shape="rect" id="Node000001" title="Puts a value in the range." alt="" coords="5,31,152,56"/>
+<area shape="rect" id="Node000002" href="$d9/da8/a09207.html#a068135b0cd55ff059544f0b4f467ebe7" title="Gives the value matching the given percentage." alt="" coords="200,5,340,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,31,186,26,187,32,153,36"/>
+<area shape="rect" id="Node000003" href="$d9/da8/a09207.html#a18a23ae9545aca1b31a8e13fbeede614" title="Gives the percentage matching the given value." alt="" coords="388,5,543,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="340,24,374,24,374,30,340,29"/>
+<area shape="poly" id="edge3_Node000003_Node000001" title=" " alt="" coords="410,33,340,45,251,50,166,50,166,44,250,44,340,39,410,28"/>
+<area shape="poly" id="edge4_Node000003_Node000002" title=" " alt="" coords="388,12,354,12,354,6,388,7"/>
+</map>

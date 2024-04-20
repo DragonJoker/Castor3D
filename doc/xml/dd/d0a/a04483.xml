@@ -1,0 +1,486 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d0a/a04483" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::HeightMapComponent::ComponentsShader</compoundname>
+    <basecompoundref refid="dd/d3b/a04851" prot="public" virt="non-virtual">castor3d::shader::PassMapComponentsShader</basecompoundref>
+    <includes local="no">HeightMapComponent.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/d0a/a04483_1afc1506a88a275bd250d9cb95a2619087" prot="private" static="no" mutable="yes">
+        <type>sdw::Function&lt; sdw::Vec2, sdw::InVec2, sdw::InVec2, sdw::InVec2, sdw::InVec3, sdw::InCombinedImage2DRgba32, shader::InTextureConfigData, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec2 , sdw::InVec2 , sdw::InVec2 , sdw::InVec2 , sdw::InVec3 , sdw::InCombinedImage2DRgba32 , shader::InTextureConfigData , sdw::InUInt &gt; castor3d::HeightMapComponent::ComponentsShader::m_parallaxMapping</definition>
+        <argsstring></argsstring>
+        <name>m_parallaxMapping</name>
+        <qualifiedname>castor3d::HeightMapComponent::ComponentsShader::m_parallaxMapping</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp" line="103" column="2" bodyfile="Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d0a/a04483_1aab3960058f6f60a47443df049d9c3119" prot="private" static="no" mutable="yes">
+        <type>sdw::Function&lt; sdw::Float, sdw::InVec3, sdw::InVec2, sdw::InFloat, sdw::InCombinedImage2DRgba32, shader::InTextureConfigData, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; sdw::Float , sdw::InVec3 , sdw::InVec2 , sdw::InFloat , sdw::InCombinedImage2DRgba32 , shader::InTextureConfigData , sdw::InUInt &gt; castor3d::HeightMapComponent::ComponentsShader::m_parallaxShadow</definition>
+        <argsstring></argsstring>
+        <name>m_parallaxShadow</name>
+        <qualifiedname>castor3d::HeightMapComponent::ComponentsShader::m_parallaxShadow</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp" line="110" column="2" bodyfile="Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d0a/a04483_1a1410acf7308a23b62f5f9e89ec3874ea" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::HeightMapComponent::ComponentsShader::applyTexture</definition>
+        <argsstring>(shader::PassShaders const &amp;passShaders, shader::TextureConfigurations const &amp;textureConfigs, shader::TextureAnimations const &amp;textureAnims, sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;maps, shader::Material const &amp;material, shader::BlendComponents &amp;components, shader::SampleTexture const &amp;sampleTexture) const override</argsstring>
+        <name>applyTexture</name>
+        <qualifiedname>castor3d::HeightMapComponent::ComponentsShader::applyTexture</qualifiedname>
+        <reimplements refid="dd/d3b/a04851_1a0e3cb39349c75af1ea908627043db043">applyTexture</reimplements>
+        <param>
+          <type><ref refid="d5/d49/a07611" kindref="compound">shader::PassShaders</ref> const &amp;</type>
+          <declname>passShaders</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d7c/a07707" kindref="compound">shader::TextureConfigurations</ref> const &amp;</type>
+          <declname>textureConfigs</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d61/a07699" kindref="compound">shader::TextureAnimations</ref> const &amp;</type>
+          <declname>textureAnims</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;</type>
+          <declname>maps</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d98/a07551" kindref="compound">shader::Material</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">shader::BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d68/a02280_1a319512df016d306e059167be0bb1400c" kindref="member">shader::SampleTexture</ref> const &amp;</type>
+          <declname>sampleTexture</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp" line="33" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d0a/a04483_1a0617884c2f149cd467e2b280dbce3005" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::HeightMapComponent::ComponentsShader::parallaxMapping</definition>
+        <argsstring>(sdw::Vec2 const &amp;texCoords, sdw::Vec3 const &amp;viewDir, sdw::CombinedImage2DRgba32 const &amp;heightMap, shader::TextureConfigData const &amp;textureConfig, sdw::UInt const &amp;mask) const</argsstring>
+        <name>parallaxMapping</name>
+        <qualifiedname>castor3d::HeightMapComponent::ComponentsShader::parallaxMapping</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>viewDir</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>heightMap</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d8b/a07703" kindref="compound">shader::TextureConfigData</ref> const &amp;</type>
+          <declname>textureConfig</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>mask</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp" line="41" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d0a/a04483_1a64a7dfc0b76d15f19831797cad66b570" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::HeightMapComponent::ComponentsShader::parallaxMapping</definition>
+        <argsstring>(sdw::Vec3 const &amp;texCoords, sdw::Vec3 const &amp;viewDir, sdw::CombinedImage2DRgba32 const &amp;heightMap, shader::TextureConfigData const &amp;textureConfig, sdw::UInt const &amp;mask) const</argsstring>
+        <name>parallaxMapping</name>
+        <qualifiedname>castor3d::HeightMapComponent::ComponentsShader::parallaxMapping</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>viewDir</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>heightMap</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d8b/a07703" kindref="compound">shader::TextureConfigData</ref> const &amp;</type>
+          <declname>textureConfig</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>mask</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp" line="46" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d0a/a04483_1adcb38d1ac308f202a9a4512f5735b473" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::HeightMapComponent::ComponentsShader::parallaxMapping</definition>
+        <argsstring>(shader::DerivTex const &amp;texCoords, sdw::Vec3 const &amp;viewDir, sdw::CombinedImage2DRgba32 const &amp;heightMap, shader::TextureConfigData const &amp;textureConfig, sdw::UInt const &amp;mask) const</argsstring>
+        <name>parallaxMapping</name>
+        <qualifiedname>castor3d::HeightMapComponent::ComponentsShader::parallaxMapping</qualifiedname>
+        <param>
+          <type><ref refid="da/d68/a02280_1a3063cef72b76fcb0aa1ff88fe54e183b" kindref="member">shader::DerivTex</ref> const &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>viewDir</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>heightMap</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d8b/a07703" kindref="compound">shader::TextureConfigData</ref> const &amp;</type>
+          <declname>textureConfig</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>mask</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp" line="51" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d0a/a04483_1aadc95e03545635c8737801531a4a0eca" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::HeightMapComponent::ComponentsShader::parallaxMapping</definition>
+        <argsstring>(sdw::Vec2 texCoords, sdw::Vec2 const &amp;dx, sdw::Vec2 const &amp;dy, sdw::Vec3 const &amp;viewDir, sdw::CombinedImage2DRgba32 const &amp;heightMap, shader::TextureConfigData const &amp;textureConfig, sdw::UInt const &amp;mask) const</argsstring>
+        <name>parallaxMapping</name>
+        <qualifiedname>castor3d::HeightMapComponent::ComponentsShader::parallaxMapping</qualifiedname>
+        <param>
+          <type>sdw::Vec2</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>dx</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>dy</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>viewDir</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>heightMap</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d8b/a07703" kindref="compound">shader::TextureConfigData</ref> const &amp;</type>
+          <declname>textureConfig</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>mask</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp" line="56" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d0a/a04483_1a27e5d53e4d189a37046b4a860da28df1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetFloat</type>
+        <definition>C3D_API sdw::RetFloat castor3d::HeightMapComponent::ComponentsShader::parallaxShadow</definition>
+        <argsstring>(sdw::Vec3 const &amp;lightDir, sdw::Vec2 const &amp;initialTexCoord, sdw::Float const &amp;initialHeight, sdw::CombinedImage2DRgba32 const &amp;heightMap, shader::TextureConfigData const &amp;textureConfig, sdw::UInt const &amp;mask)</argsstring>
+        <name>parallaxShadow</name>
+        <qualifiedname>castor3d::HeightMapComponent::ComponentsShader::parallaxShadow</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>lightDir</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>initialTexCoord</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>initialHeight</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>heightMap</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d8b/a07703" kindref="compound">shader::TextureConfigData</ref> const &amp;</type>
+          <declname>textureConfig</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>mask</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp" line="63" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d0a/a04483_1ab6d646afc26578f9834ee9f8d4d7bd67" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref></type>
+        <definition>PassComponentTextureFlag castor3d::HeightMapComponent::ComponentsShader::getTextureFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>getTextureFlags</name>
+        <qualifiedname>castor3d::HeightMapComponent::ComponentsShader::getTextureFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp" line="70" column="26" bodyfile="Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp" bodystart="70" bodyend="73"/>
+        <references refid="d6/d6f/a04819_1a846afb362f8cdb6bd2dc1a3f98db9f64">castor3d::shader::PassComponentsShader::getId</references>
+        <references refid="d5/d8a/a04475_1a105da62aed508cf21f2fa6563be37c78" compoundref="d0/ddb/a00542" startline="17">castor3d::HeightMapComponent::Height</references>
+        <references refid="d9/dba/a02278_1a813eb0a53ad6b3f96433a39acae9f59b" compoundref="d0/dc4/a00443" startline="41" endline="46">castor3d::makeTextureFlag</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="dd/d0a/a04483_1a32503a7857a18f69d3751fbb5ef67c63" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::HeightMapComponent::ComponentsShader::doComputeTexcoord</definition>
+        <argsstring>(PassComponentCombine const &amp;pass, shader::TextureConfigData const &amp;config, sdw::CombinedImage2DRgba32 const &amp;map, sdw::Vec2 &amp;texCoords, sdw::UInt const &amp;mask, shader::BlendComponents &amp;components) const</argsstring>
+        <name>doComputeTexcoord</name>
+        <qualifiedname>castor3d::HeightMapComponent::ComponentsShader::doComputeTexcoord</qualifiedname>
+        <param>
+          <type><ref refid="d1/dc1/a04099" kindref="compound">PassComponentCombine</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d8b/a07703" kindref="compound">shader::TextureConfigData</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>map</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>mask</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">shader::BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp" line="76" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d0a/a04483_1a03d498239d2ea3d3f14f1a3a2b19ca34" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::HeightMapComponent::ComponentsShader::doComputeTexcoord</definition>
+        <argsstring>(PassComponentCombine const &amp;pass, shader::TextureConfigData const &amp;config, sdw::CombinedImage2DRgba32 const &amp;map, sdw::Vec3 &amp;texCoords, sdw::UInt const &amp;mask, shader::BlendComponents &amp;components) const</argsstring>
+        <name>doComputeTexcoord</name>
+        <qualifiedname>castor3d::HeightMapComponent::ComponentsShader::doComputeTexcoord</qualifiedname>
+        <param>
+          <type><ref refid="d1/dc1/a04099" kindref="compound">PassComponentCombine</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d8b/a07703" kindref="compound">shader::TextureConfigData</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>map</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>mask</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">shader::BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp" line="82" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d0a/a04483_1ab955ac41643ce1aa1906e9075f53b1ba" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::HeightMapComponent::ComponentsShader::doComputeTexcoord</definition>
+        <argsstring>(PassComponentCombine const &amp;pass, shader::TextureConfigData const &amp;config, sdw::CombinedImage2DRgba32 const &amp;map, shader::DerivTex &amp;texCoords, sdw::UInt const &amp;mask, shader::BlendComponents &amp;components) const</argsstring>
+        <name>doComputeTexcoord</name>
+        <qualifiedname>castor3d::HeightMapComponent::ComponentsShader::doComputeTexcoord</qualifiedname>
+        <param>
+          <type><ref refid="d1/dc1/a04099" kindref="compound">PassComponentCombine</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d8b/a07703" kindref="compound">shader::TextureConfigData</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>map</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d68/a02280_1a3063cef72b76fcb0aa1ff88fe54e183b" kindref="member">shader::DerivTex</ref> &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>mask</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">shader::BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp" line="88" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::HeightMapComponent::ComponentsShader</label>
+        <link refid="dd/d0a/a04483"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PassComponentsShader</label>
+        <link refid="d6/d6f/a04819"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassMapComponentsShader</label>
+        <link refid="dd/d3b/a04851"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::HeightMapComponent::ComponentsShader</label>
+        <link refid="dd/d0a/a04483"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PassComponentsShader</label>
+        <link refid="d6/d6f/a04819"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassMapComponentsShader</label>
+        <link refid="dd/d3b/a04851"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp" line="28" column="1" bodyfile="Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp" bodystart="30" bodyend="111"/>
+    <listofallmembers>
+      <member refid="d6/d6f/a04819_1a9628851e6c3e74b22df1548301832513" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>applyComponents</name></member>
+      <member refid="d6/d6f/a04819_1a77e66ffa1eac33d82efbe4ce59236f38" prot="protected" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>applyFloatComponent</name></member>
+      <member refid="d6/d6f/a04819_1a02ae79221e5a0e986858c9c383fdaed0" prot="protected" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>applyFloatComponent</name></member>
+      <member refid="dd/d0a/a04483_1a1410acf7308a23b62f5f9e89ec3874ea" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>applyTexture</name></member>
+      <member refid="d6/d6f/a04819_1a3243f2f9fffc4e75f91e927600a6271d" prot="protected" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>applyVec3Component</name></member>
+      <member refid="d6/d6f/a04819_1aed9f9d27b59abd38f5b5c19d5f45a2af" prot="protected" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>applyVec3Component</name></member>
+      <member refid="d6/d6f/a04819_1a277de8d6d8fa8c0e3d50edb51fe2157c" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>blendComponents</name></member>
+      <member refid="dd/d0a/a04483_1a32503a7857a18f69d3751fbb5ef67c63" prot="private" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>doComputeTexcoord</name></member>
+      <member refid="dd/d0a/a04483_1a03d498239d2ea3d3f14f1a3a2b19ca34" prot="private" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>doComputeTexcoord</name></member>
+      <member refid="dd/d0a/a04483_1ab955ac41643ce1aa1906e9075f53b1ba" prot="private" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>doComputeTexcoord</name></member>
+      <member refid="d6/d6f/a04819_1ac2cfaa34f675787b0b0140eb9e2eb7d3" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>fillComponents</name></member>
+      <member refid="d6/d6f/a04819_1a80a16a96d3e5d71cb6b631a77c73217f" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>fillComponentsInits</name></member>
+      <member refid="d6/d6f/a04819_1a846afb362f8cdb6bd2dc1a3f98db9f64" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>getId</name></member>
+      <member refid="d6/d6f/a04819_1a1727bca64233903f00c27aacd146429b" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>getPlugin</name></member>
+      <member refid="dd/d0a/a04483_1ab6d646afc26578f9834ee9f8d4d7bd67" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>getTextureFlags</name></member>
+      <member refid="d6/d6f/a04819_1ae6acbd6edb3df14dcecccd2598bed038" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>isMapSampling</name></member>
+      <member refid="dd/d0a/a04483_1afc1506a88a275bd250d9cb95a2619087" prot="private" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>m_parallaxMapping</name></member>
+      <member refid="dd/d0a/a04483_1aab3960058f6f60a47443df049d9c3119" prot="private" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>m_parallaxShadow</name></member>
+      <member refid="d2/d04/a04815_1a06fad613f64fa717de3e8032393fdbd7" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>operator=</name></member>
+      <member refid="d2/d04/a04815_1a0e5c7fea4f6928009d6da51c4d78a9df" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>operator=</name></member>
+      <member refid="dd/d0a/a04483_1a0617884c2f149cd467e2b280dbce3005" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>parallaxMapping</name></member>
+      <member refid="dd/d0a/a04483_1a64a7dfc0b76d15f19831797cad66b570" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>parallaxMapping</name></member>
+      <member refid="dd/d0a/a04483_1adcb38d1ac308f202a9a4512f5735b473" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>parallaxMapping</name></member>
+      <member refid="dd/d0a/a04483_1aadc95e03545635c8737801531a4a0eca" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>parallaxMapping</name></member>
+      <member refid="dd/d0a/a04483_1a27e5d53e4d189a37046b4a860da28df1" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>parallaxShadow</name></member>
+      <member refid="dd/d3b/a04851_1af7ade94522557fd93269087ee3703612" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>PassComponentsShader</name></member>
+      <member refid="d2/d04/a04815_1ab439edbbb2da660939e0209d9bfba3b0" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>PassShader</name></member>
+      <member refid="d2/d04/a04815_1ae0263dc410ae3d05ddea8cc9ad7eac73" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>PassShader</name></member>
+      <member refid="d2/d04/a04815_1aee18e0dfda227ed54fb966d7d75a1ea5" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>PassShader</name></member>
+      <member refid="d6/d6f/a04819_1adae1f04a5d2866590f4f3204b233dd99" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>sampleMap</name></member>
+      <member refid="d6/d6f/a04819_1a226e2c05d6cff43678f171ef5f413887" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>sampleMap</name></member>
+      <member refid="d6/d6f/a04819_1ab47e2f5bc209511aa30f917e09636eb9" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>updateComponent</name></member>
+      <member refid="d2/d04/a04815_1a56338db0aed5f44427291aa6c631872b" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::ComponentsShader</scope><name>~PassShader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

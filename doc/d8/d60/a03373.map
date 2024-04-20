@@ -1,5 +1,16 @@
-<map id="castor3d::TextureCountComponent::MaterialShader" name="castor3d::TextureCountComponent::MaterialShader">
-<area shape="rect" id="node1" title=" " alt="" coords="5,167,228,207"/>
-<area shape="rect" id="node2" href="$dc/d86/a04022.html" title=" " alt="" coords="15,79,218,119"/>
-<area shape="rect" id="node3" href="$d0/dee/a04014.html" title=" " alt="" coords="17,5,216,31"/>
+<map id="castor3d::BinaryParser&lt; SkinComponent &gt;" name="castor3d::BinaryParser&lt; SkinComponent &gt;">
+<area shape="rect" id="Node000001" title="SkinComponent loader." alt="" coords="880,89,1035,129"/>
+<area shape="rect" id="Node000002" href="$dd/de1/a03223.html" title=" " alt="" coords="645,89,831,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="845,107,880,107,880,112,845,112"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="19,5,146,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="160,20,254,20,370,26,497,39,622,64,690,87,688,92,621,69,496,45,370,31,254,26,160,25"/>
+<area shape="rect" id="Node000006" href="$dd/de1/a03223.html" title="Binary data chunk reader base class." alt="" coords="291,56,476,96"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="160,36,291,58,290,63,159,41"/>
+<area shape="rect" id="Node000004" href="$d5/d27/a03183.html" title=" " alt="" coords="5,107,160,133"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="174,119,291,120,476,120,645,113,645,118,476,125,291,125,174,124"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="173,104,290,87,291,92,174,109"/>
+<area shape="rect" id="Node000005" href="$d5/d15/a05335.html" title=" " alt="" coords="21,171,145,197"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="158,175,367,154,621,124,644,121,645,126,622,129,367,159,159,180"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="138,165,266,122,334,94,336,99,268,126,139,170"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="490,83,645,98,645,103,490,89"/>
 </map>

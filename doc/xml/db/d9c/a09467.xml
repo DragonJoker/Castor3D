@@ -1,0 +1,169 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d9c/a09467" kind="class" language="C++" prot="public">
+    <compoundname>castor::FractalNoiseT</compoundname>
+    <includes local="no">FractalNoise.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename NoiseT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="db/d9c/a09467_1a37b8a45b986e8d2c3d09b2e6811924f9" prot="private" static="no">
+        <type>typename NoiseT::TypeT</type>
+        <definition>using castor::FractalNoiseT&lt; NoiseT &gt;::TypeT =  typename NoiseT::TypeT</definition>
+        <argsstring></argsstring>
+        <name>TypeT</name>
+        <qualifiedname>castor::FractalNoiseT::TypeT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/FractalNoise.hpp" line="15" column="1" bodyfile="CastorUtils/Noise/FractalNoise.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/d9c/a09467_1a6d115a0aca66e9d7317a0e2329fb456d" prot="private" static="no" mutable="no">
+        <type>NoiseT</type>
+        <definition>NoiseT castor::FractalNoiseT&lt; NoiseT &gt;::m_noise</definition>
+        <argsstring></argsstring>
+        <name>m_noise</name>
+        <qualifiedname>castor::FractalNoiseT::m_noise</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/FractalNoise.hpp" line="23" column="8" bodyfile="CastorUtils/Noise/FractalNoise.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d9c/a09467_1aac18559dbde9bb289916574608885e15" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::FractalNoiseT&lt; NoiseT &gt;::m_octaves</definition>
+        <argsstring></argsstring>
+        <name>m_octaves</name>
+        <qualifiedname>castor::FractalNoiseT::m_octaves</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/FractalNoise.hpp" line="24" column="10" bodyfile="CastorUtils/Noise/FractalNoise.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d9c/a09467_1a4f7aa715a387b5e267fdd11ecaeb7dc7" prot="private" static="no" mutable="no">
+        <type>TypeT</type>
+        <definition>TypeT castor::FractalNoiseT&lt; NoiseT &gt;::m_frequency</definition>
+        <argsstring></argsstring>
+        <name>m_frequency</name>
+        <qualifiedname>castor::FractalNoiseT::m_frequency</qualifiedname>
+        <initializer>{ TypeT( 1.0 ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/FractalNoise.hpp" line="25" column="7" bodyfile="CastorUtils/Noise/FractalNoise.hpp" bodystart="25" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d9c/a09467_1afdabf2c16473b7a424f32496d12b13b7" prot="private" static="no" mutable="no">
+        <type>TypeT</type>
+        <definition>TypeT castor::FractalNoiseT&lt; NoiseT &gt;::m_amplitude</definition>
+        <argsstring></argsstring>
+        <name>m_amplitude</name>
+        <qualifiedname>castor::FractalNoiseT::m_amplitude</qualifiedname>
+        <initializer>{ TypeT( 1.0 ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/FractalNoise.hpp" line="26" column="7" bodyfile="CastorUtils/Noise/FractalNoise.hpp" bodystart="26" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d9c/a09467_1a5893c40abd26d2e400e73a0bef1f2a50" prot="private" static="no" mutable="no">
+        <type>TypeT</type>
+        <definition>TypeT castor::FractalNoiseT&lt; NoiseT &gt;::m_persistence</definition>
+        <argsstring></argsstring>
+        <name>m_persistence</name>
+        <qualifiedname>castor::FractalNoiseT::m_persistence</qualifiedname>
+        <initializer>{ TypeT( 0.5 ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/FractalNoise.hpp" line="27" column="7" bodyfile="CastorUtils/Noise/FractalNoise.hpp" bodystart="27" bodyend="27"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d9c/a09467_1a7e4c256ebc22ad022168f61aca20e1d8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::FractalNoiseT&lt; NoiseT &gt;::FractalNoiseT</definition>
+        <argsstring>(uint32_t octaves, NoiseT noise)</argsstring>
+        <name>FractalNoiseT</name>
+        <qualifiedname>castor::FractalNoiseT::FractalNoiseT</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>octaves</declname>
+        </param>
+        <param>
+          <type>NoiseT</type>
+          <declname>noise</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/FractalNoise.hpp" line="18" column="1" bodyfile="CastorUtils/Noise/FractalNoise.hpp" bodystart="31" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d9c/a09467_1a0ccab6294c27cdc3e44d3294f7531a06" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>TypeT</type>
+        <definition>NoiseT::TypeT castor::FractalNoiseT&lt; NoiseT &gt;::noise</definition>
+        <argsstring>(TypeT x, TypeT y, TypeT z)</argsstring>
+        <name>noise</name>
+        <qualifiedname>castor::FractalNoiseT::noise</qualifiedname>
+        <param>
+          <type>TypeT</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>TypeT</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>TypeT</type>
+          <declname>z</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/FractalNoise.hpp" line="20" column="7" bodyfile="CastorUtils/Noise/FractalNoise.hpp" bodystart="39" bodyend="60"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Générateur de bruit fractal pour PerlinNoise et SimplexNoise. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Noise/FractalNoise.hpp" line="12" column="1" bodyfile="CastorUtils/Noise/FractalNoise.hpp" bodystart="13" bodyend="28"/>
+    <listofallmembers>
+      <member refid="db/d9c/a09467_1a7e4c256ebc22ad022168f61aca20e1d8" prot="public" virt="non-virtual"><scope>castor::FractalNoiseT</scope><name>FractalNoiseT</name></member>
+      <member refid="db/d9c/a09467_1afdabf2c16473b7a424f32496d12b13b7" prot="private" virt="non-virtual"><scope>castor::FractalNoiseT</scope><name>m_amplitude</name></member>
+      <member refid="db/d9c/a09467_1a4f7aa715a387b5e267fdd11ecaeb7dc7" prot="private" virt="non-virtual"><scope>castor::FractalNoiseT</scope><name>m_frequency</name></member>
+      <member refid="db/d9c/a09467_1a6d115a0aca66e9d7317a0e2329fb456d" prot="private" virt="non-virtual"><scope>castor::FractalNoiseT</scope><name>m_noise</name></member>
+      <member refid="db/d9c/a09467_1aac18559dbde9bb289916574608885e15" prot="private" virt="non-virtual"><scope>castor::FractalNoiseT</scope><name>m_octaves</name></member>
+      <member refid="db/d9c/a09467_1a5893c40abd26d2e400e73a0bef1f2a50" prot="private" virt="non-virtual"><scope>castor::FractalNoiseT</scope><name>m_persistence</name></member>
+      <member refid="db/d9c/a09467_1a0ccab6294c27cdc3e44d3294f7531a06" prot="public" virt="non-virtual"><scope>castor::FractalNoiseT</scope><name>noise</name></member>
+      <member refid="db/d9c/a09467_1a37b8a45b986e8d2c3d09b2e6811924f9" prot="private" virt="non-virtual"><scope>castor::FractalNoiseT</scope><name>TypeT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,5 +1,16 @@
-<map id="castor3d::Layout" name="castor3d::Layout">
-<area shape="rect" id="node1" title=" " alt="" coords="17,79,136,104"/>
-<area shape="rect" id="node3" href="$d1/d48/a03218.html" title=" " alt="" coords="5,152,148,177"/>
-<area shape="rect" id="node2" title=" " alt="" coords="23,5,130,31"/>
+<map id="castor3d::BinaryParser&lt; MeshAnimation &gt;" name="castor3d::BinaryParser&lt; MeshAnimation &gt;">
+<area shape="rect" id="Node000001" title="MeshAnimation binary loader." alt="" coords="877,89,1032,129"/>
+<area shape="rect" id="Node000002" href="$dd/de1/a03223.html" title=" " alt="" coords="643,89,828,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="842,107,877,107,877,112,842,112"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="19,5,146,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="160,20,253,20,369,26,495,39,619,64,687,87,686,92,618,69,494,45,369,31,253,26,160,25"/>
+<area shape="rect" id="Node000006" href="$dd/de1/a03223.html" title="Binary data chunk reader base class." alt="" coords="291,56,476,96"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="160,36,291,58,290,63,159,41"/>
+<area shape="rect" id="Node000004" href="$d5/d27/a03183.html" title=" " alt="" coords="5,107,160,133"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="174,119,291,120,476,120,642,113,642,118,476,125,291,125,174,124"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="173,104,290,87,291,92,174,109"/>
+<area shape="rect" id="Node000005" href="$d5/d15/a05335.html" title=" " alt="" coords="21,171,145,197"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="158,174,366,154,618,124,642,121,642,126,619,129,366,159,159,180"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="138,165,266,122,334,94,336,99,268,126,139,170"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="490,83,642,98,642,103,490,89"/>
 </map>

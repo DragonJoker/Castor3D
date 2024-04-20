@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d51/a06023" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LpvConfig</compoundname>
+    <includes local="no">LpvConfig.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/d51/a06023_1a410a4d84ac4b0b9ccc6163d54e369a5a" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ae9d3fa7fcdf1d831572a45f9c1f131a9" kindref="member">castor::ChangeTracked</ref>&lt; float &gt;</type>
+        <definition>castor::ChangeTracked&lt; float &gt; castor3d::LpvConfig::indirectAttenuation</definition>
+        <argsstring></argsstring>
+        <name>indirectAttenuation</name>
+        <qualifiedname>castor3d::LpvConfig::indirectAttenuation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp" line="21" column="23" bodyfile="Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d51/a06023_1a88faddd9e5b6b83cae302fcc9a4efcf5" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ae9d3fa7fcdf1d831572a45f9c1f131a9" kindref="member">castor::ChangeTracked</ref>&lt; float &gt;</type>
+        <definition>castor::ChangeTracked&lt; float &gt; castor3d::LpvConfig::texelAreaModifier</definition>
+        <argsstring></argsstring>
+        <name>texelAreaModifier</name>
+        <qualifiedname>castor3d::LpvConfig::texelAreaModifier</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp" line="22" column="23" bodyfile="Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d51/a06023_1a42d038cc90630ab3d02a1d3a76fda364" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LpvConfig::accept</definition>
+        <argsstring>(ConfigurationVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::LpvConfig::accept</qualifiedname>
+        <param>
+          <type><ref refid="db/dc2/a05011" kindref="compound">ConfigurationVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp" line="17" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dd/d51/a06023_1a3b0957d4e7d393d55f341704d3fc73c7" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::LpvConfig::addParsers</definition>
+        <argsstring>(castor::AttributeParsers &amp;result)</argsstring>
+        <name>addParsers</name>
+        <qualifiedname>castor3d::LpvConfig::addParsers</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7138ba41c2c2c4ced36cacefe5eb2c33" kindref="member">castor::AttributeParsers</ref> &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp" line="19" column="21"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::ChangeTrackedT&lt; float &gt;</label>
+        <link refid="d2/def/a08159"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; float &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::LpvConfig</label>
+        <link refid="dd/d51/a06023"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>indirectAttenuation</edgelabel>
+          <edgelabel>texelAreaModifier</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::ChangeTrackedT&lt; ValueT, ControlT &gt;</label>
+        <link refid="d2/def/a08159"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp" line="15" column="1" bodyfile="Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp" bodystart="16" bodyend="23"/>
+    <listofallmembers>
+      <member refid="dd/d51/a06023_1a42d038cc90630ab3d02a1d3a76fda364" prot="public" virt="non-virtual"><scope>castor3d::LpvConfig</scope><name>accept</name></member>
+      <member refid="dd/d51/a06023_1a3b0957d4e7d393d55f341704d3fc73c7" prot="public" virt="non-virtual"><scope>castor3d::LpvConfig</scope><name>addParsers</name></member>
+      <member refid="dd/d51/a06023_1a410a4d84ac4b0b9ccc6163d54e369a5a" prot="public" virt="non-virtual"><scope>castor3d::LpvConfig</scope><name>indirectAttenuation</name></member>
+      <member refid="dd/d51/a06023_1a88faddd9e5b6b83cae302fcc9a4efcf5" prot="public" virt="non-virtual"><scope>castor3d::LpvConfig</scope><name>texelAreaModifier</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,225 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/d23/a08155" kind="struct" language="C++" prot="public">
+    <compoundname>castor::BlockGuard</compoundname>
+    <basecompoundref refid="da/d87/a08319" prot="public" virt="non-virtual">castor::NonMovable</basecompoundref>
+    <includes local="no">BlockGuard.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename CleanFunc</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/d23/a08155_1aec1a702c791c2d1964a2d6756e692291" prot="private" static="no" mutable="no">
+        <type>CleanFunc</type>
+        <definition>CleanFunc castor::BlockGuard&lt; CleanFunc &gt;::m_clean</definition>
+        <argsstring></argsstring>
+        <name>m_clean</name>
+        <qualifiedname>castor::BlockGuard::m_clean</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>L&apos;action de nettoyage. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/BlockGuard.hpp" line="55" column="11" bodyfile="CastorUtils/Design/BlockGuard.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d23/a08155_1a8fa57be60d9aebcb95a5e78da2bafcf8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::BlockGuard&lt; CleanFunc &gt;::BlockGuard</definition>
+        <argsstring>(BlockGuard const &amp;)=delete</argsstring>
+        <name>BlockGuard</name>
+        <qualifiedname>castor::BlockGuard::BlockGuard</qualifiedname>
+        <param>
+          <type><ref refid="d7/d23/a08155" kindref="compound">BlockGuard</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/BlockGuard.hpp" line="17" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d23/a08155_1ae717047f5bd491b8d7d300dd769e10d8" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::BlockGuard&lt; CleanFunc &gt;::BlockGuard</definition>
+        <argsstring>(BlockGuard &amp;&amp;) noexcept=delete</argsstring>
+        <name>BlockGuard</name>
+        <qualifiedname>castor::BlockGuard::BlockGuard</qualifiedname>
+        <param>
+          <type><ref refid="d7/d23/a08155" kindref="compound">BlockGuard</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/BlockGuard.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d23/a08155_1a80bdcd9a5029d5e0eb7f4e5df3ebf000" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d7/d23/a08155" kindref="compound">BlockGuard</ref> &amp;</type>
+        <definition>BlockGuard &amp; castor::BlockGuard&lt; CleanFunc &gt;::operator=</definition>
+        <argsstring>(BlockGuard const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::BlockGuard::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/d23/a08155" kindref="compound">BlockGuard</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/BlockGuard.hpp" line="19" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d23/a08155_1acee2ef479521158b3438114e68b67a4d" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d7/d23/a08155" kindref="compound">BlockGuard</ref> &amp;</type>
+        <definition>BlockGuard &amp; castor::BlockGuard&lt; CleanFunc &gt;::operator=</definition>
+        <argsstring>(BlockGuard &amp;&amp;) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::BlockGuard::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/d23/a08155" kindref="compound">BlockGuard</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/BlockGuard.hpp" line="20" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d23/a08155_1a578346e14c770560c5819ed5912d79c9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename InitFunc</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::BlockGuard&lt; CleanFunc &gt;::BlockGuard</definition>
+        <argsstring>(InitFunc init, CleanFunc clean)</argsstring>
+        <name>BlockGuard</name>
+        <qualifiedname>castor::BlockGuard::BlockGuard</qualifiedname>
+        <param>
+          <type>InitFunc</type>
+          <declname>init</declname>
+        </param>
+        <param>
+          <type>CleanFunc</type>
+          <declname>clean</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Exécute l&apos;action d&apos;initialisation. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">init</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;action effectuée à la construction. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">clean</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;action effectuée lors de la destruction. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/BlockGuard.hpp" line="34" column="1" bodyfile="CastorUtils/Design/BlockGuard.hpp" bodystart="34" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d23/a08155_1aa6e6a5f29964854d7b05b8bfe75fcd26" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::BlockGuard&lt; CleanFunc &gt;::~BlockGuard</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~BlockGuard</name>
+        <qualifiedname>castor::BlockGuard::~BlockGuard</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Exécute l&apos;action de nettoyage. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/BlockGuard.hpp" line="47" column="1" bodyfile="CastorUtils/Design/BlockGuard.hpp" bodystart="47" bodyend="50"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Permet de déclarer une variable de scope, avec une action à la construction <linebreak/>
+et une action à la destruction. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Utile pour forcer l&apos;exécution de code, si une exception est lancée. <bold>Example</bold> <programlisting><codeline><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*<sp/>buffer<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
+<codeline><highlight class="normal">{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>guard<sp/>=<sp/><ref refid="d2/dd2/a02279_1a83753f0501828c03cdf51f697334f74a" kindref="member">makeBlockGuard</ref>(<sp/>[&amp;buffer,<sp/>&amp;size]()</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>buffer<sp/>=<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">[size<sp/>+<sp/>1];</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>},</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>[&amp;buffer]()</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">delete</highlight><highlight class="normal"><sp/>[]<sp/>buffer;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/>);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>...<sp/>Code<sp/>pouvant<sp/>lancer<sp/>une<sp/>exception<sp/>...</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline><highlight class="normal">}</highlight></codeline>
+</programlisting> </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::BlockGuard&lt; CleanFunc &gt;</label>
+        <link refid="d7/d23/a08155"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::BlockGuard&lt; CleanFunc &gt;</label>
+        <link refid="d7/d23/a08155"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Design/BlockGuard.hpp" line="14" column="1" bodyfile="CastorUtils/Design/BlockGuard.hpp" bodystart="16" bodyend="56"/>
+    <listofallmembers>
+      <member refid="d7/d23/a08155_1a8fa57be60d9aebcb95a5e78da2bafcf8" prot="public" virt="non-virtual"><scope>castor::BlockGuard</scope><name>BlockGuard</name></member>
+      <member refid="d7/d23/a08155_1ae717047f5bd491b8d7d300dd769e10d8" prot="public" virt="non-virtual"><scope>castor::BlockGuard</scope><name>BlockGuard</name></member>
+      <member refid="d7/d23/a08155_1a578346e14c770560c5819ed5912d79c9" prot="public" virt="non-virtual"><scope>castor::BlockGuard</scope><name>BlockGuard</name></member>
+      <member refid="d7/d23/a08155_1aec1a702c791c2d1964a2d6756e692291" prot="private" virt="non-virtual"><scope>castor::BlockGuard</scope><name>m_clean</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::BlockGuard</scope><name>NonMovable</name></member>
+      <member refid="d7/d23/a08155_1a80bdcd9a5029d5e0eb7f4e5df3ebf000" prot="public" virt="non-virtual"><scope>castor::BlockGuard</scope><name>operator=</name></member>
+      <member refid="d7/d23/a08155_1acee2ef479521158b3438114e68b67a4d" prot="public" virt="non-virtual"><scope>castor::BlockGuard</scope><name>operator=</name></member>
+      <member refid="d7/d23/a08155_1aa6e6a5f29964854d7b05b8bfe75fcd26" prot="public" virt="non-virtual"><scope>castor::BlockGuard</scope><name>~BlockGuard</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::BlockGuard</scope><name>~NonMovable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

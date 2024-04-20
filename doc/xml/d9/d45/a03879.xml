@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/d45/a03879" kind="union" language="C++" prot="public">
+    <compoundname>castor3d::Layout::Item::Value</compoundname>
+    <includes local="no">Layout.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d45/a03879_1aff07da0ec433a9f8068a70713f119e50" prot="public" static="no" mutable="no">
+        <type>ControlRPtr</type>
+        <definition>ControlRPtr castor3d::Layout::Item::Value::control</definition>
+        <argsstring></argsstring>
+        <name>control</name>
+        <qualifiedname>castor3d::Layout::Item::Value::control</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="68" column="13" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="68" bodyend="-1"/>
+        <referencedby refid="d5/d3c/a03875_1a5511b93396ab3e6d8e86e1e8d10a9e39" compoundref="d4/d13/a00377" startline="110" endline="115">castor3d::Layout::Item::control</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d45/a03879_1a4c3d95d955aeed182897ba9567d26296" prot="public" static="no" mutable="no">
+        <type>SpacerRPtr</type>
+        <definition>SpacerRPtr castor3d::Layout::Item::Value::spacer</definition>
+        <argsstring></argsstring>
+        <name>spacer</name>
+        <qualifiedname>castor3d::Layout::Item::Value::spacer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="69" column="12" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="69" bodyend="-1"/>
+        <referencedby refid="d5/d3c/a03875_1ad584fe6acf246e26e5aafcf71a02e24b" compoundref="d4/d13/a00377" startline="133" endline="138">castor3d::Layout::Item::spacer</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Gui/Layout/Layout.hpp" line="66" column="1" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="67" bodyend="70"/>
+    <listofallmembers>
+      <member refid="d9/d45/a03879_1aff07da0ec433a9f8068a70713f119e50" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item::Value</scope><name>control</name></member>
+      <member refid="d9/d45/a03879_1a4c3d95d955aeed182897ba9567d26296" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item::Value</scope><name>spacer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

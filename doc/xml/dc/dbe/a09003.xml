@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/dbe/a09003" kind="union" language="C++" prot="public">
+    <compoundname>castor::RectangleData</compoundname>
+    <includes local="no">Rectangle.hpp</includes>
+    <innerclass refid="dd/d46/a09007" prot="public">castor::RectangleData::Mbr</innerclass>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/dbe/a09003_1aeffdc8c517306477c1aef380be1f515d" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/d46/a09007" kindref="compound">Mbr</ref></type>
+        <definition>Mbr castor::RectangleData::rect</definition>
+        <argsstring></argsstring>
+        <name>rect</name>
+        <qualifiedname>castor::RectangleData::rect</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Rectangle.hpp" line="21" column="5" bodyfile="CastorUtils/Graphics/Rectangle.hpp" bodystart="21" bodyend="-1"/>
+        <referencedby refid="d4/da5/a09011_1aa66c41cfcc2230dad02516a9c41fd4d3" compoundref="da/d14/a02066" startline="188" endline="191">castor::Rectangle::bottom</referencedby>
+        <referencedby refid="d4/da5/a09011_1a9835ed394339a62d820eace9c464ae13" compoundref="da/d14/a02066" startline="176" endline="179">castor::Rectangle::bottom</referencedby>
+        <referencedby refid="d4/da5/a09011_1ac131b6b6475cc46960c99af25209e5b5" compoundref="da/d14/a02066" startline="212" endline="215">castor::Rectangle::getHeight</referencedby>
+        <referencedby refid="d4/da5/a09011_1aaf51e7864545f6542253c760df09b109" compoundref="da/d14/a02066" startline="200" endline="203">castor::Rectangle::getWidth</referencedby>
+        <referencedby refid="d4/da5/a09011_1af06c215310d2ef4a8f1ff810cd177881" compoundref="da/d14/a02066" startline="116" endline="119">castor::Rectangle::left</referencedby>
+        <referencedby refid="d4/da5/a09011_1a79fc7539e4a64b7423a67849529679bf" compoundref="da/d14/a02066" startline="104" endline="107">castor::Rectangle::left</referencedby>
+        <referencedby refid="d4/da5/a09011_1a4613156de50996d6fc53fab56b0f87eb" compoundref="da/d14/a02066" startline="140" endline="143">castor::Rectangle::right</referencedby>
+        <referencedby refid="d4/da5/a09011_1ac832aae3881fa64b6a39ae61bb318226" compoundref="da/d14/a02066" startline="128" endline="131">castor::Rectangle::right</referencedby>
+        <referencedby refid="d4/da5/a09011_1ab2d446645899494247e8b09f23c94a8f" compoundref="da/d14/a02066" startline="164" endline="167">castor::Rectangle::top</referencedby>
+        <referencedby refid="d4/da5/a09011_1a82f11f64ca01212b5c5754ccce9ab51a" compoundref="da/d14/a02066" startline="152" endline="155">castor::Rectangle::top</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dc/dbe/a09003_1ad77156cb7040a1c7d84db1b658368a5b" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">Array</ref>&lt; int32_t, 4u &gt;</type>
+        <definition>Array&lt; int32_t, 4u &gt; castor::RectangleData::buffer</definition>
+        <argsstring></argsstring>
+        <name>buffer</name>
+        <qualifiedname>castor::RectangleData::buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Rectangle.hpp" line="22" column="7" bodyfile="CastorUtils/Graphics/Rectangle.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::RectangleData</label>
+        <link refid="dc/dbe/a09003"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>rect</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::RectangleData::Mbr</label>
+        <link refid="dd/d46/a09007"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/Rectangle.hpp" line="12" column="1" bodyfile="CastorUtils/Graphics/Rectangle.hpp" bodystart="13" bodyend="23"/>
+    <listofallmembers>
+      <member refid="dc/dbe/a09003_1ad77156cb7040a1c7d84db1b658368a5b" prot="public" virt="non-virtual"><scope>castor::RectangleData</scope><name>buffer</name></member>
+      <member refid="dc/dbe/a09003_1aeffdc8c517306477c1aef380be1f515d" prot="public" virt="non-virtual"><scope>castor::RectangleData</scope><name>rect</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

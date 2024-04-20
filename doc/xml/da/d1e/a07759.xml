@@ -1,0 +1,268 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d1e/a07759" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ColourGradingUbo</compoundname>
+    <includes local="no">ColourGradingUbo.hpp</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="da/d1e/a07759_1a310e03a7cdbd11e326a7fdb42b0b7259" prot="public" static="no">
+        <type><ref refid="d9/d65/a06711" kindref="compound">ColourGradingConfig</ref></type>
+        <definition>using castor3d::ColourGradingUbo::Configuration =  ColourGradingConfig</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <qualifiedname>castor3d::ColourGradingUbo::Configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="111" column="1" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="da/d1e/a07759_1a423eff907a3525f52b6f42d09ce204d2" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::ColourGradingUbo::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::ColourGradingUbo::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="148" column="21" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d1e/a07759_1a00eda20fc50fa5906c3759aca58163aa" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d63/a03459" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="da/d1e/a07759_1a310e03a7cdbd11e326a7fdb42b0b7259" kindref="member">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::ColourGradingUbo::m_ubo</definition>
+        <argsstring></argsstring>
+        <name>m_ubo</name>
+        <qualifiedname>castor3d::ColourGradingUbo::m_ubo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="149" column="22" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="149" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d1e/a07759_1ade6bc5f9e32cbc193fc17d38b26aa20c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ColourGradingUbo::ColourGradingUbo</definition>
+        <argsstring>(ColourGradingUbo const &amp;rhs)=delete</argsstring>
+        <name>ColourGradingUbo</name>
+        <qualifiedname>castor3d::ColourGradingUbo::ColourGradingUbo</qualifiedname>
+        <param>
+          <type><ref refid="da/d1e/a07759" kindref="compound">ColourGradingUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="114" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d1e/a07759_1a7b5313dfedef10a4ccccd3ac2154403c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="da/d1e/a07759" kindref="compound">ColourGradingUbo</ref> &amp;</type>
+        <definition>C3D_API ColourGradingUbo &amp; castor3d::ColourGradingUbo::operator=</definition>
+        <argsstring>(ColourGradingUbo const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ColourGradingUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="da/d1e/a07759" kindref="compound">ColourGradingUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="115" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d1e/a07759_1a8f44add766e6d3ff5b9a3b90356532e3" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ColourGradingUbo::ColourGradingUbo</definition>
+        <argsstring>(ColourGradingUbo &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>ColourGradingUbo</name>
+        <qualifiedname>castor3d::ColourGradingUbo::ColourGradingUbo</qualifiedname>
+        <param>
+          <type><ref refid="da/d1e/a07759" kindref="compound">ColourGradingUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="116" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d1e/a07759_1af8b20674ddce910918e1551ba9497d6f" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="da/d1e/a07759" kindref="compound">ColourGradingUbo</ref> &amp;</type>
+        <definition>C3D_API ColourGradingUbo &amp; castor3d::ColourGradingUbo::operator=</definition>
+        <argsstring>(ColourGradingUbo &amp;&amp;rhs) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ColourGradingUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="da/d1e/a07759" kindref="compound">ColourGradingUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="117" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d1e/a07759_1a64d2471c2c7b216e7245da374fe0b864" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ColourGradingUbo::ColourGradingUbo</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>ColourGradingUbo</name>
+        <qualifiedname>castor3d::ColourGradingUbo::ColourGradingUbo</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="118" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d1e/a07759_1a8939c32a1305441d4493eea0814aab52" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ColourGradingUbo::~ColourGradingUbo</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~ColourGradingUbo</name>
+        <qualifiedname>castor3d::ColourGradingUbo::~ColourGradingUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="119" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d1e/a07759_1a04678e9bcce1762da94472e703a650f1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ColourGradingUbo::cpuUpdate</definition>
+        <argsstring>(Configuration const &amp;config)</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::ColourGradingUbo::cpuUpdate</qualifiedname>
+        <param>
+          <type><ref refid="da/d1e/a07759_1a310e03a7cdbd11e326a7fdb42b0b7259" kindref="member">Configuration</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour l&apos;UBO avec les valeurs données. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La configuration HDR. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="128" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d1e/a07759_1abadc8f35c8531457995aadf004543c31" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ColourGradingUbo::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t binding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::ColourGradingUbo::createPassBinding</qualifiedname>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="130" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="130" bodyend="134"/>
+        <references refid="d4/d63/a03459_1a926b4f99af45e4423f45a276b7d72505" compoundref="dd/d52/a00221" startline="86" endline="94">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createPassBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d1e/a07759_1ab6536db2483f68913fe092692cfb0997" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ColourGradingUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <qualifiedname>castor3d::ColourGradingUbo::createSizedBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="136" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="136" bodyend="140"/>
+        <references refid="d4/d63/a03459_1a2c6ad146d4910651544564c25ca7dccd" compoundref="dd/d52/a00221" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d1e/a07759_1af95bb37cb56c216ebaed022d11817ec8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d63/a03459" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="da/d1e/a07759_1a310e03a7cdbd11e326a7fdb42b0b7259" kindref="member">Configuration</ref> &gt; const &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const  &amp; castor3d::ColourGradingUbo::getUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getUbo</name>
+        <qualifiedname>castor3d::ColourGradingUbo::getUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="142" column="29" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="142" bodyend="145"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="108" column="1" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="109" bodyend="150"/>
+    <listofallmembers>
+      <member refid="da/d1e/a07759_1ade6bc5f9e32cbc193fc17d38b26aa20c" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingUbo</scope><name>ColourGradingUbo</name></member>
+      <member refid="da/d1e/a07759_1a8f44add766e6d3ff5b9a3b90356532e3" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingUbo</scope><name>ColourGradingUbo</name></member>
+      <member refid="da/d1e/a07759_1a64d2471c2c7b216e7245da374fe0b864" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingUbo</scope><name>ColourGradingUbo</name></member>
+      <member refid="da/d1e/a07759_1a310e03a7cdbd11e326a7fdb42b0b7259" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingUbo</scope><name>Configuration</name></member>
+      <member refid="da/d1e/a07759_1a04678e9bcce1762da94472e703a650f1" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingUbo</scope><name>cpuUpdate</name></member>
+      <member refid="da/d1e/a07759_1abadc8f35c8531457995aadf004543c31" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingUbo</scope><name>createPassBinding</name></member>
+      <member refid="da/d1e/a07759_1ab6536db2483f68913fe092692cfb0997" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingUbo</scope><name>createSizedBinding</name></member>
+      <member refid="da/d1e/a07759_1af95bb37cb56c216ebaed022d11817ec8" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingUbo</scope><name>getUbo</name></member>
+      <member refid="da/d1e/a07759_1a423eff907a3525f52b6f42d09ce204d2" prot="private" virt="non-virtual"><scope>castor3d::ColourGradingUbo</scope><name>m_device</name></member>
+      <member refid="da/d1e/a07759_1a00eda20fc50fa5906c3759aca58163aa" prot="private" virt="non-virtual"><scope>castor3d::ColourGradingUbo</scope><name>m_ubo</name></member>
+      <member refid="da/d1e/a07759_1a7b5313dfedef10a4ccccd3ac2154403c" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingUbo</scope><name>operator=</name></member>
+      <member refid="da/d1e/a07759_1af8b20674ddce910918e1551ba9497d6f" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingUbo</scope><name>operator=</name></member>
+      <member refid="da/d1e/a07759_1a8939c32a1305441d4493eea0814aab52" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingUbo</scope><name>~ColourGradingUbo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

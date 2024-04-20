@@ -1,0 +1,2246 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/da0/a08923" kind="class" language="C++" prot="public">
+    <compoundname>castor::RgbColourT</compoundname>
+    <includes local="no">RgbColour.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ComponentType</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d2/da0/a08923_1aea93e98c5b31fd4eabb84b528128467b" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">Array</ref>&lt; ComponentType, size_t(<ref refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156ae558bb69fadec037d9eae46601a4df8e" kindref="member">RgbComponent::eCount</ref>) &gt;</type>
+        <definition>using castor::RgbColourT&lt; ComponentType &gt;::ColourComponentArray =  Array&lt; ComponentType, size_t( RgbComponent::eCount ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ColourComponentArray</name>
+        <qualifiedname>castor::RgbColourT::ColourComponentArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="46" column="1" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/da0/a08923_1a0623e74ab054f56ece2d051fe1b2b41d" prot="private" static="no">
+        <type>typename ColourComponentArray::iterator</type>
+        <definition>using castor::RgbColourT&lt; ComponentType &gt;::ColourComponentArrayIt =  typename ColourComponentArray::iterator</definition>
+        <argsstring></argsstring>
+        <name>ColourComponentArrayIt</name>
+        <qualifiedname>castor::RgbColourT::ColourComponentArrayIt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="47" column="1" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/da0/a08923_1a17b2ece0b8181caaae75f5b82c8d52f5" prot="private" static="no">
+        <type>typename ColourComponentArray::reverse_iterator</type>
+        <definition>using castor::RgbColourT&lt; ComponentType &gt;::ColourComponentArrayRIt =  typename ColourComponentArray::reverse_iterator</definition>
+        <argsstring></argsstring>
+        <name>ColourComponentArrayRIt</name>
+        <qualifiedname>castor::RgbColourT::ColourComponentArrayRIt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="48" column="1" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/da0/a08923_1ac64be17580ef27c61a8f80e1b2610de5" prot="private" static="no">
+        <type>typename ColourComponentArray::const_iterator</type>
+        <definition>using castor::RgbColourT&lt; ComponentType &gt;::ColourComponentArrayConstIt =  typename ColourComponentArray::const_iterator</definition>
+        <argsstring></argsstring>
+        <name>ColourComponentArrayConstIt</name>
+        <qualifiedname>castor::RgbColourT::ColourComponentArrayConstIt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="49" column="1" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/da0/a08923_1af6485220f375b955f7510080cc0c0e52" prot="private" static="no">
+        <type>typename ColourComponentArray::const_reverse_iterator</type>
+        <definition>using castor::RgbColourT&lt; ComponentType &gt;::ColourComponentArrayConstRIt =  typename ColourComponentArray::const_reverse_iterator</definition>
+        <argsstring></argsstring>
+        <name>ColourComponentArrayConstRIt</name>
+        <qualifiedname>castor::RgbColourT::ColourComponentArrayConstRIt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="50" column="1" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="d2/da0/a08923_1aeb94f854738cf4d65eea4f852724ce31" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ComponentU</type>
+          </param>
+        </templateparamlist>
+        <type>class</type>
+        <definition>friend class RgbColourT</definition>
+        <argsstring></argsstring>
+        <name>RgbColourT</name>
+        <qualifiedname>castor::RgbColourT::RgbColourT</qualifiedname>
+        <param>
+          <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="43" column="14" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/da0/a08923_1aa7bf4592d20bb993ae39b3328f98db87" prot="private" static="no" mutable="no">
+        <type>ColourComponentArray</type>
+        <definition>ColourComponentArray castor::RgbColourT&lt; ComponentType &gt;::m_components</definition>
+        <argsstring></argsstring>
+        <name>m_components</name>
+        <qualifiedname>castor::RgbColourT::m_components</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="829" column="22" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="829" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/da0/a08923_1a30354310181c38f022a2397939ac0c76" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::RgbColourT&lt; ComponentType &gt;::CU_DeclareArray</definition>
+        <argsstring>(float, RgbComponent::eCount, Float4)</argsstring>
+        <name>CU_DeclareArray</name>
+        <qualifiedname>castor::RgbColourT::CU_DeclareArray</qualifiedname>
+        <param>
+          <type>float</type>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156ae558bb69fadec037d9eae46601a4df8e" kindref="member">RgbComponent::eCount</ref></type>
+        </param>
+        <param>
+          <type>Float4</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="45" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/da0/a08923_1ad990156f68d639d2f1ca46981916fb63" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::RgbColourT&lt; ComponentType &gt;::RgbColourT</definition>
+        <argsstring>()=default</argsstring>
+        <name>RgbColourT</name>
+        <qualifiedname>castor::RgbColourT::RgbColourT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="53" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a6b0d0d257c3947bd9a86551487635e92" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::RgbColourT&lt; ComponentType &gt;::RgbColourT</definition>
+        <argsstring>(RgbColourT const &amp;rhs)=default</argsstring>
+        <name>RgbColourT</name>
+        <qualifiedname>castor::RgbColourT::RgbColourT</qualifiedname>
+        <param>
+          <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="54" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a99622af7cf8ab3cbf0f7aa0db27d37ca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> &amp;</type>
+        <definition>RgbColourT &amp; castor::RgbColourT&lt; ComponentType &gt;::operator=</definition>
+        <argsstring>(RgbColourT const &amp;rhs)=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::RgbColourT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="55" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a77eaa5ca77e66bff6f6b1e4c82450343" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::RgbColourT&lt; ComponentType &gt;::RgbColourT</definition>
+        <argsstring>(RgbColourT &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>RgbColourT</name>
+        <qualifiedname>castor::RgbColourT::RgbColourT</qualifiedname>
+        <param>
+          <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="56" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1afb1274b148651d39c910f59fef03efa5" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> &amp;</type>
+        <definition>RgbColourT &amp; castor::RgbColourT&lt; ComponentType &gt;::operator=</definition>
+        <argsstring>(RgbColourT &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::RgbColourT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="57" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1afbfd1718ab0d8c8523ebeba0ce94a088" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::RgbColourT&lt; ComponentType &gt;::~RgbColourT</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~RgbColourT</name>
+        <qualifiedname>castor::RgbColourT::~RgbColourT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="58" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a295768a2602ce296c9195e76ea12a4bb" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ComponentU</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::RgbColourT&lt; ComponentType &gt;::RgbColourT</definition>
+        <argsstring>(RgbColourT&lt; ComponentU &gt; const &amp;rhs, float gamma=2.2f)</argsstring>
+        <name>RgbColourT</name>
+        <qualifiedname>castor::RgbColourT::RgbColourT</qualifiedname>
+        <param>
+          <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref>&lt; ComponentU &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>gamma</declname>
+          <defval>2.2f</defval>
+        </param>
+        <briefdescription>
+<para>Constructeur depuis un autre type de composante. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la couleur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gamma</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la correction gamma. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="70" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a206532dd3896c81b28015cd316ea3e4e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::RgbColourT&lt; ComponentType &gt;::RgbColourT</definition>
+        <argsstring>(float r, float g, float b)</argsstring>
+        <name>RgbColourT</name>
+        <qualifiedname>castor::RgbColourT::RgbColourT</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>g</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur spécifié </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="78" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1aeac21fb7a3a7d29505606a28d75bdd8a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ColourComponentArrayIt</type>
+        <definition>ColourComponentArrayIt castor::RgbColourT&lt; ComponentType &gt;::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::RgbColourT::begin</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur sur le premier <ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="461" column="24" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="461" bodyend="464"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a8fca3398210cb2e774c879dd2f227246" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ColourComponentArrayConstIt</type>
+        <definition>ColourComponentArrayConstIt castor::RgbColourT&lt; ComponentType &gt;::begin</definition>
+        <argsstring>() const</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::RgbColourT::begin</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur constant sur le premier <ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="473" column="29" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="473" bodyend="476"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a179e97e9aa70eec510cdc55c0118c048" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ColourComponentArrayIt</type>
+        <definition>ColourComponentArrayIt castor::RgbColourT&lt; ComponentType &gt;::end</definition>
+        <argsstring>()</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::RgbColourT::end</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur sur après le dernier <ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="485" column="24" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="485" bodyend="488"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1ae5a6fbc88aecd6cb71fb04111c845457" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ColourComponentArrayConstIt</type>
+        <definition>ColourComponentArrayConstIt castor::RgbColourT&lt; ComponentType &gt;::end</definition>
+        <argsstring>() const</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::RgbColourT::end</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur constant sur après le dernier <ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="497" column="29" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="497" bodyend="500"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a6a0c4054c8ab71ebf1abdd67248c31d2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float const *</type>
+        <definition>float const  * castor::RgbColourT&lt; ComponentType &gt;::constPtr</definition>
+        <argsstring>() const</argsstring>
+        <name>constPtr</name>
+        <qualifiedname>castor::RgbColourT::constPtr</qualifiedname>
+        <briefdescription>
+<para>Récupère un pointeur constant sur les valeurs de la couleur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le pointeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="509" column="14" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="509" bodyend="512"/>
+        <referencedby refid="d9/dba/a02278_1a8e432f8d88434eaff5d73c2bc2b4ee25" compoundref="d6/d7d/a00161" startline="676" endline="679">castor3d::getBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a4d8e34a158ffa2f4e857ad86200c7b1f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>float *</type>
+        <definition>float * castor::RgbColourT&lt; ComponentType &gt;::ptr</definition>
+        <argsstring>()</argsstring>
+        <name>ptr</name>
+        <qualifiedname>castor::RgbColourT::ptr</qualifiedname>
+        <briefdescription>
+<para>Récupère un pointeur sur les valeurs de la couleur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le pointeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="521" column="8" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="521" bodyend="524"/>
+        <referencedby refid="d9/dba/a02278_1aa6455a73ed509065b667e72d5031d548" compoundref="d6/d7d/a00161" startline="690" endline="693">castor3d::getBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a9a3b81a054f0d8353b6f52f520139d9c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType &amp;</type>
+        <definition>ComponentType &amp; castor::RgbColourT&lt; ComponentType &gt;::operator[]</definition>
+        <argsstring>(RgbComponent component)</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::RgbColourT::operator[]</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156" kindref="member">RgbComponent</ref></type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur de la composante demandée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La composante demandée </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="535" column="16" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="535" bodyend="538"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a87475cd65f8b8a27c9a9b33953b6eded" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType const &amp;</type>
+        <definition>ComponentType const  &amp; castor::RgbColourT&lt; ComponentType &gt;::operator[]</definition>
+        <argsstring>(RgbComponent component) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::RgbColourT::operator[]</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156" kindref="member">RgbComponent</ref></type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur de la composante demandée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La composante demandée </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="549" column="22" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="549" bodyend="552"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1ae07bcc7d6bbb82ab9dd6f23440d31ade" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType &amp;</type>
+        <definition>ComponentType &amp; castor::RgbColourT&lt; ComponentType &gt;::operator[]</definition>
+        <argsstring>(size_t component)</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::RgbColourT::operator[]</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur de la composante demandée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La composante demandée </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="563" column="16" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="563" bodyend="566"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a50cd30fcf259f540ca4afadedc7d2618" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType const &amp;</type>
+        <definition>ComponentType const  &amp; castor::RgbColourT&lt; ComponentType &gt;::operator[]</definition>
+        <argsstring>(size_t component) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::RgbColourT::operator[]</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur de la composante demandée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La composante demandée </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="577" column="22" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="577" bodyend="580"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1ab16395ae5c76bf72b1700115ca40c811" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType &amp;</type>
+        <definition>ComponentType &amp; castor::RgbColourT&lt; ComponentType &gt;::get</definition>
+        <argsstring>(RgbComponent component)</argsstring>
+        <name>get</name>
+        <qualifiedname>castor::RgbColourT::get</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156" kindref="member">RgbComponent</ref></type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur de la composante demandée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La composante demandée </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="591" column="16" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="591" bodyend="594"/>
+        <referencedby refid="d2/da0/a08923_1a1e133d02735e7b297387fda7de2f2f8f" compoundref="de/d9d/a02072" startline="665" endline="668">castor::RgbColourT&lt; ComponentType &gt;::blue</referencedby>
+        <referencedby refid="d2/da0/a08923_1a70d68cff846eb42f8673dbeaedb21707" compoundref="de/d9d/a02072" startline="677" endline="680">castor::RgbColourT&lt; ComponentType &gt;::blue</referencedby>
+        <referencedby refid="d2/da0/a08923_1a046308466d170b20e74cd36c8b449ad4" compoundref="de/d9d/a02072" startline="641" endline="644">castor::RgbColourT&lt; ComponentType &gt;::green</referencedby>
+        <referencedby refid="d2/da0/a08923_1a85d21104f812a8fc345b6eaca18a3d2c" compoundref="de/d9d/a02072" startline="653" endline="656">castor::RgbColourT&lt; ComponentType &gt;::green</referencedby>
+        <referencedby refid="d2/da0/a08923_1af14ff16a26be4cf583c31e90d9903b55" compoundref="de/d9d/a02072" startline="617" endline="620">castor::RgbColourT&lt; ComponentType &gt;::red</referencedby>
+        <referencedby refid="d2/da0/a08923_1a7663a901f2906068d9a34f34324c5bf7" compoundref="de/d9d/a02072" startline="629" endline="632">castor::RgbColourT&lt; ComponentType &gt;::red</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1adf4a0f01c037af47c9162b0e33627fc6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType const &amp;</type>
+        <definition>ComponentType const  &amp; castor::RgbColourT&lt; ComponentType &gt;::get</definition>
+        <argsstring>(RgbComponent component) const</argsstring>
+        <name>get</name>
+        <qualifiedname>castor::RgbColourT::get</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156" kindref="member">RgbComponent</ref></type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur de la composante demandée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La composante demandée </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="605" column="22" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="605" bodyend="608"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1af14ff16a26be4cf583c31e90d9903b55" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType &amp;</type>
+        <definition>ComponentType &amp; castor::RgbColourT&lt; ComponentType &gt;::red</definition>
+        <argsstring>()</argsstring>
+        <name>red</name>
+        <qualifiedname>castor::RgbColourT::red</qualifiedname>
+        <briefdescription>
+<para>Récupère la valeur de la composante rouge. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="617" column="16" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="617" bodyend="620"/>
+        <references refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156a034da23e289662569a29385fc190f2c9">castor::eRed</references>
+        <references refid="d2/da0/a08923_1ab16395ae5c76bf72b1700115ca40c811" compoundref="de/d9d/a02072" startline="591" endline="594">castor::RgbColourT&lt; ComponentType &gt;::get</references>
+        <referencedby refid="d0/d33/a03899_1a064762eaae9407ceea58131d50a350f9" compoundref="d4/d27/a00392" startline="116" endline="132">castor3d::ControlStyle::doCreateMaterial</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a7663a901f2906068d9a34f34324c5bf7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType const &amp;</type>
+        <definition>ComponentType const  &amp; castor::RgbColourT&lt; ComponentType &gt;::red</definition>
+        <argsstring>() const</argsstring>
+        <name>red</name>
+        <qualifiedname>castor::RgbColourT::red</qualifiedname>
+        <briefdescription>
+<para>Récupère la valeur de la composante rouge. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="629" column="22" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="629" bodyend="632"/>
+        <references refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156a034da23e289662569a29385fc190f2c9">castor::eRed</references>
+        <references refid="d2/da0/a08923_1ab16395ae5c76bf72b1700115ca40c811" compoundref="de/d9d/a02072" startline="591" endline="594">castor::RgbColourT&lt; ComponentType &gt;::get</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a046308466d170b20e74cd36c8b449ad4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType &amp;</type>
+        <definition>ComponentType &amp; castor::RgbColourT&lt; ComponentType &gt;::green</definition>
+        <argsstring>()</argsstring>
+        <name>green</name>
+        <qualifiedname>castor::RgbColourT::green</qualifiedname>
+        <briefdescription>
+<para>Récupère la valeur de la composante verte. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="641" column="16" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="641" bodyend="644"/>
+        <references refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156a792bf7724ae3b7852ea2a6a5dd6858ed">castor::eGreen</references>
+        <references refid="d2/da0/a08923_1ab16395ae5c76bf72b1700115ca40c811" compoundref="de/d9d/a02072" startline="591" endline="594">castor::RgbColourT&lt; ComponentType &gt;::get</references>
+        <referencedby refid="d0/d33/a03899_1a064762eaae9407ceea58131d50a350f9" compoundref="d4/d27/a00392" startline="116" endline="132">castor3d::ControlStyle::doCreateMaterial</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a85d21104f812a8fc345b6eaca18a3d2c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType const &amp;</type>
+        <definition>ComponentType const  &amp; castor::RgbColourT&lt; ComponentType &gt;::green</definition>
+        <argsstring>() const</argsstring>
+        <name>green</name>
+        <qualifiedname>castor::RgbColourT::green</qualifiedname>
+        <briefdescription>
+<para>Récupère la valeur de la composante verte. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="653" column="22" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="653" bodyend="656"/>
+        <references refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156a792bf7724ae3b7852ea2a6a5dd6858ed">castor::eGreen</references>
+        <references refid="d2/da0/a08923_1ab16395ae5c76bf72b1700115ca40c811" compoundref="de/d9d/a02072" startline="591" endline="594">castor::RgbColourT&lt; ComponentType &gt;::get</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a1e133d02735e7b297387fda7de2f2f8f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType &amp;</type>
+        <definition>ComponentType &amp; castor::RgbColourT&lt; ComponentType &gt;::blue</definition>
+        <argsstring>()</argsstring>
+        <name>blue</name>
+        <qualifiedname>castor::RgbColourT::blue</qualifiedname>
+        <briefdescription>
+<para>Récupère la valeur de la composante bleue. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="665" column="16" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="665" bodyend="668"/>
+        <references refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156ae646385008148e606d53eddd2b4038fc">castor::eBlue</references>
+        <references refid="d2/da0/a08923_1ab16395ae5c76bf72b1700115ca40c811" compoundref="de/d9d/a02072" startline="591" endline="594">castor::RgbColourT&lt; ComponentType &gt;::get</references>
+        <referencedby refid="d0/d33/a03899_1a064762eaae9407ceea58131d50a350f9" compoundref="d4/d27/a00392" startline="116" endline="132">castor3d::ControlStyle::doCreateMaterial</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a70d68cff846eb42f8673dbeaedb21707" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType const &amp;</type>
+        <definition>ComponentType const  &amp; castor::RgbColourT&lt; ComponentType &gt;::blue</definition>
+        <argsstring>() const</argsstring>
+        <name>blue</name>
+        <qualifiedname>castor::RgbColourT::blue</qualifiedname>
+        <briefdescription>
+<para>Récupère la valeur de la composante bleue. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="677" column="22" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="677" bodyend="680"/>
+        <references refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156ae646385008148e606d53eddd2b4038fc">castor::eBlue</references>
+        <references refid="d2/da0/a08923_1ab16395ae5c76bf72b1700115ca40c811" compoundref="de/d9d/a02072" startline="591" endline="594">castor::RgbColourT&lt; ComponentType &gt;::get</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a0001b43842b33ba1eb2ef1768166e873" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> &amp;</type>
+        <definition>RgbColourT &amp; castor::RgbColourT&lt; ComponentType &gt;::operator+=</definition>
+        <argsstring>(RgbColourT const &amp;rhs)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::RgbColourT::operator+=</qualifiedname>
+        <param>
+          <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par addition. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les couleurs à ajouter </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this + rhs </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="691" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1ac639d5a03a7ad5bb3898c92dddc87d93" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> &amp;</type>
+        <definition>RgbColourT &amp; castor::RgbColourT&lt; ComponentType &gt;::operator-=</definition>
+        <argsstring>(RgbColourT const &amp;rhs)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::RgbColourT::operator-=</qualifiedname>
+        <param>
+          <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par soustraction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les couleurs à soustraire </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this - rhs </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="702" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a9fcbbaf0cead76f59743550590a89417" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> &amp;</type>
+        <definition>RgbColourT &amp; castor::RgbColourT&lt; ComponentType &gt;::operator+=</definition>
+        <argsstring>(T scalar)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::RgbColourT::operator+=</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>scalar</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par addition. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scalar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à ajouter </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this + scalar </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="714" column="13" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="714" bodyend="722"/>
+        <references refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156ae558bb69fadec037d9eae46601a4df8e">castor::eCount</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1ae4a20c544f464bfd2b924c9a6c338a4d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> &amp;</type>
+        <definition>RgbColourT &amp; castor::RgbColourT&lt; ComponentType &gt;::operator-=</definition>
+        <argsstring>(T scalar)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::RgbColourT::operator-=</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>scalar</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par soustraction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scalar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à soustraire </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this - scalar </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="734" column="13" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="734" bodyend="742"/>
+        <references refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156ae558bb69fadec037d9eae46601a4df8e">castor::eCount</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a119e82da1ece3ab704fb92ea289295aa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> &amp;</type>
+        <definition>RgbColourT &amp; castor::RgbColourT&lt; ComponentType &gt;::operator*=</definition>
+        <argsstring>(T scalar)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::RgbColourT::operator*=</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>scalar</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par multiplication. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scalar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à multiplier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this * scalar </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="754" column="13" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="754" bodyend="762"/>
+        <references refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156ae558bb69fadec037d9eae46601a4df8e">castor::eCount</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a69fe3dcfb6589f7b7f5fd5a7be7dfa21" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> &amp;</type>
+        <definition>RgbColourT &amp; castor::RgbColourT&lt; ComponentType &gt;::operator/=</definition>
+        <argsstring>(T scalar)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::RgbColourT::operator/=</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>scalar</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par division. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scalar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à diviser </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this / scalar </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="774" column="13" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="774" bodyend="782"/>
+        <references refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156ae558bb69fadec037d9eae46601a4df8e">castor::eCount</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a990558c7a6562b70dc1d8fea617c6dbd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> &amp;</type>
+        <definition>RgbColourT &amp; castor::RgbColourT&lt; ComponentType &gt;::operator+=</definition>
+        <argsstring>(ComponentType const &amp;component)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::RgbColourT::operator+=</qualifiedname>
+        <param>
+          <type>ComponentType const &amp;</type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par addition. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à ajouter </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this + component </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="793" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a69a50e9a6981e6d8d179284ec993889a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> &amp;</type>
+        <definition>RgbColourT &amp; castor::RgbColourT&lt; ComponentType &gt;::operator-=</definition>
+        <argsstring>(ComponentType const &amp;component)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::RgbColourT::operator-=</qualifiedname>
+        <param>
+          <type>ComponentType const &amp;</type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par soustraction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à soustraire </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this - component </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="804" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a48f96d32992bbe708754b21beb0c84e4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> &amp;</type>
+        <definition>RgbColourT &amp; castor::RgbColourT&lt; ComponentType &gt;::operator*=</definition>
+        <argsstring>(ComponentType const &amp;component)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::RgbColourT::operator*=</qualifiedname>
+        <param>
+          <type>ComponentType const &amp;</type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par multiplication. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à multiplier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this * component </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="815" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1accbba8e7aa101d4f866fb6b4aa6a468f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> &amp;</type>
+        <definition>RgbColourT &amp; castor::RgbColourT&lt; ComponentType &gt;::operator/=</definition>
+        <argsstring>(ComponentType const &amp;component)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::RgbColourT::operator/=</qualifiedname>
+        <param>
+          <type>ComponentType const &amp;</type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par division. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à diviser </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this / component </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="826" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d2/da0/a08923_1a72b1713bdc1e15bae5fe6414f319058a" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T1</type>
+          </param>
+          <param>
+            <type>typename T2</type>
+          </param>
+          <param>
+            <type>typename T3</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromComponents</definition>
+        <argsstring>(T1 const &amp;r, T2 const &amp;g, T3 const &amp;b)</argsstring>
+        <name>fromComponents</name>
+        <qualifiedname>castor::RgbColourT::fromComponents</qualifiedname>
+        <param>
+          <type>T1 const &amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>T2 const &amp;</type>
+          <declname>g</declname>
+        </param>
+        <param>
+          <type>T3 const &amp;</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir des composantes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">r</parametername>
+<parametername direction="in">g</parametername>
+<parametername direction="in">b</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les composantes de la couleur </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="90" column="19" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="90" bodyend="97"/>
+        <references refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156ae646385008148e606d53eddd2b4038fc">castor::eBlue</references>
+        <references refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156a792bf7724ae3b7852ea2a6a5dd6858ed">castor::eGreen</references>
+        <references refid="d2/dd2/a02279_1a8815d33ec5e4c6d014c78babf91df156a034da23e289662569a29385fc190f2c9">castor::eRed</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a218f0e86a0864bdbc7e7b0a5c8bb8b03" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromPredefined</definition>
+        <argsstring>(PredefinedRgbColour predefined)</argsstring>
+        <name>fromPredefined</name>
+        <qualifiedname>castor::RgbColourT::fromPredefined</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7c465f9d6436e92b483633dace8c9b8" kindref="member">PredefinedRgbColour</ref></type>
+          <declname>predefined</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;une couleur prédéfinie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">predefined</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="108" column="19" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="108" bodyend="111"/>
+        <references refid="d2/da0/a08923_1aeaf709d5843fb1428632eddc35464959">castor::RgbColourT&lt; ComponentType &gt;::fromRGBA</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1ab3836573a272f0090fba62a47bc16c57" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromRGB</definition>
+        <argsstring>(Point3ub const &amp;colour)</argsstring>
+        <name>fromRGB</name>
+        <qualifiedname>castor::RgbColourT::fromRGB</qualifiedname>
+        <param>
+          <type>Point3ub const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes RGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="122" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a5d7cb91cb47805c7fda35101a2dcb466" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromBGR</definition>
+        <argsstring>(Point3ub const &amp;colour)</argsstring>
+        <name>fromBGR</name>
+        <qualifiedname>castor::RgbColourT::fromBGR</qualifiedname>
+        <param>
+          <type>Point3ub const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes BGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="133" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1aeaf709d5843fb1428632eddc35464959" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromRGBA</definition>
+        <argsstring>(Point4ub const &amp;colour)</argsstring>
+        <name>fromRGBA</name>
+        <qualifiedname>castor::RgbColourT::fromRGBA</qualifiedname>
+        <param>
+          <type>Point4ub const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes RGBA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="144" column="19"/>
+        <referencedby refid="d2/da0/a08923_1a218f0e86a0864bdbc7e7b0a5c8bb8b03" compoundref="de/d9d/a02072" startline="108" endline="111">castor::RgbColourT&lt; ComponentType &gt;::fromPredefined</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1ac1e6c8d675589a5baf6db8c986669146" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromBGRA</definition>
+        <argsstring>(Point4ub const &amp;colour)</argsstring>
+        <name>fromBGRA</name>
+        <qualifiedname>castor::RgbColourT::fromBGRA</qualifiedname>
+        <param>
+          <type>Point4ub const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes BGRA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="155" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a4ae0f5a4438b68457fa95066aefc2f92" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromARGB</definition>
+        <argsstring>(Point4ub const &amp;colour)</argsstring>
+        <name>fromARGB</name>
+        <qualifiedname>castor::RgbColourT::fromARGB</qualifiedname>
+        <param>
+          <type>Point4ub const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes ARGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="166" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a1521d535f9e03bb9b3bad243d6c25d52" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromABGR</definition>
+        <argsstring>(Point4ub const &amp;colour)</argsstring>
+        <name>fromABGR</name>
+        <qualifiedname>castor::RgbColourT::fromABGR</qualifiedname>
+        <param>
+          <type>Point4ub const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes ABGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="177" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a975a26a7d8d1839fd4128c2e1c5bd56b" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromRGB</definition>
+        <argsstring>(Point3f const &amp;colour)</argsstring>
+        <name>fromRGB</name>
+        <qualifiedname>castor::RgbColourT::fromRGB</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes RGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="188" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a9ddb203458cd62e52730f733c060f7a9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromBGR</definition>
+        <argsstring>(Point3f const &amp;colour)</argsstring>
+        <name>fromBGR</name>
+        <qualifiedname>castor::RgbColourT::fromBGR</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes BGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="199" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a03fc7f60a12dd92995d7b37186757e76" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromRGBA</definition>
+        <argsstring>(Point4f const &amp;colour)</argsstring>
+        <name>fromRGBA</name>
+        <qualifiedname>castor::RgbColourT::fromRGBA</qualifiedname>
+        <param>
+          <type>Point4f const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes RGBA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="210" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1af1bb8af971257a12cae28c9f69f06670" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromARGB</definition>
+        <argsstring>(Point4f const &amp;colour)</argsstring>
+        <name>fromARGB</name>
+        <qualifiedname>castor::RgbColourT::fromARGB</qualifiedname>
+        <param>
+          <type>Point4f const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes ARGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="221" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1aa1bb7f8c013643047a0c8ad1511c705b" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromABGR</definition>
+        <argsstring>(Point4f const &amp;colour)</argsstring>
+        <name>fromABGR</name>
+        <qualifiedname>castor::RgbColourT::fromABGR</qualifiedname>
+        <param>
+          <type>Point4f const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes ABGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="232" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1ab063031fbc8ff8b4df3d831bb139366b" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromBGRA</definition>
+        <argsstring>(Point4f const &amp;colour)</argsstring>
+        <name>fromBGRA</name>
+        <qualifiedname>castor::RgbColourT::fromBGRA</qualifiedname>
+        <param>
+          <type>Point4f const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes BGRA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="243" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a630fe8ce3ca7e0fbd573530367cd6697" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromRGB</definition>
+        <argsstring>(uint8_t const(&amp;colour)[3])</argsstring>
+        <name>fromRGB</name>
+        <qualifiedname>castor::RgbColourT::fromRGB</qualifiedname>
+        <param>
+          <type>uint8_t const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[3]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes RGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="254" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a8b739d5f9b4e0f62bf8fafddb4e07674" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromBGR</definition>
+        <argsstring>(uint8_t const(&amp;colour)[3])</argsstring>
+        <name>fromBGR</name>
+        <qualifiedname>castor::RgbColourT::fromBGR</qualifiedname>
+        <param>
+          <type>uint8_t const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[3]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes BGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="265" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a06b8a362399f716a61889941d8d4ecd5" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromRGBA</definition>
+        <argsstring>(uint8_t const(&amp;colour)[4])</argsstring>
+        <name>fromRGBA</name>
+        <qualifiedname>castor::RgbColourT::fromRGBA</qualifiedname>
+        <param>
+          <type>uint8_t const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[4]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes RGBA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="276" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1ab71a00f1d3a76797710fd90a01485599" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromBGRA</definition>
+        <argsstring>(uint8_t const(&amp;colour)[4])</argsstring>
+        <name>fromBGRA</name>
+        <qualifiedname>castor::RgbColourT::fromBGRA</qualifiedname>
+        <param>
+          <type>uint8_t const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[4]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes BGRA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="287" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a15c198b74e2603d3209c8a6c50ee6460" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromARGB</definition>
+        <argsstring>(uint8_t const(&amp;colour)[4])</argsstring>
+        <name>fromARGB</name>
+        <qualifiedname>castor::RgbColourT::fromARGB</qualifiedname>
+        <param>
+          <type>uint8_t const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[4]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes ARGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="298" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a9a70c2db3c639d4b92fca459efe913c9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromABGR</definition>
+        <argsstring>(uint8_t const(&amp;colour)[4])</argsstring>
+        <name>fromABGR</name>
+        <qualifiedname>castor::RgbColourT::fromABGR</qualifiedname>
+        <param>
+          <type>uint8_t const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[4]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes ABGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="309" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1add3f2ba9a8c2533cd693a3e09a3fa4b0" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromRGB</definition>
+        <argsstring>(float const(&amp;colour)[3])</argsstring>
+        <name>fromRGB</name>
+        <qualifiedname>castor::RgbColourT::fromRGB</qualifiedname>
+        <param>
+          <type>float const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[3]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes RGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="320" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1aabc168c171481df6fca26da2e88a5464" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromBGR</definition>
+        <argsstring>(float const(&amp;colour)[3])</argsstring>
+        <name>fromBGR</name>
+        <qualifiedname>castor::RgbColourT::fromBGR</qualifiedname>
+        <param>
+          <type>float const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[3]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes BGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="331" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a9867b741cf2f5364cf1c42b863520c46" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromRGBA</definition>
+        <argsstring>(float const(&amp;colour)[4])</argsstring>
+        <name>fromRGBA</name>
+        <qualifiedname>castor::RgbColourT::fromRGBA</qualifiedname>
+        <param>
+          <type>float const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[4]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes RGBA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="342" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a6117b38fe5c408a023e362d4d73656b8" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromARGB</definition>
+        <argsstring>(float const(&amp;colour)[4])</argsstring>
+        <name>fromARGB</name>
+        <qualifiedname>castor::RgbColourT::fromARGB</qualifiedname>
+        <param>
+          <type>float const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[4]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes ARGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="353" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a4661aa6e47f4fb72265d69581de86d5b" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromABGR</definition>
+        <argsstring>(float const(&amp;colour)[4])</argsstring>
+        <name>fromABGR</name>
+        <qualifiedname>castor::RgbColourT::fromABGR</qualifiedname>
+        <param>
+          <type>float const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[4]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes ABGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="364" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a7bf2503ddf0f2f21535fa69bf09df426" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromBGRA</definition>
+        <argsstring>(float const(&amp;colour)[4])</argsstring>
+        <name>fromBGRA</name>
+        <qualifiedname>castor::RgbColourT::fromBGRA</qualifiedname>
+        <param>
+          <type>float const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[4]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes BGRA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="375" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a393eb04c36aff5910eeca40a75f21eb0" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromRGB</definition>
+        <argsstring>(uint32_t colour)</argsstring>
+        <name>fromRGB</name>
+        <qualifiedname>castor::RgbColourT::fromRGB</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un uint32_t représentant des composantes RGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;uint32_t contenant la couleur (0x00RRGGBB) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="386" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1aab4591b3b9cd57b03be54b65617bf6f2" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromBGR</definition>
+        <argsstring>(uint32_t colour)</argsstring>
+        <name>fromBGR</name>
+        <qualifiedname>castor::RgbColourT::fromBGR</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un uint32_t représentant des composantes BGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;uint32_t contenant la couleur (0x00BBGGRR) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="397" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1aadf31229122618586f9e0115d195d42b" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromARGB</definition>
+        <argsstring>(uint32_t colour)</argsstring>
+        <name>fromARGB</name>
+        <qualifiedname>castor::RgbColourT::fromARGB</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un uint32_t représentant des composantes ARGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;uint32_t contenant la couleur (0xAARRGGBB) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="408" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a91957aad1cd8b8c09bfbc3cfaae6823e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromRGBA</definition>
+        <argsstring>(uint32_t colour)</argsstring>
+        <name>fromRGBA</name>
+        <qualifiedname>castor::RgbColourT::fromRGBA</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un uint32_t représentant des composantes RGBA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;uint32_t contenant la couleur (0xRRGGBBAA) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="419" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1acbac2962422c7eaaf574143acb12e318" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromABGR</definition>
+        <argsstring>(uint32_t colour)</argsstring>
+        <name>fromABGR</name>
+        <qualifiedname>castor::RgbColourT::fromABGR</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un uint32_t représentant des composantes ABGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;uint32_t contenant la couleur (0xAABBGGRR) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="430" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a5dc9f7eaf80992b154951d8ef0f707cf" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromBGRA</definition>
+        <argsstring>(uint32_t colour)</argsstring>
+        <name>fromBGRA</name>
+        <qualifiedname>castor::RgbColourT::fromBGRA</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un uint32_t représentant des composantes BGRA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;uint32_t contenant la couleur (0xBBGGRRAA) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="441" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da0/a08923_1a9daec3d5d7d250e565e1d4d01e063476" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/da0/a08923" kindref="compound">RgbColourT</ref></type>
+        <definition>static RgbColourT castor::RgbColourT&lt; ComponentType &gt;::fromHSB</definition>
+        <argsstring>(float hue, float saturation, float brightness)</argsstring>
+        <name>fromHSB</name>
+        <qualifiedname>castor::RgbColourT::fromHSB</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>hue</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>saturation</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>brightness</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir de composantes HSB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">hue</parametername>
+<parametername direction="in">saturation</parametername>
+<parametername direction="in">brightness</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les composantes HSB. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbColour.hpp" line="452" column="19"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Représentation d&apos;une couleur RGB. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Prédéfinit differentes couleurs <linebreak/>
+Permet la conversion entre différents types de couleurs (RGB, ARGB, BGR, ...) et différents types de données (long, float, char, ...) </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/RgbColour.hpp" line="39" column="1" bodyfile="CastorUtils/Graphics/RgbColour.hpp" bodystart="40" bodyend="830"/>
+    <listofallmembers>
+      <member refid="d2/da0/a08923_1aeac21fb7a3a7d29505606a28d75bdd8a" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>begin</name></member>
+      <member refid="d2/da0/a08923_1a8fca3398210cb2e774c879dd2f227246" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>begin</name></member>
+      <member refid="d2/da0/a08923_1a1e133d02735e7b297387fda7de2f2f8f" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>blue</name></member>
+      <member refid="d2/da0/a08923_1a70d68cff846eb42f8673dbeaedb21707" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>blue</name></member>
+      <member refid="d2/da0/a08923_1aea93e98c5b31fd4eabb84b528128467b" prot="private" virt="non-virtual"><scope>castor::RgbColourT</scope><name>ColourComponentArray</name></member>
+      <member refid="d2/da0/a08923_1ac64be17580ef27c61a8f80e1b2610de5" prot="private" virt="non-virtual"><scope>castor::RgbColourT</scope><name>ColourComponentArrayConstIt</name></member>
+      <member refid="d2/da0/a08923_1af6485220f375b955f7510080cc0c0e52" prot="private" virt="non-virtual"><scope>castor::RgbColourT</scope><name>ColourComponentArrayConstRIt</name></member>
+      <member refid="d2/da0/a08923_1a0623e74ab054f56ece2d051fe1b2b41d" prot="private" virt="non-virtual"><scope>castor::RgbColourT</scope><name>ColourComponentArrayIt</name></member>
+      <member refid="d2/da0/a08923_1a17b2ece0b8181caaae75f5b82c8d52f5" prot="private" virt="non-virtual"><scope>castor::RgbColourT</scope><name>ColourComponentArrayRIt</name></member>
+      <member refid="d2/da0/a08923_1a6a0c4054c8ab71ebf1abdd67248c31d2" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>constPtr</name></member>
+      <member refid="d2/da0/a08923_1a30354310181c38f022a2397939ac0c76" prot="private" virt="non-virtual"><scope>castor::RgbColourT</scope><name>CU_DeclareArray</name></member>
+      <member refid="d2/da0/a08923_1a179e97e9aa70eec510cdc55c0118c048" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>end</name></member>
+      <member refid="d2/da0/a08923_1ae5a6fbc88aecd6cb71fb04111c845457" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>end</name></member>
+      <member refid="d2/da0/a08923_1a1521d535f9e03bb9b3bad243d6c25d52" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromABGR</name></member>
+      <member refid="d2/da0/a08923_1aa1bb7f8c013643047a0c8ad1511c705b" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromABGR</name></member>
+      <member refid="d2/da0/a08923_1a9a70c2db3c639d4b92fca459efe913c9" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromABGR</name></member>
+      <member refid="d2/da0/a08923_1a4661aa6e47f4fb72265d69581de86d5b" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromABGR</name></member>
+      <member refid="d2/da0/a08923_1acbac2962422c7eaaf574143acb12e318" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromABGR</name></member>
+      <member refid="d2/da0/a08923_1a4ae0f5a4438b68457fa95066aefc2f92" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromARGB</name></member>
+      <member refid="d2/da0/a08923_1af1bb8af971257a12cae28c9f69f06670" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromARGB</name></member>
+      <member refid="d2/da0/a08923_1a15c198b74e2603d3209c8a6c50ee6460" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromARGB</name></member>
+      <member refid="d2/da0/a08923_1a6117b38fe5c408a023e362d4d73656b8" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromARGB</name></member>
+      <member refid="d2/da0/a08923_1aadf31229122618586f9e0115d195d42b" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromARGB</name></member>
+      <member refid="d2/da0/a08923_1a5d7cb91cb47805c7fda35101a2dcb466" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromBGR</name></member>
+      <member refid="d2/da0/a08923_1a9ddb203458cd62e52730f733c060f7a9" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromBGR</name></member>
+      <member refid="d2/da0/a08923_1a8b739d5f9b4e0f62bf8fafddb4e07674" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromBGR</name></member>
+      <member refid="d2/da0/a08923_1aabc168c171481df6fca26da2e88a5464" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromBGR</name></member>
+      <member refid="d2/da0/a08923_1aab4591b3b9cd57b03be54b65617bf6f2" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromBGR</name></member>
+      <member refid="d2/da0/a08923_1ac1e6c8d675589a5baf6db8c986669146" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromBGRA</name></member>
+      <member refid="d2/da0/a08923_1ab063031fbc8ff8b4df3d831bb139366b" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromBGRA</name></member>
+      <member refid="d2/da0/a08923_1ab71a00f1d3a76797710fd90a01485599" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromBGRA</name></member>
+      <member refid="d2/da0/a08923_1a7bf2503ddf0f2f21535fa69bf09df426" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromBGRA</name></member>
+      <member refid="d2/da0/a08923_1a5dc9f7eaf80992b154951d8ef0f707cf" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromBGRA</name></member>
+      <member refid="d2/da0/a08923_1a72b1713bdc1e15bae5fe6414f319058a" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromComponents</name></member>
+      <member refid="d2/da0/a08923_1a9daec3d5d7d250e565e1d4d01e063476" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromHSB</name></member>
+      <member refid="d2/da0/a08923_1a218f0e86a0864bdbc7e7b0a5c8bb8b03" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromPredefined</name></member>
+      <member refid="d2/da0/a08923_1ab3836573a272f0090fba62a47bc16c57" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromRGB</name></member>
+      <member refid="d2/da0/a08923_1a975a26a7d8d1839fd4128c2e1c5bd56b" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromRGB</name></member>
+      <member refid="d2/da0/a08923_1a630fe8ce3ca7e0fbd573530367cd6697" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromRGB</name></member>
+      <member refid="d2/da0/a08923_1add3f2ba9a8c2533cd693a3e09a3fa4b0" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromRGB</name></member>
+      <member refid="d2/da0/a08923_1a393eb04c36aff5910eeca40a75f21eb0" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromRGB</name></member>
+      <member refid="d2/da0/a08923_1aeaf709d5843fb1428632eddc35464959" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromRGBA</name></member>
+      <member refid="d2/da0/a08923_1a03fc7f60a12dd92995d7b37186757e76" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromRGBA</name></member>
+      <member refid="d2/da0/a08923_1a06b8a362399f716a61889941d8d4ecd5" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromRGBA</name></member>
+      <member refid="d2/da0/a08923_1a9867b741cf2f5364cf1c42b863520c46" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromRGBA</name></member>
+      <member refid="d2/da0/a08923_1a91957aad1cd8b8c09bfbc3cfaae6823e" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>fromRGBA</name></member>
+      <member refid="d2/da0/a08923_1ab16395ae5c76bf72b1700115ca40c811" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>get</name></member>
+      <member refid="d2/da0/a08923_1adf4a0f01c037af47c9162b0e33627fc6" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>get</name></member>
+      <member refid="d2/da0/a08923_1a046308466d170b20e74cd36c8b449ad4" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>green</name></member>
+      <member refid="d2/da0/a08923_1a85d21104f812a8fc345b6eaca18a3d2c" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>green</name></member>
+      <member refid="d2/da0/a08923_1aa7bf4592d20bb993ae39b3328f98db87" prot="private" virt="non-virtual"><scope>castor::RgbColourT</scope><name>m_components</name></member>
+      <member refid="d2/da0/a08923_1a119e82da1ece3ab704fb92ea289295aa" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>operator*=</name></member>
+      <member refid="d2/da0/a08923_1a48f96d32992bbe708754b21beb0c84e4" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>operator*=</name></member>
+      <member refid="d2/da0/a08923_1a0001b43842b33ba1eb2ef1768166e873" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>operator+=</name></member>
+      <member refid="d2/da0/a08923_1a9fcbbaf0cead76f59743550590a89417" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>operator+=</name></member>
+      <member refid="d2/da0/a08923_1a990558c7a6562b70dc1d8fea617c6dbd" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>operator+=</name></member>
+      <member refid="d2/da0/a08923_1ac639d5a03a7ad5bb3898c92dddc87d93" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>operator-=</name></member>
+      <member refid="d2/da0/a08923_1ae4a20c544f464bfd2b924c9a6c338a4d" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>operator-=</name></member>
+      <member refid="d2/da0/a08923_1a69a50e9a6981e6d8d179284ec993889a" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>operator-=</name></member>
+      <member refid="d2/da0/a08923_1a69fe3dcfb6589f7b7f5fd5a7be7dfa21" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>operator/=</name></member>
+      <member refid="d2/da0/a08923_1accbba8e7aa101d4f866fb6b4aa6a468f" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>operator/=</name></member>
+      <member refid="d2/da0/a08923_1a99622af7cf8ab3cbf0f7aa0db27d37ca" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>operator=</name></member>
+      <member refid="d2/da0/a08923_1afb1274b148651d39c910f59fef03efa5" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>operator=</name></member>
+      <member refid="d2/da0/a08923_1a9a3b81a054f0d8353b6f52f520139d9c" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>operator[]</name></member>
+      <member refid="d2/da0/a08923_1a87475cd65f8b8a27c9a9b33953b6eded" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>operator[]</name></member>
+      <member refid="d2/da0/a08923_1ae07bcc7d6bbb82ab9dd6f23440d31ade" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>operator[]</name></member>
+      <member refid="d2/da0/a08923_1a50cd30fcf259f540ca4afadedc7d2618" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>operator[]</name></member>
+      <member refid="d2/da0/a08923_1a4d8e34a158ffa2f4e857ad86200c7b1f" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>ptr</name></member>
+      <member refid="d2/da0/a08923_1af14ff16a26be4cf583c31e90d9903b55" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>red</name></member>
+      <member refid="d2/da0/a08923_1a7663a901f2906068d9a34f34324c5bf7" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>red</name></member>
+      <member refid="d2/da0/a08923_1aeb94f854738cf4d65eea4f852724ce31" prot="private" virt="non-virtual"><scope>castor::RgbColourT</scope><name>RgbColourT</name></member>
+      <member refid="d2/da0/a08923_1ad990156f68d639d2f1ca46981916fb63" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>RgbColourT</name></member>
+      <member refid="d2/da0/a08923_1a6b0d0d257c3947bd9a86551487635e92" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>RgbColourT</name></member>
+      <member refid="d2/da0/a08923_1a77eaa5ca77e66bff6f6b1e4c82450343" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>RgbColourT</name></member>
+      <member refid="d2/da0/a08923_1a295768a2602ce296c9195e76ea12a4bb" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>RgbColourT</name></member>
+      <member refid="d2/da0/a08923_1a206532dd3896c81b28015cd316ea3e4e" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>RgbColourT</name></member>
+      <member refid="d2/da0/a08923_1afbfd1718ab0d8c8523ebeba0ce94a088" prot="public" virt="non-virtual"><scope>castor::RgbColourT</scope><name>~RgbColourT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,272 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d33/a04079" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::UntileMappingComponent::ComponentsShader</compoundname>
+    <basecompoundref refid="d6/d6f/a04819" prot="public" virt="non-virtual">castor3d::shader::PassComponentsShader</basecompoundref>
+    <includes local="no">UntileMappingComponent.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="da/d33/a04079_1acd04daf5ae104d2e59a1f0ecfc361318" prot="private" static="no" mutable="yes">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InVec2 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InVec2 &gt; castor3d::UntileMappingComponent::ComponentsShader::m_hash4</definition>
+        <argsstring></argsstring>
+        <name>m_hash4</name>
+        <qualifiedname>castor3d::UntileMappingComponent::ComponentsShader::m_hash4</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp" line="45" column="2" bodyfile="Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d33/a04079_1aba04022aec83b9950f2d2febe5f8f4af" prot="private" static="no" mutable="yes">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InCombinedImage2DRgba32, sdw::InVec2, sdw::InVec2, sdw::InVec2 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InCombinedImage2DRgba32 , sdw::InVec2 , sdw::InVec2 , sdw::InVec2 &gt; castor3d::UntileMappingComponent::ComponentsShader::m_sampleUntiled</definition>
+        <argsstring></argsstring>
+        <name>m_sampleUntiled</name>
+        <qualifiedname>castor3d::UntileMappingComponent::ComponentsShader::m_sampleUntiled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp" line="50" column="2" bodyfile="Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d33/a04079_1aa8ea26b412ab19bbfd1025afe328456e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::UntileMappingComponent::ComponentsShader::sampleMap</definition>
+        <argsstring>(sdw::CombinedImage2DRgba32 const &amp;map, sdw::Vec3 const &amp;texCoords, shader::BlendComponents const &amp;components) const override</argsstring>
+        <name>sampleMap</name>
+        <qualifiedname>castor3d::UntileMappingComponent::ComponentsShader::sampleMap</qualifiedname>
+        <reimplements refid="d6/d6f/a04819_1adae1f04a5d2866590f4f3204b233dd99">sampleMap</reimplements>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>map</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">shader::BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Laisse le composant échantillonner la texture. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">map</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">texCoords</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les coordonnées de texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Contient les membres du composants. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp" line="24" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d33/a04079_1aca0cf2b0ee4b3b58afe12bf4dd2158ea" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::UntileMappingComponent::ComponentsShader::sampleMap</definition>
+        <argsstring>(sdw::CombinedImage2DRgba32 const &amp;map, shader::DerivTex const &amp;texCoords, shader::BlendComponents const &amp;components) const override</argsstring>
+        <name>sampleMap</name>
+        <qualifiedname>castor3d::UntileMappingComponent::ComponentsShader::sampleMap</qualifiedname>
+        <reimplements refid="d6/d6f/a04819_1a226e2c05d6cff43678f171ef5f413887">sampleMap</reimplements>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>map</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d68/a02280_1a3063cef72b76fcb0aa1ff88fe54e183b" kindref="member">shader::DerivTex</ref> const &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">shader::BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Laisse le composant échantillonner la texture. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">map</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">texCoords</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les coordonnées de texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Contient les membres du composants. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp" line="27" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d33/a04079_1a349ad4e72c7b10b320e768c663a9a501" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::UntileMappingComponent::ComponentsShader::isMapSampling</definition>
+        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
+        <name>isMapSampling</name>
+        <qualifiedname>castor3d::UntileMappingComponent::ComponentsShader::isMapSampling</qualifiedname>
+        <reimplements refid="d6/d6f/a04819_1ae6acbd6edb3df14dcecccd2598bed038">isMapSampling</reimplements>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> si l&apos;échantillonnage de texture du composant est utilisable par rapport à <computeroutput>flags</computeroutput>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp" line="31" column="6" bodyfile="Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp" bodystart="31" bodyend="35"/>
+        <references refid="d3/d9a/a04075_1afadb7a245087d3a6a9cbbc10f292346a" compoundref="d7/d5e/a00467" startline="17">castor3d::UntileMappingComponent::eUntile</references>
+        <references refid="d6/d6f/a04819_1a846afb362f8cdb6bd2dc1a3f98db9f64">castor3d::shader::PassComponentsShader::getId</references>
+        <references refid="d9/dba/a02278_1a77300ce1912b533c6630218c9bf746a6">castor3d::hasAny</references>
+        <references refid="d9/dba/a02278_1a17fb42a34e2f26ac65dc169db981b513" compoundref="d0/dc4/a00443" startline="78" endline="83">castor3d::makePassComponentFlag</references>
+        <references refid="d9/d28/a06351_1a66ba2d3a7bb37875aa9431060a2700b9" compoundref="d7/daf/a01169" startline="61" endline="61">castor3d::PipelineHiHashDetails::pass</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="da/d33/a04079_1a3e10e0d7fee942a34be24991e7f12d8c" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::RetVec4</type>
+        <definition>sdw::RetVec4 castor3d::UntileMappingComponent::ComponentsShader::sampleUntiled</definition>
+        <argsstring>(sdw::CombinedImage2DRgba32 const &amp;map, sdw::Vec2 const &amp;texCoords, sdw::Vec2 const &amp;ddx, sdw::Vec2 const &amp;ddy) const</argsstring>
+        <name>sampleUntiled</name>
+        <qualifiedname>castor3d::UntileMappingComponent::ComponentsShader::sampleUntiled</qualifiedname>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>map</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>ddx</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>ddy</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp" line="38" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::UntileMappingComponent::ComponentsShader</label>
+        <link refid="da/d33/a04079"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassComponentsShader</label>
+        <link refid="d6/d6f/a04819"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::UntileMappingComponent::ComponentsShader</label>
+        <link refid="da/d33/a04079"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassComponentsShader</label>
+        <link refid="d6/d6f/a04819"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp" line="19" column="1" bodyfile="Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp" bodystart="21" bodyend="51"/>
+    <listofallmembers>
+      <member refid="d6/d6f/a04819_1a9628851e6c3e74b22df1548301832513" prot="public" virt="virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>applyComponents</name></member>
+      <member refid="d6/d6f/a04819_1a77e66ffa1eac33d82efbe4ce59236f38" prot="protected" virt="non-virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>applyFloatComponent</name></member>
+      <member refid="d6/d6f/a04819_1a02ae79221e5a0e986858c9c383fdaed0" prot="protected" virt="non-virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>applyFloatComponent</name></member>
+      <member refid="d6/d6f/a04819_1a3243f2f9fffc4e75f91e927600a6271d" prot="protected" virt="non-virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>applyVec3Component</name></member>
+      <member refid="d6/d6f/a04819_1aed9f9d27b59abd38f5b5c19d5f45a2af" prot="protected" virt="non-virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>applyVec3Component</name></member>
+      <member refid="d6/d6f/a04819_1a277de8d6d8fa8c0e3d50edb51fe2157c" prot="public" virt="virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>blendComponents</name></member>
+      <member refid="d6/d6f/a04819_1ac2cfaa34f675787b0b0140eb9e2eb7d3" prot="public" virt="virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>fillComponents</name></member>
+      <member refid="d6/d6f/a04819_1a80a16a96d3e5d71cb6b631a77c73217f" prot="public" virt="virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>fillComponentsInits</name></member>
+      <member refid="d6/d6f/a04819_1a846afb362f8cdb6bd2dc1a3f98db9f64" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>getId</name></member>
+      <member refid="d6/d6f/a04819_1a1727bca64233903f00c27aacd146429b" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>getPlugin</name></member>
+      <member refid="da/d33/a04079_1a349ad4e72c7b10b320e768c663a9a501" prot="public" virt="virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>isMapSampling</name></member>
+      <member refid="da/d33/a04079_1acd04daf5ae104d2e59a1f0ecfc361318" prot="private" virt="non-virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>m_hash4</name></member>
+      <member refid="da/d33/a04079_1aba04022aec83b9950f2d2febe5f8f4af" prot="private" virt="non-virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>m_sampleUntiled</name></member>
+      <member refid="d2/d04/a04815_1a06fad613f64fa717de3e8032393fdbd7" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>operator=</name></member>
+      <member refid="d2/d04/a04815_1a0e5c7fea4f6928009d6da51c4d78a9df" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>operator=</name></member>
+      <member refid="d6/d6f/a04819_1af7ade94522557fd93269087ee3703612" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>PassComponentsShader</name></member>
+      <member refid="d2/d04/a04815_1ab439edbbb2da660939e0209d9bfba3b0" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>PassShader</name></member>
+      <member refid="d2/d04/a04815_1ae0263dc410ae3d05ddea8cc9ad7eac73" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>PassShader</name></member>
+      <member refid="d2/d04/a04815_1aee18e0dfda227ed54fb966d7d75a1ea5" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>PassShader</name></member>
+      <member refid="da/d33/a04079_1aa8ea26b412ab19bbfd1025afe328456e" prot="public" virt="virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>sampleMap</name></member>
+      <member refid="da/d33/a04079_1aca0cf2b0ee4b3b58afe12bf4dd2158ea" prot="public" virt="virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>sampleMap</name></member>
+      <member refid="da/d33/a04079_1a3e10e0d7fee942a34be24991e7f12d8c" prot="private" virt="non-virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>sampleUntiled</name></member>
+      <member refid="d6/d6f/a04819_1ab47e2f5bc209511aa30f917e09636eb9" prot="public" virt="virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>updateComponent</name></member>
+      <member refid="d2/d04/a04815_1a56338db0aed5f44427291aa6c631872b" prot="public" virt="virtual"><scope>castor3d::UntileMappingComponent::ComponentsShader</scope><name>~PassShader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

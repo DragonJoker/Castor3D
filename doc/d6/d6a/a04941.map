@@ -1,5 +1,9 @@
-<map id="castor3d::LayeredLightPropagationVolumesT&lt; GeometryVolumesT &gt;" name="castor3d::LayeredLightPropagationVolumesT&lt; GeometryVolumesT &gt;">
-<area shape="rect" id="node1" title="Lighting propagation volumes generation pass." alt="" coords="5,167,228,207"/>
-<area shape="rect" id="node2" href="$d9/d75/a04934.html" title=" " alt="" coords="5,79,228,119"/>
-<area shape="rect" id="node3" title=" " alt="" coords="63,5,170,31"/>
+<map id="castor3d::TextureConfiguration" name="castor3d::TextureConfiguration">
+<area shape="rect" id="Node000001" title=" " alt="" coords="67,211,265,236"/>
+<area shape="rect" id="Node000002" href="$d3/d16/a04935.html" title=" " alt="" coords="5,115,185,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,150,159,209,155,212,110,153"/>
+<area shape="rect" id="Node000003" href="$dd/dbb/a08207.html" title=" " alt="" coords="210,108,373,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="256,159,183,213,180,208,253,154"/>
+<area shape="rect" id="Node000004" href="$dd/dbb/a08207.html" title="Template class providing implicit conversion from a scoped enum to its integral base type." alt="" coords="210,5,373,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="294,59,294,108,289,108,289,59"/>
 </map>

@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/d44/a09383" kind="class" language="C++" prot="public">
+    <compoundname>castor::debug::Backtraced</compoundname>
+    <includes local="no">Debug.hpp</includes>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d3/d44/a09383_1abdb4f2f6f3cb1bd93baf5f026d3fa83a" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>String castor::debug::Backtraced::m_callStack</definition>
+        <argsstring></argsstring>
+        <name>m_callStack</name>
+        <qualifiedname>castor::debug::Backtraced::m_callStack</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Debug.hpp" line="96" column="8" bodyfile="CastorUtils/Miscellaneous/Debug.hpp" bodystart="96" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d3/d44/a09383_1a26f56e9e908d419ffbfc2f7443098a9b" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::debug::Backtraced::Backtraced</definition>
+        <argsstring>()</argsstring>
+        <name>Backtraced</name>
+        <qualifiedname>castor::debug::Backtraced::Backtraced</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Debug.hpp" line="82" column="1" bodyfile="CastorUtils/Miscellaneous/Debug.hpp" bodystart="82" bodyend="85"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="d3/d44/a09383_1afa3721d6b3dd82d6bd0aceddc27d03c9" prot="private" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>static String castor::debug::Backtraced::doGetCallStack</definition>
+        <argsstring>()</argsstring>
+        <name>doGetCallStack</name>
+        <qualifiedname>castor::debug::Backtraced::doGetCallStack</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Debug.hpp" line="88" column="15" bodyfile="CastorUtils/Miscellaneous/Debug.hpp" bodystart="88" bodyend="93"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="d3/d44/a09383_1aec7c94d18550d3ae39554a4eb3af28ba" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1ac8dca26c22640aed8eaed8fee3a45069" kindref="member">OutputStream</ref> &amp;</type>
+        <definition>OutputStream &amp; operator&lt;&lt;</definition>
+        <argsstring>(OutputStream &amp;stream, Backtraced const &amp;traced)</argsstring>
+        <name>operator&lt;&lt;</name>
+        <qualifiedname>castor::debug::Backtraced::operator&lt;&lt;</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ac8dca26c22640aed8eaed8fee3a45069" kindref="member">OutputStream</ref> &amp;</type>
+          <declname>stream</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d44/a09383" kindref="compound">Backtraced</ref> const &amp;</type>
+          <declname>traced</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Debug.hpp" line="97" column="8" bodyfile="CastorUtils/Miscellaneous/Debug.hpp" bodystart="102" bodyend="109"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe d&apos;aide permettant la récupération de la pile d&apos;appels d&apos;allocation. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>05/10/2015 </para>
+</simplesect>
+<simplesect kind="version"><para>0.8.0 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::debug::Backtraced</label>
+        <link refid="d3/d44/a09383"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_callStack</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Miscellaneous/Debug.hpp" line="77" column="1" bodyfile="CastorUtils/Miscellaneous/Debug.hpp" bodystart="78" bodyend="100"/>
+    <listofallmembers>
+      <member refid="d3/d44/a09383_1a26f56e9e908d419ffbfc2f7443098a9b" prot="protected" virt="non-virtual"><scope>castor::debug::Backtraced</scope><name>Backtraced</name></member>
+      <member refid="d3/d44/a09383_1afa3721d6b3dd82d6bd0aceddc27d03c9" prot="private" virt="non-virtual"><scope>castor::debug::Backtraced</scope><name>doGetCallStack</name></member>
+      <member refid="d3/d44/a09383_1abdb4f2f6f3cb1bd93baf5f026d3fa83a" prot="protected" virt="non-virtual"><scope>castor::debug::Backtraced</scope><name>m_callStack</name></member>
+      <member refid="d3/d44/a09383_1aec7c94d18550d3ae39554a4eb3af28ba" prot="protected" virt="non-virtual"><scope>castor::debug::Backtraced</scope><name>operator&lt;&lt;</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

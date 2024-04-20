@@ -1,0 +1,234 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d7b/a03639" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry</compoundname>
+    <includes local="no">GeometryCache.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d7b/a03639_1a7971aeab92732c20e8aa006a7fda0d1d" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry::hash</definition>
+        <argsstring></argsstring>
+        <name>hash</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry::hash</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/GeometryCache.hpp" line="34" column="8" bodyfile="Castor3D/Cache/GeometryCache.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d7b/a03639_1a131115e723b61471e4b3429f9c108ebb" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/d46/a06971" kindref="compound">Geometry</ref> const  &amp;</type>
+        <definition>Geometry const&amp; castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry::geometry</definition>
+        <argsstring></argsstring>
+        <name>geometry</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry::geometry</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/GeometryCache.hpp" line="35" column="17" bodyfile="Castor3D/Cache/GeometryCache.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d7b/a03639_1ac072f068f8b5ccbe105d3cf7db4f400e" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/df1/a05635" kindref="compound">Submesh</ref> const  &amp;</type>
+        <definition>Submesh const&amp; castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry::submesh</definition>
+        <argsstring></argsstring>
+        <name>submesh</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry::submesh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/GeometryCache.hpp" line="36" column="16" bodyfile="Castor3D/Cache/GeometryCache.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d7b/a03639_1a0232f4df31b6f4528a3b68841f0aca2e" prot="public" static="no" mutable="no">
+        <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> const  &amp;</type>
+        <definition>Pass const&amp; castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry::pass</definition>
+        <argsstring></argsstring>
+        <name>pass</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry::pass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/GeometryCache.hpp" line="37" column="13" bodyfile="Castor3D/Cache/GeometryCache.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="8">
+        <label>Animable</label>
+        <link refid="d2/d7a/a03115"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; AnimableHandlerT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Material &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor::OwnedBy&lt; Mesh &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Mesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Scene &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor::SignalT&lt; OnPassChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; OnPassChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor::SignalT&lt; OnSceneNodeReparentFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; OnSceneNodeReparentFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d2/d7a/a03115"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Geometry</label>
+        <link refid="d8/d46/a06971"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::MovableObject</label>
+        <link refid="da/d09/a07047"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_notifyIndex</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry</label>
+        <link refid="d1/d7b/a03639"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>geometry</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>submesh</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>pass</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::Pass</label>
+        <link refid="df/d6c/a04863"/>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>onChanged</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::RenderedObject</label>
+        <link refid="df/d83/a07127"/>
+      </node>
+      <node id="7">
+        <label>castor3d::SceneNode</label>
+        <link refid="d4/dc4/a07255"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>onParentChanged</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::Submesh</label>
+        <link refid="dd/df1/a05635"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor::ConnectionT&lt; MySignalT &gt;</label>
+        <link refid="d4/ddb/a08183"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="13">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="9">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="14">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Cache/GeometryCache.hpp" line="32" column="1" bodyfile="Castor3D/Cache/GeometryCache.hpp" bodystart="33" bodyend="38"/>
+    <listofallmembers>
+      <member refid="d1/d7b/a03639_1a131115e723b61471e4b3429f9c108ebb" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry</scope><name>geometry</name></member>
+      <member refid="d1/d7b/a03639_1a7971aeab92732c20e8aa006a7fda0d1d" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry</scope><name>hash</name></member>
+      <member refid="d1/d7b/a03639_1a0232f4df31b6f4528a3b68841f0aca2e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry</scope><name>pass</name></member>
+      <member refid="d1/d7b/a03639_1ac072f068f8b5ccbe105d3cf7db4f400e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry</scope><name>submesh</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

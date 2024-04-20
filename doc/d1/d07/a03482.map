@@ -1,0 +1,5 @@
+<map id="castor3d::GpuBufferBase" name="castor3d::GpuBufferBase">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,172,31"/>
+<area shape="rect" id="Node000002" href="$d8/df8/a03443.html" title="A GPU buffer pool, that uses an allocator to allocate sub&#45;buffers." alt="" coords="17,79,161,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,44,91,79,86,79,86,44"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="castor3d::PrepassRendering::hasVisibility" name="castor3d::PrepassRendering::hasVisibility">
+<area shape="rect" id="Node000001" title=" " alt="" coords="468,37,655,77"/>
+<area shape="rect" id="Node000002" href="$d2/d3d/a06371.html#a974084c48bed6cd2e7d32e3f5c2e2a21" title=" " alt="" coords="233,5,420,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="454,45,420,41,421,35,455,40"/>
+<area shape="rect" id="Node000004" href="$d8/dd8/a06575.html#a860166b038553b830e1a839b1c72d0b2" title=" " alt="" coords="237,69,417,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="455,75,417,80,417,74,454,69"/>
+<area shape="rect" id="Node000003" href="$d8/dd8/a06575.html#a27cd22180099e23c9ab6622b6effe08c" title=" " alt="" coords="5,5,185,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="219,28,186,28,186,23,219,23"/>
+</map>

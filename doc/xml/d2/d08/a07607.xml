@@ -1,0 +1,385 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/d08/a07607" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::OverlaySurfaceT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GlslOverlaySurface.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>ast::var::Flag</type>
+        <declname>FlagT</declname>
+        <defname>FlagT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d08/a07607_1acd992ef681e2eb12f5180d24937aa001" prot="public" static="no" mutable="no">
+        <type>sdw::Vec2</type>
+        <definition>sdw::Vec2 castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::position</definition>
+        <argsstring></argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::shader::OverlaySurfaceT::position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" line="125" column="11" bodyfile="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" bodystart="125" bodyend="-1"/>
+        <referencedby refid="d2/d08/a07607_1a44ec8d7d004149ca0e0a7865ba89bc38" compoundref="dc/d71/a01664" startline="109" endline="114">castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::set</referencedby>
+        <referencedby refid="d2/d08/a07607_1af80b2777061f43e2e5e810aac0763066" compoundref="dc/d71/a01664" startline="116" endline="123">castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::set</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d08/a07607_1a35d48fa323c36cafecf57caa30368a74" prot="public" static="no" mutable="no">
+        <type>sdw::Vec2</type>
+        <definition>sdw::Vec2 castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::texUV</definition>
+        <argsstring></argsstring>
+        <name>texUV</name>
+        <qualifiedname>castor3d::shader::OverlaySurfaceT::texUV</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" line="126" column="11" bodyfile="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" bodystart="126" bodyend="-1"/>
+        <referencedby refid="d2/d08/a07607_1a44ec8d7d004149ca0e0a7865ba89bc38" compoundref="dc/d71/a01664" startline="109" endline="114">castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::set</referencedby>
+        <referencedby refid="d2/d08/a07607_1af80b2777061f43e2e5e810aac0763066" compoundref="dc/d71/a01664" startline="116" endline="123">castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::set</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d08/a07607_1a4bf73a43b3e2e137f6398f47569b7806" prot="public" static="no" mutable="no">
+        <type>sdw::Vec2</type>
+        <definition>sdw::Vec2 castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::fontUV</definition>
+        <argsstring></argsstring>
+        <name>fontUV</name>
+        <qualifiedname>castor3d::shader::OverlaySurfaceT::fontUV</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" line="127" column="11" bodyfile="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" bodystart="127" bodyend="-1"/>
+        <referencedby refid="d2/d08/a07607_1af80b2777061f43e2e5e810aac0763066" compoundref="dc/d71/a01664" startline="116" endline="123">castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::set</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d08/a07607_1ac41ec9465c6ad2ba8aa952c3465dda81" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::materialId</definition>
+        <argsstring></argsstring>
+        <name>materialId</name>
+        <qualifiedname>castor3d::shader::OverlaySurfaceT::materialId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" line="128" column="11" bodyfile="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" bodystart="128" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d08/a07607_1aa4db8d6f023c1df987e60116127c8b7a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::OverlaySurfaceT</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>OverlaySurfaceT</name>
+        <qualifiedname>castor3d::shader::OverlaySurfaceT::OverlaySurfaceT</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" line="18" column="1" bodyfile="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" bodystart="18" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d08/a07607_1a856425c8c764573d305bf8b032b214fd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::OverlaySurfaceT</definition>
+        <argsstring>(sdw::Vec2 const pos, sdw::Vec2 const uv)</argsstring>
+        <name>OverlaySurfaceT</name>
+        <qualifiedname>castor3d::shader::OverlaySurfaceT::OverlaySurfaceT</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const</type>
+          <declname>pos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const</type>
+          <declname>uv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" line="29" column="1" bodyfile="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" bodystart="29" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d08/a07607_1ae0df65cec7b4497982cc6cc4132130e7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::OverlaySurfaceT</definition>
+        <argsstring>(sdw::Vec2 const pos, sdw::Vec2 const uv, sdw::Vec2 const text)</argsstring>
+        <name>OverlaySurfaceT</name>
+        <qualifiedname>castor3d::shader::OverlaySurfaceT::OverlaySurfaceT</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const</type>
+          <declname>pos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const</type>
+          <declname>uv</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const</type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" line="37" column="1" bodyfile="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" bodystart="37" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d08/a07607_1a217b0c31fab8f71ac282cb0d2aeb1af9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::SDW_DeclStructInstance</definition>
+        <argsstring>(, OverlaySurfaceT)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::OverlaySurfaceT::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d2/d08/a07607" kindref="compound">OverlaySurfaceT</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" line="46" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d08/a07607_1a44ec8d7d004149ca0e0a7865ba89bc38" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::set</definition>
+        <argsstring>(sdw::Vec2 const &amp;pos, sdw::Vec2 const &amp;uv)</argsstring>
+        <name>set</name>
+        <qualifiedname>castor3d::shader::OverlaySurfaceT::set</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>uv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" line="109" column="6" bodyfile="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" bodystart="109" bodyend="114"/>
+        <references refid="d2/d08/a07607_1acd992ef681e2eb12f5180d24937aa001" compoundref="dc/d71/a01664" startline="125">castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::position</references>
+        <references refid="d2/d08/a07607_1a35d48fa323c36cafecf57caa30368a74" compoundref="dc/d71/a01664" startline="126">castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::texUV</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d08/a07607_1af80b2777061f43e2e5e810aac0763066" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::set</definition>
+        <argsstring>(sdw::Vec2 const &amp;pos, sdw::Vec2 const &amp;uv, sdw::Vec2 const &amp;text)</argsstring>
+        <name>set</name>
+        <qualifiedname>castor3d::shader::OverlaySurfaceT::set</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>uv</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" line="116" column="6" bodyfile="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" bodystart="116" bodyend="123"/>
+        <references refid="d2/d08/a07607_1a4bf73a43b3e2e137f6398f47569b7806" compoundref="dc/d71/a01664" startline="127">castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::fontUV</references>
+        <references refid="d2/d08/a07607_1acd992ef681e2eb12f5180d24937aa001" compoundref="dc/d71/a01664" startline="125">castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::position</references>
+        <references refid="d2/d08/a07607_1a35d48fa323c36cafecf57caa30368a74" compoundref="dc/d71/a01664" startline="126">castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::texUV</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d2/d08/a07607_1a7679c821d0507f7c5f08ac4d26368c43" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ast::expr::ExprPtr</type>
+        <definition>static ast::expr::ExprPtr castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::makeInitExpr</definition>
+        <argsstring>(sdw::Vec2 const pos, sdw::Vec2 const uv)</argsstring>
+        <name>makeInitExpr</name>
+        <qualifiedname>castor3d::shader::OverlaySurfaceT::makeInitExpr</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const</type>
+          <declname>pos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const</type>
+          <declname>uv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" line="48" column="27" bodyfile="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" bodystart="48" bodyend="56"/>
+        <references refid="d2/d08/a07607_1a99984b758bdca153955aadde160950d4" compoundref="dc/d71/a01664" startline="70" endline="85">castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::makeType</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d08/a07607_1a1792bc2c97e6dc04151adc4d779be116" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ast::expr::ExprPtr</type>
+        <definition>static ast::expr::ExprPtr castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::makeInitExpr</definition>
+        <argsstring>(sdw::Vec2 const pos, sdw::Vec2 const uv, sdw::Vec2 const text)</argsstring>
+        <name>makeInitExpr</name>
+        <qualifiedname>castor3d::shader::OverlaySurfaceT::makeInitExpr</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const</type>
+          <declname>pos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const</type>
+          <declname>uv</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const</type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" line="58" column="27" bodyfile="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" bodystart="58" bodyend="68"/>
+        <references refid="d2/d08/a07607_1a99984b758bdca153955aadde160950d4" compoundref="dc/d71/a01664" startline="70" endline="85">castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::makeType</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d08/a07607_1a99984b758bdca153955aadde160950d4" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ast::type::BaseStructPtr</type>
+        <definition>static ast::type::BaseStructPtr castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache, bool isTextOverlay, bool hasTextures)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::OverlaySurfaceT::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isTextOverlay</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>hasTextures</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" line="70" column="33" bodyfile="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" bodystart="70" bodyend="85"/>
+        <referencedby refid="d2/d08/a07607_1a7679c821d0507f7c5f08ac4d26368c43" compoundref="dc/d71/a01664" startline="48" endline="56">castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::makeInitExpr</referencedby>
+        <referencedby refid="d2/d08/a07607_1a1792bc2c97e6dc04151adc4d779be116" compoundref="dc/d71/a01664" startline="58" endline="68">castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::makeInitExpr</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/d08/a07607_1a8411672ee0c4d377cb9ef640912d19cd" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ast::type::IOStructPtr</type>
+        <definition>static ast::type::IOStructPtr castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;::makeIOType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache, sdw::EntryPoint entryPoint, bool hasPosition, bool isTextOverlay, bool hasTextures, bool isTransition)</argsstring>
+        <name>makeIOType</name>
+        <qualifiedname>castor3d::shader::OverlaySurfaceT::makeIOType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type>sdw::EntryPoint</type>
+          <declname>entryPoint</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>hasPosition</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isTextOverlay</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>hasTextures</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isTransition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" line="87" column="31" bodyfile="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" bodystart="87" bodyend="107"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;</label>
+        <link refid="d2/d08/a07607"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::OverlaySurfaceT&lt; FlagT &gt;</label>
+        <link refid="d2/d08/a07607"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" line="15" column="1" bodyfile="Castor3D/Shader/Shaders/GlslOverlaySurface.hpp" bodystart="17" bodyend="129"/>
+    <listofallmembers>
+      <member refid="d2/d08/a07607_1a4bf73a43b3e2e137f6398f47569b7806" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlaySurfaceT</scope><name>fontUV</name></member>
+      <member refid="d2/d08/a07607_1a7679c821d0507f7c5f08ac4d26368c43" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlaySurfaceT</scope><name>makeInitExpr</name></member>
+      <member refid="d2/d08/a07607_1a1792bc2c97e6dc04151adc4d779be116" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlaySurfaceT</scope><name>makeInitExpr</name></member>
+      <member refid="d2/d08/a07607_1a8411672ee0c4d377cb9ef640912d19cd" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlaySurfaceT</scope><name>makeIOType</name></member>
+      <member refid="d2/d08/a07607_1a99984b758bdca153955aadde160950d4" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlaySurfaceT</scope><name>makeType</name></member>
+      <member refid="d2/d08/a07607_1ac41ec9465c6ad2ba8aa952c3465dda81" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlaySurfaceT</scope><name>materialId</name></member>
+      <member refid="d2/d08/a07607_1aa4db8d6f023c1df987e60116127c8b7a" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlaySurfaceT</scope><name>OverlaySurfaceT</name></member>
+      <member refid="d2/d08/a07607_1a856425c8c764573d305bf8b032b214fd" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlaySurfaceT</scope><name>OverlaySurfaceT</name></member>
+      <member refid="d2/d08/a07607_1ae0df65cec7b4497982cc6cc4132130e7" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlaySurfaceT</scope><name>OverlaySurfaceT</name></member>
+      <member refid="d2/d08/a07607_1acd992ef681e2eb12f5180d24937aa001" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlaySurfaceT</scope><name>position</name></member>
+      <member refid="d2/d08/a07607_1a217b0c31fab8f71ac282cb0d2aeb1af9" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlaySurfaceT</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d2/d08/a07607_1a44ec8d7d004149ca0e0a7865ba89bc38" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlaySurfaceT</scope><name>set</name></member>
+      <member refid="d2/d08/a07607_1af80b2777061f43e2e5e810aac0763066" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlaySurfaceT</scope><name>set</name></member>
+      <member refid="d2/d08/a07607_1a35d48fa323c36cafecf57caa30368a74" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlaySurfaceT</scope><name>texUV</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

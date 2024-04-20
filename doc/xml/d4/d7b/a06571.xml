@@ -1,0 +1,503 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/d7b/a06571" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TargetContext</compoundname>
+    <includes local="no">RenderTarget.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d7b/a06571_1a96669413f56d43b85afed6875205ebba" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/d3c/a05003" kindref="compound">TextureContext</ref> *</type>
+        <definition>TextureContext* castor3d::TargetContext::texture</definition>
+        <argsstring></argsstring>
+        <name>texture</name>
+        <qualifiedname>castor3d::TargetContext::texture</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="548" column="17" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="548" bodyend="548"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d7b/a06571_1ac92144eabd847a5014ee3d5567855dd8" prot="public" static="no" mutable="no">
+        <type><ref refid="da/d7d/a06615" kindref="compound">WindowContext</ref> *</type>
+        <definition>WindowContext* castor3d::TargetContext::window</definition>
+        <argsstring></argsstring>
+        <name>window</name>
+        <qualifiedname>castor3d::TargetContext::window</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="549" column="16" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="549" bodyend="549"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d7b/a06571_1ab411cc8c3b4eaf31e41d6b37f5a2c65d" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a4ad78470d8077ac5aaa5443df9894203" kindref="member">TargetType</ref></type>
+        <definition>TargetType castor3d::TargetContext::targetType</definition>
+        <argsstring></argsstring>
+        <name>targetType</name>
+        <qualifiedname>castor3d::TargetContext::targetType</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="550" column="12" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="550" bodyend="550"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d7b/a06571_1a9b2332ed03ea67bb9c13e8726325c44b" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/daa/a06683" kindref="compound">SsaoConfig</ref></type>
+        <definition>SsaoConfig castor3d::TargetContext::ssaoConfig</definition>
+        <argsstring></argsstring>
+        <name>ssaoConfig</name>
+        <qualifiedname>castor3d::TargetContext::ssaoConfig</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="551" column="12" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="551" bodyend="551"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d7b/a06571_1a22979115c11113b1d114c213ceced055" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/dd6/a09023" kindref="compound">castor::Size</ref></type>
+        <definition>castor::Size castor3d::TargetContext::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>castor3d::TargetContext::size</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="552" column="14" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="552" bodyend="552"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d7b/a06571_1acef13c872f3a52a435484d682d5ac149" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">castor::PixelFormat</ref></type>
+        <definition>castor::PixelFormat castor3d::TargetContext::hdrPixelFormat</definition>
+        <argsstring></argsstring>
+        <name>hdrPixelFormat</name>
+        <qualifiedname>castor3d::TargetContext::hdrPixelFormat</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="553" column="21" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="553" bodyend="553"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d7b/a06571_1a642081d2a17932121c6dbe4c3efb451d" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">castor::PixelFormat</ref></type>
+        <definition>castor::PixelFormat castor3d::TargetContext::srgbPixelFormat</definition>
+        <argsstring></argsstring>
+        <name>srgbPixelFormat</name>
+        <qualifiedname>castor3d::TargetContext::srgbPixelFormat</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="554" column="21" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="554" bodyend="554"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d7b/a06571_1a299d3288d30dce40b665c6059e32a0e3" prot="public" static="no" mutable="no">
+        <type>RenderTargetRPtr</type>
+        <definition>RenderTargetRPtr castor3d::TargetContext::renderTarget</definition>
+        <argsstring></argsstring>
+        <name>renderTarget</name>
+        <qualifiedname>castor3d::TargetContext::renderTarget</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="555" column="18" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="555" bodyend="555"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="39">
+        <label>castor::ChangeTrackedT&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</label>
+        <link refid="d2/def/a08159"/>
+        <childnode refid="40" relation="template-instance">
+          <edgelabel>&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="45">
+        <label>castor::Coords&lt; uint32_t, 2 &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+        <childnode refid="46" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="43">
+        <label>castor::DataHolderT&lt; SizeData &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="44" relation="template-instance">
+          <edgelabel>&lt; SizeData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="31">
+        <label>castor::FlagCombination&lt; TextureSpace &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="32" relation="template-instance">
+          <edgelabel>&lt; TextureSpace &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="34">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="18" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="18" relation="template-instance">
+          <edgelabel>&lt; Material &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="18" relation="template-instance">
+          <edgelabel>&lt; Pass &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="37">
+        <label>castor::RangedValue&lt; int32_t &gt;</label>
+        <link refid="d8/de9/a09211"/>
+        <childnode refid="38" relation="template-instance">
+          <edgelabel>&lt; int32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="41">
+        <label>castor::RangedValue&lt; uint32_t &gt;</label>
+        <link refid="d8/de9/a09211"/>
+        <childnode refid="38" relation="template-instance">
+          <edgelabel>&lt; uint32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor::SignalT&lt; OnPassChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+        <childnode refid="21" relation="template-instance">
+          <edgelabel>&lt; OnPassChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="28">
+        <label>String</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="7" relation="private-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::MaterialContext</label>
+        <link refid="d1/de2/a03983"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>scene</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::Pass</label>
+        <link refid="df/d6c/a04863"/>
+        <childnode refid="17" relation="public-inheritance">
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>onChanged</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor3d::PassComponent</label>
+        <link refid="db/db4/a04835"/>
+        <childnode refid="23" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_type</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>m_plugin</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_materialShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="d2/d2e/a04831"/>
+      </node>
+      <node id="14">
+        <label>castor3d::PassContext</label>
+        <link refid="d8/de5/a04867"/>
+        <childnode refid="15" relation="usage">
+          <edgelabel>material</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>pass</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>passComponent</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::ProgressBar</label>
+        <link refid="d6/daf/a05323"/>
+      </node>
+      <node id="33">
+        <label>castor3d::RenderTarget</label>
+        <link refid="dd/d91/a06563"/>
+        <childnode refid="34" relation="public-inheritance">
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>DefaultSamplerName</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::RenderWindowDesc</label>
+        <link refid="de/d75/a06503"/>
+        <childnode refid="10" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RootContext</label>
+        <link refid="de/dd6/a07151"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>engine</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>window</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>logger</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>progress</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::SceneContext</label>
+        <link refid="d3/db2/a07139"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>fontName</edgelabel>
+        </childnode>
+      </node>
+      <node id="36">
+        <label>castor3d::SsaoConfig</label>
+        <link refid="dd/daa/a06683"/>
+        <childnode refid="37" relation="usage">
+          <edgelabel>logMaxOffset</edgelabel>
+        </childnode>
+        <childnode refid="39" relation="usage">
+          <edgelabel>blurRadius</edgelabel>
+          <edgelabel>blurStepSize</edgelabel>
+        </childnode>
+        <childnode refid="41" relation="usage">
+          <edgelabel>bendStepCount</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::TargetContext</label>
+        <link refid="d4/d7b/a06571"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>texture</edgelabel>
+        </childnode>
+        <childnode refid="35" relation="usage">
+          <edgelabel>window</edgelabel>
+        </childnode>
+        <childnode refid="36" relation="usage">
+          <edgelabel>ssaoConfig</edgelabel>
+        </childnode>
+        <childnode refid="42" relation="usage">
+          <edgelabel>size</edgelabel>
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor3d::TextureConfiguration</label>
+        <link refid="d5/dc1/a04943"/>
+        <childnode refid="30" relation="usage">
+          <edgelabel>transform</edgelabel>
+        </childnode>
+        <childnode refid="31" relation="usage">
+          <edgelabel>textureSpace</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::TextureContext</label>
+        <link refid="d7/d3c/a05003"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>scene</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>pass</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="usage">
+          <edgelabel>folder</edgelabel>
+          <edgelabel>relative</edgelabel>
+        </childnode>
+        <childnode refid="29" relation="usage">
+          <edgelabel>configuration</edgelabel>
+        </childnode>
+        <childnode refid="33" relation="usage">
+          <edgelabel>renderTarget</edgelabel>
+        </childnode>
+        <childnode refid="30" relation="usage">
+          <edgelabel>textureTransform</edgelabel>
+        </childnode>
+      </node>
+      <node id="30">
+        <label>castor3d::TextureTransform</label>
+        <link refid="d3/d16/a04935"/>
+      </node>
+      <node id="35">
+        <label>castor3d::WindowContext</label>
+        <link refid="da/d7d/a06615"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>window</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="d6/da6/a04827"/>
+        <childnode refid="26" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+      <node id="40">
+        <label>castor::ChangeTrackedT&lt; ValueT, ControlT &gt;</label>
+        <link refid="d2/def/a08159"/>
+      </node>
+      <node id="46">
+        <label>castor::Coords&lt; T, Count &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+      </node>
+      <node id="44">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="32">
+        <label>castor::FlagCombination&lt; FlagType &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+      </node>
+      <node id="12">
+        <label>castor::LoggerInstance</label>
+        <link refid="d9/d93/a09063"/>
+      </node>
+      <node id="20">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="7">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="18">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="27">
+        <label>castor::Path</label>
+        <link refid="d1/de1/a08011"/>
+        <childnode refid="28" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>castor::RangedValue&lt; T &gt;</label>
+        <link refid="d8/de9/a09211"/>
+      </node>
+      <node id="21">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>castor::Size</label>
+        <link refid="d4/dd6/a09023"/>
+        <childnode refid="43" relation="private-inheritance">
+        </childnode>
+        <childnode refid="45" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="7" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/RenderTarget.hpp" line="546" column="1" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="547" bodyend="556"/>
+    <listofallmembers>
+      <member refid="d4/d7b/a06571_1acef13c872f3a52a435484d682d5ac149" prot="public" virt="non-virtual"><scope>castor3d::TargetContext</scope><name>hdrPixelFormat</name></member>
+      <member refid="d4/d7b/a06571_1a299d3288d30dce40b665c6059e32a0e3" prot="public" virt="non-virtual"><scope>castor3d::TargetContext</scope><name>renderTarget</name></member>
+      <member refid="d4/d7b/a06571_1a22979115c11113b1d114c213ceced055" prot="public" virt="non-virtual"><scope>castor3d::TargetContext</scope><name>size</name></member>
+      <member refid="d4/d7b/a06571_1a642081d2a17932121c6dbe4c3efb451d" prot="public" virt="non-virtual"><scope>castor3d::TargetContext</scope><name>srgbPixelFormat</name></member>
+      <member refid="d4/d7b/a06571_1a9b2332ed03ea67bb9c13e8726325c44b" prot="public" virt="non-virtual"><scope>castor3d::TargetContext</scope><name>ssaoConfig</name></member>
+      <member refid="d4/d7b/a06571_1ab411cc8c3b4eaf31e41d6b37f5a2c65d" prot="public" virt="non-virtual"><scope>castor3d::TargetContext</scope><name>targetType</name></member>
+      <member refid="d4/d7b/a06571_1a96669413f56d43b85afed6875205ebba" prot="public" virt="non-virtual"><scope>castor3d::TargetContext</scope><name>texture</name></member>
+      <member refid="d4/d7b/a06571_1ac92144eabd847a5014ee3d5567855dd8" prot="public" virt="non-virtual"><scope>castor3d::TargetContext</scope><name>window</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

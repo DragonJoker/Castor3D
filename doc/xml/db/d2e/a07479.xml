@@ -1,0 +1,372 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d2e/a07479" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::ClusteredLights</compoundname>
+    <includes local="no">GlslClusteredLights.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/d2e/a07479_1a27c987479e80eb1f9b78cd8fbc638163" prot="private" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::ClusteredLights::m_writer</definition>
+        <argsstring></argsstring>
+        <name>m_writer</name>
+        <qualifiedname>castor3d::shader::ClusteredLights::m_writer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" line="67" column="20" bodyfile="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2e/a07479_1ada8e8356ff93603c3d655968d379587d" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::shader::ClusteredLights::m_enabled</definition>
+        <argsstring></argsstring>
+        <name>m_enabled</name>
+        <qualifiedname>castor3d::shader::ClusteredLights::m_enabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" line="68" column="6" bodyfile="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2e/a07479_1a709aed9aecd6752c87617318ba934b59" prot="private" static="no" mutable="no">
+        <type>ClustersDataUPtr</type>
+        <definition>ClustersDataUPtr castor3d::shader::ClusteredLights::m_clusterData</definition>
+        <argsstring></argsstring>
+        <name>m_clusterData</name>
+        <qualifiedname>castor3d::shader::ClusteredLights::m_clusterData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" line="69" column="18" bodyfile="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2e/a07479_1a013826e9a749b100a42a879cc69cbe9f" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; sdw::Vec4 &gt;</type>
+        <definition>castor::RawUniquePtr&lt; sdw::Vec4 &gt; castor3d::shader::ClusteredLights::m_clustersLightsData</definition>
+        <argsstring></argsstring>
+        <name>m_clustersLightsData</name>
+        <qualifiedname>castor3d::shader::ClusteredLights::m_clustersLightsData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" line="70" column="22" bodyfile="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2e/a07479_1ac6f9d6e2cdf7698185a4213d2f97ff1d" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; sdw::UInt32Array &gt;</type>
+        <definition>castor::RawUniquePtr&lt; sdw::UInt32Array &gt; castor3d::shader::ClusteredLights::m_pointLightIndices</definition>
+        <argsstring></argsstring>
+        <name>m_pointLightIndices</name>
+        <qualifiedname>castor3d::shader::ClusteredLights::m_pointLightIndices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" line="71" column="22" bodyfile="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2e/a07479_1a1b6650881ed01a01d005477f72140512" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; sdw::U32Vec2Array &gt;</type>
+        <definition>castor::RawUniquePtr&lt; sdw::U32Vec2Array &gt; castor3d::shader::ClusteredLights::m_pointLightClusters</definition>
+        <argsstring></argsstring>
+        <name>m_pointLightClusters</name>
+        <qualifiedname>castor3d::shader::ClusteredLights::m_pointLightClusters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" line="72" column="22" bodyfile="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2e/a07479_1ab673b9dbc91d45c4ee832f9a59af1cdb" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; sdw::UInt32Array &gt;</type>
+        <definition>castor::RawUniquePtr&lt; sdw::UInt32Array &gt; castor3d::shader::ClusteredLights::m_spotLightIndices</definition>
+        <argsstring></argsstring>
+        <name>m_spotLightIndices</name>
+        <qualifiedname>castor3d::shader::ClusteredLights::m_spotLightIndices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" line="73" column="22" bodyfile="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2e/a07479_1a26cc1f1687acd5364d0be45465b6355f" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; sdw::U32Vec2Array &gt;</type>
+        <definition>castor::RawUniquePtr&lt; sdw::U32Vec2Array &gt; castor3d::shader::ClusteredLights::m_spotLightClusters</definition>
+        <argsstring></argsstring>
+        <name>m_spotLightClusters</name>
+        <qualifiedname>castor3d::shader::ClusteredLights::m_spotLightClusters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" line="74" column="22" bodyfile="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d2e/a07479_1a4e06c6994c94af6e87a53660d96d3ee7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::ClusteredLights::ClusteredLights</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, uint32_t &amp;binding, uint32_t set, ClustersConfig const *config, bool enabled)</argsstring>
+        <name>ClusteredLights</name>
+        <qualifiedname>castor3d::shader::ClusteredLights::ClusteredLights</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type><ref refid="db/da7/a05911" kindref="compound">ClustersConfig</ref> const *</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" line="19" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d2e/a07479_1a40842e022d700bd32d9f198f9c72bc03" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::ClusteredLights::ClusteredLights</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, uint32_t &amp;binding, uint32_t set, ClustersConfig const *config)</argsstring>
+        <name>ClusteredLights</name>
+        <qualifiedname>castor3d::shader::ClusteredLights::ClusteredLights</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type><ref refid="db/da7/a05911" kindref="compound">ClustersConfig</ref> const *</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" line="25" column="1" bodyfile="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" bodystart="25" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d2e/a07479_1af8cd5542754aaae423cb8979efcc9328" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::ClusteredLights::computeCombinedDifSpec</definition>
+        <argsstring>(Lights &amp;lights, LightingModel &amp;lightingModel, BlendComponents const &amp;components, LightSurface const &amp;lightSurface, sdw::UInt const receivesShadows, sdw::Vec2 const screenPosition, sdw::Float const viewDepth, DebugOutput &amp;debugOutput, DirectLighting &amp;output)</argsstring>
+        <name>computeCombinedDifSpec</name>
+        <qualifiedname>castor3d::shader::ClusteredLights::computeCombinedDifSpec</qualifiedname>
+        <param>
+          <type><ref refid="d2/df8/a07539" kindref="compound">Lights</ref> &amp;</type>
+          <declname>lights</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d55/a07543" kindref="compound">LightingModel</ref> &amp;</type>
+          <declname>lightingModel</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d81/a07547" kindref="compound">LightSurface</ref> const &amp;</type>
+          <declname>lightSurface</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const</type>
+          <declname>screenPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Float const</type>
+          <declname>viewDepth</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d68/a07491" kindref="compound">DebugOutput</ref> &amp;</type>
+          <declname>debugOutput</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dd8/a07591" kindref="compound">DirectLighting</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" line="33" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d2e/a07479_1a1e083ace40352cb23932d9381f1146b0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::ClusteredLights::computeCombinedAllButDif</definition>
+        <argsstring>(Lights &amp;lights, LightingModel &amp;lightingModel, BlendComponents const &amp;components, LightSurface const &amp;lightSurface, sdw::UInt const receivesShadows, sdw::Vec2 const screenPosition, sdw::Float const viewDepth, DebugOutput &amp;debugOutput, DirectLighting &amp;output)</argsstring>
+        <name>computeCombinedAllButDif</name>
+        <qualifiedname>castor3d::shader::ClusteredLights::computeCombinedAllButDif</qualifiedname>
+        <param>
+          <type><ref refid="d2/df8/a07539" kindref="compound">Lights</ref> &amp;</type>
+          <declname>lights</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d55/a07543" kindref="compound">LightingModel</ref> &amp;</type>
+          <declname>lightingModel</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d81/a07547" kindref="compound">LightSurface</ref> const &amp;</type>
+          <declname>lightSurface</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const</type>
+          <declname>screenPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Float const</type>
+          <declname>viewDepth</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d68/a07491" kindref="compound">DebugOutput</ref> &amp;</type>
+          <declname>debugOutput</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dd8/a07591" kindref="compound">DirectLighting</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" line="42" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d2e/a07479_1a818019fe10ba78ca7da8025330242fe0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::ClusteredLights::computeCombinedDif</definition>
+        <argsstring>(Lights &amp;lights, LightingModel &amp;lightingModel, BlendComponents const &amp;components, LightSurface const &amp;lightSurface, sdw::UInt const receivesShadows, sdw::Vec2 const screenPosition, sdw::Float const viewDepth, DebugOutput &amp;debugOutput, sdw::Vec3 &amp;output)</argsstring>
+        <name>computeCombinedDif</name>
+        <qualifiedname>castor3d::shader::ClusteredLights::computeCombinedDif</qualifiedname>
+        <param>
+          <type><ref refid="d2/df8/a07539" kindref="compound">Lights</ref> &amp;</type>
+          <declname>lights</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d55/a07543" kindref="compound">LightingModel</ref> &amp;</type>
+          <declname>lightingModel</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d81/a07547" kindref="compound">LightSurface</ref> const &amp;</type>
+          <declname>lightSurface</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const</type>
+          <declname>screenPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Float const</type>
+          <declname>viewDepth</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d68/a07491" kindref="compound">DebugOutput</ref> &amp;</type>
+          <declname>debugOutput</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" line="51" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d2e/a07479_1a821251a6e8595ba29d877ba1d4bbf8be" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::shader::ClusteredLights::isEnabled</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isEnabled</name>
+        <qualifiedname>castor3d::shader::ClusteredLights::isEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" line="61" column="6" bodyfile="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" bodystart="61" bodyend="64"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" line="16" column="1" bodyfile="Castor3D/Shader/Shaders/GlslClusteredLights.hpp" bodystart="17" bodyend="75"/>
+    <listofallmembers>
+      <member refid="db/d2e/a07479_1a4e06c6994c94af6e87a53660d96d3ee7" prot="public" virt="non-virtual"><scope>castor3d::shader::ClusteredLights</scope><name>ClusteredLights</name></member>
+      <member refid="db/d2e/a07479_1a40842e022d700bd32d9f198f9c72bc03" prot="public" virt="non-virtual"><scope>castor3d::shader::ClusteredLights</scope><name>ClusteredLights</name></member>
+      <member refid="db/d2e/a07479_1a1e083ace40352cb23932d9381f1146b0" prot="public" virt="non-virtual"><scope>castor3d::shader::ClusteredLights</scope><name>computeCombinedAllButDif</name></member>
+      <member refid="db/d2e/a07479_1a818019fe10ba78ca7da8025330242fe0" prot="public" virt="non-virtual"><scope>castor3d::shader::ClusteredLights</scope><name>computeCombinedDif</name></member>
+      <member refid="db/d2e/a07479_1af8cd5542754aaae423cb8979efcc9328" prot="public" virt="non-virtual"><scope>castor3d::shader::ClusteredLights</scope><name>computeCombinedDifSpec</name></member>
+      <member refid="db/d2e/a07479_1a821251a6e8595ba29d877ba1d4bbf8be" prot="public" virt="non-virtual"><scope>castor3d::shader::ClusteredLights</scope><name>isEnabled</name></member>
+      <member refid="db/d2e/a07479_1a709aed9aecd6752c87617318ba934b59" prot="private" virt="non-virtual"><scope>castor3d::shader::ClusteredLights</scope><name>m_clusterData</name></member>
+      <member refid="db/d2e/a07479_1a013826e9a749b100a42a879cc69cbe9f" prot="private" virt="non-virtual"><scope>castor3d::shader::ClusteredLights</scope><name>m_clustersLightsData</name></member>
+      <member refid="db/d2e/a07479_1ada8e8356ff93603c3d655968d379587d" prot="private" virt="non-virtual"><scope>castor3d::shader::ClusteredLights</scope><name>m_enabled</name></member>
+      <member refid="db/d2e/a07479_1a1b6650881ed01a01d005477f72140512" prot="private" virt="non-virtual"><scope>castor3d::shader::ClusteredLights</scope><name>m_pointLightClusters</name></member>
+      <member refid="db/d2e/a07479_1ac6f9d6e2cdf7698185a4213d2f97ff1d" prot="private" virt="non-virtual"><scope>castor3d::shader::ClusteredLights</scope><name>m_pointLightIndices</name></member>
+      <member refid="db/d2e/a07479_1a26cc1f1687acd5364d0be45465b6355f" prot="private" virt="non-virtual"><scope>castor3d::shader::ClusteredLights</scope><name>m_spotLightClusters</name></member>
+      <member refid="db/d2e/a07479_1ab673b9dbc91d45c4ee832f9a59af1cdb" prot="private" virt="non-virtual"><scope>castor3d::shader::ClusteredLights</scope><name>m_spotLightIndices</name></member>
+      <member refid="db/d2e/a07479_1a27c987479e80eb1f9b78cd8fbc638163" prot="private" virt="non-virtual"><scope>castor3d::shader::ClusteredLights</scope><name>m_writer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

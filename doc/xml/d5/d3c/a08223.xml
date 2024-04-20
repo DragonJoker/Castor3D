@@ -1,0 +1,824 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/d3c/a08223" kind="class" language="C++" prot="public">
+    <compoundname>castor::NamedBaseT</compoundname>
+    <derivedcompoundref refid="d2/df0/a03119" prot="public" virt="non-virtual">castor3d::AnimationT&lt; Engine &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d4/def/a06811" prot="public" virt="non-virtual">castor3d::AnimatedObject</derivedcompoundref>
+    <derivedcompoundref refid="d7/d55/a06815" prot="public" virt="non-virtual">castor3d::AnimatedObjectGroup</derivedcompoundref>
+    <derivedcompoundref refid="d2/df0/a03119" prot="public" virt="non-virtual">castor3d::AnimationT&lt; AnimableHandlerT &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d8/d16/a03619" prot="public" virt="non-virtual">castor3d::CacheViewT&lt; CacheT, EventT &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d0/d33/a03899" prot="public" virt="non-virtual">castor3d::ControlStyle</derivedcompoundref>
+    <derivedcompoundref refid="dc/d21/a05951" prot="public" virt="non-virtual">castor3d::EnvironmentMapPass</derivedcompoundref>
+    <derivedcompoundref refid="da/db0/a03747" prot="public" virt="non-virtual">castor3d::EventHandler</derivedcompoundref>
+    <derivedcompoundref refid="dd/d3c/a03735" prot="public" virt="non-virtual">castor3d::FrameListener</derivedcompoundref>
+    <derivedcompoundref refid="d8/d33/a05959" prot="public" virt="non-virtual">castor3d::GBufferBase</derivedcompoundref>
+    <derivedcompoundref refid="d3/d67/a05971" prot="public" virt="non-virtual">castor3d::GeometryInjectionPass</derivedcompoundref>
+    <derivedcompoundref refid="d6/d0c/a05979" prot="public" virt="non-virtual">castor3d::LayeredLightPropagationVolumesBase</derivedcompoundref>
+    <derivedcompoundref refid="d8/d03/a03871" prot="public" virt="non-virtual">castor3d::Layout</derivedcompoundref>
+    <derivedcompoundref refid="de/d2b/a05991" prot="public" virt="non-virtual">castor3d::LightInjectionPass</derivedcompoundref>
+    <derivedcompoundref refid="d1/d05/a05999" prot="public" virt="non-virtual">castor3d::LightPropagationPass</derivedcompoundref>
+    <derivedcompoundref refid="dc/ddd/a06007" prot="public" virt="non-virtual">castor3d::LightPropagationVolumesBase</derivedcompoundref>
+    <derivedcompoundref refid="d1/d42/a03979" prot="public" virt="non-virtual">castor3d::Material</derivedcompoundref>
+    <derivedcompoundref refid="d2/dc7/a05391" prot="public" virt="non-virtual">castor3d::Mesh</derivedcompoundref>
+    <derivedcompoundref refid="de/dd7/a07051" prot="public" virt="non-virtual">castor3d::MovableMergerT&lt; CacheT &gt;</derivedcompoundref>
+    <derivedcompoundref refid="da/d09/a07047" prot="public" virt="non-virtual">castor3d::MovableObject</derivedcompoundref>
+    <derivedcompoundref refid="db/d2c/a06363" prot="public" virt="non-virtual">castor3d::PostEffect</derivedcompoundref>
+    <derivedcompoundref refid="d5/d96/a06531" prot="public" virt="non-virtual">castor3d::RenderNodesPass</derivedcompoundref>
+    <derivedcompoundref refid="de/d5b/a06307" prot="public" virt="non-virtual">castor3d::RenderQuad</derivedcompoundref>
+    <derivedcompoundref refid="d8/dd8/a06575" prot="public" virt="non-virtual">castor3d::RenderTechnique</derivedcompoundref>
+    <derivedcompoundref refid="d0/dd4/a06595" prot="public" virt="non-virtual">castor3d::RenderWindow</derivedcompoundref>
+    <derivedcompoundref refid="de/d42/a04927" prot="public" virt="non-virtual">castor3d::Sampler</derivedcompoundref>
+    <derivedcompoundref refid="dc/dc2/a07135" prot="public" virt="non-virtual">castor3d::Scene</derivedcompoundref>
+    <derivedcompoundref refid="d4/d2c/a06895" prot="public" virt="non-virtual">castor3d::SceneBackground</derivedcompoundref>
+    <derivedcompoundref refid="d4/dc4/a07255" prot="public" virt="non-virtual">castor3d::SceneNode</derivedcompoundref>
+    <derivedcompoundref refid="d0/d12/a07271" prot="public" virt="non-virtual">castor3d::SceneNodeMergerT&lt; CacheT &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d3/dcd/a07303" prot="public" virt="non-virtual">castor3d::ShaderProgram</derivedcompoundref>
+    <derivedcompoundref refid="d6/d3e/a05683" prot="public" virt="non-virtual">castor3d::Skeleton</derivedcompoundref>
+    <derivedcompoundref refid="d3/d30/a05703" prot="public" virt="non-virtual">castor3d::SkeletonNode</derivedcompoundref>
+    <derivedcompoundref refid="da/de7/a04983" prot="public" virt="non-virtual">castor3d::TextureSource</derivedcompoundref>
+    <derivedcompoundref refid="d7/dc5/a06143" prot="public" virt="non-virtual">castor3d::VisibilityReorderPass</derivedcompoundref>
+    <derivedcompoundref refid="d1/d10/a06147" prot="public" virt="non-virtual">castor3d::VisibilityResolvePass</derivedcompoundref>
+    <derivedcompoundref refid="d0/dbd/a08755" prot="public" virt="non-virtual">castor::Font</derivedcompoundref>
+    <derivedcompoundref refid="d6/d3e/a08939" prot="public" virt="non-virtual">castor::Image</derivedcompoundref>
+    <derivedcompoundref refid="dd/da9/a08243" prot="public" virt="non-virtual">castor::ResourceMergerT&lt; CacheT &gt;</derivedcompoundref>
+    <includes local="no">Named.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d5/d3c/a08223_1a869b429a7190ecf614d8221b270e6dca" prot="protected" static="no" mutable="no">
+        <type>T</type>
+        <definition>T castor::NamedBaseT&lt; T &gt;::m_name</definition>
+        <argsstring></argsstring>
+        <name>m_name</name>
+        <qualifiedname>castor::NamedBaseT::m_name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Named.hpp" line="46" column="3" bodyfile="CastorUtils/Design/Named.hpp" bodystart="46" bodyend="-1"/>
+        <referencedby refid="d5/d3c/a08223_1abc1fa9ec1a50d2023373baa4d4c79519" compoundref="de/dca/a01907" startline="35" endline="38">castor::NamedBaseT&lt; T &gt;::getName</referencedby>
+        <referencedby refid="d5/d3c/a08223_1a2d62ce1925efead03c4e0842c06b3e11" compoundref="de/dca/a01907" startline="40" endline="43">castor::NamedBaseT&lt; T &gt;::rename</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d3c/a08223_1a4a6e4748603541685b04f95fb91efb26" prot="public" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::NamedBaseT&lt; T &gt;::NamedBaseT</definition>
+        <argsstring>(T name) noexcept</argsstring>
+        <name>NamedBaseT</name>
+        <qualifiedname>castor::NamedBaseT::NamedBaseT</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Named.hpp" line="23" column="10" bodyfile="CastorUtils/Design/Named.hpp" bodystart="23" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d3c/a08223_1abc1fa9ec1a50d2023373baa4d4c79519" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>T const &amp;</type>
+        <definition>T const  &amp; castor::NamedBaseT&lt; T &gt;::getName</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getName</name>
+        <qualifiedname>castor::NamedBaseT::getName</qualifiedname>
+        <briefdescription>
+<para>Récupère le nom. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le nom </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Named.hpp" line="35" column="10" bodyfile="CastorUtils/Design/Named.hpp" bodystart="35" bodyend="38"/>
+        <references refid="d5/d3c/a08223_1a869b429a7190ecf614d8221b270e6dca" compoundref="de/dca/a01907" startline="46">castor::NamedBaseT&lt; T &gt;::m_name</references>
+        <referencedby refid="d0/d33/a03899_1a064762eaae9407ceea58131d50a350f9" compoundref="d4/d27/a00392" startline="116" endline="132">castor3d::ControlStyle::doCreateMaterial</referencedby>
+        <referencedby refid="dd/da9/a08243_1a3b87b98138c129cc52aedf7d5ebce054" compoundref="d0/d36/a01916" startline="144" endline="159">castor::ResourceMergerT&lt; CacheT &gt;::operator()</referencedby>
+        <referencedby refid="de/dd7/a07051_1a2934229aec576706393b79d5a3ec375e" compoundref="dc/d47/a01487" startline="127" endline="157">castor3d::MovableMergerT&lt; CacheT &gt;::operator()</referencedby>
+        <referencedby refid="d0/d12/a07271_1a63c30cc9ea9687b20311400faad7c851" compoundref="d5/dc8/a01541" startline="433" endline="463">castor3d::SceneNodeMergerT&lt; CacheT &gt;::operator()</referencedby>
+        <referencedby refid="da/de7/a04983_1a98aa69bd3498e822bca9a3cf09d164a8" compoundref="dc/d91/a00659" startline="60" endline="63">castor3d::TextureSource::toString</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d3c/a08223_1a2d62ce1925efead03c4e0842c06b3e11" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::NamedBaseT&lt; T &gt;::rename</definition>
+        <argsstring>(T name) noexcept</argsstring>
+        <name>rename</name>
+        <qualifiedname>castor::NamedBaseT::rename</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Named.hpp" line="40" column="6" bodyfile="CastorUtils/Design/Named.hpp" bodystart="40" bodyend="43"/>
+        <references refid="d5/d3c/a08223_1a869b429a7190ecf614d8221b270e6dca" compoundref="de/dca/a01907" startline="46">castor::NamedBaseT&lt; T &gt;::m_name</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe de base pour les éléments nommés. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Le nom est un argument template, ainsi n&apos;importe quoi peut être un nom pour cette classe (même si c&apos;est <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> par défaut) </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::AnimationT&lt; Engine &gt;</label>
+        <link refid="d2/df0/a03119"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="48">
+        <label>castor3d::GBufferT&lt; LpvTexture &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="47" relation="private-inheritance">
+        </childnode>
+        <childnode refid="56" relation="template-instance">
+          <edgelabel>&lt; LpvTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="50">
+        <label>castor3d::GBufferT&lt; PpTexture &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="47" relation="private-inheritance">
+        </childnode>
+        <childnode refid="56" relation="template-instance">
+          <edgelabel>&lt; PpTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="52">
+        <label>castor3d::GBufferT&lt; SmTexture &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="47" relation="private-inheritance">
+        </childnode>
+        <childnode refid="56" relation="template-instance">
+          <edgelabel>&lt; SmTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="54">
+        <label>castor3d::GBufferT&lt; WbTexture &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="47" relation="private-inheritance">
+        </childnode>
+        <childnode refid="56" relation="template-instance">
+          <edgelabel>&lt; WbTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor3d::NonClientEventHandler&lt; Control &gt;</label>
+        <link refid="d7/dfa/a03751"/>
+        <childnode refid="28" relation="public-inheritance">
+        </childnode>
+        <childnode refid="45" relation="template-instance">
+          <edgelabel>&lt; Control &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::AnimatedMesh</label>
+        <link refid="db/ddc/a06807"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::AnimatedObject&lt; String &gt;</label>
+        <link refid="d4/def/a06811"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::AnimatedObjectGroup&lt; String &gt;</label>
+        <link refid="d7/d55/a06815"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::AnimatedSceneNode</label>
+        <link refid="d8/d76/a06827"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::AnimatedSkeleton</label>
+        <link refid="df/d73/a06831"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::AnimatedTexture</label>
+        <link refid="d5/de9/a06835"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::AnimationT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d2/df0/a03119"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="70">
+        <label>castor3d::BillboardList</label>
+        <link refid="db/d1b/a06935"/>
+        <childnode refid="69" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="102">
+        <label>castor3d::BoneNode</label>
+        <link refid="d3/ddb/a05679"/>
+        <childnode refid="101" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="31">
+        <label>castor3d::ButtonCtrl</label>
+        <link refid="d4/ddc/a03787"/>
+        <childnode refid="30" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::ButtonStyle</label>
+        <link refid="d6/d12/a03891"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::CacheViewT&lt; CacheT, EventT &gt;</label>
+        <link refid="d8/d16/a03619"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="71">
+        <label>castor3d::Camera</label>
+        <link refid="d2/dc3/a06951"/>
+        <childnode refid="69" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="94">
+        <label>castor3d::ColourBackground</label>
+        <link refid="d3/d3b/a06899"/>
+        <childnode refid="93" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>castor3d::ComboBoxCtrl</label>
+        <link refid="d6/d8b/a03791"/>
+        <childnode refid="30" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::ComboBoxStyle</label>
+        <link refid="d1/dc8/a03895"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>castor3d::Control</label>
+        <link refid="d6/dee/a03795"/>
+        <childnode refid="29" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::ControlStyle&lt; String &gt;</label>
+        <link refid="d0/d33/a03899"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="79">
+        <label>castor3d::DepthPass</label>
+        <link refid="d8/dcb/a06367"/>
+        <childnode refid="78" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="33">
+        <label>castor3d::EditCtrl</label>
+        <link refid="d8/d73/a03799"/>
+        <childnode refid="30" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::EditStyle</label>
+        <link refid="d6/db7/a03903"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor3d::EnvironmentMapPass&lt; String &gt;</label>
+        <link refid="dc/d21/a05951"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>castor3d::EventHandler&lt; String &gt;</label>
+        <link refid="da/db0/a03747"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>castor3d::ExpandablePanelCtrl</label>
+        <link refid="d7/dab/a03815"/>
+        <childnode refid="30" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::ExpandablePanelStyle</label>
+        <link refid="db/d27/a03907"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="80">
+        <label>castor3d::ForwardRenderTechniquePass</label>
+        <link refid="da/d78/a06259"/>
+        <childnode refid="78" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="35">
+        <label>castor3d::FrameCtrl</label>
+        <link refid="d4/daf/a03819"/>
+        <childnode refid="30" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>castor3d::FrameListener&lt; String &gt;</label>
+        <link refid="dd/d3c/a03735"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor3d::FrameStyle</label>
+        <link refid="d4/da4/a03911"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>castor3d::GBufferBase&lt; String &gt;</label>
+        <link refid="d8/d33/a05959"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="56">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="47" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="72">
+        <label>castor3d::Geometry</label>
+        <link refid="d8/d46/a06971"/>
+        <childnode refid="69" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="57">
+        <label>castor3d::GeometryInjectionPass&lt; String &gt;</label>
+        <link refid="d3/d67/a05971"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="95">
+        <label>castor3d::ImageBackground</label>
+        <link refid="da/daf/a06903"/>
+        <childnode refid="93" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="58">
+        <label>castor3d::LayeredLightPropagationVolumesBase&lt; String &gt;</label>
+        <link refid="d6/d0c/a05979"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="59">
+        <label>castor3d::LayeredLightPropagationVolumesT&lt; GeometryVolumesT &gt;</label>
+        <link refid="d4/df8/a05987"/>
+        <childnode refid="58" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="60">
+        <label>castor3d::Layout&lt; String &gt;</label>
+        <link refid="d8/d03/a03871"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="61">
+        <label>castor3d::LayoutBox</label>
+        <link refid="dc/d02/a03883"/>
+        <childnode refid="60" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>castor3d::LayoutControl</label>
+        <link refid="d9/dc9/a03823"/>
+        <childnode refid="30" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="73">
+        <label>castor3d::Light</label>
+        <link refid="da/d3c/a06987"/>
+        <childnode refid="69" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="62">
+        <label>castor3d::LightInjectionPass&lt; String &gt;</label>
+        <link refid="de/d2b/a05991"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="63">
+        <label>castor3d::LightPropagationPass&lt; String &gt;</label>
+        <link refid="d1/d05/a05999"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="64">
+        <label>castor3d::LightPropagationVolumesBase&lt; String &gt;</label>
+        <link refid="dc/ddd/a06007"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="65">
+        <label>castor3d::LightPropagationVolumesT&lt; GeometryVolumesT &gt;</label>
+        <link refid="dc/d04/a06015"/>
+        <childnode refid="64" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="49">
+        <label>castor3d::LightVolumePassResult</label>
+        <link refid="dc/d72/a06019"/>
+        <childnode refid="48" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>castor3d::ListBoxCtrl</label>
+        <link refid="d2/db0/a03827"/>
+        <childnode refid="30" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor3d::ListBoxStyle</label>
+        <link refid="d6/dfd/a03915"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="66">
+        <label>castor3d::Material&lt; String &gt;</label>
+        <link refid="d1/d42/a03979"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="67">
+        <label>castor3d::Mesh&lt; String &gt;</label>
+        <link refid="d2/dc7/a05391"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::MeshAnimation</label>
+        <link refid="dd/dd5/a05343"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>castor3d::MouseEventHandler</label>
+        <link refid="dc/dd8/a03755"/>
+        <childnode refid="28" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="68">
+        <label>castor3d::MovableMergerT&lt; CacheT &gt;</label>
+        <link refid="de/dd7/a07051"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="69">
+        <label>castor3d::MovableObject&lt; String &gt;</label>
+        <link refid="da/d09/a07047"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>castor3d::NonClientEventHandler&lt; Derived &gt;</label>
+        <link refid="d7/dfa/a03751"/>
+        <childnode refid="28" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="37">
+        <label>castor3d::PanelCtrl</label>
+        <link refid="dd/d89/a03831"/>
+        <childnode refid="36" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor3d::PanelStyle</label>
+        <link refid="d5/d48/a03919"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="74">
+        <label>castor3d::ParticleSystem</label>
+        <link refid="de/dde/a07107"/>
+        <childnode refid="69" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="77">
+        <label>castor3d::PickingPass</label>
+        <link refid="d3/d83/a06287"/>
+        <childnode refid="76" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="75">
+        <label>castor3d::PostEffect&lt; String &gt;</label>
+        <link refid="db/d2c/a06363"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>castor3d::PrepassResult</label>
+        <link refid="de/da2/a06375"/>
+        <childnode refid="50" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="39">
+        <label>castor3d::ProgressCtrl</label>
+        <link refid="d1/da3/a03835"/>
+        <childnode refid="30" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor3d::ProgressStyle</label>
+        <link refid="d9/d2a/a03923"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="76">
+        <label>castor3d::RenderNodesPass&lt; String &gt;</label>
+        <link refid="d5/d96/a06531"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="88">
+        <label>castor3d::RenderQuad&lt; String &gt;</label>
+        <link refid="de/d5b/a06307"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="89">
+        <label>castor3d::RenderTechnique&lt; String &gt;</label>
+        <link refid="d8/dd8/a06575"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="78">
+        <label>castor3d::RenderTechniqueNodesPass</label>
+        <link refid="df/d90/a06587"/>
+        <childnode refid="76" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>castor3d::RenderWindow::EvtHandler</label>
+        <link refid="de/dc7/a06607"/>
+        <childnode refid="43" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="90">
+        <label>castor3d::RenderWindow&lt; String &gt;</label>
+        <link refid="d0/dd4/a06595"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="91">
+        <label>castor3d::Sampler&lt; String &gt;</label>
+        <link refid="de/d42/a04927"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="92">
+        <label>castor3d::Scene&lt; String &gt;</label>
+        <link refid="dc/dc2/a07135"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="93">
+        <label>castor3d::SceneBackground&lt; String &gt;</label>
+        <link refid="d4/d2c/a06895"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="97">
+        <label>castor3d::SceneNode&lt; String &gt;</label>
+        <link refid="d4/dc4/a07255"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::SceneNodeAnimation</label>
+        <link refid="d2/dfb/a06863"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="98">
+        <label>castor3d::SceneNodeMergerT&lt; CacheT &gt;</label>
+        <link refid="d0/d12/a07271"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="40">
+        <label>castor3d::ScrollBarCtrl</label>
+        <link refid="d1/db8/a03847"/>
+        <childnode refid="30" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor3d::ScrollBarStyle</label>
+        <link refid="d8/d74/a03931"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="99">
+        <label>castor3d::ShaderProgram&lt; String &gt;</label>
+        <link refid="d3/dcd/a07303"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="83">
+        <label>castor3d::ShadowMapPass</label>
+        <link refid="d4/df1/a06639"/>
+        <childnode refid="76" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="84">
+        <label>castor3d::ShadowMapPassDirectional</label>
+        <link refid="dd/d9b/a06643"/>
+        <childnode refid="83" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="85">
+        <label>castor3d::ShadowMapPassPoint</label>
+        <link refid="d8/d17/a06647"/>
+        <childnode refid="83" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="86">
+        <label>castor3d::ShadowMapPassSpot</label>
+        <link refid="d1/d57/a06651"/>
+        <childnode refid="83" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="53">
+        <label>castor3d::ShadowMapResult</label>
+        <link refid="d1/d15/a06659"/>
+        <childnode refid="52" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="100">
+        <label>castor3d::Skeleton&lt; String &gt;</label>
+        <link refid="d6/d3e/a05683"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::SkeletonAnimation</label>
+        <link refid="dc/d03/a05655"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="101">
+        <label>castor3d::SkeletonNode&lt; String &gt;</label>
+        <link refid="d3/d30/a05703"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="96">
+        <label>castor3d::SkyboxBackground</label>
+        <link refid="dd/d4c/a06919"/>
+        <childnode refid="93" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>castor3d::SliderCtrl</label>
+        <link refid="d5/d12/a03851"/>
+        <childnode refid="30" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor3d::SliderStyle</label>
+        <link refid="d7/ddd/a03939"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>castor3d::StaticCtrl</label>
+        <link refid="d5/daa/a03855"/>
+        <childnode refid="30" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor3d::StaticStyle</label>
+        <link refid="d7/d0d/a03943"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::TextureAnimation</label>
+        <link refid="da/dea/a04915"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="103">
+        <label>castor3d::TextureSource&lt; String &gt;</label>
+        <link refid="da/de7/a04983"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="81">
+        <label>castor3d::TransparentPass</label>
+        <link refid="d1/d96/a06787"/>
+        <childnode refid="78" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="55">
+        <label>castor3d::TransparentPassResult</label>
+        <link refid="df/de9/a06791"/>
+        <childnode refid="54" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="82">
+        <label>castor3d::VisibilityPass</label>
+        <link refid="dc/d1d/a06379"/>
+        <childnode refid="78" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="104">
+        <label>castor3d::VisibilityReorderPass&lt; String &gt;</label>
+        <link refid="d7/dc5/a06143"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="105">
+        <label>castor3d::VisibilityResolvePass&lt; String &gt;</label>
+        <link refid="d1/d10/a06147"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="87">
+        <label>castor3d::VoxelizePass</label>
+        <link refid="d3/df2/a06043"/>
+        <childnode refid="76" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="106">
+        <label>castor::Font&lt; String &gt;</label>
+        <link refid="d0/dbd/a08755"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="107">
+        <label>castor::Image&lt; String &gt;</label>
+        <link refid="d6/d3e/a08939"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::NamedBaseT&lt; T &gt;</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="108">
+        <label>castor::ResourceMergerT&lt; CacheT &gt;</label>
+        <link refid="dd/da9/a08243"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/Design/Named.hpp" line="12" column="1" bodyfile="CastorUtils/Design/Named.hpp" bodystart="13" bodyend="47"/>
+    <listofallmembers>
+      <member refid="d5/d3c/a08223_1abc1fa9ec1a50d2023373baa4d4c79519" prot="public" virt="non-virtual"><scope>castor::NamedBaseT</scope><name>getName</name></member>
+      <member refid="d5/d3c/a08223_1a869b429a7190ecf614d8221b270e6dca" prot="protected" virt="non-virtual"><scope>castor::NamedBaseT</scope><name>m_name</name></member>
+      <member refid="d5/d3c/a08223_1a4a6e4748603541685b04f95fb91efb26" prot="public" virt="non-virtual"><scope>castor::NamedBaseT</scope><name>NamedBaseT</name></member>
+      <member refid="d5/d3c/a08223_1a2d62ce1925efead03c4e0842c06b3e11" prot="public" virt="non-virtual"><scope>castor::NamedBaseT</scope><name>rename</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

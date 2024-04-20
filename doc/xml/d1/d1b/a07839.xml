@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d1b/a07839" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::SkinningData</compoundname>
+    <includes local="no">SkinningUbo.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d1b/a07839_1a988c09e3ce3c0c17a1d0e867e12a2f24" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; sdw::ArrayStorageBufferT&lt; sdw::Mat4 &gt; &gt;</type>
+        <definition>castor::RawUniquePtr&lt; sdw::ArrayStorageBufferT&lt; sdw::Mat4 &gt; &gt; castor3d::shader::SkinningData::transforms</definition>
+        <argsstring></argsstring>
+        <name>transforms</name>
+        <qualifiedname>castor3d::shader::SkinningData::transforms</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/SkinningUbo.hpp" line="21" column="22" bodyfile="Castor3D/Shader/Ubos/SkinningUbo.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/Ubos/SkinningUbo.hpp" line="19" column="1" bodyfile="Castor3D/Shader/Ubos/SkinningUbo.hpp" bodystart="20" bodyend="22"/>
+    <listofallmembers>
+      <member refid="d1/d1b/a07839_1a988c09e3ce3c0c17a1d0e867e12a2f24" prot="public" virt="non-virtual"><scope>castor3d::shader::SkinningData</scope><name>transforms</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

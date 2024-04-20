@@ -1,0 +1,190 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/de5/a08927" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ResourceCacheTraitsT&lt; Font, String &gt;</compoundname>
+    <basecompoundref refid="dc/df8/a08263" prot="public" virt="non-virtual">castor::ResourceCacheTraitsBaseT&lt; Font, String, ResourceCacheTraitsT&lt; Font, String &gt; &gt;</basecompoundref>
+    <includes local="no">GraphicsModule.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dc/de5/a08927_1aaa98af7c9fe0db3dfc9a11cf673c1c21" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>using castor::ResourceCacheTraitsT&lt; Font, String &gt;::KeyT =  String</definition>
+        <argsstring></argsstring>
+        <name>KeyT</name>
+        <qualifiedname>castor::ResourceCacheTraitsT&lt; Font, String &gt;::KeyT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="833" column="1" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="833" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/de5/a08927_1a8c404a2c6bf60ede1211d80813674cce" prot="public" static="no">
+        <type><ref refid="dc/df8/a08263" kindref="compound">ResourceCacheTraitsBaseT</ref>&lt; <ref refid="d0/dbd/a08755" kindref="compound">Font</ref>, <ref refid="dc/de5/a08927_1aaa98af7c9fe0db3dfc9a11cf673c1c21" kindref="member">KeyT</ref>, <ref refid="d8/d73/a08235" kindref="compound">ResourceCacheTraitsT</ref>&lt; <ref refid="d0/dbd/a08755" kindref="compound">Font</ref>, <ref refid="dc/de5/a08927_1aaa98af7c9fe0db3dfc9a11cf673c1c21" kindref="member">KeyT</ref> &gt; &gt;</type>
+        <definition>using castor::ResourceCacheTraitsT&lt; Font, String &gt;::Base =  ResourceCacheTraitsBaseT&lt; Font, KeyT, ResourceCacheTraitsT&lt; Font, KeyT &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>Base</name>
+        <qualifiedname>castor::ResourceCacheTraitsT&lt; Font, String &gt;::Base</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="834" column="1" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="834" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/de5/a08927_1a3466678ca14005e66e27afbd989acde6" prot="public" static="no">
+        <type>typename Base::ElementT</type>
+        <definition>using castor::ResourceCacheTraitsT&lt; Font, String &gt;::ElementT =  typename Base::ElementT</definition>
+        <argsstring></argsstring>
+        <name>ElementT</name>
+        <qualifiedname>castor::ResourceCacheTraitsT&lt; Font, String &gt;::ElementT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="835" column="1" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="835" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/de5/a08927_1a52800ce1981bb1dad7e1de85713ea40c" prot="public" static="no">
+        <type>typename Base::ElementPtrT</type>
+        <definition>using castor::ResourceCacheTraitsT&lt; Font, String &gt;::ElementPtrT =  typename Base::ElementPtrT</definition>
+        <argsstring></argsstring>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor::ResourceCacheTraitsT&lt; Font, String &gt;::ElementPtrT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="836" column="1" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="836" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dc/de5/a08927_1ae600b8ad5506facbca706538e9b3e8de" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> const <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>CU_API const String castor::ResourceCacheTraitsT&lt; Font, String &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor::ResourceCacheTraitsT&lt; Font, String &gt;::Name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="838" column="28" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="838" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dc/de5/a08927_1ab9643264ec804ad0359c908359cfad60" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="dc/de5/a08927_1a52800ce1981bb1dad7e1de85713ea40c" kindref="member">ElementPtrT</ref></type>
+        <definition>static CU_API ElementPtrT castor::ResourceCacheTraitsT&lt; Font, String &gt;::makeElement</definition>
+        <argsstring>(ResourceCacheBaseT&lt; Font, String, ResourceCacheTraitsT&lt; Font, String &gt; &gt; const &amp;cache, KeyT const &amp;name, uint32_t height, Path const &amp;path)</argsstring>
+        <name>makeElement</name>
+        <qualifiedname>castor::ResourceCacheTraitsT&lt; Font, String &gt;::makeElement</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255" kindref="compound">ResourceCacheBaseT</ref>&lt; <ref refid="d0/dbd/a08755" kindref="compound">Font</ref>, <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref>, <ref refid="d8/d73/a08235" kindref="compound">ResourceCacheTraitsT</ref>&lt; <ref refid="d0/dbd/a08755" kindref="compound">Font</ref>, <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> &gt; &gt; const &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/de5/a08927_1aaa98af7c9fe0db3dfc9a11cf673c1c21" kindref="member">KeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>height</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="840" column="27"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Structure permettant de spécialiser le comportement d&apos;un cache. <simplesect kind="remark"><para>Spécialisation pour <ref refid="d0/dbd/a08755" kindref="compound">castor::Font</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::ResourceCacheTraitsBaseT&lt; Font, String, ResourceCacheTraitsT&lt; Font, String &gt; &gt;</label>
+        <link refid="dc/df8/a08263"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Font, String, ResourceCacheTraitsT&lt; Font, String &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::ResourceCacheTraitsBaseT&lt; ResT, KeyT, TraitsT &gt;</label>
+        <link refid="dc/df8/a08263"/>
+      </node>
+      <node id="1">
+        <label>castor::ResourceCacheTraitsT&lt; Font, String &gt;</label>
+        <link refid="dc/de5/a08927"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::ResourceCacheTraitsBaseT&lt; Font, String, ResourceCacheTraitsT&lt; Font, String &gt; &gt;</label>
+        <link refid="dc/df8/a08263"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Font, String, ResourceCacheTraitsT&lt; Font, String &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::ResourceCacheTraitsBaseT&lt; ResT, KeyT, TraitsT &gt;</label>
+        <link refid="dc/df8/a08263"/>
+      </node>
+      <node id="1">
+        <label>castor::ResourceCacheTraitsT&lt; Font, String &gt;</label>
+        <link refid="dc/de5/a08927"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>Name</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="830" column="1" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="832" bodyend="844"/>
+    <listofallmembers>
+      <member refid="dc/df8/a08263_1af868f35698e50edefa1b1e9a6ca04bdf" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="dc/df8/a08263_1aa669017b4acbf658468d658960ba8058" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="dc/df8/a08263_1ac76c9e5df897812792e44e7762993663" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="dc/df8/a08263_1ae18f144bc84d03572ef94037a11c9f5a" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="dc/de5/a08927_1a8c404a2c6bf60ede1211d80813674cce" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>Base</name></member>
+      <member refid="dc/df8/a08263_1a1ee6b0144b9bd9fd6947474dfc017a95" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>ElementCacheT</name></member>
+      <member refid="dc/df8/a08263_1a2635226f031af6f10fc47292df92dc0b" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>ElementCleanerT</name></member>
+      <member refid="dc/df8/a08263_1a14b39c9c07fccd01b240e033d936d5cb" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>ElementContT</name></member>
+      <member refid="dc/df8/a08263_1af2a42f5ada216a5e69c2b43c923ee074" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>ElementInitialiserT</name></member>
+      <member refid="dc/df8/a08263_1aa9a6854b537f46b6926c360e0d5de6ff" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>ElementKeyT</name></member>
+      <member refid="dc/df8/a08263_1aae4f7d8417807ebf8d81467ffd501733" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>ElementMergerT</name></member>
+      <member refid="dc/df8/a08263_1ab778cd9b7ca70fc3d8db4a6e49465034" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>ElementObsT</name></member>
+      <member refid="dc/de5/a08927_1a52800ce1981bb1dad7e1de85713ea40c" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>ElementPtrT</name></member>
+      <member refid="dc/de5/a08927_1a3466678ca14005e66e27afbd989acde6" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>ElementT</name></member>
+      <member refid="dc/df8/a08263_1a4fd2aef2eb71b9984057056ecf83e7d1" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>isElementObsNull</name></member>
+      <member refid="dc/de5/a08927_1aaa98af7c9fe0db3dfc9a11cf673c1c21" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>KeyT</name></member>
+      <member refid="dc/de5/a08927_1ab9643264ec804ad0359c908359cfad60" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>makeElement</name></member>
+      <member refid="dc/df8/a08263_1a09b38ad47906bdb0cf106bfd61926f97" prot="public" virt="non-virtual" ambiguityscope="ResourceCacheTraitsBaseT&lt; Font, String, ResourceCacheTraitsT&lt; Font, String &gt; &gt;::"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>makeElement</name></member>
+      <member refid="dc/df8/a08263_1a9fcdf2cf7db7722a6c8b84e2cfa52ca4" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>makeElementObs</name></member>
+      <member refid="dc/de5/a08927_1ae600b8ad5506facbca706538e9b3e8de" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Font, String &gt;</scope><name>Name</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

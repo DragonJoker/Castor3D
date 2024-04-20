@@ -1,0 +1,525 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/d1c/a03551" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::StagedUploadData</compoundname>
+    <basecompoundref refid="da/d50/a08167" prot="private" virt="non-virtual">castor::DataHolderT&lt; ashes::CommandBufferPtr &gt;</basecompoundref>
+    <basecompoundref refid="d7/d12/a03583" prot="public" virt="non-virtual">castor3d::UploadData</basecompoundref>
+    <includes local="no">StagedUploadData.hpp</includes>
+    <innerclass refid="d4/dbd/a03563" prot="private">castor3d::StagedUploadData::BufferRange</innerclass>
+    <innerclass refid="d4/dd1/a03567" prot="private">castor3d::StagedUploadData::FrameBuffers</innerclass>
+    <innerclass refid="d1/df9/a03555" prot="private">castor3d::StagedUploadData::GpuBufferOffset</innerclass>
+    <innerclass refid="d0/db8/a03559" prot="private">castor3d::StagedUploadData::StagingBuffer</innerclass>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d3/d1c/a03551_1abfec1acc43cf7b1eb50d4e00c1f7b064" prot="private" static="no">
+        <type><ref refid="da/d50/a08167" kindref="compound">castor::DataHolderT</ref>&lt; ashes::CommandBufferPtr &gt;</type>
+        <definition>using castor3d::StagedUploadData::CommandBufferHolder =  castor::DataHolderT&lt; ashes::CommandBufferPtr &gt;</definition>
+        <argsstring></argsstring>
+        <name>CommandBufferHolder</name>
+        <qualifiedname>castor3d::StagedUploadData::CommandBufferHolder</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="27" column="1" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/d1c/a03551_1a14eb9b6a2107275a024a06dbf440b489" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; StagingBuffer &gt;</type>
+        <definition>using castor3d::StagedUploadData::BufferArray =  castor::Vector&lt; StagingBuffer &gt;</definition>
+        <argsstring></argsstring>
+        <name>BufferArray</name>
+        <qualifiedname>castor3d::StagedUploadData::BufferArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="82" column="1" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/d1c/a03551_1a7699da9e2333ed221247b18940688d40" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1a5f667ec3534f15e07b7825ade796cd2b" kindref="member">castor::UnorderedMap</ref>&lt; ashes::BufferBase const *, BufferRange &gt;</type>
+        <definition>using castor3d::StagedUploadData::BuffersRanges =  castor::UnorderedMap&lt; ashes::BufferBase const *, BufferRange &gt;</definition>
+        <argsstring></argsstring>
+        <name>BuffersRanges</name>
+        <qualifiedname>castor3d::StagedUploadData::BuffersRanges</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="95" column="1" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="95" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d3/d1c/a03551_1a05240bedb491babb10cb755d2805170e" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a5f667ec3534f15e07b7825ade796cd2b" kindref="member">castor::UnorderedMap</ref>&lt; ashes::BufferBase const *, byte * &gt;</type>
+        <definition>castor::UnorderedMap&lt; ashes::BufferBase const *, byte * &gt; castor3d::StagedUploadData::m_wholeBuffers</definition>
+        <argsstring></argsstring>
+        <name>m_wholeBuffers</name>
+        <qualifiedname>castor3d::StagedUploadData::m_wholeBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="136" column="22" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d1c/a03551_1a1c76b12c5b896e98894b088634008959" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; FrameBuffers, 2u &gt;</type>
+        <definition>castor::Array&lt; FrameBuffers, 2u &gt; castor3d::StagedUploadData::m_buffers</definition>
+        <argsstring></argsstring>
+        <name>m_buffers</name>
+        <qualifiedname>castor3d::StagedUploadData::m_buffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="137" column="15" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d1c/a03551_1a0e3cf72d7a0fed2fea9fbe9ed0c28f72" prot="private" static="no" mutable="no">
+        <type>FrameBuffers *</type>
+        <definition>FrameBuffers* castor3d::StagedUploadData::m_cpuBuffers</definition>
+        <argsstring></argsstring>
+        <name>m_cpuBuffers</name>
+        <qualifiedname>castor3d::StagedUploadData::m_cpuBuffers</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="138" column="15" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="138" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d1c/a03551_1af67bba04a03e5faea40b3faaea1bfb9b" prot="private" static="no" mutable="no">
+        <type>FrameBuffers *</type>
+        <definition>FrameBuffers* castor3d::StagedUploadData::m_gpuBuffers</definition>
+        <argsstring></argsstring>
+        <name>m_gpuBuffers</name>
+        <qualifiedname>castor3d::StagedUploadData::m_gpuBuffers</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="139" column="15" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="139" bodyend="139"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d1c/a03551_1a4b997abc34e1601af072cc6a2bac069b" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::StagedUploadData::m_frameIndex</definition>
+        <argsstring></argsstring>
+        <name>m_frameIndex</name>
+        <qualifiedname>castor3d::StagedUploadData::m_frameIndex</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="140" column="10" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="140" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d1c/a03551_1a3de9be501a322b8b4b98bf5de81303b4" prot="private" static="no" mutable="no">
+        <type>FramePassTimerUPtr</type>
+        <definition>FramePassTimerUPtr castor3d::StagedUploadData::m_timer</definition>
+        <argsstring></argsstring>
+        <name>m_timer</name>
+        <qualifiedname>castor3d::StagedUploadData::m_timer</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="141" column="20" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="141" bodyend="141"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d1c/a03551_1a50ac9ef93375fdef2ac9b3a662401249" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; crg::FramePassTimerBlock &gt;</type>
+        <definition>castor::RawUniquePtr&lt; crg::FramePassTimerBlock &gt; castor3d::StagedUploadData::m_cpuBlock</definition>
+        <argsstring></argsstring>
+        <name>m_cpuBlock</name>
+        <qualifiedname>castor3d::StagedUploadData::m_cpuBlock</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="142" column="22" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="142" bodyend="142"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d1c/a03551_1a55c85366e325cdb2bae9d09ade28f9d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::StagedUploadData::StagedUploadData</definition>
+        <argsstring>(RenderDevice const &amp;device, castor::String debugName, ashes::CommandBufferPtr commandBuffer)</argsstring>
+        <name>StagedUploadData</name>
+        <qualifiedname>castor3d::StagedUploadData::StagedUploadData</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>debugName</declname>
+        </param>
+        <param>
+          <type>ashes::CommandBufferPtr</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="51" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d1c/a03551_1a24e6a0200866d3ebc4d0864751dbdf45" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::StagedUploadData::~StagedUploadData</definition>
+        <argsstring>() noexcept override</argsstring>
+        <name>~StagedUploadData</name>
+        <qualifiedname>castor3d::StagedUploadData::~StagedUploadData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="54" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d1c/a03551_1a0a498dfd5b2f7dcfe11acfc0167139fe" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::StagedUploadData::getFrameIndex</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getFrameIndex</name>
+        <qualifiedname>castor3d::StagedUploadData::getFrameIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="56" column="10" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="56" bodyend="59"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d3/d1c/a03551_1a8fcda624f48111e0bc339d6da8a1b9f5" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::StagedUploadData::doBegin</definition>
+        <argsstring>() override</argsstring>
+        <name>doBegin</name>
+        <qualifiedname>castor3d::StagedUploadData::doBegin</qualifiedname>
+        <reimplements refid="d7/d12/a03583_1a33afbcb7bcb30955b6ac6be534d41fb7">doBegin</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="62" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d1c/a03551_1ab34a840dbb5f51601cc0d82c7a6192b3" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::StagedUploadData::doPreprocess</definition>
+        <argsstring>(castor::Vector&lt; BufferDataRange &gt; *&amp;pendingBuffers, castor::Vector&lt; ImageDataRange &gt; *&amp;pendingImages) override</argsstring>
+        <name>doPreprocess</name>
+        <qualifiedname>castor3d::StagedUploadData::doPreprocess</qualifiedname>
+        <reimplements refid="d7/d12/a03583_1a13717174743f0dc5cd23b9cf9dc86e61">doPreprocess</reimplements>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d1/dd1/a03591" kindref="compound">BufferDataRange</ref> &gt; *&amp;</type>
+          <declname>pendingBuffers</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d2/db0/a03595" kindref="compound">ImageDataRange</ref> &gt; *&amp;</type>
+          <declname>pendingImages</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="63" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d1c/a03551_1a75cfc94e2fc81c58e01b7c22524d4cc8" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::StagedUploadData::doUpload</definition>
+        <argsstring>(BufferDataRange &amp;data) override</argsstring>
+        <name>doUpload</name>
+        <qualifiedname>castor3d::StagedUploadData::doUpload</qualifiedname>
+        <reimplements refid="d7/d12/a03583_1a58f2f40c9d14f9f36624de9699997552">doUpload</reimplements>
+        <param>
+          <type><ref refid="d1/dd1/a03591" kindref="compound">BufferDataRange</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="65" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d1c/a03551_1ac231cf4101e4f103ad4cf60ea0aa9da8" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::StagedUploadData::doUpload</definition>
+        <argsstring>(ImageDataRange &amp;data) override</argsstring>
+        <name>doUpload</name>
+        <qualifiedname>castor3d::StagedUploadData::doUpload</qualifiedname>
+        <reimplements refid="d7/d12/a03583_1a44820abdb3083afe79bfda3a1e8c41c1">doUpload</reimplements>
+        <param>
+          <type><ref refid="d2/db0/a03595" kindref="compound">ImageDataRange</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="66" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d1c/a03551_1a3a5cb2a7682a48ae3462a8414abcb8af" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::StagedUploadData::doPostprocess</definition>
+        <argsstring>() override</argsstring>
+        <name>doPostprocess</name>
+        <qualifiedname>castor3d::StagedUploadData::doPostprocess</qualifiedname>
+        <reimplements refid="d7/d12/a03583_1a8828896b9f42715fc7408cc6baad678e">doPostprocess</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="67" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d1c/a03551_1a9d8f3c546b36ef8a28626a2fa3477477" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="df/d38/a03587" kindref="compound">SemaphoreUsed</ref></type>
+        <definition>SemaphoreUsed castor3d::StagedUploadData::doEnd</definition>
+        <argsstring>(ashes::Queue const &amp;queue, ashes::Fence const *fence, castor::Milliseconds timeout) override</argsstring>
+        <name>doEnd</name>
+        <qualifiedname>castor3d::StagedUploadData::doEnd</qualifiedname>
+        <reimplements refid="d7/d12/a03583_1ac1479a2981ec5ecbd63eac48fc86ce51">doEnd</reimplements>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>ashes::Fence const *</type>
+          <declname>fence</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a9bbae2d5d564fa58ccbb16ec1d0ed7a1" kindref="member">castor::Milliseconds</ref></type>
+          <declname>timeout</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="68" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d1c/a03551_1a9363b9e90d362ad3f4257892526bf1b0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>GpuBufferOffset</type>
+        <definition>GpuBufferOffset castor3d::StagedUploadData::doGetBuffer</definition>
+        <argsstring>(BufferArray &amp;pool, VkDeviceSize size)</argsstring>
+        <name>doGetBuffer</name>
+        <qualifiedname>castor3d::StagedUploadData::doGetBuffer</qualifiedname>
+        <param>
+          <type>BufferArray &amp;</type>
+          <declname>pool</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="84" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d1c/a03551_1a5c807d26c9a0f03199464d9505928245" prot="private" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::StagedUploadData::doPutBuffer</definition>
+        <argsstring>(BufferArray &amp;pool, GpuBufferOffset const &amp;bufferOffset) const noexcept</argsstring>
+        <name>doPutBuffer</name>
+        <qualifiedname>castor3d::StagedUploadData::doPutBuffer</qualifiedname>
+        <param>
+          <type>BufferArray &amp;</type>
+          <declname>pool</declname>
+        </param>
+        <param>
+          <type>GpuBufferOffset const &amp;</type>
+          <declname>bufferOffset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="86" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::DataHolderT&lt; ashes::CommandBufferPtr &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; ashes::CommandBufferPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::StagedUploadData</label>
+        <link refid="d3/d1c/a03551"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::UploadData</label>
+        <link refid="d7/d12/a03583"/>
+      </node>
+      <node id="3">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::DataHolderT&lt; ashes::CommandBufferPtr &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; ashes::CommandBufferPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::RenderDevice</label>
+        <link refid="dc/d32/a06415"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d5/d4e/a06559"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::StagedUploadData</label>
+        <link refid="d3/d1c/a03551"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::UploadData</label>
+        <link refid="d7/d12/a03583"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_debugName</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="8">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="10">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Buffer/StagedUploadData.hpp" line="23" column="1" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="26" bodyend="143"/>
+    <listofallmembers>
+      <member refid="d7/d12/a03583_1ada13fa011737375b3c65a5a9d7bcb509" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>begin</name></member>
+      <member refid="d3/d1c/a03551_1a14eb9b6a2107275a024a06dbf440b489" prot="private" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>BufferArray</name></member>
+      <member refid="d3/d1c/a03551_1a7699da9e2333ed221247b18940688d40" prot="private" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>BuffersRanges</name></member>
+      <member refid="d3/d1c/a03551_1abfec1acc43cf7b1eb50d4e00c1f7b064" prot="private" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>CommandBufferHolder</name></member>
+      <member refid="d3/d1c/a03551_1a8fcda624f48111e0bc339d6da8a1b9f5" prot="private" virt="virtual"><scope>castor3d::StagedUploadData</scope><name>doBegin</name></member>
+      <member refid="d7/d12/a03583_1ade325eb70d1106305c8610e651e571bf" prot="protected" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>doCopyData</name></member>
+      <member refid="d3/d1c/a03551_1a9d8f3c546b36ef8a28626a2fa3477477" prot="private" virt="virtual"><scope>castor3d::StagedUploadData</scope><name>doEnd</name></member>
+      <member refid="d3/d1c/a03551_1a9363b9e90d362ad3f4257892526bf1b0" prot="private" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>doGetBuffer</name></member>
+      <member refid="d3/d1c/a03551_1a3a5cb2a7682a48ae3462a8414abcb8af" prot="private" virt="virtual"><scope>castor3d::StagedUploadData</scope><name>doPostprocess</name></member>
+      <member refid="d3/d1c/a03551_1ab34a840dbb5f51601cc0d82c7a6192b3" prot="private" virt="virtual"><scope>castor3d::StagedUploadData</scope><name>doPreprocess</name></member>
+      <member refid="d3/d1c/a03551_1a5c807d26c9a0f03199464d9505928245" prot="private" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>doPutBuffer</name></member>
+      <member refid="d3/d1c/a03551_1a75cfc94e2fc81c58e01b7c22524d4cc8" prot="private" virt="virtual"><scope>castor3d::StagedUploadData</scope><name>doUpload</name></member>
+      <member refid="d3/d1c/a03551_1ac231cf4101e4f103ad4cf60ea0aa9da8" prot="private" virt="virtual"><scope>castor3d::StagedUploadData</scope><name>doUpload</name></member>
+      <member refid="d7/d12/a03583_1a766f67254869bed6d5d94dcd0caa9d59" prot="protected" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>doUploadBuffer</name></member>
+      <member refid="d7/d12/a03583_1a8d995aa3f03f793f65201bf8ff74f335" prot="protected" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>doUploadImage</name></member>
+      <member refid="d7/d12/a03583_1aaf99041fb33234d4dfdb5c3894ebcd88" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>end</name></member>
+      <member refid="d7/d12/a03583_1a81951fb371b5784f075c2e035694b17e" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>getCommandBuffer</name></member>
+      <member refid="d7/d12/a03583_1a9beb7dbe51db3350f5898d507945662d" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>getDevice</name></member>
+      <member refid="d3/d1c/a03551_1a0a498dfd5b2f7dcfe11acfc0167139fe" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>getFrameIndex</name></member>
+      <member refid="d7/d12/a03583_1a3a4d974ee93c78456cec1a80f3ddbe2f" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>getName</name></member>
+      <member refid="d3/d1c/a03551_1a1c76b12c5b896e98894b088634008959" prot="private" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>m_buffers</name></member>
+      <member refid="d7/d12/a03583_1a5011b4b7b9942916ddbf4cab177c1700" prot="protected" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>m_commandBuffer</name></member>
+      <member refid="d3/d1c/a03551_1a50ac9ef93375fdef2ac9b3a662401249" prot="private" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>m_cpuBlock</name></member>
+      <member refid="d3/d1c/a03551_1a0e3cf72d7a0fed2fea9fbe9ed0c28f72" prot="private" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>m_cpuBuffers</name></member>
+      <member refid="d7/d12/a03583_1a759027762b8c86e6635978f0a13a0001" prot="protected" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>m_debugName</name></member>
+      <member refid="d7/d12/a03583_1a8694a94c6cc36d03cc4302e4370d534d" prot="protected" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>m_device</name></member>
+      <member refid="d3/d1c/a03551_1a4b997abc34e1601af072cc6a2bac069b" prot="private" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>m_frameIndex</name></member>
+      <member refid="d3/d1c/a03551_1af67bba04a03e5faea40b3faaea1bfb9b" prot="private" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>m_gpuBuffers</name></member>
+      <member refid="d7/d12/a03583_1ae56bc7c19c635ee4506b463cef221809" prot="protected" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>m_pendingBuffers</name></member>
+      <member refid="d7/d12/a03583_1ad3c4398bcfaff9e44bf7a45202b8f42e" prot="protected" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>m_pendingImages</name></member>
+      <member refid="d3/d1c/a03551_1a3de9be501a322b8b4b98bf5de81303b4" prot="private" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>m_timer</name></member>
+      <member refid="d3/d1c/a03551_1a05240bedb491babb10cb755d2805170e" prot="private" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>m_wholeBuffers</name></member>
+      <member refid="d7/d12/a03583_1a7853e1d0c795246023731dc638abfa42" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>operator=</name></member>
+      <member refid="d7/d12/a03583_1ab1f052fb97be3fd560a72cc3860d3f77" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>operator=</name></member>
+      <member refid="d7/d12/a03583_1a71946f5b8920bec702c4e8f9b33aecc7" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>process</name></member>
+      <member refid="d7/d12/a03583_1a8fa864671ae7dd28863787c504a757b1" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>pushUpload</name></member>
+      <member refid="d7/d12/a03583_1ad15efbed98d72ca1ead30b05a258fae5" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>pushUpload</name></member>
+      <member refid="d7/d12/a03583_1a1cf95b9c5ad123d1f1cb390e6df74770" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>pushUpload</name></member>
+      <member refid="d7/d12/a03583_1a9cf933bce34d1758b583a41707d5a524" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>pushUpload</name></member>
+      <member refid="d7/d12/a03583_1a59ca6e8aced50e70feac109042b9adb6" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>pushUpload</name></member>
+      <member refid="d7/d12/a03583_1a00f87e2e00d112299e44b89082fc6e4d" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>pushUpload</name></member>
+      <member refid="d3/d1c/a03551_1a55c85366e325cdb2bae9d09ade28f9d7" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>StagedUploadData</name></member>
+      <member refid="d7/d12/a03583_1ab40296897ee1e35cd8829a3209191ad9" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>UploadData</name></member>
+      <member refid="d7/d12/a03583_1ad0d0512983442ca61a5facb8aa6ddfd5" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>UploadData</name></member>
+      <member refid="d7/d12/a03583_1a06072251d0492aa411f74500082d1b69" prot="protected" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>UploadData</name></member>
+      <member refid="d3/d1c/a03551_1a24e6a0200866d3ebc4d0864751dbdf45" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData</scope><name>~StagedUploadData</name></member>
+      <member refid="d7/d12/a03583_1ab497295895553f3e7c1ed868801b2ab4" prot="public" virt="virtual"><scope>castor3d::StagedUploadData</scope><name>~UploadData</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,206 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/dc1/a09487" kind="struct" language="C++" prot="public">
+    <compoundname>castor::BuddyAllocatorTraits</compoundname>
+    <includes local="no">BuddyAllocator.hpp</includes>
+    <innerclass refid="d5/db1/a09491" prot="public">castor::BuddyAllocatorTraits::Block</innerclass>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dc/dc1/a09487_1acb276b3d1b73424ed896fb61fd956278" prot="public" static="no">
+        <type>uint8_t *</type>
+        <definition>using castor::BuddyAllocatorTraits::PointerType =  uint8_t *</definition>
+        <argsstring></argsstring>
+        <name>PointerType</name>
+        <qualifiedname>castor::BuddyAllocatorTraits::PointerType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="13" column="1" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="13" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/dc1/a09487_1af7920fb3332ef0c9c5556e56fb5dba56" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; uint8_t &gt;</type>
+        <definition>Vector&lt; uint8_t &gt; castor::BuddyAllocatorTraits::m_memory</definition>
+        <argsstring></argsstring>
+        <name>m_memory</name>
+        <qualifiedname>castor::BuddyAllocatorTraits::m_memory</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="91" column="8" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/dc1/a09487_1af644a77ca9e8d3999f6c43dd793f33a3" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::BuddyAllocatorTraits::BuddyAllocatorTraits</definition>
+        <argsstring>(size_t size)</argsstring>
+        <name>BuddyAllocatorTraits</name>
+        <qualifiedname>castor::BuddyAllocatorTraits::BuddyAllocatorTraits</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La taille de l&apos;allocateur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="26" column="17" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="26" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc1/a09487_1a64df36163f83a3b8be4a2b5cfd552f59" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor::BuddyAllocatorTraits::getSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getSize</name>
+        <qualifiedname>castor::BuddyAllocatorTraits::getSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La taille de l&apos;allocateur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="36" column="15" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="36" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc1/a09487_1ad770cd9f6c7abe2bd531bb7574207149" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/dc1/a09487_1acb276b3d1b73424ed896fb61fd956278" kindref="member">PointerType</ref></type>
+        <definition>PointerType castor::BuddyAllocatorTraits::getPointer</definition>
+        <argsstring>(uint32_t offset)</argsstring>
+        <name>getPointer</name>
+        <qualifiedname>castor::BuddyAllocatorTraits::getPointer</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+<para>Crée un bloc de mémoire. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le décalage en mémoire du bloc. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le block. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="50" column="20" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="50" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc1/a09487_1a3d6757fd86b8688ab54c02b6acd6a9f0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor::BuddyAllocatorTraits::getOffset</definition>
+        <argsstring>(PointerType pointer) const</argsstring>
+        <name>getOffset</name>
+        <qualifiedname>castor::BuddyAllocatorTraits::getOffset</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc1/a09487_1acb276b3d1b73424ed896fb61fd956278" kindref="member">PointerType</ref></type>
+          <declname>pointer</declname>
+        </param>
+        <briefdescription>
+<para>Récupère le décalage en mémoire d&apos;un block. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pointer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le bloc mémoire. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le décalage. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="64" column="15" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="64" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc1/a09487_1a0f2b0c215e18405450d362940f2368ed" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/db1/a09491" kindref="compound">Block</ref></type>
+        <definition>Block castor::BuddyAllocatorTraits::getNull</definition>
+        <argsstring>() const</argsstring>
+        <name>getNull</name>
+        <qualifiedname>castor::BuddyAllocatorTraits::getNull</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le block mémoire nul. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="74" column="14" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="74" bodyend="78"/>
+        <referencedby refid="dc/dc1/a09487_1aaaff0defd7449f7326d7c87cdb206778" compoundref="de/db2/a02246" startline="85" endline="88">isNull</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc1/a09487_1aaaff0defd7449f7326d7c87cdb206778" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::BuddyAllocatorTraits::isNull</definition>
+        <argsstring>(PointerType pointer) const</argsstring>
+        <name>isNull</name>
+        <qualifiedname>castor::BuddyAllocatorTraits::isNull</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc1/a09487_1acb276b3d1b73424ed896fb61fd956278" kindref="member">PointerType</ref></type>
+          <declname>pointer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> si le pointeur donné est nul. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="85" column="13" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="85" bodyend="88"/>
+        <references refid="d5/db1/a09491_1a08978e63ede0129ae0d71bea3915a8a0" compoundref="de/db2/a02246" startline="16">castor::BuddyAllocatorTraits::Block::data</references>
+        <references refid="dc/dc1/a09487_1a0f2b0c215e18405450d362940f2368ed" compoundref="de/db2/a02246" startline="74" endline="78">getNull</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="11" column="1" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="12" bodyend="92"/>
+    <listofallmembers>
+      <member refid="dc/dc1/a09487_1af644a77ca9e8d3999f6c43dd793f33a3" prot="public" virt="non-virtual"><scope>castor::BuddyAllocatorTraits</scope><name>BuddyAllocatorTraits</name></member>
+      <member refid="dc/dc1/a09487_1a0f2b0c215e18405450d362940f2368ed" prot="public" virt="non-virtual"><scope>castor::BuddyAllocatorTraits</scope><name>getNull</name></member>
+      <member refid="dc/dc1/a09487_1a3d6757fd86b8688ab54c02b6acd6a9f0" prot="public" virt="non-virtual"><scope>castor::BuddyAllocatorTraits</scope><name>getOffset</name></member>
+      <member refid="dc/dc1/a09487_1ad770cd9f6c7abe2bd531bb7574207149" prot="public" virt="non-virtual"><scope>castor::BuddyAllocatorTraits</scope><name>getPointer</name></member>
+      <member refid="dc/dc1/a09487_1a64df36163f83a3b8be4a2b5cfd552f59" prot="public" virt="non-virtual"><scope>castor::BuddyAllocatorTraits</scope><name>getSize</name></member>
+      <member refid="dc/dc1/a09487_1aaaff0defd7449f7326d7c87cdb206778" prot="public" virt="non-virtual"><scope>castor::BuddyAllocatorTraits</scope><name>isNull</name></member>
+      <member refid="dc/dc1/a09487_1af7920fb3332ef0c9c5556e56fb5dba56" prot="private" virt="non-virtual"><scope>castor::BuddyAllocatorTraits</scope><name>m_memory</name></member>
+      <member refid="dc/dc1/a09487_1acb276b3d1b73424ed896fb61fd956278" prot="public" virt="non-virtual"><scope>castor::BuddyAllocatorTraits</scope><name>PointerType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

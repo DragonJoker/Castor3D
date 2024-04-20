@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/d69/a07631" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::DirectionalShadowData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_DirectionalShadowData&quot;, sdw::type::MemoryLayout::eStd140, sdw::StructFieldT&lt; ShadowData, &quot;base&quot; &gt;, sdw::Vec4ArrayField&lt; &quot;splitDepths&quot;, ashes::getAlignedSize(MaxDirectionalCascadesCount, 4u)/4u &gt;, sdw::Vec4ArrayField&lt; &quot;splitScales&quot;, ashes::getAlignedSize(MaxDirectionalCascadesCount, 4u)/4u &gt;, sdw::Mat4ArrayField&lt; &quot;transforms&quot;, MaxDirectionalCascadesCount &gt; &gt;</basecompoundref>
+    <includes local="no">GlslShadow.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d69/a07631_1a9dda19cfb720f469646283e185c51d7b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::DirectionalShadowData::DirectionalShadowData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>DirectionalShadowData</name>
+        <qualifiedname>castor3d::shader::DirectionalShadowData::DirectionalShadowData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="66" column="1" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="66" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d69/a07631_1a74c51f0a2465f599bd93ef4d61a15c5e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DirectionalShadowData::base</definition>
+        <argsstring>() const</argsstring>
+        <name>base</name>
+        <qualifiedname>castor3d::shader::DirectionalShadowData::base</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="73" column="6" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="73" bodyend="73"/>
+        <referencedby refid="d3/d69/a07631_1a90dd5ddf37ca9b0cae4cbecb5e6ee575" compoundref="de/d3e/a01676" startline="74" endline="74">cascadeCount</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/d69/a07631_1a90dd5ddf37ca9b0cae4cbecb5e6ee575" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DirectionalShadowData::cascadeCount</definition>
+        <argsstring>() const</argsstring>
+        <name>cascadeCount</name>
+        <qualifiedname>castor3d::shader::DirectionalShadowData::cascadeCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="74" column="6" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="74" bodyend="74"/>
+        <references refid="d3/d69/a07631_1a74c51f0a2465f599bd93ef4d61a15c5e" compoundref="de/d3e/a01676" startline="73" endline="73">base</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d69/a07631_1a073ab26061b96bb75462b570b261401a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DirectionalShadowData::splitDepths</definition>
+        <argsstring>() const</argsstring>
+        <name>splitDepths</name>
+        <qualifiedname>castor3d::shader::DirectionalShadowData::splitDepths</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="75" column="6" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="75" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d69/a07631_1ac566ca9e95364278bda8e61246b14603" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DirectionalShadowData::splitScales</definition>
+        <argsstring>() const</argsstring>
+        <name>splitScales</name>
+        <qualifiedname>castor3d::shader::DirectionalShadowData::splitScales</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="76" column="6" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="76" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d69/a07631_1ae94d32d53cbc71e7e3c66ecc281d5e7f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DirectionalShadowData::transforms</definition>
+        <argsstring>() const</argsstring>
+        <name>transforms</name>
+        <qualifiedname>castor3d::shader::DirectionalShadowData::transforms</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="77" column="6" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="77" bodyend="77"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::DirectionalShadowData</label>
+        <link refid="d3/d69/a07631"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_DirectionalShadowData&quot;, sdw::type::MemoryLayout::eStd140, sdw::StructFieldT&lt; ShadowData, &quot;base&quot; &gt;, sdw::Vec4ArrayField&lt; &quot;splitDepths&quot;, ashes::getAlignedSize(MaxDirectionalCascadesCount, 4u)/4u &gt;, sdw::Vec4ArrayField&lt; &quot;splitScales&quot;, ashes::getAlignedSize(MaxDirectionalCascadesCount, 4u)/4u &gt;, sdw::Mat4ArrayField&lt; &quot;transforms&quot;, MaxDirectionalCascadesCount &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::DirectionalShadowData</label>
+        <link refid="d3/d69/a07631"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_DirectionalShadowData&quot;, sdw::type::MemoryLayout::eStd140, sdw::StructFieldT&lt; ShadowData, &quot;base&quot; &gt;, sdw::Vec4ArrayField&lt; &quot;splitDepths&quot;, ashes::getAlignedSize(MaxDirectionalCascadesCount, 4u)/4u &gt;, sdw::Vec4ArrayField&lt; &quot;splitScales&quot;, ashes::getAlignedSize(MaxDirectionalCascadesCount, 4u)/4u &gt;, sdw::Mat4ArrayField&lt; &quot;transforms&quot;, MaxDirectionalCascadesCount &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="58" column="1" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="65" bodyend="78"/>
+    <listofallmembers>
+      <member refid="d3/d69/a07631_1a74c51f0a2465f599bd93ef4d61a15c5e" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalShadowData</scope><name>base</name></member>
+      <member refid="d3/d69/a07631_1a90dd5ddf37ca9b0cae4cbecb5e6ee575" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalShadowData</scope><name>cascadeCount</name></member>
+      <member refid="d3/d69/a07631_1a9dda19cfb720f469646283e185c51d7b" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalShadowData</scope><name>DirectionalShadowData</name></member>
+      <member refid="d3/d69/a07631_1a073ab26061b96bb75462b570b261401a" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalShadowData</scope><name>splitDepths</name></member>
+      <member refid="d3/d69/a07631_1ac566ca9e95364278bda8e61246b14603" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalShadowData</scope><name>splitScales</name></member>
+      <member refid="d3/d69/a07631_1ae94d32d53cbc71e7e3c66ecc281d5e7f" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalShadowData</scope><name>transforms</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

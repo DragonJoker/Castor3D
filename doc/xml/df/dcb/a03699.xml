@@ -1,0 +1,219 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/dcb/a03699" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::EngineConfig</compoundname>
+    <includes local="no">Engine.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/dcb/a03699_1a022db3aa6a3d20b242f8281a60d8cd5e" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::EngineConfig::appName</definition>
+        <argsstring></argsstring>
+        <name>appName</name>
+        <qualifiedname>castor3d::EngineConfig::appName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le nom de l&apos;application. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Engine.hpp" line="72" column="16" bodyfile="Castor3D/Engine.hpp" bodystart="72" bodyend="-1"/>
+        <referencedby refid="d8/d4f/a03703_1a2a3070874bc9257b56735ed7090f1704" compoundref="db/dc3/a00284" startline="768" endline="771">castor3d::Engine::getAppName</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/dcb/a03699_1a8667ffad9a8b04ebcee891e05b1e722d" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/d15/a05335" kindref="compound">Version</ref></type>
+        <definition>Version castor3d::EngineConfig::appVersion</definition>
+        <argsstring></argsstring>
+        <name>appVersion</name>
+        <qualifiedname>castor3d::EngineConfig::appVersion</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La version de l&apos;application. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Engine.hpp" line="79" column="9" bodyfile="Castor3D/Engine.hpp" bodystart="79" bodyend="-1"/>
+        <referencedby refid="d8/d4f/a03703_1ad67d083dab9477be09f1e357c5fd0809" compoundref="db/dc3/a00284" startline="773" endline="776">castor3d::Engine::getAppVersion</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/dcb/a03699_1abfce57b7a0de818a0bde13b8cee2dbbe" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::EngineConfig::enableValidation</definition>
+        <argsstring></argsstring>
+        <name>enableValidation</name>
+        <qualifiedname>castor3d::EngineConfig::enableValidation</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><computeroutput>true</computeroutput> pour activer la validation via l&apos;API de rendu. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Engine.hpp" line="86" column="6" bodyfile="Castor3D/Engine.hpp" bodystart="86" bodyend="86"/>
+        <referencedby refid="d8/d4f/a03703_1aac153d4798d15f1437d85b01439f90e2" compoundref="db/dc3/a00284" startline="783" endline="786">castor3d::Engine::isValidationEnabled</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/dcb/a03699_1a73ccf4daaf5a0048c0021cc569e137c6" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::EngineConfig::enableRandom</definition>
+        <argsstring></argsstring>
+        <name>enableRandom</name>
+        <qualifiedname>castor3d::EngineConfig::enableRandom</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><computeroutput>true</computeroutput> pour générer des random seeds à chaque lancement. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Engine.hpp" line="93" column="6" bodyfile="Castor3D/Engine.hpp" bodystart="93" bodyend="93"/>
+        <referencedby refid="d8/d4f/a03703_1a9de029a3a2bacd457aa229244931b1c2" compoundref="db/dc3/a00284" startline="798" endline="801">castor3d::Engine::isRandomisationEnabled</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/dcb/a03699_1a415407f9da81673d4bf41f6455d8a1f3" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::EngineConfig::enableUpdateOptimisations</definition>
+        <argsstring></argsstring>
+        <name>enableUpdateOptimisations</name>
+        <qualifiedname>castor3d::EngineConfig::enableUpdateOptimisations</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><computeroutput>true</computeroutput> pour activer les optimisations de mise à jour (pour éviter de lancer les passes pour lesquelles les données n&apos;ont pas changé). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Engine.hpp" line="100" column="6" bodyfile="Castor3D/Engine.hpp" bodystart="100" bodyend="100"/>
+        <referencedby refid="d8/d4f/a03703_1a743391e0928f95513f7ae9b6b2744fed" compoundref="db/dc3/a00284" startline="793" endline="796">castor3d::Engine::areUpdateOptimisationsEnabled</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/dcb/a03699_1a3ab8fc9dc844078f8d859a1720fdf07f" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::EngineConfig::shaderDebugLevel</definition>
+        <argsstring></argsstring>
+        <name>shaderDebugLevel</name>
+        <qualifiedname>castor3d::EngineConfig::shaderDebugLevel</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le niveau de débogage lors de la compilation des shaders. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Engine.hpp" line="107" column="10" bodyfile="Castor3D/Engine.hpp" bodystart="107" bodyend="107"/>
+        <referencedby refid="d8/d4f/a03703_1a5a265d90ebfe100b06328ca04b59f3cb" compoundref="db/dc3/a00284" startline="788" endline="791">castor3d::Engine::getShaderDebugLevel</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/dcb/a03699_1a8b0557c8ca695d10155512918c8e6d09" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::EngineConfig::enableShaderValidation</definition>
+        <argsstring></argsstring>
+        <name>enableShaderValidation</name>
+        <qualifiedname>castor3d::EngineConfig::enableShaderValidation</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><computeroutput>true</computeroutput> pour activer la validation des shaders via glslang. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Engine.hpp" line="114" column="6" bodyfile="Castor3D/Engine.hpp" bodystart="114" bodyend="114"/>
+        <referencedby refid="d8/d4f/a03703_1a837e39db6d1764e56dc2253481ed7837" compoundref="db/dc3/a00284" startline="778" endline="781">castor3d::Engine::isShaderValidationEnabled</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/dcb/a03699_1a7172386d3a765fcdccdca26bf5a8d8ef" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::EngineConfig::enableApiTrace</definition>
+        <argsstring></argsstring>
+        <name>enableApiTrace</name>
+        <qualifiedname>castor3d::EngineConfig::enableApiTrace</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><computeroutput>true</computeroutput> pour activer les traces via l&apos;API de rendu. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Engine.hpp" line="121" column="6" bodyfile="Castor3D/Engine.hpp" bodystart="121" bodyend="121"/>
+        <referencedby refid="d8/d4f/a03703_1a2fb8f87af4900d30db440bbf82aefefc" compoundref="db/dc3/a00284" startline="803" endline="806">castor3d::Engine::isApiTraceEnabled</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/dcb/a03699_1a8c4917c95e7b4a31bdde6211fb12c77c" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::EngineConfig::keepTextShaders</definition>
+        <argsstring></argsstring>
+        <name>keepTextShaders</name>
+        <qualifiedname>castor3d::EngineConfig::keepTextShaders</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><computeroutput>true</computeroutput> pour garder la version texte des shaders. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Engine.hpp" line="128" column="6" bodyfile="Castor3D/Engine.hpp" bodystart="128" bodyend="128"/>
+        <referencedby refid="d8/d4f/a03703_1a601c04722ecec84265071102ed22251b" compoundref="db/dc3/a00284" startline="808" endline="811">castor3d::Engine::areTextShadersKept</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/dcb/a03699_1af5d0e519b2a7e3f163fc5b97b8d6aa73" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::EngineConfig::enableDebugTargets</definition>
+        <argsstring></argsstring>
+        <name>enableDebugTargets</name>
+        <qualifiedname>castor3d::EngineConfig::enableDebugTargets</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><computeroutput>true</computeroutput> pour activer la visualisation des debug targets. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Engine.hpp" line="135" column="6" bodyfile="Castor3D/Engine.hpp" bodystart="135" bodyend="135"/>
+        <referencedby refid="d8/d4f/a03703_1a179b404eb64c6608bc8a67767147f88e" compoundref="db/dc3/a00284" startline="813" endline="816">castor3d::Engine::areDebugTargetsEnabled</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::EngineConfig</label>
+        <link refid="df/dcb/a03699"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>appName</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>appVersion</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Version</label>
+        <link refid="d5/d15/a05335"/>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Engine.hpp" line="64" column="1" bodyfile="Castor3D/Engine.hpp" bodystart="65" bodyend="136"/>
+    <listofallmembers>
+      <member refid="df/dcb/a03699_1a022db3aa6a3d20b242f8281a60d8cd5e" prot="public" virt="non-virtual"><scope>castor3d::EngineConfig</scope><name>appName</name></member>
+      <member refid="df/dcb/a03699_1a8667ffad9a8b04ebcee891e05b1e722d" prot="public" virt="non-virtual"><scope>castor3d::EngineConfig</scope><name>appVersion</name></member>
+      <member refid="df/dcb/a03699_1a7172386d3a765fcdccdca26bf5a8d8ef" prot="public" virt="non-virtual"><scope>castor3d::EngineConfig</scope><name>enableApiTrace</name></member>
+      <member refid="df/dcb/a03699_1af5d0e519b2a7e3f163fc5b97b8d6aa73" prot="public" virt="non-virtual"><scope>castor3d::EngineConfig</scope><name>enableDebugTargets</name></member>
+      <member refid="df/dcb/a03699_1a73ccf4daaf5a0048c0021cc569e137c6" prot="public" virt="non-virtual"><scope>castor3d::EngineConfig</scope><name>enableRandom</name></member>
+      <member refid="df/dcb/a03699_1a8b0557c8ca695d10155512918c8e6d09" prot="public" virt="non-virtual"><scope>castor3d::EngineConfig</scope><name>enableShaderValidation</name></member>
+      <member refid="df/dcb/a03699_1a415407f9da81673d4bf41f6455d8a1f3" prot="public" virt="non-virtual"><scope>castor3d::EngineConfig</scope><name>enableUpdateOptimisations</name></member>
+      <member refid="df/dcb/a03699_1abfce57b7a0de818a0bde13b8cee2dbbe" prot="public" virt="non-virtual"><scope>castor3d::EngineConfig</scope><name>enableValidation</name></member>
+      <member refid="df/dcb/a03699_1a8c4917c95e7b4a31bdde6211fb12c77c" prot="public" virt="non-virtual"><scope>castor3d::EngineConfig</scope><name>keepTextShaders</name></member>
+      <member refid="df/dcb/a03699_1a3ab8fc9dc844078f8d859a1720fdf07f" prot="public" virt="non-virtual"><scope>castor3d::EngineConfig</scope><name>shaderDebugLevel</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

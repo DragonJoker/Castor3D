@@ -1,0 +1,315 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/d9a/a05639" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SubmeshContext</compoundname>
+    <includes local="no">Submesh.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/d9a/a05639_1affbd3b5aa73e421017f63ef3ca1a9654" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/dd1/a05395" kindref="compound">MeshContext</ref> *</type>
+        <definition>MeshContext* castor3d::SubmeshContext::mesh</definition>
+        <argsstring></argsstring>
+        <name>mesh</name>
+        <qualifiedname>castor3d::SubmeshContext::mesh</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Submesh.hpp" line="422" column="14" bodyfile="Castor3D/Model/Mesh/Submesh/Submesh.hpp" bodystart="422" bodyend="422"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d9a/a05639_1a11c9c4e547d33f05ca46c940ece18010" prot="public" static="no" mutable="no">
+        <type>SubmeshRPtr</type>
+        <definition>SubmeshRPtr castor3d::SubmeshContext::submesh</definition>
+        <argsstring></argsstring>
+        <name>submesh</name>
+        <qualifiedname>castor3d::SubmeshContext::submesh</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Submesh.hpp" line="423" column="13" bodyfile="Castor3D/Model/Mesh/Submesh/Submesh.hpp" bodystart="423" bodyend="423"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d9a/a05639_1a4b22a4602e28e20ee7ea34a025f32398" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int castor3d::SubmeshContext::face1</definition>
+        <argsstring></argsstring>
+        <name>face1</name>
+        <qualifiedname>castor3d::SubmeshContext::face1</qualifiedname>
+        <initializer>{ -1 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Submesh.hpp" line="424" column="5" bodyfile="Castor3D/Model/Mesh/Submesh/Submesh.hpp" bodystart="424" bodyend="424"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d9a/a05639_1a98ff99231401a5d8fe10941772da4219" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int castor3d::SubmeshContext::face2</definition>
+        <argsstring></argsstring>
+        <name>face2</name>
+        <qualifiedname>castor3d::SubmeshContext::face2</qualifiedname>
+        <initializer>{ -1 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Submesh.hpp" line="425" column="5" bodyfile="Castor3D/Model/Mesh/Submesh/Submesh.hpp" bodystart="425" bodyend="425"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d9a/a05639_1ad086a8c1e3b844013391684b7d8de446" prot="public" static="no" mutable="no">
+        <type>FloatArray</type>
+        <definition>FloatArray castor3d::SubmeshContext::vertexPos</definition>
+        <argsstring></argsstring>
+        <name>vertexPos</name>
+        <qualifiedname>castor3d::SubmeshContext::vertexPos</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Submesh.hpp" line="426" column="12" bodyfile="Castor3D/Model/Mesh/Submesh/Submesh.hpp" bodystart="426" bodyend="426"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d9a/a05639_1a5a616ab4a3837ad326c0df46be0c5b16" prot="public" static="no" mutable="no">
+        <type>FloatArray</type>
+        <definition>FloatArray castor3d::SubmeshContext::vertexNml</definition>
+        <argsstring></argsstring>
+        <name>vertexNml</name>
+        <qualifiedname>castor3d::SubmeshContext::vertexNml</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Submesh.hpp" line="427" column="12" bodyfile="Castor3D/Model/Mesh/Submesh/Submesh.hpp" bodystart="427" bodyend="427"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d9a/a05639_1ac87f878fe050bf9adeba64b85abdeded" prot="public" static="no" mutable="no">
+        <type>FloatArray</type>
+        <definition>FloatArray castor3d::SubmeshContext::vertexTan</definition>
+        <argsstring></argsstring>
+        <name>vertexTan</name>
+        <qualifiedname>castor3d::SubmeshContext::vertexTan</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Submesh.hpp" line="428" column="12" bodyfile="Castor3D/Model/Mesh/Submesh/Submesh.hpp" bodystart="428" bodyend="428"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d9a/a05639_1aa130646f17c7a2b347dda918e2ec18f7" prot="public" static="no" mutable="no">
+        <type>FloatArray</type>
+        <definition>FloatArray castor3d::SubmeshContext::vertexTex</definition>
+        <argsstring></argsstring>
+        <name>vertexTex</name>
+        <qualifiedname>castor3d::SubmeshContext::vertexTex</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Submesh.hpp" line="429" column="12" bodyfile="Castor3D/Model/Mesh/Submesh/Submesh.hpp" bodystart="429" bodyend="429"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d9a/a05639_1a0b058dc075571ad5a35ffe979b646e6a" prot="public" static="no" mutable="no">
+        <type>UInt32Array</type>
+        <definition>UInt32Array castor3d::SubmeshContext::faces</definition>
+        <argsstring></argsstring>
+        <name>faces</name>
+        <qualifiedname>castor3d::SubmeshContext::faces</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Submesh.hpp" line="430" column="13" bodyfile="Castor3D/Model/Mesh/Submesh/Submesh.hpp" bodystart="430" bodyend="430"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="17">
+        <label>castor::OwnedBy&lt; Mesh &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="18" relation="template-instance">
+          <edgelabel>&lt; Mesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="18" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="7" relation="private-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MeshContext</label>
+        <link refid="d7/dd1/a05395"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>scene</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>geometry</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>submesh</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>submeshComponent</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::MovableContext</label>
+        <link refid="d1/d84/a07063"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>scene</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::ObjectContext</label>
+        <link refid="d0/d3f/a06975"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::ProgressBar</label>
+        <link refid="d6/daf/a05323"/>
+      </node>
+      <node id="9">
+        <label>castor3d::RenderWindowDesc</label>
+        <link refid="de/d75/a06503"/>
+        <childnode refid="10" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RootContext</label>
+        <link refid="de/dd6/a07151"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>engine</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>window</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>logger</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>progress</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::SceneContext</label>
+        <link refid="d3/db2/a07139"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>fontName</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::Submesh</label>
+        <link refid="dd/df1/a05635"/>
+        <childnode refid="17" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::SubmeshComponent</label>
+        <link refid="d6/df6/a05611"/>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SubmeshContext</label>
+        <link refid="d7/d9a/a05639"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>mesh</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>faces</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor::LoggerInstance</label>
+        <link refid="d9/d93/a09063"/>
+      </node>
+      <node id="7">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="18">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="21">
+        <label>UInt32Array</label>
+      </node>
+      <node id="8">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="7" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Model/Mesh/Submesh/Submesh.hpp" line="420" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/Submesh.hpp" bodystart="421" bodyend="431"/>
+    <listofallmembers>
+      <member refid="d7/d9a/a05639_1a4b22a4602e28e20ee7ea34a025f32398" prot="public" virt="non-virtual"><scope>castor3d::SubmeshContext</scope><name>face1</name></member>
+      <member refid="d7/d9a/a05639_1a98ff99231401a5d8fe10941772da4219" prot="public" virt="non-virtual"><scope>castor3d::SubmeshContext</scope><name>face2</name></member>
+      <member refid="d7/d9a/a05639_1a0b058dc075571ad5a35ffe979b646e6a" prot="public" virt="non-virtual"><scope>castor3d::SubmeshContext</scope><name>faces</name></member>
+      <member refid="d7/d9a/a05639_1affbd3b5aa73e421017f63ef3ca1a9654" prot="public" virt="non-virtual"><scope>castor3d::SubmeshContext</scope><name>mesh</name></member>
+      <member refid="d7/d9a/a05639_1a11c9c4e547d33f05ca46c940ece18010" prot="public" virt="non-virtual"><scope>castor3d::SubmeshContext</scope><name>submesh</name></member>
+      <member refid="d7/d9a/a05639_1a5a616ab4a3837ad326c0df46be0c5b16" prot="public" virt="non-virtual"><scope>castor3d::SubmeshContext</scope><name>vertexNml</name></member>
+      <member refid="d7/d9a/a05639_1ad086a8c1e3b844013391684b7d8de446" prot="public" virt="non-virtual"><scope>castor3d::SubmeshContext</scope><name>vertexPos</name></member>
+      <member refid="d7/d9a/a05639_1ac87f878fe050bf9adeba64b85abdeded" prot="public" virt="non-virtual"><scope>castor3d::SubmeshContext</scope><name>vertexTan</name></member>
+      <member refid="d7/d9a/a05639_1aa130646f17c7a2b347dda918e2ec18f7" prot="public" virt="non-virtual"><scope>castor3d::SubmeshContext</scope><name>vertexTex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

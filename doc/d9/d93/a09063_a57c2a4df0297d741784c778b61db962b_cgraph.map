@@ -1,0 +1,13 @@
+<map id="castor::LoggerInstance::logInfo" name="castor::LoggerInstance::logInfo">
+<area shape="rect" id="Node000001" title="Logs a message, from a std::basic_ostream&lt; CharT &gt;" alt="" coords="5,63,160,103"/>
+<area shape="rect" id="Node000002" href="$d9/d93/a09063.html#a420b0ab27873b6092fce594dfa6b6ebf" title="Logs a message, from a std::basic_string&lt; CharT &gt;" alt="" coords="208,63,363,103"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,80,194,80,194,85,160,85"/>
+<area shape="rect" id="Node000003" href="$d9/d93/a09063.html#af8c57bc4b8bfeb532f32493316e157a1" title="Pushes a message into the queue." alt="" coords="411,63,565,103"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="363,80,396,80,396,85,363,85"/>
+<area shape="rect" id="Node000004" href="$d9/d93/a09063.html#afa966debfbe3f79d0bea9cf2bc4c7889" title=" " alt="" coords="619,5,774,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="561,60,610,46,611,52,562,65"/>
+<area shape="rect" id="Node000005" href="$d2/dd2/a02279.html#a58f3178234ce83e643568e48a0ed6a3f" title=" " alt="" coords="613,70,780,95"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="565,80,600,80,600,85,565,85"/>
+<area shape="rect" id="Node000006" href="$d2/dd2/a02279.html#ab0fb14b20a64ca391cfd363dfdf2ea78" title=" " alt="" coords="647,119,747,145"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="566,98,633,114,632,120,565,103"/>
+</map>

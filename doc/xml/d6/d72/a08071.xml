@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d72/a08071" kind="struct" language="C++" prot="public">
+    <compoundname>castor::FileTyper&lt; FileType::eText &gt;</compoundname>
+    <includes local="no">TextFile.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d6/d72/a08071_1a74b422ae20a6b8cb1254bb026079d186" prot="public" static="no">
+        <type><ref refid="dc/d82/a08075" kindref="compound">TextFile</ref></type>
+        <definition>using castor::FileTyper&lt; FileType::eText &gt;::Type =  TextFile</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor::FileTyper&lt; FileType::eText &gt;::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextFile.hpp" line="24" column="1" bodyfile="CastorUtils/Data/TextFile.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Structure d&apos;aide pour trouver le type de <ref refid="d4/d10/a08003" kindref="compound">File</ref> (<ref refid="dc/d86/a07971" kindref="compound">BinaryFile</ref> ou <ref refid="dc/d82/a08075" kindref="compound">TextFile</ref>) à partir d&apos;un FileType. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Spécialisation pour <ref refid="d2/dd2/a02279_1ac4972a01abb873aee032c3071b56cbe4a8c15e6038102a3065760b26043b9c162" kindref="member">FileType::eText</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="CastorUtils/Data/TextFile.hpp" line="22" column="1" bodyfile="CastorUtils/Data/TextFile.hpp" bodystart="23" bodyend="25"/>
+    <listofallmembers>
+      <member refid="d6/d72/a08071_1a74b422ae20a6b8cb1254bb026079d186" prot="public" virt="non-virtual"><scope>castor::FileTyper&lt; FileType::eText &gt;</scope><name>Type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

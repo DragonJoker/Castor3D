@@ -1,0 +1,56 @@
+<map id="castor3d::PickingPass" name="castor3d::PickingPass">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1675,706,1828,731"/>
+<area shape="rect" id="Node000002" href="$d5/d96/a06531.html" title=" " alt="" coords="1437,409,1625,434"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1552,443,1743,704,1739,708,1548,447"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="305,169,492,194"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="506,171,655,165,845,164,1055,173,1161,183,1264,197,1344,209,1377,220,1415,243,1456,283,1489,330,1513,374,1528,407,1523,410,1508,377,1485,333,1452,287,1412,247,1375,225,1343,214,1264,203,1160,188,1054,179,845,170,655,171,506,177"/>
+<area shape="rect" id="Node000013" href="$d5/d4e/a06559.html" title=" " alt="" coords="637,199,804,225"/>
+<area shape="poly" id="edge14_Node000013_Node000003" title=" " alt="" coords="506,189,637,201,637,207,506,194"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="5,169,188,194"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="202,179,305,179,305,184,202,184"/>
+<area shape="rect" id="Node000005" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="1111,310,1218,335"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="1232,331,1319,349,1414,373,1502,406,1500,411,1413,379,1318,354,1231,337"/>
+<area shape="rect" id="Node000006" href="$da/d50/a08167.html" title="Some data holder." alt="" coords="1100,359,1229,385"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="1243,378,1414,400,1453,406,1452,411,1413,405,1243,383"/>
+<area shape="rect" id="Node000007" href="$da/d50/a08167.html" title="Some data holder." alt="" coords="1095,409,1234,434"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="1248,419,1437,419,1437,424,1248,424"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="1105,458,1224,483"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="1237,458,1437,431,1437,437,1238,464"/>
+<area shape="rect" id="Node000009" href="$dc/d79/a08267.html" title=" " alt="" coords="1065,508,1264,548"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="1277,505,1344,489,1412,469,1504,432,1506,436,1414,475,1346,494,1278,510"/>
+<area shape="rect" id="Node000010" href="$da/d36/a08315.html" title=" " alt="" coords="327,510,470,535"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="484,518,734,516,1041,519,1065,519,1065,525,1041,524,734,521,484,524"/>
+<area shape="rect" id="Node000011" href="$dc/d79/a08267.html" title="Basic signal class." alt="" coords="629,541,812,566"/>
+<area shape="poly" id="edge11_Node000011_Node000010" title=" " alt="" coords="484,528,629,542,629,547,483,533"/>
+<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="825,554,930,554,1041,548,1065,545,1065,550,1042,553,930,560,826,560"/>
+<area shape="rect" id="Node000012" href="$dc/d32/a06415.html" title=" " alt="" coords="1085,261,1244,286"/>
+<area shape="poly" id="edge12_Node000002_Node000012" title=" " alt="" coords="1230,287,1265,296,1341,313,1374,322,1415,339,1472,373,1516,406,1513,411,1469,378,1412,344,1372,327,1340,318,1263,301,1229,292"/>
+<area shape="poly" id="edge15_Node000002_Node000013" title=" " alt="" coords="818,209,968,213,1142,224,1226,233,1303,245,1367,261,1415,282,1452,311,1484,346,1525,407,1521,410,1480,350,1449,315,1412,286,1366,266,1302,251,1226,238,1141,229,967,218,818,215"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="772,226,837,243,967,260,1085,268,1085,274,967,266,835,248,771,231"/>
+<area shape="rect" id="Node000014" href="$d1/ddf/a07743.html" title=" " alt="" coords="1091,573,1239,598"/>
+<area shape="poly" id="edge16_Node000002_Node000014" title=" " alt="" coords="1252,572,1332,553,1373,539,1412,522,1445,501,1474,477,1517,432,1521,436,1478,480,1448,505,1415,526,1375,544,1333,558,1253,577"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="1101,751,1228,791"/>
+<area shape="poly" id="edge17_Node000002_Node000015" title=" " alt="" coords="1242,776,1284,774,1329,768,1373,754,1412,731,1444,698,1470,658,1490,615,1505,571,1522,489,1527,434,1532,434,1527,490,1510,572,1495,617,1475,661,1449,701,1415,735,1375,759,1330,773,1285,780,1242,781"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="657,783,784,823"/>
+<area shape="poly" id="edge29_Node000001_Node000016" title=" " alt="" coords="798,805,917,811,1070,814,1241,809,1413,793,1495,780,1575,762,1706,729,1707,734,1577,768,1496,785,1414,799,1242,814,1070,819,916,816,798,811"/>
+<area shape="poly" id="edge18_Node000015_Node000016" title=" " alt="" coords="798,794,1101,773,1101,778,798,800"/>
+<area shape="rect" id="Node000017" href="$dd/dbb/a08207.html" title=" " alt="" coords="1083,623,1246,663"/>
+<area shape="poly" id="edge19_Node000002_Node000017" title=" " alt="" coords="1259,635,1337,618,1376,604,1412,584,1452,549,1484,506,1508,464,1522,433,1527,435,1513,467,1489,509,1456,552,1415,589,1378,609,1339,624,1261,640"/>
+<area shape="rect" id="Node000018" href="$dd/dbb/a08207.html" title="Template class providing implicit conversion from a scoped enum to its integral base type." alt="" coords="639,659,802,699"/>
+<area shape="poly" id="edge20_Node000017_Node000018" title=" " alt="" coords="816,668,1083,647,1083,652,816,674"/>
+<area shape="rect" id="Node000025" href="$dd/dbb/a08207.html" title=" " alt="" coords="1080,687,1249,727"/>
+<area shape="poly" id="edge28_Node000025_Node000018" title=" " alt="" coords="816,691,836,693,964,701,1080,704,1080,709,964,707,836,699,815,696"/>
+<area shape="rect" id="Node000019" href="$d4/dd6/a09023.html" title=" " alt="" coords="1119,47,1211,73"/>
+<area shape="poly" id="edge21_Node000002_Node000019" title=" " alt="" coords="1224,49,1270,48,1320,52,1370,66,1394,77,1415,91,1450,127,1477,170,1498,216,1512,263,1528,349,1533,408,1527,409,1523,350,1507,264,1493,217,1472,172,1446,130,1412,95,1391,81,1368,71,1319,58,1270,53,1225,55"/>
+<area shape="rect" id="Node000020" href="$da/d50/a08167.html" title=" " alt="" coords="652,5,789,45"/>
+<area shape="poly" id="edge22_Node000019_Node000020" title=" " alt="" coords="804,29,1118,54,1118,59,803,34"/>
+<area shape="rect" id="Node000021" href="$da/d50/a08167.html" title="Some data holder." alt="" coords="330,5,467,45"/>
+<area shape="poly" id="edge23_Node000020_Node000021" title=" " alt="" coords="481,23,652,23,652,28,481,28"/>
+<area shape="rect" id="Node000022" href="$d9/d6a/a09103.html" title=" " alt="" coords="643,69,798,109"/>
+<area shape="poly" id="edge24_Node000019_Node000022" title=" " alt="" coords="812,81,1118,60,1118,66,812,86"/>
+<area shape="rect" id="Node000023" href="$d9/d6a/a09103.html" title="Templated static dimensions point representation." alt="" coords="333,69,464,109"/>
+<area shape="poly" id="edge25_Node000022_Node000023" title=" " alt="" coords="478,87,643,87,643,92,478,92"/>
+<area shape="rect" id="Node000024" href="$d5/de1/a07827.html" title=" " alt="" coords="1095,97,1235,122"/>
+<area shape="poly" id="edge26_Node000002_Node000024" title=" " alt="" coords="1249,109,1345,118,1386,126,1415,139,1446,169,1471,205,1491,243,1506,283,1525,357,1532,408,1526,409,1519,358,1501,285,1486,246,1467,207,1442,173,1412,144,1385,131,1344,123,1248,114"/>
+<area shape="poly" id="edge27_Node000002_Node000025" title=" " alt="" coords="1263,702,1301,696,1340,686,1378,671,1412,650,1438,626,1459,597,1493,535,1514,476,1525,434,1530,435,1519,478,1498,537,1464,600,1441,629,1415,654,1380,676,1342,691,1302,701,1264,707"/>
+</map>

@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d27/a07395" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SpirVShader</compoundname>
+    <includes local="no">ShaderModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d27/a07395_1aa9154c5d764c20f2d45b6161ac65159a" prot="public" static="no" mutable="no">
+        <type>castor::UInt32Array</type>
+        <definition>castor::UInt32Array castor3d::SpirVShader::spirv</definition>
+        <argsstring></argsstring>
+        <name>spirv</name>
+        <qualifiedname>castor3d::SpirVShader::spirv</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderModule.hpp" line="30" column="21" bodyfile="Castor3D/Shader/ShaderModule.hpp" bodystart="30" bodyend="-1"/>
+        <referencedby refid="db/dc2/a05011_1a0ed116d6e1c34a5e63f5093297a1a16d" compoundref="d8/d13/a00671" startline="160" endline="176">castor3d::ConfigurationVisitorBase::visit</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d27/a07395_1aa4ea66c27b69e914096c0039129b51cb" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">castor::MbString</ref></type>
+        <definition>castor::MbString castor3d::SpirVShader::text</definition>
+        <argsstring></argsstring>
+        <name>text</name>
+        <qualifiedname>castor3d::SpirVShader::text</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderModule.hpp" line="31" column="18" bodyfile="Castor3D/Shader/ShaderModule.hpp" bodystart="31" bodyend="-1"/>
+        <referencedby refid="db/dc2/a05011_1a0ed116d6e1c34a5e63f5093297a1a16d" compoundref="d8/d13/a00671" startline="160" endline="176">castor3d::ConfigurationVisitorBase::visit</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Un module shader SPIR-V, avec le binaire SPIR-V et la source en texte. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3">
+        <label>std::basic_string&lt; mbchar &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; mbchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SpirVShader</label>
+        <link refid="d1/d27/a07395"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>spirv</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>text</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>UInt32Array</label>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/ShaderModule.hpp" line="28" column="1" bodyfile="Castor3D/Shader/ShaderModule.hpp" bodystart="29" bodyend="32"/>
+    <listofallmembers>
+      <member refid="d1/d27/a07395_1aa9154c5d764c20f2d45b6161ac65159a" prot="public" virt="non-virtual"><scope>castor3d::SpirVShader</scope><name>spirv</name></member>
+      <member refid="d1/d27/a07395_1aa4ea66c27b69e914096c0039129b51cb" prot="public" virt="non-virtual"><scope>castor3d::SpirVShader</scope><name>text</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,19 +1,19 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_7108b733bb1fee5c7687037800af29fb" kind="dir">
-    <compoundname>Render/GlobalIllumination/LightPropagationVolumes</compoundname>
-    <innerfile refid="d5/d6c/a00977">GeometryInjectionPass.hpp</innerfile>
-    <innerfile refid="db/d20/a00980">LayeredLightPropagationVolumes.hpp</innerfile>
-    <innerfile refid="d7/d98/a00983">LightInjectionPass.hpp</innerfile>
-    <innerfile refid="d3/d7b/a00986">LightPropagationPass.hpp</innerfile>
-    <innerfile refid="d4/d95/a00989">LightPropagationVolumes.hpp</innerfile>
-    <innerfile refid="d7/d76/a00992">LightPropagationVolumesModule.hpp</innerfile>
-    <innerfile refid="dd/d48/a00995">LightVolumePassResult.hpp</innerfile>
-    <innerfile refid="d9/d9a/a00998">LpvConfig.hpp</innerfile>
+    <compoundname>Castor3D/Render/GlobalIllumination/LightPropagationVolumes</compoundname>
+    <innerfile refid="d1/dd8/a01022">GeometryInjectionPass.hpp</innerfile>
+    <innerfile refid="db/d23/a01025">LayeredLightPropagationVolumes.hpp</innerfile>
+    <innerfile refid="db/d08/a01028">LightInjectionPass.hpp</innerfile>
+    <innerfile refid="d6/dcf/a01031">LightPropagationPass.hpp</innerfile>
+    <innerfile refid="de/d91/a01034">LightPropagationVolumes.hpp</innerfile>
+    <innerfile refid="d2/d41/a01037">LightPropagationVolumesModule.hpp</innerfile>
+    <innerfile refid="db/d14/a01040">LightVolumePassResult.hpp</innerfile>
+    <innerfile refid="d8/d27/a01043">LpvConfig.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/GlobalIllumination/LightPropagationVolumes/"/>
+    <location file="Castor3D/Render/GlobalIllumination/LightPropagationVolumes/"/>
   </compounddef>
 </doxygen>

@@ -1,0 +1,9 @@
+<map id="castor3d::SubmeshComponentRegister::getPlugin" name="castor3d::SubmeshComponentRegister::getPlugin">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,207,45"/>
+<area shape="rect" id="Node000002" href="$da/d5c/a05615.html#aa5f4d6bda7d313ab3286885ead6990ee" title=" " alt="" coords="504,5,705,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="206,10,255,7,355,3,456,7,491,9,490,14,456,12,355,8,255,12,207,16"/>
+<area shape="rect" id="Node000003" href="$da/d5c/a05615.html#a1c940f05882e2a68e16961b898c48d31" title=" " alt="" coords="255,45,456,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="207,39,242,44,241,50,207,44"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="456,47,490,41,491,46,457,52"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="309,46,306,36,314,26,330,21,355,19,384,22,400,29,398,34,383,27,355,24,331,26,317,31,312,37,314,44"/>
+</map>

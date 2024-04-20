@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/dd7/a09235" kind="struct" language="C++" prot="public">
+    <compoundname>castor::PointTyperT</compoundname>
+    <includes local="no">MathModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename SrcT</type>
+      </param>
+      <param>
+        <type>typename DstCompT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/dd7/a09235_1aad86a38e68be12b7b3231ce9ba852b5b" prot="public" static="no">
+        <type>DstCompT</type>
+        <definition>using castor::PointTyperT&lt; SrcT, DstCompT &gt;::Type =  DstCompT</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor::PointTyperT::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/MathModule.hpp" line="397" column="1" bodyfile="CastorUtils/Math/MathModule.hpp" bodystart="397" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/MathModule.hpp" line="395" column="1" bodyfile="CastorUtils/Math/MathModule.hpp" bodystart="396" bodyend="398"/>
+    <listofallmembers>
+      <member refid="de/dd7/a09235_1aad86a38e68be12b7b3231ce9ba852b5b" prot="public" virt="non-virtual"><scope>castor::PointTyperT</scope><name>Type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

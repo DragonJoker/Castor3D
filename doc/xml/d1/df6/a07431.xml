@@ -1,0 +1,247 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/df6/a07431" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::AppendBufferT</compoundname>
+    <basecompoundref refid="d8/dcd/a07427" prot="public" virt="non-virtual">castor3d::shader::AppendBufferBase</basecompoundref>
+    <includes local="no">GlslAppendBuffer.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename DataT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/df6/a07431_1aee1d36c57a38ca65bf55dca015423935" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; sdw::Array&lt; DataT &gt; &gt;</type>
+        <definition>castor::RawUniquePtr&lt; sdw::Array&lt; DataT &gt; &gt; castor3d::shader::AppendBufferT&lt; DataT &gt;::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <qualifiedname>castor3d::shader::AppendBufferT::m_data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslAppendBuffer.hpp" line="237" column="22" bodyfile="Castor3D/Shader/Shaders/GlslAppendBuffer.hpp" bodystart="237" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/df6/a07431_1a1ac5fd0762526043985656b3512de6e0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParamsT</declname>
+            <defname>ParamsT</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor3d::shader::AppendBufferT&lt; DataT &gt;::AppendBufferT</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, castor::String blockName, castor::String variableName, uint32_t binding, uint32_t set, bool enabled=true, ParamsT &amp;&amp;... params)</argsstring>
+        <name>AppendBufferT</name>
+        <qualifiedname>castor3d::shader::AppendBufferT::AppendBufferT</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>blockName</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>variableName</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+          <defval>true</defval>
+        </param>
+        <param>
+          <type>ParamsT &amp;&amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslAppendBuffer.hpp" line="165" column="1" bodyfile="Castor3D/Shader/Shaders/GlslAppendBuffer.hpp" bodystart="165" bodyend="186"/>
+        <references refid="d8/dcd/a07427_1a25326ae71913ca6158acb034916c3c24" compoundref="dc/dbf/a01595" startline="142" endline="145">castor3d::shader::AppendBufferBase::isEnabled</references>
+        <references refid="d8/dcd/a07427_1a7dc07de2b6df1aace638738f40c7d3c8" compoundref="dc/dbf/a01595" startline="154">castor3d::shader::AppendBufferBase::m_ssbo</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/df6/a07431_1ae66b3c070e4896d3fd757d0d66fc7470" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParamsT</declname>
+            <defname>ParamsT</defname>
+          </param>
+        </templateparamlist>
+        <type>DataT</type>
+        <definition>DataT castor3d::shader::AppendBufferT&lt; DataT &gt;::getData</definition>
+        <argsstring>(sdw::UInt const &amp;index, ParamsT &amp;&amp;... params) const</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::shader::AppendBufferT::getData</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>ParamsT &amp;&amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslAppendBuffer.hpp" line="189" column="7" bodyfile="Castor3D/Shader/Shaders/GlslAppendBuffer.hpp" bodystart="189" bodyend="195"/>
+        <references refid="d8/dcd/a07427_1a7dc07de2b6df1aace638738f40c7d3c8" compoundref="dc/dbf/a01595" startline="154">castor3d::shader::AppendBufferBase::m_ssbo</references>
+        <references refid="d8/dcd/a07427_1a527f988d8130a82303ce27cad7c66d87" compoundref="dc/dbf/a01595" startline="156">castor3d::shader::AppendBufferBase::m_variableName</references>
+        <references refid="d8/dcd/a07427_1a16f005035f04c4fb18f30d8ed1a1ed66" compoundref="dc/dbf/a01595" startline="153">castor3d::shader::AppendBufferBase::m_writer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/df6/a07431_1abd1a1e4161e9c871612c5df00d3d3623" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::AppendBufferT&lt; DataT &gt;::appendData</definition>
+        <argsstring>(DataT const data)</argsstring>
+        <name>appendData</name>
+        <qualifiedname>castor3d::shader::AppendBufferT::appendData</qualifiedname>
+        <param>
+          <type>DataT const</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslAppendBuffer.hpp" line="197" column="6" bodyfile="Castor3D/Shader/Shaders/GlslAppendBuffer.hpp" bodystart="197" bodyend="204"/>
+        <references refid="d8/dcd/a07427_1a3d24ea403510fe9688ed78521a3e7c8c">castor3d::shader::AppendBufferBase::incrementCount</references>
+        <references refid="d8/dcd/a07427_1a7dc07de2b6df1aace638738f40c7d3c8" compoundref="dc/dbf/a01595" startline="154">castor3d::shader::AppendBufferBase::m_ssbo</references>
+        <references refid="d8/dcd/a07427_1a527f988d8130a82303ce27cad7c66d87" compoundref="dc/dbf/a01595" startline="156">castor3d::shader::AppendBufferBase::m_variableName</references>
+        <references refid="d8/dcd/a07427_1a16f005035f04c4fb18f30d8ed1a1ed66" compoundref="dc/dbf/a01595" startline="153">castor3d::shader::AppendBufferBase::m_writer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/df6/a07431_1a9917918352de22bd74dfc1670798871b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::AppendBufferT&lt; DataT &gt;::appendData</definition>
+        <argsstring>(DataT const data, sdw::UInt const maxCount)</argsstring>
+        <name>appendData</name>
+        <qualifiedname>castor3d::shader::AppendBufferT::appendData</qualifiedname>
+        <param>
+          <type>DataT const</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const</type>
+          <declname>maxCount</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslAppendBuffer.hpp" line="206" column="6" bodyfile="Castor3D/Shader/Shaders/GlslAppendBuffer.hpp" bodystart="206" bodyend="219"/>
+        <references refid="d8/dcd/a07427_1a3d24ea403510fe9688ed78521a3e7c8c">castor3d::shader::AppendBufferBase::incrementCount</references>
+        <references refid="d8/dcd/a07427_1a7dc07de2b6df1aace638738f40c7d3c8" compoundref="dc/dbf/a01595" startline="154">castor3d::shader::AppendBufferBase::m_ssbo</references>
+        <references refid="d8/dcd/a07427_1a527f988d8130a82303ce27cad7c66d87" compoundref="dc/dbf/a01595" startline="156">castor3d::shader::AppendBufferBase::m_variableName</references>
+        <references refid="d8/dcd/a07427_1a16f005035f04c4fb18f30d8ed1a1ed66" compoundref="dc/dbf/a01595" startline="153">castor3d::shader::AppendBufferBase::m_writer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/df6/a07431_1ae4aadab92e693c59fb325c6fe56a5957" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::AppendBufferT&lt; DataT &gt;::appendData</definition>
+        <argsstring>(DataT const data, uint32_t maxCount)</argsstring>
+        <name>appendData</name>
+        <qualifiedname>castor3d::shader::AppendBufferT::appendData</qualifiedname>
+        <param>
+          <type>DataT const</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>maxCount</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslAppendBuffer.hpp" line="221" column="6" bodyfile="Castor3D/Shader/Shaders/GlslAppendBuffer.hpp" bodystart="221" bodyend="234"/>
+        <references refid="d8/dcd/a07427_1a3d24ea403510fe9688ed78521a3e7c8c">castor3d::shader::AppendBufferBase::incrementCount</references>
+        <references refid="d8/dcd/a07427_1a7dc07de2b6df1aace638738f40c7d3c8" compoundref="dc/dbf/a01595" startline="154">castor3d::shader::AppendBufferBase::m_ssbo</references>
+        <references refid="d8/dcd/a07427_1a527f988d8130a82303ce27cad7c66d87" compoundref="dc/dbf/a01595" startline="156">castor3d::shader::AppendBufferBase::m_variableName</references>
+        <references refid="d8/dcd/a07427_1a16f005035f04c4fb18f30d8ed1a1ed66" compoundref="dc/dbf/a01595" startline="153">castor3d::shader::AppendBufferBase::m_writer</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::shader::AppendBufferBase</label>
+        <link refid="d8/dcd/a07427"/>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::AppendBufferT&lt; DataT &gt;</label>
+        <link refid="d1/df6/a07431"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>std::basic_string&lt; mbchar &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; mbchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::AppendBufferBase</label>
+        <link refid="d8/dcd/a07427"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_variableName</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::AppendBufferT&lt; DataT &gt;</label>
+        <link refid="d1/df6/a07431"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslAppendBuffer.hpp" line="160" column="1" bodyfile="Castor3D/Shader/Shaders/GlslAppendBuffer.hpp" bodystart="162" bodyend="238"/>
+    <listofallmembers>
+      <member refid="d8/dcd/a07427_1aded94373448bf98810247db5885740c8" prot="public" virt="non-virtual"><scope>castor3d::shader::AppendBufferT</scope><name>AppendBufferBase</name></member>
+      <member refid="d1/df6/a07431_1a1ac5fd0762526043985656b3512de6e0" prot="public" virt="non-virtual"><scope>castor3d::shader::AppendBufferT</scope><name>AppendBufferT</name></member>
+      <member refid="d1/df6/a07431_1abd1a1e4161e9c871612c5df00d3d3623" prot="public" virt="non-virtual"><scope>castor3d::shader::AppendBufferT</scope><name>appendData</name></member>
+      <member refid="d1/df6/a07431_1a9917918352de22bd74dfc1670798871b" prot="public" virt="non-virtual"><scope>castor3d::shader::AppendBufferT</scope><name>appendData</name></member>
+      <member refid="d1/df6/a07431_1ae4aadab92e693c59fb325c6fe56a5957" prot="public" virt="non-virtual"><scope>castor3d::shader::AppendBufferT</scope><name>appendData</name></member>
+      <member refid="d8/dcd/a07427_1a2860b2498af302ce4fe48a5a00db6fdb" prot="public" virt="non-virtual"><scope>castor3d::shader::AppendBufferT</scope><name>getCount</name></member>
+      <member refid="d1/df6/a07431_1ae66b3c070e4896d3fd757d0d66fc7470" prot="public" virt="non-virtual"><scope>castor3d::shader::AppendBufferT</scope><name>getData</name></member>
+      <member refid="d8/dcd/a07427_1a4dc9e854b35e168d051a7b0a0ba5e43b" prot="public" virt="non-virtual"><scope>castor3d::shader::AppendBufferT</scope><name>getWriter</name></member>
+      <member refid="d8/dcd/a07427_1a3d24ea403510fe9688ed78521a3e7c8c" prot="public" virt="non-virtual"><scope>castor3d::shader::AppendBufferT</scope><name>incrementCount</name></member>
+      <member refid="d8/dcd/a07427_1a25326ae71913ca6158acb034916c3c24" prot="public" virt="non-virtual"><scope>castor3d::shader::AppendBufferT</scope><name>isEnabled</name></member>
+      <member refid="d8/dcd/a07427_1a25779e2fce0ea4ab86e2d98a03500cc3" prot="protected" virt="non-virtual"><scope>castor3d::shader::AppendBufferT</scope><name>m_count</name></member>
+      <member refid="d1/df6/a07431_1aee1d36c57a38ca65bf55dca015423935" prot="private" virt="non-virtual"><scope>castor3d::shader::AppendBufferT</scope><name>m_data</name></member>
+      <member refid="d8/dcd/a07427_1a7dc07de2b6df1aace638738f40c7d3c8" prot="protected" virt="non-virtual"><scope>castor3d::shader::AppendBufferT</scope><name>m_ssbo</name></member>
+      <member refid="d8/dcd/a07427_1a527f988d8130a82303ce27cad7c66d87" prot="protected" virt="non-virtual"><scope>castor3d::shader::AppendBufferT</scope><name>m_variableName</name></member>
+      <member refid="d8/dcd/a07427_1a16f005035f04c4fb18f30d8ed1a1ed66" prot="protected" virt="non-virtual"><scope>castor3d::shader::AppendBufferT</scope><name>m_writer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

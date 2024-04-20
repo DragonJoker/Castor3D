@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d1f/a09095" kind="struct" language="C++" prot="public">
+    <compoundname>castor::Message</compoundname>
+    <includes local="no">LogModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d1f/a09095_1a20b6a8c08caea7082a50533d2e513377" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59" kindref="member">LogType</ref></type>
+        <definition>LogType castor::Message::m_type</definition>
+        <argsstring></argsstring>
+        <name>m_type</name>
+        <qualifiedname>castor::Message::m_type</qualifiedname>
+        <briefdescription>
+<para>The message type. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LogModule.hpp" line="36" column="9" bodyfile="CastorUtils/Log/LogModule.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a09095_1a026c7baaa0ea03ef1438dde88428267f" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref></type>
+        <definition>MbString castor::Message::m_message</definition>
+        <argsstring></argsstring>
+        <name>m_message</name>
+        <qualifiedname>castor::Message::m_message</qualifiedname>
+        <briefdescription>
+<para>The message text. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LogModule.hpp" line="38" column="10" bodyfile="CastorUtils/Log/LogModule.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a09095_1ac7f9523d9ec397b89cef51ab4d9b4982" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor::Message::m_newLine</definition>
+        <argsstring></argsstring>
+        <name>m_newLine</name>
+        <qualifiedname>castor::Message::m_newLine</qualifiedname>
+        <briefdescription>
+<para>Tells if the new line character is printed. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LogModule.hpp" line="40" column="6" bodyfile="CastorUtils/Log/LogModule.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d1f/a09095_1aad42229a8311ebee66f71d14dd896158" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Message::Message</definition>
+        <argsstring>(LogType type, MbString message, bool newLine)</argsstring>
+        <name>Message</name>
+        <qualifiedname>castor::Message::Message</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59" kindref="member">LogType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref></type>
+          <declname>message</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>newLine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LogModule.hpp" line="26" column="1" bodyfile="CastorUtils/Log/LogModule.hpp" bodystart="26" bodyend="33"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Représentation d&apos;un message. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>std::basic_string&lt; mbchar &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; mbchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::Message</label>
+        <link refid="d1/d1f/a09095"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_message</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Log/LogModule.hpp" line="24" column="1" bodyfile="CastorUtils/Log/LogModule.hpp" bodystart="25" bodyend="41"/>
+    <listofallmembers>
+      <member refid="d1/d1f/a09095_1a026c7baaa0ea03ef1438dde88428267f" prot="public" virt="non-virtual"><scope>castor::Message</scope><name>m_message</name></member>
+      <member refid="d1/d1f/a09095_1ac7f9523d9ec397b89cef51ab4d9b4982" prot="public" virt="non-virtual"><scope>castor::Message</scope><name>m_newLine</name></member>
+      <member refid="d1/d1f/a09095_1a20b6a8c08caea7082a50533d2e513377" prot="public" virt="non-virtual"><scope>castor::Message</scope><name>m_type</name></member>
+      <member refid="d1/d1f/a09095_1aad42229a8311ebee66f71d14dd896158" prot="public" virt="non-virtual"><scope>castor::Message</scope><name>Message</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

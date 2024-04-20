@@ -1,0 +1,510 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d86/a07971" kind="class" language="C++" prot="public">
+    <compoundname>castor::BinaryFile</compoundname>
+    <basecompoundref refid="d4/d10/a08003" prot="public" virt="non-virtual">castor::File</basecompoundref>
+    <includes local="no">BinaryFile.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d86/a07971_1a40392c66f280a9e297bfb1b982ec7d2a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::BinaryFile::BinaryFile</definition>
+        <argsstring>(Path const &amp;fileName, FlagCombination&lt; OpenMode &gt; const &amp;mode, EncodingMode encodingMode=EncodingMode::eASCII)</argsstring>
+        <name>BinaryFile</name>
+        <qualifiedname>castor::BinaryFile::BinaryFile</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>fileName</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dbb/a08207" kindref="compound">FlagCombination</ref>&lt; <ref refid="d4/d10/a08003_1a68eddcef6261f1852e55e010bdc23f95" kindref="member">OpenMode</ref> &gt; const &amp;</type>
+          <declname>mode</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d10/a08003_1a130e0284a5fcc0413ab10d8f4ff20ba8" kindref="member">EncodingMode</ref></type>
+          <declname>encodingMode</declname>
+          <defval><ref refid="d4/d10/a08003_1a130e0284a5fcc0413ab10d8f4ff20ba8a6b90ff532c402c0d9b3f38ee8b3dc3c2" kindref="member">EncodingMode::eASCII</ref></defval>
+        </param>
+        <briefdescription>
+<para>Ouvre le fichier situé au chemin donné, avec le mode et l&apos;encodage donnés. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">fileName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin du fichier </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">mode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le mode d&apos;ouverture, combinaison d&apos;un ou plusieurs OpenMode </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">encodingMode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le mode d&apos;encodage </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/BinaryFile.hpp" line="40" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d86/a07971_1a5964def319a41d93ee85b550847e55da" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::BinaryFile::write</definition>
+        <argsstring>(String const &amp;toWrite)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor::BinaryFile::write</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>toWrite</declname>
+        </param>
+        <briefdescription>
+<para>Ecrit une chaîne de caractères dans le fichier (en binaire, donc écrit d&apos;abord la taille puis le contenu, sans le &apos;\0&apos;) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">toWrite</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La chaîne </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si l&apos;écriture s&apos;est bien déroulée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/BinaryFile.hpp" line="53" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d86/a07971_1a97fa1551f3f3edbb6fde0b388dec9ee3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::BinaryFile::read</definition>
+        <argsstring>(String &amp;toRead)</argsstring>
+        <name>read</name>
+        <qualifiedname>castor::BinaryFile::read</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> &amp;</type>
+          <declname>toRead</declname>
+        </param>
+        <briefdescription>
+<para>Lit une chaîne de caractères à partir du fichier (en binaire, donc lit d&apos;abord la taille puis le contenu) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">toRead</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La chaîne </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si la lecture s&apos;est bien déroulée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/BinaryFile.hpp" line="64" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d86/a07971_1a76382f5f79925b560782dc46920a1c0f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>uint64_t</type>
+        <definition>uint64_t castor::BinaryFile::write</definition>
+        <argsstring>(T const &amp;toWrite)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor::BinaryFile::write</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>toWrite</declname>
+        </param>
+        <briefdescription>
+<para>Ecrit un objet dans le fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">toWrite</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le nombre d&apos;octets écrits </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/BinaryFile.hpp" line="75" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d86/a07971_1a5a5dd59436d83a6574d2c2c176f083cc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>uint64_t</type>
+        <definition>uint64_t castor::BinaryFile::read</definition>
+        <argsstring>(T &amp;toRead)</argsstring>
+        <name>read</name>
+        <qualifiedname>castor::BinaryFile::read</qualifiedname>
+        <param>
+          <type>T &amp;</type>
+          <declname>toRead</declname>
+        </param>
+        <briefdescription>
+<para>Lit un objet à partir du fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">toRead</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le nombre d&apos;octets lus </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/BinaryFile.hpp" line="86" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d86/a07971_1a3e680c36b8bf544415adbf439eeff7a4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>uint64_t</type>
+        <definition>uint64_t castor::BinaryFile::writeArray</definition>
+        <argsstring>(T const *toWrite, uint64_t count)</argsstring>
+        <name>writeArray</name>
+        <qualifiedname>castor::BinaryFile::writeArray</qualifiedname>
+        <param>
+          <type>T const *</type>
+          <declname>toWrite</declname>
+        </param>
+        <param>
+          <type>uint64_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Ecrit un tableau dynamique d&apos;objets dans du fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">toWrite</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le tableau d&apos;objets </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La taille du tableau </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le nombre d&apos;octets écrits </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/BinaryFile.hpp" line="99" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d86/a07971_1a4e64bfd7f8a510ebdb5b083782349ef6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint64_t</type>
+            <declname>N</declname>
+            <defname>N</defname>
+          </param>
+        </templateparamlist>
+        <type>uint64_t</type>
+        <definition>uint64_t castor::BinaryFile::writeArray</definition>
+        <argsstring>(T const(&amp;toWrite)[N])</argsstring>
+        <name>writeArray</name>
+        <qualifiedname>castor::BinaryFile::writeArray</qualifiedname>
+        <param>
+          <type>T const(&amp;)</type>
+          <declname>toWrite</declname>
+          <array>[N]</array>
+        </param>
+        <briefdescription>
+<para>Ecrit un tableau statique d&apos;objets dans du fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>La taille du tableau est déduite à partir du paramètre </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">toWrite</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le tableau d&apos;objets </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le nombre d&apos;octets écrits </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/BinaryFile.hpp" line="112" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d86/a07971_1a1d9b0fcf691324d797326ebd72ef1cac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>uint64_t</type>
+        <definition>uint64_t castor::BinaryFile::readArray</definition>
+        <argsstring>(T *toRead, uint64_t count)</argsstring>
+        <name>readArray</name>
+        <qualifiedname>castor::BinaryFile::readArray</qualifiedname>
+        <param>
+          <type>T *</type>
+          <declname>toRead</declname>
+        </param>
+        <param>
+          <type>uint64_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Lit un tableau dynamique d&apos;objets à partir du fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">toRead</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le tableau d&apos;objets (doit être alloué avant l&apos;appel) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La taille du tableau </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le nombre d&apos;octets lus </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/BinaryFile.hpp" line="125" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d86/a07971_1a4ed03ff0093fcd3e3f7ca3d2b685d17d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint64_t</type>
+            <declname>N</declname>
+            <defname>N</defname>
+          </param>
+        </templateparamlist>
+        <type>uint64_t</type>
+        <definition>uint64_t castor::BinaryFile::readArray</definition>
+        <argsstring>(T(&amp;toRead)[N])</argsstring>
+        <name>readArray</name>
+        <qualifiedname>castor::BinaryFile::readArray</qualifiedname>
+        <param>
+          <type>T(&amp;)</type>
+          <declname>toRead</declname>
+          <array>[N]</array>
+        </param>
+        <briefdescription>
+<para>Lit un tableau statique d&apos;objets à partir du fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">toRead</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le tableau d&apos;objets </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="remark"><para>La taille du tableau est déduite à partir du paramètre </para>
+</simplesect>
+<simplesect kind="return"><para>Le nombre d&apos;octets lus </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/BinaryFile.hpp" line="138" column="25"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe de gestion de fichier. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Ajoute quelques fonctions statiques de vérification d&apos;existence, suppression, ... </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::BinaryFile</label>
+        <link refid="dc/d86/a07971"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::File</label>
+        <link refid="d4/d10/a08003"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>castor::FlagCombination&lt; OpenMode &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; OpenMode &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>String</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::BinaryFile</label>
+        <link refid="dc/d86/a07971"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::File</label>
+        <link refid="d4/d10/a08003"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_mode</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_fileFullPath</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::FlagCombination&lt; FlagType &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+      </node>
+      <node id="3">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="6">
+        <label>castor::Path</label>
+        <link refid="d1/de1/a08011"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Data/BinaryFile.hpp" line="24" column="1" bodyfile="CastorUtils/Data/BinaryFile.hpp" bodystart="26" bodyend="139"/>
+    <listofallmembers>
+      <member refid="dc/d86/a07971_1a40392c66f280a9e297bfb1b982ec7d2a" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>BinaryFile</name></member>
+      <member refid="d4/d10/a08003_1a8b2dfe1d0621223f02a197fb8a7f57d7" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>copyFile</name></member>
+      <member refid="d4/d10/a08003_1ac8092ffb9d8d2acbec545d760e5a65b1" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>copyFileName</name></member>
+      <member refid="d4/d10/a08003_1a463ae685301229606c32746ba6800548" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>CreateMode</name></member>
+      <member refid="d4/d10/a08003_1aa6ee83e0d80b8feb8101c126ca5947c2" prot="protected" virt="non-virtual"><scope>castor::BinaryFile</scope><name>CU_DeclareInvariantBlock</name></member>
+      <member refid="d4/d10/a08003_1a9b702d7f5ff0d52fba3fe75f830e2745" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>deleteFile</name></member>
+      <member refid="d4/d10/a08003_1afb3e0522b98e30df8a1b7cf462a2284f" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>directoryCreate</name></member>
+      <member refid="d4/d10/a08003_1a35bd33d4e6f24dc9ca22fa5bd57fbaf5" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>directoryDelete</name></member>
+      <member refid="d4/d10/a08003_1af36167ffa1e870b4dc069439952b63c4" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>directoryExists</name></member>
+      <member refid="d4/d10/a08003_1abc4c42be831338d06615e8e13bc8ecde" prot="protected" virt="non-virtual"><scope>castor::BinaryFile</scope><name>doRead</name></member>
+      <member refid="d4/d10/a08003_1a2e247e86a0521e7fbba94d6b98b3a2ff" prot="protected" virt="non-virtual"><scope>castor::BinaryFile</scope><name>doWrite</name></member>
+      <member refid="d4/d10/a08003_1a130e0284a5fcc0413ab10d8f4ff20ba8" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>EncodingMode</name></member>
+      <member refid="d4/d10/a08003_1a75f6c4f5075361a0b95858b6eb3179b5" prot="protected" virt="non-virtual"><scope>castor::BinaryFile</scope><name>File</name></member>
+      <member refid="d4/d10/a08003_1af6be9c9a3363804c52591b4104d3a198" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>fileExists</name></member>
+      <member refid="d4/d10/a08003_1a91e4401c024cb93037259c2b2c894dd4" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>filterDirectoryFiles</name></member>
+      <member refid="d4/d10/a08003_1ac73c90bf5b3cdbfa0c3af07258300909" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>FilterFunction</name></member>
+      <member refid="d4/d10/a08003_1abfc768a522393be48398ada0fa4b587f" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>getExecutableDirectory</name></member>
+      <member refid="d4/d10/a08003_1aa465cc53643d8404a32a349265fb8f23" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>getFileFullPath</name></member>
+      <member refid="d4/d10/a08003_1a9b3f822268d6300fa8a816bf6fdbed32" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>getFileName</name></member>
+      <member refid="d4/d10/a08003_1a376c0e917c4da03a641d8dd3f1f1503d" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>getFilePath</name></member>
+      <member refid="d4/d10/a08003_1a55c43b3d78331caeae33c2426b294f35" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>getLength</name></member>
+      <member refid="d4/d10/a08003_1a3b93f73496721579346543b5b6d7646d" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>getUserDirectory</name></member>
+      <member refid="d4/d10/a08003_1ad1c8e1c6cfc95972ba363f271f19b877" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>HitFileFunction</name></member>
+      <member refid="d4/d10/a08003_1a5f2cc85958dde16a3793977d2f4e990b" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>isOk</name></member>
+      <member refid="d4/d10/a08003_1ad7adcfae5d489d33d2a2a9d076fa74d8" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>listDirectoryFiles</name></member>
+      <member refid="d4/d10/a08003_1a1a8334c094efe5116d260302b227dea6" prot="protected" virt="non-virtual"><scope>castor::BinaryFile</scope><name>m_cursor</name></member>
+      <member refid="d4/d10/a08003_1acf11a2594281adecf00f7d4911ce3608" prot="protected" virt="non-virtual"><scope>castor::BinaryFile</scope><name>m_encoding</name></member>
+      <member refid="d4/d10/a08003_1a1bea7ad7a82f1d6b70b08a556b7560e3" prot="protected" virt="non-virtual"><scope>castor::BinaryFile</scope><name>m_file</name></member>
+      <member refid="d4/d10/a08003_1a312a6d588cc619b9f61b39683bc64b79" prot="protected" virt="non-virtual"><scope>castor::BinaryFile</scope><name>m_fileFullPath</name></member>
+      <member refid="d4/d10/a08003_1a6e61e402e1c184678526bc2e5a5b0a2d" prot="protected" virt="non-virtual"><scope>castor::BinaryFile</scope><name>m_length</name></member>
+      <member refid="d4/d10/a08003_1a24dd154c6389092dcc881b3ac30daec9" prot="protected" virt="non-virtual"><scope>castor::BinaryFile</scope><name>m_mode</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::BinaryFile</scope><name>NonMovable</name></member>
+      <member refid="d4/d10/a08003_1a83921652df0d77dec5a2738d6167bf28" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>normaliseFileName</name></member>
+      <member refid="d4/d10/a08003_1a2d75cd840e492ab9fffd4221afbfb54b" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>OffsetMode</name></member>
+      <member refid="d4/d10/a08003_1a68eddcef6261f1852e55e010bdc23f95" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>OpenMode</name></member>
+      <member refid="dc/d86/a07971_1a97fa1551f3f3edbb6fde0b388dec9ee3" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>read</name></member>
+      <member refid="dc/d86/a07971_1a5a5dd59436d83a6574d2c2c176f083cc" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>read</name></member>
+      <member refid="dc/d86/a07971_1a1d9b0fcf691324d797326ebd72ef1cac" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>readArray</name></member>
+      <member refid="dc/d86/a07971_1a4ed03ff0093fcd3e3f7ca3d2b685d17d" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>readArray</name></member>
+      <member refid="d4/d10/a08003_1a68e4988e182c38e0e81fc25e939ffd6a" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>seek</name></member>
+      <member refid="d4/d10/a08003_1acc5807a8213e745c150dc763f2f75708" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>tell</name></member>
+      <member refid="d4/d10/a08003_1a54fa6ffc7651e924ef653f5469a51ba5" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>traverseDirectory</name></member>
+      <member refid="d4/d10/a08003_1a59d4b384b23323dc018c3ac2e786f2a0" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>TraverseDirFunction</name></member>
+      <member refid="dc/d86/a07971_1a5964def319a41d93ee85b550847e55da" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>write</name></member>
+      <member refid="dc/d86/a07971_1a76382f5f79925b560782dc46920a1c0f" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>write</name></member>
+      <member refid="dc/d86/a07971_1a3e680c36b8bf544415adbf439eeff7a4" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>writeArray</name></member>
+      <member refid="dc/d86/a07971_1a4e64bfd7f8a510ebdb5b083782349ef6" prot="public" virt="non-virtual"><scope>castor::BinaryFile</scope><name>writeArray</name></member>
+      <member refid="d4/d10/a08003_1a19873784f5a2580579e009ed11850c47" prot="public" virt="virtual"><scope>castor::BinaryFile</scope><name>~File</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::BinaryFile</scope><name>~NonMovable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

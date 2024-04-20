@@ -1,5 +1,14 @@
-<map id="castor3d::GenericPlugin" name="castor3d::GenericPlugin">
-<area shape="rect" id="node1" title=" " alt="" coords="18,152,179,177"/>
-<area shape="rect" id="node2" href="$d5/d8e/a04874.html" title=" " alt="" coords="41,79,157,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,31"/>
+<map id="castor3d::Pass" name="castor3d::Pass">
+<area shape="rect" id="Node000001" title=" " alt="" coords="183,271,294,296"/>
+<area shape="rect" id="Node000002" href="$d6/da8/a08227.html" title=" " alt="" coords="5,175,197,201"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="131,206,223,268,220,273,128,211"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="10,80,193,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="104,119,104,175,99,175,99,119"/>
+<area shape="rect" id="Node000004" href="$dc/d79/a08267.html" title=" " alt="" coords="221,168,440,208"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="304,220,252,272,248,268,300,216"/>
+<area shape="rect" id="Node000005" href="$da/d36/a08315.html" title=" " alt="" coords="234,5,377,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="299,44,292,74,293,105,305,138,320,166,316,169,300,140,288,106,287,73,293,43"/>
+<area shape="rect" id="Node000006" href="$dc/d79/a08267.html" title="Basic signal class." alt="" coords="303,80,486,105"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="332,37,382,77,378,82,329,42"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="381,118,346,169,341,166,377,115"/>
 </map>

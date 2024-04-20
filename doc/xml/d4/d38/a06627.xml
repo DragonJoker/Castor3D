@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/d38/a06627" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ShadowMap::Passes</compoundname>
+    <includes local="no">ShadowMap.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d38/a06627_1ad4f89f06a7b656fd1ce470d4d8cbe210" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="dc/d4f/a06619_1aa73477fa0e2f35aae6a14dfde8ee1388" kindref="member">PassDataPtr</ref> &gt;</type>
+        <definition>castor::Vector&lt; PassDataPtr &gt; castor3d::ShadowMap::Passes::passes</definition>
+        <argsstring></argsstring>
+        <name>passes</name>
+        <qualifiedname>castor3d::ShadowMap::Passes::passes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ShadowMap/ShadowMap.hpp" line="59" column="16" bodyfile="Castor3D/Render/ShadowMap/ShadowMap.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d38/a06627_1abf1eb6bfacb6e33df1d43ec4d429b334" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; crg::FrameGraph &gt; &gt;</type>
+        <definition>castor::Vector&lt; castor::RawUniquePtr&lt; crg::FrameGraph &gt; &gt; castor3d::ShadowMap::Passes::graphs</definition>
+        <argsstring></argsstring>
+        <name>graphs</name>
+        <qualifiedname>castor3d::ShadowMap::Passes::graphs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ShadowMap/ShadowMap.hpp" line="60" column="16" bodyfile="Castor3D/Render/ShadowMap/ShadowMap.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d38/a06627_1a28d3aa0f7bda04694fcf2df3a3cce8cf" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; crg::RunnableGraphPtr &gt;</type>
+        <definition>castor::Vector&lt; crg::RunnableGraphPtr &gt; castor3d::ShadowMap::Passes::runnables</definition>
+        <argsstring></argsstring>
+        <name>runnables</name>
+        <qualifiedname>castor3d::ShadowMap::Passes::runnables</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ShadowMap/ShadowMap.hpp" line="61" column="16" bodyfile="Castor3D/Render/ShadowMap/ShadowMap.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d38/a06627_1a46d0076f8d7af3115b7595cadc452034" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; GaussianBlurUPtr &gt;</type>
+        <definition>castor::Vector&lt; GaussianBlurUPtr &gt; castor3d::ShadowMap::Passes::blurs</definition>
+        <argsstring></argsstring>
+        <name>blurs</name>
+        <qualifiedname>castor3d::ShadowMap::Passes::blurs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ShadowMap/ShadowMap.hpp" line="62" column="16" bodyfile="Castor3D/Render/ShadowMap/ShadowMap.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/ShadowMap/ShadowMap.hpp" line="57" column="1" bodyfile="Castor3D/Render/ShadowMap/ShadowMap.hpp" bodystart="58" bodyend="63"/>
+    <listofallmembers>
+      <member refid="d4/d38/a06627_1a46d0076f8d7af3115b7595cadc452034" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::Passes</scope><name>blurs</name></member>
+      <member refid="d4/d38/a06627_1abf1eb6bfacb6e33df1d43ec4d429b334" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::Passes</scope><name>graphs</name></member>
+      <member refid="d4/d38/a06627_1ad4f89f06a7b656fd1ce470d4d8cbe210" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::Passes</scope><name>passes</name></member>
+      <member refid="d4/d38/a06627_1a28d3aa0f7bda04694fcf2df3a3cce8cf" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::Passes</scope><name>runnables</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

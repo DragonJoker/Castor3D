@@ -1,0 +1,599 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/ddb/a07807" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::MorphingWeightsData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">MorphingUbo.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d8/ddb/a07807_1aeac6f78330c73180340e80f9edd24ade" prot="private" static="no" mutable="no">
+        <type>sdw::UVec4</type>
+        <definition>sdw::UVec4 castor3d::shader::MorphingWeightsData::m_limits</definition>
+        <argsstring></argsstring>
+        <name>m_limits</name>
+        <qualifiedname>castor3d::shader::MorphingWeightsData::m_limits</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/MorphingUbo.hpp" line="194" column="12" bodyfile="Castor3D/Shader/Ubos/MorphingUbo.hpp" bodystart="194" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/ddb/a07807_1a863f85b2cbf580aebee705d687c7b485" prot="private" static="no" mutable="no">
+        <type>sdw::Array&lt; sdw::UVec4 &gt;</type>
+        <definition>sdw::Array&lt; sdw::UVec4 &gt; castor3d::shader::MorphingWeightsData::m_indices</definition>
+        <argsstring></argsstring>
+        <name>m_indices</name>
+        <qualifiedname>castor3d::shader::MorphingWeightsData::m_indices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/MorphingUbo.hpp" line="195" column="12" bodyfile="Castor3D/Shader/Ubos/MorphingUbo.hpp" bodystart="195" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/ddb/a07807_1a846f035cd72f6e0262e4edf3bd3ac566" prot="private" static="no" mutable="no">
+        <type>sdw::Array&lt; sdw::Vec4 &gt;</type>
+        <definition>sdw::Array&lt; sdw::Vec4 &gt; castor3d::shader::MorphingWeightsData::m_weights</definition>
+        <argsstring></argsstring>
+        <name>m_weights</name>
+        <qualifiedname>castor3d::shader::MorphingWeightsData::m_weights</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/MorphingUbo.hpp" line="196" column="12" bodyfile="Castor3D/Shader/Ubos/MorphingUbo.hpp" bodystart="196" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/ddb/a07807_1ab4b5016a0f47120ec6b303799bfd172a" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::MorphingWeightsData::morphTargetsCount</definition>
+        <argsstring></argsstring>
+        <name>morphTargetsCount</name>
+        <qualifiedname>castor3d::shader::MorphingWeightsData::morphTargetsCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/MorphingUbo.hpp" line="199" column="11" bodyfile="Castor3D/Shader/Ubos/MorphingUbo.hpp" bodystart="199" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/ddb/a07807_1ac1ab40e53b3b851376c7b0a6f402e28b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::MorphingWeightsData::MorphingWeightsData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>MorphingWeightsData</name>
+        <qualifiedname>castor3d::shader::MorphingWeightsData::MorphingWeightsData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/MorphingUbo.hpp" line="104" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/ddb/a07807_1a3927e272278a2286c075e70d56a2c624" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::MorphingWeightsData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, MorphingWeightsData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::MorphingWeightsData::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d8/ddb/a07807" kindref="compound">MorphingWeightsData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/MorphingUbo.hpp" line="108" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/ddb/a07807_1a528329e61c928f7cb958acffbca4cf82" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::MorphingWeightsData::morph</definition>
+        <argsstring>(sdw::Array&lt; shader::MorphTargetsData &gt; const &amp;targets, sdw::UInt vertexId, sdw::Vec4 &amp;pos, sdw::Vec3 &amp;uvw0, sdw::Vec3 &amp;uvw1, sdw::Vec3 &amp;uvw2, sdw::Vec3 &amp;uvw3, sdw::Vec3 &amp;col) const</argsstring>
+        <name>morph</name>
+        <qualifiedname>castor3d::shader::MorphingWeightsData::morph</qualifiedname>
+        <param>
+          <type>sdw::Array&lt; <ref refid="da/dde/a07803" kindref="compound">shader::MorphTargetsData</ref> &gt; const &amp;</type>
+          <declname>targets</declname>
+        </param>
+        <param>
+          <type>sdw::UInt</type>
+          <declname>vertexId</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw0</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw1</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw2</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw3</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>col</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/MorphingUbo.hpp" line="112" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/ddb/a07807_1a4682979988accd94df3b79377e28bb4a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::MorphingWeightsData::morph</definition>
+        <argsstring>(sdw::Array&lt; shader::MorphTargetsData &gt; const &amp;targets, sdw::UInt vertexId, sdw::Vec4 &amp;pos, sdw::Vec4 &amp;nml, sdw::Vec3 &amp;uvw0, sdw::Vec3 &amp;uvw1, sdw::Vec3 &amp;uvw2, sdw::Vec3 &amp;uvw3, sdw::Vec3 &amp;col) const</argsstring>
+        <name>morph</name>
+        <qualifiedname>castor3d::shader::MorphingWeightsData::morph</qualifiedname>
+        <param>
+          <type>sdw::Array&lt; <ref refid="da/dde/a07803" kindref="compound">shader::MorphTargetsData</ref> &gt; const &amp;</type>
+          <declname>targets</declname>
+        </param>
+        <param>
+          <type>sdw::UInt</type>
+          <declname>vertexId</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>nml</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw0</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw1</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw2</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw3</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>col</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/MorphingUbo.hpp" line="120" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/ddb/a07807_1a772b1bdaf839e1a64e8340d453df0ff3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::MorphingWeightsData::morph</definition>
+        <argsstring>(sdw::Array&lt; shader::MorphTargetsData &gt; const &amp;targets, sdw::UInt vertexId, sdw::Vec4 &amp;pos, sdw::Vec4 &amp;nml, sdw::Vec4 &amp;tan, sdw::Vec3 &amp;uvw0, sdw::Vec3 &amp;uvw1, sdw::Vec3 &amp;uvw2, sdw::Vec3 &amp;uvw3, sdw::Vec3 &amp;col) const</argsstring>
+        <name>morph</name>
+        <qualifiedname>castor3d::shader::MorphingWeightsData::morph</qualifiedname>
+        <param>
+          <type>sdw::Array&lt; <ref refid="da/dde/a07803" kindref="compound">shader::MorphTargetsData</ref> &gt; const &amp;</type>
+          <declname>targets</declname>
+        </param>
+        <param>
+          <type>sdw::UInt</type>
+          <declname>vertexId</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>nml</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>tan</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw0</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw1</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw2</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw3</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>col</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/MorphingUbo.hpp" line="129" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/ddb/a07807_1a5325e74ae755848eeb0d28e8628fab86" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::MorphingWeightsData::morph</definition>
+        <argsstring>(sdw::Array&lt; shader::MorphTargetsData &gt; const &amp;targets, sdw::UInt vertexId, sdw::Vec4 &amp;pos, sdw::Vec4 &amp;nml, sdw::Vec4 &amp;tan, sdw::Vec4 &amp;bit, sdw::Vec3 &amp;uvw0, sdw::Vec3 &amp;uvw1, sdw::Vec3 &amp;uvw2, sdw::Vec3 &amp;uvw3, sdw::Vec3 &amp;col) const</argsstring>
+        <name>morph</name>
+        <qualifiedname>castor3d::shader::MorphingWeightsData::morph</qualifiedname>
+        <param>
+          <type>sdw::Array&lt; <ref refid="da/dde/a07803" kindref="compound">shader::MorphTargetsData</ref> &gt; const &amp;</type>
+          <declname>targets</declname>
+        </param>
+        <param>
+          <type>sdw::UInt</type>
+          <declname>vertexId</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>nml</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>tan</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>bit</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw0</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw1</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw2</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw3</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>col</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/MorphingUbo.hpp" line="139" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/ddb/a07807_1acfffd261a391e2e5e3d8fea2857deda8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::MorphingWeightsData::morph</definition>
+        <argsstring>(sdw::ArrayStorageBufferT&lt; shader::MorphTargetsData &gt; const &amp;targets, sdw::UInt vertexId, sdw::Vec4 &amp;pos, sdw::Vec4 &amp;nml, sdw::Vec4 &amp;tan, sdw::Vec3 &amp;uvw0, sdw::Vec3 &amp;uvw1, sdw::Vec3 &amp;uvw2, sdw::Vec3 &amp;uvw3, sdw::Vec3 &amp;col) const</argsstring>
+        <name>morph</name>
+        <qualifiedname>castor3d::shader::MorphingWeightsData::morph</qualifiedname>
+        <param>
+          <type>sdw::ArrayStorageBufferT&lt; <ref refid="da/dde/a07803" kindref="compound">shader::MorphTargetsData</ref> &gt; const &amp;</type>
+          <declname>targets</declname>
+        </param>
+        <param>
+          <type>sdw::UInt</type>
+          <declname>vertexId</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>nml</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>tan</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw0</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw1</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw2</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw3</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>col</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/MorphingUbo.hpp" line="150" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/ddb/a07807_1aa9130eba28e23aca17fad3afa43827af" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::MorphingWeightsData::morph</definition>
+        <argsstring>(sdw::ArrayStorageBufferT&lt; shader::MorphTargetsData &gt; const &amp;targets, sdw::UInt vertexId, sdw::Vec4 &amp;pos, sdw::Vec4 &amp;nml, sdw::Vec4 &amp;tan, sdw::Vec4 &amp;bit, sdw::Vec3 &amp;uvw0, sdw::Vec3 &amp;uvw1, sdw::Vec3 &amp;uvw2, sdw::Vec3 &amp;uvw3, sdw::Vec3 &amp;col) const</argsstring>
+        <name>morph</name>
+        <qualifiedname>castor3d::shader::MorphingWeightsData::morph</qualifiedname>
+        <param>
+          <type>sdw::ArrayStorageBufferT&lt; <ref refid="da/dde/a07803" kindref="compound">shader::MorphTargetsData</ref> &gt; const &amp;</type>
+          <declname>targets</declname>
+        </param>
+        <param>
+          <type>sdw::UInt</type>
+          <declname>vertexId</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>nml</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>tan</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>bit</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw0</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw1</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw2</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw3</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>col</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/MorphingUbo.hpp" line="160" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/ddb/a07807_1ae2ff4587baae32149e4f5e6150cd4d1c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::MorphingWeightsData::index</definition>
+        <argsstring>(sdw::UInt const &amp;index) const</argsstring>
+        <name>index</name>
+        <qualifiedname>castor3d::shader::MorphingWeightsData::index</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/MorphingUbo.hpp" line="183" column="11" bodyfile="Castor3D/Shader/Ubos/MorphingUbo.hpp" bodystart="183" bodyend="186"/>
+        <references refid="d8/ddb/a07807_1ae2ff4587baae32149e4f5e6150cd4d1c" compoundref="d0/d78/a01745" startline="183" endline="186">index</references>
+        <referencedby refid="d8/ddb/a07807_1ae2ff4587baae32149e4f5e6150cd4d1c" compoundref="d0/d78/a01745" startline="183" endline="186">index</referencedby>
+        <referencedby refid="d8/ddb/a07807_1a48cfb58dbfb4f78dc1a240260dff9e0f" compoundref="d0/d78/a01745" startline="188" endline="191">weight</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/ddb/a07807_1a48cfb58dbfb4f78dc1a240260dff9e0f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::MorphingWeightsData::weight</definition>
+        <argsstring>(sdw::UInt const &amp;index) const</argsstring>
+        <name>weight</name>
+        <qualifiedname>castor3d::shader::MorphingWeightsData::weight</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/MorphingUbo.hpp" line="188" column="12" bodyfile="Castor3D/Shader/Ubos/MorphingUbo.hpp" bodystart="188" bodyend="191"/>
+        <references refid="d8/ddb/a07807_1ae2ff4587baae32149e4f5e6150cd4d1c" compoundref="d0/d78/a01745" startline="183" endline="186">index</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d8/ddb/a07807_1ac01b69d5d0adcf07479c2e8d54615c9f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ast::type::BaseStructPtr</type>
+        <definition>static ast::type::BaseStructPtr castor3d::shader::MorphingWeightsData::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::MorphingWeightsData::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/MorphingUbo.hpp" line="110" column="33"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/ddb/a07807_1ad515d64bf2002215ab63722827439f67" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::shader::MorphingWeightsData::morphNoAnim</definition>
+        <argsstring>(sdw::ArrayStorageBufferT&lt; shader::MorphTargetsData &gt; const &amp;targets, sdw::UInt vertexId, sdw::Vec4 &amp;pos, sdw::Vec4 &amp;nml, sdw::Vec4 &amp;tan, sdw::Vec4 &amp;bit, sdw::Vec3 &amp;uvw0, sdw::Vec3 &amp;uvw1, sdw::Vec3 &amp;uvw2, sdw::Vec3 &amp;uvw3, sdw::Vec3 &amp;col)</argsstring>
+        <name>morphNoAnim</name>
+        <qualifiedname>castor3d::shader::MorphingWeightsData::morphNoAnim</qualifiedname>
+        <param>
+          <type>sdw::ArrayStorageBufferT&lt; <ref refid="da/dde/a07803" kindref="compound">shader::MorphTargetsData</ref> &gt; const &amp;</type>
+          <declname>targets</declname>
+        </param>
+        <param>
+          <type>sdw::UInt</type>
+          <declname>vertexId</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>nml</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>tan</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>bit</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw0</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw1</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw2</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>uvw3</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>col</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/MorphingUbo.hpp" line="171" column="21"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::MorphingWeightsData</label>
+        <link refid="d8/ddb/a07807"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::MorphingWeightsData</label>
+        <link refid="d8/ddb/a07807"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Ubos/MorphingUbo.hpp" line="100" column="1" bodyfile="Castor3D/Shader/Ubos/MorphingUbo.hpp" bodystart="102" bodyend="200"/>
+    <listofallmembers>
+      <member refid="d8/ddb/a07807_1ae2ff4587baae32149e4f5e6150cd4d1c" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingWeightsData</scope><name>index</name></member>
+      <member refid="d8/ddb/a07807_1a863f85b2cbf580aebee705d687c7b485" prot="private" virt="non-virtual"><scope>castor3d::shader::MorphingWeightsData</scope><name>m_indices</name></member>
+      <member refid="d8/ddb/a07807_1aeac6f78330c73180340e80f9edd24ade" prot="private" virt="non-virtual"><scope>castor3d::shader::MorphingWeightsData</scope><name>m_limits</name></member>
+      <member refid="d8/ddb/a07807_1a846f035cd72f6e0262e4edf3bd3ac566" prot="private" virt="non-virtual"><scope>castor3d::shader::MorphingWeightsData</scope><name>m_weights</name></member>
+      <member refid="d8/ddb/a07807_1ac01b69d5d0adcf07479c2e8d54615c9f" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingWeightsData</scope><name>makeType</name></member>
+      <member refid="d8/ddb/a07807_1a528329e61c928f7cb958acffbca4cf82" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingWeightsData</scope><name>morph</name></member>
+      <member refid="d8/ddb/a07807_1a4682979988accd94df3b79377e28bb4a" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingWeightsData</scope><name>morph</name></member>
+      <member refid="d8/ddb/a07807_1a772b1bdaf839e1a64e8340d453df0ff3" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingWeightsData</scope><name>morph</name></member>
+      <member refid="d8/ddb/a07807_1a5325e74ae755848eeb0d28e8628fab86" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingWeightsData</scope><name>morph</name></member>
+      <member refid="d8/ddb/a07807_1acfffd261a391e2e5e3d8fea2857deda8" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingWeightsData</scope><name>morph</name></member>
+      <member refid="d8/ddb/a07807_1aa9130eba28e23aca17fad3afa43827af" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingWeightsData</scope><name>morph</name></member>
+      <member refid="d8/ddb/a07807_1ac1ab40e53b3b851376c7b0a6f402e28b" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingWeightsData</scope><name>MorphingWeightsData</name></member>
+      <member refid="d8/ddb/a07807_1ad515d64bf2002215ab63722827439f67" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingWeightsData</scope><name>morphNoAnim</name></member>
+      <member refid="d8/ddb/a07807_1ab4b5016a0f47120ec6b303799bfd172a" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingWeightsData</scope><name>morphTargetsCount</name></member>
+      <member refid="d8/ddb/a07807_1a3927e272278a2286c075e70d56a2c624" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingWeightsData</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d8/ddb/a07807_1a48cfb58dbfb4f78dc1a240260dff9e0f" prot="public" virt="non-virtual"><scope>castor3d::shader::MorphingWeightsData</scope><name>weight</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

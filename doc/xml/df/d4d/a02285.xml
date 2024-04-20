@@ -1,0 +1,2545 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d4d/a02285" kind="namespace" language="C++">
+    <compoundname>castor::point</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="df/d4d/a02285_1ab70c9a1a33deb0e60ab8ab7b8dcfeb6c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::point::negate</definition>
+        <argsstring>(Coords&lt; T, Count &gt; &amp;point)</argsstring>
+        <name>negate</name>
+        <qualifiedname>castor::point::negate</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Négative chaque donnée du point donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="304" column="13" declfile="CastorUtils/Math/Coords.hpp" declline="304" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a0c151c5f14ac50773784209f2501592f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::point::normalise</definition>
+        <argsstring>(Coords&lt; T, Count &gt; &amp;point)</argsstring>
+        <name>normalise</name>
+        <qualifiedname>castor::point::normalise</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Normalise le point. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Un point est normalisé quand sa longueur vaut 1.0 <linebreak/>
+Chaque donnée est donc divisée par la longueur du point </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="318" column="13" declfile="CastorUtils/Math/Coords.hpp" declline="318" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1aec612e5436e4b045e5c3325f93597480" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>T castor::point::dot</definition>
+        <argsstring>(Coords&lt; T, Count &gt; const &amp;lhs, Coords&lt; T, Count &gt; const &amp;rhs)</argsstring>
+        <name>dot</name>
+        <qualifiedname>castor::point::dot</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le produit scalaire entre 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le produit scalaire </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="330" column="10" declfile="CastorUtils/Math/Coords.hpp" declline="330" declcolumn="10"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1aff01a1de44a70caa886607415e1b659f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, 3 &gt;</type>
+        <definition>Point&lt; T, 3 &gt; castor::point::cross</definition>
+        <argsstring>(Coords&lt; T, 3 &gt; const &amp;lhs, Coords&lt; U, 3 &gt; const &amp;rhs)</argsstring>
+        <name>cross</name>
+        <qualifiedname>castor::point::cross</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, 3 &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; U, 3 &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de produit vectoriel. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points à multiplier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le résultat du produit vectoriel </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="342" column="14" declfile="CastorUtils/Math/Coords.hpp" declline="342" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a89efaa2df4fcee9f2838aa08df209230" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>double castor::point::cosTheta</definition>
+        <argsstring>(Coords&lt; T, Count &gt; const &amp;lhs, Coords&lt; T, Count &gt; const &amp;rhs)</argsstring>
+        <name>cosTheta</name>
+        <qualifiedname>castor::point::cosTheta</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le cosinus trigonométrique de l&apos;angle entre 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le cosinus </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="354" column="15" declfile="CastorUtils/Math/Coords.hpp" declline="354" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1abaa75532409c2f0d2fc10825ae4f8c54" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>double castor::point::lengthSquared</definition>
+        <argsstring>(Coords&lt; T, Count &gt; const &amp;point)</argsstring>
+        <name>lengthSquared</name>
+        <qualifiedname>castor::point::lengthSquared</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le carré de la longueur Euclidienne du vecteur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le carré de la norme Euclidienne </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="366" column="15" declfile="CastorUtils/Math/Coords.hpp" declline="366" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a84101ce47ed39b849e45ff0b4ab048a9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>double castor::point::length</definition>
+        <argsstring>(Coords&lt; T, Count &gt; const &amp;point)</argsstring>
+        <name>length</name>
+        <qualifiedname>castor::point::length</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la longueur Euclidienne du vecteur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La norme Euclidienne </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="378" column="15" declfile="CastorUtils/Math/Coords.hpp" declline="378" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1ae397857a9da9fc3d19c22a2da857f72b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>double castor::point::lengthManhattan</definition>
+        <argsstring>(Coords&lt; T, Count &gt; const &amp;point)</argsstring>
+        <name>lengthManhattan</name>
+        <qualifiedname>castor::point::lengthManhattan</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la longueur de Manhattan du vecteur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La distance de Manhattan </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="390" column="15" declfile="CastorUtils/Math/Coords.hpp" declline="390" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a0f1c6a3f97745a765fc0009bbaf4fe51" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>double castor::point::lengthMinkowski</definition>
+        <argsstring>(Coords&lt; T, Count &gt; const &amp;point, double order)</argsstring>
+        <name>lengthMinkowski</name>
+        <qualifiedname>castor::point::lengthMinkowski</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>order</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la longueur de Minkowski du vecteur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">order</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;ordre Minkownski </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La distance de Minkowski </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="404" column="15" declfile="CastorUtils/Math/Coords.hpp" declline="404" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a28dee7b4cca66ad9d7563f4559886d69" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>double castor::point::lengthChebychev</definition>
+        <argsstring>(Coords&lt; T, Count &gt; const &amp;point)</argsstring>
+        <name>lengthChebychev</name>
+        <qualifiedname>castor::point::lengthChebychev</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la longueur de Chebychev du vecteur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La distance de Chebychev </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="416" column="15" declfile="CastorUtils/Math/Coords.hpp" declline="416" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1ac9454cf363512cd8efb7ee91107502ec" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>double castor::point::distanceSquared</definition>
+        <argsstring>(Coords&lt; T, Count &gt; const &amp;lhs, Coords&lt; T, Count &gt; const &amp;rhs)</argsstring>
+        <name>distanceSquared</name>
+        <qualifiedname>castor::point::distanceSquared</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le carré de la distance Euclidienne entre deux points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le carré de la norme Euclidienne. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="428" column="15" declfile="CastorUtils/Math/Coords.hpp" declline="428" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a3826ebe47c9496bc0ba70977690451ad" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>double castor::point::distance</definition>
+        <argsstring>(Coords&lt; T, Count &gt; const &amp;lhs, Coords&lt; T, Count &gt; const &amp;rhs)</argsstring>
+        <name>distance</name>
+        <qualifiedname>castor::point::distance</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la norme Euclidienne entre deux points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La norme Euclidienne. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="440" column="15" declfile="CastorUtils/Math/Coords.hpp" declline="440" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1ac244ea01bcb8790b01ea50025d06f638" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>double castor::point::distanceManhattan</definition>
+        <argsstring>(Coords&lt; T, Count &gt; const &amp;lhs, Coords&lt; T, Count &gt; const &amp;rhs)</argsstring>
+        <name>distanceManhattan</name>
+        <qualifiedname>castor::point::distanceManhattan</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la distance de Manhattan entre deux points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La distance de Manhattan. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="452" column="15" declfile="CastorUtils/Math/Coords.hpp" declline="452" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a539c4ef5773050548883f12a37c5af7f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>double castor::point::distanceMinkowski</definition>
+        <argsstring>(Coords&lt; T, Count &gt; const &amp;lhs, Coords&lt; T, Count &gt; const &amp;rhs, double order)</argsstring>
+        <name>distanceMinkowski</name>
+        <qualifiedname>castor::point::distanceMinkowski</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>order</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la distance de Minkowski entre deux points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">order</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;ordre Minkownski. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La distance de Minkowski. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="466" column="15" declfile="CastorUtils/Math/Coords.hpp" declline="466" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1acc62aa6920b7e354af073fd17f5ee5f5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>double castor::point::distanceChebychev</definition>
+        <argsstring>(Coords&lt; T, Count &gt; const &amp;lhs, Coords&lt; T, Count &gt; const &amp;rhs)</argsstring>
+        <name>distanceChebychev</name>
+        <qualifiedname>castor::point::distanceChebychev</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la distance de Chebychev entre deux points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La distance de Chebychev. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="478" column="15" declfile="CastorUtils/Math/Coords.hpp" declline="478" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a18d8488335bb62e75ba234b60954aeeb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CoordT</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>CountT</declname>
+            <defname>CountT</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; CoordT, CountT &gt; const &amp;</type>
+        <definition>Point&lt; CoordT, CountT &gt; const  &amp; castor::point::getPoint</definition>
+        <argsstring>(Point&lt; CoordT, CountT &gt; const &amp;lhs)</argsstring>
+        <name>getPoint</name>
+        <qualifiedname>castor::point::getPoint</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; CoordT, CountT &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="311" column="14" declfile="CastorUtils/Math/Point.hpp" declline="311" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1afaf34c33f0762be7b42dffccaa550d96" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CoordT</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>CountT</declname>
+            <defname>CountT</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; CoordT, CountT &gt; const &amp;</type>
+        <definition>Point&lt; CoordT, CountT &gt; const  &amp; castor::point::getPoint</definition>
+        <argsstring>(LengthT&lt; Point&lt; CoordT, CountT &gt; &gt; const &amp;lhs)</argsstring>
+        <name>getPoint</name>
+        <qualifiedname>castor::point::getPoint</qualifiedname>
+        <param>
+          <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; <ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; CoordT, CountT &gt; &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="313" column="14" declfile="CastorUtils/Math/Point.hpp" declline="313" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1afd560ec2a691a465bfa1ca4f18c3d057" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CoordT</type>
+          </param>
+          <param>
+            <type>typename CoordU</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>CountT</declname>
+            <defname>CountT</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::point::setPoint</definition>
+        <argsstring>(Point&lt; CoordT, CountT &gt; &amp;lhs, Point&lt; CoordU, CountT &gt; const &amp;rhs)</argsstring>
+        <name>setPoint</name>
+        <qualifiedname>castor::point::setPoint</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; CoordT, CountT &gt; &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; CoordU, CountT &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="315" column="6" declfile="CastorUtils/Math/Point.hpp" declline="315" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1afb817c08566217de3d6deec5f1c1a54c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CoordT</type>
+          </param>
+          <param>
+            <type>typename CoordU</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>CountT</declname>
+            <defname>CountT</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::point::setPoint</definition>
+        <argsstring>(LengthT&lt; Point&lt; CoordT, CountT &gt; &gt; &amp;lhs, Point&lt; CoordU, CountT &gt; const &amp;rhs)</argsstring>
+        <name>setPoint</name>
+        <qualifiedname>castor::point::setPoint</qualifiedname>
+        <param>
+          <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; <ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; CoordT, CountT &gt; &gt; &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; CoordU, CountT &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="318" column="6" declfile="CastorUtils/Math/Point.hpp" declline="318" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a78d1220d663baf57150febfce222e659" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CoordT</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>CountT</declname>
+            <defname>CountT</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::point::setCoord</definition>
+        <argsstring>(Point&lt; CoordT, CountT &gt; &amp;pt, uint32_t i, CoordT const &amp;c)</argsstring>
+        <name>setCoord</name>
+        <qualifiedname>castor::point::setCoord</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; CoordT, CountT &gt; &amp;</type>
+          <declname>pt</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>CoordT const &amp;</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="321" column="6" declfile="CastorUtils/Math/Point.hpp" declline="321" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a3c23ccf1d43a8ae058916b160252d017" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CoordT</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>CountT</declname>
+            <defname>CountT</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::point::setCoord</definition>
+        <argsstring>(Coords&lt; CoordT, CountT &gt; &amp;pt, uint32_t i, CoordT const &amp;c)</argsstring>
+        <name>setCoord</name>
+        <qualifiedname>castor::point::setCoord</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; CoordT, CountT &gt; &amp;</type>
+          <declname>pt</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>CoordT const &amp;</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="325" column="6" declfile="CastorUtils/Math/Point.hpp" declline="325" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1af53a078653a175e581448ce4c41ee35a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CoordT</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>CountT</declname>
+            <defname>CountT</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::point::setCoord</definition>
+        <argsstring>(LengthT&lt; Point&lt; CoordT, CountT &gt; &gt; &amp;pt, uint32_t i, CoordT const &amp;c)</argsstring>
+        <name>setCoord</name>
+        <qualifiedname>castor::point::setCoord</qualifiedname>
+        <param>
+          <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; <ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; CoordT, CountT &gt; &gt; &amp;</type>
+          <declname>pt</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>CoordT const &amp;</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="329" column="6" declfile="CastorUtils/Math/Point.hpp" declline="329" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1ae8d5b17f4731eddaa9331b5550a4c2d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CoordT</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>CountT</declname>
+            <defname>CountT</defname>
+          </param>
+        </templateparamlist>
+        <type>CoordT const &amp;</type>
+        <definition>CoordT const  &amp; castor::point::getCoord</definition>
+        <argsstring>(Point&lt; CoordT, CountT &gt; const &amp;pt, uint32_t i)</argsstring>
+        <name>getCoord</name>
+        <qualifiedname>castor::point::getCoord</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; CoordT, CountT &gt; const &amp;</type>
+          <declname>pt</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="333" column="15" declfile="CastorUtils/Math/Point.hpp" declline="333" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1abb917e651483098845ebf12a1d971edf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CoordT</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>CountT</declname>
+            <defname>CountT</defname>
+          </param>
+        </templateparamlist>
+        <type>CoordT const &amp;</type>
+        <definition>CoordT const  &amp; castor::point::getCoord</definition>
+        <argsstring>(Coords&lt; CoordT, CountT &gt; const &amp;pt, uint32_t i)</argsstring>
+        <name>getCoord</name>
+        <qualifiedname>castor::point::getCoord</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; CoordT, CountT &gt; const &amp;</type>
+          <declname>pt</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="336" column="15" declfile="CastorUtils/Math/Point.hpp" declline="336" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a91dc3eb69576645de8d5c4fa6f464cab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CoordT</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>CountT</declname>
+            <defname>CountT</defname>
+          </param>
+        </templateparamlist>
+        <type>CoordT const &amp;</type>
+        <definition>CoordT const  &amp; castor::point::getCoord</definition>
+        <argsstring>(LengthT&lt; Point&lt; CoordT, CountT &gt; &gt; const &amp;pt, uint32_t i)</argsstring>
+        <name>getCoord</name>
+        <qualifiedname>castor::point::getCoord</qualifiedname>
+        <param>
+          <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; <ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; CoordT, CountT &gt; &gt; const &amp;</type>
+          <declname>pt</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="339" column="15" declfile="CastorUtils/Math/Point.hpp" declline="339" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a6c9a9d81050eaf36a5fffa64dfcc4057" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::point::floor</definition>
+        <argsstring>(Point&lt; T, TCount &gt; &amp;point)</argsstring>
+        <name>floor</name>
+        <qualifiedname>castor::point::floor</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Arrondit à l&apos;inférieur chaque donnée du point donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="350" column="13" declfile="CastorUtils/Math/Point.hpp" declline="350" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1ae60a74eb7554370dcba5030f39c5d0b4" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt;</type>
+        <definition>static Point&lt; T, TCount &gt; castor::point::getFloored</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;point)</argsstring>
+        <name>getFloored</name>
+        <qualifiedname>castor::point::getFloored</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Arrondit à l&apos;inférieur chaque donnée du point donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le point arrondi. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="362" column="14" declfile="CastorUtils/Math/Point.hpp" declline="362" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a709d83aa842e5045c19e7f64b0bfc214" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::point::ceil</definition>
+        <argsstring>(Point&lt; T, TCount &gt; &amp;point)</argsstring>
+        <name>ceil</name>
+        <qualifiedname>castor::point::ceil</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Arrondit au supérieur chaque donnée du point donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="372" column="13" declfile="CastorUtils/Math/Point.hpp" declline="372" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1af1ee37c8c473547247df6e97d5e20ffa" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt;</type>
+        <definition>static Point&lt; T, TCount &gt; castor::point::getCeiled</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;point)</argsstring>
+        <name>getCeiled</name>
+        <qualifiedname>castor::point::getCeiled</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Arrondit au supérieur chaque donnée du point donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le point arrondi. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="384" column="14" declfile="CastorUtils/Math/Point.hpp" declline="384" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a7fca0493e1d4433bf1b74a9c7c42caee" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::point::round</definition>
+        <argsstring>(Point&lt; T, TCount &gt; &amp;point)</argsstring>
+        <name>round</name>
+        <qualifiedname>castor::point::round</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Arrondit chaque donnée du point donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="394" column="13" declfile="CastorUtils/Math/Point.hpp" declline="394" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a11f0f9e917c86138582f048793535dba" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt;</type>
+        <definition>static Point&lt; T, TCount &gt; castor::point::getRounded</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;point)</argsstring>
+        <name>getRounded</name>
+        <qualifiedname>castor::point::getRounded</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Arrondit chaque donnée du point donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le point arrondi. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="406" column="14" declfile="CastorUtils/Math/Point.hpp" declline="406" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1aaa1c6c1d6d62783f154bdb3cf8326342" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::point::negate</definition>
+        <argsstring>(Point&lt; T, TCount &gt; &amp;point)</argsstring>
+        <name>negate</name>
+        <qualifiedname>castor::point::negate</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Négative chaque donnée du point donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="416" column="13" declfile="CastorUtils/Math/Point.hpp" declline="416" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a97436fb51c790363e8a38bb1727b4384" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::point::normalise</definition>
+        <argsstring>(Point&lt; T, TCount &gt; &amp;point)</argsstring>
+        <name>normalise</name>
+        <qualifiedname>castor::point::normalise</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Normalise le point. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Un point est normalisé quand sa longueur vaut 1.0 <linebreak/>
+Chaque donnée est donc divisée par la longueur du point </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="430" column="13" declfile="CastorUtils/Math/Point.hpp" declline="430" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a86e3d56b7445127f4e200884c5768e27" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt;</type>
+        <definition>static Point&lt; T, TCount &gt; castor::point::getNormalised</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;point)</argsstring>
+        <name>getNormalised</name>
+        <qualifiedname>castor::point::getNormalised</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Retourne la forme normalisée d&apos;un point. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="440" column="14" declfile="CastorUtils/Math/Point.hpp" declline="440" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a9030781229b3ca3092f76fcc561f1421" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>static T castor::point::dot</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;lhs, Point&lt; T, TCount &gt; const &amp;rhs)</argsstring>
+        <name>dot</name>
+        <qualifiedname>castor::point::dot</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le produit scalaire entre 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le produit scalaire </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="452" column="10" declfile="CastorUtils/Math/Point.hpp" declline="452" declcolumn="10"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a1de9a6986a55444a1f0b2ceea5d87c1f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>Vector3T</type>
+            <declname>LhsT</declname>
+            <defname>LhsT</defname>
+          </param>
+          <param>
+            <type>Vector3T</type>
+            <declname>RhsT</declname>
+            <defname>RhsT</defname>
+          </param>
+        </templateparamlist>
+        <type>LhsT</type>
+        <definition>static LhsT castor::point::cross</definition>
+        <argsstring>(LhsT const &amp;lhs, RhsT const &amp;rhs)</argsstring>
+        <name>cross</name>
+        <qualifiedname>castor::point::cross</qualifiedname>
+        <param>
+          <type>LhsT const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>RhsT const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le produit vectoriel entre 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le vecteur résultant. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="464" column="13" declfile="CastorUtils/Math/Point.hpp" declline="464" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a881ca9a01ee9b92234e84b4c6eae038f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>static double castor::point::cosTheta</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;lhs, Point&lt; T, TCount &gt; const &amp;rhs)</argsstring>
+        <name>cosTheta</name>
+        <qualifiedname>castor::point::cosTheta</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le cosinus trigonométrique de l&apos;angle entre 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le cosinus </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="476" column="15" declfile="CastorUtils/Math/Point.hpp" declline="476" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a08576d82ca6e4b6d1537501625adae02" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>static double castor::point::lengthSquared</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;point)</argsstring>
+        <name>lengthSquared</name>
+        <qualifiedname>castor::point::lengthSquared</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le carré de la longueur Euclidienne du vecteur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le carré de la norme Euclidienne </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="488" column="15" declfile="CastorUtils/Math/Point.hpp" declline="488" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a114e4edf9fd6759642794483c11d789a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>static double castor::point::length</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;point)</argsstring>
+        <name>length</name>
+        <qualifiedname>castor::point::length</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la longueur Euclidienne du vecteur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La norme Euclidienne </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="500" column="15" declfile="CastorUtils/Math/Point.hpp" declline="500" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a64cbeeef83c4181c439d0f82521af569" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>static double castor::point::lengthManhattan</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;point)</argsstring>
+        <name>lengthManhattan</name>
+        <qualifiedname>castor::point::lengthManhattan</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la longueur de Manhattan du vecteur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La distance de Manhattan </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="512" column="15" declfile="CastorUtils/Math/Point.hpp" declline="512" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1ac59fb91421a727bc769e10d801730d79" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>static double castor::point::lengthMinkowski</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;point, double order)</argsstring>
+        <name>lengthMinkowski</name>
+        <qualifiedname>castor::point::lengthMinkowski</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>order</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la longueur de Minkowski du vecteur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">order</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;ordre Minkownski </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La distance de Minkowski </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="526" column="15" declfile="CastorUtils/Math/Point.hpp" declline="526" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a1ab5d876a7caf6a60d8fbda288c057d2" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>static double castor::point::lengthChebychev</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;point)</argsstring>
+        <name>lengthChebychev</name>
+        <qualifiedname>castor::point::lengthChebychev</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la longueur de Chebychev du vecteur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La distance de Chebychev </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="538" column="15" declfile="CastorUtils/Math/Point.hpp" declline="538" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a8d3799f4363627454443acea73178c57" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>static double castor::point::distanceSquared</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;lhs, Point&lt; T, TCount &gt; const &amp;rhs)</argsstring>
+        <name>distanceSquared</name>
+        <qualifiedname>castor::point::distanceSquared</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le carré de la distance Euclidienne entre deux points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le carré de la norme Euclidienne. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="550" column="15" declfile="CastorUtils/Math/Point.hpp" declline="550" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1ab659a0f4cc2863ea7d8c15e13b64c304" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>static double castor::point::distance</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;lhs, Point&lt; T, TCount &gt; const &amp;rhs)</argsstring>
+        <name>distance</name>
+        <qualifiedname>castor::point::distance</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la norme Euclidienne entre deux points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La norme Euclidienne. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="562" column="15" declfile="CastorUtils/Math/Point.hpp" declline="562" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a27138f85341d7f600f7a534a8ad5b9db" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>static double castor::point::distanceManhattan</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;lhs, Point&lt; T, TCount &gt; const &amp;rhs)</argsstring>
+        <name>distanceManhattan</name>
+        <qualifiedname>castor::point::distanceManhattan</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la distance de Manhattan entre deux points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La distance de Manhattan. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="574" column="15" declfile="CastorUtils/Math/Point.hpp" declline="574" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a9537dc65de742bd62ffa2b97e8c197f8" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>static double castor::point::distanceMinkowski</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;lhs, Point&lt; T, TCount &gt; const &amp;rhs, double order)</argsstring>
+        <name>distanceMinkowski</name>
+        <qualifiedname>castor::point::distanceMinkowski</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>order</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la distance de Minkowski entre deux points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">order</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;ordre Minkownski. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La distance de Minkowski. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="588" column="15" declfile="CastorUtils/Math/Point.hpp" declline="588" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1af4ca33bb4b331d70bbba58aa513715e8" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>static double castor::point::distanceChebychev</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;lhs, Point&lt; T, TCount &gt; const &amp;rhs)</argsstring>
+        <name>distanceChebychev</name>
+        <qualifiedname>castor::point::distanceChebychev</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la distance de Chebychev entre deux points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La distance de Chebychev. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="600" column="15" declfile="CastorUtils/Math/Point.hpp" declline="600" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1ae4f80dd36f36a2d84ab6ed4857975239" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>static T castor::point::dot</definition>
+        <argsstring>(Coords&lt; T, TCount &gt; const &amp;lhs, Point&lt; T, TCount &gt; const &amp;rhs)</argsstring>
+        <name>dot</name>
+        <qualifiedname>castor::point::dot</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le produit scalaire entre 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le produit scalaire </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="612" column="10" declfile="CastorUtils/Math/Point.hpp" declline="612" declcolumn="10"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a983481f81ff7003540e95a49be387a66" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; T &gt;</type>
+        <definition>static Point3&lt; T &gt; castor::point::cross</definition>
+        <argsstring>(Coords3&lt; T &gt; const &amp;lhs, Point3&lt; T &gt; const &amp;rhs)</argsstring>
+        <name>cross</name>
+        <qualifiedname>castor::point::cross</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a916f4c33a4634d775ac0cfd9bff376ee" kindref="member">Coords3</ref>&lt; T &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; T &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le produit vectoriel entre 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le vecteur résultant. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="624" column="15" declfile="CastorUtils/Math/Point.hpp" declline="624" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1aef1c13704bcd7040f61902db8f6b8c25" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>static double castor::point::cosTheta</definition>
+        <argsstring>(Coords&lt; T, TCount &gt; const &amp;lhs, Point&lt; T, TCount &gt; const &amp;rhs)</argsstring>
+        <name>cosTheta</name>
+        <qualifiedname>castor::point::cosTheta</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le cosinus trigonométrique de l&apos;angle entre 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le cosinus </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="636" column="15" declfile="CastorUtils/Math/Point.hpp" declline="636" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a63ef59217fdd70bf7d556c1093f21793" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>static T castor::point::dot</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;lhs, Coords&lt; T, TCount &gt; const &amp;rhs)</argsstring>
+        <name>dot</name>
+        <qualifiedname>castor::point::dot</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le produit scalaire entre 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le produit scalaire </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="648" column="10" declfile="CastorUtils/Math/Point.hpp" declline="648" declcolumn="10"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1ab5a43e71bc45fd396c4593c2ac149483" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; T &gt;</type>
+        <definition>static Point3&lt; T &gt; castor::point::cross</definition>
+        <argsstring>(Point3&lt; T &gt; const &amp;lhs, Coords3&lt; T &gt; const &amp;rhs)</argsstring>
+        <name>cross</name>
+        <qualifiedname>castor::point::cross</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; T &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a916f4c33a4634d775ac0cfd9bff376ee" kindref="member">Coords3</ref>&lt; T &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le produit vectoriel entre 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le vecteur résultant. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="660" column="15" declfile="CastorUtils/Math/Point.hpp" declline="660" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a329fcb7f7f0524c3872106a41fb3ca19" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>static double castor::point::cosTheta</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;lhs, Coords&lt; T, TCount &gt; const &amp;rhs)</argsstring>
+        <name>cosTheta</name>
+        <qualifiedname>castor::point::cosTheta</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le cosinus trigonométrique de l&apos;angle entre 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le cosinus </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="672" column="15" declfile="CastorUtils/Math/Point.hpp" declline="672" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1ac03f43fda0210654081ffd3746d7fff0" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>static T castor::point::dot</definition>
+        <argsstring>(Coords&lt; T const, TCount &gt; const &amp;lhs, Point&lt; T, TCount &gt; const &amp;rhs)</argsstring>
+        <name>dot</name>
+        <qualifiedname>castor::point::dot</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T const, TCount &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le produit scalaire entre 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le produit scalaire </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="684" column="10" declfile="CastorUtils/Math/Point.hpp" declline="684" declcolumn="10"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1aa61a3bcc3ddf8bdfcdc9a7b76b1161af" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; T &gt;</type>
+        <definition>static Point3&lt; T &gt; castor::point::cross</definition>
+        <argsstring>(Coords&lt; T const, 3 &gt; const &amp;lhs, Point3&lt; T &gt; const &amp;rhs)</argsstring>
+        <name>cross</name>
+        <qualifiedname>castor::point::cross</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T const, 3 &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; T &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le produit vectoriel entre 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le vecteur résultant. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="696" column="15" declfile="CastorUtils/Math/Point.hpp" declline="696" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a629ccd427480b0db6224c68dc501ec9c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>static double castor::point::cosTheta</definition>
+        <argsstring>(Coords&lt; T const, TCount &gt; const &amp;lhs, Point&lt; T, TCount &gt; const &amp;rhs)</argsstring>
+        <name>cosTheta</name>
+        <qualifiedname>castor::point::cosTheta</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T const, TCount &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le cosinus trigonométrique de l&apos;angle entre 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le cosinus </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="708" column="15" declfile="CastorUtils/Math/Point.hpp" declline="708" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1aad44c5664c2b2071c9bb15f79cadb64b" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>static T castor::point::dot</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;lhs, Coords&lt; T const, TCount &gt; const &amp;rhs)</argsstring>
+        <name>dot</name>
+        <qualifiedname>castor::point::dot</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T const, TCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le produit scalaire entre 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le produit scalaire </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="720" column="10" declfile="CastorUtils/Math/Point.hpp" declline="720" declcolumn="10"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1a2a021cdb99fc346c525638ddbae31344" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; T &gt;</type>
+        <definition>static Point3&lt; T &gt; castor::point::cross</definition>
+        <argsstring>(Point3&lt; T &gt; const &amp;lhs, Coords&lt; T const, 3 &gt; const &amp;rhs)</argsstring>
+        <name>cross</name>
+        <qualifiedname>castor::point::cross</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; T &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T const, 3 &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le produit vectoriel entre 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le vecteur résultant. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="732" column="15" declfile="CastorUtils/Math/Point.hpp" declline="732" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d4d/a02285_1ae898abeef5ab9fac76206cae048eade2" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>TCount</declname>
+            <defname>TCount</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>static double castor::point::cosTheta</definition>
+        <argsstring>(Point&lt; T, TCount &gt; const &amp;lhs, Coords&lt; T const, TCount &gt; const &amp;rhs)</argsstring>
+        <name>cosTheta</name>
+        <qualifiedname>castor::point::cosTheta</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, TCount &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; T const, TCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le cosinus trigonométrique de l&apos;angle entre 2 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lhs</parametername>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les points </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le cosinus </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="744" column="15" declfile="CastorUtils/Math/Point.hpp" declline="744" declcolumn="15"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Fonctions d&apos;aide pour les <ref refid="db/dcf/a09187" kindref="compound">Point</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>10/07/2012 </para>
+</simplesect>
+<simplesect kind="version"><para>0.7.0 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="CastorUtils/Math/Coords.hpp" line="293" column="1"/>
+  </compounddef>
+</doxygen>

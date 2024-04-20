@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d25/a05787" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlayContext</compoundname>
+    <includes local="no">Overlay.hpp</includes>
+    <innerclass refid="d8/df0/a05791" prot="public">castor3d::OverlayContext::OverlayPtr</innerclass>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d25/a05787_1a2d23feba600b2317c1061c4fed13cdcb" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/db2/a07139" kindref="compound">SceneContext</ref> *</type>
+        <definition>SceneContext* castor3d::OverlayContext::scene</definition>
+        <argsstring></argsstring>
+        <name>scene</name>
+        <qualifiedname>castor3d::OverlayContext::scene</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/Overlay.hpp" line="342" column="15" bodyfile="Castor3D/Overlay/Overlay.hpp" bodystart="342" bodyend="342"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d25/a05787_1a2c1d38cbe4b681b4552a05ed8f84026a" prot="public" static="no" mutable="no">
+        <type><ref refid="de/dd6/a07151" kindref="compound">RootContext</ref> *</type>
+        <definition>RootContext* castor3d::OverlayContext::root</definition>
+        <argsstring></argsstring>
+        <name>root</name>
+        <qualifiedname>castor3d::OverlayContext::root</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/Overlay.hpp" line="343" column="14" bodyfile="Castor3D/Overlay/Overlay.hpp" bodystart="343" bodyend="343"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d25/a05787_1afade43be9ff7040b731a99d28b025377" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/df0/a05791" kindref="compound">OverlayPtr</ref></type>
+        <definition>OverlayPtr castor3d::OverlayContext::overlay</definition>
+        <argsstring></argsstring>
+        <name>overlay</name>
+        <qualifiedname>castor3d::OverlayContext::overlay</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/Overlay.hpp" line="344" column="12" bodyfile="Castor3D/Overlay/Overlay.hpp" bodystart="344" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d25/a05787_1acaa736a94198a75e5056b566289f27a2" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d8/df0/a05791" kindref="compound">OverlayPtr</ref> &gt;</type>
+        <definition>castor::Vector&lt; OverlayPtr &gt; castor3d::OverlayContext::parentOverlays</definition>
+        <argsstring></argsstring>
+        <name>parentOverlays</name>
+        <qualifiedname>castor3d::OverlayContext::parentOverlays</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/Overlay.hpp" line="345" column="16" bodyfile="Castor3D/Overlay/Overlay.hpp" bodystart="345" bodyend="345"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="5">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="6" relation="private-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::OverlayContext</label>
+        <link refid="d0/d25/a05787"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>scene</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>overlay</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::OverlayContext::OverlayPtr</label>
+        <link refid="d8/df0/a05791"/>
+      </node>
+      <node id="12">
+        <label>castor3d::ProgressBar</label>
+        <link refid="d6/daf/a05323"/>
+      </node>
+      <node id="8">
+        <label>castor3d::RenderWindowDesc</label>
+        <link refid="de/d75/a06503"/>
+        <childnode refid="9" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RootContext</label>
+        <link refid="de/dd6/a07151"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>engine</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>window</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>logger</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>progress</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SceneContext</label>
+        <link refid="d3/db2/a07139"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>fontName</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::LoggerInstance</label>
+        <link refid="d9/d93/a09063"/>
+      </node>
+      <node id="6">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="7">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="6" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Overlay/Overlay.hpp" line="335" column="1" bodyfile="Castor3D/Overlay/Overlay.hpp" bodystart="336" bodyend="346"/>
+    <listofallmembers>
+      <member refid="d0/d25/a05787_1afade43be9ff7040b731a99d28b025377" prot="public" virt="non-virtual"><scope>castor3d::OverlayContext</scope><name>overlay</name></member>
+      <member refid="d0/d25/a05787_1acaa736a94198a75e5056b566289f27a2" prot="public" virt="non-virtual"><scope>castor3d::OverlayContext</scope><name>parentOverlays</name></member>
+      <member refid="d0/d25/a05787_1a2c1d38cbe4b681b4552a05ed8f84026a" prot="public" virt="non-virtual"><scope>castor3d::OverlayContext</scope><name>root</name></member>
+      <member refid="d0/d25/a05787_1a2d23feba600b2317c1061c4fed13cdcb" prot="public" virt="non-virtual"><scope>castor3d::OverlayContext</scope><name>scene</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

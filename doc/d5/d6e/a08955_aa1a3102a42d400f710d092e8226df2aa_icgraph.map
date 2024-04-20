@@ -1,0 +1,19 @@
+<map id="castor::ImageLayout::sliceMipBuffer" name="castor::ImageLayout::sliceMipBuffer">
+<area shape="rect" id="Node000001" title=" " alt="" coords="647,77,787,117"/>
+<area shape="rect" id="Node000002" href="$d2/dd2/a02279.html#a235f1ba77928962922cd89104c5c2c05" title=" " alt="" coords="432,5,599,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="663,73,598,44,564,33,566,28,600,40,666,68"/>
+<area shape="rect" id="Node000003" href="$d2/dd2/a02279.html#af0f4938b9b1da6e730471b7ebbae3b03" title=" " alt="" coords="432,55,599,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="632,87,598,82,599,77,633,82"/>
+<area shape="rect" id="Node000004" href="$d5/d6e/a08955.html#a4c4b4eacbdf4a67193a4d3ecc2d914e0" title=" " alt="" coords="445,105,585,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="633,111,586,118,585,112,632,106"/>
+<area shape="rect" id="Node000009" href="$d5/d6e/a08955.html#a41b0ed5e425958fb41250a66e46b3f3e" title=" " alt="" coords="445,169,585,209"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="667,126,600,159,571,171,569,166,598,154,665,121"/>
+<area shape="rect" id="Node000005" href="$d2/dd2/a02279.html#a53ad359a330e350507fe9ed0a9c182b6" title=" " alt="" coords="213,88,384,113"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="431,118,384,113,384,107,432,113"/>
+<area shape="rect" id="Node000008" href="$d2/dd2/a02279.html#a23449a1c1a04f6b565d740c50828bbcd" title=" " alt="" coords="213,137,384,163"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="432,137,384,143,384,137,431,132"/>
+<area shape="rect" id="Node000006" href="$d6/d3e/a08939.html#ac6028f643d5681ccc96b54a5a996240d" title=" " alt="" coords="5,63,165,88"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="199,92,165,87,166,82,200,86"/>
+<area shape="rect" id="Node000007" href="$d6/d3e/a08939.html#a734d8e7426a7f9ab0a188604de547f9c" title=" " alt="" coords="5,112,165,137"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="200,114,166,118,165,113,199,109"/>
+</map>

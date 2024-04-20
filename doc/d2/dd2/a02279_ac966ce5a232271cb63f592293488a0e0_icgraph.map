@@ -1,0 +1,7 @@
+<map id="castor::alignedAlloc" name="castor::alignedAlloc">
+<area shape="rect" id="Node000001" title="Allocates aligned memory." alt="" coords="260,35,396,60"/>
+<area shape="rect" id="Node000002" href="$d2/dd2/a02279.html#a7e04eedd6b3f29c9d882fac3d352d4e2" title="Allocates aligned memory." alt="" coords="41,5,177,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="246,39,177,30,177,24,247,34"/>
+<area shape="rect" id="Node000003" href="$d6/d92/a07935.html#aab3ac5d49d6ecaf9fabb55c7377a6b95" title="Allocates memory." alt="" coords="5,55,212,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="247,60,212,65,212,60,246,55"/>
+</map>

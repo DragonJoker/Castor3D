@@ -1,0 +1,203 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/ddf/a06955" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::CameraContext</compoundname>
+    <basecompoundref refid="d1/d84/a07063" prot="public" virt="non-virtual">castor3d::MovableContext</basecompoundref>
+    <includes local="no">Camera.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/ddf/a06955_1a31eeb496698ade66755e3a779e1e563b" prot="public" static="no" mutable="no">
+        <type>ViewportUPtr</type>
+        <definition>ViewportUPtr castor3d::CameraContext::viewport</definition>
+        <argsstring></argsstring>
+        <name>viewport</name>
+        <qualifiedname>castor3d::CameraContext::viewport</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Camera.hpp" line="295" column="14" bodyfile="Castor3D/Scene/Camera.hpp" bodystart="295" bodyend="295"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/ddf/a06955_1a65bfc0866af3af7a8bb7efba277b36ed" prot="public" static="no" mutable="no">
+        <type>VkPrimitiveTopology</type>
+        <definition>VkPrimitiveTopology castor3d::CameraContext::primitiveType</definition>
+        <argsstring></argsstring>
+        <name>primitiveType</name>
+        <qualifiedname>castor3d::CameraContext::primitiveType</qualifiedname>
+        <initializer>{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Camera.hpp" line="296" column="21" bodyfile="Castor3D/Scene/Camera.hpp" bodystart="296" bodyend="296"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/ddf/a06955_1a6166745f28582ee6277c3782023da0e0" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d2f/a06715" kindref="compound">HdrConfig</ref></type>
+        <definition>HdrConfig castor3d::CameraContext::hdrConfig</definition>
+        <argsstring></argsstring>
+        <name>hdrConfig</name>
+        <qualifiedname>castor3d::CameraContext::hdrConfig</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Camera.hpp" line="297" column="11" bodyfile="Castor3D/Scene/Camera.hpp" bodystart="297" bodyend="297"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/ddf/a06955_1ac0ef3d5fe3ed8904104fede9fa568201" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/d65/a06711" kindref="compound">ColourGradingConfig</ref></type>
+        <definition>ColourGradingConfig castor3d::CameraContext::colourGradingConfig</definition>
+        <argsstring></argsstring>
+        <name>colourGradingConfig</name>
+        <qualifiedname>castor3d::CameraContext::colourGradingConfig</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Camera.hpp" line="298" column="21" bodyfile="Castor3D/Scene/Camera.hpp" bodystart="298" bodyend="298"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::CameraContext</label>
+        <link refid="d1/ddf/a06955"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MovableContext</label>
+        <link refid="d1/d84/a07063"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="6">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="7" relation="private-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::CameraContext</label>
+        <link refid="d1/ddf/a06955"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>hdrConfig</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>colourGradingConfig</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::ColourGradingConfig</label>
+        <link refid="d9/d65/a06711"/>
+      </node>
+      <node id="5">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::HdrConfig</label>
+        <link refid="d1/d2f/a06715"/>
+      </node>
+      <node id="2">
+        <label>castor3d::MovableContext</label>
+        <link refid="d1/d84/a07063"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>scene</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::ProgressBar</label>
+        <link refid="d6/daf/a05323"/>
+      </node>
+      <node id="9">
+        <label>castor3d::RenderWindowDesc</label>
+        <link refid="de/d75/a06503"/>
+        <childnode refid="10" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RootContext</label>
+        <link refid="de/dd6/a07151"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>engine</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>window</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>logger</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>progress</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::SceneContext</label>
+        <link refid="d3/db2/a07139"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>fontName</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor::LoggerInstance</label>
+        <link refid="d9/d93/a09063"/>
+      </node>
+      <node id="7">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="8">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="7" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/Camera.hpp" line="292" column="1" bodyfile="Castor3D/Scene/Camera.hpp" bodystart="294" bodyend="299"/>
+    <listofallmembers>
+      <member refid="d1/ddf/a06955_1ac0ef3d5fe3ed8904104fede9fa568201" prot="public" virt="non-virtual"><scope>castor3d::CameraContext</scope><name>colourGradingConfig</name></member>
+      <member refid="d1/ddf/a06955_1a6166745f28582ee6277c3782023da0e0" prot="public" virt="non-virtual"><scope>castor3d::CameraContext</scope><name>hdrConfig</name></member>
+      <member refid="d1/d84/a07063_1a0299b1de049372b99ef63405a5e9cc26" prot="public" virt="non-virtual"><scope>castor3d::CameraContext</scope><name>name</name></member>
+      <member refid="d1/d84/a07063_1a387699fe0f53bb34f7ceb34056d695fa" prot="public" virt="non-virtual"><scope>castor3d::CameraContext</scope><name>parentNode</name></member>
+      <member refid="d1/ddf/a06955_1a65bfc0866af3af7a8bb7efba277b36ed" prot="public" virt="non-virtual"><scope>castor3d::CameraContext</scope><name>primitiveType</name></member>
+      <member refid="d1/d84/a07063_1ae83b7d5d5a6ef90b08a715d3d844848f" prot="public" virt="non-virtual"><scope>castor3d::CameraContext</scope><name>scene</name></member>
+      <member refid="d1/ddf/a06955_1a31eeb496698ade66755e3a779e1e563b" prot="public" virt="non-virtual"><scope>castor3d::CameraContext</scope><name>viewport</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

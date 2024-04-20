@@ -1,0 +1,9 @@
+<map id="castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt;" name="castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt;">
+<area shape="rect" id="Node000001" title="Submesh component holding base submesh data." alt="" coords="5,243,208,283"/>
+<area shape="rect" id="Node000002" href="$d6/df6/a05611.html" title=" " alt="" coords="6,168,207,193"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,207,109,243,104,243,104,207"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="6,93,207,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="109,133,109,168,104,168,104,133"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="15,5,198,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="109,45,109,93,104,93,104,45"/>
+</map>

@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/db8/a06079" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RenderedNodeT</compoundname>
+    <includes local="no">PipelinesNodes.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename NodeT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/db8/a06079_1a6b7490b6528643f66d892658d336f2fc" prot="public" static="no" mutable="no">
+        <type>NodeT const  *</type>
+        <definition>NodeT const* castor3d::RenderedNodeT&lt; NodeT &gt;::node</definition>
+        <argsstring></argsstring>
+        <name>node</name>
+        <qualifiedname>castor3d::RenderedNodeT::node</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="31" column="14" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="31" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/db8/a06079_1ae4c8e4d65373814174a5f9f41b488d50" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderedNodeT&lt; NodeT &gt;::visible</definition>
+        <argsstring></argsstring>
+        <name>visible</name>
+        <qualifiedname>castor3d::RenderedNodeT::visible</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="32" column="6" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/db8/a06079_1aba1f2985cddb8e01f12281b646a8257a" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a8f8eea85cc909b97028833eb183020cd" kindref="member">NodeCommandT</ref>&lt; NodeT &gt;</type>
+        <definition>NodeCommandT&lt; NodeT &gt; castor3d::RenderedNodeT&lt; NodeT &gt;::command</definition>
+        <argsstring></argsstring>
+        <name>command</name>
+        <qualifiedname>castor3d::RenderedNodeT::command</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="33" column="14" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="33" bodyend="33"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/db8/a06079_1ae0167d5d6931e6e3792d4f295dcae817" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderedNodeT&lt; NodeT &gt;::RenderedNodeT</definition>
+        <argsstring>()=default</argsstring>
+        <name>RenderedNodeT</name>
+        <qualifiedname>castor3d::RenderedNodeT::RenderedNodeT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="20" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/db8/a06079_1a31be5418456b7d0df5d1319044f527aa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderedNodeT&lt; NodeT &gt;::RenderedNodeT</definition>
+        <argsstring>(NodeT const *node, bool visible, NodeCommandT&lt; NodeT &gt; command)</argsstring>
+        <name>RenderedNodeT</name>
+        <qualifiedname>castor3d::RenderedNodeT::RenderedNodeT</qualifiedname>
+        <param>
+          <type>NodeT const *</type>
+          <declname>node</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>visible</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a8f8eea85cc909b97028833eb183020cd" kindref="member">NodeCommandT</ref>&lt; NodeT &gt;</type>
+          <declname>command</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="22" column="1" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="22" bodyend="29"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="18" column="1" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="19" bodyend="34"/>
+    <listofallmembers>
+      <member refid="d9/db8/a06079_1aba1f2985cddb8e01f12281b646a8257a" prot="public" virt="non-virtual"><scope>castor3d::RenderedNodeT</scope><name>command</name></member>
+      <member refid="d9/db8/a06079_1a6b7490b6528643f66d892658d336f2fc" prot="public" virt="non-virtual"><scope>castor3d::RenderedNodeT</scope><name>node</name></member>
+      <member refid="d9/db8/a06079_1ae0167d5d6931e6e3792d4f295dcae817" prot="public" virt="non-virtual"><scope>castor3d::RenderedNodeT</scope><name>RenderedNodeT</name></member>
+      <member refid="d9/db8/a06079_1a31be5418456b7d0df5d1319044f527aa" prot="public" virt="non-virtual"><scope>castor3d::RenderedNodeT</scope><name>RenderedNodeT</name></member>
+      <member refid="d9/db8/a06079_1ae4c8e4d65373814174a5f9f41b488d50" prot="public" virt="non-virtual"><scope>castor3d::RenderedNodeT</scope><name>visible</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

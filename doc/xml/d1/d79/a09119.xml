@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d79/a09119" kind="struct" language="C++" prot="public">
+    <compoundname>castor::Fact</compoundname>
+    <includes local="no">Math.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+      <param>
+        <type>int</type>
+        <declname>N</declname>
+        <defname>N</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d79/a09119_1afa44c94ff22aa1c23cd60ca06a8894e2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>T</type>
+        <definition>T castor::Fact&lt; T, N &gt;::operator()</definition>
+        <argsstring>() const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::Fact::operator()</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Math.hpp" line="18" column="10" bodyfile="CastorUtils/Math/Math.hpp" bodystart="18" bodyend="21"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Cas récursif pour Factorielle. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/Math.hpp" line="16" column="15" bodyfile="CastorUtils/Math/Math.hpp" bodystart="17" bodyend="22"/>
+    <listofallmembers>
+      <member refid="d1/d79/a09119_1afa44c94ff22aa1c23cd60ca06a8894e2" prot="public" virt="non-virtual"><scope>castor::Fact</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

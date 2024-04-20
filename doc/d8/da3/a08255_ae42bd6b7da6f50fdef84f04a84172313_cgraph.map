@@ -1,0 +1,38 @@
+<map id="castor::ResourceCacheBaseT::add" name="castor::ResourceCacheBaseT::add">
+<area shape="rect" id="Node000001" title="Logging version of tryAdd." alt="" coords="5,255,193,295"/>
+<area shape="rect" id="Node000002" href="$d8/da3/a08255.html#a63b72a3a1c306679e47426f3a270ec97" title=" " alt="" coords="241,133,429,173"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,252,282,177,284,182,140,257"/>
+<area shape="rect" id="Node000009" href="$d2/dd2/a02279.html#a58f3178234ce83e643568e48a0ed6a3f" title=" " alt="" coords="1152,259,1319,285"/>
+<area shape="poly" id="edge21_Node000001_Node000009" title=" " alt="" coords="194,272,570,272,809,272,1138,270,1138,276,809,277,570,277,194,277"/>
+<area shape="rect" id="Node000015" href="$d8/da3/a08255.html#a16408750c3e49683268744e1f35761df" title=" " alt="" coords="241,312,429,352"/>
+<area shape="poly" id="edge20_Node000001_Node000015" title=" " alt="" coords="183,292,240,306,239,311,182,297"/>
+<area shape="rect" id="Node000003" href="$d8/da3/a08255.html#a6e4ca586f9ab38ecc32ba59585435d0e" title=" " alt="" coords="477,197,665,237"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="411,171,485,191,483,196,409,176"/>
+<area shape="rect" id="Node000004" href="$d8/da3/a08255.html#a3f6cbb3c0ad8d6136141c4c089f7f479" title=" " alt="" coords="477,133,665,173"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="430,151,463,151,463,156,430,156"/>
+<area shape="rect" id="Node000012" href="$d8/da3/a08255.html#aa24d9472022aa0f450529b07d9b7f743" title=" " alt="" coords="477,5,665,45"/>
+<area shape="poly" id="edge11_Node000002_Node000012" title=" " alt="" coords="360,131,412,93,476,55,491,48,493,53,479,60,415,98,363,135"/>
+<area shape="rect" id="Node000014" href="$d8/da3/a08255.html#a9c25c01ca8f76ad4a25088101572200d" title=" " alt="" coords="477,69,665,109"/>
+<area shape="poly" id="edge16_Node000002_Node000014" title=" " alt="" coords="409,131,483,110,485,115,411,136"/>
+<area shape="rect" id="Node000005" href="$d8/da3/a08255.html#a846eb5869a3b833ce9200edb493a3463" title=" " alt="" coords="713,124,901,164"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="665,147,699,146,699,151,666,152"/>
+<area shape="rect" id="Node000006" href="$d9/d93/a09063.html#a8053eec12caa69c0ddad74e68e945eab" title="Logs a trace message, from a std::basic_string&lt; CharT &gt;" alt="" coords="730,188,885,228"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="659,171,717,184,716,190,658,176"/>
+<area shape="rect" id="Node000011" href="$d2/dd2/a02279.html#af41ea5b34edb8c4103f57937867ea4d6" title=" " alt="" coords="720,74,895,99"/>
+<area shape="poly" id="edge10_Node000004_Node000011" title=" " alt="" coords="639,131,713,109,745,100,747,106,714,115,641,136"/>
+<area shape="rect" id="Node000007" href="$d9/d93/a09063.html#af8c57bc4b8bfeb532f32493316e157a1" title="Pushes a message into the queue." alt="" coords="949,188,1104,228"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="885,205,936,205,936,211,885,211"/>
+<area shape="rect" id="Node000008" href="$d9/d93/a09063.html#afa966debfbe3f79d0bea9cf2bc4c7889" title=" " alt="" coords="1158,191,1313,231"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="1104,206,1144,207,1144,212,1104,212"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="1093,226,1181,253,1179,258,1092,231"/>
+<area shape="rect" id="Node000010" href="$d2/dd2/a02279.html#ab0fb14b20a64ca391cfd363dfdf2ea78" title=" " alt="" coords="1185,141,1285,166"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="1103,185,1172,167,1174,172,1104,191"/>
+<area shape="poly" id="edge12_Node000012_Node000005" title=" " alt="" coords="645,43,667,55,682,69,692,82,700,96,715,109,727,116,724,120,712,113,696,99,687,85,678,72,664,60,642,48"/>
+<area shape="poly" id="edge15_Node000012_Node000011" title=" " alt="" coords="650,43,745,68,744,73,648,48"/>
+<area shape="rect" id="Node000013" href="$d9/d93/a09063.html#a7fb14049e4aa52e127cb89e73f63a0a3" title="Logs a warning, from a std::basic_string&lt; CharT &gt;" alt="" coords="730,9,885,49"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="666,24,716,25,716,30,666,30"/>
+<area shape="poly" id="edge14_Node000013_Node000007" title=" " alt="" coords="881,47,903,59,936,86,965,116,1008,175,1004,178,961,120,932,90,900,64,879,52"/>
+<area shape="poly" id="edge17_Node000014_Node000005" title=" " alt="" coords="659,107,708,118,707,124,658,112"/>
+<area shape="poly" id="edge19_Node000014_Node000011" title=" " alt="" coords="666,86,706,85,706,90,666,91"/>
+<area shape="poly" id="edge18_Node000014_Node000013" title=" " alt="" coords="650,67,716,50,717,55,652,72"/>
+</map>

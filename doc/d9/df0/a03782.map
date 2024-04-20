@@ -1,0 +1,11 @@
+<map id="castor3d::UserInputListener" name="castor3d::UserInputListener">
+<area shape="rect" id="Node000001" title=" " alt="" coords="103,168,284,193"/>
+<area shape="rect" id="Node000004" href="$d4/d16/a03859.html" title=" " alt="" coords="5,250,184,275"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="170,204,110,252,107,248,167,200"/>
+<area shape="rect" id="Node000005" href="$dc/d81/a06611.html" title=" " alt="" coords="209,243,375,283"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="220,200,270,241,267,245,216,204"/>
+<area shape="rect" id="Node000002" href="$d6/da8/a08227.html" title=" " alt="" coords="100,93,287,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,133,196,168,191,168,191,133"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="102,5,285,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="196,45,196,93,191,93,191,45"/>
+</map>

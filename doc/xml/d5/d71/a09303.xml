@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/d71/a09303" kind="struct" language="C++" prot="public">
+    <compoundname>castor::details::Equal&lt; uint32_t &gt;</compoundname>
+    <includes local="no">RangedValue.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d71/a09303_1ad59be179277ef310151d0e46b97b6aca" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::details::Equal&lt; uint32_t &gt;::operator()</definition>
+        <argsstring>(RangedValue&lt; uint32_t &gt; const &amp;lhs, RangedValue&lt; uint32_t &gt; const &amp;rhs) const noexcept</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::details::Equal&lt; uint32_t &gt;::operator()</qualifiedname>
+        <param>
+          <type><ref refid="d8/de9/a09211" kindref="compound">RangedValue</ref>&lt; uint32_t &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/de9/a09211" kindref="compound">RangedValue</ref>&lt; uint32_t &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangedValue.hpp" line="200" column="6" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="200" bodyend="204"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/RangedValue.hpp" line="198" column="1" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="199" bodyend="205"/>
+    <listofallmembers>
+      <member refid="d5/d71/a09303_1ad59be179277ef310151d0e46b97b6aca" prot="public" virt="non-virtual"><scope>castor::details::Equal&lt; uint32_t &gt;</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

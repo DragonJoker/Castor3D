@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/dad/a09015" kind="union" language="C++" prot="public">
+    <compoundname>castor::SizeData</compoundname>
+    <includes local="no">Size.hpp</includes>
+    <innerclass refid="d2/db4/a09019" prot="public">castor::SizeData::Mbr</innerclass>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/dad/a09015_1a5c5b6d69ed80e44690795efe17f28516" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/db4/a09019" kindref="compound">Mbr</ref></type>
+        <definition>Mbr castor::SizeData::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>castor::SizeData::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="21" column="5" bodyfile="CastorUtils/Graphics/Size.hpp" bodystart="21" bodyend="-1"/>
+        <referencedby refid="d4/dd6/a09023_1ab8e3c320eefc853f8fb36db35939844c" compoundref="d9/d95/a02075" startline="137" endline="140">castor::Size::getHeight</referencedby>
+        <referencedby refid="d4/dd6/a09023_1a62edd788d8db8fa9418ee0d207ae4bb6" compoundref="d9/d95/a02075" startline="149" endline="152">castor::Size::getHeight</referencedby>
+        <referencedby refid="d4/dd6/a09023_1a3cef6d7fb9e7e9e4e373f689b2b23b0c" compoundref="d9/d95/a02075" startline="113" endline="116">castor::Size::getWidth</referencedby>
+        <referencedby refid="d4/dd6/a09023_1a2c95f66f6dcf8f063e8ff619c9e0de51" compoundref="d9/d95/a02075" startline="125" endline="128">castor::Size::getWidth</referencedby>
+        <referencedby refid="d4/dd6/a09023_1a5449c6a1e3763d6c644a12291c540ba0" compoundref="d9/d95/a02075" startline="179" endline="182">castor::Size::operator-&gt;</referencedby>
+        <referencedby refid="d4/dd6/a09023_1a1450a5dbb1e4678a5b9d4a0a282f4e5f" compoundref="d9/d95/a02075" startline="184" endline="187">castor::Size::operator-&gt;</referencedby>
+        <referencedby refid="d4/dd6/a09023_1af416f9c4a66c127781c438ba9f94ee9a" compoundref="d9/d95/a02075" startline="165" endline="170">castor::Size::operator&lt;&lt;=</referencedby>
+        <referencedby refid="d4/dd6/a09023_1a6b1efd897f1f9b8c6be31241ee5620a8" compoundref="d9/d95/a02075" startline="172" endline="177">castor::Size::operator&gt;&gt;=</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dc/dad/a09015_1aa29fe9d674404e218537ee642f9b780a" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">Array</ref>&lt; uint32_t, 2u &gt;</type>
+        <definition>Array&lt; uint32_t, 2u &gt; castor::SizeData::buffer</definition>
+        <argsstring></argsstring>
+        <name>buffer</name>
+        <qualifiedname>castor::SizeData::buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="22" column="7" bodyfile="CastorUtils/Graphics/Size.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::SizeData</label>
+        <link refid="dc/dad/a09015"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>size</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::SizeData::Mbr</label>
+        <link refid="d2/db4/a09019"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/Size.hpp" line="14" column="1" bodyfile="CastorUtils/Graphics/Size.hpp" bodystart="15" bodyend="23"/>
+    <listofallmembers>
+      <member refid="dc/dad/a09015_1aa29fe9d674404e218537ee642f9b780a" prot="public" virt="non-virtual"><scope>castor::SizeData</scope><name>buffer</name></member>
+      <member refid="dc/dad/a09015_1a5c5b6d69ed80e44690795efe17f28516" prot="public" virt="non-virtual"><scope>castor::SizeData</scope><name>size</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,238 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/db4/a07575" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::MeshBuffersBase</compoundname>
+    <derivedcompoundref refid="de/de7/a07579" prot="public" virt="non-virtual">castor3d::shader::MeshBuffers</derivedcompoundref>
+    <derivedcompoundref refid="df/ddb/a07583" prot="public" virt="non-virtual">castor3d::shader::MeshletBuffers</derivedcompoundref>
+    <includes local="no">GlslMeshVertex.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/db4/a07575_1ac572e9e7430435182939ce4d932c93ec" prot="public" static="no" mutable="no">
+        <type>sdw::Array&lt; <ref refid="d0/df8/a07571" kindref="compound">MeshPosition</ref> &gt;</type>
+        <definition>sdw::Array&lt; MeshPosition &gt; castor3d::shader::MeshBuffersBase::positions</definition>
+        <argsstring></argsstring>
+        <name>positions</name>
+        <qualifiedname>castor3d::shader::MeshBuffersBase::positions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" line="115" column="12" bodyfile="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/db4/a07575_1af7fb9878b0901fca6cdc61ef10316033" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4Array</type>
+        <definition>sdw::Vec4Array castor3d::shader::MeshBuffersBase::normals</definition>
+        <argsstring></argsstring>
+        <name>normals</name>
+        <qualifiedname>castor3d::shader::MeshBuffersBase::normals</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" line="116" column="16" bodyfile="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/db4/a07575_1a6c0dec5d0577092c5951d607cc59e0b0" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4Array</type>
+        <definition>sdw::Vec4Array castor3d::shader::MeshBuffersBase::tangents</definition>
+        <argsstring></argsstring>
+        <name>tangents</name>
+        <qualifiedname>castor3d::shader::MeshBuffersBase::tangents</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" line="117" column="16" bodyfile="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/db4/a07575_1a7525b46192066152d8cb2dbb7954eecb" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4Array</type>
+        <definition>sdw::Vec4Array castor3d::shader::MeshBuffersBase::bitangents</definition>
+        <argsstring></argsstring>
+        <name>bitangents</name>
+        <qualifiedname>castor3d::shader::MeshBuffersBase::bitangents</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" line="118" column="16" bodyfile="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/db4/a07575_1ad728856d2ce273993dd1efc53c51334c" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4Array</type>
+        <definition>sdw::Vec4Array castor3d::shader::MeshBuffersBase::textures0</definition>
+        <argsstring></argsstring>
+        <name>textures0</name>
+        <qualifiedname>castor3d::shader::MeshBuffersBase::textures0</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" line="119" column="16" bodyfile="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/db4/a07575_1a78cf0be8391c97b1b3a9a633c7875d53" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4Array</type>
+        <definition>sdw::Vec4Array castor3d::shader::MeshBuffersBase::textures1</definition>
+        <argsstring></argsstring>
+        <name>textures1</name>
+        <qualifiedname>castor3d::shader::MeshBuffersBase::textures1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" line="120" column="16" bodyfile="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/db4/a07575_1ac1d7fd63c23b1332079c3beeafc598f6" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4Array</type>
+        <definition>sdw::Vec4Array castor3d::shader::MeshBuffersBase::textures2</definition>
+        <argsstring></argsstring>
+        <name>textures2</name>
+        <qualifiedname>castor3d::shader::MeshBuffersBase::textures2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" line="121" column="16" bodyfile="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/db4/a07575_1ad685cc72a846900527112c7e7807d8b9" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4Array</type>
+        <definition>sdw::Vec4Array castor3d::shader::MeshBuffersBase::textures3</definition>
+        <argsstring></argsstring>
+        <name>textures3</name>
+        <qualifiedname>castor3d::shader::MeshBuffersBase::textures3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" line="122" column="16" bodyfile="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/db4/a07575_1a56d31324322a817358ae761a06b96e51" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4Array</type>
+        <definition>sdw::Vec4Array castor3d::shader::MeshBuffersBase::colours</definition>
+        <argsstring></argsstring>
+        <name>colours</name>
+        <qualifiedname>castor3d::shader::MeshBuffersBase::colours</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" line="123" column="16" bodyfile="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/db4/a07575_1a2e111b88174f07013594bcda71f49e80" prot="public" static="no" mutable="no">
+        <type>sdw::UVec4Array</type>
+        <definition>sdw::UVec4Array castor3d::shader::MeshBuffersBase::passMasks</definition>
+        <argsstring></argsstring>
+        <name>passMasks</name>
+        <qualifiedname>castor3d::shader::MeshBuffersBase::passMasks</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" line="124" column="17" bodyfile="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/db4/a07575_1a91858bfd397ab181ea8cb22fba8b21b7" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4Array</type>
+        <definition>sdw::Vec4Array castor3d::shader::MeshBuffersBase::velocities</definition>
+        <argsstring></argsstring>
+        <name>velocities</name>
+        <qualifiedname>castor3d::shader::MeshBuffersBase::velocities</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" line="125" column="16" bodyfile="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/db4/a07575_1a5db58907c6bfd54f1a2932ea168ed0a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::MeshBuffersBase::MeshBuffersBase</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, PipelineFlags const &amp;flags, uint32_t &amp;firstBinding, uint32_t set, uint32_t stride)</argsstring>
+        <name>MeshBuffersBase</name>
+        <qualifiedname>castor3d::shader::MeshBuffersBase::MeshBuffersBase</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>firstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>stride</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" line="109" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::shader::MeshBuffers</label>
+        <link refid="de/de7/a07579"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::MeshBuffersBase</label>
+        <link refid="da/db4/a07575"/>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::MeshletBuffers</label>
+        <link refid="df/ddb/a07583"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" line="107" column="1" bodyfile="Castor3D/Shader/Shaders/GlslMeshVertex.hpp" bodystart="108" bodyend="126"/>
+    <listofallmembers>
+      <member refid="da/db4/a07575_1a7525b46192066152d8cb2dbb7954eecb" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshBuffersBase</scope><name>bitangents</name></member>
+      <member refid="da/db4/a07575_1a56d31324322a817358ae761a06b96e51" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshBuffersBase</scope><name>colours</name></member>
+      <member refid="da/db4/a07575_1a5db58907c6bfd54f1a2932ea168ed0a9" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshBuffersBase</scope><name>MeshBuffersBase</name></member>
+      <member refid="da/db4/a07575_1af7fb9878b0901fca6cdc61ef10316033" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshBuffersBase</scope><name>normals</name></member>
+      <member refid="da/db4/a07575_1a2e111b88174f07013594bcda71f49e80" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshBuffersBase</scope><name>passMasks</name></member>
+      <member refid="da/db4/a07575_1ac572e9e7430435182939ce4d932c93ec" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshBuffersBase</scope><name>positions</name></member>
+      <member refid="da/db4/a07575_1a6c0dec5d0577092c5951d607cc59e0b0" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshBuffersBase</scope><name>tangents</name></member>
+      <member refid="da/db4/a07575_1ad728856d2ce273993dd1efc53c51334c" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshBuffersBase</scope><name>textures0</name></member>
+      <member refid="da/db4/a07575_1a78cf0be8391c97b1b3a9a633c7875d53" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshBuffersBase</scope><name>textures1</name></member>
+      <member refid="da/db4/a07575_1ac1d7fd63c23b1332079c3beeafc598f6" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshBuffersBase</scope><name>textures2</name></member>
+      <member refid="da/db4/a07575_1ad685cc72a846900527112c7e7807d8b9" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshBuffersBase</scope><name>textures3</name></member>
+      <member refid="da/db4/a07575_1a91858bfd397ab181ea8cb22fba8b21b7" prot="public" virt="non-virtual"><scope>castor3d::shader::MeshBuffersBase</scope><name>velocities</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

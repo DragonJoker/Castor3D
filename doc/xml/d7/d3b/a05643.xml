@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/d3b/a05643" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PassMasks</compoundname>
+    <includes local="no">SubmeshModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/d3b/a05643_1a059e9de6fa7935f4302a4ffb7bb54b80" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; uint8_t, <ref refid="d9/dba/a02278_1a3cfbf16033082e4a90d13af2f909d575" kindref="member">MaxPassLayers</ref> &gt;</type>
+        <definition>castor::Array&lt; uint8_t, MaxPassLayers &gt; castor3d::PassMasks::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>castor3d::PassMasks::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp" line="29" column="15" bodyfile="Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp" line="27" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp" bodystart="28" bodyend="30"/>
+    <listofallmembers>
+      <member refid="d7/d3b/a05643_1a059e9de6fa7935f4302a4ffb7bb54b80" prot="public" virt="non-virtual"><scope>castor3d::PassMasks</scope><name>data</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

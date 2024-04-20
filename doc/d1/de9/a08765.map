@@ -1,0 +1,10 @@
+<map id="castor::ResourceCacheT&lt; Font, String, FontCacheTraits &gt;" name="castor::ResourceCacheT&lt; Font, String, FontCacheTraits &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="9,300,226,340"/>
+<area shape="rect" id="Node000002" href="$d8/da3/a08255.html" title=" " alt="" coords="5,211,229,251"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,265,120,300,115,300,115,265"/>
+<area shape="rect" id="Node000003" href="$d9/d93/a09063.html" title=" " alt="" coords="73,5,228,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="136,43,122,67,112,94,107,125,107,157,115,210,110,211,102,157,102,125,107,93,118,65,132,41"/>
+<area shape="rect" id="Node000004" href="$d8/da3/a08255.html" title="Base class for an element cache." alt="" coords="178,93,366,133"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="178,37,249,91,246,95,175,41"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="238,143,144,213,141,209,234,139"/>
+</map>

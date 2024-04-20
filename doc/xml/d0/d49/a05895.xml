@@ -1,0 +1,271 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d49/a05895" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::PluginException</compoundname>
+    <basecompoundref refid="d2/d96/a08355" prot="public" virt="non-virtual">castor::Exception</basecompoundref>
+    <includes local="no">PluginException.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d49/a05895_1a6714478562139a67d1391820ef2982ab" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::PluginException::m_critical</definition>
+        <argsstring></argsstring>
+        <name>m_critical</name>
+        <qualifiedname>castor3d::PluginException::m_critical</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/PluginException.hpp" line="68" column="6" bodyfile="Castor3D/Plugin/PluginException.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d49/a05895_1a59688dcdb89d84a7d357a531a626de1f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PluginException::PluginException</definition>
+        <argsstring>(bool critical, castor::MbString const &amp;description, char const *file, char const *function, uint32_t line)</argsstring>
+        <name>PluginException</name>
+        <qualifiedname>castor3d::PluginException::PluginException</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>critical</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">castor::MbString</ref> const &amp;</type>
+          <declname>description</declname>
+        </param>
+        <param>
+          <type>char const *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>char const *</type>
+          <declname>function</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>line</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">critical</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si l&apos;exception est critique </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">description</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La description de l&apos;exception </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le fichier </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La fonction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">line</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne dans le fichier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/PluginException.hpp" line="33" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d49/a05895_1a96ccd3a71ec8e71ec865c9b275c574f4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PluginException::PluginException</definition>
+        <argsstring>(bool critical, castor::WString const &amp;description, char const *file, char const *function, uint32_t line)</argsstring>
+        <name>PluginException</name>
+        <qualifiedname>castor3d::PluginException::PluginException</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>critical</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae5b1e9a2409f0870782a59af6208c267" kindref="member">castor::WString</ref> const &amp;</type>
+          <declname>description</declname>
+        </param>
+        <param>
+          <type>char const *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>char const *</type>
+          <declname>function</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>line</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">critical</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si l&apos;exception est critique </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">description</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La description de l&apos;exception </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le fichier </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La fonction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">line</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne dans le fichier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/PluginException.hpp" line="50" column="9" bodyfile="Castor3D/Plugin/PluginException.hpp" bodystart="50" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d49/a05895_1acba329c115f995c79825500dc886bba4" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PluginException::isCritical</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isCritical</name>
+        <qualifiedname>castor3d::PluginException::isCritical</qualifiedname>
+        <briefdescription>
+<para>Dit si l&apos;exception est critique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le statut </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/PluginException.hpp" line="62" column="6" bodyfile="Castor3D/Plugin/PluginException.hpp" bodystart="62" bodyend="65"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::PluginException</label>
+        <link refid="d0/d49/a05895"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Exception</label>
+        <link refid="d2/d96/a08355"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::exception</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>std::basic_string&lt; mbchar &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; mbchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PluginException</label>
+        <link refid="d0/d49/a05895"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Exception</label>
+        <link refid="d2/d96/a08355"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_callStack</edgelabel>
+          <edgelabel>m_description</edgelabel>
+          <edgelabel>m_filename</edgelabel>
+          <edgelabel>m_functionName</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::exception</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Plugin/PluginException.hpp" line="13" column="1" bodyfile="Castor3D/Plugin/PluginException.hpp" bodystart="15" bodyend="69"/>
+    <listofallmembers>
+      <member refid="d2/d96/a08355_1ada321c02ff8fd2e8084701084961b3f2" prot="public" virt="non-virtual"><scope>castor3d::PluginException</scope><name>Exception</name></member>
+      <member refid="d2/d96/a08355_1a99bb999221629bf5932f8e3a270b32c7" prot="public" virt="non-virtual"><scope>castor3d::PluginException</scope><name>Exception</name></member>
+      <member refid="d2/d96/a08355_1ac6d91176e5c1302307ad7e21bfff40c1" prot="public" virt="non-virtual"><scope>castor3d::PluginException</scope><name>getDescription</name></member>
+      <member refid="d2/d96/a08355_1a989a591d3c82e148275a16be6ff0780d" prot="public" virt="non-virtual"><scope>castor3d::PluginException</scope><name>getFileName</name></member>
+      <member refid="d2/d96/a08355_1aee67527c1afbd1f29dec9191a36cf89e" prot="public" virt="non-virtual"><scope>castor3d::PluginException</scope><name>getFullDescription</name></member>
+      <member refid="d2/d96/a08355_1af6c65d07734b666514bcfeac7a080aa5" prot="public" virt="non-virtual"><scope>castor3d::PluginException</scope><name>getFunction</name></member>
+      <member refid="d2/d96/a08355_1a80c010456bf1cd71b21ad38347f522d5" prot="public" virt="non-virtual"><scope>castor3d::PluginException</scope><name>getLine</name></member>
+      <member refid="d0/d49/a05895_1acba329c115f995c79825500dc886bba4" prot="public" virt="non-virtual"><scope>castor3d::PluginException</scope><name>isCritical</name></member>
+      <member refid="d2/d96/a08355_1ab03a4184301dd65c8a1e3b1dc304bbd5" prot="protected" virt="non-virtual"><scope>castor3d::PluginException</scope><name>m_callStack</name></member>
+      <member refid="d0/d49/a05895_1a6714478562139a67d1391820ef2982ab" prot="private" virt="non-virtual"><scope>castor3d::PluginException</scope><name>m_critical</name></member>
+      <member refid="d2/d96/a08355_1aeeb89f384eb9fc4189a5d3b49491b87c" prot="protected" virt="non-virtual"><scope>castor3d::PluginException</scope><name>m_description</name></member>
+      <member refid="d2/d96/a08355_1a304ae098a78df1d109b798702b9a4fb5" prot="protected" virt="non-virtual"><scope>castor3d::PluginException</scope><name>m_filename</name></member>
+      <member refid="d2/d96/a08355_1aaf2d800d4ff757a6b755a888e11b31c5" prot="protected" virt="non-virtual"><scope>castor3d::PluginException</scope><name>m_functionName</name></member>
+      <member refid="d2/d96/a08355_1a7b3f321153f9f0fe0b7e71e328822448" prot="protected" virt="non-virtual"><scope>castor3d::PluginException</scope><name>m_line</name></member>
+      <member refid="d0/d49/a05895_1a59688dcdb89d84a7d357a531a626de1f" prot="public" virt="non-virtual"><scope>castor3d::PluginException</scope><name>PluginException</name></member>
+      <member refid="d0/d49/a05895_1a96ccd3a71ec8e71ec865c9b275c574f4" prot="public" virt="non-virtual"><scope>castor3d::PluginException</scope><name>PluginException</name></member>
+      <member refid="d2/d96/a08355_1a18163f7cb9b8953865ce54e0073892a5" prot="public" virt="non-virtual"><scope>castor3d::PluginException</scope><name>what</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

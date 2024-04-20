@@ -1,0 +1,535 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/da7/a08195" kind="class" language="C++" prot="public">
+    <compoundname>castor::Factory</compoundname>
+    <derivedcompoundref refid="d6/d48/a04883" prot="private" virt="non-virtual">castor3d::PassFactory</derivedcompoundref>
+    <includes local="no">Factory.hpp</includes>
+    <innerclass refid="dc/deb/a08303" prot="public">castor::Factory::ListEntry</innerclass>
+    <templateparamlist>
+      <param>
+        <type>class ObjT</type>
+      </param>
+      <param>
+        <type>class KeyT</type>
+      </param>
+      <param>
+        <type>class PtrTypeT</type>
+      </param>
+      <param>
+        <type>typename CreatorT</type>
+      </param>
+      <param>
+        <type>class IdT</type>
+      </param>
+      <param>
+        <type>class EntryT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d4/da7/a08195_1aa69ed70d226eb769e2264edf00fc6eb8" prot="public" static="no">
+        <type>ObjT</type>
+        <definition>using castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::Obj =  ObjT</definition>
+        <argsstring></argsstring>
+        <name>Obj</name>
+        <qualifiedname>castor::Factory::Obj</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="38" column="1" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/da7/a08195_1ad68d86c0a36cadf0eab243047fe5041d" prot="public" static="no">
+        <type>KeyT</type>
+        <definition>using castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::Key =  KeyT</definition>
+        <argsstring></argsstring>
+        <name>Key</name>
+        <qualifiedname>castor::Factory::Key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="39" column="1" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/da7/a08195_1ab926e6c629e5550c60e370ea2381a61d" prot="public" static="no">
+        <type>EntryT</type>
+        <definition>using castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::Entry =  EntryT</definition>
+        <argsstring></argsstring>
+        <name>Entry</name>
+        <qualifiedname>castor::Factory::Entry</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="40" column="1" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/da7/a08195_1a8fa33309b519663c41778ad50caba812" prot="public" static="no">
+        <type>IdT</type>
+        <definition>using castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::Id =  IdT</definition>
+        <argsstring></argsstring>
+        <name>Id</name>
+        <qualifiedname>castor::Factory::Id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="41" column="1" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/da7/a08195_1a5524de00459c711db20c964e6db9aeed" prot="public" static="no">
+        <type>PtrTypeT</type>
+        <definition>using castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::PtrType =  PtrTypeT</definition>
+        <argsstring></argsstring>
+        <name>PtrType</name>
+        <qualifiedname>castor::Factory::PtrType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="42" column="1" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/da7/a08195_1af5dea170ce7af25c096994b45bdb4c56" prot="public" static="no">
+        <type>CreatorT</type>
+        <definition>using castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::Creator =  CreatorT</definition>
+        <argsstring></argsstring>
+        <name>Creator</name>
+        <qualifiedname>castor::Factory::Creator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="43" column="1" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/da7/a08195_1af9545737d43ee6f59e0f46ba6d22395d" prot="public" static="no">
+        <type><ref refid="d4/da7/a08195_1a5524de00459c711db20c964e6db9aeed" kindref="member">PtrType</ref></type>
+        <definition>using castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::ObjPtr =  PtrType</definition>
+        <argsstring></argsstring>
+        <name>ObjPtr</name>
+        <qualifiedname>castor::Factory::ObjPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="44" column="1" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/da7/a08195_1a027f6d42631eb31470595c14899367d8" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; <ref refid="d4/da7/a08195_1ab926e6c629e5550c60e370ea2381a61d" kindref="member">Entry</ref> &gt;</type>
+        <definition>using castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::ObjCont =  Vector&lt; Entry &gt;</definition>
+        <argsstring></argsstring>
+        <name>ObjCont</name>
+        <qualifiedname>castor::Factory::ObjCont</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="45" column="1" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d4/da7/a08195_1a2f9367b1b8d49a5a90145f542fc80790" prot="protected" static="no" mutable="no">
+        <type><ref refid="d4/da7/a08195_1a8fa33309b519663c41778ad50caba812" kindref="member">Id</ref></type>
+        <definition>Id castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::m_currentId</definition>
+        <argsstring></argsstring>
+        <name>m_currentId</name>
+        <qualifiedname>castor::Factory::m_currentId</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="214" column="4" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="214" bodyend="214"/>
+        <referencedby refid="d4/da7/a08195_1ad781781092f77194bf1638cda3cf9074" compoundref="dd/d8e/a01898" startline="63" endline="81">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::registerType</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d4/da7/a08195_1a10ceed9e0910376462403feec81e49d3" prot="protected" static="no" mutable="no">
+        <type><ref refid="d4/da7/a08195_1a027f6d42631eb31470595c14899367d8" kindref="member">ObjCont</ref></type>
+        <definition>ObjCont castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::m_registered</definition>
+        <argsstring></argsstring>
+        <name>m_registered</name>
+        <qualifiedname>castor::Factory::m_registered</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="215" column="9" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="215" bodyend="-1"/>
+        <referencedby refid="d4/da7/a08195_1a443ae4447b1ff6df0becc9b882158959" compoundref="dd/d8e/a01898" startline="195" endline="211">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::create</referencedby>
+        <referencedby refid="d4/da7/a08195_1ade2ee53ed8b99733ca39df7ddd687b8d" compoundref="dd/d8e/a01898" startline="132" endline="144">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::getIdType</referencedby>
+        <referencedby refid="d4/da7/a08195_1a387a55894cadf4e94272939e9da31bd0" compoundref="dd/d8e/a01898" startline="111" endline="123">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::getTypeId</referencedby>
+        <referencedby refid="d4/da7/a08195_1a5b21b9247dc45aab8d4f214e4d65652c" compoundref="dd/d8e/a01898" startline="155" endline="163">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::isTypeRegistered</referencedby>
+        <referencedby refid="d4/da7/a08195_1a02dd19a527ffd8ac7f6f347ba6ac08ae" compoundref="dd/d8e/a01898" startline="170" endline="181">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::listRegisteredTypes</referencedby>
+        <referencedby refid="d6/d48/a04883_1ae7f396c798994cae2cd1d89295938f01" compoundref="d4/dc4/a00617" startline="52" endline="55">castor3d::PassFactory::listRegisteredTypes</referencedby>
+        <referencedby refid="d4/da7/a08195_1ad781781092f77194bf1638cda3cf9074" compoundref="dd/d8e/a01898" startline="63" endline="81">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::registerType</referencedby>
+        <referencedby refid="d4/da7/a08195_1a1e6593c4baea1a1a8cf715bf6138e50c" compoundref="dd/d8e/a01898" startline="90" endline="102">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::unregisterType</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/da7/a08195_1ad781781092f77194bf1638cda3cf9074" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/da7/a08195_1ab926e6c629e5550c60e370ea2381a61d" kindref="member">Entry</ref> &amp;</type>
+        <definition>Entry &amp; castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::registerType</definition>
+        <argsstring>(Key const &amp;key, Creator create)</argsstring>
+        <name>registerType</name>
+        <qualifiedname>castor::Factory::registerType</qualifiedname>
+        <param>
+          <type><ref refid="d4/da7/a08195_1ad68d86c0a36cadf0eab243047fe5041d" kindref="member">Key</ref> const &amp;</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/da7/a08195_1af5dea170ce7af25c096994b45bdb4c56" kindref="member">Creator</ref></type>
+          <declname>create</declname>
+        </param>
+        <briefdescription>
+<para>Enregistre un type d&apos;objet. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type d&apos;objet </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">create</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La fonction de création d&apos;objet </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="63" column="8" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="63" bodyend="81"/>
+        <references refid="d4/da7/a08195_1a443ae4447b1ff6df0becc9b882158959" compoundref="dd/d8e/a01898" startline="195" endline="211">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::create</references>
+        <references refid="d4/da7/a08195_1a2f9367b1b8d49a5a90145f542fc80790" compoundref="dd/d8e/a01898" startline="214" endline="214">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::m_currentId</references>
+        <references refid="d4/da7/a08195_1a10ceed9e0910376462403feec81e49d3" compoundref="dd/d8e/a01898" startline="215">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::m_registered</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da7/a08195_1a1e6593c4baea1a1a8cf715bf6138e50c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::unregisterType</definition>
+        <argsstring>(Key const &amp;key)</argsstring>
+        <name>unregisterType</name>
+        <qualifiedname>castor::Factory::unregisterType</qualifiedname>
+        <param>
+          <type><ref refid="d4/da7/a08195_1ad68d86c0a36cadf0eab243047fe5041d" kindref="member">Key</ref> const &amp;</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+<para>Désenregistre un type d&apos;objet. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type d&apos;objet </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="90" column="6" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="90" bodyend="102"/>
+        <references refid="d4/da7/a08195_1a10ceed9e0910376462403feec81e49d3" compoundref="dd/d8e/a01898" startline="215">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::m_registered</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da7/a08195_1a387a55894cadf4e94272939e9da31bd0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/da7/a08195_1a8fa33309b519663c41778ad50caba812" kindref="member">Id</ref></type>
+        <definition>Id castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::getTypeId</definition>
+        <argsstring>(Key const &amp;key) const</argsstring>
+        <name>getTypeId</name>
+        <qualifiedname>castor::Factory::getTypeId</qualifiedname>
+        <param>
+          <type><ref refid="d4/da7/a08195_1ad68d86c0a36cadf0eab243047fe5041d" kindref="member">Key</ref> const &amp;</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type d&apos;objet. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;ID du type d&apos;objet. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="111" column="4" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="111" bodyend="123"/>
+        <references refid="d4/da7/a08195_1a10ceed9e0910376462403feec81e49d3" compoundref="dd/d8e/a01898" startline="215">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::m_registered</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da7/a08195_1ade2ee53ed8b99733ca39df7ddd687b8d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/da7/a08195_1ad68d86c0a36cadf0eab243047fe5041d" kindref="member">Key</ref></type>
+        <definition>Key castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::getIdType</definition>
+        <argsstring>(Id const &amp;id) const</argsstring>
+        <name>getIdType</name>
+        <qualifiedname>castor::Factory::getIdType</qualifiedname>
+        <param>
+          <type><ref refid="d4/da7/a08195_1a8fa33309b519663c41778ad50caba812" kindref="member">Id</ref> const &amp;</type>
+          <declname>id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;ID du type d&apos;objet. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le type d&apos;objet. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="132" column="5" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="132" bodyend="144"/>
+        <references refid="d4/da7/a08195_1a10ceed9e0910376462403feec81e49d3" compoundref="dd/d8e/a01898" startline="215">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::m_registered</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da7/a08195_1a5b21b9247dc45aab8d4f214e4d65652c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::isTypeRegistered</definition>
+        <argsstring>(Key const &amp;key) const</argsstring>
+        <name>isTypeRegistered</name>
+        <qualifiedname>castor::Factory::isTypeRegistered</qualifiedname>
+        <param>
+          <type><ref refid="d4/da7/a08195_1ad68d86c0a36cadf0eab243047fe5041d" kindref="member">Key</ref> const &amp;</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+<para>Vérifie si un type d&apos;objet est enregistré. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type d&apos;objet. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si enregistré. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="155" column="6" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="155" bodyend="163"/>
+        <references refid="d4/da7/a08195_1a10ceed9e0910376462403feec81e49d3" compoundref="dd/d8e/a01898" startline="215">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::m_registered</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da7/a08195_1a02dd19a527ffd8ac7f6f347ba6ac08ae" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; <ref refid="dc/deb/a08303" kindref="compound">ListEntry</ref> &gt;</type>
+        <definition>Vector&lt; ListEntry &gt; castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::listRegisteredTypes</definition>
+        <argsstring>() const</argsstring>
+        <name>listRegisteredTypes</name>
+        <qualifiedname>castor::Factory::listRegisteredTypes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La liste des types enregistrés. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="170" column="8" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="170" bodyend="181"/>
+        <references refid="d4/da7/a08195_1a10ceed9e0910376462403feec81e49d3" compoundref="dd/d8e/a01898" startline="215">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::m_registered</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da7/a08195_1a443ae4447b1ff6df0becc9b882158959" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>Parameters</declname>
+            <defname>Parameters</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d4/da7/a08195_1af9545737d43ee6f59e0f46ba6d22395d" kindref="member">ObjPtr</ref></type>
+        <definition>ObjPtr castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::create</definition>
+        <argsstring>(Key const &amp;key, Parameters &amp;&amp;... params) const</argsstring>
+        <name>create</name>
+        <qualifiedname>castor::Factory::create</qualifiedname>
+        <param>
+          <type><ref refid="d4/da7/a08195_1ad68d86c0a36cadf0eab243047fe5041d" kindref="member">Key</ref> const &amp;</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>Parameters &amp;&amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+<para>Crée un objet à partir d&apos;une clef (type d&apos;objet) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type d&apos;objet </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les paramètres de création </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;objet créé </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="195" column="8" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="195" bodyend="211"/>
+        <references refid="d0/dce/a01946_1ab9410fa9a6a0a8fa4bce2bebc9d2edaf" compoundref="d0/dce/a01946" startline="203" endline="204">CU_Exception</references>
+        <references refid="d2/dd2/a02279_1abba16ae029767a35567e6610917d92b2" compoundref="dd/d8e/a01898" startline="17">castor::ERROR_UNKNOWN_OBJECT</references>
+        <references refid="d4/da7/a08195_1a10ceed9e0910376462403feec81e49d3" compoundref="dd/d8e/a01898" startline="215">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::m_registered</references>
+        <referencedby refid="d4/da7/a08195_1ad781781092f77194bf1638cda3cf9074" compoundref="dd/d8e/a01898" startline="63" endline="81">castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;::registerType</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Implémentation du concept de fabrique. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::Factory&lt; AnimationImporter, castor::String, AnimationImporterUPtr, std::function&lt; AnimationImporterUPtr(Engine &amp;) &gt; &gt;</label>
+        <link refid="d4/da7/a08195"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; AnimationImporter, castor::String, AnimationImporterUPtr, std::function&lt; AnimationImporterUPtr(Engine &amp;) &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::Factory&lt; BackgroundModel, castor::String, BackgroundModelPtr, BackgroundModelCreator, BackgroundModelID &gt;</label>
+        <link refid="d4/da7/a08195"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; BackgroundModel, castor::String, BackgroundModelPtr, BackgroundModelCreator, BackgroundModelID &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Factory&lt; LightCategory, LightType, LightCategoryUPtr, castor::Function&lt; LightCategoryUPtr(Light &amp;) &gt; &gt;</label>
+        <link refid="d4/da7/a08195"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; LightCategory, LightType, LightCategoryUPtr, castor::Function&lt; LightCategoryUPtr(Light &amp;) &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::Factory&lt; MeshGenerator, castor::String, castor::UniquePtr&lt; MeshGenerator &gt; &gt;</label>
+        <link refid="d4/da7/a08195"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; MeshGenerator, castor::String, castor::UniquePtr&lt; MeshGenerator &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor::Factory&lt; OverlayCategory, OverlayType, OverlayCategoryUPtr &gt;</label>
+        <link refid="d4/da7/a08195"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OverlayCategory, OverlayType, OverlayCategoryUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor::Factory&lt; PostEffect, castor::String, PostEffectUPtr, castor::Function&lt; PostEffectUPtr(RenderTarget &amp;, RenderSystem &amp;, Parameters const &amp;) &gt; &gt;</label>
+        <link refid="d4/da7/a08195"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; PostEffect, castor::String, PostEffectUPtr, castor::Function&lt; PostEffectUPtr(RenderTarget &amp;, RenderSystem &amp;, Parameters const &amp;) &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor::Factory&lt; ToneMapping, castor::String, void, castor::Function&lt; void(ast::ShaderBuilder &amp;) &gt; &gt;</label>
+        <link refid="d4/da7/a08195"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ToneMapping, castor::String, void, castor::Function&lt; void(ast::ShaderBuilder &amp;) &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::AnimationImporterFactory</label>
+        <link refid="d7/d2e/a03127"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::LightFactory</label>
+        <link refid="db/d1b/a07007"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::MeshFactory</label>
+        <link refid="dc/daf/a05399"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::OverlayFactory</label>
+        <link refid="d0/d5b/a05827"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PassFactory&lt; Pass, LightingModelID, PassUPtr, PassCreator, PassTypeID, PassFactoryEntry &gt;</label>
+        <link refid="d6/d48/a04883"/>
+        <childnode refid="1" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;</label>
+        <link refid="d4/da7/a08195"/>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/Design/Factory.hpp" line="35" column="1" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="36" bodyend="216"/>
+    <listofallmembers>
+      <member refid="d4/da7/a08195_1a443ae4447b1ff6df0becc9b882158959" prot="public" virt="non-virtual"><scope>castor::Factory</scope><name>create</name></member>
+      <member refid="d4/da7/a08195_1af5dea170ce7af25c096994b45bdb4c56" prot="public" virt="non-virtual"><scope>castor::Factory</scope><name>Creator</name></member>
+      <member refid="d4/da7/a08195_1ab926e6c629e5550c60e370ea2381a61d" prot="public" virt="non-virtual"><scope>castor::Factory</scope><name>Entry</name></member>
+      <member refid="d4/da7/a08195_1ade2ee53ed8b99733ca39df7ddd687b8d" prot="public" virt="non-virtual"><scope>castor::Factory</scope><name>getIdType</name></member>
+      <member refid="d4/da7/a08195_1a387a55894cadf4e94272939e9da31bd0" prot="public" virt="non-virtual"><scope>castor::Factory</scope><name>getTypeId</name></member>
+      <member refid="d4/da7/a08195_1a8fa33309b519663c41778ad50caba812" prot="public" virt="non-virtual"><scope>castor::Factory</scope><name>Id</name></member>
+      <member refid="d4/da7/a08195_1a5b21b9247dc45aab8d4f214e4d65652c" prot="public" virt="non-virtual"><scope>castor::Factory</scope><name>isTypeRegistered</name></member>
+      <member refid="d4/da7/a08195_1ad68d86c0a36cadf0eab243047fe5041d" prot="public" virt="non-virtual"><scope>castor::Factory</scope><name>Key</name></member>
+      <member refid="d4/da7/a08195_1a02dd19a527ffd8ac7f6f347ba6ac08ae" prot="public" virt="non-virtual"><scope>castor::Factory</scope><name>listRegisteredTypes</name></member>
+      <member refid="d4/da7/a08195_1a2f9367b1b8d49a5a90145f542fc80790" prot="protected" virt="non-virtual"><scope>castor::Factory</scope><name>m_currentId</name></member>
+      <member refid="d4/da7/a08195_1a10ceed9e0910376462403feec81e49d3" prot="protected" virt="non-virtual"><scope>castor::Factory</scope><name>m_registered</name></member>
+      <member refid="d4/da7/a08195_1aa69ed70d226eb769e2264edf00fc6eb8" prot="public" virt="non-virtual"><scope>castor::Factory</scope><name>Obj</name></member>
+      <member refid="d4/da7/a08195_1a027f6d42631eb31470595c14899367d8" prot="public" virt="non-virtual"><scope>castor::Factory</scope><name>ObjCont</name></member>
+      <member refid="d4/da7/a08195_1af9545737d43ee6f59e0f46ba6d22395d" prot="public" virt="non-virtual"><scope>castor::Factory</scope><name>ObjPtr</name></member>
+      <member refid="d4/da7/a08195_1a5524de00459c711db20c964e6db9aeed" prot="public" virt="non-virtual"><scope>castor::Factory</scope><name>PtrType</name></member>
+      <member refid="d4/da7/a08195_1ad781781092f77194bf1638cda3cf9074" prot="public" virt="non-virtual"><scope>castor::Factory</scope><name>registerType</name></member>
+      <member refid="d4/da7/a08195_1a1e6593c4baea1a1a8cf715bf6138e50c" prot="public" virt="non-virtual"><scope>castor::Factory</scope><name>unregisterType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

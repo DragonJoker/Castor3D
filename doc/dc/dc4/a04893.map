@@ -1,4 +1,5 @@
-<map id="castor3d::DummyCuller" name="castor3d::DummyCuller">
-<area shape="rect" id="node1" title=" " alt="" coords="5,79,164,104"/>
-<area shape="rect" id="node2" href="$d8/de5/a04902.html" title=" " alt="" coords="9,5,160,31"/>
+<map id="castor3d::PbrPass" name="castor3d::PbrPass">
+<area shape="rect" id="Node000001" title=" " alt="" coords="15,123,145,148"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,155,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,59,83,122,77,122,77,59"/>
 </map>

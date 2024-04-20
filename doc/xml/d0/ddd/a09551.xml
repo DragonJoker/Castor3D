@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/ddd/a09551" kind="struct" language="C++" prot="public">
+    <compoundname>castor::format::BasePrefixer</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">prefix_traits</basecompoundref>
+    <includes local="no">StreamPrefixManipulators.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename char_type</type>
+      </param>
+      <param>
+        <type>typename prefix_traits</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/ddd/a09551_1a8e1a02b8e4fbf5d4924a4b201bc44531" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::basic_string&lt; char_type &gt;</type>
+        <definition>std::basic_string&lt; char_type &gt; castor::format::BasePrefixer&lt; char_type, prefix_traits &gt;::toString</definition>
+        <argsstring>()</argsstring>
+        <name>toString</name>
+        <qualifiedname>castor::format::BasePrefixer::toString</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixManipulators.hpp" line="18" column="19" bodyfile="CastorUtils/Stream/StreamPrefixManipulators.hpp" bodystart="18" bodyend="21"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Contient une méthode std::basic_string&lt; char_type &gt; operator()() qui génère le préfixe. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::format::BasePrefixer&lt; char_type, prefix_traits &gt;</label>
+        <link refid="d0/ddd/a09551"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>prefix_traits</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::format::BasePrefixer&lt; char_type, prefix_traits &gt;</label>
+        <link refid="d0/ddd/a09551"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>prefix_traits</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Stream/StreamPrefixManipulators.hpp" line="15" column="1" bodyfile="CastorUtils/Stream/StreamPrefixManipulators.hpp" bodystart="17" bodyend="22"/>
+    <listofallmembers>
+      <member refid="d0/ddd/a09551_1a8e1a02b8e4fbf5d4924a4b201bc44531" prot="public" virt="non-virtual"><scope>castor::format::BasePrefixer</scope><name>toString</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

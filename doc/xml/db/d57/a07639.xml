@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d57/a07639" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::SpotShadowData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_SpotShadowData&quot;, sdw::type::MemoryLayout::eStd140, sdw::StructFieldT&lt; ShadowData, &quot;base&quot; &gt;, sdw::Mat4Field&lt; &quot;transform&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">GlslShadow.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d57/a07639_1a1d3eabed4484f34e7607df5f07733269" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::SpotShadowData::SpotShadowData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>SpotShadowData</name>
+        <qualifiedname>castor3d::shader::SpotShadowData::SpotShadowData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="101" column="1" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="101" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d57/a07639_1a5f11d84c2b820cc96563ef91b2703a63" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SpotShadowData::base</definition>
+        <argsstring>() const</argsstring>
+        <name>base</name>
+        <qualifiedname>castor3d::shader::SpotShadowData::base</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="108" column="6" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="108" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d57/a07639_1ad78f823ad14fefc64a6ae32dcf135208" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SpotShadowData::transform</definition>
+        <argsstring>() const</argsstring>
+        <name>transform</name>
+        <qualifiedname>castor3d::shader::SpotShadowData::transform</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="109" column="6" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="109" bodyend="109"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::SpotShadowData</label>
+        <link refid="db/d57/a07639"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_SpotShadowData&quot;, sdw::type::MemoryLayout::eStd140, sdw::StructFieldT&lt; ShadowData, &quot;base&quot; &gt;, sdw::Mat4Field&lt; &quot;transform&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::SpotShadowData</label>
+        <link refid="db/d57/a07639"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_SpotShadowData&quot;, sdw::type::MemoryLayout::eStd140, sdw::StructFieldT&lt; ShadowData, &quot;base&quot; &gt;, sdw::Mat4Field&lt; &quot;transform&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="95" column="1" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="100" bodyend="110"/>
+    <listofallmembers>
+      <member refid="db/d57/a07639_1a5f11d84c2b820cc96563ef91b2703a63" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotShadowData</scope><name>base</name></member>
+      <member refid="db/d57/a07639_1a1d3eabed4484f34e7607df5f07733269" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotShadowData</scope><name>SpotShadowData</name></member>
+      <member refid="db/d57/a07639_1ad78f823ad14fefc64a6ae32dcf135208" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotShadowData</scope><name>transform</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

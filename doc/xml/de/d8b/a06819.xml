@@ -1,0 +1,215 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/d8b/a06819" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::AnimGroupContext</compoundname>
+    <includes local="no">AnimatedObjectGroup.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d8b/a06819_1adf9a42174ea63c720df8c8273cb474a6" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/db2/a07139" kindref="compound">SceneContext</ref> *</type>
+        <definition>SceneContext* castor3d::AnimGroupContext::scene</definition>
+        <argsstring></argsstring>
+        <name>scene</name>
+        <qualifiedname>castor3d::AnimGroupContext::scene</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="294" column="15" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="294" bodyend="294"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d8b/a06819_1a558a3c4e6a18e451a212629f0f39df2d" prot="public" static="no" mutable="no">
+        <type>AnimatedObjectGroupRPtr</type>
+        <definition>AnimatedObjectGroupRPtr castor3d::AnimGroupContext::animGroup</definition>
+        <argsstring></argsstring>
+        <name>animGroup</name>
+        <qualifiedname>castor3d::AnimGroupContext::animGroup</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="295" column="25" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="295" bodyend="295"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d8b/a06819_1a73d1d29b7f86ee71f57e781fca20bfb7" prot="public" static="no" mutable="no">
+        <type>AnimatedObjectRPtr</type>
+        <definition>AnimatedObjectRPtr castor3d::AnimGroupContext::animSkeleton</definition>
+        <argsstring></argsstring>
+        <name>animSkeleton</name>
+        <qualifiedname>castor3d::AnimGroupContext::animSkeleton</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="296" column="20" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="296" bodyend="296"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d8b/a06819_1ada6f79f0c6ff82bda7d51aad3c8e6d9b" prot="public" static="no" mutable="no">
+        <type>AnimatedObjectRPtr</type>
+        <definition>AnimatedObjectRPtr castor3d::AnimGroupContext::animMesh</definition>
+        <argsstring></argsstring>
+        <name>animMesh</name>
+        <qualifiedname>castor3d::AnimGroupContext::animMesh</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="297" column="20" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="297" bodyend="297"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d8b/a06819_1a5aae7c48eaaef73d3626cdd50eed4347" prot="public" static="no" mutable="no">
+        <type>AnimatedObjectRPtr</type>
+        <definition>AnimatedObjectRPtr castor3d::AnimGroupContext::animNode</definition>
+        <argsstring></argsstring>
+        <name>animNode</name>
+        <qualifiedname>castor3d::AnimGroupContext::animNode</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="298" column="20" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="298" bodyend="298"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d8b/a06819_1ab5c2e776f4fd619fb94b74f2ae13a361" prot="public" static="no" mutable="no">
+        <type>AnimatedObjectRPtr</type>
+        <definition>AnimatedObjectRPtr castor3d::AnimGroupContext::animTexture</definition>
+        <argsstring></argsstring>
+        <name>animTexture</name>
+        <qualifiedname>castor3d::AnimGroupContext::animTexture</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="299" column="20" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="299" bodyend="299"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d8b/a06819_1aba947c1a553e55f4f06bae61a9a68d18" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::AnimGroupContext::animName</definition>
+        <argsstring></argsstring>
+        <name>animName</name>
+        <qualifiedname>castor3d::AnimGroupContext::animName</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="300" column="16" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="300" bodyend="300"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="5">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="6" relation="private-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::AnimGroupContext</label>
+        <link refid="de/d8b/a06819"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>scene</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>animName</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::ProgressBar</label>
+        <link refid="d6/daf/a05323"/>
+      </node>
+      <node id="8">
+        <label>castor3d::RenderWindowDesc</label>
+        <link refid="de/d75/a06503"/>
+        <childnode refid="9" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RootContext</label>
+        <link refid="de/dd6/a07151"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>engine</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>window</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>logger</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>progress</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SceneContext</label>
+        <link refid="d3/db2/a07139"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>fontName</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::LoggerInstance</label>
+        <link refid="d9/d93/a09063"/>
+      </node>
+      <node id="6">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="7">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="6" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="292" column="1" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="293" bodyend="301"/>
+    <listofallmembers>
+      <member refid="de/d8b/a06819_1a558a3c4e6a18e451a212629f0f39df2d" prot="public" virt="non-virtual"><scope>castor3d::AnimGroupContext</scope><name>animGroup</name></member>
+      <member refid="de/d8b/a06819_1ada6f79f0c6ff82bda7d51aad3c8e6d9b" prot="public" virt="non-virtual"><scope>castor3d::AnimGroupContext</scope><name>animMesh</name></member>
+      <member refid="de/d8b/a06819_1aba947c1a553e55f4f06bae61a9a68d18" prot="public" virt="non-virtual"><scope>castor3d::AnimGroupContext</scope><name>animName</name></member>
+      <member refid="de/d8b/a06819_1a5aae7c48eaaef73d3626cdd50eed4347" prot="public" virt="non-virtual"><scope>castor3d::AnimGroupContext</scope><name>animNode</name></member>
+      <member refid="de/d8b/a06819_1a73d1d29b7f86ee71f57e781fca20bfb7" prot="public" virt="non-virtual"><scope>castor3d::AnimGroupContext</scope><name>animSkeleton</name></member>
+      <member refid="de/d8b/a06819_1ab5c2e776f4fd619fb94b74f2ae13a361" prot="public" virt="non-virtual"><scope>castor3d::AnimGroupContext</scope><name>animTexture</name></member>
+      <member refid="de/d8b/a06819_1adf9a42174ea63c720df8c8273cb474a6" prot="public" virt="non-virtual"><scope>castor3d::AnimGroupContext</scope><name>scene</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

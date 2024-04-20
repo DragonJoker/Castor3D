@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/d50/a07179" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserEnumTraits&lt; VkImageType &gt;</compoundname>
+    <includes local="no">SceneFileParserData.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d7/d50/a07179_1a1e90bd25ccd3acd7c4723a0bc46f670f" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a98169622bc976df3189194c2b35fbf60" kindref="member">xchar</ref> const  *const</type>
+        <definition>xchar const* const castor::ParserEnumTraits&lt; VkImageType &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; VkImageType &gt;::Name</qualifiedname>
+        <initializer>= <ref refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" kindref="member">cuT</ref>( &quot;ImageType&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneFileParserData.hpp" line="255" column="34" bodyfile="Castor3D/Scene/SceneFileParserData.hpp" bodystart="255" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d50/a07179_1a8629eb937154ea77e2c73480abad6f84" prot="public" static="yes" mutable="no">
+        <type>UInt32StrMap const</type>
+        <definition>UInt32StrMap const castor::ParserEnumTraits&lt; VkImageType &gt;::Values</definition>
+        <argsstring></argsstring>
+        <name>Values</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; VkImageType &gt;::Values</qualifiedname>
+        <initializer>= []()
+			{
+				UInt32StrMap result;
+				result = <ref refid="d9/dba/a02278_1a89ee8e4edb4c883ef7c66b8dc60cc430" kindref="member">castor3d::getEnumMapT</ref>( VK_IMAGE_TYPE_1D, VK_IMAGE_TYPE_3D );
+				return result;
+			}( )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneFileParserData.hpp" line="256" column="34" bodyfile="Castor3D/Scene/SceneFileParserData.hpp" bodystart="256" bodyend="261"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserEnumTraits&lt; VkImageType &gt;</label>
+        <link refid="d7/d50/a07179"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>Values</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>UInt32StrMap</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/SceneFileParserData.hpp" line="253" column="1" bodyfile="Castor3D/Scene/SceneFileParserData.hpp" bodystart="254" bodyend="262"/>
+    <listofallmembers>
+      <member refid="d7/d50/a07179_1a1e90bd25ccd3acd7c4723a0bc46f670f" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; VkImageType &gt;</scope><name>Name</name></member>
+      <member refid="d7/d50/a07179_1a8629eb937154ea77e2c73480abad6f84" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; VkImageType &gt;</scope><name>Values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,2717 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d04/a02287" kind="namespace" language="C++">
+    <compoundname>castor::matrix</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="df/d04/a02287_1ac776832d3111540ea2b357edfd8e7b60" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::rotate</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, QuaternionT&lt; U &gt; const &amp;orientation)</argsstring>
+        <name>rotate</name>
+        <qualifiedname>castor::matrix::rotate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; U &gt; const &amp;</type>
+          <declname>orientation</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de rotation, construit une matrice de rotation à partir d&apos;un quaternion. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">orientation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le quaternion contenant la rotation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="32" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="32" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1af0781b48988a10deab1a947e5437688b" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::setRotate</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, QuaternionT&lt; U &gt; const &amp;orientation)</argsstring>
+        <name>setRotate</name>
+        <qualifiedname>castor::matrix::setRotate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; U &gt; const &amp;</type>
+          <declname>orientation</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de rotation, construit une matrice de rotation à partir d&apos;un quaternion. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">orientation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le quaternion contenant la rotation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="45" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="45" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a42dea7ab985e34e021e57043305902e9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::matrix::getRotate</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; const &amp;matrix, QuaternionT&lt; U &gt; &amp;orientation)</argsstring>
+        <name>getRotate</name>
+        <qualifiedname>castor::matrix::getRotate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; const &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; U &gt; &amp;</type>
+          <declname>orientation</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de rotation, construit une matrice de rotation à partir d&apos;un quaternion. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contient les transformations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">orientation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la rotation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="58" column="13" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="58" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a7599e554601e256536af22ac23d00a51" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::yaw</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, Angle const &amp;angle)</argsstring>
+        <name>yaw</name>
+        <qualifiedname>castor::matrix::yaw</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">Angle</ref> const &amp;</type>
+          <declname>angle</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de rotation autour de l&apos;axe Y, construit une matrice de rotation à partir d&apos;un angle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">angle</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;angle de rotation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="71" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="71" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1ae19941e58ee840c69325d5cdaaadf6aa" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::pitch</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, Angle const &amp;angle)</argsstring>
+        <name>pitch</name>
+        <qualifiedname>castor::matrix::pitch</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">Angle</ref> const &amp;</type>
+          <declname>angle</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de rotation autour de l&apos;axe X, construit une matrice de rotation à partir d&apos;un angle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">angle</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;angle de rotation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="84" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="84" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1af0274fad9e7fb43ccff4c7c019fbd28d" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::roll</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, Angle const &amp;angle)</argsstring>
+        <name>roll</name>
+        <qualifiedname>castor::matrix::roll</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">Angle</ref> const &amp;</type>
+          <declname>angle</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de rotation autour de l&apos;axe Z, construit une matrice de rotation à partir d&apos;un angle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">angle</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;angle de rotation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="97" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="97" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1ade147f939d86c4011711a2942eb9007a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::scale</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, U x, U y, U z)</argsstring>
+        <name>scale</name>
+        <qualifiedname>castor::matrix::scale</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>z</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de mise a l&apos;échelle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+<parametername direction="in">z</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs d&apos;échelle sur les 3 axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="110" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="110" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a63e3e211ac18c01565ea694b817b5957" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::scale</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, Point3&lt; U &gt; const &amp;scaling)</argsstring>
+        <name>scale</name>
+        <qualifiedname>castor::matrix::scale</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; U &gt; const &amp;</type>
+          <declname>scaling</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de mise a l&apos;échelle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scaling</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs d&apos;échelle sur les 3 axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="125" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="125" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a064cf05a6ed0b428756420a42853810b" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::setScale</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, U x, U y, U z)</argsstring>
+        <name>setScale</name>
+        <qualifiedname>castor::matrix::setScale</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>z</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de mise a l&apos;échelle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+<parametername direction="in">z</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs d&apos;échelle sur les 3 axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="138" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="138" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a802800e6bae4f58dc5dfc4476d5042cd" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::setScale</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, Point3&lt; U &gt; const &amp;scaling)</argsstring>
+        <name>setScale</name>
+        <qualifiedname>castor::matrix::setScale</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; U &gt; const &amp;</type>
+          <declname>scaling</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de mise a l&apos;échelle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scaling</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs d&apos;échelle sur les 3 axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="153" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="153" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1af3df0bc988e66b0f760d72e64583e797" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::translate</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, U x, U y, U z)</argsstring>
+        <name>translate</name>
+        <qualifiedname>castor::matrix::translate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>z</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de construction de matrice de translation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+<parametername direction="in">z</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs de translation sur les 3 axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="166" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="166" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a16900c951063a606b181cab3bad54731" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::translate</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, Point3&lt; U &gt; const &amp;translation)</argsstring>
+        <name>translate</name>
+        <qualifiedname>castor::matrix::translate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; U &gt; const &amp;</type>
+          <declname>translation</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de construction de matrice de translation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">translation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs de translation sur les 3 axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="181" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="181" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1ae7eeeb863b3d74b05dfccdedf6d94e78" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::setTranslate</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, U x, U y, U z)</argsstring>
+        <name>setTranslate</name>
+        <qualifiedname>castor::matrix::setTranslate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>z</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de construction de matrice de translation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+<parametername direction="in">z</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs de translation sur les 3 axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="194" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="194" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a3d9a3f498ef25697ed21bd4215e1b896" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::setTranslate</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, Point3&lt; U &gt; const &amp;translation)</argsstring>
+        <name>setTranslate</name>
+        <qualifiedname>castor::matrix::setTranslate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; U &gt; const &amp;</type>
+          <declname>translation</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de construction de matrice de translation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">translation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs de translation sur les 3 axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="209" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="209" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a1934332b6d95a560148ed180be630a4e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>typename V</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::setTransform</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, Point3&lt; U &gt; const &amp;position, Point3&lt; U &gt; const &amp;scaling, QuaternionT&lt; V &gt; const &amp;orientation)</argsstring>
+        <name>setTransform</name>
+        <qualifiedname>castor::matrix::setTransform</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; U &gt; const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; U &gt; const &amp;</type>
+          <declname>scaling</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; V &gt; const &amp;</type>
+          <declname>orientation</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la matrice de transformation à partir de la translation, la mise à l&apos;échelle et la rotation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la transformation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de translation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scaling</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de mise à l&apos;échelle </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">orientation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de rotation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="226" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="226" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a10d64b7a424749962ecdf6123bcddd77" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>typename V</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::transform</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, Point3&lt; U &gt; const &amp;position, Point3&lt; U &gt; const &amp;scaling, QuaternionT&lt; V &gt; const &amp;orientation)</argsstring>
+        <name>transform</name>
+        <qualifiedname>castor::matrix::transform</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; U &gt; const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; U &gt; const &amp;</type>
+          <declname>scaling</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; V &gt; const &amp;</type>
+          <declname>orientation</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la matrice de transformation à partir de la translation, la mise à l&apos;échelle et la rotation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la transformation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de translation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scaling</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de mise à l&apos;échelle </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">orientation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de rotation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="245" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="245" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1aed31604c89fe0eb86f89a28c225bb848" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; U &gt;</type>
+        <definition>static Point3&lt; U &gt; castor::matrix::getTransformed</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; const &amp;matrix, Point3&lt; U &gt; const &amp;value)</argsstring>
+        <name>getTransformed</name>
+        <qualifiedname>castor::matrix::getTransformed</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; const &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; U &gt; const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Transforme une position/mise à l&apos;échelle via une matrice de transformation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice de transformation. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La position/mise à l&apos;échelle. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La position transformée. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="262" column="15" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="262" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a0f62de63b13b350994c5c63965a96db8" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a09d3481f4a05ba6fbf3d4dede82380d8" kindref="member">Quaternion</ref></type>
+        <definition>static Quaternion castor::matrix::getTransformed</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; const &amp;matrix, Quaternion const &amp;value)</argsstring>
+        <name>getTransformed</name>
+        <qualifiedname>castor::matrix::getTransformed</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; const &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a09d3481f4a05ba6fbf3d4dede82380d8" kindref="member">Quaternion</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Transforme une orientation via une matrice de transformation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice de transformation. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;orientation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La position transformée. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="277" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="277" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a6406116d05d0253c08d81ad27f7cfb49" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>typename V</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::matrix::decompose</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; const &amp;matrix, Point3&lt; U &gt; &amp;position, Point3&lt; U &gt; &amp;scaling, QuaternionT&lt; V &gt; &amp;rotation)</argsstring>
+        <name>decompose</name>
+        <qualifiedname>castor::matrix::decompose</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; const &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; U &gt; &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; U &gt; &amp;</type>
+          <declname>scaling</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; V &gt; &amp;</type>
+          <declname>rotation</declname>
+        </param>
+        <briefdescription>
+<para>Récupère les composantes d&apos;une matrice de transformation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice de transformation. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La composante de position. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">scaling</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La composante de mise à l&apos;échelle. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rotation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La composante de rotation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="294" column="13" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="294" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a588e936d95f2a3fbe453cfc9d24c95c5" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt;</type>
+        <definition>static Matrix4x4&lt; T &gt; castor::matrix::reverseDepth</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; const &amp;matrix)</argsstring>
+        <name>reverseDepth</name>
+        <qualifiedname>castor::matrix::reverseDepth</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; const &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <briefdescription>
+<para>Inverse la profondeur pour la matrice de projection donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice de projection. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La matrice de projection à profondeur inversée. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="309" column="18" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="309" declcolumn="18"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a12fc75b4ea655a4db806721bd590e7ea" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::perspective</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, Angle const &amp;fovy, U aspect, U zNear, U zFar)</argsstring>
+        <name>perspective</name>
+        <qualifiedname>castor::matrix::perspective</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">Angle</ref> const &amp;</type>
+          <declname>fovy</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>aspect</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>zNear</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>zFar</declname>
+        </param>
+        <briefdescription>
+<para>Construit une matrice de projection en perspective centrée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">fovy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Angle de vision Y </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">aspect</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Ratio Largeur / Hauteur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">zNear</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan proche </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">zFar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan lointain </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="327" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="327" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1ab8abca60f40252f79ad3b2632877afdd" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::perspective</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, Angle const &amp;fovy, U aspect, U zNear)</argsstring>
+        <name>perspective</name>
+        <qualifiedname>castor::matrix::perspective</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">Angle</ref> const &amp;</type>
+          <declname>fovy</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>aspect</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>zNear</declname>
+        </param>
+        <briefdescription>
+<para>Construit une matrice de projection en perspective infinie centrée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">fovy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Angle de vision Y </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">aspect</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Ratio Largeur / Hauteur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">zNear</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan proche </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="347" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="347" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a1e332021a6d2ebdf3f8cd94bed7833da" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt;</type>
+        <definition>static Matrix4x4&lt; T &gt; castor::matrix::perspective</definition>
+        <argsstring>(Angle const &amp;fovy, T aspect, T nearVal, T farVal)</argsstring>
+        <name>perspective</name>
+        <qualifiedname>castor::matrix::perspective</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">Angle</ref> const &amp;</type>
+          <declname>fovy</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>aspect</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>nearVal</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>farVal</declname>
+        </param>
+        <briefdescription>
+<para>Construit une matrice de projection en perspective centrée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">fovy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Angle de vision Y </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">aspect</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Ratio Largeur / Hauteur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nearVal</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan proche </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">farVal</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan lointain </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La matrice résultante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="368" column="18" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="368" declcolumn="18"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1ae73032c087cc4f2613f2bf7e49b1ef43" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt;</type>
+        <definition>static Matrix4x4&lt; T &gt; castor::matrix::perspective</definition>
+        <argsstring>(Angle const &amp;fovy, T aspect, T nearVal)</argsstring>
+        <name>perspective</name>
+        <qualifiedname>castor::matrix::perspective</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">Angle</ref> const &amp;</type>
+          <declname>fovy</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>aspect</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>nearVal</declname>
+        </param>
+        <briefdescription>
+<para>Construit une matrice de projection infinie en perspective centrée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">fovy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Angle de vision Y </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">aspect</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Ratio Largeur / Hauteur </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nearVal</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan proche </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La matrice résultante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="387" column="18" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="387" declcolumn="18"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a2ce9f7bffcbdcb2ecfef508d27b16bd8" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::frustum</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, U left, U right, U bottom, U top, U nearVal, U farVal)</argsstring>
+        <name>frustum</name>
+        <qualifiedname>castor::matrix::frustum</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>left</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>right</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>bottom</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>top</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>nearVal</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>farVal</declname>
+        </param>
+        <briefdescription>
+<para>Construit une matrice de projection en perspective non centrée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">left</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan gauche </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">right</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan droit </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bottom</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan bas </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">top</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan haut </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nearVal</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan proche </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">farVal</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan lointain </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="411" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="411" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1ae74c521ba6fb0044287a7443f2d717bd" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt;</type>
+        <definition>static Matrix4x4&lt; T &gt; castor::matrix::frustum</definition>
+        <argsstring>(T left, T right, T bottom, T top, T nearVal, T farVal)</argsstring>
+        <name>frustum</name>
+        <qualifiedname>castor::matrix::frustum</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>left</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>right</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>bottom</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>top</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>nearVal</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>farVal</declname>
+        </param>
+        <briefdescription>
+<para>Construit une matrice de projection en perspective non centrée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">left</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan gauche </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">right</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan droit </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bottom</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan bas </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">top</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan haut </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nearVal</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan proche </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">farVal</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan lointain </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La matrice résultante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="439" column="18" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="439" declcolumn="18"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a1b707bb758194dbb3fe3caddfffea6cf" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::ortho</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, U left, U right, U bottom, U top, U zNear, U zFar)</argsstring>
+        <name>ortho</name>
+        <qualifiedname>castor::matrix::ortho</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>left</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>right</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>bottom</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>top</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>zNear</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>zFar</declname>
+        </param>
+        <briefdescription>
+<para>Construit une matrice de projection orthographique non centrée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">left</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan gauche </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">right</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan droit </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bottom</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan bas </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">top</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan haut </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">zNear</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan proche </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">zFar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan lointain </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="466" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="466" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1ae46d781f8f9001e7386cd1bfb638915e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt;</type>
+        <definition>static Matrix4x4&lt; T &gt; castor::matrix::ortho</definition>
+        <argsstring>(T left, T right, T bottom, T top, T zNear, T zFar)</argsstring>
+        <name>ortho</name>
+        <qualifiedname>castor::matrix::ortho</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>left</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>right</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>bottom</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>top</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>zNear</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>zFar</declname>
+        </param>
+        <briefdescription>
+<para>Construit une matrice de projection orthographique non centrée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">left</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan gauche </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">right</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan droit </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bottom</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan bas </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">top</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan haut </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">zNear</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan proche </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">zFar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> du plan lointain </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La matrice résultante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="494" column="18" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="494" declcolumn="18"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1aece12ee63d8befeab1b2b71ca98b17c3" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::lookAt</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix, Point3&lt; U &gt; const &amp;eye, Point3&lt; U &gt; const &amp;center, Point3&lt; U &gt; const &amp;up)</argsstring>
+        <name>lookAt</name>
+        <qualifiedname>castor::matrix::lookAt</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; U &gt; const &amp;</type>
+          <declname>eye</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; U &gt; const &amp;</type>
+          <declname>center</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; U &gt; const &amp;</type>
+          <declname>up</declname>
+        </param>
+        <briefdescription>
+<para>Construit une matrice de vue regardant un point donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">eye</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La position de l&apos;oeil </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">center</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point à regarder </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">up</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La direction vers le haut </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="515" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="515" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a22088b9771167ecb8e80dc60d32161a6" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt;</type>
+        <definition>static Matrix4x4&lt; T &gt; castor::matrix::lookAt</definition>
+        <argsstring>(Point3&lt; T &gt; const &amp;eye, Point3&lt; T &gt; const &amp;center, Point3&lt; T &gt; const &amp;up)</argsstring>
+        <name>lookAt</name>
+        <qualifiedname>castor::matrix::lookAt</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; T &gt; const &amp;</type>
+          <declname>eye</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; T &gt; const &amp;</type>
+          <declname>center</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">Point3</ref>&lt; T &gt; const &amp;</type>
+          <declname>up</declname>
+        </param>
+        <briefdescription>
+<para>Construit une matrice de vue regardant un point donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">eye</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La position de l&apos;oeil </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">center</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point à regarder </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">up</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La direction vers le haut </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La matrice résultante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="534" column="18" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="534" declcolumn="18"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a7b0158938431f85a022a687ad4f22738" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix4x4&lt; T &gt; &amp; castor::matrix::switchHand</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; &amp;matrix)</argsstring>
+        <name>switchHand</name>
+        <qualifiedname>castor::matrix::switchHand</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <briefdescription>
+<para>Change la main de la matrice (de main gauche à droite et inversement) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice à changer, reçoit la matrice changée </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La matrice changée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="548" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="548" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a67cb4c3267ba0e71c5a6690eb5ae1d84" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt;</type>
+        <definition>static Matrix4x4&lt; T &gt; castor::matrix::getSwitchHand</definition>
+        <argsstring>(Matrix4x4&lt; T &gt; const &amp;matrix)</argsstring>
+        <name>getSwitchHand</name>
+        <qualifiedname>castor::matrix::getSwitchHand</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1a6d255a875cbdff26643d39a6406987" kindref="member">Matrix4x4</ref>&lt; T &gt; const &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <briefdescription>
+<para>Change la main de la matrice (de main gauche à droite et inversement) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice à changer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La matrice changée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="560" column="18" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="560" declcolumn="18"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1aa57c7ee604aa90d9f66dd66a0b377e7e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix3x3&lt; T &gt; &amp; castor::matrix::rotate</definition>
+        <argsstring>(Matrix3x3&lt; T &gt; &amp;matrix, Angle orientation)</argsstring>
+        <name>rotate</name>
+        <qualifiedname>castor::matrix::rotate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">Angle</ref></type>
+          <declname>orientation</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de rotation, construit une matrice de rotation à partir d&apos;un quaternion. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">orientation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le quaternion contenant la rotation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="572" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="572" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a74ea4665ca8be4c655587ffa31162ccd" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix3x3&lt; T &gt; &amp; castor::matrix::setRotate</definition>
+        <argsstring>(Matrix3x3&lt; T &gt; &amp;matrix, Angle orientation)</argsstring>
+        <name>setRotate</name>
+        <qualifiedname>castor::matrix::setRotate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">Angle</ref></type>
+          <declname>orientation</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de rotation, construit une matrice de rotation à partir d&apos;un quaternion. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">orientation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le quaternion contenant la rotation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="585" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="585" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a701738654be718cad48ae3073d741f97" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::matrix::getRotate</definition>
+        <argsstring>(Matrix3x3&lt; T &gt; const &amp;matrix, Angle orientation)</argsstring>
+        <name>getRotate</name>
+        <qualifiedname>castor::matrix::getRotate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; const &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">Angle</ref></type>
+          <declname>orientation</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de rotation, construit une matrice de rotation à partir d&apos;un quaternion. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contient les transformations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">orientation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la rotation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="598" column="13" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="598" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a7caa2cea46f278f9cab31ef21f2943cd" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix3x3&lt; T &gt; &amp; castor::matrix::scale</definition>
+        <argsstring>(Matrix3x3&lt; T &gt; &amp;matrix, U x, U y)</argsstring>
+        <name>scale</name>
+        <qualifiedname>castor::matrix::scale</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de mise a l&apos;échelle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs d&apos;échelle sur les 3 axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="611" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="611" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a28fa31ae410f1863c575d102a3731b69" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix3x3&lt; T &gt; &amp; castor::matrix::scale</definition>
+        <argsstring>(Matrix3x3&lt; T &gt; &amp;matrix, Point2&lt; U &gt; const &amp;scaling)</argsstring>
+        <name>scale</name>
+        <qualifiedname>castor::matrix::scale</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aa69fef28c24152a2d8c2b155af85163a" kindref="member">Point2</ref>&lt; U &gt; const &amp;</type>
+          <declname>scaling</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de mise a l&apos;échelle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scaling</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs d&apos;échelle sur les 3 axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="625" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="625" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1af70f51c13446d19a731e57073589e330" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix3x3&lt; T &gt; &amp; castor::matrix::setScale</definition>
+        <argsstring>(Matrix3x3&lt; T &gt; &amp;matrix, U x, U y)</argsstring>
+        <name>setScale</name>
+        <qualifiedname>castor::matrix::setScale</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de mise a l&apos;échelle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs d&apos;échelle sur les 3 axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="638" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="638" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a10a111c005f127012f029de2916a656d" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix3x3&lt; T &gt; &amp; castor::matrix::setScale</definition>
+        <argsstring>(Matrix3x3&lt; T &gt; &amp;matrix, Point2&lt; U &gt; const &amp;scaling)</argsstring>
+        <name>setScale</name>
+        <qualifiedname>castor::matrix::setScale</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aa69fef28c24152a2d8c2b155af85163a" kindref="member">Point2</ref>&lt; U &gt; const &amp;</type>
+          <declname>scaling</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de mise a l&apos;échelle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scaling</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs d&apos;échelle sur les 3 axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="652" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="652" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1aab3938e19dbdd9dce1630acf1d4c4a89" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix3x3&lt; T &gt; &amp; castor::matrix::translate</definition>
+        <argsstring>(Matrix3x3&lt; T &gt; &amp;matrix, U x, U y)</argsstring>
+        <name>translate</name>
+        <qualifiedname>castor::matrix::translate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de construction de matrice de translation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs de translation sur les 3 axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="665" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="665" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1acbbe32515e7f783b494aa8b50077acb3" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix3x3&lt; T &gt; &amp; castor::matrix::translate</definition>
+        <argsstring>(Matrix3x3&lt; T &gt; &amp;matrix, Point2&lt; U &gt; const &amp;translation)</argsstring>
+        <name>translate</name>
+        <qualifiedname>castor::matrix::translate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aa69fef28c24152a2d8c2b155af85163a" kindref="member">Point2</ref>&lt; U &gt; const &amp;</type>
+          <declname>translation</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de construction de matrice de translation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">translation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs de translation sur les 3 axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="679" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="679" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a47541c7d07aae700b4724feeacad265d" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix3x3&lt; T &gt; &amp; castor::matrix::setTranslate</definition>
+        <argsstring>(Matrix3x3&lt; T &gt; &amp;matrix, U x, U y)</argsstring>
+        <name>setTranslate</name>
+        <qualifiedname>castor::matrix::setTranslate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>U</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de construction de matrice de translation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs de translation sur les 3 axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="692" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="692" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1aa7e9b2ceefe9f9a3708f36cb1e59c1a4" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix3x3&lt; T &gt; &amp; castor::matrix::setTranslate</definition>
+        <argsstring>(Matrix3x3&lt; T &gt; &amp;matrix, Point2&lt; U &gt; const &amp;translation)</argsstring>
+        <name>setTranslate</name>
+        <qualifiedname>castor::matrix::setTranslate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aa69fef28c24152a2d8c2b155af85163a" kindref="member">Point2</ref>&lt; U &gt; const &amp;</type>
+          <declname>translation</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de construction de matrice de translation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice qui contiendra le résultat </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">translation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs de translation sur les 3 axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="706" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="706" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1a62d8afbb39bfb1c1454e332fda1ba443" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>typename V</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix3x3&lt; T &gt; &amp; castor::matrix::setTransform</definition>
+        <argsstring>(Matrix3x3&lt; T &gt; &amp;matrix, Point2&lt; U &gt; const &amp;position, Point2&lt; U &gt; const &amp;scaling, Angle orientation)</argsstring>
+        <name>setTransform</name>
+        <qualifiedname>castor::matrix::setTransform</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aa69fef28c24152a2d8c2b155af85163a" kindref="member">Point2</ref>&lt; U &gt; const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aa69fef28c24152a2d8c2b155af85163a" kindref="member">Point2</ref>&lt; U &gt; const &amp;</type>
+          <declname>scaling</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">Angle</ref></type>
+          <declname>orientation</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la matrice de transformation à partir de la translation, la mise à l&apos;échelle et la rotation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la transformation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de translation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scaling</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de mise à l&apos;échelle </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">orientation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de rotation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="723" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="723" declcolumn="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d04/a02287_1ab68387c79242f67d3601595884a6d423" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>typename V</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+        <definition>static Matrix3x3&lt; T &gt; &amp; castor::matrix::transform</definition>
+        <argsstring>(Matrix3x3&lt; T &gt; &amp;matrix, Point2&lt; U &gt; const &amp;position, Point2&lt; U &gt; const &amp;scaling, Angle orientation)</argsstring>
+        <name>transform</name>
+        <qualifiedname>castor::matrix::transform</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a20c9a729fb713d1c692194bdcc4837e9" kindref="member">Matrix3x3</ref>&lt; T &gt; &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aa69fef28c24152a2d8c2b155af85163a" kindref="member">Point2</ref>&lt; U &gt; const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aa69fef28c24152a2d8c2b155af85163a" kindref="member">Point2</ref>&lt; U &gt; const &amp;</type>
+          <declname>scaling</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">Angle</ref></type>
+          <declname>orientation</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la matrice de transformation à partir de la translation, la mise à l&apos;échelle et la rotation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la transformation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de translation </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scaling</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de mise à l&apos;échelle </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">orientation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de rotation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/TransformationMatrix.hpp" line="742" column="19" declfile="CastorUtils/Math/TransformationMatrix.hpp" declline="742" declcolumn="19"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Opérations basiques sur des matrices 4x4. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Contient des fonctions de rotation, translation, scale et multiplication (optimisées pour des matrices 4x4) <linebreak/>
+Permet aussi de calculer les frustum, persperctive, ortho, le passage main gauche main droite et inversement </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="CastorUtils/Math/TransformationMatrix.hpp" line="19" column="1"/>
+  </compounddef>
+</doxygen>

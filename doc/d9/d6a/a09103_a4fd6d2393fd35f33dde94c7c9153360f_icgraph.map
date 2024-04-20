@@ -1,0 +1,7 @@
+<map id="castor::Coords::ptr" name="castor::Coords::ptr">
+<area shape="rect" id="Node000001" title="Retrieves a non constant pointer on datas." alt="" coords="184,31,315,56"/>
+<area shape="rect" id="Node000002" href="$d9/dba/a02278.html#a06304787bcd14219ba8a68175aa3d5ad" title="Retrieves the beginning of the buffer for given value." alt="" coords="5,5,136,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="170,35,136,30,137,25,171,30"/>
+<area shape="rect" id="Node000003" href="$d9/dba/a02278.html#a8232bc508dcb9b2707dc0934ed289804" title="Retrieves the beginning of the buffer for given value." alt="" coords="5,55,136,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="171,57,137,61,136,56,170,51"/>
+</map>

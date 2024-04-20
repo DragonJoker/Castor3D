@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d64/a04183" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::IridescenceData</compoundname>
+    <includes local="no">IridescenceComponent.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d64/a04183_1afeca44357bec2973010b88d8793accf4" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ac3f6d2ca50f484925164c6f2a13c97e8" kindref="member">castor::AtomicGroupChangeTracked</ref>&lt; float &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; float &gt; castor3d::IridescenceData::factor</definition>
+        <argsstring></argsstring>
+        <name>factor</name>
+        <qualifiedname>castor3d::IridescenceData::factor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Lighting/IridescenceComponent.hpp" line="25" column="34" bodyfile="Castor3D/Material/Pass/Component/Lighting/IridescenceComponent.hpp" bodystart="25" bodyend="-1"/>
+        <referencedby refid="d1/dde/a04187_1a3c2d7ae3c30012e90314fce626d2a0cd" compoundref="d4/ddf/a00488" startline="111" endline="114">castor3d::IridescenceComponent::getFactor</referencedby>
+        <referencedby refid="d1/dde/a04187_1ad44be473036963e2fa750b86b96b22f5" compoundref="d4/ddf/a00488" startline="116" endline="119">castor3d::IridescenceComponent::setFactor</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="db/d64/a04183_1ac214d855f266508c40c44e1a98c00619" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ac3f6d2ca50f484925164c6f2a13c97e8" kindref="member">castor::AtomicGroupChangeTracked</ref>&lt; float &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; float &gt; castor3d::IridescenceData::ior</definition>
+        <argsstring></argsstring>
+        <name>ior</name>
+        <qualifiedname>castor3d::IridescenceData::ior</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Lighting/IridescenceComponent.hpp" line="26" column="34" bodyfile="Castor3D/Material/Pass/Component/Lighting/IridescenceComponent.hpp" bodystart="26" bodyend="-1"/>
+        <referencedby refid="d1/dde/a04187_1ace595ee2b45d0ab23979aae83bf6ffe1" compoundref="d4/ddf/a00488" startline="121" endline="124">castor3d::IridescenceComponent::getIor</referencedby>
+        <referencedby refid="d1/dde/a04187_1a60d07b1910a96dd67f085f54e79c3836" compoundref="d4/ddf/a00488" startline="126" endline="129">castor3d::IridescenceComponent::setIor</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="db/d64/a04183_1a3bedf947f2f48e476e62e25f988e69c2" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ac3f6d2ca50f484925164c6f2a13c97e8" kindref="member">castor::AtomicGroupChangeTracked</ref>&lt; float &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; float &gt; castor3d::IridescenceData::minThickness</definition>
+        <argsstring></argsstring>
+        <name>minThickness</name>
+        <qualifiedname>castor3d::IridescenceData::minThickness</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Lighting/IridescenceComponent.hpp" line="27" column="34" bodyfile="Castor3D/Material/Pass/Component/Lighting/IridescenceComponent.hpp" bodystart="27" bodyend="-1"/>
+        <referencedby refid="d1/dde/a04187_1a6328bc27553cffab633392125438086f" compoundref="d4/ddf/a00488" startline="131" endline="134">castor3d::IridescenceComponent::getMinThickness</referencedby>
+        <referencedby refid="d1/dde/a04187_1aaaf4fb628f005ddb94de3f925a712e75" compoundref="d4/ddf/a00488" startline="136" endline="139">castor3d::IridescenceComponent::setMinThickness</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="db/d64/a04183_1a5aba039ebbdae7034d0c3ec3fddb519f" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ac3f6d2ca50f484925164c6f2a13c97e8" kindref="member">castor::AtomicGroupChangeTracked</ref>&lt; float &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; float &gt; castor3d::IridescenceData::maxThickness</definition>
+        <argsstring></argsstring>
+        <name>maxThickness</name>
+        <qualifiedname>castor3d::IridescenceData::maxThickness</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Lighting/IridescenceComponent.hpp" line="28" column="34" bodyfile="Castor3D/Material/Pass/Component/Lighting/IridescenceComponent.hpp" bodystart="28" bodyend="-1"/>
+        <referencedby refid="d1/dde/a04187_1ace0453c180e8e87f3e1135e01fc40971" compoundref="d4/ddf/a00488" startline="141" endline="144">castor3d::IridescenceComponent::getMaxThickness</referencedby>
+        <referencedby refid="d1/dde/a04187_1a395bae96f60936f44302ac93ba3d8076" compoundref="d4/ddf/a00488" startline="146" endline="149">castor3d::IridescenceComponent::setMaxThickness</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d64/a04183_1a1267c3662ab8e2e9a22c4bb72b78ced5" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::IridescenceData::IridescenceData</definition>
+        <argsstring>(std::atomic_bool &amp;dirty)</argsstring>
+        <name>IridescenceData</name>
+        <qualifiedname>castor3d::IridescenceData::IridescenceData</qualifiedname>
+        <param>
+          <type>std::atomic_bool &amp;</type>
+          <declname>dirty</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Lighting/IridescenceComponent.hpp" line="17" column="10" bodyfile="Castor3D/Material/Pass/Component/Lighting/IridescenceComponent.hpp" bodystart="17" bodyend="23"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::GroupChangeTrackedT&lt; float &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; float &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::IridescenceData</label>
+        <link refid="db/d64/a04183"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>factor</edgelabel>
+          <edgelabel>ior</edgelabel>
+          <edgelabel>maxThickness</edgelabel>
+          <edgelabel>minThickness</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Component/Lighting/IridescenceComponent.hpp" line="15" column="1" bodyfile="Castor3D/Material/Pass/Component/Lighting/IridescenceComponent.hpp" bodystart="16" bodyend="29"/>
+    <listofallmembers>
+      <member refid="db/d64/a04183_1afeca44357bec2973010b88d8793accf4" prot="public" virt="non-virtual"><scope>castor3d::IridescenceData</scope><name>factor</name></member>
+      <member refid="db/d64/a04183_1ac214d855f266508c40c44e1a98c00619" prot="public" virt="non-virtual"><scope>castor3d::IridescenceData</scope><name>ior</name></member>
+      <member refid="db/d64/a04183_1a1267c3662ab8e2e9a22c4bb72b78ced5" prot="public" virt="non-virtual"><scope>castor3d::IridescenceData</scope><name>IridescenceData</name></member>
+      <member refid="db/d64/a04183_1a5aba039ebbdae7034d0c3ec3fddb519f" prot="public" virt="non-virtual"><scope>castor3d::IridescenceData</scope><name>maxThickness</name></member>
+      <member refid="db/d64/a04183_1a3bedf947f2f48e476e62e25f988e69c2" prot="public" virt="non-virtual"><scope>castor3d::IridescenceData</scope><name>minThickness</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

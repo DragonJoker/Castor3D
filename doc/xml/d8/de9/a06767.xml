@@ -1,0 +1,213 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/de9/a06767" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::BoundsTransformPipeline</compoundname>
+    <includes local="no">TransformPipeline.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/de9/a06767_1a9674ebfac5ebda3f03d8eb2fc5782d89" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::BoundsTransformPipeline::normals</definition>
+        <argsstring></argsstring>
+        <name>normals</name>
+        <qualifiedname>castor3d::BoundsTransformPipeline::normals</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="54" column="6" bodyfile="Castor3D/Render/Transform/TransformPipeline.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de9/a06767_1a67613f6cd8a6e40818008239e4ea4299" prot="public" static="no" mutable="no">
+        <type><ref refid="db/d46/a07399" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::BoundsTransformPipeline::shader</definition>
+        <argsstring></argsstring>
+        <name>shader</name>
+        <qualifiedname>castor3d::BoundsTransformPipeline::shader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="56" column="14" bodyfile="Castor3D/Render/Transform/TransformPipeline.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de9/a06767_1ae24e4504d101392733bd56efdf92fe61" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::BoundsTransformPipeline::descriptorSetLayout</definition>
+        <argsstring></argsstring>
+        <name>descriptorSetLayout</name>
+        <qualifiedname>castor3d::BoundsTransformPipeline::descriptorSetLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="57" column="31" bodyfile="Castor3D/Render/Transform/TransformPipeline.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de9/a06767_1a49df7abd155e0925f5aea031ff96410f" prot="public" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::BoundsTransformPipeline::pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>pipelineLayout</name>
+        <qualifiedname>castor3d::BoundsTransformPipeline::pipelineLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="58" column="26" bodyfile="Castor3D/Render/Transform/TransformPipeline.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de9/a06767_1a919f64569a8ba42578131f53b3249ae4" prot="public" static="no" mutable="no">
+        <type>ashes::ComputePipelinePtr</type>
+        <definition>ashes::ComputePipelinePtr castor3d::BoundsTransformPipeline::pipeline</definition>
+        <argsstring></argsstring>
+        <name>pipeline</name>
+        <qualifiedname>castor3d::BoundsTransformPipeline::pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="59" column="27" bodyfile="Castor3D/Render/Transform/TransformPipeline.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de9/a06767_1a1b525482651fd479a65d97ecc6e87a9f" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::BoundsTransformPipeline::descriptorSetPool</definition>
+        <argsstring></argsstring>
+        <name>descriptorSetPool</name>
+        <qualifiedname>castor3d::BoundsTransformPipeline::descriptorSetPool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="60" column="29" bodyfile="Castor3D/Render/Transform/TransformPipeline.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/de9/a06767_1af07b26e9644b71b67dff22729134eca5" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BoundsTransformPipeline::BoundsTransformPipeline</definition>
+        <argsstring>(bool normals)</argsstring>
+        <name>BoundsTransformPipeline</name>
+        <qualifiedname>castor3d::BoundsTransformPipeline::BoundsTransformPipeline</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>normals</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="49" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/de9/a06767_1ad0b7da731b7fc66473e9e6a22ae1a36c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>C3D_API castor::String castor3d::BoundsTransformPipeline::getName</definition>
+        <argsstring>() const</argsstring>
+        <name>getName</name>
+        <qualifiedname>castor3d::BoundsTransformPipeline::getName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="51" column="24"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d8/de9/a06767_1a54effc6465e9abbe94c6438ac7f3bf2f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>static C3D_API castor::String castor3d::BoundsTransformPipeline::getName</definition>
+        <argsstring>(bool normals)</argsstring>
+        <name>getName</name>
+        <qualifiedname>castor3d::BoundsTransformPipeline::getName</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>normals</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="52" column="31"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="5">
+        <label>std::basic_string&lt; mbchar &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; mbchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BoundsTransformPipeline</label>
+        <link refid="d8/de9/a06767"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>shader</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ShaderModule</label>
+        <link refid="db/d46/a07399"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>source</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>compiled</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::SpirVShader</label>
+        <link refid="d1/d27/a07395"/>
+        <childnode refid="7" relation="usage">
+          <edgelabel>spirv</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>text</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>UInt32Array</label>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/Transform/TransformPipeline.hpp" line="47" column="1" bodyfile="Castor3D/Render/Transform/TransformPipeline.hpp" bodystart="48" bodyend="61"/>
+    <listofallmembers>
+      <member refid="d8/de9/a06767_1af07b26e9644b71b67dff22729134eca5" prot="public" virt="non-virtual"><scope>castor3d::BoundsTransformPipeline</scope><name>BoundsTransformPipeline</name></member>
+      <member refid="d8/de9/a06767_1ae24e4504d101392733bd56efdf92fe61" prot="public" virt="non-virtual"><scope>castor3d::BoundsTransformPipeline</scope><name>descriptorSetLayout</name></member>
+      <member refid="d8/de9/a06767_1a1b525482651fd479a65d97ecc6e87a9f" prot="public" virt="non-virtual"><scope>castor3d::BoundsTransformPipeline</scope><name>descriptorSetPool</name></member>
+      <member refid="d8/de9/a06767_1ad0b7da731b7fc66473e9e6a22ae1a36c" prot="public" virt="non-virtual"><scope>castor3d::BoundsTransformPipeline</scope><name>getName</name></member>
+      <member refid="d8/de9/a06767_1a54effc6465e9abbe94c6438ac7f3bf2f" prot="public" virt="non-virtual"><scope>castor3d::BoundsTransformPipeline</scope><name>getName</name></member>
+      <member refid="d8/de9/a06767_1a9674ebfac5ebda3f03d8eb2fc5782d89" prot="public" virt="non-virtual"><scope>castor3d::BoundsTransformPipeline</scope><name>normals</name></member>
+      <member refid="d8/de9/a06767_1a919f64569a8ba42578131f53b3249ae4" prot="public" virt="non-virtual"><scope>castor3d::BoundsTransformPipeline</scope><name>pipeline</name></member>
+      <member refid="d8/de9/a06767_1a49df7abd155e0925f5aea031ff96410f" prot="public" virt="non-virtual"><scope>castor3d::BoundsTransformPipeline</scope><name>pipelineLayout</name></member>
+      <member refid="d8/de9/a06767_1a67613f6cd8a6e40818008239e4ea4299" prot="public" virt="non-virtual"><scope>castor3d::BoundsTransformPipeline</scope><name>shader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

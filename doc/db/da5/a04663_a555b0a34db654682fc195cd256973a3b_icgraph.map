@@ -1,0 +1,7 @@
+<map id="castor3d::SpecularMapComponent::Plugin::getTextureFlags" name="castor3d::SpecularMapComponent::Plugin::getTextureFlags">
+<area shape="rect" id="Node000001" title=" " alt="" coords="276,37,499,77"/>
+<area shape="rect" id="Node000002" href="$db/da5/a04663.html#a6d827fccd2cfc083b89f60fc6b840c0c" title="Fills the texture configuration for use with this component." alt="" coords="5,5,228,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="262,45,228,41,228,36,263,40"/>
+<area shape="rect" id="Node000003" href="$db/da5/a04663.html#ac5c4d3a7c5b9fb6f3b2b6749e57b9839" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="5,69,228,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="263,75,228,79,228,74,262,69"/>
+</map>

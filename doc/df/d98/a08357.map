@@ -1,0 +1,29 @@
+<map id="castor::PreprocessedFile" name="castor::PreprocessedFile">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1212,121,1379,147"/>
+<area shape="rect" id="Node000002" href="$dc/d79/a08267.html" title=" " alt="" coords="884,39,1083,64"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1046,65,1247,119,1246,124,1045,70"/>
+<area shape="rect" id="Node000003" href="$da/d36/a08315.html" title=" " alt="" coords="241,5,384,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="398,13,608,14,734,19,860,29,914,36,913,41,860,34,734,24,608,19,398,19"/>
+<area shape="rect" id="Node000004" href="$dc/d79/a08267.html" title="Basic signal class." alt="" coords="559,39,741,64"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="398,24,558,40,558,45,397,29"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="755,49,884,49,884,54,755,54"/>
+<area shape="rect" id="Node000005" href="$d6/d08/a08367.html" title=" " alt="" coords="921,121,1046,147"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="1060,131,1212,131,1212,137,1060,137"/>
+<area shape="rect" id="Node000006" href="$da/d87/a08319.html" title=" " alt="" coords="582,88,718,113"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="732,105,860,117,921,124,920,129,860,122,731,110"/>
+<area shape="rect" id="Node000007" href="$d9/d93/a09063.html" title=" " alt="" coords="573,137,727,163"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="741,143,920,134,921,140,741,148"/>
+<area shape="rect" id="Node000008" href="$d0/d5d/a08363.html" title=" " alt="" coords="900,201,1067,241"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="1069,194,1248,144,1249,149,1070,199"/>
+<area shape="rect" id="Node000009" href="$d1/de1/a08011.html" title=" " alt="" coords="603,187,697,212"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="711,200,900,213,900,218,710,206"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="285,199,341,224"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="354,207,603,198,603,204,354,213"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="5,219,132,259"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="145,228,284,212,284,217,146,233"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="408,245,535,285"/>
+<area shape="poly" id="edge13_Node000012_Node000011" title=" " alt="" coords="146,244,156,245,408,259,408,265,156,250,146,249"/>
+<area shape="poly" id="edge12_Node000008_Node000012" title=" " alt="" coords="548,261,741,251,899,231,900,237,742,257,548,266"/>
+<area shape="rect" id="Node000013" href="$de/d5d/a08415.html" title="The parser function and expected parameters." alt="" coords="561,314,739,354"/>
+<area shape="poly" id="edge14_Node000008_Node000013" title=" " alt="" coords="752,323,806,313,859,297,912,269,956,239,959,243,915,274,861,302,807,318,753,328"/>
+</map>

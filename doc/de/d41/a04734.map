@@ -1,0 +1,9 @@
+<map id="castor3d::DefaultReflRefrComponent" name="castor3d::DefaultReflRefrComponent">
+<area shape="rect" id="Node000001" title=" " alt="" coords="14,243,179,283"/>
+<area shape="rect" id="Node000002" href="$db/db4/a04835.html" title=" " alt="" coords="9,168,185,193"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,207,99,243,94,243,94,207"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="9,93,185,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,133,99,168,94,168,94,133"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="5,5,188,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="99,45,99,93,94,93,94,45"/>
+</map>

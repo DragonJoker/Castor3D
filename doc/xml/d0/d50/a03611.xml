@@ -1,0 +1,521 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d50/a03611" kind="class" language="C++" prot="public" final="yes">
+    <compoundname>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</compoundname>
+    <basecompoundref refid="d8/d07/a03627" prot="public" virt="non-virtual">castor3d::ObjectCacheBaseT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</basecompoundref>
+    <includes local="no">BillboardCache.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d0/d50/a03611_1aa5290c2dbe32ad5ada4e002a354d693e" prot="public" static="no">
+        <type><ref refid="db/d1b/a06935" kindref="compound">BillboardList</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementT =  BillboardList</definition>
+        <argsstring></argsstring>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/BillboardCache.hpp" line="30" column="1" bodyfile="Castor3D/Cache/BillboardCache.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d50/a03611_1a653c736c04dfa2561d8b528b41760497" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementKeyT =  castor::String</definition>
+        <argsstring></argsstring>
+        <name>ElementKeyT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementKeyT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/BillboardCache.hpp" line="31" column="1" bodyfile="Castor3D/Cache/BillboardCache.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d50/a03611_1aece32d8f96e48ad59585a374e0c623f6" prot="public" static="no">
+        <type><ref refid="d9/dba/a02278_1a6a8e09f0f7fe68dbb02f928399bc38db" kindref="member">BillboardCacheTraits</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementCacheTraitsT =  BillboardCacheTraits</definition>
+        <argsstring></argsstring>
+        <name>ElementCacheTraitsT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementCacheTraitsT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/BillboardCache.hpp" line="32" column="1" bodyfile="Castor3D/Cache/BillboardCache.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d50/a03611_1a774c0c339f9dd5f69f84f005d7562ba7" prot="public" static="no">
+        <type><ref refid="d8/d07/a03627" kindref="compound">ObjectCacheBaseT</ref>&lt; <ref refid="d0/d50/a03611_1aa5290c2dbe32ad5ada4e002a354d693e" kindref="member">ElementT</ref>, <ref refid="d0/d50/a03611_1a653c736c04dfa2561d8b528b41760497" kindref="member">ElementKeyT</ref>, <ref refid="d0/d50/a03611_1aece32d8f96e48ad59585a374e0c623f6" kindref="member">ElementCacheTraitsT</ref> &gt;</type>
+        <definition>using castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementObjectCacheT =  ObjectCacheBaseT&lt; ElementT, ElementKeyT, ElementCacheTraitsT &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementObjectCacheT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementObjectCacheT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/BillboardCache.hpp" line="33" column="1" bodyfile="Castor3D/Cache/BillboardCache.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d50/a03611_1a3ed38f3a6a044f16abb3731d392c782e" prot="public" static="no">
+        <type>typename ElementObjectCacheT::ElementPtrT</type>
+        <definition>using castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementPtrT =  typename ElementObjectCacheT::ElementPtrT</definition>
+        <argsstring></argsstring>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementPtrT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/BillboardCache.hpp" line="34" column="1" bodyfile="Castor3D/Cache/BillboardCache.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d50/a03611_1a8735f1febc265ee3dcd08932b32547f5" prot="public" static="no">
+        <type>typename ElementObjectCacheT::ElementObsT</type>
+        <definition>using castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementObsT =  typename ElementObjectCacheT::ElementObsT</definition>
+        <argsstring></argsstring>
+        <name>ElementObsT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementObsT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/BillboardCache.hpp" line="35" column="1" bodyfile="Castor3D/Cache/BillboardCache.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d50/a03611_1ae891f8f13e9404524a5f80871f74dcb2" prot="public" static="no">
+        <type>typename ElementObjectCacheT::ElementContT</type>
+        <definition>using castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementContT =  typename ElementObjectCacheT::ElementContT</definition>
+        <argsstring></argsstring>
+        <name>ElementContT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementContT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/BillboardCache.hpp" line="36" column="1" bodyfile="Castor3D/Cache/BillboardCache.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d50/a03611_1ac1ee1033e2c063c41b06c5129f0fcf1c" prot="public" static="no">
+        <type>typename ElementObjectCacheT::ElementInitialiserT</type>
+        <definition>using castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementInitialiserT =  typename ElementObjectCacheT::ElementInitialiserT</definition>
+        <argsstring></argsstring>
+        <name>ElementInitialiserT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementInitialiserT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/BillboardCache.hpp" line="37" column="1" bodyfile="Castor3D/Cache/BillboardCache.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d50/a03611_1a95c7268b83929b20ad1b2b6434e15f5d" prot="public" static="no">
+        <type>typename ElementObjectCacheT::ElementCleanerT</type>
+        <definition>using castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementCleanerT =  typename ElementObjectCacheT::ElementCleanerT</definition>
+        <argsstring></argsstring>
+        <name>ElementCleanerT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementCleanerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/BillboardCache.hpp" line="38" column="1" bodyfile="Castor3D/Cache/BillboardCache.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d50/a03611_1a967e230328543e31dc11827942a8c7fb" prot="public" static="no">
+        <type>typename ElementObjectCacheT::ElementMergerT</type>
+        <definition>using castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementMergerT =  typename ElementObjectCacheT::ElementMergerT</definition>
+        <argsstring></argsstring>
+        <name>ElementMergerT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementMergerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/BillboardCache.hpp" line="39" column="1" bodyfile="Castor3D/Cache/BillboardCache.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d50/a03611_1a4755beaf2d691bc95709e9744e66f20a" prot="public" static="no">
+        <type>typename ElementObjectCacheT::ElementAttacherT</type>
+        <definition>using castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementAttacherT =  typename ElementObjectCacheT::ElementAttacherT</definition>
+        <argsstring></argsstring>
+        <name>ElementAttacherT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementAttacherT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/BillboardCache.hpp" line="40" column="1" bodyfile="Castor3D/Cache/BillboardCache.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d50/a03611_1a80c5673a77132236831684bbfc04124d" prot="public" static="no">
+        <type>typename ElementObjectCacheT::ElementDetacherT</type>
+        <definition>using castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementDetacherT =  typename ElementObjectCacheT::ElementDetacherT</definition>
+        <argsstring></argsstring>
+        <name>ElementDetacherT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ElementDetacherT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/BillboardCache.hpp" line="41" column="1" bodyfile="Castor3D/Cache/BillboardCache.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d50/a03611_1ac8fae25062ada3552e4610a02668a441" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ObjectCacheT</definition>
+        <argsstring>(Scene &amp;scene, SceneNodeRPtr rootNode, SceneNodeRPtr rootCameraNode, SceneNodeRPtr rootObjectNode)</argsstring>
+        <name>ObjectCacheT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;::ObjectCacheT</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>SceneNodeRPtr</type>
+          <declname>rootNode</declname>
+        </param>
+        <param>
+          <type>SceneNodeRPtr</type>
+          <declname>rootCameraNode</declname>
+        </param>
+        <param>
+          <type>SceneNodeRPtr</type>
+          <declname>rootObjectNode</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La scène. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rootNode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le noeud racine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rootCameraNode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le noeud racine des caméras. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rootObjectNode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le noeud racine des objets. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/BillboardCache.hpp" line="56" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Cache de <ref refid="db/d1b/a06935" kindref="compound">BillboardList</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ObjectCacheBaseT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</label>
+        <link refid="d8/d07/a03627"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Scene &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::ResourceCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; ObjT, KeyT, TraitsT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
+        <link refid="d8/d07/a03627"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</label>
+        <link refid="d0/d50/a03611"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="8">
+        <label>castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;</label>
+        <link refid="d8/da3/a08255"/>
+      </node>
+      <node id="5">
+        <label>castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;</label>
+        <link refid="d8/da3/a08255"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::ObjectCacheBaseT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</label>
+        <link refid="d8/d07/a03627"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>onChanged</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Scene &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor::ResourceCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_logger</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="template-instance">
+          <edgelabel>&lt; ObjT, KeyT, TraitsT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::SignalT&lt; OnChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; OnChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="12" relation="private-inheritance">
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
+        <link refid="d8/d07/a03627"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>onChanged</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</label>
+        <link refid="d0/d50/a03611"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::LoggerInstance</label>
+        <link refid="d9/d93/a09063"/>
+      </node>
+      <node id="8">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="12">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="16">
+        <label>castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_logger</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_logger</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="12" relation="private-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Cache/BillboardCache.hpp" line="26" column="1" bodyfile="Castor3D/Cache/BillboardCache.hpp" bodystart="28" bodyend="60"/>
+    <listofallmembers>
+      <member refid="d8/da3/a08255_1ae42bd6b7da6f50fdef84f04a84172313" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>add</name></member>
+      <member refid="d8/da3/a08255_1af4b3aa2cae901fb81e67007a49f01c89" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>add</name></member>
+      <member refid="d8/da3/a08255_1a1fc2571a5ea51ead9564b4cec6b31314" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>addNoLock</name></member>
+      <member refid="d8/da3/a08255_1a0a36c208871e24f543beb6d46751244b" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>addNoLock</name></member>
+      <member refid="d8/da3/a08255_1a513f7e6f476b4e383247c3e2521dab66" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>begin</name></member>
+      <member refid="d8/da3/a08255_1a50bb86447bf101e78949992c5e690204" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>begin</name></member>
+      <member refid="d8/da3/a08255_1a7b9ac51df57e111ec2af31f89a97cbac" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>cleanup</name></member>
+      <member refid="d8/da3/a08255_1a5400b3eabcf62af7df977a20e643418d" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>clear</name></member>
+      <member refid="d8/da3/a08255_1aae5b569e26955738733ba4de036629d7" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>create</name></member>
+      <member refid="d8/da3/a08255_1a63b72a3a1c306679e47426f3a270ec97" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>doAddNoLock</name></member>
+      <member refid="d8/da3/a08255_1a5fc262a8e5bbcb42d59d19b211a65203" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>doAddNoLockT</name></member>
+      <member refid="d8/da3/a08255_1a9623d8ca68e009f78e842011a9caceb4" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>doCleanupNoLock</name></member>
+      <member refid="d8/da3/a08255_1a5a950162bcc6e71f5ae81ad5f4a85f01" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>doClearNoLock</name></member>
+      <member refid="d8/da3/a08255_1adee23d182e1e5ddc942024826978b31e" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>doCreateT</name></member>
+      <member refid="d8/da3/a08255_1a6e4ca586f9ab38ecc32ba59585435d0e" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>doTryAddNoLock</name></member>
+      <member refid="d8/da3/a08255_1acfdaeba21b6d8853f0629ae9197342dd" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>doTryAddNoLockT</name></member>
+      <member refid="d8/da3/a08255_1a0186ef49bd625ae3669d94657845237f" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>doTryFindNoLock</name></member>
+      <member refid="d8/da3/a08255_1a74a35e486aa159b89451ccfb86e2dbd9" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>doTryRemoveNoLock</name></member>
+      <member refid="d0/d50/a03611_1a4755beaf2d691bc95709e9744e66f20a" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ElementAttacherT</name></member>
+      <member refid="d8/d07/a03627_1a833dc232271e526d2fff8e95be226a47" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ElementCacheBaseT</name></member>
+      <member refid="d8/d07/a03627_1a8b2d0e83f5e04699b979b93e711dd38f" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ElementCacheT</name></member>
+      <member refid="d0/d50/a03611_1aece32d8f96e48ad59585a374e0c623f6" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ElementCacheTraitsT</name></member>
+      <member refid="d0/d50/a03611_1a95c7268b83929b20ad1b2b6434e15f5d" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ElementCleanerT</name></member>
+      <member refid="d0/d50/a03611_1ae891f8f13e9404524a5f80871f74dcb2" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ElementContT</name></member>
+      <member refid="d0/d50/a03611_1a80c5673a77132236831684bbfc04124d" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ElementDetacherT</name></member>
+      <member refid="d0/d50/a03611_1ac1ee1033e2c063c41b06c5129f0fcf1c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ElementInitialiserT</name></member>
+      <member refid="d0/d50/a03611_1a653c736c04dfa2561d8b528b41760497" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ElementKeyT</name></member>
+      <member refid="d0/d50/a03611_1a967e230328543e31dc11827942a8c7fb" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ElementMergerT</name></member>
+      <member refid="d0/d50/a03611_1a774c0c339f9dd5f69f84f005d7562ba7" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ElementObjectCacheT</name></member>
+      <member refid="d0/d50/a03611_1a8735f1febc265ee3dcd08932b32547f5" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ElementObsT</name></member>
+      <member refid="d0/d50/a03611_1a3ed38f3a6a044f16abb3731d392c782e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ElementPtrT</name></member>
+      <member refid="d0/d50/a03611_1aa5290c2dbe32ad5ada4e002a354d693e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ElementT</name></member>
+      <member refid="d8/da3/a08255_1a4da03983e4fa5f10c489e9c46f059f28" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>end</name></member>
+      <member refid="d8/da3/a08255_1a0291614751b6a31d44dbee9e1750d579" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>end</name></member>
+      <member refid="d8/da3/a08255_1ae2bc50ccc5e4f323a14a1a6f39d3ec14" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>find</name></member>
+      <member refid="d8/da3/a08255_1a4978d020ac192e539d60ce384b714753" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>findNoLock</name></member>
+      <member refid="d8/da3/a08255_1ae84da1b21345a418752dd78b0cf644ae" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>forEach</name></member>
+      <member refid="d8/da3/a08255_1ade25c114da6605836b4d9618c5236fb0" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>forEach</name></member>
+      <member refid="d8/d07/a03627_1adc8164ea347187c4d73d25676ca89203" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>getEngine</name></member>
+      <member refid="d8/da3/a08255_1a3a6c437db53c29554a44635674119d3d" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>getObjectCount</name></member>
+      <member refid="d8/da3/a08255_1a38d921d597aa752485a108e4fc1d70d7" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>getObjectCountNoLock</name></member>
+      <member refid="d8/d07/a03627_1a27395ec375a3c551674290af1ba98629" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>getObjectTypeName</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>getOwner</name></member>
+      <member refid="d8/da3/a08255_1a2c7514746fa02eb850a1a274cc227732" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>has</name></member>
+      <member refid="d8/da3/a08255_1a226df2a5fa8ac0d1ab25c344d8feaf8c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>hasNoLock</name></member>
+      <member refid="d8/da3/a08255_1a4603e9fde607cdf993adf47ba4dd307f" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>isEmpty</name></member>
+      <member refid="d8/da3/a08255_1ae9a58e21f9e7bbbd9b6d56ffd076ab50" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>isEmptyNoLock</name></member>
+      <member refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>lock</name></member>
+      <member refid="d8/d07/a03627_1ab163121f8e7748ad2d7bf093dd25e943" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>m_attach</name></member>
+      <member refid="d8/da3/a08255_1acaf0ac6efbc13f391e4976d766284df2" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>m_clean</name></member>
+      <member refid="d8/d07/a03627_1adb2cd25d360c2c9fefca61d26273e3ce" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>m_detach</name></member>
+      <member refid="d8/d07/a03627_1ad2d2ec81317e6a6424228ed476c38651" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>m_engine</name></member>
+      <member refid="d8/da3/a08255_1a8cf6f3524574a11b8cf97f67b0c8f168" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>m_initialise</name></member>
+      <member refid="d8/da3/a08255_1a3ff280a88ac186050be8c57363f585e9" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>m_logger</name></member>
+      <member refid="d8/d07/a03627_1a4a7fda17cfa540fdf1ef120f49b23478" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>m_merge</name></member>
+      <member refid="d8/da3/a08255_1ae0f2c32510e90ebd77738c5d99aba20d" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>m_mutex</name></member>
+      <member refid="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>m_resources</name></member>
+      <member refid="d8/d07/a03627_1ae9a623acdbaee056cd58f353af8c7c5d" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>m_rootCameraNode</name></member>
+      <member refid="d8/d07/a03627_1a653080e81b3ea235e344ac564ca4719d" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>m_rootNode</name></member>
+      <member refid="d8/d07/a03627_1a290a406a2ed5d96fe7a5bb28d5a2aac2" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>m_rootObjectNode</name></member>
+      <member refid="d8/d07/a03627_1ac2d02c45ec20d264310c39258cf8ce50" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>mergeInto</name></member>
+      <member refid="d8/da3/a08255_1a0ee0c582a59a49ecf8b68c0bb68721a1" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>MutexT</name></member>
+      <member refid="d8/d07/a03627_1a2c5a94f06997db2f8ce2e1252776fdd2" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ObjectCacheBaseT</name></member>
+      <member refid="d0/d50/a03611_1ac8fae25062ada3552e4610a02668a441" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ObjectCacheT</name></member>
+      <member refid="d8/d07/a03627_1a91d72169bf2d52687170aeefc90f3dcd" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>onChanged</name></member>
+      <member refid="d8/d07/a03627_1a53f214ce6eab35501fb5509c504d4df1" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>OnChanged</name></member>
+      <member refid="d8/d07/a03627_1adae6339cafd80fbce83519e3e38b111b" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>OnChangedFunction</name></member>
+      <member refid="d8/da3/a08255_1a00583361ac080fd7136cf106d386b8e7" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>operator=</name></member>
+      <member refid="d8/da3/a08255_1af8fa35257e8982d727e716872de2c499" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>operator=</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>OwnedBy</name></member>
+      <member refid="d8/da3/a08255_1a21d0ef274f434e61b1d0c336a8c7253a" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>remove</name></member>
+      <member refid="d8/da3/a08255_1a55752549d182d7d232c432746b6b5312" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>removeNoLock</name></member>
+      <member refid="d8/da3/a08255_1a6318e3a64926730b389ee55727eacb3e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>rename</name></member>
+      <member refid="d8/da3/a08255_1a3f6cbb3c0ad8d6136141c4c089f7f479" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>reportAdded</name></member>
+      <member refid="d8/da3/a08255_1aa1689ccd9a406fe8dfe9ff473d226b5e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>reportCreation</name></member>
+      <member refid="d8/da3/a08255_1aa24d9472022aa0f450529b07d9b7f743" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>reportDuplicate</name></member>
+      <member refid="d8/da3/a08255_1a9c25c01ca8f76ad4a25088101572200d" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>reportNull</name></member>
+      <member refid="d8/da3/a08255_1a6537032eaeeadaffea633743e3218e53" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>reportUnknown</name></member>
+      <member refid="d8/da3/a08255_1a2c54dbffb6da0f873564cd7523c6ca2e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ResourceCacheBaseT</name></member>
+      <member refid="d8/da3/a08255_1a3cc66423ca359aebe860a4cd37a16ed2" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ResourceCacheBaseT</name></member>
+      <member refid="d8/da3/a08255_1ad1f999dc303a3929d1ce12688a7bfa82" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>ResourceCacheBaseT</name></member>
+      <member refid="d8/da3/a08255_1adfe23feed932e13cb6d29207a1ccc51a" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>tryAdd</name></member>
+      <member refid="d8/da3/a08255_1ad7c855d1938539d8353d27f31f1b1a6b" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>tryAdd</name></member>
+      <member refid="d8/da3/a08255_1a455df8866f38178ee368bb82324cc5b3" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>tryAddNoLock</name></member>
+      <member refid="d8/da3/a08255_1ab193001556389344cbd6c9ae7861af7d" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>tryAddNoLock</name></member>
+      <member refid="d8/da3/a08255_1a1057aebd572ac71378ea519f7c0288ab" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>tryFind</name></member>
+      <member refid="d8/da3/a08255_1a0858d0d079fd8fa1a4506cfe2f5266b2" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>tryFindNoLock</name></member>
+      <member refid="d8/da3/a08255_1a5d16d1a42b2ea9518a97d9d8e1408140" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>tryRemove</name></member>
+      <member refid="d8/da3/a08255_1aa66962c4bd8bfec19c1d9df146349f9e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>tryRemoveNoLock</name></member>
+      <member refid="d8/da3/a08255_1adaebf3755b5ae0a14b71d7223279b189" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>unlock</name></member>
+      <member refid="d8/da3/a08255_1a4659119e9e245b67bfc7ad3a480a97d3" prot="protected" virt="virtual"><scope>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</scope><name>~ResourceCacheBaseT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

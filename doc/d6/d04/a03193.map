@@ -1,6 +1,16 @@
-<map id="castor3d::ControlsManager" name="castor3d::ControlsManager">
-<area shape="rect" id="node1" title=" " alt="" coords="105,152,284,177"/>
-<area shape="rect" id="node2" href="$dc/d00/a03118.html" title=" " alt="" coords="8,79,189,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,31"/>
-<area shape="rect" id="node4" href="$dc/d77/a03270.html" title=" " alt="" coords="213,79,368,104"/>
+<map id="castor3d::BinaryParser&lt; Mesh &gt;" name="castor3d::BinaryParser&lt; Mesh &gt;">
+<area shape="rect" id="Node000001" title="MovableObject loader." alt="" coords="820,89,975,129"/>
+<area shape="rect" id="Node000002" href="$dd/de1/a03223.html" title=" " alt="" coords="585,89,771,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="785,107,820,107,820,112,785,112"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="19,5,146,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="160,22,267,24,372,28,476,41,520,52,562,67,621,87,620,92,560,72,518,57,476,47,372,33,267,29,160,27"/>
+<area shape="rect" id="Node000006" href="$dd/de1/a03223.html" title="Binary data chunk reader base class." alt="" coords="291,56,476,96"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="160,36,291,58,290,63,159,41"/>
+<area shape="rect" id="Node000004" href="$d5/d27/a03183.html" title=" " alt="" coords="5,107,160,133"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="174,120,316,122,476,120,585,114,585,119,476,125,316,127,174,125"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="173,104,290,87,291,92,174,109"/>
+<area shape="rect" id="Node000005" href="$d5/d15/a05335.html" title=" " alt="" coords="21,171,145,197"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="158,175,305,161,476,141,585,124,585,129,476,147,306,167,159,181"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="138,165,266,122,334,94,336,99,268,126,139,170"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="490,85,585,96,585,102,490,91"/>
 </map>

@@ -1,0 +1,5 @@
+<map id="castor::LoggerInstance::logInfoNoLF" name="castor::LoggerInstance::logInfoNoLF">
+<area shape="rect" id="Node000001" title="Logs a message, from a std::basic_string&lt; CharT &gt;" alt="" coords="208,5,363,45"/>
+<area shape="rect" id="Node000002" href="$d9/d93/a09063.html#a7bbc8f2ed6bb03ee53facb84f0cccde6" title="Logs a message, from a std::basic_ostream&lt; CharT &gt;" alt="" coords="5,5,160,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,28,161,28,161,23,194,23"/>
+</map>

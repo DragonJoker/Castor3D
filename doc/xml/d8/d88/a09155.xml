@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/d88/a09155" kind="struct" language="C++" prot="public">
+    <compoundname>castor::details::MinRecT&lt; DataT, ValueT &gt;</compoundname>
+    <includes local="no">Math.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>ValueTypeT</type>
+        <declname>DataT</declname>
+        <defname>DataT</defname>
+      </param>
+      <param>
+        <type>DataT</type>
+        <declname>ValueT</declname>
+        <defname>ValueT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d8/d88/a09155_1af53beea17237b06c98e1e7b3b1132355" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr DataT</type>
+        <definition>constexpr DataT castor::details::MinRecT&lt; DataT, ValueT &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>castor::details::MinRecT&lt; DataT, ValueT &gt;::value</qualifiedname>
+        <initializer>= ValueT</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Math.hpp" line="138" column="24" bodyfile="CastorUtils/Math/Math.hpp" bodystart="138" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>DataT</label>
+      </node>
+      <node id="1">
+        <label>castor::details::MinRecT&lt; DataT, ValueT &gt;</label>
+        <link refid="d8/d88/a09155"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>value</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Math/Math.hpp" line="136" column="1" bodyfile="CastorUtils/Math/Math.hpp" bodystart="137" bodyend="139"/>
+    <listofallmembers>
+      <member refid="d8/d88/a09155_1af53beea17237b06c98e1e7b3b1132355" prot="public" virt="non-virtual"><scope>castor::details::MinRecT&lt; DataT, ValueT &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

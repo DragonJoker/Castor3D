@@ -1,0 +1,14 @@
+<map id="castor3d::SubsurfaceScatteringComponent" name="castor3d::SubsurfaceScatteringComponent">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1560,13,1764,53"/>
+<area shape="rect" id="Node000002" href="$df/dc6/a04087.html" title=" " alt="" coords="1260,5,1511,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1524,30,1560,30,1560,35,1524,35"/>
+<area shape="rect" id="Node000003" href="$db/db4/a04835.html" title=" " alt="" coords="520,11,696,36"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="710,19,950,18,1236,22,1260,23,1260,28,1236,27,949,24,710,25"/>
+<area shape="rect" id="Node000006" href="$df/dc6/a04087.html" title="Pass component holding base pass data." alt="" coords="745,43,979,83"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="703,36,746,42,745,48,702,41"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title=" " alt="" coords="295,11,471,36"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="484,21,520,21,520,26,484,26"/>
+<area shape="rect" id="Node000005" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="5,11,188,36"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="201,21,294,21,294,26,201,26"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="993,61,1111,59,1236,51,1260,49,1260,54,1236,57,1111,64,993,67"/>
+</map>

@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/d5d/a08415" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserFunctionAndParams</compoundname>
+    <includes local="no">FileParserModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d5d/a08415_1ac05675db02a7090835721084f942471d" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a803dd67bd01170a159f03b11db5b3fc7" kindref="member">ParserFunction</ref></type>
+        <definition>ParserFunction castor::ParserFunctionAndParams::function</definition>
+        <argsstring></argsstring>
+        <name>function</name>
+        <qualifiedname>castor::ParserFunctionAndParams::function</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserModule.hpp" line="361" column="16" bodyfile="CastorUtils/FileParser/FileParserModule.hpp" bodystart="361" bodyend="361"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d5d/a08415_1a748a5447a7d70b499cfc4c97d302cafb" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::ParserFunctionAndParams::resultSection</definition>
+        <argsstring></argsstring>
+        <name>resultSection</name>
+        <qualifiedname>castor::ParserFunctionAndParams::resultSection</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserModule.hpp" line="362" column="10" bodyfile="CastorUtils/FileParser/FileParserModule.hpp" bodystart="362" bodyend="362"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d5d/a08415_1ace36ce4df75ab81418dd5f4d87dad9e7" prot="public" static="no" mutable="no">
+        <type>ParserParameterArray</type>
+        <definition>ParserParameterArray castor::ParserFunctionAndParams::params</definition>
+        <argsstring></argsstring>
+        <name>params</name>
+        <qualifiedname>castor::ParserFunctionAndParams::params</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserModule.hpp" line="363" column="22" bodyfile="CastorUtils/FileParser/FileParserModule.hpp" bodystart="363" bodyend="363"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d5d/a08415_1ad6fde87aa696c9728ff04f563fa4cbf0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::ParserFunctionAndParams::ParserFunctionAndParams</definition>
+        <argsstring>()=default</argsstring>
+        <name>ParserFunctionAndParams</name>
+        <qualifiedname>castor::ParserFunctionAndParams::ParserFunctionAndParams</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserModule.hpp" line="350" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d5d/a08415_1a1a87f66da6ff7cd5b0e70deea388fb88" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ParserFunctionAndParams::ParserFunctionAndParams</definition>
+        <argsstring>(ParserFunction function, uint32_t resultSection, ParserParameterArray params={})</argsstring>
+        <name>ParserFunctionAndParams</name>
+        <qualifiedname>castor::ParserFunctionAndParams::ParserFunctionAndParams</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a803dd67bd01170a159f03b11db5b3fc7" kindref="member">ParserFunction</ref></type>
+          <declname>function</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>resultSection</declname>
+        </param>
+        <param>
+          <type>ParserParameterArray</type>
+          <declname>params</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserModule.hpp" line="352" column="1" bodyfile="CastorUtils/FileParser/FileParserModule.hpp" bodystart="352" bodyend="359"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>La fonction ainsi que les paramètres attendus pour un parser. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/FileParser/FileParserModule.hpp" line="348" column="1" bodyfile="CastorUtils/FileParser/FileParserModule.hpp" bodystart="349" bodyend="364"/>
+    <listofallmembers>
+      <member refid="de/d5d/a08415_1ac05675db02a7090835721084f942471d" prot="public" virt="non-virtual"><scope>castor::ParserFunctionAndParams</scope><name>function</name></member>
+      <member refid="de/d5d/a08415_1ace36ce4df75ab81418dd5f4d87dad9e7" prot="public" virt="non-virtual"><scope>castor::ParserFunctionAndParams</scope><name>params</name></member>
+      <member refid="de/d5d/a08415_1ad6fde87aa696c9728ff04f563fa4cbf0" prot="public" virt="non-virtual"><scope>castor::ParserFunctionAndParams</scope><name>ParserFunctionAndParams</name></member>
+      <member refid="de/d5d/a08415_1a1a87f66da6ff7cd5b0e70deea388fb88" prot="public" virt="non-virtual"><scope>castor::ParserFunctionAndParams</scope><name>ParserFunctionAndParams</name></member>
+      <member refid="de/d5d/a08415_1a748a5447a7d70b499cfc4c97d302cafb" prot="public" virt="non-virtual"><scope>castor::ParserFunctionAndParams</scope><name>resultSection</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

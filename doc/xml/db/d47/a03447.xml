@@ -1,0 +1,370 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d47/a03447" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::GpuBaseBufferT</compoundname>
+    <includes local="no">GpuBuffer.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename AllocatorT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/d47/a03447_1aa8d39e184d662935d68f1cfadf19cb62" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::GpuBaseBufferT&lt; AllocatorT &gt;::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::GpuBaseBufferT::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GpuBuffer.hpp" line="386" column="21" bodyfile="Castor3D/Buffer/GpuBuffer.hpp" bodystart="386" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d47/a03447_1a9c12d3f67f98458dad8e0f4dec55190e" prot="private" static="no" mutable="no">
+        <type>VkBufferUsageFlags</type>
+        <definition>VkBufferUsageFlags castor3d::GpuBaseBufferT&lt; AllocatorT &gt;::m_usage</definition>
+        <argsstring></argsstring>
+        <name>m_usage</name>
+        <qualifiedname>castor3d::GpuBaseBufferT::m_usage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GpuBuffer.hpp" line="387" column="20" bodyfile="Castor3D/Buffer/GpuBuffer.hpp" bodystart="387" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d47/a03447_1a6f786819a22db789f5fb59841abc121a" prot="private" static="no" mutable="no">
+        <type>VkMemoryPropertyFlags</type>
+        <definition>VkMemoryPropertyFlags castor3d::GpuBaseBufferT&lt; AllocatorT &gt;::m_memoryFlags</definition>
+        <argsstring></argsstring>
+        <name>m_memoryFlags</name>
+        <qualifiedname>castor3d::GpuBaseBufferT::m_memoryFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GpuBuffer.hpp" line="388" column="23" bodyfile="Castor3D/Buffer/GpuBuffer.hpp" bodystart="388" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d47/a03447_1a972d576e8e8d0748d765cb85cb3c836b" prot="private" static="no" mutable="no">
+        <type>ashes::QueueShare</type>
+        <definition>ashes::QueueShare castor3d::GpuBaseBufferT&lt; AllocatorT &gt;::m_sharingMode</definition>
+        <argsstring></argsstring>
+        <name>m_sharingMode</name>
+        <qualifiedname>castor3d::GpuBaseBufferT::m_sharingMode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GpuBuffer.hpp" line="389" column="19" bodyfile="Castor3D/Buffer/GpuBuffer.hpp" bodystart="389" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d47/a03447_1ad488da573275a70fce2436880c6c9da9" prot="private" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::GpuBaseBufferT&lt; AllocatorT &gt;::m_allocatedSize</definition>
+        <argsstring></argsstring>
+        <name>m_allocatedSize</name>
+        <qualifiedname>castor3d::GpuBaseBufferT::m_allocatedSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GpuBuffer.hpp" line="390" column="14" bodyfile="Castor3D/Buffer/GpuBuffer.hpp" bodystart="390" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d47/a03447_1a1848cc97bda802d3e375e1d402580424" prot="private" static="no" mutable="no">
+        <type>ashes::BufferBasePtr</type>
+        <definition>ashes::BufferBasePtr castor3d::GpuBaseBufferT&lt; AllocatorT &gt;::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor3d::GpuBaseBufferT::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GpuBuffer.hpp" line="391" column="22" bodyfile="Castor3D/Buffer/GpuBuffer.hpp" bodystart="391" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d47/a03447_1ad0efd32fb00411847b95b2c6506cb39c" prot="private" static="no" mutable="no">
+        <type>AllocatorT</type>
+        <definition>AllocatorT castor3d::GpuBaseBufferT&lt; AllocatorT &gt;::m_allocator</definition>
+        <argsstring></argsstring>
+        <name>m_allocator</name>
+        <qualifiedname>castor3d::GpuBaseBufferT::m_allocator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GpuBuffer.hpp" line="392" column="12" bodyfile="Castor3D/Buffer/GpuBuffer.hpp" bodystart="392" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d47/a03447_1ac235aca59174d21b1b0012801f736b2f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GpuBaseBufferT&lt; AllocatorT &gt;::GpuBaseBufferT</definition>
+        <argsstring>(RenderDevice const &amp;device, VkBufferUsageFlags usage, VkMemoryPropertyFlags memoryFlags, castor::String const &amp;debugName, ashes::QueueShare sharingMode, AllocatorT allocator)</argsstring>
+        <name>GpuBaseBufferT</name>
+        <qualifiedname>castor3d::GpuBaseBufferT::GpuBaseBufferT</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>VkBufferUsageFlags</type>
+          <declname>usage</declname>
+        </param>
+        <param>
+          <type>VkMemoryPropertyFlags</type>
+          <declname>memoryFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>debugName</declname>
+        </param>
+        <param>
+          <type>ashes::QueueShare</type>
+          <declname>sharingMode</declname>
+        </param>
+        <param>
+          <type>AllocatorT</type>
+          <declname>allocator</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le device sur lequel le stockage est alloué. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">usage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les cibles du tampon. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">memoryFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les propriétés mémoire du tampon. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom debug. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sharingMode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le mode de partage. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">allocator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;allocateur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GpuBuffer.hpp" line="318" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d47/a03447_1a6b8295a998a521c4ebe256b6763b00c5" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::GpuBaseBufferT&lt; AllocatorT &gt;::hasAvailable</definition>
+        <argsstring>(VkDeviceSize size) const noexcept</argsstring>
+        <name>hasAvailable</name>
+        <qualifiedname>castor3d::GpuBaseBufferT::hasAvailable</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La taille requise pour la mémoire. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> s&apos;il y a assez de mémoire restante pour la taille donnée. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GpuBuffer.hpp" line="332" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d47/a03447_1a343202c2c90ccd0d980bf0d54ebfcaf4" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="db/db8/a03471" kindref="compound">MemChunk</ref></type>
+        <definition>MemChunk castor3d::GpuBaseBufferT&lt; AllocatorT &gt;::allocate</definition>
+        <argsstring>(VkDeviceSize size) noexcept</argsstring>
+        <name>allocate</name>
+        <qualifiedname>castor3d::GpuBaseBufferT::allocate</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Alloue une zone mémoire pour un CPU buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La taille requise pour la mémoire. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;offset de la zone mémoire. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GpuBuffer.hpp" line="343" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d47/a03447_1aa6b3ea47fe26c54d36b178fcc7b3844a" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::GpuBaseBufferT&lt; AllocatorT &gt;::deallocate</definition>
+        <argsstring>(MemChunk const &amp;mem) noexcept</argsstring>
+        <name>deallocate</name>
+        <qualifiedname>castor3d::GpuBaseBufferT::deallocate</qualifiedname>
+        <param>
+          <type><ref refid="db/db8/a03471" kindref="compound">MemChunk</ref> const &amp;</type>
+          <declname>mem</declname>
+        </param>
+        <briefdescription>
+<para>Désalloue de la mémoire. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">mem</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La zone mémoire. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GpuBuffer.hpp" line="352" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d47/a03447_1a8563898ebf2eb8ba6059fd01a297e349" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor3d::GpuBaseBufferT&lt; AllocatorT &gt;::getMinAlignment</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getMinAlignment</name>
+        <qualifiedname>castor3d::GpuBaseBufferT::getMinAlignment</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La taille alignée d&apos;un élément. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GpuBuffer.hpp" line="359" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d47/a03447_1a303dac43d1a5da22e815f22a50e04bac" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::BufferBase const &amp;</type>
+        <definition>ashes::BufferBase const  &amp; castor3d::GpuBaseBufferT&lt; AllocatorT &gt;::getBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::GpuBaseBufferT::getBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le tampon interne. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GpuBuffer.hpp" line="368" column="26" bodyfile="Castor3D/Buffer/GpuBuffer.hpp" bodystart="368" bodyend="371"/>
+        <referencedby refid="d0/d08/a03519_1ac8e2cc4cf9e8a4531300987d3bd38c07" compoundref="de/d79/a00203" startline="25" endline="28">castor3d::ObjectBufferOffset::GpuBufferChunk::getBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/d47/a03447_1abede23b421361c29b6c33858951c56f6" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::BufferBase &amp;</type>
+        <definition>ashes::BufferBase &amp; castor3d::GpuBaseBufferT&lt; AllocatorT &gt;::getBuffer</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::GpuBaseBufferT::getBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le tampon interne. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GpuBuffer.hpp" line="380" column="20" bodyfile="Castor3D/Buffer/GpuBuffer.hpp" bodystart="380" bodyend="383"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Un pool de buffer GPU, utilisant un allocateur pour allouer des sous-tampons. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para></para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Castor3D/Buffer/GpuBuffer.hpp" line="297" column="1" bodyfile="Castor3D/Buffer/GpuBuffer.hpp" bodystart="298" bodyend="393"/>
+    <listofallmembers>
+      <member refid="db/d47/a03447_1a343202c2c90ccd0d980bf0d54ebfcaf4" prot="public" virt="non-virtual"><scope>castor3d::GpuBaseBufferT</scope><name>allocate</name></member>
+      <member refid="db/d47/a03447_1aa6b3ea47fe26c54d36b178fcc7b3844a" prot="public" virt="non-virtual"><scope>castor3d::GpuBaseBufferT</scope><name>deallocate</name></member>
+      <member refid="db/d47/a03447_1a303dac43d1a5da22e815f22a50e04bac" prot="public" virt="non-virtual"><scope>castor3d::GpuBaseBufferT</scope><name>getBuffer</name></member>
+      <member refid="db/d47/a03447_1abede23b421361c29b6c33858951c56f6" prot="public" virt="non-virtual"><scope>castor3d::GpuBaseBufferT</scope><name>getBuffer</name></member>
+      <member refid="db/d47/a03447_1a8563898ebf2eb8ba6059fd01a297e349" prot="public" virt="non-virtual"><scope>castor3d::GpuBaseBufferT</scope><name>getMinAlignment</name></member>
+      <member refid="db/d47/a03447_1ac235aca59174d21b1b0012801f736b2f" prot="public" virt="non-virtual"><scope>castor3d::GpuBaseBufferT</scope><name>GpuBaseBufferT</name></member>
+      <member refid="db/d47/a03447_1a6b8295a998a521c4ebe256b6763b00c5" prot="public" virt="non-virtual"><scope>castor3d::GpuBaseBufferT</scope><name>hasAvailable</name></member>
+      <member refid="db/d47/a03447_1ad488da573275a70fce2436880c6c9da9" prot="private" virt="non-virtual"><scope>castor3d::GpuBaseBufferT</scope><name>m_allocatedSize</name></member>
+      <member refid="db/d47/a03447_1ad0efd32fb00411847b95b2c6506cb39c" prot="private" virt="non-virtual"><scope>castor3d::GpuBaseBufferT</scope><name>m_allocator</name></member>
+      <member refid="db/d47/a03447_1a1848cc97bda802d3e375e1d402580424" prot="private" virt="non-virtual"><scope>castor3d::GpuBaseBufferT</scope><name>m_buffer</name></member>
+      <member refid="db/d47/a03447_1aa8d39e184d662935d68f1cfadf19cb62" prot="private" virt="non-virtual"><scope>castor3d::GpuBaseBufferT</scope><name>m_device</name></member>
+      <member refid="db/d47/a03447_1a6f786819a22db789f5fb59841abc121a" prot="private" virt="non-virtual"><scope>castor3d::GpuBaseBufferT</scope><name>m_memoryFlags</name></member>
+      <member refid="db/d47/a03447_1a972d576e8e8d0748d765cb85cb3c836b" prot="private" virt="non-virtual"><scope>castor3d::GpuBaseBufferT</scope><name>m_sharingMode</name></member>
+      <member refid="db/d47/a03447_1a9c12d3f67f98458dad8e0f4dec55190e" prot="private" virt="non-virtual"><scope>castor3d::GpuBaseBufferT</scope><name>m_usage</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

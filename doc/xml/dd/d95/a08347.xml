@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d95/a08347" kind="struct" language="C++" prot="public">
+    <compoundname>castor::MaxValue&lt; A, B, std::enable_if_t&lt;(B &gt; A) &gt; &gt;</compoundname>
+    <includes local="no">Templates.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>uint32_t</type>
+        <declname>A</declname>
+        <defname>A</defname>
+      </param>
+      <param>
+        <type>uint32_t</type>
+        <declname>B</declname>
+        <defname>B</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dd/d95/a08347_1a9444c3f29748c5ab48e68ed4d913c6c8" prot="public" static="yes" mutable="no">
+        <type>const uint32_t</type>
+        <definition>const uint32_t castor::MaxValue&lt; A, B, std::enable_if_t&lt;(B &gt; A) &gt; &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>castor::MaxValue&lt; A, B, std::enable_if_t&lt;(B &gt; A) &gt; &gt;::value</qualifiedname>
+        <initializer>= B</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Templates.hpp" line="96" column="23" bodyfile="CastorUtils/Design/Templates.hpp" bodystart="96" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Utilisé pour obtenir la valeur maximale entre deux, à la compilation. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>spécialisation de <ref refid="d8/d50/a08219" kindref="compound">MaxValue</ref> pour B &gt; A. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="CastorUtils/Design/Templates.hpp" line="94" column="1" bodyfile="CastorUtils/Design/Templates.hpp" bodystart="95" bodyend="97"/>
+    <listofallmembers>
+      <member refid="dd/d95/a08347_1a9444c3f29748c5ab48e68ed4d913c6c8" prot="public" virt="non-virtual"><scope>castor::MaxValue&lt; A, B, std::enable_if_t&lt;(B &gt; A) &gt; &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

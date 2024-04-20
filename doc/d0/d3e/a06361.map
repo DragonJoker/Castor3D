@@ -1,0 +1,26 @@
+<map id="castor3d::PostEffect" name="castor3d::PostEffect">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1751,107,1891,132"/>
+<area shape="rect" id="Node000002" href="$d6/da8/a08227.html" title=" " alt="" coords="561,5,793,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="807,15,1049,15,1531,15,1588,18,1632,26,1728,62,1769,83,1803,104,1800,109,1766,87,1726,67,1630,31,1587,23,1531,21,1049,21,807,21"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="5,29,188,55"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="202,35,561,20,561,25,202,40"/>
+<area shape="rect" id="Node000008" href="$d6/da8/a08227.html" title=" " alt="" coords="351,56,537,81"/>
+<area shape="poly" id="edge8_Node000008_Node000003" title=" " alt="" coords="175,54,212,59,351,66,350,72,212,65,174,60"/>
+<area shape="rect" id="Node000004" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="1476,221,1583,247"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1583,214,1607,206,1726,160,1792,130,1794,134,1728,164,1609,211,1585,219"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="1466,157,1593,197"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1606,160,1726,137,1761,129,1762,135,1727,142,1607,165"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="1133,169,1260,209"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1274,195,1348,198,1426,195,1465,189,1466,195,1427,201,1348,204,1274,200"/>
+<area shape="rect" id="Node000007" href="$dd/d91/a06563.html" title=" " alt="" coords="1451,107,1608,132"/>
+<area shape="poly" id="edge9_Node000007_Node000006" title=" " alt="" coords="1273,177,1348,166,1426,150,1450,142,1488,130,1490,135,1452,147,1427,155,1349,171,1274,183"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1622,117,1751,117,1751,122,1622,122"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="551,74,817,91,1171,106,1450,115,1450,120,1171,112,817,97,551,79"/>
+<area shape="rect" id="Node000011" href="$d5/d4e/a06559.html" title=" " alt="" coords="817,56,984,81"/>
+<area shape="poly" id="edge13_Node000011_Node000008" title=" " alt="" coords="552,66,817,66,817,71,552,71"/>
+<area shape="rect" id="Node000009" href="$d1/d95/a06703.html" title=" " alt="" coords="1468,56,1591,81"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="1604,77,1727,98,1759,104,1758,109,1726,103,1604,83"/>
+<area shape="rect" id="Node000010" href="$dc/d32/a06415.html" title=" " alt="" coords="1117,56,1276,81"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="1290,66,1468,66,1468,71,1290,71"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="998,66,1117,66,1117,71,998,71"/>
+</map>

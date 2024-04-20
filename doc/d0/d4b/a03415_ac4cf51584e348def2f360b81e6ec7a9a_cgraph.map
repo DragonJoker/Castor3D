@@ -1,0 +1,17 @@
+<map id="castor3d::ChunkWriter::write" name="castor3d::ChunkWriter::write">
+<area shape="rect" id="Node000001" title="Writes a subchunk value into a chunk." alt="" coords="5,95,157,135"/>
+<area shape="rect" id="Node000002" href="$d9/dba/a02278.html#ac8fd79a65bf3d510536e2f77797a5df7" title="Prepares chunk data for read/write." alt="" coords="205,68,400,93"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,101,207,93,208,98,158,106"/>
+<area shape="rect" id="Node000007" href="$d3/d74/a03411.html#abe80518993510ab4c19bc4f9e67d32a8" title="Writes a subchunk value into a chunk." alt="" coords="211,130,394,170"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="158,125,198,131,197,136,158,130"/>
+<area shape="rect" id="Node000003" href="$d2/dd2/a02279.html#aa4e7623135b28fcbdeb6f2d423df6746" title="Detects if the current system is little endian." alt="" coords="469,5,613,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="351,65,447,39,477,32,479,37,449,45,352,70"/>
+<area shape="rect" id="Node000004" href="$d9/dba/a02278.html#a18b75386e45b81504fc6c5e9ece3d006" title=" " alt="" coords="462,55,621,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="400,73,448,70,448,75,400,78"/>
+<area shape="rect" id="Node000005" href="$d9/dba/a02278.html#a430f3de9071e7d03358bb1b39d07c2b8" title="Sets given value to big endian." alt="" coords="448,104,635,129"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="388,91,444,99,443,105,387,96"/>
+<area shape="rect" id="Node000006" href="$d2/dd2/a02279.html#a90cf51f94dda321c89fc40fa450d0b91" title="Convert from little or big endian to the other." alt="" coords="683,104,853,129"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="635,114,669,114,669,119,635,119"/>
+<area shape="rect" id="Node000008" href="$d5/d27/a03183.html#aa21722c40ca9e697b02b6612e81e41c9" title="Sets the chunk&#39;s data." alt="" coords="464,154,619,194"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="395,157,450,162,450,167,394,162"/>
+</map>

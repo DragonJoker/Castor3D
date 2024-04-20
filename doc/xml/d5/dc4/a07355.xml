@@ -1,0 +1,196 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/dc4/a07355" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ShaderBufferTypes::Data4T</compoundname>
+    <includes local="no">ShaderBuffersModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename DataT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/dc4/a07355_1afa1ad05b53e7aae4011f2d420ac03c51" prot="public" static="no" mutable="no">
+        <type>DataT</type>
+        <definition>DataT castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Data4T::x</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="188" column="7" bodyfile="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="188" bodyend="188"/>
+        <referencedby refid="d5/dc4/a07355_1af98ee7882de06a9b232c15e9ea0cc51f" compoundref="d9/df5/a01574" startline="164" endline="169">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::operator=</referencedby>
+        <referencedby refid="d5/dc4/a07355_1a4a52a4190e15ce66821dafeba0aa44f7" compoundref="d9/df5/a01574" startline="171" endline="177">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::operator=</referencedby>
+        <referencedby refid="d5/dc4/a07355_1a5cb0016da5154469b886cd7cb9c91a74" compoundref="d9/df5/a01574" startline="179" endline="186">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::operator=</referencedby>
+        <referencedby refid="d5/dc4/a07355_1a32da52fa1585df14c93cd8a5d9a64a59" compoundref="d9/df5/a01574" startline="158" endline="162">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::operator=</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dc4/a07355_1ad24a3761792851098cc7408b5b48f665" prot="public" static="no" mutable="no">
+        <type>DataT</type>
+        <definition>DataT castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Data4T::y</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="189" column="7" bodyfile="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="189" bodyend="189"/>
+        <referencedby refid="d5/dc4/a07355_1af98ee7882de06a9b232c15e9ea0cc51f" compoundref="d9/df5/a01574" startline="164" endline="169">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::operator=</referencedby>
+        <referencedby refid="d5/dc4/a07355_1a4a52a4190e15ce66821dafeba0aa44f7" compoundref="d9/df5/a01574" startline="171" endline="177">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::operator=</referencedby>
+        <referencedby refid="d5/dc4/a07355_1a5cb0016da5154469b886cd7cb9c91a74" compoundref="d9/df5/a01574" startline="179" endline="186">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::operator=</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dc4/a07355_1a325e24e09fc9157028291fd307f0bfa5" prot="public" static="no" mutable="no">
+        <type>DataT</type>
+        <definition>DataT castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::z</definition>
+        <argsstring></argsstring>
+        <name>z</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Data4T::z</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="190" column="7" bodyfile="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="190" bodyend="190"/>
+        <referencedby refid="d5/dc4/a07355_1a4a52a4190e15ce66821dafeba0aa44f7" compoundref="d9/df5/a01574" startline="171" endline="177">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::operator=</referencedby>
+        <referencedby refid="d5/dc4/a07355_1a5cb0016da5154469b886cd7cb9c91a74" compoundref="d9/df5/a01574" startline="179" endline="186">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::operator=</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dc4/a07355_1ae3b13ca817f116169a44bd1476e58c59" prot="public" static="no" mutable="no">
+        <type>DataT</type>
+        <definition>DataT castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::w</definition>
+        <argsstring></argsstring>
+        <name>w</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Data4T::w</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="191" column="7" bodyfile="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="191" bodyend="191"/>
+        <referencedby refid="d5/dc4/a07355_1a5cb0016da5154469b886cd7cb9c91a74" compoundref="d9/df5/a01574" startline="179" endline="186">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::operator=</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/dc4/a07355_1a32da52fa1585df14c93cd8a5d9a64a59" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/dc4/a07355" kindref="compound">Data4T</ref> &amp;</type>
+        <definition>Data4T &amp; castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::operator=</definition>
+        <argsstring>(DataT rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Data4T::operator=</qualifiedname>
+        <param>
+          <type>DataT</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="158" column="9" bodyfile="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="158" bodyend="162"/>
+        <references refid="d5/dc4/a07355_1afa1ad05b53e7aae4011f2d420ac03c51" compoundref="d9/df5/a01574" startline="188" endline="188">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::x</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/dc4/a07355_1af98ee7882de06a9b232c15e9ea0cc51f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/dc4/a07355" kindref="compound">Data4T</ref> &amp;</type>
+        <definition>Data4T &amp; castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::operator=</definition>
+        <argsstring>(castor::Point2&lt; DataT &gt; const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Data4T::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aa69fef28c24152a2d8c2b155af85163a" kindref="member">castor::Point2</ref>&lt; DataT &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="164" column="9" bodyfile="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="164" bodyend="169"/>
+        <references refid="d5/dc4/a07355_1afa1ad05b53e7aae4011f2d420ac03c51" compoundref="d9/df5/a01574" startline="188" endline="188">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::x</references>
+        <references refid="d5/dc4/a07355_1ad24a3761792851098cc7408b5b48f665" compoundref="d9/df5/a01574" startline="189" endline="189">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::y</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/dc4/a07355_1a4a52a4190e15ce66821dafeba0aa44f7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/dc4/a07355" kindref="compound">Data4T</ref> &amp;</type>
+        <definition>Data4T &amp; castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::operator=</definition>
+        <argsstring>(castor::Point3&lt; DataT &gt; const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Data4T::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a073a6615c730b0cbe22f33728ac95a4b" kindref="member">castor::Point3</ref>&lt; DataT &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="171" column="9" bodyfile="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="171" bodyend="177"/>
+        <references refid="d5/dc4/a07355_1afa1ad05b53e7aae4011f2d420ac03c51" compoundref="d9/df5/a01574" startline="188" endline="188">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::x</references>
+        <references refid="d5/dc4/a07355_1ad24a3761792851098cc7408b5b48f665" compoundref="d9/df5/a01574" startline="189" endline="189">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::y</references>
+        <references refid="d5/dc4/a07355_1a325e24e09fc9157028291fd307f0bfa5" compoundref="d9/df5/a01574" startline="190" endline="190">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::z</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/dc4/a07355_1a5cb0016da5154469b886cd7cb9c91a74" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/dc4/a07355" kindref="compound">Data4T</ref> &amp;</type>
+        <definition>Data4T &amp; castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::operator=</definition>
+        <argsstring>(castor::Point4&lt; DataT &gt; const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Data4T::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a5e1950beb027b9e1e101eef7c4535a31" kindref="member">castor::Point4</ref>&lt; DataT &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="179" column="9" bodyfile="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="179" bodyend="186"/>
+        <references refid="d5/dc4/a07355_1ae3b13ca817f116169a44bd1476e58c59" compoundref="d9/df5/a01574" startline="191" endline="191">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::w</references>
+        <references refid="d5/dc4/a07355_1afa1ad05b53e7aae4011f2d420ac03c51" compoundref="d9/df5/a01574" startline="188" endline="188">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::x</references>
+        <references refid="d5/dc4/a07355_1ad24a3761792851098cc7408b5b48f665" compoundref="d9/df5/a01574" startline="189" endline="189">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::y</references>
+        <references refid="d5/dc4/a07355_1a325e24e09fc9157028291fd307f0bfa5" compoundref="d9/df5/a01574" startline="190" endline="190">castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;::z</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ShaderBufferTypes::Data4T&lt; Float1 &gt;</label>
+        <link refid="d5/dc4/a07355"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Float1 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ShaderBufferTypes::Data4T&lt; DataT &gt;</label>
+        <link refid="d5/dc4/a07355"/>
+      </node>
+    </inheritancegraph>
+    <location file="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="156" column="1" bodyfile="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="157" bodyend="192"/>
+    <listofallmembers>
+      <member refid="d5/dc4/a07355_1a32da52fa1585df14c93cd8a5d9a64a59" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Data4T</scope><name>operator=</name></member>
+      <member refid="d5/dc4/a07355_1af98ee7882de06a9b232c15e9ea0cc51f" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Data4T</scope><name>operator=</name></member>
+      <member refid="d5/dc4/a07355_1a4a52a4190e15ce66821dafeba0aa44f7" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Data4T</scope><name>operator=</name></member>
+      <member refid="d5/dc4/a07355_1a5cb0016da5154469b886cd7cb9c91a74" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Data4T</scope><name>operator=</name></member>
+      <member refid="d5/dc4/a07355_1ae3b13ca817f116169a44bd1476e58c59" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Data4T</scope><name>w</name></member>
+      <member refid="d5/dc4/a07355_1afa1ad05b53e7aae4011f2d420ac03c51" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Data4T</scope><name>x</name></member>
+      <member refid="d5/dc4/a07355_1ad24a3761792851098cc7408b5b48f665" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Data4T</scope><name>y</name></member>
+      <member refid="d5/dc4/a07355_1a325e24e09fc9157028291fd307f0bfa5" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Data4T</scope><name>z</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

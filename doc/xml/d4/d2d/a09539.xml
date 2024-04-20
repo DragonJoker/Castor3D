@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/d2d/a09539" kind="struct" language="C++" prot="public">
+    <compoundname>castor::format::Indent</compoundname>
+    <includes local="no">StreamIndentManipulators.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d2d/a09539_1a29cab28c0840e4c6cc4a4dc1e1496d80" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int castor::format::Indent::m_indent</definition>
+        <argsstring></argsstring>
+        <name>m_indent</name>
+        <qualifiedname>castor::format::Indent::m_indent</qualifiedname>
+        <briefdescription>
+<para>La valeur d&apos;indentation. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentManipulators.hpp" line="30" column="5" bodyfile="CastorUtils/Stream/StreamIndentManipulators.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/d2d/a09539_1ab6e4b9bebcb9979709957c8f20b6598e" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::format::Indent::Indent</definition>
+        <argsstring>(int i)</argsstring>
+        <name>Indent</name>
+        <qualifiedname>castor::format::Indent::Indent</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">i</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The indentation value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentManipulators.hpp" line="24" column="10" bodyfile="CastorUtils/Stream/StreamIndentManipulators.hpp" bodystart="24" bodyend="27"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Stream/StreamIndentManipulators.hpp" line="14" column="1" bodyfile="CastorUtils/Stream/StreamIndentManipulators.hpp" bodystart="15" bodyend="31"/>
+    <listofallmembers>
+      <member refid="d4/d2d/a09539_1ab6e4b9bebcb9979709957c8f20b6598e" prot="public" virt="non-virtual"><scope>castor::format::Indent</scope><name>Indent</name></member>
+      <member refid="d4/d2d/a09539_1a29cab28c0840e4c6cc4a4dc1e1496d80" prot="public" virt="non-virtual"><scope>castor::format::Indent</scope><name>m_indent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

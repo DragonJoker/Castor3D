@@ -1,0 +1,1331 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/d61/a09183" kind="class" language="C++" prot="public">
+    <compoundname>castor::Matrix</compoundname>
+    <includes local="no">Matrix.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+      <param>
+        <type>uint32_t</type>
+        <declname>Columns</declname>
+        <defname>Columns</defname>
+      </param>
+      <param>
+        <type>uint32_t</type>
+        <declname>Rows</declname>
+        <defname>Rows</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d2/d61/a09183_1a4a5f770810536074563aaeb11ecd5a60" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::Matrix&lt; T, Columns, Rows &gt;::Matrix</definition>
+        <argsstring>()</argsstring>
+        <name>Matrix</name>
+        <qualifiedname>castor::Matrix::Matrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Construction / Destruction. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="49" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a08bcff990e8c2153fffb07985ae2752f" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::Matrix&lt; T, Columns, Rows &gt;::Matrix</definition>
+        <argsstring>(NoInit const &amp;)</argsstring>
+        <name>Matrix</name>
+        <qualifiedname>castor::Matrix::Matrix</qualifiedname>
+        <param>
+          <type><ref refid="da/d68/a07951" kindref="compound">NoInit</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="50" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1adea208526a48b94dcc93d8a2468c5cd0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::Matrix&lt; T, Columns, Rows &gt;::Matrix</definition>
+        <argsstring>(Matrix const &amp;matrix)</argsstring>
+        <name>Matrix</name>
+        <qualifiedname>castor::Matrix::Matrix</qualifiedname>
+        <param>
+          <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref> const &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="51" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a0cf01f6755ecdc2cd4ddbcfc9dd6d769" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Matrix&lt; T, Columns, Rows &gt;::Matrix</definition>
+        <argsstring>(Matrix &amp;&amp;matrix) noexcept</argsstring>
+        <name>Matrix</name>
+        <qualifiedname>castor::Matrix::Matrix</qualifiedname>
+        <param>
+          <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref> &amp;&amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="52" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a774cefa6ee3e4a9c027dba92cb19be64" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::Matrix&lt; T, Columns, Rows &gt;::Matrix</definition>
+        <argsstring>(T const &amp;value)</argsstring>
+        <name>Matrix</name>
+        <qualifiedname>castor::Matrix::Matrix</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="53" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a639939819c4467657867456b83a4fe91" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::Matrix&lt; T, Columns, Rows &gt;::Matrix</definition>
+        <argsstring>(T *matrix)</argsstring>
+        <name>Matrix</name>
+        <qualifiedname>castor::Matrix::Matrix</qualifiedname>
+        <param>
+          <type>T *</type>
+          <declname>matrix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="54" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a1d697ce39ed017198f172b25a3ba2606" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::Matrix&lt; T, Columns, Rows &gt;::Matrix</definition>
+        <argsstring>(Type const *matrix)</argsstring>
+        <name>Matrix</name>
+        <qualifiedname>castor::Matrix::Matrix</qualifiedname>
+        <param>
+          <type>Type const *</type>
+          <declname>matrix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="56" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a6d93001cca91f9394cf074dcfd641f00" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::Matrix&lt; T, Columns, Rows &gt;::Matrix</definition>
+        <argsstring>(Array&lt; Type, Columns *Rows &gt; const &amp;rhs)</argsstring>
+        <name>Matrix</name>
+        <qualifiedname>castor::Matrix::Matrix</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">Array</ref>&lt; Type, Columns *Rows &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="58" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a64a928385b6aff4c7635134a5d61b822" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::Matrix&lt; T, Columns, Rows &gt;::Matrix</definition>
+        <argsstring>(Matrix&lt; Type, Columns, Rows &gt; const &amp;matrix)</argsstring>
+        <name>Matrix</name>
+        <qualifiedname>castor::Matrix::Matrix</qualifiedname>
+        <param>
+          <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; Type, Columns, Rows &gt; const &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="60" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a004b30e4e1a508fb1743fa2871fb2f6c" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::Matrix&lt; T, Columns, Rows &gt;::Matrix</definition>
+        <argsstring>(std::initializer_list&lt; T &gt; rhs)</argsstring>
+        <name>Matrix</name>
+        <qualifiedname>castor::Matrix::Matrix</qualifiedname>
+        <param>
+          <type>std::initializer_list&lt; T &gt;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="61" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1aaa253f9efe52eeb65324707246f634ba" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Matrix&lt; T, Columns, Rows &gt;::~Matrix</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~Matrix</name>
+        <qualifiedname>castor::Matrix::~Matrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="62" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a88c23e7523846255e1cf10a225f6fbf9" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>Types</declname>
+            <defname>Types</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::Matrix&lt; T, Columns, Rows &gt;::Matrix</definition>
+        <argsstring>(Types &amp;&amp;... inits)</argsstring>
+        <name>Matrix</name>
+        <qualifiedname>castor::Matrix::Matrix</qualifiedname>
+        <param>
+          <type>Types &amp;&amp;...</type>
+          <declname>inits</declname>
+        </param>
+    <requiresclause>isRightSize&lt; Types... &gt;    </requiresclause>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="65" column="10" bodyfile="CastorUtils/Math/Matrix.hpp" bodystart="65" bodyend="68"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d2/d61/a09183_1ad3cfceda825d351a5e86c513bc6df4eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Matrix&lt; T, Columns, Rows &gt;::setRow</definition>
+        <argsstring>(uint32_t index, value_type const *row)</argsstring>
+        <name>setRow</name>
+        <qualifiedname>castor::Matrix::setRow</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref> const *</type>
+          <declname>row</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Accès aux lignes/colonnes. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="77" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a56f461ab9ad58cac2a75fb703ece177f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Matrix&lt; T, Columns, Rows &gt;::setRow</definition>
+        <argsstring>(uint32_t index, Point&lt; value_type, Columns &gt; const &amp;row)</argsstring>
+        <name>setRow</name>
+        <qualifiedname>castor::Matrix::setRow</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; <ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref>, Columns &gt; const &amp;</type>
+          <declname>row</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="78" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a988205740a49e35ac36fed51c5ee329e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Matrix&lt; T, Columns, Rows &gt;::setRow</definition>
+        <argsstring>(uint32_t index, Coords&lt; value_type, Columns &gt; const &amp;row)</argsstring>
+        <name>setRow</name>
+        <qualifiedname>castor::Matrix::setRow</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; <ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref>, Columns &gt; const &amp;</type>
+          <declname>row</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="79" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1ac32db600c8f6b22ac1db8ccdedcef1d3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; <ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref>, Columns &gt;</type>
+        <definition>Point&lt; value_type, Columns &gt; castor::Matrix&lt; T, Columns, Rows &gt;::getRow</definition>
+        <argsstring>(uint32_t index) const</argsstring>
+        <name>getRow</name>
+        <qualifiedname>castor::Matrix::getRow</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="80" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1afbe064ee57f689a46d8bc378fb1df657" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Matrix&lt; T, Columns, Rows &gt;::getRow</definition>
+        <argsstring>(uint32_t index, Point&lt; value_type, Columns &gt; &amp;result) const</argsstring>
+        <name>getRow</name>
+        <qualifiedname>castor::Matrix::getRow</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; <ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref>, Columns &gt; &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="81" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a76dc0db7d98c434bc27431776f12ac28" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Matrix&lt; T, Columns, Rows &gt;::setColumn</definition>
+        <argsstring>(uint32_t index, value_type const *col)</argsstring>
+        <name>setColumn</name>
+        <qualifiedname>castor::Matrix::setColumn</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref> const *</type>
+          <declname>col</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="83" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a636efc5e5585742625ed84ea656c5f4b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Matrix&lt; T, Columns, Rows &gt;::setColumn</definition>
+        <argsstring>(uint32_t index, Point&lt; value_type, Rows &gt; const &amp;col)</argsstring>
+        <name>setColumn</name>
+        <qualifiedname>castor::Matrix::setColumn</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; <ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref>, Rows &gt; const &amp;</type>
+          <declname>col</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="84" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1ad25ff8ea36abc24703df5aa383f06251" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Matrix&lt; T, Columns, Rows &gt;::setColumn</definition>
+        <argsstring>(uint32_t index, Coords&lt; value_type const, Rows &gt; const &amp;col)</argsstring>
+        <name>setColumn</name>
+        <qualifiedname>castor::Matrix::setColumn</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; <ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref> const, Rows &gt; const &amp;</type>
+          <declname>col</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="85" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a146d69adb7e74b4e2c3e7e4f871a11de" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Matrix&lt; T, Columns, Rows &gt;::setColumn</definition>
+        <argsstring>(uint32_t index, Coords&lt; value_type, Rows &gt; const &amp;col)</argsstring>
+        <name>setColumn</name>
+        <qualifiedname>castor::Matrix::setColumn</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; <ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref>, Rows &gt; const &amp;</type>
+          <declname>col</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="86" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1ae3bc54767d01d58c04220b70c50016a8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; <ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref>, Rows &gt; const &amp;</type>
+        <definition>Point&lt; value_type, Rows &gt; const  &amp; castor::Matrix&lt; T, Columns, Rows &gt;::getColumn</definition>
+        <argsstring>(uint32_t index) const</argsstring>
+        <name>getColumn</name>
+        <qualifiedname>castor::Matrix::getColumn</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="87" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a473a3859a5a9b537d305072498558e19" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; <ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref>, Rows &gt; &amp;</type>
+        <definition>Point&lt; value_type, Rows &gt; &amp; castor::Matrix&lt; T, Columns, Rows &gt;::getColumn</definition>
+        <argsstring>(uint32_t index)</argsstring>
+        <name>getColumn</name>
+        <qualifiedname>castor::Matrix::getColumn</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="88" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1ab67a98dad40b13a44a87d0da5c87cd41" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Matrix&lt; T, Columns, Rows &gt;::getColumn</definition>
+        <argsstring>(uint32_t index, Point&lt; value_type, Rows &gt; &amp;result) const</argsstring>
+        <name>getColumn</name>
+        <qualifiedname>castor::Matrix::getColumn</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; <ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref>, Rows &gt; &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="89" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1af3147776ae87f0cfa0edf59d2a544125" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Matrix&lt; T, Columns, Rows &gt;::getColumn</definition>
+        <argsstring>(uint32_t index, Coords&lt; value_type, Rows &gt; &amp;result)</argsstring>
+        <name>getColumn</name>
+        <qualifiedname>castor::Matrix::getColumn</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; <ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref>, Rows &gt; &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="90" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d2/d61/a09183_1a31d6e976a67970f37de9426a419f6d52" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d61/a09183_1ae08ffc30c95f713a1cfacb0090af7348" kindref="member">col_type</ref> const &amp;</type>
+        <definition>col_type const  &amp; castor::Matrix&lt; T, Columns, Rows &gt;::operator[]</definition>
+        <argsstring>(uint32_t index) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::Matrix::operator[]</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Accesseurs de tableau. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="99" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a6814feed9a5bf5e666862e048ffa1bf8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d61/a09183_1ae08ffc30c95f713a1cfacb0090af7348" kindref="member">col_type</ref> &amp;</type>
+        <definition>col_type &amp; castor::Matrix&lt; T, Columns, Rows &gt;::operator[]</definition>
+        <argsstring>(uint32_t index)</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::Matrix::operator[]</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="100" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a8831d1bc852817c928cfe6ecd7211e8f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref> &amp;</type>
+        <definition>value_type &amp; castor::Matrix&lt; T, Columns, Rows &gt;::operator()</definition>
+        <argsstring>(uint32_t col, uint32_t row)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::Matrix::operator()</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>row</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="101" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a14a909880307bc19db8a248e9f63e6a0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref> const &amp;</type>
+        <definition>value_type const  &amp; castor::Matrix&lt; T, Columns, Rows &gt;::operator()</definition>
+        <argsstring>(uint32_t col, uint32_t row) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::Matrix::operator()</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>col</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>row</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="102" column="19"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d2/d61/a09183_1a6323ca192ffced7b717b95481c94eec6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; T, Columns, Rows &gt; &amp;</type>
+        <definition>Matrix&lt; T, Columns, Rows &gt; &amp; castor::Matrix&lt; T, Columns, Rows &gt;::operator=</definition>
+        <argsstring>(Matrix&lt; T, Columns, Rows &gt; const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Matrix::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; T, Columns, Rows &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Opérateurs d&apos;affectation. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="178" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a41763b71612f2e32d410171d0af1863e" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; T, Columns, Rows &gt; &amp;</type>
+        <definition>Matrix&lt; T, Columns, Rows &gt; &amp; castor::Matrix&lt; T, Columns, Rows &gt;::operator=</definition>
+        <argsstring>(Matrix&lt; T, Columns, Rows &gt; &amp;&amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Matrix::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; T, Columns, Rows &gt; &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="179" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1aa1c5c7fe285e907ebdc6903df9a16a18" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; T, Columns, Rows &gt; &amp;</type>
+        <definition>Matrix&lt; T, Columns, Rows &gt; &amp; castor::Matrix&lt; T, Columns, Rows &gt;::operator=</definition>
+        <argsstring>(Matrix&lt; Type, Columns, Rows &gt; const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Matrix::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; Type, Columns, Rows &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="180" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a6f01e29297e8319ddf1fcf115ee41d5c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; T, Columns, Rows &gt; &amp;</type>
+        <definition>Matrix&lt; T, Columns, Rows &gt; &amp; castor::Matrix&lt; T, Columns, Rows &gt;::operator=</definition>
+        <argsstring>(Type const *rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Matrix::operator=</qualifiedname>
+        <param>
+          <type>Type const *</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="181" column="22"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d2/d61/a09183_1aa90d96eac0ad37c4b76784b09824c9ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; T, Columns, Rows &gt; &amp;</type>
+        <definition>Matrix&lt; T, Columns, Rows &gt; &amp; castor::Matrix&lt; T, Columns, Rows &gt;::operator+=</definition>
+        <argsstring>(Matrix&lt; Type, Columns, Rows &gt; const &amp;rhs)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::Matrix::operator+=</qualifiedname>
+        <param>
+          <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; Type, Columns, Rows &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Opérateurs arithmétiques. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="190" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1ad637c8b15ecb43c36291974f14531607" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; T, Columns, Rows &gt; &amp;</type>
+        <definition>Matrix&lt; T, Columns, Rows &gt; &amp; castor::Matrix&lt; T, Columns, Rows &gt;::operator-=</definition>
+        <argsstring>(Matrix&lt; Type, Columns, Rows &gt; const &amp;rhs)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::Matrix::operator-=</qualifiedname>
+        <param>
+          <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; Type, Columns, Rows &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="191" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1ae2928cd3e36a78bacee118cd1606e30e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; T, Columns, Rows &gt; &amp;</type>
+        <definition>Matrix&lt; T, Columns, Rows &gt; &amp; castor::Matrix&lt; T, Columns, Rows &gt;::operator+=</definition>
+        <argsstring>(T const &amp;rhs)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::Matrix::operator+=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="192" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a3fd7bcf9df4ffb308891d28d9b1704ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; T, Columns, Rows &gt; &amp;</type>
+        <definition>Matrix&lt; T, Columns, Rows &gt; &amp; castor::Matrix&lt; T, Columns, Rows &gt;::operator-=</definition>
+        <argsstring>(T const &amp;rhs)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::Matrix::operator-=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="193" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1ab997dfb8bf43468e42c35af6e2bb6e43" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; T, Columns, Rows &gt; &amp;</type>
+        <definition>Matrix&lt; T, Columns, Rows &gt; &amp; castor::Matrix&lt; T, Columns, Rows &gt;::operator*=</definition>
+        <argsstring>(T const &amp;rhs)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::Matrix::operator*=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="194" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a5d0b69990e4dd9a3f1a56186f7d3462d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; T, Columns, Rows &gt; &amp;</type>
+        <definition>Matrix&lt; T, Columns, Rows &gt; &amp; castor::Matrix&lt; T, Columns, Rows &gt;::operator/=</definition>
+        <argsstring>(T const &amp;rhs)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::Matrix::operator/=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="195" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" prot="public" static="no">
+        <type>T</type>
+        <definition>using castor::Matrix&lt; T, Columns, Rows &gt;::value_type =  T</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>castor::Matrix::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le type de données. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="27" column="1" bodyfile="CastorUtils/Math/Matrix.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/d61/a09183_1ae08ffc30c95f713a1cfacb0090af7348" prot="public" static="no">
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; <ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref>, Rows &gt;</type>
+        <definition>using castor::Matrix&lt; T, Columns, Rows &gt;::col_type =  Point&lt; value_type, Rows &gt;</definition>
+        <argsstring></argsstring>
+        <name>col_type</name>
+        <qualifiedname>castor::Matrix::col_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le type de colonne. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="30" column="1" bodyfile="CastorUtils/Math/Matrix.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/d61/a09183_1a5332589a7bef98deb54cb32a5a32c515" prot="public" static="no">
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; <ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref>, Columns &gt;</type>
+        <definition>using castor::Matrix&lt; T, Columns, Rows &gt;::row_type =  Point&lt; value_type, Columns &gt;</definition>
+        <argsstring></argsstring>
+        <name>row_type</name>
+        <qualifiedname>castor::Matrix::row_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le type de ligne. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="33" column="1" bodyfile="CastorUtils/Math/Matrix.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/d61/a09183_1a04d650e8d33db2d8ee7fd74f4f93ed7b" prot="public" static="no">
+        <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; <ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref>, Rows, Columns &gt;</type>
+        <definition>using castor::Matrix&lt; T, Columns, Rows &gt;::transpose_type =  Matrix&lt; value_type, Rows, Columns &gt;</definition>
+        <argsstring></argsstring>
+        <name>transpose_type</name>
+        <qualifiedname>castor::Matrix::transpose_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le type de matrice transposée. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="36" column="1" bodyfile="CastorUtils/Math/Matrix.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/d61/a09183_1a0997a6828d57728df3f7b3c15e2980f8" prot="public" static="no">
+        <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; <ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref>, Columns, Rows &gt;</type>
+        <definition>using castor::Matrix&lt; T, Columns, Rows &gt;::my_type =  Matrix&lt; value_type, Columns, Rows &gt;</definition>
+        <argsstring></argsstring>
+        <name>my_type</name>
+        <qualifiedname>castor::Matrix::my_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le type de cette matrice. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="39" column="1" bodyfile="CastorUtils/Math/Matrix.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="d2/d61/a09183_1aecc2950843b75b014486ee8d17a5851c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>C</declname>
+            <defname>C</defname>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>R</declname>
+            <defname>R</defname>
+          </param>
+        </templateparamlist>
+        <type>class</type>
+        <definition>friend class Matrix</definition>
+        <argsstring></argsstring>
+        <name>Matrix</name>
+        <qualifiedname>castor::Matrix::Matrix</qualifiedname>
+        <param>
+          <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="16" column="14" bodyfile="CastorUtils/Math/Matrix.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-attrib">
+      <memberdef kind="variable" id="d2/d61/a09183_1a01f754f200028a40a87b9f582a613ce9" prot="protected" static="yes" mutable="no">
+        <type>const std::size_t</type>
+        <definition>const std::size_t castor::Matrix&lt; T, Columns, Rows &gt;::count</definition>
+        <argsstring></argsstring>
+        <name>count</name>
+        <qualifiedname>castor::Matrix::count</qualifiedname>
+        <initializer>= Rows * Columns</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="19" column="26" bodyfile="CastorUtils/Math/Matrix.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d61/a09183_1a5d1cf60f437412f38ddc417d967055aa" prot="protected" static="yes" mutable="no">
+        <type>const std::size_t</type>
+        <definition>const std::size_t castor::Matrix&lt; T, Columns, Rows &gt;::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>castor::Matrix::size</qualifiedname>
+        <initializer>= sizeof( T ) * Rows * Columns</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="20" column="26" bodyfile="CastorUtils/Math/Matrix.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d61/a09183_1a306698e210c34876cfb12e4e39e5d90c" prot="protected" static="yes" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>Types</declname>
+            <defname>Types</defname>
+          </param>
+        </templateparamlist>
+        <type>bool constexpr</type>
+        <definition>bool constexpr castor::Matrix&lt; T, Columns, Rows &gt;::isRightSize</definition>
+        <argsstring></argsstring>
+        <name>isRightSize</name>
+        <qualifiedname>castor::Matrix::isRightSize</qualifiedname>
+        <initializer>= sizeof...( Types ) == <ref refid="d2/d61/a09183_1a01f754f200028a40a87b9f582a613ce9" kindref="member">count</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="22" column="23" bodyfile="CastorUtils/Math/Matrix.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d61/a09183_1a1060e9caf4f859dc6f435fe9fe51bd58" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">Array</ref>&lt; T, Columns *Rows &gt;</type>
+        <definition>Array&lt; T, Columns * Rows &gt; castor::Matrix&lt; T, Columns, Rows &gt;::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <qualifiedname>castor::Matrix::m_data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="204" column="7" bodyfile="CastorUtils/Math/Matrix.hpp" bodystart="204" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d61/a09183_1a852990177a387d8921c8bf84bd632b90" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">Array</ref>&lt; <ref refid="d2/d61/a09183_1ae08ffc30c95f713a1cfacb0090af7348" kindref="member">col_type</ref>, Columns &gt;</type>
+        <definition>Array&lt; col_type, Columns &gt; castor::Matrix&lt; T, Columns, Rows &gt;::m_columns</definition>
+        <argsstring></argsstring>
+        <name>m_columns</name>
+        <qualifiedname>castor::Matrix::m_columns</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="205" column="7" bodyfile="CastorUtils/Math/Matrix.hpp" bodystart="205" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d2/d61/a09183_1acdf9b93a0f6de1a3229ccff2df94945e" prot="protected" static="no" mutable="no">
+        <type>union <ref refid="d2/d61/a09183" kindref="compound">castor::Matrix</ref></type>
+        <definition>union castor::Matrix castor::Matrix&lt; T, Columns, Rows &gt;</definition>
+        <argsstring></argsstring>
+        <name></name>
+        <qualifiedname>castor::Matrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="206" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d61/a09183_1a52ab2cd790370344db3ab43cb560e22d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref> *</type>
+        <definition>value_type * castor::Matrix&lt; T, Columns, Rows &gt;::ptr</definition>
+        <argsstring>()</argsstring>
+        <name>ptr</name>
+        <qualifiedname>castor::Matrix::ptr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le pointeur sur les données. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="110" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1ad85da1280cccde8b1d27f49b8bf86a1b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref> const *</type>
+        <definition>value_type const  * castor::Matrix&lt; T, Columns, Rows &gt;::constPtr</definition>
+        <argsstring>() const</argsstring>
+        <name>constPtr</name>
+        <qualifiedname>castor::Matrix::constPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le pointeur sur les données constantes. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="117" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1af6f6a962525ac9e54bc6355f60b9ebaa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Matrix&lt; T, Columns, Rows &gt;::initialise</definition>
+        <argsstring>()</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor::Matrix::initialise</qualifiedname>
+        <briefdescription>
+<para>Initialise la matrice à 0. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="124" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a788e68897b10e9ecff63a28915499f3e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Matrix&lt; T, Columns, Rows &gt;::initialise</definition>
+        <argsstring>(value_type const &amp;value)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor::Matrix::initialise</qualifiedname>
+        <param>
+          <type><ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Initialise la matrice comme une matrice de Jordan, avec la valeur donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="133" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a9bfa2d96641b8817134e2fe96035ad9b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d61/a09183_1a04d650e8d33db2d8ee7fd74f4f93ed7b" kindref="member">transpose_type</ref></type>
+        <definition>transpose_type castor::Matrix&lt; T, Columns, Rows &gt;::getTransposed</definition>
+        <argsstring>() const</argsstring>
+        <name>getTransposed</name>
+        <qualifiedname>castor::Matrix::getTransposed</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La transposée de cette matrice. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="140" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1ad59bbd072813d6f836a5dd50ef8b8b96" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Matrix&lt; T, Columns, Rows &gt;::getTransposed</definition>
+        <argsstring>(transpose_type &amp;result) const</argsstring>
+        <name>getTransposed</name>
+        <qualifiedname>castor::Matrix::getTransposed</qualifiedname>
+        <param>
+          <type><ref refid="d2/d61/a09183_1a04d650e8d33db2d8ee7fd74f4f93ed7b" kindref="member">transpose_type</ref> &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la transposée de cette matrice. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">result</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la transposée. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="149" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1ad16f62fc49696eb8fb1b2b36a34052a7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref></type>
+        <definition>value_type castor::Matrix&lt; T, Columns, Rows &gt;::getTrace</definition>
+        <argsstring>() const</argsstring>
+        <name>getTrace</name>
+        <qualifiedname>castor::Matrix::getTrace</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La trace de cette matrice. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="163" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d61/a09183_1a0e958d0a71833013a559b4e4d7b659df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Matrix&lt; T, Columns, Rows &gt;::setIdentity</definition>
+        <argsstring>()</argsstring>
+        <name>setIdentity</name>
+        <qualifiedname>castor::Matrix::setIdentity</qualifiedname>
+        <briefdescription>
+<para>Définit cette matrice à l&apos;identité </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="170" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d2/d61/a09183_1af2b6b5383fbec6e5bab14c731fbdff9d" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d61/a09183_1a0997a6828d57728df3f7b3c15e2980f8" kindref="member">my_type</ref></type>
+        <definition>static my_type castor::Matrix&lt; T, Columns, Rows &gt;::getIdentity</definition>
+        <argsstring>()</argsstring>
+        <name>getIdentity</name>
+        <qualifiedname>castor::Matrix::getIdentity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La matrice identité. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="156" column="16"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d2/d61/a09183_1a93eb794c51f15982fd00d38107d1cacd" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d61/a09183_1a0997a6828d57728df3f7b3c15e2980f8" kindref="member">my_type</ref></type>
+        <definition>my_type castor::Matrix&lt; T, Columns, Rows &gt;::recGetMinor</definition>
+        <argsstring>(uint32_t x, uint32_t y, uint32_t rows, uint32_t cols) const</argsstring>
+        <name>recGetMinor</name>
+        <qualifiedname>castor::Matrix::recGetMinor</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>rows</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>cols</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Matrix.hpp" line="199" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Représentation d&apos;une matrice column major, le type des éléments et les dimensions de la matrice sont en template. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Peut contenir n&apos;importe quel élément qui a une castor::Policy. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::Matrix&lt; T, Count, Count &gt;</label>
+        <link refid="d2/d61/a09183"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; T, Count, Count &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::Matrix&lt; T, Columns, Rows &gt;</label>
+        <link refid="d2/d61/a09183"/>
+      </node>
+      <node id="3">
+        <label>castor::SquareMatrix&lt; T, Count &gt;</label>
+        <link refid="db/dc1/a09231"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/Math/Matrix.hpp" line="13" column="1" bodyfile="CastorUtils/Math/Matrix.hpp" bodystart="14" bodyend="207"/>
+    <listofallmembers>
+      <member refid="d2/d61/a09183_1ae08ffc30c95f713a1cfacb0090af7348" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>col_type</name></member>
+      <member refid="d2/d61/a09183_1ad85da1280cccde8b1d27f49b8bf86a1b" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>constPtr</name></member>
+      <member refid="d2/d61/a09183_1a01f754f200028a40a87b9f582a613ce9" prot="protected" virt="non-virtual"><scope>castor::Matrix</scope><name>count</name></member>
+      <member refid="d2/d61/a09183_1ae3bc54767d01d58c04220b70c50016a8" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>getColumn</name></member>
+      <member refid="d2/d61/a09183_1a473a3859a5a9b537d305072498558e19" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>getColumn</name></member>
+      <member refid="d2/d61/a09183_1ab67a98dad40b13a44a87d0da5c87cd41" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>getColumn</name></member>
+      <member refid="d2/d61/a09183_1af3147776ae87f0cfa0edf59d2a544125" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>getColumn</name></member>
+      <member refid="d2/d61/a09183_1af2b6b5383fbec6e5bab14c731fbdff9d" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>getIdentity</name></member>
+      <member refid="d2/d61/a09183_1ac32db600c8f6b22ac1db8ccdedcef1d3" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>getRow</name></member>
+      <member refid="d2/d61/a09183_1afbe064ee57f689a46d8bc378fb1df657" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>getRow</name></member>
+      <member refid="d2/d61/a09183_1ad16f62fc49696eb8fb1b2b36a34052a7" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>getTrace</name></member>
+      <member refid="d2/d61/a09183_1a9bfa2d96641b8817134e2fe96035ad9b" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>getTransposed</name></member>
+      <member refid="d2/d61/a09183_1ad59bbd072813d6f836a5dd50ef8b8b96" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>getTransposed</name></member>
+      <member refid="d2/d61/a09183_1af6f6a962525ac9e54bc6355f60b9ebaa" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>initialise</name></member>
+      <member refid="d2/d61/a09183_1a788e68897b10e9ecff63a28915499f3e" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>initialise</name></member>
+      <member refid="d2/d61/a09183_1a306698e210c34876cfb12e4e39e5d90c" prot="protected" virt="non-virtual"><scope>castor::Matrix</scope><name>isRightSize</name></member>
+      <member refid="d2/d61/a09183_1a852990177a387d8921c8bf84bd632b90" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>m_columns</name></member>
+      <member refid="d2/d61/a09183_1a1060e9caf4f859dc6f435fe9fe51bd58" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>m_data</name></member>
+      <member refid="d2/d61/a09183_1aecc2950843b75b014486ee8d17a5851c" prot="private" virt="non-virtual"><scope>castor::Matrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a4a5f770810536074563aaeb11ecd5a60" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a08bcff990e8c2153fffb07985ae2752f" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1adea208526a48b94dcc93d8a2468c5cd0" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a0cf01f6755ecdc2cd4ddbcfc9dd6d769" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a774cefa6ee3e4a9c027dba92cb19be64" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a639939819c4467657867456b83a4fe91" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a1d697ce39ed017198f172b25a3ba2606" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a6d93001cca91f9394cf074dcfd641f00" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a64a928385b6aff4c7635134a5d61b822" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a004b30e4e1a508fb1743fa2871fb2f6c" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a88c23e7523846255e1cf10a225f6fbf9" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a0997a6828d57728df3f7b3c15e2980f8" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>my_type</name></member>
+      <member refid="d2/d61/a09183_1a8831d1bc852817c928cfe6ecd7211e8f" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>operator()</name></member>
+      <member refid="d2/d61/a09183_1a14a909880307bc19db8a248e9f63e6a0" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>operator()</name></member>
+      <member refid="d2/d61/a09183_1ab997dfb8bf43468e42c35af6e2bb6e43" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>operator*=</name></member>
+      <member refid="d2/d61/a09183_1aa90d96eac0ad37c4b76784b09824c9ff" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>operator+=</name></member>
+      <member refid="d2/d61/a09183_1ae2928cd3e36a78bacee118cd1606e30e" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>operator+=</name></member>
+      <member refid="d2/d61/a09183_1ad637c8b15ecb43c36291974f14531607" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>operator-=</name></member>
+      <member refid="d2/d61/a09183_1a3fd7bcf9df4ffb308891d28d9b1704ef" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>operator-=</name></member>
+      <member refid="d2/d61/a09183_1a5d0b69990e4dd9a3f1a56186f7d3462d" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>operator/=</name></member>
+      <member refid="d2/d61/a09183_1a6323ca192ffced7b717b95481c94eec6" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>operator=</name></member>
+      <member refid="d2/d61/a09183_1a41763b71612f2e32d410171d0af1863e" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>operator=</name></member>
+      <member refid="d2/d61/a09183_1aa1c5c7fe285e907ebdc6903df9a16a18" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>operator=</name></member>
+      <member refid="d2/d61/a09183_1a6f01e29297e8319ddf1fcf115ee41d5c" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>operator=</name></member>
+      <member refid="d2/d61/a09183_1a31d6e976a67970f37de9426a419f6d52" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>operator[]</name></member>
+      <member refid="d2/d61/a09183_1a6814feed9a5bf5e666862e048ffa1bf8" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>operator[]</name></member>
+      <member refid="d2/d61/a09183_1a52ab2cd790370344db3ab43cb560e22d" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>ptr</name></member>
+      <member refid="d2/d61/a09183_1a93eb794c51f15982fd00d38107d1cacd" prot="protected" virt="non-virtual"><scope>castor::Matrix</scope><name>recGetMinor</name></member>
+      <member refid="d2/d61/a09183_1a5332589a7bef98deb54cb32a5a32c515" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>row_type</name></member>
+      <member refid="d2/d61/a09183_1a76dc0db7d98c434bc27431776f12ac28" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>setColumn</name></member>
+      <member refid="d2/d61/a09183_1a636efc5e5585742625ed84ea656c5f4b" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>setColumn</name></member>
+      <member refid="d2/d61/a09183_1ad25ff8ea36abc24703df5aa383f06251" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>setColumn</name></member>
+      <member refid="d2/d61/a09183_1a146d69adb7e74b4e2c3e7e4f871a11de" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>setColumn</name></member>
+      <member refid="d2/d61/a09183_1a0e958d0a71833013a559b4e4d7b659df" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>setIdentity</name></member>
+      <member refid="d2/d61/a09183_1ad3cfceda825d351a5e86c513bc6df4eb" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>setRow</name></member>
+      <member refid="d2/d61/a09183_1a56f461ab9ad58cac2a75fb703ece177f" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>setRow</name></member>
+      <member refid="d2/d61/a09183_1a988205740a49e35ac36fed51c5ee329e" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>setRow</name></member>
+      <member refid="d2/d61/a09183_1a5d1cf60f437412f38ddc417d967055aa" prot="protected" virt="non-virtual"><scope>castor::Matrix</scope><name>size</name></member>
+      <member refid="d2/d61/a09183_1a04d650e8d33db2d8ee7fd74f4f93ed7b" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>transpose_type</name></member>
+      <member refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>value_type</name></member>
+      <member refid="d2/d61/a09183_1aaa253f9efe52eeb65324707246f634ba" prot="public" virt="non-virtual"><scope>castor::Matrix</scope><name>~Matrix</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

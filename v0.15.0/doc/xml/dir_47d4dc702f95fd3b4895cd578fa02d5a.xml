@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dir_47d4dc702f95fd3b4895cd578fa02d5a" kind="dir">
+    <compoundname>Cache</compoundname>
+    <innerfile refid="d0/d27/a00239">AnimatedObjectGroupCache.hpp</innerfile>
+    <innerfile refid="d2/dc8/a00242">BillboardCache.hpp</innerfile>
+    <innerfile refid="d6/d22/a00245">CacheModule.hpp</innerfile>
+    <innerfile refid="dd/dd7/a00248">CacheView.hpp</innerfile>
+    <innerfile refid="d3/d1a/a00251">GeometryCache.hpp</innerfile>
+    <innerfile refid="d7/d03/a00254">LightCache.hpp</innerfile>
+    <innerfile refid="d9/d39/a00257">MaterialCache.hpp</innerfile>
+    <innerfile refid="dd/dd7/a00260">ObjectCache.hpp</innerfile>
+    <innerfile refid="df/da9/a00263">ObjectCacheBase.hpp</innerfile>
+    <innerfile refid="d5/d35/a00266">OverlayCache.hpp</innerfile>
+    <innerfile refid="d5/d42/a00269">PluginCache.hpp</innerfile>
+    <innerfile refid="d9/dd6/a00272">SceneNodeCache.hpp</innerfile>
+    <innerfile refid="d3/d5e/a00275">ShaderCache.hpp</innerfile>
+    <innerfile refid="dc/d5d/a00278">TargetCache.hpp</innerfile>
+    <innerfile refid="d2/d04/a00281">TextureCache.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Cache/"/>
+  </compounddef>
+</doxygen>

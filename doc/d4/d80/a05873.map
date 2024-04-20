@@ -1,6 +1,20 @@
-<map id="castor3d::SkeletonAnimationInstanceObject" name="castor3d::SkeletonAnimationInstanceObject">
-<area shape="rect" id="node1" title=" " alt="" coords="112,93,301,133"/>
-<area shape="rect" id="node3" href="$d7/d69/a05862.html" title=" " alt="" coords="5,181,195,221"/>
-<area shape="rect" id="node4" href="$d5/d43/a05870.html" title=" " alt="" coords="219,181,408,221"/>
-<area shape="rect" id="node2" title=" " alt="" coords="114,5,299,45"/>
+<map id="castor3d::GeneratorPlugin" name="castor3d::GeneratorPlugin">
+<area shape="rect" id="Node000001" title=" " alt="" coords="192,433,365,459"/>
+<area shape="rect" id="Node000002" href="$db/d5e/a05891.html" title=" " alt="" coords="221,359,337,384"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="281,398,281,433,276,433,276,398"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="5,256,192,281"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="133,286,260,356,257,361,130,291"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="7,168,190,193"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="101,207,101,255,96,255,96,207"/>
+<area shape="rect" id="Node000005" href="$d5/d15/a05335.html" title=" " alt="" coords="217,256,341,281"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="281,295,281,359,276,359,276,295"/>
+<area shape="rect" id="Node000006" href="$d8/d4f/a03703.html" title=" " alt="" coords="405,256,525,281"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="462,296,453,317,438,337,415,351,389,362,337,372,336,367,387,357,412,347,434,333,449,315,457,293"/>
+<area shape="rect" id="Node000007" href="$dc/d63/a08283.html" title=" " alt="" coords="380,168,551,193"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="468,207,468,255,463,255,463,207"/>
+<area shape="rect" id="Node000008" href="$da/d87/a08319.html" title=" " alt="" coords="379,5,515,31"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="443,45,439,74,440,105,450,139,462,167,457,169,445,141,435,106,433,74,438,44"/>
+<area shape="rect" id="Node000009" href="$dc/d63/a08283.html" title="Representation of a Unique instance class." alt="" coords="450,80,587,105"/>
+<area shape="poly" id="edge9_Node000009_Node000008" title=" " alt="" coords="470,39,509,78,505,82,466,43"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="506,119,475,169,470,166,502,116"/>
 </map>

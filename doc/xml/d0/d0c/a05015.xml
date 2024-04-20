@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d0c/a05015" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ConfigurationVisitorBase::Config</compoundname>
+    <includes local="no">ConfigurationVisitor.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d0c/a05015_1a007b23a304970d88847771596a8b13af" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::ConfigurationVisitorBase::Config::allowProgramsVisit</definition>
+        <argsstring></argsstring>
+        <name>allowProgramsVisit</name>
+        <qualifiedname>castor3d::ConfigurationVisitorBase::Config::allowProgramsVisit</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" line="26" column="6" bodyfile="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" bodystart="26" bodyend="26"/>
+        <referencedby refid="db/dc2/a05011_1ab3b4e46d6871a18322df876ed7380b3f" compoundref="d8/d13/a00671" startline="198" endline="209">castor3d::ConfigurationVisitorBase::visit</referencedby>
+        <referencedby refid="db/dc2/a05011_1a19cfea0bfe7bfa61c9218796941fca15" compoundref="d8/d13/a00671" startline="178" endline="196">castor3d::ConfigurationVisitorBase::visit</referencedby>
+        <referencedby refid="db/dc2/a05011_1a0ed116d6e1c34a5e63f5093297a1a16d" compoundref="d8/d13/a00671" startline="160" endline="176">castor3d::ConfigurationVisitorBase::visit</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" line="24" column="1" bodyfile="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" bodystart="25" bodyend="27"/>
+    <listofallmembers>
+      <member refid="d0/d0c/a05015_1a007b23a304970d88847771596a8b13af" prot="public" virt="non-virtual"><scope>castor3d::ConfigurationVisitorBase::Config</scope><name>allowProgramsVisit</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

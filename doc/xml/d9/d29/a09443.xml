@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/d29/a09443" kind="struct" language="C++" prot="public">
+    <compoundname>castor::string::details::TrimDefaultArgsT&lt; char32_t &gt;</compoundname>
+    <includes local="no">StringUtils.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d9/d29/a09443_1ac9b4982f6b19ff6d675eb598aea30a6c" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>std::u32string_view constexpr</type>
+        <definition>std::u32string_view constexpr castor::string::details::TrimDefaultArgsT&lt; char32_t &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>castor::string::details::TrimDefaultArgsT&lt; char32_t &gt;::value</qualifiedname>
+        <initializer>= U&quot; \t\r&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="49" column="38" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::string::details::TrimDefaultArgsT&lt; char32_t &gt;</label>
+        <link refid="d9/d29/a09443"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>value</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string_view&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::u32string_view</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="47" column="1" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="48" bodyend="50"/>
+    <listofallmembers>
+      <member refid="d9/d29/a09443_1ac9b4982f6b19ff6d675eb598aea30a6c" prot="public" virt="non-virtual"><scope>castor::string::details::TrimDefaultArgsT&lt; char32_t &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

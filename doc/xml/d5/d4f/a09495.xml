@@ -1,0 +1,421 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/d4f/a09495" kind="class" language="C++" prot="public">
+    <compoundname>castor::BuddyAllocatorT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Traits</basecompoundref>
+    <includes local="no">BuddyAllocator.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename Traits</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d5/d4f/a09495_1a6980f63d58010170fbae89e392a095f5" prot="private" static="no">
+        <type>typename Traits::PointerType</type>
+        <definition>using castor::BuddyAllocatorT&lt; Traits &gt;::PointerType =  typename Traits::PointerType</definition>
+        <argsstring></argsstring>
+        <name>PointerType</name>
+        <qualifiedname>castor::BuddyAllocatorT::PointerType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="99" column="1" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d5/d4f/a09495_1a2d7f4e5571e60751f7356406e8491c4e" prot="private" static="no">
+        <type>typename Traits::Block</type>
+        <definition>using castor::BuddyAllocatorT&lt; Traits &gt;::Block =  typename Traits::Block</definition>
+        <argsstring></argsstring>
+        <name>Block</name>
+        <qualifiedname>castor::BuddyAllocatorT::Block</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="100" column="1" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d5/d4f/a09495_1a809a9f853f45fbb8677d030a8372c88a" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1ad647f2440f3ac85908e69db85c3706ca" kindref="member">List</ref>&lt; Block &gt;</type>
+        <definition>using castor::BuddyAllocatorT&lt; Traits &gt;::FreeList =  List&lt; Block &gt;</definition>
+        <argsstring></argsstring>
+        <name>FreeList</name>
+        <qualifiedname>castor::BuddyAllocatorT::FreeList</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="166" column="1" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d5/d4f/a09495_1afa55cce4265605ba7e6e44c4c15ebca7" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1a2d339222ffb89e8324291fb135b12496" kindref="member">Pair</ref>&lt; size_t, uint32_t &gt;</type>
+        <definition>using castor::BuddyAllocatorT&lt; Traits &gt;::PointerLevel =  Pair&lt; size_t, uint32_t &gt;</definition>
+        <argsstring></argsstring>
+        <name>PointerLevel</name>
+        <qualifiedname>castor::BuddyAllocatorT::PointerLevel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="167" column="1" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="167" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d5/d4f/a09495_1a0400ded19e345e3ef1057d5cc1c840bb" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::BuddyAllocatorT&lt; Traits &gt;::m_numLevels</definition>
+        <argsstring></argsstring>
+        <name>m_numLevels</name>
+        <qualifiedname>castor::BuddyAllocatorT::m_numLevels</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="170" column="10" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d4f/a09495_1a7a4c916c7943a248a905b49a1e1f13dd" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::BuddyAllocatorT&lt; Traits &gt;::m_minBlockSize</definition>
+        <argsstring></argsstring>
+        <name>m_minBlockSize</name>
+        <qualifiedname>castor::BuddyAllocatorT::m_minBlockSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="171" column="10" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d4f/a09495_1a23b7a647da9deeaa72e87f211c9336ac" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; FreeList &gt;</type>
+        <definition>Vector&lt; FreeList &gt; castor::BuddyAllocatorT&lt; Traits &gt;::m_freeLists</definition>
+        <argsstring></argsstring>
+        <name>m_freeLists</name>
+        <qualifiedname>castor::BuddyAllocatorT::m_freeLists</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="172" column="8" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="172" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d4f/a09495_1a79087d9bc4050a2871b57a5a7500aa9b" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; PointerLevel &gt;</type>
+        <definition>Vector&lt; PointerLevel &gt; castor::BuddyAllocatorT&lt; Traits &gt;::m_allocated</definition>
+        <argsstring></argsstring>
+        <name>m_allocated</name>
+        <qualifiedname>castor::BuddyAllocatorT::m_allocated</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="173" column="8" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="173" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d4f/a09495_1a0543fedd961aa9daeddf72f34bfaf2d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::BuddyAllocatorT&lt; Traits &gt;::BuddyAllocatorT</definition>
+        <argsstring>(uint32_t numLevels, uint32_t minBlockSize)</argsstring>
+        <name>BuddyAllocatorT</name>
+        <qualifiedname>castor::BuddyAllocatorT::BuddyAllocatorT</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>numLevels</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>minBlockSize</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">numLevels</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La taille maximale de l&apos;arbre de l&apos;allocateur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">minBlockSize</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La taille minimale d&apos;un bloc. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="113" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d4f/a09495_1ae1da90df79af7e5f472b6589d5568920" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::BuddyAllocatorT&lt; Traits &gt;::hasAvailable</definition>
+        <argsstring>(size_t size) const</argsstring>
+        <name>hasAvailable</name>
+        <qualifiedname>castor::BuddyAllocatorT::hasAvailable</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La taille requise pour la mémoire. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> s&apos;il y a assez de mémoire restante pour la taille donnée. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="123" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d4f/a09495_1a511d8df5e60c5781e609085e8c75a744" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>PointerType</type>
+        <definition>PointerType castor::BuddyAllocatorT&lt; Traits &gt;::allocate</definition>
+        <argsstring>(size_t size)</argsstring>
+        <name>allocate</name>
+        <qualifiedname>castor::BuddyAllocatorT::allocate</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Alloue de la mémoire. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La taille requiese pour la mémoire. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La zone mémoire. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="134" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d4f/a09495_1a863d5c841de7436e61521a6a2ab9c289" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::BuddyAllocatorT&lt; Traits &gt;::deallocate</definition>
+        <argsstring>(PointerType pointer)</argsstring>
+        <name>deallocate</name>
+        <qualifiedname>castor::BuddyAllocatorT::deallocate</qualifiedname>
+        <param>
+          <type>PointerType</type>
+          <declname>pointer</declname>
+        </param>
+        <briefdescription>
+<para>Désalloue de la mémoire. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pointer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La zone mémoire. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="143" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d4f/a09495_1a14e7df8d13e56b6928daf54e5c095962" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor::BuddyAllocatorT&lt; Traits &gt;::getTotalSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getTotalSize</name>
+        <qualifiedname>castor::BuddyAllocatorT::getTotalSize</qualifiedname>
+        <briefdescription>
+<para>La taille totale du pool. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="150" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d4f/a09495_1a9ec6fcc2a5ff230791108de99a88ad8e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor::BuddyAllocatorT&lt; Traits &gt;::getAlignSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getAlignSize</name>
+        <qualifiedname>castor::BuddyAllocatorT::getAlignSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="152" column="8" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="152" bodyend="155"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d5/d4f/a09495_1af7cc5562529f4c546b8a84edb1cdcf88" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::BuddyAllocatorT&lt; Traits &gt;::doGetLevel</definition>
+        <argsstring>(size_t size) const</argsstring>
+        <name>doGetLevel</name>
+        <qualifiedname>castor::BuddyAllocatorT::doGetLevel</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="158" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d4f/a09495_1a16b5b1a27ca13bacf5b64e524965d58b" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor::BuddyAllocatorT&lt; Traits &gt;::doGetLevelSize</definition>
+        <argsstring>(uint32_t level) const</argsstring>
+        <name>doGetLevelSize</name>
+        <qualifiedname>castor::BuddyAllocatorT::doGetLevelSize</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="159" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d4f/a09495_1a23b2b0997d256d53dc95a2c9a82957b5" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>Block</type>
+        <definition>Block castor::BuddyAllocatorT&lt; Traits &gt;::doAllocate</definition>
+        <argsstring>(uint32_t order)</argsstring>
+        <name>doAllocate</name>
+        <qualifiedname>castor::BuddyAllocatorT::doAllocate</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>order</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="160" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d4f/a09495_1a2c45f245857c05a6cf42170785d0cdce" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::BuddyAllocatorT&lt; Traits &gt;::doMergeLevel</definition>
+        <argsstring>(Block const &amp;block, uint32_t index, uint32_t level)</argsstring>
+        <name>doMergeLevel</name>
+        <qualifiedname>castor::BuddyAllocatorT::doMergeLevel</qualifiedname>
+        <param>
+          <type>Block const &amp;</type>
+          <declname>block</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="161" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Implémentation d&apos;un buddy allocator. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Traits</label>
+      </node>
+      <node id="1">
+        <label>castor::BuddyAllocatorT&lt; Traits &gt;</label>
+        <link refid="d5/d4f/a09495"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Traits</label>
+      </node>
+      <node id="1">
+        <label>castor::BuddyAllocatorT&lt; Traits &gt;</label>
+        <link refid="d5/d4f/a09495"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Pool/BuddyAllocator.hpp" line="95" column="1" bodyfile="CastorUtils/Pool/BuddyAllocator.hpp" bodystart="97" bodyend="174"/>
+    <listofallmembers>
+      <member refid="d5/d4f/a09495_1a511d8df5e60c5781e609085e8c75a744" prot="public" virt="non-virtual"><scope>castor::BuddyAllocatorT</scope><name>allocate</name></member>
+      <member refid="d5/d4f/a09495_1a2d7f4e5571e60751f7356406e8491c4e" prot="private" virt="non-virtual"><scope>castor::BuddyAllocatorT</scope><name>Block</name></member>
+      <member refid="d5/d4f/a09495_1a0543fedd961aa9daeddf72f34bfaf2d3" prot="public" virt="non-virtual"><scope>castor::BuddyAllocatorT</scope><name>BuddyAllocatorT</name></member>
+      <member refid="d5/d4f/a09495_1a863d5c841de7436e61521a6a2ab9c289" prot="public" virt="non-virtual"><scope>castor::BuddyAllocatorT</scope><name>deallocate</name></member>
+      <member refid="d5/d4f/a09495_1a23b2b0997d256d53dc95a2c9a82957b5" prot="private" virt="non-virtual"><scope>castor::BuddyAllocatorT</scope><name>doAllocate</name></member>
+      <member refid="d5/d4f/a09495_1af7cc5562529f4c546b8a84edb1cdcf88" prot="private" virt="non-virtual"><scope>castor::BuddyAllocatorT</scope><name>doGetLevel</name></member>
+      <member refid="d5/d4f/a09495_1a16b5b1a27ca13bacf5b64e524965d58b" prot="private" virt="non-virtual"><scope>castor::BuddyAllocatorT</scope><name>doGetLevelSize</name></member>
+      <member refid="d5/d4f/a09495_1a2c45f245857c05a6cf42170785d0cdce" prot="private" virt="non-virtual"><scope>castor::BuddyAllocatorT</scope><name>doMergeLevel</name></member>
+      <member refid="d5/d4f/a09495_1a809a9f853f45fbb8677d030a8372c88a" prot="private" virt="non-virtual"><scope>castor::BuddyAllocatorT</scope><name>FreeList</name></member>
+      <member refid="d5/d4f/a09495_1a9ec6fcc2a5ff230791108de99a88ad8e" prot="public" virt="non-virtual"><scope>castor::BuddyAllocatorT</scope><name>getAlignSize</name></member>
+      <member refid="d5/d4f/a09495_1a14e7df8d13e56b6928daf54e5c095962" prot="public" virt="non-virtual"><scope>castor::BuddyAllocatorT</scope><name>getTotalSize</name></member>
+      <member refid="d5/d4f/a09495_1ae1da90df79af7e5f472b6589d5568920" prot="public" virt="non-virtual"><scope>castor::BuddyAllocatorT</scope><name>hasAvailable</name></member>
+      <member refid="d5/d4f/a09495_1a79087d9bc4050a2871b57a5a7500aa9b" prot="private" virt="non-virtual"><scope>castor::BuddyAllocatorT</scope><name>m_allocated</name></member>
+      <member refid="d5/d4f/a09495_1a23b7a647da9deeaa72e87f211c9336ac" prot="private" virt="non-virtual"><scope>castor::BuddyAllocatorT</scope><name>m_freeLists</name></member>
+      <member refid="d5/d4f/a09495_1a7a4c916c7943a248a905b49a1e1f13dd" prot="private" virt="non-virtual"><scope>castor::BuddyAllocatorT</scope><name>m_minBlockSize</name></member>
+      <member refid="d5/d4f/a09495_1a0400ded19e345e3ef1057d5cc1c840bb" prot="private" virt="non-virtual"><scope>castor::BuddyAllocatorT</scope><name>m_numLevels</name></member>
+      <member refid="d5/d4f/a09495_1afa55cce4265605ba7e6e44c4c15ebca7" prot="private" virt="non-virtual"><scope>castor::BuddyAllocatorT</scope><name>PointerLevel</name></member>
+      <member refid="d5/d4f/a09495_1a6980f63d58010170fbae89e392a095f5" prot="private" virt="non-virtual"><scope>castor::BuddyAllocatorT</scope><name>PointerType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

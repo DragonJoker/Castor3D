@@ -1,0 +1,7 @@
+<map id="castor3d::BaseShadowData" name="castor3d::BaseShadowData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,137,188,163"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="13,5,55,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="31,44,28,78,31,96,38,112,49,125,64,135,62,139,46,129,33,115,26,97,23,79,25,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="141,5,180,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="159,45,150,79,134,115,113,139,109,135,129,112,144,77,154,44"/>
+</map>

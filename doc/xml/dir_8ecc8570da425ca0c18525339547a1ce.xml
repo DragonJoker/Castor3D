@@ -1,18 +1,19 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_8ecc8570da425ca0c18525339547a1ce" kind="dir">
-    <compoundname>Shader/ShaderBuffers</compoundname>
-    <innerfile refid="d7/db6/a01556">FontGlyphBuffer.hpp</innerfile>
-    <innerfile refid="de/d1a/a01559">LightBuffer.hpp</innerfile>
-    <innerfile refid="d2/dc1/a01562">PassBuffer.hpp</innerfile>
-    <innerfile refid="d6/d82/a01565">ShaderBuffersModule.hpp</innerfile>
-    <innerfile refid="da/daf/a01568">SssProfileBuffer.hpp</innerfile>
-    <innerfile refid="d5/d10/a01571">TextureAnimationBuffer.hpp</innerfile>
-    <innerfile refid="d9/df5/a01574">TextureConfigurationBuffer.hpp</innerfile>
+    <compoundname>Castor3D/Shader/ShaderBuffers</compoundname>
+    <innerfile refid="d6/d82/a01565">FontGlyphBuffer.hpp</innerfile>
+    <innerfile refid="da/daf/a01568">LightBuffer.hpp</innerfile>
+    <innerfile refid="d5/d10/a01571">PassBuffer.hpp</innerfile>
+    <innerfile refid="d9/df5/a01574">ShaderBuffersModule.hpp</innerfile>
+    <innerfile refid="d3/daa/a01577">ShadowBuffer.hpp</innerfile>
+    <innerfile refid="da/dd5/a01580">SssProfileBuffer.hpp</innerfile>
+    <innerfile refid="d9/d1b/a01583">TextureAnimationBuffer.hpp</innerfile>
+    <innerfile refid="d2/d2f/a01586">TextureConfigurationBuffer.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Shader/ShaderBuffers/"/>
+    <location file="Castor3D/Shader/ShaderBuffers/"/>
   </compounddef>
 </doxygen>

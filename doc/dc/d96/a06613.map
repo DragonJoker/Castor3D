@@ -1,0 +1,25 @@
+<map id="castor3d::WindowContext" name="castor3d::WindowContext">
+<area shape="rect" id="Node000001" title=" " alt="" coords="99,461,269,487"/>
+<area shape="rect" id="Node000002" href="$de/dd6/a07151.html" title=" " alt="" coords="228,373,380,399"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="278,409,202,463,199,459,275,405"/>
+<area shape="rect" id="Node000003" href="$d8/d4f/a03703.html" title=" " alt="" coords="581,285,701,311"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="591,317,465,352,360,376,359,371,463,347,590,312"/>
+<area shape="rect" id="Node000004" href="$dc/d63/a08283.html" title=" " alt="" coords="556,190,727,215"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="644,229,644,285,639,285,639,229"/>
+<area shape="rect" id="Node000005" href="$da/d87/a08319.html" title=" " alt="" coords="592,5,728,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="672,43,684,97,685,129,679,160,669,177,657,191,653,188,664,174,673,158,679,128,679,98,667,44"/>
+<area shape="rect" id="Node000006" href="$dc/d63/a08283.html" title="Representation of a Unique instance class." alt="" coords="519,87,657,113"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="643,42,600,89,596,86,639,39"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="596,125,609,157,632,188,628,191,604,160,591,127"/>
+<area shape="rect" id="Node000007" href="$de/d75/a06503.html" title=" " alt="" coords="5,285,203,311"/>
+<area shape="poly" id="edge12_Node000001_Node000007" title=" " alt="" coords="117,322,181,460,176,462,112,324"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="145,314,278,371,276,376,142,319"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="41,183,167,223"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="107,237,107,285,101,285,101,237"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="41,80,167,120"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="107,134,107,183,101,183,101,134"/>
+<area shape="rect" id="Node000010" href="$d9/d93/a09063.html" title=" " alt="" coords="227,285,381,311"/>
+<area shape="poly" id="edge10_Node000002_Node000010" title=" " alt="" coords="307,325,307,373,301,373,301,325"/>
+<area shape="rect" id="Node000011" href="$d6/daf/a05323.html" title=" " alt="" coords="405,285,557,311"/>
+<area shape="poly" id="edge11_Node000002_Node000011" title=" " alt="" coords="447,319,329,375,327,371,444,314"/>
+</map>

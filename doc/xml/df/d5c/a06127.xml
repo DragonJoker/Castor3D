@@ -1,0 +1,908 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d5c/a06127" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::OpaqueRendering</compoundname>
+    <basecompoundref refid="d6/da8/a08227" prot="public" virt="non-virtual">castor::OwnedBy&lt; RenderTechnique &gt;</basecompoundref>
+    <includes local="no">OpaqueRendering.hpp</includes>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="df/d5c/a06127_1a1173baf614b84e0337d7c44001112330" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> *</type>
+        <definition>C3D_API Engine * castor3d::OpaqueRendering::getEngine</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getEngine</name>
+        <qualifiedname>castor3d::OpaqueRendering::getEngine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Accesseurs. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="111" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5c/a06127_1a7d75daa0d3648c89eed8bed2c01f0b73" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::FramePass const &amp;</type>
+        <definition>C3D_API crg::FramePass const  &amp; castor3d::OpaqueRendering::getLastPass</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getLastPass</name>
+        <qualifiedname>castor3d::OpaqueRendering::getLastPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="112" column="31"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5c/a06127_1a5d8f69bd2689a2d791c8a582bf09a1c6" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>C3D_API Texture const  &amp; castor3d::OpaqueRendering::getSsaoResult</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getSsaoResult</name>
+        <qualifiedname>castor3d::OpaqueRendering::getSsaoResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="113" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5c/a06127_1a9b034c671685abff33153901db90ae69" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>C3D_API Texture const  &amp; castor3d::OpaqueRendering::getSssDiffuse</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getSssDiffuse</name>
+        <qualifiedname>castor3d::OpaqueRendering::getSssDiffuse</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="114" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5c/a06127_1a8e518a28434c1590280de531b1a3d204" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::OpaqueRendering::isEnabled</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isEnabled</name>
+        <qualifiedname>castor3d::OpaqueRendering::isEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="115" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5c/a06127_1a7e20dd3907f3cf9aad260d5d30380bac" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::Buffer&lt; uint32_t &gt; const &amp;</type>
+        <definition>ashes::Buffer&lt; uint32_t &gt; const  &amp; castor3d::OpaqueRendering::getMaterialsCounts</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getMaterialsCounts</name>
+        <qualifiedname>castor3d::OpaqueRendering::getMaterialsCounts</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="117" column="22" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="117" bodyend="120"/>
+        <referencedby refid="d8/dd8/a06575_1ad01e556118d671a32acc1a2ac31e42ca" compoundref="dd/dad/a01235" startline="298" endline="301">castor3d::RenderTechnique::getMaterialsCounts</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/d5c/a06127_1ad063f0362d409f2296e029438d068172" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::Buffer&lt; castor::Point3ui &gt; const &amp;</type>
+        <definition>ashes::Buffer&lt; castor::Point3ui &gt; const  &amp; castor3d::OpaqueRendering::getMaterialsIndirectCounts</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getMaterialsIndirectCounts</name>
+        <qualifiedname>castor3d::OpaqueRendering::getMaterialsIndirectCounts</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="122" column="22" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="122" bodyend="125"/>
+        <referencedby refid="d8/dd8/a06575_1a7201bb4abd61496a38b6c0020de74898" compoundref="dd/dad/a01235" startline="303" endline="306">castor3d::RenderTechnique::getMaterialsIndirectCounts</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/d5c/a06127_1a2885ebee4d60591a52ab8c0c6c472b2f" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::Buffer&lt; uint32_t &gt; const &amp;</type>
+        <definition>ashes::Buffer&lt; uint32_t &gt; const  &amp; castor3d::OpaqueRendering::getMaterialsStarts</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getMaterialsStarts</name>
+        <qualifiedname>castor3d::OpaqueRendering::getMaterialsStarts</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="127" column="22" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="127" bodyend="130"/>
+        <referencedby refid="d8/dd8/a06575_1a8265a41d4cc60a9f6113183b064b618e" compoundref="dd/dad/a01235" startline="308" endline="311">castor3d::RenderTechnique::getMaterialsStarts</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/d5c/a06127_1ae59e9af2992f57bc5a6074aedac8c156" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::Buffer&lt; castor::Point2ui &gt; const &amp;</type>
+        <definition>ashes::Buffer&lt; castor::Point2ui &gt; const  &amp; castor3d::OpaqueRendering::getPixelXY</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getPixelXY</name>
+        <qualifiedname>castor3d::OpaqueRendering::getPixelXY</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="132" column="22" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="132" bodyend="135"/>
+        <referencedby refid="d8/dd8/a06575_1ac562b1a6bbdb271f030497fa9a750424" compoundref="dd/dad/a01235" startline="313" endline="316">castor3d::RenderTechnique::getPixelXY</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="df/d5c/a06127_1a0c94b23ebbdbe0e3fc6987643b294f79" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; ShadowMapUPtr &gt;</type>
+        <definition>using castor3d::OpaqueRendering::ShadowMapArray =  castor::Vector&lt; ShadowMapUPtr &gt;</definition>
+        <argsstring></argsstring>
+        <name>ShadowMapArray</name>
+        <qualifiedname>castor3d::OpaqueRendering::ShadowMapArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="139" column="1" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="139" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/d5c/a06127_1ac052dc26d5bf8f06c1b7709bb4d77407" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::OpaqueRendering::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="161" column="21" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1abb66ed1c5ebe39848a7c6ca13c0e6c7c" prot="private" static="no" mutable="no">
+        <type>crg::FramePassGroup &amp;</type>
+        <definition>crg::FramePassGroup&amp; castor3d::OpaqueRendering::m_graph</definition>
+        <argsstring></argsstring>
+        <name>m_graph</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_graph</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="162" column="22" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1a636172407f79ee250865d83c199b9298" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; uint32_t &gt;</type>
+        <definition>ashes::BufferPtr&lt; uint32_t &gt; castor3d::OpaqueRendering::m_materialsCounts</definition>
+        <argsstring></argsstring>
+        <name>m_materialsCounts</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_materialsCounts</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="163" column="18" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="163" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1ab2ef5f0f9f13e2bd09dcd7ebdf5c582b" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; castor::Point3ui &gt;</type>
+        <definition>ashes::BufferPtr&lt; castor::Point3ui &gt; castor3d::OpaqueRendering::m_materialsIndirectCounts</definition>
+        <argsstring></argsstring>
+        <name>m_materialsIndirectCounts</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_materialsIndirectCounts</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="164" column="18" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1a65c5f08548e3bc2a3957f497b5c294f6" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; uint32_t &gt;</type>
+        <definition>ashes::BufferPtr&lt; uint32_t &gt; castor3d::OpaqueRendering::m_materialsStarts</definition>
+        <argsstring></argsstring>
+        <name>m_materialsStarts</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_materialsStarts</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="165" column="18" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1a9f30eb88a0a8462c20d702799448523d" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; castor::Point2ui &gt;</type>
+        <definition>ashes::BufferPtr&lt; castor::Point2ui &gt; castor3d::OpaqueRendering::m_pixelsXY</definition>
+        <argsstring></argsstring>
+        <name>m_pixelsXY</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_pixelsXY</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="166" column="18" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1a23e75894627436b598fa79aee33d83da" prot="private" static="no" mutable="no">
+        <type>crg::RunnablePass::IsEnabledCallback</type>
+        <definition>crg::RunnablePass::IsEnabledCallback castor3d::OpaqueRendering::m_opaquePassEnabled</definition>
+        <argsstring></argsstring>
+        <name>m_opaquePassEnabled</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_opaquePassEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="167" column="38" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="167" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1aa02f3ccb7b03d402a91318cc976aa028" prot="private" static="no" mutable="no">
+        <type>crg::RunnablePass::IsEnabledCallback</type>
+        <definition>crg::RunnablePass::IsEnabledCallback castor3d::OpaqueRendering::m_deferredOpaquePassEnabled</definition>
+        <argsstring></argsstring>
+        <name>m_deferredOpaquePassEnabled</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_deferredOpaquePassEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="168" column="38" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="168" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1a8a92a50ccdd8443fc55ef2a914089656" prot="private" static="no" mutable="no">
+        <type>crg::RunnablePass::IsEnabledCallback</type>
+        <definition>crg::RunnablePass::IsEnabledCallback castor3d::OpaqueRendering::m_visibilityOpaquePassEnabled</definition>
+        <argsstring></argsstring>
+        <name>m_visibilityOpaquePassEnabled</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_visibilityOpaquePassEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="169" column="38" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="169" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1a34c1487edbb6183760d2924678577276" prot="private" static="no" mutable="no">
+        <type>VisibilityReorderPassUPtr</type>
+        <definition>VisibilityReorderPassUPtr castor3d::OpaqueRendering::m_visibilityReorder</definition>
+        <argsstring></argsstring>
+        <name>m_visibilityReorder</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_visibilityReorder</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="170" column="27" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1a7e80e688071a90066d2b4bdb7a2c47bc" prot="private" static="no" mutable="no">
+        <type>SsaoPassUPtr</type>
+        <definition>SsaoPassUPtr castor3d::OpaqueRendering::m_ssao</definition>
+        <argsstring></argsstring>
+        <name>m_ssao</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_ssao</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="171" column="14" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1ae46b9959389d7340df4969a6b2bf5ee3" prot="private" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::OpaqueRendering::m_visibilityResolveDesc</definition>
+        <argsstring></argsstring>
+        <name>m_visibilityResolveDesc</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_visibilityResolveDesc</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="172" column="17" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="172" bodyend="172"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1aa65aca559e2bab8a4ff1671a5668eeb9" prot="private" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::OpaqueRendering::m_opaquePassDesc</definition>
+        <argsstring></argsstring>
+        <name>m_opaquePassDesc</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_opaquePassDesc</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="173" column="17" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="173" bodyend="173"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1a375dbb0a616b260e9ea456a7d581fc18" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d07/a06583" kindref="compound">RenderTechniquePass</ref> *</type>
+        <definition>RenderTechniquePass* castor3d::OpaqueRendering::m_opaquePass</definition>
+        <argsstring></argsstring>
+        <name>m_opaquePass</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_opaquePass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="174" column="22" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="174" bodyend="174"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1a4a73abf02c8afad42548c533345863df" prot="private" static="no" mutable="no">
+        <type>SubsurfaceScatteringPassUPtr</type>
+        <definition>SubsurfaceScatteringPassUPtr castor3d::OpaqueRendering::m_subsurfaceScattering</definition>
+        <argsstring></argsstring>
+        <name>m_subsurfaceScattering</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_subsurfaceScattering</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="175" column="30" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="175" bodyend="175"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1a7934c39d1722a4eafd51d4861188119c" prot="private" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::OpaqueRendering::m_deferredVisibilityResolveDesc</definition>
+        <argsstring></argsstring>
+        <name>m_deferredVisibilityResolveDesc</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_deferredVisibilityResolveDesc</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="176" column="17" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="176" bodyend="176"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1a48750b6f87f45e018ef8da4f31f80026" prot="private" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::OpaqueRendering::m_deferredOpaquePassDesc</definition>
+        <argsstring></argsstring>
+        <name>m_deferredOpaquePassDesc</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_deferredOpaquePassDesc</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="177" column="17" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="177" bodyend="177"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1a5d6d0396b1d8461905a7cf908fbd6dc9" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d07/a06583" kindref="compound">RenderTechniquePass</ref> *</type>
+        <definition>RenderTechniquePass* castor3d::OpaqueRendering::m_deferredOpaquePass</definition>
+        <argsstring></argsstring>
+        <name>m_deferredOpaquePass</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_deferredOpaquePass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="178" column="22" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="178" bodyend="178"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1a31421dd51a3c025dc13ae11dd0c9c6b2" prot="private" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::OpaqueRendering::m_visibilityOpaquePassDesc</definition>
+        <argsstring></argsstring>
+        <name>m_visibilityOpaquePassDesc</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_visibilityOpaquePassDesc</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="179" column="17" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="179" bodyend="179"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d5c/a06127_1aaed7b3b8e90825c0fb2cd1cd966f4e64" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d07/a06583" kindref="compound">RenderTechniquePass</ref> *</type>
+        <definition>RenderTechniquePass* castor3d::OpaqueRendering::m_visibilityOpaquePass</definition>
+        <argsstring></argsstring>
+        <name>m_visibilityOpaquePass</name>
+        <qualifiedname>castor3d::OpaqueRendering::m_visibilityOpaquePass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="180" column="22" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="180" bodyend="180"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d5c/a06127_1a115c4c41f472ff9bb51a4d4c55582d6f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::OpaqueRendering::OpaqueRendering</definition>
+        <argsstring>(RenderTechnique &amp;parent, RenderDevice const &amp;device, PrepassRendering const &amp;previous, crg::FramePassArray const &amp;previousPasses, ProgressBar *progress)</argsstring>
+        <name>OpaqueRendering</name>
+        <qualifiedname>castor3d::OpaqueRendering::OpaqueRendering</qualifiedname>
+        <param>
+          <type><ref refid="d8/dd8/a06575" kindref="compound">RenderTechnique</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d3d/a06371" kindref="compound">PrepassRendering</ref> const &amp;</type>
+          <declname>previous</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray const &amp;</type>
+          <declname>previousPasses</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La technique parente. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le device GPU. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previous</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le renderer de prépasse. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previousPasses</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les passes dont celle-ci dépend. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La barre de progression optionnelle. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="50" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5c/a06127_1a05377599a1dd9ba431e876d06eb5ebd5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::OpaqueRendering::listIntermediates</definition>
+        <argsstring>(castor::Vector&lt; IntermediateView &gt; &amp;intermediates)</argsstring>
+        <name>listIntermediates</name>
+        <qualifiedname>castor3d::OpaqueRendering::listIntermediates</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d3/d06/a06707" kindref="compound">IntermediateView</ref> &gt; &amp;</type>
+          <declname>intermediates</declname>
+        </param>
+        <briefdescription>
+<para>Liste les vues intermédiaires utilisées par toute la technique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">intermediates</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les vues intermédiaires. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="70" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5c/a06127_1a0823cf4a71e3e9723c492f725f3e9f9b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::OpaqueRendering::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::OpaqueRendering::update</qualifiedname>
+        <param>
+          <type><ref refid="dc/d23/a06511" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour la passe de rendu, au niveau CPU. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données d&apos;update. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="79" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5c/a06127_1a6c74a3ce6add946c8e94cade74bfa9a5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::OpaqueRendering::update</definition>
+        <argsstring>(GpuUpdater &amp;updater) const</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::OpaqueRendering::update</qualifiedname>
+        <param>
+          <type><ref refid="d9/d4b/a06519" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour la passe de rendu, au niveau GPU. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données d&apos;update. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="88" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5c/a06127_1a49f1bc53441088dca4e56c6b26131b42" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::OpaqueRendering::accept</definition>
+        <argsstring>(RenderTechniqueVisitor &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::OpaqueRendering::accept</qualifiedname>
+        <param>
+          <type><ref refid="d1/d7f/a06591" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;acceptation de visiteur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le ... visiteur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="101" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="df/d5c/a06127_1a05ac3c93e7a1f9e21e48e6057caa332b" prot="public" static="yes" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>static uint32_t castor3d::OpaqueRendering::countInitialisationSteps</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>countInitialisationSteps</name>
+        <qualifiedname>castor3d::OpaqueRendering::countInitialisationSteps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le nombre d&apos;étapes nécessaires à l&apos;initialisation, pour en montrer la progression. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="61" column="17"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="df/d5c/a06127_1a2c79af197048fca5bb3e6606cf69c166" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>SsaoPassUPtr</type>
+        <definition>SsaoPassUPtr castor3d::OpaqueRendering::doCreateSsaoPass</definition>
+        <argsstring>(ProgressBar *progress, crg::FramePass const &amp;lastPass, crg::FramePassArray previousPasses) const</argsstring>
+        <name>doCreateSsaoPass</name>
+        <qualifiedname>castor3d::OpaqueRendering::doCreateSsaoPass</qualifiedname>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>lastPass</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray</type>
+          <declname>previousPasses</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="142" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5c/a06127_1a262157522b3a62096cc897324b382932" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::OpaqueRendering::doCreateVisibilityResolve</definition>
+        <argsstring>(ProgressBar *progress, PrepassRendering const &amp;previous, crg::FramePassArray const &amp;previousPasses, bool isDeferredLighting)</argsstring>
+        <name>doCreateVisibilityResolve</name>
+        <qualifiedname>castor3d::OpaqueRendering::doCreateVisibilityResolve</qualifiedname>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d3d/a06371" kindref="compound">PrepassRendering</ref> const &amp;</type>
+          <declname>previous</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray const &amp;</type>
+          <declname>previousPasses</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isDeferredLighting</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="145" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5c/a06127_1a5fba17cfe1cafaf6d68215dd83961eb2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::OpaqueRendering::doCreateVisibilityOpaquePass</definition>
+        <argsstring>(ProgressBar *progress, crg::FramePass const &amp;lastPass, crg::FramePassArray const &amp;previousPasses)</argsstring>
+        <name>doCreateVisibilityOpaquePass</name>
+        <qualifiedname>castor3d::OpaqueRendering::doCreateVisibilityOpaquePass</qualifiedname>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>lastPass</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray const &amp;</type>
+          <declname>previousPasses</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="149" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5c/a06127_1a9f36910699775aec6688c3d1ca25c655" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::OpaqueRendering::doCreateOpaquePass</definition>
+        <argsstring>(ProgressBar *progress, crg::FramePass const &amp;lastPass, crg::FramePassArray const &amp;previousPasses, bool isDeferredLighting)</argsstring>
+        <name>doCreateOpaquePass</name>
+        <qualifiedname>castor3d::OpaqueRendering::doCreateOpaquePass</qualifiedname>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>lastPass</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray const &amp;</type>
+          <declname>previousPasses</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isDeferredLighting</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="152" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5c/a06127_1a103a9bbfbb6516cf2731c1b94f656d65" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::OpaqueRendering::doIsOpaquePassEnabled</definition>
+        <argsstring>() const</argsstring>
+        <name>doIsOpaquePassEnabled</name>
+        <qualifiedname>castor3d::OpaqueRendering::doIsOpaquePassEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="156" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5c/a06127_1a9cb77e723c0ee35bdd87768f97d090b6" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::OpaqueRendering::doIsDeferredOpaquePassEnabled</definition>
+        <argsstring>() const</argsstring>
+        <name>doIsDeferredOpaquePassEnabled</name>
+        <qualifiedname>castor3d::OpaqueRendering::doIsDeferredOpaquePassEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="157" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d5c/a06127_1a662d450626ce6bc98f0a6a0305ef11db" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::OpaqueRendering::doIsVisibilityOpaquePassEnabled</definition>
+        <argsstring>() const</argsstring>
+        <name>doIsVisibilityOpaquePassEnabled</name>
+        <qualifiedname>castor3d::OpaqueRendering::doIsVisibilityOpaquePassEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="158" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderTechnique &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; RenderTechnique &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::OpaqueRendering</label>
+        <link refid="df/d5c/a06127"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderTechnique &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; RenderTechnique &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::OpaqueRendering</label>
+        <link refid="df/d5c/a06127"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/Opaque/OpaqueRendering.hpp" line="30" column="1" bodyfile="Castor3D/Render/Opaque/OpaqueRendering.hpp" bodystart="32" bodyend="181"/>
+    <listofallmembers>
+      <member refid="df/d5c/a06127_1a49f1bc53441088dca4e56c6b26131b42" prot="public" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>accept</name></member>
+      <member refid="df/d5c/a06127_1a05ac3c93e7a1f9e21e48e6057caa332b" prot="public" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>countInitialisationSteps</name></member>
+      <member refid="df/d5c/a06127_1a9f36910699775aec6688c3d1ca25c655" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>doCreateOpaquePass</name></member>
+      <member refid="df/d5c/a06127_1a2c79af197048fca5bb3e6606cf69c166" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>doCreateSsaoPass</name></member>
+      <member refid="df/d5c/a06127_1a5fba17cfe1cafaf6d68215dd83961eb2" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>doCreateVisibilityOpaquePass</name></member>
+      <member refid="df/d5c/a06127_1a262157522b3a62096cc897324b382932" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>doCreateVisibilityResolve</name></member>
+      <member refid="df/d5c/a06127_1a9cb77e723c0ee35bdd87768f97d090b6" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>doIsDeferredOpaquePassEnabled</name></member>
+      <member refid="df/d5c/a06127_1a103a9bbfbb6516cf2731c1b94f656d65" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>doIsOpaquePassEnabled</name></member>
+      <member refid="df/d5c/a06127_1a662d450626ce6bc98f0a6a0305ef11db" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>doIsVisibilityOpaquePassEnabled</name></member>
+      <member refid="df/d5c/a06127_1a1173baf614b84e0337d7c44001112330" prot="public" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>getEngine</name></member>
+      <member refid="df/d5c/a06127_1a7d75daa0d3648c89eed8bed2c01f0b73" prot="public" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>getLastPass</name></member>
+      <member refid="df/d5c/a06127_1a7e20dd3907f3cf9aad260d5d30380bac" prot="public" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>getMaterialsCounts</name></member>
+      <member refid="df/d5c/a06127_1ad063f0362d409f2296e029438d068172" prot="public" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>getMaterialsIndirectCounts</name></member>
+      <member refid="df/d5c/a06127_1a2885ebee4d60591a52ab8c0c6c472b2f" prot="public" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>getMaterialsStarts</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>getOwner</name></member>
+      <member refid="df/d5c/a06127_1ae59e9af2992f57bc5a6074aedac8c156" prot="public" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>getPixelXY</name></member>
+      <member refid="df/d5c/a06127_1a5d8f69bd2689a2d791c8a582bf09a1c6" prot="public" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>getSsaoResult</name></member>
+      <member refid="df/d5c/a06127_1a9b034c671685abff33153901db90ae69" prot="public" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>getSssDiffuse</name></member>
+      <member refid="df/d5c/a06127_1a8e518a28434c1590280de531b1a3d204" prot="public" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>isEnabled</name></member>
+      <member refid="df/d5c/a06127_1a05377599a1dd9ba431e876d06eb5ebd5" prot="public" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>listIntermediates</name></member>
+      <member refid="df/d5c/a06127_1a5d6d0396b1d8461905a7cf908fbd6dc9" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_deferredOpaquePass</name></member>
+      <member refid="df/d5c/a06127_1a48750b6f87f45e018ef8da4f31f80026" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_deferredOpaquePassDesc</name></member>
+      <member refid="df/d5c/a06127_1aa02f3ccb7b03d402a91318cc976aa028" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_deferredOpaquePassEnabled</name></member>
+      <member refid="df/d5c/a06127_1a7934c39d1722a4eafd51d4861188119c" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_deferredVisibilityResolveDesc</name></member>
+      <member refid="df/d5c/a06127_1ac052dc26d5bf8f06c1b7709bb4d77407" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_device</name></member>
+      <member refid="df/d5c/a06127_1abb66ed1c5ebe39848a7c6ca13c0e6c7c" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_graph</name></member>
+      <member refid="df/d5c/a06127_1a636172407f79ee250865d83c199b9298" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_materialsCounts</name></member>
+      <member refid="df/d5c/a06127_1ab2ef5f0f9f13e2bd09dcd7ebdf5c582b" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_materialsIndirectCounts</name></member>
+      <member refid="df/d5c/a06127_1a65c5f08548e3bc2a3957f497b5c294f6" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_materialsStarts</name></member>
+      <member refid="df/d5c/a06127_1a375dbb0a616b260e9ea456a7d581fc18" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_opaquePass</name></member>
+      <member refid="df/d5c/a06127_1aa65aca559e2bab8a4ff1671a5668eeb9" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_opaquePassDesc</name></member>
+      <member refid="df/d5c/a06127_1a23e75894627436b598fa79aee33d83da" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_opaquePassEnabled</name></member>
+      <member refid="df/d5c/a06127_1a9f30eb88a0a8462c20d702799448523d" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_pixelsXY</name></member>
+      <member refid="df/d5c/a06127_1a7e80e688071a90066d2b4bdb7a2c47bc" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_ssao</name></member>
+      <member refid="df/d5c/a06127_1a4a73abf02c8afad42548c533345863df" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_subsurfaceScattering</name></member>
+      <member refid="df/d5c/a06127_1aaed7b3b8e90825c0fb2cd1cd966f4e64" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_visibilityOpaquePass</name></member>
+      <member refid="df/d5c/a06127_1a31421dd51a3c025dc13ae11dd0c9c6b2" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_visibilityOpaquePassDesc</name></member>
+      <member refid="df/d5c/a06127_1a8a92a50ccdd8443fc55ef2a914089656" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_visibilityOpaquePassEnabled</name></member>
+      <member refid="df/d5c/a06127_1a34c1487edbb6183760d2924678577276" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_visibilityReorder</name></member>
+      <member refid="df/d5c/a06127_1ae46b9959389d7340df4969a6b2bf5ee3" prot="private" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>m_visibilityResolveDesc</name></member>
+      <member refid="df/d5c/a06127_1a115c4c41f472ff9bb51a4d4c55582d6f" prot="public" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>OpaqueRendering</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>OwnedBy</name></member>
+      <member refid="df/d5c/a06127_1a0c94b23ebbdbe0e3fc6987643b294f79" prot="public" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>ShadowMapArray</name></member>
+      <member refid="df/d5c/a06127_1a0823cf4a71e3e9723c492f725f3e9f9b" prot="public" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>update</name></member>
+      <member refid="df/d5c/a06127_1a6c74a3ce6add946c8e94cade74bfa9a5" prot="public" virt="non-virtual"><scope>castor3d::OpaqueRendering</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

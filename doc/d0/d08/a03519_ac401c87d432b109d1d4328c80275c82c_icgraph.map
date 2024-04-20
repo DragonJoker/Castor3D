@@ -1,0 +1,33 @@
+<map id="castor3d::ObjectBufferOffset::GpuBufferChunk::getOffset" name="castor3d::ObjectBufferOffset::GpuBufferChunk::getOffset">
+<area shape="rect" id="Node000001" title=" " alt="" coords="576,285,761,325"/>
+<area shape="rect" id="Node000002" href="$d0/d08/a03519.html#a601947305dcf227dd59e3a778b7d0ffb" title=" " alt="" coords="280,5,524,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="654,272,636,227,608,174,572,120,550,95,526,73,509,62,512,58,530,69,554,91,576,116,613,171,640,225,659,270"/>
+<area shape="rect" id="Node000004" href="$d0/d08/a03519.html#a2a3cd89175e98a7e85c2efd44a7d3079" title=" " alt="" coords="281,84,523,139"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="644,275,595,213,563,181,527,154,504,141,506,136,529,149,566,177,599,210,649,272"/>
+<area shape="rect" id="Node000006" href="$d0/d08/a03519.html#af53313636647cb9db5a0491fc52842f4" title=" " alt="" coords="276,163,528,217"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="621,280,527,232,494,220,496,215,529,228,623,275"/>
+<area shape="rect" id="Node000008" href="$d0/d08/a03519.html#a9e01a24d97d88ce3c93b4dfb277399f4" title=" " alt="" coords="281,241,523,296"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="562,293,523,288,524,282,563,288"/>
+<area shape="rect" id="Node000010" href="$d0/d08/a03519.html#a8cdb5108fbc9bf69678245f581abf49a" title=" " alt="" coords="309,321,495,361"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="562,322,495,331,494,326,562,316"/>
+<area shape="rect" id="Node000012" href="$de/d3d/a03515.html#a1bd1df9eb70ccc063ee5345fcd82beaf" title=" " alt="" coords="309,385,495,425"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="620,334,529,375,492,387,490,382,527,370,618,329"/>
+<area shape="rect" id="Node000013" href="$d0/d08/a03519.html#a89c8c237e0ce90a0fc34f885ae2e6c2e" title=" " alt="" coords="283,449,521,489"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="645,337,595,390,564,416,529,439,503,451,501,446,527,434,561,412,592,386,641,334"/>
+<area shape="rect" id="Node000015" href="$d0/d08/a03519.html#a1d92fdc959a8f887830b553a29237eb3" title=" " alt="" coords="283,513,521,553"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="655,339,636,377,608,421,572,466,530,503,508,515,505,510,526,498,568,462,603,418,631,374,651,336"/>
+<area shape="rect" id="Node000003" href="$de/d3d/a03515.html#a9714f22fb459657a1cbf0c5c5dd81677" title=" " alt="" coords="9,13,224,53"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="266,35,224,35,224,30,266,30"/>
+<area shape="rect" id="Node000005" href="$de/d3d/a03515.html#a4cd50d597e35eab2676f16492e044235" title=" " alt="" coords="11,91,223,131"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="267,114,223,114,223,109,267,109"/>
+<area shape="rect" id="Node000007" href="$de/d3d/a03515.html#a1f1c87475c76dcd71f429a276e0e1ddf" title=" " alt="" coords="5,170,228,210"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="262,193,228,193,228,187,262,187"/>
+<area shape="rect" id="Node000009" href="$de/d3d/a03515.html#a520e2def66992e5e7e260b4e2f24f73a" title=" " alt="" coords="24,249,209,289"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="267,271,209,271,209,266,267,266"/>
+<area shape="rect" id="Node000011" href="$de/d3d/a03515.html#a30c2f3a9e9e59af1261a448aec356760" title=" " alt="" coords="24,321,209,361"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="296,343,210,343,210,338,296,338"/>
+<area shape="rect" id="Node000014" href="$de/d3d/a03515.html#aa7a2665263913ab33532acf686f600fd" title=" " alt="" coords="24,449,209,489"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="269,471,210,471,210,466,269,466"/>
+<area shape="rect" id="Node000016" href="$de/d3d/a03515.html#a99bcdb9f6dae14ccd01752c85a2e4f9c" title=" " alt="" coords="24,513,209,553"/>
+<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="269,535,210,535,210,530,269,530"/>
+</map>

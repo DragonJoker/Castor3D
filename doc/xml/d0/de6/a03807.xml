@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/de6/a03807" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::EditCtrl::Selection</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/de6/a03807_1a9297473c9f4ec5b5b3da33dc46f29cb4" prot="public" static="no" mutable="no">
+        <type>CaretIndices</type>
+        <definition>CaretIndices castor3d::EditCtrl::Selection::begin</definition>
+        <argsstring></argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::EditCtrl::Selection::begin</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlEdit.hpp" line="123" column="14" bodyfile="Castor3D/Gui/Controls/CtrlEdit.hpp" bodystart="123" bodyend="123"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/de6/a03807_1a62b6998024dce63dc5d0c9536558b2f4" prot="public" static="no" mutable="no">
+        <type>CaretIndices</type>
+        <definition>CaretIndices castor3d::EditCtrl::Selection::end</definition>
+        <argsstring></argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::EditCtrl::Selection::end</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlEdit.hpp" line="124" column="14" bodyfile="Castor3D/Gui/Controls/CtrlEdit.hpp" bodystart="124" bodyend="124"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::EditCtrl::CaretIndices</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>captionIt</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::EditCtrl::Selection</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>begin</edgelabel>
+          <edgelabel>end</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;::const_iterator</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Gui/Controls/CtrlEdit.hpp" line="121" column="1" bodyfile="Castor3D/Gui/Controls/CtrlEdit.hpp" bodystart="122" bodyend="125"/>
+    <listofallmembers>
+      <member refid="d0/de6/a03807_1a9297473c9f4ec5b5b3da33dc46f29cb4" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl::Selection</scope><name>begin</name></member>
+      <member refid="d0/de6/a03807_1a62b6998024dce63dc5d0c9536558b2f4" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl::Selection</scope><name>end</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,17 @@
+<map id="castor3d::SceneFileParser" name="castor3d::SceneFileParser">
+<area shape="rect" id="Node000001" title=" " alt="" coords="573,65,749,90"/>
+<area shape="rect" id="Node000002" href="$d6/da8/a08227.html" title=" " alt="" coords="337,7,524,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="497,33,610,62,609,67,495,39"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="5,7,188,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="202,17,337,17,337,23,202,23"/>
+<area shape="rect" id="Node000004" href="$da/d50/a08167.html" title=" " alt="" coords="362,57,499,97"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="514,75,573,75,573,80,514,80"/>
+<area shape="rect" id="Node000005" href="$da/d50/a08167.html" title="Some data holder." alt="" coords="28,57,165,97"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="179,75,362,75,362,80,179,80"/>
+<area shape="rect" id="Node000006" href="$d6/d08/a08367.html" title=" " alt="" coords="368,122,493,147"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="495,116,609,87,610,93,497,121"/>
+<area shape="rect" id="Node000007" href="$da/d87/a08319.html" title=" " alt="" coords="29,122,165,147"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="179,132,368,132,368,137,179,137"/>
+<area shape="rect" id="Node000008" href="$d9/d93/a09063.html" title=" " alt="" coords="19,171,174,197"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="187,170,313,152,368,143,368,148,314,157,188,175"/>
+</map>

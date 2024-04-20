@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/d92/a09051" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor::ConsoleImpl</compoundname>
+    <basecompoundref refid="da/d87/a08319" prot="public" virt="non-virtual">castor::NonMovable</basecompoundref>
+    <includes local="no">LoggerConsole.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d92/a09051_1a0c6da1d2e58008c13a5c9ce7b850dd29" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::ConsoleImpl::ConsoleImpl</definition>
+        <argsstring>()=default</argsstring>
+        <name>ConsoleImpl</name>
+        <qualifiedname>castor::ConsoleImpl::ConsoleImpl</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerConsole.hpp" line="22" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d92/a09051_1a8ddfab14410d36418e33758835d20591" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type></type>
+        <definition>virtual castor::ConsoleImpl::~ConsoleImpl</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~ConsoleImpl</name>
+        <qualifiedname>castor::ConsoleImpl::~ConsoleImpl</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerConsole.hpp" line="29" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d92/a09051_1acbafe6b64fe187cb9f764344f9383afa" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor::ConsoleImpl::beginLog</definition>
+        <argsstring>(LogType logLevel)=0</argsstring>
+        <name>beginLog</name>
+        <qualifiedname>castor::ConsoleImpl::beginLog</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59" kindref="member">LogType</ref></type>
+          <declname>logLevel</declname>
+        </param>
+        <briefdescription>
+<para>Configure la console pour le niveau de log demandé. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">logLevel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le niveau de log. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerConsole.hpp" line="38" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d92/a09051_1ac1271b0bf21808f4a3306e48d87f6fb3" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor::ConsoleImpl::print</definition>
+        <argsstring>(MbString const &amp;toLog, bool newLine)=0</argsstring>
+        <name>print</name>
+        <qualifiedname>castor::ConsoleImpl::print</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref> const &amp;</type>
+          <declname>toLog</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>newLine</declname>
+        </param>
+        <briefdescription>
+<para>Affiche un texte dans la console, ajoute le caractère de fin de ligne si demandé. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">toLog</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le texte à logger. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">newLine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si le caractère de fin de ligne doit être ajouté. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/LoggerConsole.hpp" line="49" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::ConsoleImpl</label>
+        <link refid="d2/d92/a09051"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ConsoleImpl</label>
+        <link refid="d2/d92/a09051"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Log/LoggerConsole.hpp" line="12" column="1" bodyfile="CastorUtils/Log/LoggerConsole.hpp" bodystart="14" bodyend="50"/>
+    <listofallmembers>
+      <member refid="d2/d92/a09051_1acbafe6b64fe187cb9f764344f9383afa" prot="public" virt="pure-virtual"><scope>castor::ConsoleImpl</scope><name>beginLog</name></member>
+      <member refid="d2/d92/a09051_1a0c6da1d2e58008c13a5c9ce7b850dd29" prot="public" virt="non-virtual"><scope>castor::ConsoleImpl</scope><name>ConsoleImpl</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::ConsoleImpl</scope><name>NonMovable</name></member>
+      <member refid="d2/d92/a09051_1ac1271b0bf21808f4a3306e48d87f6fb3" prot="public" virt="pure-virtual"><scope>castor::ConsoleImpl</scope><name>print</name></member>
+      <member refid="d2/d92/a09051_1a8ddfab14410d36418e33758835d20591" prot="public" virt="virtual"><scope>castor::ConsoleImpl</scope><name>~ConsoleImpl</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::ConsoleImpl</scope><name>~NonMovable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

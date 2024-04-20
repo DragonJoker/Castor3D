@@ -1,0 +1,15 @@
+<map id="castor3d::ClustersUbo::createPassBinding" name="castor3d::ClustersUbo::createPassBinding">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,69,156,109"/>
+<area shape="rect" id="Node000002" href="$d4/d63/a03459.html#a926b4f99af45e4423f45a276b7d72505" title=" " alt="" coords="204,69,395,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="156,87,190,87,190,92,156,92"/>
+<area shape="rect" id="Node000003" href="$d4/d63/a03459.html#af6031892474c15c1ff806ca0e9842242" title=" " alt="" coords="443,5,633,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="374,67,449,46,451,51,375,72"/>
+<area shape="rect" id="Node000005" href="$d4/d63/a03459.html#af1486cfa4c196f82e0cbc2440edea70e" title=" " alt="" coords="443,69,633,109"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="395,87,429,87,429,92,395,92"/>
+<area shape="rect" id="Node000006" href="$d4/d63/a03459.html#a11dc3f75dd4cd054c5ee5fd4e0c1f67f" title=" " alt="" coords="443,133,633,173"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="375,107,451,127,449,132,374,112"/>
+<area shape="rect" id="Node000004" href="$dd/d6d/a03547.html#aef1ea7312b5f180989b18ef8a5503012" title=" " alt="" coords="681,69,864,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="613,43,687,63,685,68,611,48"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="633,87,668,87,668,92,633,92"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="611,131,685,110,687,115,613,136"/>
+</map>

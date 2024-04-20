@@ -1,0 +1,363 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d93/a04219" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::MetalnessComponent::ComponentsShader</compoundname>
+    <basecompoundref refid="d6/d6f/a04819" prot="public" virt="non-virtual">castor3d::shader::PassComponentsShader</basecompoundref>
+    <includes local="no">MetalnessComponent.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d93/a04219_1a8476a52485746341c51ef235b6d75957" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MetalnessComponent::ComponentsShader::fillComponents</definition>
+        <argsstring>(ComponentModeFlags componentsMask, sdw::type::BaseStruct &amp;components, shader::Materials const &amp;materials, sdw::StructInstance const *surface) const override</argsstring>
+        <name>fillComponents</name>
+        <qualifiedname>castor3d::MetalnessComponent::ComponentsShader::fillComponents</qualifiedname>
+        <reimplements refid="d6/d6f/a04819_1ac2cfaa34f675787b0b0140eb9e2eb7d3">fillComponents</reimplements>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a924293b8f4fc39410f651e98ed535eb0" kindref="member">ComponentModeFlags</ref></type>
+          <declname>componentsMask</declname>
+        </param>
+        <param>
+          <type>sdw::type::BaseStruct &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/da5/a07555" kindref="compound">shader::Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type>sdw::StructInstance const *</type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+<para>Remplit la structure shader de composants avec les membres fournis par ce composant. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">componentsMask</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Utilisé pour déterminer si le composant est valide dans le contexte de l&apos;appel. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les membres de la structure. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">materials</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Utilisé pour vérifier si la passe de rendu courante a besoin de ce composant. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">surface</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Utilisés pour vérifier si la surface supporte les données nécessaires pour ce composant. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="22" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d93/a04219_1ab0b2ba44bdef374b6ceceac9f0080218" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MetalnessComponent::ComponentsShader::fillComponentsInits</definition>
+        <argsstring>(sdw::type::BaseStruct const &amp;components, shader::Materials const &amp;materials, shader::Material const *material, sdw::StructInstance const *surface, sdw::Vec4 const *clrCot, sdw::expr::ExprList &amp;inits) const override</argsstring>
+        <name>fillComponentsInits</name>
+        <qualifiedname>castor3d::MetalnessComponent::ComponentsShader::fillComponentsInits</qualifiedname>
+        <reimplements refid="d6/d6f/a04819_1a80a16a96d3e5d71cb6b631a77c73217f">fillComponentsInits</reimplements>
+        <param>
+          <type>sdw::type::BaseStruct const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/da5/a07555" kindref="compound">shader::Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d98/a07551" kindref="compound">shader::Material</ref> const *</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>sdw::StructInstance const *</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const *</type>
+          <declname>clrCot</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprList &amp;</type>
+          <declname>inits</declname>
+        </param>
+        <briefdescription>
+<para>Remplit les initialiseurs de la structure shader de composants avec les ceux fournis par ce composant. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Le nombre et l&apos;ordre des initialiseurs doit correspondre à celui défini par fillComponent. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les membres de la structure. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">materials</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Utilisé pour vérifier si la passe de rendu courante a besoin de ce composant. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">material</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Utilisé pour récupérer les données pour ce composant. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">surface</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Utilisé pour récupérer les données pour ce composant. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">clrCot</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Utilisé pour récupérer les données pour ce composant. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">inits</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les initialiseurs </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="26" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d93/a04219_1af61f1559bc270021c2bdcee6c3489da1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MetalnessComponent::ComponentsShader::blendComponents</definition>
+        <argsstring>(shader::Materials const &amp;materials, sdw::Float const &amp;passMultiplier, shader::BlendComponents &amp;res, shader::BlendComponents const &amp;src) const override</argsstring>
+        <name>blendComponents</name>
+        <qualifiedname>castor3d::MetalnessComponent::ComponentsShader::blendComponents</qualifiedname>
+        <reimplements refid="d6/d6f/a04819_1a277de8d6d8fa8c0e3d50edb51fe2157c">blendComponents</reimplements>
+        <param>
+          <type><ref refid="d3/da5/a07555" kindref="compound">shader::Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>passMultiplier</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">shader::BlendComponents</ref> &amp;</type>
+          <declname>res</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">shader::BlendComponents</ref> const &amp;</type>
+          <declname>src</declname>
+        </param>
+        <briefdescription>
+<para>Utilisé pour mixer les composant quand plusieurs passes sont fusionnées ensemble. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">materials</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Utilisé pour vérifier si la passe de rendu courante a besoin de ce composant. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">passMultiplier</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le facteur de la passe courant. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">res</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit le résultat du blending. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">src</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données de la passe courante. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="32" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d93/a04219_1a2dd44cc9fb38b2f3ae212be88cd6234e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MetalnessComponent::ComponentsShader::updateComponent</definition>
+        <argsstring>(sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;maps, shader::Material const &amp;material, shader::BlendComponents &amp;components, bool isFrontCulled) const override</argsstring>
+        <name>updateComponent</name>
+        <qualifiedname>castor3d::MetalnessComponent::ComponentsShader::updateComponent</qualifiedname>
+        <reimplements refid="d6/d6f/a04819_1ab47e2f5bc209511aa30f917e09636eb9">updateComponent</reimplements>
+        <param>
+          <type>sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;</type>
+          <declname>maps</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d98/a07551" kindref="compound">shader::Material</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">shader::BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isFrontCulled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Ajuste les données du composant après que les textures ont été traitées. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">maps</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Contient les images des passes de matériau. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">material</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données du matériau. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Contient les membres du composant. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">isFrontCulled</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si ce shader est pour les objets front culled. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="36" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::MetalnessComponent::ComponentsShader</label>
+        <link refid="dc/d93/a04219"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassComponentsShader</label>
+        <link refid="d6/d6f/a04819"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::MetalnessComponent::ComponentsShader</label>
+        <link refid="dc/d93/a04219"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassComponentsShader</label>
+        <link refid="d6/d6f/a04819"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="17" column="1" bodyfile="Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp" bodystart="19" bodyend="40"/>
+    <listofallmembers>
+      <member refid="d6/d6f/a04819_1a9628851e6c3e74b22df1548301832513" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>applyComponents</name></member>
+      <member refid="d6/d6f/a04819_1a77e66ffa1eac33d82efbe4ce59236f38" prot="protected" virt="non-virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>applyFloatComponent</name></member>
+      <member refid="d6/d6f/a04819_1a02ae79221e5a0e986858c9c383fdaed0" prot="protected" virt="non-virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>applyFloatComponent</name></member>
+      <member refid="d6/d6f/a04819_1a3243f2f9fffc4e75f91e927600a6271d" prot="protected" virt="non-virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>applyVec3Component</name></member>
+      <member refid="d6/d6f/a04819_1aed9f9d27b59abd38f5b5c19d5f45a2af" prot="protected" virt="non-virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>applyVec3Component</name></member>
+      <member refid="dc/d93/a04219_1af61f1559bc270021c2bdcee6c3489da1" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>blendComponents</name></member>
+      <member refid="dc/d93/a04219_1a8476a52485746341c51ef235b6d75957" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>fillComponents</name></member>
+      <member refid="dc/d93/a04219_1ab0b2ba44bdef374b6ceceac9f0080218" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>fillComponentsInits</name></member>
+      <member refid="d6/d6f/a04819_1a846afb362f8cdb6bd2dc1a3f98db9f64" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>getId</name></member>
+      <member refid="d6/d6f/a04819_1a1727bca64233903f00c27aacd146429b" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>getPlugin</name></member>
+      <member refid="d6/d6f/a04819_1ae6acbd6edb3df14dcecccd2598bed038" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>isMapSampling</name></member>
+      <member refid="d2/d04/a04815_1a06fad613f64fa717de3e8032393fdbd7" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>operator=</name></member>
+      <member refid="d2/d04/a04815_1a0e5c7fea4f6928009d6da51c4d78a9df" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>operator=</name></member>
+      <member refid="d6/d6f/a04819_1af7ade94522557fd93269087ee3703612" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>PassComponentsShader</name></member>
+      <member refid="d2/d04/a04815_1ab439edbbb2da660939e0209d9bfba3b0" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>PassShader</name></member>
+      <member refid="d2/d04/a04815_1ae0263dc410ae3d05ddea8cc9ad7eac73" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>PassShader</name></member>
+      <member refid="d2/d04/a04815_1aee18e0dfda227ed54fb966d7d75a1ea5" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>PassShader</name></member>
+      <member refid="d6/d6f/a04819_1adae1f04a5d2866590f4f3204b233dd99" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>sampleMap</name></member>
+      <member refid="d6/d6f/a04819_1a226e2c05d6cff43678f171ef5f413887" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>sampleMap</name></member>
+      <member refid="dc/d93/a04219_1a2dd44cc9fb38b2f3ae212be88cd6234e" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>updateComponent</name></member>
+      <member refid="d2/d04/a04815_1a56338db0aed5f44427291aa6c631872b" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent::ComponentsShader</scope><name>~PassShader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

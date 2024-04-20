@@ -1,0 +1,18 @@
+<map id="castor::Range::clamp" name="castor::Range::clamp">
+<area shape="rect" id="Node000001" title="Puts a value in the range." alt="" coords="633,60,780,85"/>
+<area shape="rect" id="Node000002" href="$d9/da8/a09207.html#a18a23ae9545aca1b31a8e13fbeede614" title="Gives the percentage matching the given value." alt="" coords="431,35,585,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="619,64,585,60,586,55,620,59"/>
+<area shape="rect" id="Node000003" href="$d9/da8/a09207.html#a3ba21b7ce4847f2b9f9557289c36bd36" title="Gives the percentage matching the given value." alt="" coords="5,5,176,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="438,35,382,26,275,19,176,18,176,13,275,14,383,21,439,29"/>
+<area shape="rect" id="Node000004" href="$d9/da8/a09207.html#ae4789643a936b9eda9dcfc1328a54b7f" title="Gives the value matching the given percentage." alt="" coords="224,35,383,60"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="417,50,383,50,383,45,417,45"/>
+<area shape="rect" id="Node000005" href="$d9/da8/a09207.html#a068135b0cd55ff059544f0b4f467ebe7" title="Gives the value matching the given percentage." alt="" coords="233,84,373,109"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="468,67,374,91,373,86,467,62"/>
+<area shape="poly" id="edge5_Node000005_Node000001" title=" " alt="" coords="387,89,633,74,633,80,387,94"/>
+<area shape="poly" id="edge9_Node000005_Node000002" title=" " alt="" coords="343,77,430,55,431,60,345,82"/>
+<area shape="poly" id="edge8_Node000005_Node000003" title=" " alt="" coords="244,82,223,75,121,33,123,28,225,70,246,77"/>
+<area shape="rect" id="Node000006" href="$da/d49/a09219.html#af828ed71d93407cfc1cbe242046cd235" title=" " alt="" coords="7,66,175,106"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="220,95,175,93,175,88,220,90"/>
+<area shape="rect" id="Node000007" href="$d9/da8/a09207.html#af957dbebdd5330f15a76cc855eb03652" title=" " alt="" coords="25,131,157,156"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="232,115,150,133,149,128,231,110"/>
+</map>

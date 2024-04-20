@@ -1,0 +1,314 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/da4/a08943" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ImageCreateParams</compoundname>
+    <includes local="no">ImageCache.hpp</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="enum" id="dd/da4/a08943_1a6b347fa47a7c33c5e32b210628b7299a" prot="public" static="no" strong="no">
+        <type></type>
+        <name>Mode</name>
+        <qualifiedname>castor::ImageCreateParams::Mode</qualifiedname>
+        <enumvalue id="dd/da4/a08943_1a6b347fa47a7c33c5e32b210628b7299aa4c9b4ce1c8da7a95bebc0cf79b1f528c" prot="public">
+          <name>eFile</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="dd/da4/a08943_1a6b347fa47a7c33c5e32b210628b7299aa8bc7f82f8b248d3a33130ee68b9d0a99" prot="public">
+          <name>eBuffer</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="dd/da4/a08943_1a6b347fa47a7c33c5e32b210628b7299aa41ec8598d9bde28400abb7a281a79e6a" prot="public">
+          <name>eParam</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="24" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="25" bodyend="29"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/da4/a08943_1a34ff89b79d863b73bc3638468ce1ffac" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/da4/a08943_1a6b347fa47a7c33c5e32b210628b7299a" kindref="member">Mode</ref></type>
+        <definition>Mode castor::ImageCreateParams::mode</definition>
+        <argsstring></argsstring>
+        <name>mode</name>
+        <qualifiedname>castor::ImageCreateParams::mode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="57" column="6" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/da4/a08943_1aa9de1905940e4fa9d72b572ee1ef4d46" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref></type>
+        <definition>Path castor::ImageCreateParams::path</definition>
+        <argsstring></argsstring>
+        <name>path</name>
+        <qualifiedname>castor::ImageCreateParams::path</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="59" column="6" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/da4/a08943_1a6c647ea77d59d65cd309f8fc6fd188d2" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d09/a08787" kindref="compound">ImageLoaderConfig</ref></type>
+        <definition>ImageLoaderConfig castor::ImageCreateParams::loadConfig</definition>
+        <argsstring></argsstring>
+        <name>loadConfig</name>
+        <qualifiedname>castor::ImageCreateParams::loadConfig</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="60" column="19" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="60" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/da4/a08943_1ae081636730fc71e67a39e611e1e9d890" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>String castor::ImageCreateParams::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>castor::ImageCreateParams::type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="62" column="8" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/da4/a08943_1aab7aed9a34e2d23426e2c7d1f3e69461" prot="public" static="no" mutable="no">
+        <type>ByteArray</type>
+        <definition>ByteArray castor::ImageCreateParams::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>castor::ImageCreateParams::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="63" column="11" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/da4/a08943_1a86878cd65d54d28879e0dfa27de78268" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref></type>
+        <definition>Size castor::ImageCreateParams::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>castor::ImageCreateParams::size</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="65" column="6" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="65" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/da4/a08943_1a42b258cfe3bf75ee8454bd464f716fbf" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+        <definition>PixelFormat castor::ImageCreateParams::format</definition>
+        <argsstring></argsstring>
+        <name>format</name>
+        <qualifiedname>castor::ImageCreateParams::format</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="66" column="13" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="66" bodyend="66"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/da4/a08943_1af3e16c9aecf8d5cb1e916b08ae9913c3" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ImageCreateParams::ImageCreateParams</definition>
+        <argsstring>(Path ppath, ImageLoaderConfig ploadConfig={ true, true, true })</argsstring>
+        <name>ImageCreateParams</name>
+        <qualifiedname>castor::ImageCreateParams::ImageCreateParams</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref></type>
+          <declname>ppath</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d09/a08787" kindref="compound">ImageLoaderConfig</ref></type>
+          <declname>ploadConfig</declname>
+          <defval>{ true, true, true }</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="31" column="10" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="31" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/da4/a08943_1aea38886e31546b7ac0111473411e6522" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ImageCreateParams::ImageCreateParams</definition>
+        <argsstring>(String ptype, ByteArray pdata, ImageLoaderConfig ploadConfig={ true, true, true })</argsstring>
+        <name>ImageCreateParams</name>
+        <qualifiedname>castor::ImageCreateParams::ImageCreateParams</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+          <declname>ptype</declname>
+        </param>
+        <param>
+          <type>ByteArray</type>
+          <declname>pdata</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d09/a08787" kindref="compound">ImageLoaderConfig</ref></type>
+          <declname>ploadConfig</declname>
+          <defval>{ true, true, true }</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="39" column="10" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="39" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/da4/a08943_1a454c9bd89e02320c500882b2097f9ca7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ImageCreateParams::ImageCreateParams</definition>
+        <argsstring>(Size const &amp;psize, PixelFormat pformat)</argsstring>
+        <name>ImageCreateParams</name>
+        <qualifiedname>castor::ImageCreateParams::ImageCreateParams</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>psize</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>pformat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="49" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="49" bodyend="55"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Paramètres de création d&apos;une <ref refid="d6/d3e/a08939" kindref="compound">castor::Image</ref>. </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="10">
+        <label>castor::Coords&lt; uint32_t, 2 &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::DataHolderT&lt; SizeData &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; SizeData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>String</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::Coords&lt; T, Count &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+      </node>
+      <node id="9">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="1">
+        <label>castor::ImageCreateParams</label>
+        <link refid="dd/da4/a08943"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>path</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>loadConfig</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>type</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>size</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::ImageLoaderConfig</label>
+        <link refid="dc/d09/a08787"/>
+      </node>
+      <node id="2">
+        <label>castor::Path</label>
+        <link refid="d1/de1/a08011"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::Size</label>
+        <link refid="d4/dd6/a09023"/>
+        <childnode refid="8" relation="private-inheritance">
+        </childnode>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/ImageCache.hpp" line="22" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="23" bodyend="67"/>
+    <listofallmembers>
+      <member refid="dd/da4/a08943_1aab7aed9a34e2d23426e2c7d1f3e69461" prot="public" virt="non-virtual"><scope>castor::ImageCreateParams</scope><name>data</name></member>
+      <member refid="dd/da4/a08943_1a6b347fa47a7c33c5e32b210628b7299aa8bc7f82f8b248d3a33130ee68b9d0a99" prot="public" virt="non-virtual"><scope>castor::ImageCreateParams</scope><name>eBuffer</name></member>
+      <member refid="dd/da4/a08943_1a6b347fa47a7c33c5e32b210628b7299aa4c9b4ce1c8da7a95bebc0cf79b1f528c" prot="public" virt="non-virtual"><scope>castor::ImageCreateParams</scope><name>eFile</name></member>
+      <member refid="dd/da4/a08943_1a6b347fa47a7c33c5e32b210628b7299aa41ec8598d9bde28400abb7a281a79e6a" prot="public" virt="non-virtual"><scope>castor::ImageCreateParams</scope><name>eParam</name></member>
+      <member refid="dd/da4/a08943_1a42b258cfe3bf75ee8454bd464f716fbf" prot="public" virt="non-virtual"><scope>castor::ImageCreateParams</scope><name>format</name></member>
+      <member refid="dd/da4/a08943_1af3e16c9aecf8d5cb1e916b08ae9913c3" prot="public" virt="non-virtual"><scope>castor::ImageCreateParams</scope><name>ImageCreateParams</name></member>
+      <member refid="dd/da4/a08943_1aea38886e31546b7ac0111473411e6522" prot="public" virt="non-virtual"><scope>castor::ImageCreateParams</scope><name>ImageCreateParams</name></member>
+      <member refid="dd/da4/a08943_1a454c9bd89e02320c500882b2097f9ca7" prot="public" virt="non-virtual"><scope>castor::ImageCreateParams</scope><name>ImageCreateParams</name></member>
+      <member refid="dd/da4/a08943_1a6c647ea77d59d65cd309f8fc6fd188d2" prot="public" virt="non-virtual"><scope>castor::ImageCreateParams</scope><name>loadConfig</name></member>
+      <member refid="dd/da4/a08943_1a6b347fa47a7c33c5e32b210628b7299a" prot="public" virt="non-virtual"><scope>castor::ImageCreateParams</scope><name>Mode</name></member>
+      <member refid="dd/da4/a08943_1a34ff89b79d863b73bc3638468ce1ffac" prot="public" virt="non-virtual"><scope>castor::ImageCreateParams</scope><name>mode</name></member>
+      <member refid="dd/da4/a08943_1aa9de1905940e4fa9d72b572ee1ef4d46" prot="public" virt="non-virtual"><scope>castor::ImageCreateParams</scope><name>path</name></member>
+      <member refid="dd/da4/a08943_1a86878cd65d54d28879e0dfa27de78268" prot="public" virt="non-virtual"><scope>castor::ImageCreateParams</scope><name>size</name></member>
+      <member refid="dd/da4/a08943_1ae081636730fc71e67a39e611e1e9d890" prot="public" virt="non-virtual"><scope>castor::ImageCreateParams</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,511 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d5b/a04003" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::BlendComponent</compoundname>
+    <basecompoundref refid="df/dc6/a04087" prot="public" virt="non-virtual">castor3d::BaseDataPassComponentT&lt; BlendData &gt;</basecompoundref>
+    <includes local="no">BlendComponent.hpp</includes>
+    <innerclass refid="d2/dfc/a04007" prot="public">castor3d::BlendComponent::Plugin</innerclass>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d6/d5b/a04003_1a6b28e5fca46a519c35c1761dec5615ed" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr <ref refid="d9/dba/a02278_1a043cb84a97fa62d2b78e9f4ec3238f70" kindref="member">PassFlag</ref></type>
+        <definition>constexpr PassFlag castor3d::BlendComponent::eAlphaBlending</definition>
+        <argsstring></argsstring>
+        <name>eAlphaBlending</name>
+        <qualifiedname>castor3d::BlendComponent::eAlphaBlending</qualifiedname>
+        <initializer>= <ref refid="d9/dba/a02278_1a043cb84a97fa62d2b78e9f4ec3238f70" kindref="member">PassFlag</ref>( 0x01u )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" line="29" column="27" bodyfile="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" bodystart="29" bodyend="-1"/>
+        <referencedby refid="d2/dfc/a04007_1aa10b43e350027adf27174e5f673bfd3c" compoundref="d3/def/a00446" startline="57" endline="60">castor3d::BlendComponent::Plugin::getComponentFlags</referencedby>
+        <referencedby refid="d6/d5b/a04003_1a5ab6a4d80dcae582a072f0b4a23eb2de" compoundref="d3/def/a00446" startline="82" endline="88">getPassFlags</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5b/a04003_1abaa39997da042794e6826bdc531e90a0" prot="public" static="yes" mutable="no">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const</type>
+        <definition>C3D_API castor::String const castor3d::BlendComponent::TypeName</definition>
+        <argsstring></argsstring>
+        <name>TypeName</name>
+        <qualifiedname>castor3d::BlendComponent::TypeName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" line="115" column="37" bodyfile="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d6/d5b/a04003_1a6a1c23f071f3130f5f09b710638c5c7a" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>PassComponentPluginUPtr</type>
+        <definition>static PassComponentPluginUPtr castor3d::BlendComponent::createPlugin</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponent)</argsstring>
+        <name>createPlugin</name>
+        <qualifiedname>castor3d::BlendComponent::createPlugin</qualifiedname>
+        <param>
+          <type><ref refid="d4/d10/a04839" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" line="73" column="32" bodyfile="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" bodystart="73" bodyend="76"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d5b/a04003_1a3fb2632c26bf8260e36a3198568cf0ca" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BlendComponent::BlendComponent</definition>
+        <argsstring>(Pass &amp;pass)</argsstring>
+        <name>BlendComponent</name>
+        <qualifiedname>castor3d::BlendComponent::BlendComponent</qualifiedname>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" line="78" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5b/a04003_1a8002b4b47f57a879f9a03a949f61f3d4" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BlendComponent::accept</definition>
+        <argsstring>(ConfigurationVisitorBase &amp;vis) override</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::BlendComponent::accept</qualifiedname>
+        <reimplements refid="db/db4/a04835_1a0a937d88f0f9cf4d9b725850764c3cd6">accept</reimplements>
+        <param>
+          <type><ref refid="db/dc2/a05011" kindref="compound">ConfigurationVisitorBase</ref> &amp;</type>
+          <declname>vis</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;acceptation de <ref refid="db/dc2/a05011" kindref="compound">ConfigurationVisitorBase</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>vis</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le ... visiteur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" line="80" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5b/a04003_1a5ab6a4d80dcae582a072f0b4a23eb2de" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dba/a02278_1ad77e61bf7d7ca8d88ae3f528ed7ef891" kindref="member">PassComponentFlag</ref></type>
+        <definition>C3D_API PassComponentFlag castor3d::BlendComponent::getPassFlags</definition>
+        <argsstring>() const override</argsstring>
+        <name>getPassFlags</name>
+        <qualifiedname>castor3d::BlendComponent::getPassFlags</qualifiedname>
+        <reimplements refid="db/db4/a04835_1af015484800f32c718d067a80b76709e9">getPassFlags</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" line="82" column="27" bodyfile="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" bodystart="82" bodyend="88"/>
+        <references refid="d6/d5b/a04003_1a6b28e5fca46a519c35c1761dec5615ed" compoundref="d3/def/a00446" startline="29">eAlphaBlending</references>
+        <references refid="d9/dba/a02278_1a043cb84a97fa62d2b78e9f4ec3238f70abe988781e4e1de1c6a36fb698afbbe1f">castor3d::eNone</references>
+        <references refid="db/db4/a04835_1a625adfcb001824768e8a99a3c03dcbb1" compoundref="d0/d1c/a00605" startline="1226" endline="1229">castor3d::PassComponent::getId</references>
+        <references refid="d6/d5b/a04003_1ac09888601e0f7bda790bfa9e762c39ae" compoundref="d3/def/a00446" startline="90" endline="93">hasAlphaBlending</references>
+        <references refid="d9/dba/a02278_1a17fb42a34e2f26ac65dc169db981b513" compoundref="d0/dc4/a00443" startline="78" endline="83">castor3d::makePassComponentFlag</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5b/a04003_1ac09888601e0f7bda790bfa9e762c39ae" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BlendComponent::hasAlphaBlending</definition>
+        <argsstring>() const</argsstring>
+        <name>hasAlphaBlending</name>
+        <qualifiedname>castor3d::BlendComponent::hasAlphaBlending</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" line="90" column="6" bodyfile="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" bodystart="90" bodyend="93"/>
+        <references refid="d9/dba/a02278_1a2ec340d0748bbfd3b7d9f067f949b27da12c10e6e0388d587340cfbe98b5045ae">castor3d::eNoBlend</references>
+        <references refid="d6/d5b/a04003_1a8b44469c83ffe94f79b3737a0a81f290" compoundref="d3/def/a00446" startline="95" endline="98">getAlphaBlendMode</references>
+        <referencedby refid="d6/d5b/a04003_1a5ab6a4d80dcae582a072f0b4a23eb2de" compoundref="d3/def/a00446" startline="82" endline="88">getPassFlags</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5b/a04003_1a8b44469c83ffe94f79b3737a0a81f290" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1a2ec340d0748bbfd3b7d9f067f949b27d" kindref="member">BlendMode</ref></type>
+        <definition>BlendMode castor3d::BlendComponent::getAlphaBlendMode</definition>
+        <argsstring>() const</argsstring>
+        <name>getAlphaBlendMode</name>
+        <qualifiedname>castor3d::BlendComponent::getAlphaBlendMode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" line="95" column="11" bodyfile="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" bodystart="95" bodyend="98"/>
+        <references refid="d0/dfb/a03999_1a30940cb3032589178c40a16dfad0198f" compoundref="d3/def/a00446" startline="23">castor3d::BlendData::alphaBlendMode</references>
+        <references refid="df/dc6/a04087_1aa297ac5faf886e6b766533f5fc0b25d1" compoundref="d0/d29/a00470" startline="88">castor3d::BaseDataPassComponentT&lt; BlendData &gt;::m_value</references>
+        <referencedby refid="d6/d5b/a04003_1ac09888601e0f7bda790bfa9e762c39ae" compoundref="d3/def/a00446" startline="90" endline="93">hasAlphaBlending</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5b/a04003_1a3520cecd0369c0dadb32827b9421c5e0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1a2ec340d0748bbfd3b7d9f067f949b27d" kindref="member">BlendMode</ref></type>
+        <definition>BlendMode castor3d::BlendComponent::getColourBlendMode</definition>
+        <argsstring>() const</argsstring>
+        <name>getColourBlendMode</name>
+        <qualifiedname>castor3d::BlendComponent::getColourBlendMode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" line="100" column="11" bodyfile="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" bodystart="100" bodyend="103"/>
+        <references refid="d0/dfb/a03999_1a7d8b3d0b9ab2c41194f2b7f38e2cc6a4" compoundref="d3/def/a00446" startline="22">castor3d::BlendData::colourBlendMode</references>
+        <references refid="df/dc6/a04087_1aa297ac5faf886e6b766533f5fc0b25d1" compoundref="d0/d29/a00470" startline="88">castor3d::BaseDataPassComponentT&lt; BlendData &gt;::m_value</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5b/a04003_1a7c9ef5a023ebd710618a75bc47b7ea09" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BlendComponent::setAlphaBlendMode</definition>
+        <argsstring>(BlendMode value)</argsstring>
+        <name>setAlphaBlendMode</name>
+        <qualifiedname>castor3d::BlendComponent::setAlphaBlendMode</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a2ec340d0748bbfd3b7d9f067f949b27d" kindref="member">BlendMode</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" line="105" column="6" bodyfile="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" bodystart="105" bodyend="108"/>
+        <references refid="d0/dfb/a03999_1a30940cb3032589178c40a16dfad0198f" compoundref="d3/def/a00446" startline="23">castor3d::BlendData::alphaBlendMode</references>
+        <references refid="df/dc6/a04087_1aa297ac5faf886e6b766533f5fc0b25d1" compoundref="d0/d29/a00470" startline="88">castor3d::BaseDataPassComponentT&lt; BlendData &gt;::m_value</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5b/a04003_1aed761f404fd608db3450ecd62357ff4e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BlendComponent::setColourBlendMode</definition>
+        <argsstring>(BlendMode value)</argsstring>
+        <name>setColourBlendMode</name>
+        <qualifiedname>castor3d::BlendComponent::setColourBlendMode</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a2ec340d0748bbfd3b7d9f067f949b27d" kindref="member">BlendMode</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" line="110" column="6" bodyfile="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" bodystart="110" bodyend="113"/>
+        <references refid="d0/dfb/a03999_1a7d8b3d0b9ab2c41194f2b7f38e2cc6a4" compoundref="d3/def/a00446" startline="22">castor3d::BlendData::colourBlendMode</references>
+        <references refid="df/dc6/a04087_1aa297ac5faf886e6b766533f5fc0b25d1" compoundref="d0/d29/a00470" startline="88">castor3d::BaseDataPassComponentT&lt; BlendData &gt;::m_value</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d6/d5b/a04003_1a60956498effb7f2d5654c247a6cfe25a" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>PassComponentUPtr</type>
+        <definition>PassComponentUPtr castor3d::BlendComponent::doClone</definition>
+        <argsstring>(Pass &amp;pass) const override</argsstring>
+        <name>doClone</name>
+        <qualifiedname>castor3d::BlendComponent::doClone</qualifiedname>
+        <reimplements refid="db/db4/a04835_1ad87fbb1539bb6c5004cbcb02ddfcd46f">doClone</reimplements>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Clone ce composant dans la passe donnée. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit le composant cloné. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" line="118" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5b/a04003_1ac243f5337e56547448c5c89855071262" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BlendComponent::doWriteText</definition>
+        <argsstring>(castor::String const &amp;tabs, castor::Path const &amp;folder, castor::String const &amp;subfolder, castor::StringStream &amp;file) const override</argsstring>
+        <name>doWriteText</name>
+        <qualifiedname>castor3d::BlendComponent::doWriteText</qualifiedname>
+        <reimplements refid="db/db4/a04835_1af8c7cb8f4c2e0753c0ebbb6adf802c9c">doWriteText</reimplements>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>subfolder</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae7002b6add23b6f33bfde31351b5e8c9" kindref="member">castor::StringStream</ref> &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+<para>Ecrit le contenu du composant en texte. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">tabs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le niveau actuel de tabulation. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">folder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le dossier de ressources. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">subfolder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le sous-dossier de ressources. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le fichier de sortie. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" line="119" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::BaseDataPassComponentT&lt; BlendData &gt;</label>
+        <link refid="df/dc6/a04087"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; BlendData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Pass &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::BaseDataPassComponentT&lt; DataT &gt;</label>
+        <link refid="df/dc6/a04087"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BlendComponent</label>
+        <link refid="d6/d5b/a04003"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="db/db4/a04835"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::BaseDataPassComponentT&lt; BlendData &gt;</label>
+        <link refid="df/dc6/a04087"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_value</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; BlendData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor::GroupChangeTrackedT&lt; BlendMode &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; BlendMode &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Pass &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::BaseDataPassComponentT&lt; DataT &gt;</label>
+        <link refid="df/dc6/a04087"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BlendComponent</label>
+        <link refid="d6/d5b/a04003"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>TypeName</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::BlendData</label>
+        <link refid="d0/dfb/a03999"/>
+        <childnode refid="12" relation="usage">
+          <edgelabel>alphaBlendMode</edgelabel>
+          <edgelabel>colourBlendMode</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="db/db4/a04835"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_type</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_plugin</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_materialShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="d2/d2e/a04831"/>
+      </node>
+      <node id="9">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="d6/da6/a04827"/>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+      <node id="13">
+        <label>castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="7">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" line="26" column="1" bodyfile="Castor3D/Material/Pass/Component/Base/BlendComponent.hpp" bodystart="28" bodyend="123"/>
+    <listofallmembers>
+      <member refid="d6/d5b/a04003_1a8002b4b47f57a879f9a03a949f61f3d4" prot="public" virt="virtual"><scope>castor3d::BlendComponent</scope><name>accept</name></member>
+      <member refid="df/dc6/a04087_1afb1743ea21712dcfe9765639815fc59d" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>BaseDataPassComponentT</name></member>
+      <member refid="d6/d5b/a04003_1a3fb2632c26bf8260e36a3198568cf0ca" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>BlendComponent</name></member>
+      <member refid="db/db4/a04835_1ae7c88041d1aae747532e537b23e41d24" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>clone</name></member>
+      <member refid="d6/d5b/a04003_1a6a1c23f071f3130f5f09b710638c5c7a" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>createPlugin</name></member>
+      <member refid="d6/d5b/a04003_1a60956498effb7f2d5654c247a6cfe25a" prot="private" virt="virtual"><scope>castor3d::BlendComponent</scope><name>doClone</name></member>
+      <member refid="d6/d5b/a04003_1ac243f5337e56547448c5c89855071262" prot="private" virt="virtual"><scope>castor3d::BlendComponent</scope><name>doWriteText</name></member>
+      <member refid="d6/d5b/a04003_1a6b28e5fca46a519c35c1761dec5615ed" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>eAlphaBlending</name></member>
+      <member refid="db/db4/a04835_1a8f6b8c698164310e2052be733834224a" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>fillBuffer</name></member>
+      <member refid="db/db4/a04835_1aeb5762d7de650b40a394f2e8bf8f5c21" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>fillChannel</name></member>
+      <member refid="db/db4/a04835_1a86da9ac512527402c64e66b34b50a5a7" prot="public" virt="virtual"><scope>castor3d::BlendComponent</scope><name>fillConfig</name></member>
+      <member refid="d6/d5b/a04003_1a8b44469c83ffe94f79b3737a0a81f290" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>getAlphaBlendMode</name></member>
+      <member refid="db/db4/a04835_1a89e385760304300908e5b308b2f1da4e" prot="public" virt="virtual"><scope>castor3d::BlendComponent</scope><name>getColour</name></member>
+      <member refid="d6/d5b/a04003_1a3520cecd0369c0dadb32827b9421c5e0" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>getColourBlendMode</name></member>
+      <member refid="df/dc6/a04087_1a23ec881a6e2aa2e40c21e108cb6458f7" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>getData</name></member>
+      <member refid="df/dc6/a04087_1aa79468a338c3ff3c31682894db721fab" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>getData</name></member>
+      <member refid="db/db4/a04835_1a32748929920ba651a4c5a1d5af435e77" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>getDependencies</name></member>
+      <member refid="db/db4/a04835_1a625adfcb001824768e8a99a3c03dcbb1" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>getId</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>getOwner</name></member>
+      <member refid="d6/d5b/a04003_1a5ab6a4d80dcae582a072f0b4a23eb2de" prot="public" virt="virtual"><scope>castor3d::BlendComponent</scope><name>getPassFlags</name></member>
+      <member refid="db/db4/a04835_1a5da51664f6736be0199d66266779b395" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>getPlugin</name></member>
+      <member refid="db/db4/a04835_1a6aae2659952d2e9a76caabf56d69fba5" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>getType</name></member>
+      <member refid="d6/d5b/a04003_1ac09888601e0f7bda790bfa9e762c39ae" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>hasAlphaBlending</name></member>
+      <member refid="db/db4/a04835_1a5af951f374ee82fd61e57f96e6193f1c" prot="public" virt="virtual"><scope>castor3d::BlendComponent</scope><name>hasColour</name></member>
+      <member refid="db/db4/a04835_1a7c90ef14fa9721b433d361c8492c3112" prot="protected" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>m_dependencies</name></member>
+      <member refid="db/db4/a04835_1a01ecec7d563666b63d7d888061e84ab1" prot="protected" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>m_dirty</name></member>
+      <member refid="db/db4/a04835_1a3d2b1319d92ba70ff8450c7873492b67" prot="protected" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>m_id</name></member>
+      <member refid="db/db4/a04835_1abc188311e9251e933a838a256802c4c6" prot="protected" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>m_materialShader</name></member>
+      <member refid="db/db4/a04835_1ae62babd07d3faf3014f1d0af1ab03357" prot="protected" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>m_plugin</name></member>
+      <member refid="db/db4/a04835_1ae5775b9cf42c79c375cbd4a033e6629f" prot="protected" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>m_type</name></member>
+      <member refid="df/dc6/a04087_1aa297ac5faf886e6b766533f5fc0b25d1" prot="protected" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>m_value</name></member>
+      <member refid="db/db4/a04835_1a8f7373eec3c7769cdcd84908523d797f" prot="public" virt="virtual"><scope>castor3d::BlendComponent</scope><name>onAddToPass</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>OwnedBy</name></member>
+      <member refid="db/db4/a04835_1a68b747d970c85a2799fb63b6825b0fc4" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>PassComponent</name></member>
+      <member refid="d6/d5b/a04003_1a7c9ef5a023ebd710618a75bc47b7ea09" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>setAlphaBlendMode</name></member>
+      <member refid="db/db4/a04835_1a2541aa58a662bd8566c602335387cb98" prot="public" virt="virtual"><scope>castor3d::BlendComponent</scope><name>setColour</name></member>
+      <member refid="db/db4/a04835_1ab6a5bf94fc25210c03c9bed7ddf1ae31" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>setColour</name></member>
+      <member refid="db/db4/a04835_1a61fa7c8562281c049a874b1ebc2635e4" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>setColour</name></member>
+      <member refid="db/db4/a04835_1a2256e542753e1f85e6812de7e6fdc261" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>setColour</name></member>
+      <member refid="d6/d5b/a04003_1aed761f404fd608db3450ecd62357ff4e" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>setColourBlendMode</name></member>
+      <member refid="df/dc6/a04087_1a074de9b2f9579c56a85617b514089545" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>setData</name></member>
+      <member refid="df/dc6/a04087_1abf51560ee823896159de61bea9326391" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>setData</name></member>
+      <member refid="d6/d5b/a04003_1abaa39997da042794e6826bdc531e90a0" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>TypeName</name></member>
+      <member refid="db/db4/a04835_1acfedf31a75536a40a891b3308083d738" prot="public" virt="virtual"><scope>castor3d::BlendComponent</scope><name>update</name></member>
+      <member refid="db/db4/a04835_1a967ba1259e24663e4a89352251acf841" prot="public" virt="non-virtual"><scope>castor3d::BlendComponent</scope><name>writeText</name></member>
+      <member refid="db/db4/a04835_1a6a3e343b81806ff616280b4eca87140b" prot="public" virt="virtual"><scope>castor3d::BlendComponent</scope><name>~PassComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

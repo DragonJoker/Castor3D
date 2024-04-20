@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/dbd/a06515" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::CpuUpdater::DirtyObjects</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/dbd/a06515_1aa6678b79c1f3453756a5dfd1ff6b99c5" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> * &gt;</type>
+        <definition>castor::Vector&lt; SceneNode * &gt; castor3d::CpuUpdater::DirtyObjects::dirtyNodes</definition>
+        <argsstring></argsstring>
+        <name>dirtyNodes</name>
+        <qualifiedname>castor3d::CpuUpdater::DirtyObjects::dirtyNodes</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="932" column="16" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="932" bodyend="932"/>
+        <referencedby refid="d6/dbd/a06515_1aef3d7db590573f1b2aa080ad34b60558" compoundref="d5/d32/a01214" startline="923" endline="930">isEmpty</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d6/dbd/a06515_1a8da2ff08218adfb5b567f3649f120407" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d8/d46/a06971" kindref="compound">Geometry</ref> * &gt;</type>
+        <definition>castor::Vector&lt; Geometry * &gt; castor3d::CpuUpdater::DirtyObjects::dirtyGeometries</definition>
+        <argsstring></argsstring>
+        <name>dirtyGeometries</name>
+        <qualifiedname>castor3d::CpuUpdater::DirtyObjects::dirtyGeometries</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="933" column="16" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="933" bodyend="933"/>
+        <referencedby refid="d6/dbd/a06515_1aef3d7db590573f1b2aa080ad34b60558" compoundref="d5/d32/a01214" startline="923" endline="930">isEmpty</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d6/dbd/a06515_1abe797e16210754396999706c5e06bb95" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d5/d31/a06931" kindref="compound">BillboardBase</ref> * &gt;</type>
+        <definition>castor::Vector&lt; BillboardBase * &gt; castor3d::CpuUpdater::DirtyObjects::dirtyBillboards</definition>
+        <argsstring></argsstring>
+        <name>dirtyBillboards</name>
+        <qualifiedname>castor3d::CpuUpdater::DirtyObjects::dirtyBillboards</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="934" column="16" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="934" bodyend="934"/>
+        <referencedby refid="d6/dbd/a06515_1aef3d7db590573f1b2aa080ad34b60558" compoundref="d5/d32/a01214" startline="923" endline="930">isEmpty</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d6/dbd/a06515_1aeb80174d8de83627580a51adfdf10baf" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="da/d3c/a06987" kindref="compound">Light</ref> * &gt;</type>
+        <definition>castor::Vector&lt; Light * &gt; castor3d::CpuUpdater::DirtyObjects::dirtyLights</definition>
+        <argsstring></argsstring>
+        <name>dirtyLights</name>
+        <qualifiedname>castor3d::CpuUpdater::DirtyObjects::dirtyLights</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="935" column="16" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="935" bodyend="935"/>
+        <referencedby refid="d6/dbd/a06515_1aef3d7db590573f1b2aa080ad34b60558" compoundref="d5/d32/a01214" startline="923" endline="930">isEmpty</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d6/dbd/a06515_1a73c987b3fbc3260befac74ee241940ca" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d2/dc3/a06951" kindref="compound">Camera</ref> * &gt;</type>
+        <definition>castor::Vector&lt; Camera * &gt; castor3d::CpuUpdater::DirtyObjects::dirtyCameras</definition>
+        <argsstring></argsstring>
+        <name>dirtyCameras</name>
+        <qualifiedname>castor3d::CpuUpdater::DirtyObjects::dirtyCameras</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="936" column="16" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="936" bodyend="936"/>
+        <referencedby refid="d6/dbd/a06515_1aef3d7db590573f1b2aa080ad34b60558" compoundref="d5/d32/a01214" startline="923" endline="930">isEmpty</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/dbd/a06515_1ae60e2ab9bfe0dddc5fe35fc05705d799" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::CpuUpdater::DirtyObjects::DirtyObjects</definition>
+        <argsstring>()=default</argsstring>
+        <name>DirtyObjects</name>
+        <qualifiedname>castor3d::CpuUpdater::DirtyObjects::DirtyObjects</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="921" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/dbd/a06515_1aef3d7db590573f1b2aa080ad34b60558" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::CpuUpdater::DirtyObjects::isEmpty</definition>
+        <argsstring>() const</argsstring>
+        <name>isEmpty</name>
+        <qualifiedname>castor3d::CpuUpdater::DirtyObjects::isEmpty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="923" column="6" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="923" bodyend="930"/>
+        <references refid="d6/dbd/a06515_1abe797e16210754396999706c5e06bb95" compoundref="d5/d32/a01214" startline="934" endline="934">dirtyBillboards</references>
+        <references refid="d6/dbd/a06515_1a73c987b3fbc3260befac74ee241940ca" compoundref="d5/d32/a01214" startline="936" endline="936">dirtyCameras</references>
+        <references refid="d6/dbd/a06515_1a8da2ff08218adfb5b567f3649f120407" compoundref="d5/d32/a01214" startline="933" endline="933">dirtyGeometries</references>
+        <references refid="d6/dbd/a06515_1aeb80174d8de83627580a51adfdf10baf" compoundref="d5/d32/a01214" startline="935" endline="935">dirtyLights</references>
+        <references refid="d6/dbd/a06515_1aa6678b79c1f3453756a5dfd1ff6b99c5" compoundref="d5/d32/a01214" startline="932" endline="932">dirtyNodes</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/RenderModule.hpp" line="919" column="1" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="920" bodyend="937"/>
+    <listofallmembers>
+      <member refid="d6/dbd/a06515_1abe797e16210754396999706c5e06bb95" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater::DirtyObjects</scope><name>dirtyBillboards</name></member>
+      <member refid="d6/dbd/a06515_1a73c987b3fbc3260befac74ee241940ca" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater::DirtyObjects</scope><name>dirtyCameras</name></member>
+      <member refid="d6/dbd/a06515_1a8da2ff08218adfb5b567f3649f120407" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater::DirtyObjects</scope><name>dirtyGeometries</name></member>
+      <member refid="d6/dbd/a06515_1aeb80174d8de83627580a51adfdf10baf" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater::DirtyObjects</scope><name>dirtyLights</name></member>
+      <member refid="d6/dbd/a06515_1aa6678b79c1f3453756a5dfd1ff6b99c5" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater::DirtyObjects</scope><name>dirtyNodes</name></member>
+      <member refid="d6/dbd/a06515_1ae60e2ab9bfe0dddc5fe35fc05705d799" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater::DirtyObjects</scope><name>DirtyObjects</name></member>
+      <member refid="d6/dbd/a06515_1aef3d7db590573f1b2aa080ad34b60558" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater::DirtyObjects</scope><name>isEmpty</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d2f/a06715" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::HdrConfig</compoundname>
+    <includes local="no">HdrConfig.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d2f/a06715_1ac8fd9583280cdc34d0a26e1237764a0d" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::HdrConfig::exposure</definition>
+        <argsstring></argsstring>
+        <name>exposure</name>
+        <qualifiedname>castor3d::HdrConfig::exposure</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La valeur d&apos;exposition. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/HdrConfig.hpp" line="21" column="7" bodyfile="Castor3D/Render/ToneMapping/HdrConfig.hpp" bodystart="21" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d2f/a06715_1a9d5123b1dbd5da1ebb2517854c23fb26" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::HdrConfig::gamma</definition>
+        <argsstring></argsstring>
+        <name>gamma</name>
+        <qualifiedname>castor3d::HdrConfig::gamma</qualifiedname>
+        <initializer>{ 2.2f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La valeur de correction gamma. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/HdrConfig.hpp" line="24" column="7" bodyfile="Castor3D/Render/ToneMapping/HdrConfig.hpp" bodystart="24" bodyend="24"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d2f/a06715_1a0bb6a67464c74cdb9d70b120fa6097bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::HdrConfig::accept</definition>
+        <argsstring>(ConfigurationVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::HdrConfig::accept</qualifiedname>
+        <param>
+          <type><ref refid="db/dc2/a05011" kindref="compound">ConfigurationVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/HdrConfig.hpp" line="15" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d1/d2f/a06715_1a99fed5ef4a86bbd39f58ed69d39cf6e9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::HdrConfig::addParsers</definition>
+        <argsstring>(castor::AttributeParsers &amp;result)</argsstring>
+        <name>addParsers</name>
+        <qualifiedname>castor3d::HdrConfig::addParsers</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7138ba41c2c2c4ced36cacefe5eb2c33" kindref="member">castor::AttributeParsers</ref> &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/HdrConfig.hpp" line="17" column="21"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/ToneMapping/HdrConfig.hpp" line="13" column="1" bodyfile="Castor3D/Render/ToneMapping/HdrConfig.hpp" bodystart="14" bodyend="25"/>
+    <listofallmembers>
+      <member refid="d1/d2f/a06715_1a0bb6a67464c74cdb9d70b120fa6097bc" prot="public" virt="non-virtual"><scope>castor3d::HdrConfig</scope><name>accept</name></member>
+      <member refid="d1/d2f/a06715_1a99fed5ef4a86bbd39f58ed69d39cf6e9" prot="public" virt="non-virtual"><scope>castor3d::HdrConfig</scope><name>addParsers</name></member>
+      <member refid="d1/d2f/a06715_1ac8fd9583280cdc34d0a26e1237764a0d" prot="public" virt="non-virtual"><scope>castor3d::HdrConfig</scope><name>exposure</name></member>
+      <member refid="d1/d2f/a06715_1a9d5123b1dbd5da1ebb2517854c23fb26" prot="public" virt="non-virtual"><scope>castor3d::HdrConfig</scope><name>gamma</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

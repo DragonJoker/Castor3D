@@ -1,0 +1,9 @@
+<map id="castor3d::CmshMeshImporter" name="castor3d::CmshMeshImporter">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,243,199,268"/>
+<area shape="rect" id="Node000002" href="$dc/d06/a05407.html" title=" " alt="" coords="23,168,181,193"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,208,105,242,99,242,99,208"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="9,93,195,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,133,105,168,99,168,99,133"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="11,5,193,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="105,45,105,93,99,93,99,45"/>
+</map>

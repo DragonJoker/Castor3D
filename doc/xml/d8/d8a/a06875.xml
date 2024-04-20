@@ -1,0 +1,303 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/d8a/a06875" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SkeletonAnimationInstanceBone</compoundname>
+    <basecompoundref refid="d8/d93/a06887" prot="public" virt="non-virtual">castor3d::SkeletonAnimationInstanceObject</basecompoundref>
+    <includes local="no">SkeletonAnimationInstanceBone.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d8/d8a/a06875_1a007c825d2c12f049c3cf39827c4741dc" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d33/a05659" kindref="compound">SkeletonAnimationBone</ref> &amp;</type>
+        <definition>SkeletonAnimationBone&amp; castor3d::SkeletonAnimationInstanceBone::m_animationBone</definition>
+        <argsstring></argsstring>
+        <name>m_animationBone</name>
+        <qualifiedname>castor3d::SkeletonAnimationInstanceBone::m_animationBone</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>L&apos;animation d&apos;os. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" line="42" column="24" bodyfile="Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d8a/a06875_1a4abf5d0b8873b8b4de886a8ceb50951b" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone</definition>
+        <argsstring>(SkeletonAnimationInstanceBone &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>SkeletonAnimationInstanceBone</name>
+        <qualifiedname>castor3d::SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone</qualifiedname>
+        <param>
+          <type><ref refid="d8/d8a/a06875" kindref="compound">SkeletonAnimationInstanceBone</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" line="15" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d8a/a06875_1a57a6eba42b2ed47da2596591e177a40a" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d8/d8a/a06875" kindref="compound">SkeletonAnimationInstanceBone</ref> &amp;</type>
+        <definition>C3D_API SkeletonAnimationInstanceBone &amp; castor3d::SkeletonAnimationInstanceBone::operator=</definition>
+        <argsstring>(SkeletonAnimationInstanceBone &amp;&amp;rhs) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::SkeletonAnimationInstanceBone::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d8/d8a/a06875" kindref="compound">SkeletonAnimationInstanceBone</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" line="16" column="40"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d8a/a06875_1a153761fe1b0d3c09371767b8ceae8372" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone</definition>
+        <argsstring>(SkeletonAnimationInstanceBone const &amp;rhs)=delete</argsstring>
+        <name>SkeletonAnimationInstanceBone</name>
+        <qualifiedname>castor3d::SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone</qualifiedname>
+        <param>
+          <type><ref refid="d8/d8a/a06875" kindref="compound">SkeletonAnimationInstanceBone</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" line="17" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d8a/a06875_1a0e758515a35b9e3dee3afc8cddd1b516" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d8/d8a/a06875" kindref="compound">SkeletonAnimationInstanceBone</ref> &amp;</type>
+        <definition>C3D_API SkeletonAnimationInstanceBone &amp; castor3d::SkeletonAnimationInstanceBone::operator=</definition>
+        <argsstring>(SkeletonAnimationInstanceBone const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::SkeletonAnimationInstanceBone::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d8/d8a/a06875" kindref="compound">SkeletonAnimationInstanceBone</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" line="18" column="40"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d8a/a06875_1a788c2117138c6beb47afeac295e59e30" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SkeletonAnimationInstanceBone::~SkeletonAnimationInstanceBone</definition>
+        <argsstring>() noexcept override=default</argsstring>
+        <name>~SkeletonAnimationInstanceBone</name>
+        <qualifiedname>castor3d::SkeletonAnimationInstanceBone::~SkeletonAnimationInstanceBone</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" line="19" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d8a/a06875_1a9e701afc471667b01b25f0f68bc283b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone</definition>
+        <argsstring>(SkeletonAnimationInstance &amp;animationInstance, SkeletonAnimationBone &amp;animationObject, SkeletonAnimationInstanceObjectPtrArray &amp;allObjects)</argsstring>
+        <name>SkeletonAnimationInstanceBone</name>
+        <qualifiedname>castor3d::SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone</qualifiedname>
+        <param>
+          <type><ref refid="d7/da1/a06871" kindref="compound">SkeletonAnimationInstance</ref> &amp;</type>
+          <declname>animationInstance</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d33/a05659" kindref="compound">SkeletonAnimationBone</ref> &amp;</type>
+          <declname>animationObject</declname>
+        </param>
+        <param>
+          <type>SkeletonAnimationInstanceObjectPtrArray &amp;</type>
+          <declname>allObjects</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">animationInstance</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;instance d&apos;animation de squelette parent. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">animationObject</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;animation d&apos;objet. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">allObjects</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les enfants de cet objet. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" line="32" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d8/d8a/a06875_1ac430b36dedabd49e7444e2535acd0a8d" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SkeletonAnimationInstanceBone::doApply</definition>
+        <argsstring>() override</argsstring>
+        <name>doApply</name>
+        <qualifiedname>castor3d::SkeletonAnimationInstanceBone::doApply</qualifiedname>
+        <reimplements refid="d8/d93/a06887_1a8b6da36fc7b2b4cce822a904295e9ed3">doApply</reimplements>
+        <briefdescription>
+<para>Met à jour les transformations appliquées à l&apos;objet. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" line="37" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; SkeletonAnimationInstance &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationInstance &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SkeletonAnimationInstanceBone</label>
+        <link refid="d8/d8a/a06875"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SkeletonAnimationInstanceObject</label>
+        <link refid="d8/d93/a06887"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="9">
+        <label>BoundingContainer3D</label>
+        <link refid="da/dc6/a08731"/>
+      </node>
+      <node id="6">
+        <label>castor::OwnedBy&lt; SkeletonAnimation &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimation &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; SkeletonAnimationInstance &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationInstance &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SkeletonAnimationInstanceBone</label>
+        <link refid="d8/d8a/a06875"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SkeletonAnimationInstanceObject</label>
+        <link refid="d8/d93/a06887"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_animationObject</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::SkeletonAnimationObject</label>
+        <link refid="d2/d44/a05675"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_boundingBox</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::BoundingBox</label>
+        <link refid="d6/d51/a08727"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="7">
+        <label>std::enable_shared_from_this&lt; SkeletonAnimationObject &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" line="11" column="1" bodyfile="Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp" bodystart="13" bodyend="43"/>
+    <listofallmembers>
+      <member refid="d8/d93/a06887_1af53d5b36d4d72c2d76c739f7a7c68ce3" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>addChild</name></member>
+      <member refid="d8/d8a/a06875_1ac430b36dedabd49e7444e2535acd0a8d" prot="private" virt="virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>doApply</name></member>
+      <member refid="d8/d93/a06887_1aad188384cdb82f4469b00befd3330ea8" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>getChildren</name></member>
+      <member refid="d8/d93/a06887_1a6950f74fc6921673b59c051d31815147" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>getFinalTransform</name></member>
+      <member refid="d8/d93/a06887_1ab86d2ed13a3d39f5281724420ef1bfda" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>getObject</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>getOwner</name></member>
+      <member refid="d8/d8a/a06875_1a007c825d2c12f049c3cf39827c4741dc" prot="private" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>m_animationBone</name></member>
+      <member refid="d8/d93/a06887_1a67479ee0d95ec5c3fe0a91bd6ca5e9fc" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>m_animationObject</name></member>
+      <member refid="d8/d93/a06887_1ad818da2e3b7e1ec3951c92a2b63bb552" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>m_children</name></member>
+      <member refid="d8/d93/a06887_1a23a80350153f06f35acd1e4ed99e902c" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>m_cumulativeTransform</name></member>
+      <member refid="d8/d93/a06887_1a035cfcc104e26c8c18ea4bc9addcb9ff" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>m_curr</name></member>
+      <member refid="d8/d93/a06887_1a3c6ae6f668b135b899a69a265d7be067" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>m_finalTransform</name></member>
+      <member refid="d8/d93/a06887_1ae3c50d44c8843b314a8b1d3ad1f9efc1" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>m_prev</name></member>
+      <member refid="d8/d93/a06887_1a5a662ec24d0f2511396375556d7e460b" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>ObjectArray</name></member>
+      <member refid="d8/d8a/a06875_1a57a6eba42b2ed47da2596591e177a40a" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>operator=</name></member>
+      <member refid="d8/d8a/a06875_1a0e758515a35b9e3dee3afc8cddd1b516" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>operator=</name></member>
+      <member refid="d8/d93/a06887_1ae621ac20381e712069eab1b09ef5e87f" prot="protected" virt="non-virtual" ambiguityscope="castor3d::SkeletonAnimationInstanceObject::"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>operator=</name></member>
+      <member refid="d8/d93/a06887_1a006558f9e718184b394ecfa52c516877" prot="protected" virt="non-virtual" ambiguityscope="castor3d::SkeletonAnimationInstanceObject::"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>operator=</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>OwnedBy</name></member>
+      <member refid="d8/d8a/a06875_1a4abf5d0b8873b8b4de886a8ceb50951b" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>SkeletonAnimationInstanceBone</name></member>
+      <member refid="d8/d8a/a06875_1a153761fe1b0d3c09371767b8ceae8372" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>SkeletonAnimationInstanceBone</name></member>
+      <member refid="d8/d8a/a06875_1a9e701afc471667b01b25f0f68bc283b9" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>SkeletonAnimationInstanceBone</name></member>
+      <member refid="d8/d93/a06887_1af3452f8f9a4d054ed50f24b8f943ad3f" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>SkeletonAnimationInstanceObject</name></member>
+      <member refid="d8/d93/a06887_1a55918ea389a6daadf869976e51d6fa85" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>SkeletonAnimationInstanceObject</name></member>
+      <member refid="d8/d93/a06887_1a6c8967a11da38699640fe64ef3396d23" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>SkeletonAnimationInstanceObject</name></member>
+      <member refid="d8/d93/a06887_1adb8585692c025d1c1756e703da411c40" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>update</name></member>
+      <member refid="d8/d8a/a06875_1a788c2117138c6beb47afeac295e59e30" prot="public" virt="non-virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>~SkeletonAnimationInstanceBone</name></member>
+      <member refid="d8/d93/a06887_1aa2f9eed5a6aa77ef4df95dcb1f4bfc36" prot="public" virt="virtual"><scope>castor3d::SkeletonAnimationInstanceBone</scope><name>~SkeletonAnimationInstanceObject</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

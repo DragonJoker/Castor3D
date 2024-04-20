@@ -1,0 +1,11 @@
+<map id="castor3d::OcclusionMapComponent::Plugin::fillTextureConfiguration" name="castor3d::OcclusionMapComponent::Plugin::fillTextureConfiguration">
+<area shape="rect" id="Node000001" title="Fills the texture configuration for use with this component." alt="" coords="5,27,235,67"/>
+<area shape="rect" id="Node000002" href="$d9/dba/a02278.html#aca9266480e6d0378e87f784f76d6994d" title=" " alt="" coords="297,5,498,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="235,33,282,27,283,33,235,38"/>
+<area shape="rect" id="Node000003" href="$db/d82/a04567.html#a085e94267d66e86c71bae332dc50f22d" title=" " alt="" coords="283,55,512,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="235,56,269,60,269,65,235,62"/>
+<area shape="rect" id="Node000004" href="$d2/d2e/a04831.html#a3d4ca319e7c6e2dc3e40e81211846fee" title=" " alt="" coords="560,26,772,66"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="512,60,546,56,547,62,513,65"/>
+<area shape="rect" id="Node000005" href="$d9/dba/a02278.html#a813eb0a53ad6b3f96433a39acae9f59b" title=" " alt="" coords="576,91,756,116"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="513,85,563,90,562,95,512,90"/>
+</map>

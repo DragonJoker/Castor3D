@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dir_0744335a0dbf4ab51b31beea33bc8818" kind="dir">
+    <compoundname>Castor3D/Render/Clustered</compoundname>
+    <innerfile refid="d6/dad/a00941">AssignLightsToClusters.hpp</innerfile>
+    <innerfile refid="d9/dce/a00944">BuildLightsBVH.hpp</innerfile>
+    <innerfile refid="d3/d29/a00947">ClusteredModule.hpp</innerfile>
+    <innerfile refid="df/d39/a00950">ClustersConfig.hpp</innerfile>
+    <innerfile refid="d5/da3/a00953">ClustersMask.hpp</innerfile>
+    <innerfile refid="d3/de5/a00956">ComputeClustersAABB.hpp</innerfile>
+    <innerfile refid="db/d40/a00959">ComputeLightsAABB.hpp</innerfile>
+    <innerfile refid="df/d88/a00962">ComputeLightsMortonCode.hpp</innerfile>
+    <innerfile refid="d3/dcd/a00965">FindUniqueClusters.hpp</innerfile>
+    <innerfile refid="d7/dd4/a00968">FrustumClusters.hpp</innerfile>
+    <innerfile refid="d0/d3c/a00971">MergeSortLights.hpp</innerfile>
+    <innerfile refid="df/dce/a00974">RadixSortLights.hpp</innerfile>
+    <innerfile refid="d5/d6c/a00977">ReduceLightsAABB.hpp</innerfile>
+    <innerfile refid="db/d20/a00980">SortAssignedLights.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/Clustered/"/>
+  </compounddef>
+</doxygen>

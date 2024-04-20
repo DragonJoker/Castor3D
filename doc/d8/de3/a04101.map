@@ -1,8 +1,10 @@
-<map id="castor3d::TextureAnimation" name="castor3d::TextureAnimation">
-<area shape="rect" id="node1" title=" " alt="" coords="81,287,263,312"/>
-<area shape="rect" id="node2" href="$d7/da8/a02522.html" title=" " alt="" coords="99,197,245,237"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,13,112,38"/>
-<area shape="rect" id="node5" href="$d7/da8/a02522.html" title="Animation base class." alt="" coords="97,95,247,135"/>
-<area shape="rect" id="node4" title=" " alt="" coords="272,102,459,127"/>
-<area shape="rect" id="node6" title=" " alt="" coords="137,5,325,45"/>
+<map id="castor3d::AmbientData" name="castor3d::AmbientData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="663,46,817,71"/>
+<area shape="rect" id="Node000002" href="$d2/d4c/a08211.html" title=" " alt="" coords="384,5,575,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="589,37,663,46,662,51,588,42"/>
+<area shape="rect" id="Node000003" href="$d2/d4c/a08211.html" title="Templated class that provide std::array style buffer view." alt="" coords="5,36,196,76"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="210,45,383,30,384,36,210,50"/>
+<area shape="rect" id="Node000004" href="$d2/d4c/a08211.html" title=" " alt="" coords="384,69,575,109"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="210,63,220,64,384,78,383,84,220,69,209,68"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="588,78,638,72,662,69,663,74,639,77,589,83"/>
 </map>

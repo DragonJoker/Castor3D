@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/da4/a03927" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ScrollableStyle</compoundname>
+    <derivedcompoundref refid="d6/db7/a03903" prot="public" virt="non-virtual">castor3d::EditStyle</derivedcompoundref>
+    <derivedcompoundref refid="d5/d48/a03919" prot="public" virt="non-virtual">castor3d::PanelStyle</derivedcompoundref>
+    <includes local="no">StyleScrollable.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/da4/a03927_1a744d42504eece5b2594e0998258a635e" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d74/a03931" kindref="compound">ScrollBarStyle</ref> *</type>
+        <definition>ScrollBarStyle* castor3d::ScrollableStyle::m_verticalStyle</definition>
+        <argsstring></argsstring>
+        <name>m_verticalStyle</name>
+        <qualifiedname>castor3d::ScrollableStyle::m_verticalStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleScrollable.hpp" line="47" column="17" bodyfile="Castor3D/Gui/Theme/StyleScrollable.hpp" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/da4/a03927_1a1ce958cbf4117fbda875bb70d2161af4" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d74/a03931" kindref="compound">ScrollBarStyle</ref> *</type>
+        <definition>ScrollBarStyle* castor3d::ScrollableStyle::m_horizontalStyle</definition>
+        <argsstring></argsstring>
+        <name>m_horizontalStyle</name>
+        <qualifiedname>castor3d::ScrollableStyle::m_horizontalStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleScrollable.hpp" line="48" column="17" bodyfile="Castor3D/Gui/Theme/StyleScrollable.hpp" bodystart="48" bodyend="48"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/da4/a03927_1acf0f32a376a660ca819705dc4d144f2a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ScrollableStyle::setVerticalStyle</definition>
+        <argsstring>(ScrollBarStyle &amp;v)</argsstring>
+        <name>setVerticalStyle</name>
+        <qualifiedname>castor3d::ScrollableStyle::setVerticalStyle</qualifiedname>
+        <param>
+          <type><ref refid="d8/d74/a03931" kindref="compound">ScrollBarStyle</ref> &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleScrollable.hpp" line="14" column="6" bodyfile="Castor3D/Gui/Theme/StyleScrollable.hpp" bodystart="14" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da4/a03927_1ae6169d62a4dcdcd78b5b9fbb3d87a7f0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ScrollableStyle::setHorizontalStyle</definition>
+        <argsstring>(ScrollBarStyle &amp;v)</argsstring>
+        <name>setHorizontalStyle</name>
+        <qualifiedname>castor3d::ScrollableStyle::setHorizontalStyle</qualifiedname>
+        <param>
+          <type><ref refid="d8/d74/a03931" kindref="compound">ScrollBarStyle</ref> &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleScrollable.hpp" line="19" column="6" bodyfile="Castor3D/Gui/Theme/StyleScrollable.hpp" bodystart="19" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/da4/a03927_1aefab1d527c69ec092b9bda7a205c2234" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ScrollableStyle::hasVerticalStyle</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>hasVerticalStyle</name>
+        <qualifiedname>castor3d::ScrollableStyle::hasVerticalStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleScrollable.hpp" line="24" column="6" bodyfile="Castor3D/Gui/Theme/StyleScrollable.hpp" bodystart="24" bodyend="27"/>
+        <referencedby refid="d2/da4/a03927_1af510aff1757fc8fc4b83f4f1d5333862" compoundref="da/d9c/a00413" startline="34" endline="38">getVerticalStyle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/da4/a03927_1a52885966ca4bb0b8158c8736a00f5fba" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ScrollableStyle::hasHorizontalStyle</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>hasHorizontalStyle</name>
+        <qualifiedname>castor3d::ScrollableStyle::hasHorizontalStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleScrollable.hpp" line="29" column="6" bodyfile="Castor3D/Gui/Theme/StyleScrollable.hpp" bodystart="29" bodyend="32"/>
+        <referencedby refid="d2/da4/a03927_1ad2df1abfcaddd463a811c9024eb8aeca" compoundref="da/d9c/a00413" startline="40" endline="44">getHorizontalStyle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/da4/a03927_1af510aff1757fc8fc4b83f4f1d5333862" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/d74/a03931" kindref="compound">ScrollBarStyle</ref> &amp;</type>
+        <definition>ScrollBarStyle &amp; castor3d::ScrollableStyle::getVerticalStyle</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getVerticalStyle</name>
+        <qualifiedname>castor3d::ScrollableStyle::getVerticalStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleScrollable.hpp" line="34" column="17" bodyfile="Castor3D/Gui/Theme/StyleScrollable.hpp" bodystart="34" bodyend="38"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+        <references refid="d2/da4/a03927_1aefab1d527c69ec092b9bda7a205c2234" compoundref="da/d9c/a00413" startline="24" endline="27">hasVerticalStyle</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/da4/a03927_1ad2df1abfcaddd463a811c9024eb8aeca" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/d74/a03931" kindref="compound">ScrollBarStyle</ref> &amp;</type>
+        <definition>ScrollBarStyle &amp; castor3d::ScrollableStyle::getHorizontalStyle</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getHorizontalStyle</name>
+        <qualifiedname>castor3d::ScrollableStyle::getHorizontalStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleScrollable.hpp" line="40" column="17" bodyfile="Castor3D/Gui/Theme/StyleScrollable.hpp" bodystart="40" bodyend="44"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+        <references refid="d2/da4/a03927_1a52885966ca4bb0b8158c8736a00f5fba" compoundref="da/d9c/a00413" startline="29" endline="32">hasHorizontalStyle</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::EditStyle</label>
+        <link refid="d6/db7/a03903"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PanelStyle</label>
+        <link refid="d5/d48/a03919"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ScrollableStyle</label>
+        <link refid="d2/da4/a03927"/>
+      </node>
+    </inheritancegraph>
+    <location file="Castor3D/Gui/Theme/StyleScrollable.hpp" line="11" column="1" bodyfile="Castor3D/Gui/Theme/StyleScrollable.hpp" bodystart="12" bodyend="49"/>
+    <listofallmembers>
+      <member refid="d2/da4/a03927_1ad2df1abfcaddd463a811c9024eb8aeca" prot="public" virt="non-virtual"><scope>castor3d::ScrollableStyle</scope><name>getHorizontalStyle</name></member>
+      <member refid="d2/da4/a03927_1af510aff1757fc8fc4b83f4f1d5333862" prot="public" virt="non-virtual"><scope>castor3d::ScrollableStyle</scope><name>getVerticalStyle</name></member>
+      <member refid="d2/da4/a03927_1a52885966ca4bb0b8158c8736a00f5fba" prot="public" virt="non-virtual"><scope>castor3d::ScrollableStyle</scope><name>hasHorizontalStyle</name></member>
+      <member refid="d2/da4/a03927_1aefab1d527c69ec092b9bda7a205c2234" prot="public" virt="non-virtual"><scope>castor3d::ScrollableStyle</scope><name>hasVerticalStyle</name></member>
+      <member refid="d2/da4/a03927_1a1ce958cbf4117fbda875bb70d2161af4" prot="private" virt="non-virtual"><scope>castor3d::ScrollableStyle</scope><name>m_horizontalStyle</name></member>
+      <member refid="d2/da4/a03927_1a744d42504eece5b2594e0998258a635e" prot="private" virt="non-virtual"><scope>castor3d::ScrollableStyle</scope><name>m_verticalStyle</name></member>
+      <member refid="d2/da4/a03927_1ae6169d62a4dcdcd78b5b9fbb3d87a7f0" prot="public" virt="non-virtual"><scope>castor3d::ScrollableStyle</scope><name>setHorizontalStyle</name></member>
+      <member refid="d2/da4/a03927_1acf0f32a376a660ca819705dc4d144f2a" prot="public" virt="non-virtual"><scope>castor3d::ScrollableStyle</scope><name>setVerticalStyle</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,621 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/d1d/a08807" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ConstPixelIterator</compoundname>
+    <includes local="no">PixelConstIterator.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+        <declname>PF</declname>
+        <defname>PF</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d4/d1d/a08807_1a4f51f3c9dee6751949e6c79b3c831f74" prot="public" static="no">
+        <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref>&lt; PF &gt;</type>
+        <definition>using castor::ConstPixelIterator&lt; PF &gt;::value_type =  Pixel&lt; PF &gt;</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>castor::ConstPixelIterator::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="20" column="1" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/d1d/a08807_1aa16f9bdd83d06479b5a65543f7d09031" prot="public" static="no">
+        <type>std::ptrdiff_t</type>
+        <definition>using castor::ConstPixelIterator&lt; PF &gt;::difference_type =  std::ptrdiff_t</definition>
+        <argsstring></argsstring>
+        <name>difference_type</name>
+        <qualifiedname>castor::ConstPixelIterator::difference_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="21" column="1" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/d1d/a08807_1ae2f6102ef9faa412b099a77a4ea74210" prot="public" static="no">
+        <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref>&lt; PF &gt; const *</type>
+        <definition>using castor::ConstPixelIterator&lt; PF &gt;::pointer =  Pixel&lt; PF &gt; const *</definition>
+        <argsstring></argsstring>
+        <name>pointer</name>
+        <qualifiedname>castor::ConstPixelIterator::pointer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="22" column="1" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/d1d/a08807_1ad6479f3d8cf2b7eab1aac6ea36a100dd" prot="public" static="no">
+        <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref>&lt; PF &gt; const &amp;</type>
+        <definition>using castor::ConstPixelIterator&lt; PF &gt;::reference =  Pixel&lt; PF &gt; const &amp;</definition>
+        <argsstring></argsstring>
+        <name>reference</name>
+        <qualifiedname>castor::ConstPixelIterator::reference</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="23" column="1" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/d1d/a08807_1aae627a168b4733176a9366a8ee7aa568" prot="public" static="no">
+        <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref>&lt; PF &gt;</type>
+        <definition>using castor::ConstPixelIterator&lt; PF &gt;::pixel_type =  Pixel&lt; PF &gt;</definition>
+        <argsstring></argsstring>
+        <name>pixel_type</name>
+        <qualifiedname>castor::ConstPixelIterator::pixel_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="25" column="1" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/d1d/a08807_1a01be473f6a91567e6a2b660a89210b8b" prot="public" static="no">
+        <type><ref refid="dd/df9/a08987_1adb1ea170c68df343dcd6e2f2364f0877" kindref="member">PxBufferBase::PxArray</ref></type>
+        <definition>using castor::ConstPixelIterator&lt; PF &gt;::array_type =  PxBufferBase::PxArray</definition>
+        <argsstring></argsstring>
+        <name>array_type</name>
+        <qualifiedname>castor::ConstPixelIterator::array_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="26" column="1" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/d1d/a08807_1ac83e8b845b75e45905d75469799ef628" prot="public" static="no">
+        <type>array_type::const_iterator</type>
+        <definition>using castor::ConstPixelIterator&lt; PF &gt;::internal_type =  array_type::const_iterator</definition>
+        <argsstring></argsstring>
+        <name>internal_type</name>
+        <qualifiedname>castor::ConstPixelIterator::internal_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="27" column="1" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/d1d/a08807_1abb0beb3bb724f60c03d75ccedb184f68" prot="public" static="no">
+        <type>internal_type::iterator_category</type>
+        <definition>using castor::ConstPixelIterator&lt; PF &gt;::iterator_category =  internal_type::iterator_category</definition>
+        <argsstring></argsstring>
+        <name>iterator_category</name>
+        <qualifiedname>castor::ConstPixelIterator::iterator_category</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="29" column="1" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="d4/d1d/a08807_1aeadc8cfcfcbea948ce6b0d8d6a7915ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+            <declname>PiF</declname>
+            <defname>PiF</defname>
+          </param>
+        </templateparamlist>
+        <type>struct</type>
+        <definition>friend struct PixelIterator</definition>
+        <argsstring></argsstring>
+        <name>PixelIterator</name>
+        <qualifiedname>castor::ConstPixelIterator::PixelIterator</qualifiedname>
+        <param>
+          <type><ref refid="d3/d1a/a08811" kindref="compound">PixelIterator</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="18" column="15" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="d4/d1d/a08807_1a73a6a6f30ce4eca1b0dd98303f1b22bf" prot="private" static="yes" mutable="no">
+        <type>uint8_t const</type>
+        <definition>uint8_t const castor::ConstPixelIterator&lt; PF &gt;::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>castor::ConstPixelIterator::size</qualifiedname>
+        <initializer>= <ref refid="d1/dea/a08819" kindref="compound">PixelDefinitionsT</ref>&lt; PF &gt;::Size</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="165" column="22" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d4/d1d/a08807_1a96fb4161f4c1290e20163347db0acdb9" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d1d/a08807_1ac83e8b845b75e45905d75469799ef628" kindref="member">internal_type</ref></type>
+        <definition>internal_type castor::ConstPixelIterator&lt; PF &gt;::m_current</definition>
+        <argsstring></argsstring>
+        <name>m_current</name>
+        <qualifiedname>castor::ConstPixelIterator::m_current</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="166" column="15" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d1d/a08807_1a9b438c16570edcd317866db2c5a2061e" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d1d/a08807_1ac83e8b845b75e45905d75469799ef628" kindref="member">internal_type</ref></type>
+        <definition>internal_type castor::ConstPixelIterator&lt; PF &gt;::m_end</definition>
+        <argsstring></argsstring>
+        <name>m_end</name>
+        <qualifiedname>castor::ConstPixelIterator::m_end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="167" column="15" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="167" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d1d/a08807_1aa196f587d3bf282e7282ddaa2ae9dd4c" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d1d/a08807_1aae627a168b4733176a9366a8ee7aa568" kindref="member">pixel_type</ref></type>
+        <definition>pixel_type castor::ConstPixelIterator&lt; PF &gt;::m_pixel</definition>
+        <argsstring></argsstring>
+        <name>m_pixel</name>
+        <qualifiedname>castor::ConstPixelIterator::m_pixel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="168" column="12" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="168" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/d1d/a08807_1a8aa0504136727f4370ef39d2dfc1fb25" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ConstPixelIterator&lt; PF &gt;::~ConstPixelIterator</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~ConstPixelIterator</name>
+        <qualifiedname>castor::ConstPixelIterator::~ConstPixelIterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="31" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a08807_1a80017ead08016a1d54fff9ed77e9c9aa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ConstPixelIterator&lt; PF &gt;::ConstPixelIterator</definition>
+        <argsstring>(array_type const &amp;array, internal_type const &amp;iter)</argsstring>
+        <name>ConstPixelIterator</name>
+        <qualifiedname>castor::ConstPixelIterator::ConstPixelIterator</qualifiedname>
+        <param>
+          <type><ref refid="d4/d1d/a08807_1a01be473f6a91567e6a2b660a89210b8b" kindref="member">array_type</ref> const &amp;</type>
+          <declname>array</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d1d/a08807_1ac83e8b845b75e45905d75469799ef628" kindref="member">internal_type</ref> const &amp;</type>
+          <declname>iter</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="33" column="1" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="33" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a08807_1a4ebef29de3ab1bb09f822304115214d5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ConstPixelIterator&lt; PF &gt;::ConstPixelIterator</definition>
+        <argsstring>(ConstPixelIterator const &amp;iter)</argsstring>
+        <name>ConstPixelIterator</name>
+        <qualifiedname>castor::ConstPixelIterator::ConstPixelIterator</qualifiedname>
+        <param>
+          <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref> const &amp;</type>
+          <declname>iter</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="40" column="1" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="40" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a08807_1af4ca68f47683cabce5c7fe8df55db978" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ConstPixelIterator&lt; PF &gt;::ConstPixelIterator</definition>
+        <argsstring>(ConstPixelIterator &amp;&amp;iter) noexcept</argsstring>
+        <name>ConstPixelIterator</name>
+        <qualifiedname>castor::ConstPixelIterator::ConstPixelIterator</qualifiedname>
+        <param>
+          <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref> &amp;&amp;</type>
+          <declname>iter</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="47" column="1" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="47" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a08807_1a004fa2c9b6b368a047590d37bd8b906f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref> &amp;</type>
+        <definition>ConstPixelIterator &amp; castor::ConstPixelIterator&lt; PF &gt;::operator=</definition>
+        <argsstring>(ConstPixelIterator const &amp;it)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ConstPixelIterator::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref> const &amp;</type>
+          <declname>it</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="55" column="21" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="55" bodyend="61"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a08807_1a577719d461453f488464067cbc9e9383" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref> &amp;</type>
+        <definition>ConstPixelIterator &amp; castor::ConstPixelIterator&lt; PF &gt;::operator=</definition>
+        <argsstring>(ConstPixelIterator &amp;&amp;it) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ConstPixelIterator::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref> &amp;&amp;</type>
+          <declname>it</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="63" column="21" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="63" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a08807_1acc28e412ed5bdf3709bd54fb27940953" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref> &amp;</type>
+        <definition>ConstPixelIterator &amp; castor::ConstPixelIterator&lt; PF &gt;::operator+=</definition>
+        <argsstring>(size_t offset)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::ConstPixelIterator::operator+=</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="72" column="21" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="72" bodyend="77"/>
+        <referencedby refid="d4/d1d/a08807_1ad68c6414267291b6d34e9967118a9bf6" compoundref="d4/d2e/a02051" startline="86" endline="90">castor::ConstPixelIterator&lt; PF &gt;::operator++</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a08807_1a4b539c848d79c96db90da3eb244792da" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref> &amp;</type>
+        <definition>ConstPixelIterator &amp; castor::ConstPixelIterator&lt; PF &gt;::operator-=</definition>
+        <argsstring>(size_t offset)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::ConstPixelIterator::operator-=</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="79" column="21" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="79" bodyend="84"/>
+        <referencedby refid="d4/d1d/a08807_1aee1864362e9812372d8c840420b2fe9e" compoundref="d4/d2e/a02051" startline="99" endline="103">castor::ConstPixelIterator&lt; PF &gt;::operator--</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a08807_1ad68c6414267291b6d34e9967118a9bf6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref> &amp;</type>
+        <definition>ConstPixelIterator &amp; castor::ConstPixelIterator&lt; PF &gt;::operator++</definition>
+        <argsstring>()</argsstring>
+        <name>operator++</name>
+        <qualifiedname>castor::ConstPixelIterator::operator++</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="86" column="21" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="86" bodyend="90"/>
+        <references refid="d4/d1d/a08807_1acc28e412ed5bdf3709bd54fb27940953" compoundref="d4/d2e/a02051" startline="72" endline="77">castor::ConstPixelIterator&lt; PF &gt;::operator+=</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a08807_1a8615e8bb805264e1167cbe4d1349aa0c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref></type>
+        <definition>ConstPixelIterator castor::ConstPixelIterator&lt; PF &gt;::operator++</definition>
+        <argsstring>(int)</argsstring>
+        <name>operator++</name>
+        <qualifiedname>castor::ConstPixelIterator::operator++</qualifiedname>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="92" column="20" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="92" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a08807_1aee1864362e9812372d8c840420b2fe9e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref> &amp;</type>
+        <definition>ConstPixelIterator &amp; castor::ConstPixelIterator&lt; PF &gt;::operator--</definition>
+        <argsstring>()</argsstring>
+        <name>operator--</name>
+        <qualifiedname>castor::ConstPixelIterator::operator--</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="99" column="21" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="99" bodyend="103"/>
+        <references refid="d4/d1d/a08807_1a4b539c848d79c96db90da3eb244792da" compoundref="d4/d2e/a02051" startline="79" endline="84">castor::ConstPixelIterator&lt; PF &gt;::operator-=</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a08807_1a413662f89cfc7f14d6daed90c8a7b2f9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref></type>
+        <definition>ConstPixelIterator castor::ConstPixelIterator&lt; PF &gt;::operator--</definition>
+        <argsstring>(int)</argsstring>
+        <name>operator--</name>
+        <qualifiedname>castor::ConstPixelIterator::operator--</qualifiedname>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="105" column="20" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="105" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a08807_1a69956e64cfbf5a086475bc45d5fdd6c5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d1d/a08807_1aae627a168b4733176a9366a8ee7aa568" kindref="member">pixel_type</ref> const &amp;</type>
+        <definition>pixel_type const  &amp; castor::ConstPixelIterator&lt; PF &gt;::operator*</definition>
+        <argsstring>() const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>castor::ConstPixelIterator::operator*</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="112" column="19" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="112" bodyend="116"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a08807_1a0907fb92546636a86890650449c2281b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d1d/a08807_1aae627a168b4733176a9366a8ee7aa568" kindref="member">pixel_type</ref> &amp;</type>
+        <definition>pixel_type &amp; castor::ConstPixelIterator&lt; PF &gt;::operator*</definition>
+        <argsstring>()</argsstring>
+        <name>operator*</name>
+        <qualifiedname>castor::ConstPixelIterator::operator*</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="118" column="13" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="118" bodyend="122"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a08807_1adf115f1750b76bb645b1f45f33d726e8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::ConstPixelIterator&lt; PF &gt;::operator==</definition>
+        <argsstring>(ConstPixelIterator const &amp;it) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>castor::ConstPixelIterator::operator==</qualifiedname>
+        <param>
+          <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref> const &amp;</type>
+          <declname>it</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="124" column="6" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="124" bodyend="127"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a08807_1ab1ef8f7551f7e3c294c1780932a82a55" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::ConstPixelIterator&lt; PF &gt;::operator!=</definition>
+        <argsstring>(ConstPixelIterator const &amp;it) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>castor::ConstPixelIterator::operator!=</qualifiedname>
+        <param>
+          <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref> const &amp;</type>
+          <declname>it</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="129" column="6" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="129" bodyend="132"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d4/d1d/a08807_1adc948465aee9c5bb3411a9bb73391e20" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d1d/a08807_1aa16f9bdd83d06479b5a65543f7d09031" kindref="member">difference_type</ref></type>
+        <definition>static difference_type castor::ConstPixelIterator&lt; PF &gt;::diffIt</definition>
+        <argsstring>(ConstPixelIterator const &amp;lhs, ConstPixelIterator const &amp;rhs)</argsstring>
+        <name>diffIt</name>
+        <qualifiedname>castor::ConstPixelIterator::diffIt</qualifiedname>
+        <param>
+          <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref> const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="134" column="24" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="134" bodyend="139"/>
+        <referencedby refid="d2/dd2/a02279_1ac51a4af62392acc5fab5159df6023435" compoundref="d4/d2e/a02051" startline="190" endline="194">castor::operator-</referencedby>
+        <referencedby refid="d2/dd2/a02279_1a949c2d4340314a117c2d84185fa278b0" compoundref="d4/d2e/a02051" startline="204" endline="208">castor::operator-</referencedby>
+        <referencedby refid="d2/dd2/a02279_1ae35d5ca408dadca17209ec36f58f0a87" compoundref="d4/d2e/a02051" startline="197" endline="201">castor::operator-</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a08807_1a0167e4c99b6fdd5361d5f37bcb6d0dc5" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d1d/a08807_1aa16f9bdd83d06479b5a65543f7d09031" kindref="member">difference_type</ref></type>
+        <definition>static difference_type castor::ConstPixelIterator&lt; PF &gt;::diffIt</definition>
+        <argsstring>(ConstPixelIterator const &amp;lhs, PixelIterator&lt; PF &gt; const &amp;rhs)</argsstring>
+        <name>diffIt</name>
+        <qualifiedname>castor::ConstPixelIterator::diffIt</qualifiedname>
+        <param>
+          <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref> const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d1a/a08811" kindref="compound">PixelIterator</ref>&lt; PF &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="141" column="24" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="141" bodyend="146"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d1d/a08807_1a2e9491ccad6a992f8c3070ea3ea51f58" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d1d/a08807_1aa16f9bdd83d06479b5a65543f7d09031" kindref="member">difference_type</ref></type>
+        <definition>static difference_type castor::ConstPixelIterator&lt; PF &gt;::diffIt</definition>
+        <argsstring>(PixelIterator&lt; PF &gt; const &amp;lhs, ConstPixelIterator const &amp;rhs)</argsstring>
+        <name>diffIt</name>
+        <qualifiedname>castor::ConstPixelIterator::diffIt</qualifiedname>
+        <param>
+          <type><ref refid="d3/d1a/a08811" kindref="compound">PixelIterator</ref>&lt; PF &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="148" column="24" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="148" bodyend="153"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d4/d1d/a08807_1a8e7d9098a40f9dd12235a29087b8c94f" prot="private" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ConstPixelIterator&lt; PF &gt;::doLink</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>doLink</name>
+        <qualifiedname>castor::ConstPixelIterator::doLink</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="156" column="6" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="156" bodyend="162"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Itérateur de buffer de pixels. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/PixelConstIterator.hpp" line="15" column="1" bodyfile="CastorUtils/Graphics/PixelConstIterator.hpp" bodystart="16" bodyend="169"/>
+    <listofallmembers>
+      <member refid="d4/d1d/a08807_1a01be473f6a91567e6a2b660a89210b8b" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>array_type</name></member>
+      <member refid="d4/d1d/a08807_1a80017ead08016a1d54fff9ed77e9c9aa" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>ConstPixelIterator</name></member>
+      <member refid="d4/d1d/a08807_1a4ebef29de3ab1bb09f822304115214d5" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>ConstPixelIterator</name></member>
+      <member refid="d4/d1d/a08807_1af4ca68f47683cabce5c7fe8df55db978" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>ConstPixelIterator</name></member>
+      <member refid="d4/d1d/a08807_1aa16f9bdd83d06479b5a65543f7d09031" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>difference_type</name></member>
+      <member refid="d4/d1d/a08807_1adc948465aee9c5bb3411a9bb73391e20" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>diffIt</name></member>
+      <member refid="d4/d1d/a08807_1a0167e4c99b6fdd5361d5f37bcb6d0dc5" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>diffIt</name></member>
+      <member refid="d4/d1d/a08807_1a2e9491ccad6a992f8c3070ea3ea51f58" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>diffIt</name></member>
+      <member refid="d4/d1d/a08807_1a8e7d9098a40f9dd12235a29087b8c94f" prot="private" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>doLink</name></member>
+      <member refid="d4/d1d/a08807_1ac83e8b845b75e45905d75469799ef628" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>internal_type</name></member>
+      <member refid="d4/d1d/a08807_1abb0beb3bb724f60c03d75ccedb184f68" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>iterator_category</name></member>
+      <member refid="d4/d1d/a08807_1a96fb4161f4c1290e20163347db0acdb9" prot="private" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>m_current</name></member>
+      <member refid="d4/d1d/a08807_1a9b438c16570edcd317866db2c5a2061e" prot="private" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>m_end</name></member>
+      <member refid="d4/d1d/a08807_1aa196f587d3bf282e7282ddaa2ae9dd4c" prot="private" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>m_pixel</name></member>
+      <member refid="d4/d1d/a08807_1ab1ef8f7551f7e3c294c1780932a82a55" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>operator!=</name></member>
+      <member refid="d4/d1d/a08807_1a69956e64cfbf5a086475bc45d5fdd6c5" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>operator*</name></member>
+      <member refid="d4/d1d/a08807_1a0907fb92546636a86890650449c2281b" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>operator*</name></member>
+      <member refid="d4/d1d/a08807_1ad68c6414267291b6d34e9967118a9bf6" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>operator++</name></member>
+      <member refid="d4/d1d/a08807_1a8615e8bb805264e1167cbe4d1349aa0c" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>operator++</name></member>
+      <member refid="d4/d1d/a08807_1acc28e412ed5bdf3709bd54fb27940953" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>operator+=</name></member>
+      <member refid="d4/d1d/a08807_1aee1864362e9812372d8c840420b2fe9e" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>operator--</name></member>
+      <member refid="d4/d1d/a08807_1a413662f89cfc7f14d6daed90c8a7b2f9" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>operator--</name></member>
+      <member refid="d4/d1d/a08807_1a4b539c848d79c96db90da3eb244792da" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>operator-=</name></member>
+      <member refid="d4/d1d/a08807_1a004fa2c9b6b368a047590d37bd8b906f" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>operator=</name></member>
+      <member refid="d4/d1d/a08807_1a577719d461453f488464067cbc9e9383" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>operator=</name></member>
+      <member refid="d4/d1d/a08807_1adf115f1750b76bb645b1f45f33d726e8" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>operator==</name></member>
+      <member refid="d4/d1d/a08807_1aae627a168b4733176a9366a8ee7aa568" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>pixel_type</name></member>
+      <member refid="d4/d1d/a08807_1aeadc8cfcfcbea948ce6b0d8d6a7915ed" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>PixelIterator</name></member>
+      <member refid="d4/d1d/a08807_1ae2f6102ef9faa412b099a77a4ea74210" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>pointer</name></member>
+      <member refid="d4/d1d/a08807_1ad6479f3d8cf2b7eab1aac6ea36a100dd" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>reference</name></member>
+      <member refid="d4/d1d/a08807_1a73a6a6f30ce4eca1b0dd98303f1b22bf" prot="private" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>size</name></member>
+      <member refid="d4/d1d/a08807_1a4f51f3c9dee6751949e6c79b3c831f74" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>value_type</name></member>
+      <member refid="d4/d1d/a08807_1a8aa0504136727f4370ef39d2dfc1fb25" prot="public" virt="non-virtual"><scope>castor::ConstPixelIterator</scope><name>~ConstPixelIterator</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

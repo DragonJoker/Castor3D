@@ -1,0 +1,677 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/dcc/a08151" kind="class" language="C++" prot="public">
+    <compoundname>castor::ArrayView</compoundname>
+    <includes local="no">ArrayView.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ValueT</type>
+      </param>
+      <param>
+        <type>typename IteratorTraitsT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d4/dcc/a08151_1a59fbbce1adb9131f423216766d6d74a1" prot="private" static="no">
+        <type>IteratorTraitsT</type>
+        <definition>using castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::my_traits =  IteratorTraitsT</definition>
+        <argsstring></argsstring>
+        <name>my_traits</name>
+        <qualifiedname>castor::ArrayView::my_traits</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="16" column="1" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d4/dcc/a08151_1a434654d4a0e19eeee44385dd0294832d" prot="public" static="no">
+        <type>typename my_traits::value_type</type>
+        <definition>using castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::value_type =  typename my_traits::value_type</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>castor::ArrayView::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="19" column="1" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/dcc/a08151_1a318f0a0aa3bc695b43ef855a53607975" prot="public" static="no">
+        <type>typename my_traits::reference</type>
+        <definition>using castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::reference =  typename my_traits::reference</definition>
+        <argsstring></argsstring>
+        <name>reference</name>
+        <qualifiedname>castor::ArrayView::reference</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="20" column="1" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/dcc/a08151_1adfcf66a0b1a5423d18662f34c5e857d1" prot="public" static="no">
+        <type><ref refid="d4/dcc/a08151_1a434654d4a0e19eeee44385dd0294832d" kindref="member">value_type</ref> *</type>
+        <definition>using castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::pointer =  value_type *</definition>
+        <argsstring></argsstring>
+        <name>pointer</name>
+        <qualifiedname>castor::ArrayView::pointer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="21" column="1" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/dcc/a08151_1ac157ae7a33119b14992599d6541d64cc" prot="public" static="no">
+        <type><ref refid="d4/dcc/a08151_1a434654d4a0e19eeee44385dd0294832d" kindref="member">value_type</ref> const *</type>
+        <definition>using castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::const_pointer =  value_type const *</definition>
+        <argsstring></argsstring>
+        <name>const_pointer</name>
+        <qualifiedname>castor::ArrayView::const_pointer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="22" column="1" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/dcc/a08151_1a72bfee3041970459f98df38e80c5e9bb" prot="public" static="no">
+        <type>typename my_traits::pointer</type>
+        <definition>using castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::iterator =  typename my_traits::pointer</definition>
+        <argsstring></argsstring>
+        <name>iterator</name>
+        <qualifiedname>castor::ArrayView::iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="23" column="1" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/dcc/a08151_1a2045ffe60d1625d0ba833d9f074e8231" prot="public" static="no">
+        <type>const <ref refid="d4/dcc/a08151_1a72bfee3041970459f98df38e80c5e9bb" kindref="member">iterator</ref></type>
+        <definition>using castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::const_iterator =  const iterator</definition>
+        <argsstring></argsstring>
+        <name>const_iterator</name>
+        <qualifiedname>castor::ArrayView::const_iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="24" column="1" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/dcc/a08151_1a4633260d6d023334683b683758608811" prot="public" static="no">
+        <type>std::reverse_iterator&lt; <ref refid="d4/dcc/a08151_1a72bfee3041970459f98df38e80c5e9bb" kindref="member">iterator</ref> &gt;</type>
+        <definition>using castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::reverse_iterator =  std::reverse_iterator&lt; iterator &gt;</definition>
+        <argsstring></argsstring>
+        <name>reverse_iterator</name>
+        <qualifiedname>castor::ArrayView::reverse_iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="25" column="1" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/dcc/a08151_1a10d7d5b87bcfe84dc91b44d0bfaca466" prot="public" static="no">
+        <type>std::reverse_iterator&lt; <ref refid="d4/dcc/a08151_1a2045ffe60d1625d0ba833d9f074e8231" kindref="member">const_iterator</ref> &gt;</type>
+        <definition>using castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::const_reverse_iterator =  std::reverse_iterator&lt; const_iterator &gt;</definition>
+        <argsstring></argsstring>
+        <name>const_reverse_iterator</name>
+        <qualifiedname>castor::ArrayView::const_reverse_iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="26" column="1" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d4/dcc/a08151_1a14c21f4aea50eeaff164e94c6061b2d1" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/dcc/a08151_1a72bfee3041970459f98df38e80c5e9bb" kindref="member">iterator</ref></type>
+        <definition>iterator castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::m_begin</definition>
+        <argsstring></argsstring>
+        <name>m_begin</name>
+        <qualifiedname>castor::ArrayView::m_begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="146" column="10" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dcc/a08151_1a6d6325554f69bcf87367ab68d281824d" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/dcc/a08151_1a72bfee3041970459f98df38e80c5e9bb" kindref="member">iterator</ref></type>
+        <definition>iterator castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::m_end</definition>
+        <argsstring></argsstring>
+        <name>m_end</name>
+        <qualifiedname>castor::ArrayView::m_end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="147" column="10" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="147" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/dcc/a08151_1aa0ed66fdb2441443684ba24a77ea36c5" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::ArrayView</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>ArrayView</name>
+        <qualifiedname>castor::ArrayView::ArrayView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="29" column="1" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="29" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1a5aedcb582193938eee89d3d2b6955b0a" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::ArrayView</definition>
+        <argsstring>(iterator begin, iterator end) noexcept</argsstring>
+        <name>ArrayView</name>
+        <qualifiedname>castor::ArrayView::ArrayView</qualifiedname>
+        <param>
+          <type><ref refid="d4/dcc/a08151_1a72bfee3041970459f98df38e80c5e9bb" kindref="member">iterator</ref></type>
+          <declname>begin</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dcc/a08151_1a72bfee3041970459f98df38e80c5e9bb" kindref="member">iterator</ref></type>
+          <declname>end</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="35" column="1" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="35" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1aaa11144c2b179edbdc01fa5975030c3f" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dcc/a08151_1a318f0a0aa3bc695b43ef855a53607975" kindref="member">reference</ref></type>
+        <definition>reference castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::operator[]</definition>
+        <argsstring>(size_t index) noexcept</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::ArrayView::operator[]</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="41" column="11" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="41" bodyend="45"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+        <references refid="d4/dcc/a08151_1a52a752d2f8189e5e427ec942b0a9b204" compoundref="d9/d7d/a01880" startline="58" endline="61">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::size</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1a47b7c15ff9ec94664e27aed74ba3e960" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>const <ref refid="d4/dcc/a08151_1a318f0a0aa3bc695b43ef855a53607975" kindref="member">reference</ref></type>
+        <definition>const reference castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::operator[]</definition>
+        <argsstring>(size_t index) const noexcept</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::ArrayView::operator[]</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="47" column="17" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="47" bodyend="51"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+        <references refid="d4/dcc/a08151_1a52a752d2f8189e5e427ec942b0a9b204" compoundref="d9/d7d/a01880" startline="58" endline="61">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::size</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1adda69b848b1fffd185e3efc9df69c3b8" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::empty</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>empty</name>
+        <qualifiedname>castor::ArrayView::empty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="53" column="6" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="53" bodyend="56"/>
+        <referencedby refid="d4/dcc/a08151_1a046f7c4bad86e39b319c0ebb41b5580d" compoundref="d9/d7d/a01880" startline="79" endline="83">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::front</referencedby>
+        <referencedby refid="d4/dcc/a08151_1ada21732fb67fd16efc10743f3e6b2b09" compoundref="d9/d7d/a01880" startline="73" endline="77">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::front</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1a52a752d2f8189e5e427ec942b0a9b204" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::size</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>size</name>
+        <qualifiedname>castor::ArrayView::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="58" column="8" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="58" bodyend="61"/>
+        <referencedby refid="d4/dcc/a08151_1a47b7c15ff9ec94664e27aed74ba3e960" compoundref="d9/d7d/a01880" startline="47" endline="51">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::operator[]</referencedby>
+        <referencedby refid="d4/dcc/a08151_1aaa11144c2b179edbdc01fa5975030c3f" compoundref="d9/d7d/a01880" startline="41" endline="45">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::operator[]</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1a6e1a9c49ba9ad91e62f22a6ef1319401" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dcc/a08151_1adfcf66a0b1a5423d18662f34c5e857d1" kindref="member">pointer</ref></type>
+        <definition>pointer castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::data</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>data</name>
+        <qualifiedname>castor::ArrayView::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="63" column="9" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="63" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1a9d550adf163d459f9fc2428367bd5ed3" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dcc/a08151_1ac157ae7a33119b14992599d6541d64cc" kindref="member">const_pointer</ref></type>
+        <definition>const_pointer castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::data</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>data</name>
+        <qualifiedname>castor::ArrayView::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="68" column="15" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="68" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1ada21732fb67fd16efc10743f3e6b2b09" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dcc/a08151_1a318f0a0aa3bc695b43ef855a53607975" kindref="member">reference</ref></type>
+        <definition>reference castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::front</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>front</name>
+        <qualifiedname>castor::ArrayView::front</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="73" column="11" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="73" bodyend="77"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+        <references refid="d4/dcc/a08151_1adda69b848b1fffd185e3efc9df69c3b8" compoundref="d9/d7d/a01880" startline="53" endline="56">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::empty</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1a046f7c4bad86e39b319c0ebb41b5580d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>const <ref refid="d4/dcc/a08151_1a318f0a0aa3bc695b43ef855a53607975" kindref="member">reference</ref></type>
+        <definition>const reference castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::front</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>front</name>
+        <qualifiedname>castor::ArrayView::front</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="79" column="17" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="79" bodyend="83"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+        <references refid="d4/dcc/a08151_1adda69b848b1fffd185e3efc9df69c3b8" compoundref="d9/d7d/a01880" startline="53" endline="56">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::empty</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1a1a0b33a579354b097dac4d86d3f65021" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dcc/a08151_1a72bfee3041970459f98df38e80c5e9bb" kindref="member">iterator</ref></type>
+        <definition>iterator castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::begin</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::ArrayView::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="85" column="10" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="85" bodyend="88"/>
+        <referencedby refid="d4/dcc/a08151_1afed1ad8b5ff4cd396dc8be57eae39f7b" compoundref="d9/d7d/a01880" startline="130" endline="133">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::rend</referencedby>
+        <referencedby refid="d4/dcc/a08151_1ac16b95917bda3206ea3a22e8fa2d5f53" compoundref="d9/d7d/a01880" startline="120" endline="123">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::rend</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1a6b5d29bef77bd858413145362fa11732" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dcc/a08151_1a4633260d6d023334683b683758608811" kindref="member">reverse_iterator</ref></type>
+        <definition>reverse_iterator castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::rbegin</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>rbegin</name>
+        <qualifiedname>castor::ArrayView::rbegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="90" column="18" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="90" bodyend="93"/>
+        <references refid="d4/dcc/a08151_1a726784b4309cf76d4057e9d6daf2c689" compoundref="d9/d7d/a01880" startline="115" endline="118">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::end</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1a2c2b737c35766da67055c3f4e0ebd8df" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dcc/a08151_1a2045ffe60d1625d0ba833d9f074e8231" kindref="member">const_iterator</ref></type>
+        <definition>const_iterator castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::begin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::ArrayView::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="95" column="16" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="95" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1a4caa6d40ccb22f0dc69117a0e534667d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dcc/a08151_1a10d7d5b87bcfe84dc91b44d0bfaca466" kindref="member">const_reverse_iterator</ref></type>
+        <definition>const_reverse_iterator castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::rbegin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>rbegin</name>
+        <qualifiedname>castor::ArrayView::rbegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="100" column="24" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="100" bodyend="103"/>
+        <references refid="d4/dcc/a08151_1a726784b4309cf76d4057e9d6daf2c689" compoundref="d9/d7d/a01880" startline="115" endline="118">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::end</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1a8bf06a86c70e971e24b763bf5c567279" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dcc/a08151_1a2045ffe60d1625d0ba833d9f074e8231" kindref="member">const_iterator</ref></type>
+        <definition>const_iterator castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::cbegin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>cbegin</name>
+        <qualifiedname>castor::ArrayView::cbegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="105" column="16" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="105" bodyend="108"/>
+        <referencedby refid="d4/dcc/a08151_1a3e4ee465195656e780bc152c06530aed" compoundref="d9/d7d/a01880" startline="140" endline="143">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::crend</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1a986c6e077d51fb3ec21fcbfe0fdcee39" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dcc/a08151_1a10d7d5b87bcfe84dc91b44d0bfaca466" kindref="member">const_reverse_iterator</ref></type>
+        <definition>const_reverse_iterator castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::crbegin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>crbegin</name>
+        <qualifiedname>castor::ArrayView::crbegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="110" column="24" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="110" bodyend="113"/>
+        <references refid="d4/dcc/a08151_1aeb54ee0233f22e2721ceef1d14de4f1f" compoundref="d9/d7d/a01880" startline="135" endline="138">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::cend</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1a726784b4309cf76d4057e9d6daf2c689" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dcc/a08151_1a72bfee3041970459f98df38e80c5e9bb" kindref="member">iterator</ref></type>
+        <definition>iterator castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::end</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::ArrayView::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="115" column="10" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="115" bodyend="118"/>
+        <referencedby refid="d4/dcc/a08151_1a4caa6d40ccb22f0dc69117a0e534667d" compoundref="d9/d7d/a01880" startline="100" endline="103">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::rbegin</referencedby>
+        <referencedby refid="d4/dcc/a08151_1a6b5d29bef77bd858413145362fa11732" compoundref="d9/d7d/a01880" startline="90" endline="93">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::rbegin</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1ac16b95917bda3206ea3a22e8fa2d5f53" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dcc/a08151_1a4633260d6d023334683b683758608811" kindref="member">reverse_iterator</ref></type>
+        <definition>reverse_iterator castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::rend</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>rend</name>
+        <qualifiedname>castor::ArrayView::rend</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="120" column="18" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="120" bodyend="123"/>
+        <references refid="d4/dcc/a08151_1a1a0b33a579354b097dac4d86d3f65021" compoundref="d9/d7d/a01880" startline="85" endline="88">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::begin</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1a6efa9679a2a4b93619c3d629f3b8563a" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dcc/a08151_1a2045ffe60d1625d0ba833d9f074e8231" kindref="member">const_iterator</ref></type>
+        <definition>const_iterator castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::end</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::ArrayView::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="125" column="16" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="125" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1afed1ad8b5ff4cd396dc8be57eae39f7b" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dcc/a08151_1a10d7d5b87bcfe84dc91b44d0bfaca466" kindref="member">const_reverse_iterator</ref></type>
+        <definition>const_reverse_iterator castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::rend</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>rend</name>
+        <qualifiedname>castor::ArrayView::rend</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="130" column="24" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="130" bodyend="133"/>
+        <references refid="d4/dcc/a08151_1a1a0b33a579354b097dac4d86d3f65021" compoundref="d9/d7d/a01880" startline="85" endline="88">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::begin</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1aeb54ee0233f22e2721ceef1d14de4f1f" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dcc/a08151_1a2045ffe60d1625d0ba833d9f074e8231" kindref="member">const_iterator</ref></type>
+        <definition>const_iterator castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::cend</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>cend</name>
+        <qualifiedname>castor::ArrayView::cend</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="135" column="16" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="135" bodyend="138"/>
+        <referencedby refid="d4/dcc/a08151_1a986c6e077d51fb3ec21fcbfe0fdcee39" compoundref="d9/d7d/a01880" startline="110" endline="113">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::crbegin</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/dcc/a08151_1a3e4ee465195656e780bc152c06530aed" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dcc/a08151_1a10d7d5b87bcfe84dc91b44d0bfaca466" kindref="member">const_reverse_iterator</ref></type>
+        <definition>const_reverse_iterator castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::crend</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>crend</name>
+        <qualifiedname>castor::ArrayView::crend</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ArrayView.hpp" line="140" column="24" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="140" bodyend="143"/>
+        <references refid="d4/dcc/a08151_1a8bf06a86c70e971e24b763bf5c567279" compoundref="d9/d7d/a01880" startline="105" endline="108">castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;::cbegin</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe template qui fournit une vue sur un tampon, à la manière d&apos;un std::array. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="16">
+        <label>castor::ArrayView&lt; Data &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Data &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor::ArrayView&lt; DataT &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; DataT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::ArrayView&lt; FontGlyphData &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; FontGlyphData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor::ArrayView&lt; SssProfileData &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SssProfileData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor::ArrayView&lt; TextureAnimationData &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; TextureAnimationData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::ArrayView&lt; VkDrawIndirectCommand &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; VkDrawIndirectCommand &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor::ArrayView&lt; castor3d::BillboardUboConfiguration &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::BillboardUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor::ArrayView&lt; castor3d::ModelBufferConfiguration &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::ModelBufferConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor::ArrayView&lt; castor3d::OverlayUboConfiguration &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::OverlayUboConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::ArrayView&lt; castor3d::TextChar &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::TextChar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::ArrayView&lt; castor3d::TextLine &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::TextLine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::ArrayView&lt; castor3d::TextWord &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::TextWord &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::ArrayView&lt; castor::Point4f &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::Point4f &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::ArrayView&lt; castor::Point4ui &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::Point4ui &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::ArrayView&lt; uint32_t &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; uint32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/Design/ArrayView.hpp" line="14" column="1" bodyfile="CastorUtils/Design/ArrayView.hpp" bodystart="15" bodyend="148"/>
+    <listofallmembers>
+      <member refid="d4/dcc/a08151_1aa0ed66fdb2441443684ba24a77ea36c5" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>ArrayView</name></member>
+      <member refid="d4/dcc/a08151_1a5aedcb582193938eee89d3d2b6955b0a" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>ArrayView</name></member>
+      <member refid="d4/dcc/a08151_1a1a0b33a579354b097dac4d86d3f65021" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>begin</name></member>
+      <member refid="d4/dcc/a08151_1a2c2b737c35766da67055c3f4e0ebd8df" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>begin</name></member>
+      <member refid="d4/dcc/a08151_1a8bf06a86c70e971e24b763bf5c567279" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>cbegin</name></member>
+      <member refid="d4/dcc/a08151_1aeb54ee0233f22e2721ceef1d14de4f1f" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>cend</name></member>
+      <member refid="d4/dcc/a08151_1a2045ffe60d1625d0ba833d9f074e8231" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>const_iterator</name></member>
+      <member refid="d4/dcc/a08151_1ac157ae7a33119b14992599d6541d64cc" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>const_pointer</name></member>
+      <member refid="d4/dcc/a08151_1a10d7d5b87bcfe84dc91b44d0bfaca466" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>const_reverse_iterator</name></member>
+      <member refid="d4/dcc/a08151_1a986c6e077d51fb3ec21fcbfe0fdcee39" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>crbegin</name></member>
+      <member refid="d4/dcc/a08151_1a3e4ee465195656e780bc152c06530aed" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>crend</name></member>
+      <member refid="d4/dcc/a08151_1a6e1a9c49ba9ad91e62f22a6ef1319401" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>data</name></member>
+      <member refid="d4/dcc/a08151_1a9d550adf163d459f9fc2428367bd5ed3" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>data</name></member>
+      <member refid="d4/dcc/a08151_1adda69b848b1fffd185e3efc9df69c3b8" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>empty</name></member>
+      <member refid="d4/dcc/a08151_1a726784b4309cf76d4057e9d6daf2c689" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>end</name></member>
+      <member refid="d4/dcc/a08151_1a6efa9679a2a4b93619c3d629f3b8563a" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>end</name></member>
+      <member refid="d4/dcc/a08151_1ada21732fb67fd16efc10743f3e6b2b09" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>front</name></member>
+      <member refid="d4/dcc/a08151_1a046f7c4bad86e39b319c0ebb41b5580d" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>front</name></member>
+      <member refid="d4/dcc/a08151_1a72bfee3041970459f98df38e80c5e9bb" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>iterator</name></member>
+      <member refid="d4/dcc/a08151_1a14c21f4aea50eeaff164e94c6061b2d1" prot="private" virt="non-virtual"><scope>castor::ArrayView</scope><name>m_begin</name></member>
+      <member refid="d4/dcc/a08151_1a6d6325554f69bcf87367ab68d281824d" prot="private" virt="non-virtual"><scope>castor::ArrayView</scope><name>m_end</name></member>
+      <member refid="d4/dcc/a08151_1a59fbbce1adb9131f423216766d6d74a1" prot="private" virt="non-virtual"><scope>castor::ArrayView</scope><name>my_traits</name></member>
+      <member refid="d4/dcc/a08151_1aaa11144c2b179edbdc01fa5975030c3f" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>operator[]</name></member>
+      <member refid="d4/dcc/a08151_1a47b7c15ff9ec94664e27aed74ba3e960" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>operator[]</name></member>
+      <member refid="d4/dcc/a08151_1adfcf66a0b1a5423d18662f34c5e857d1" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>pointer</name></member>
+      <member refid="d4/dcc/a08151_1a6b5d29bef77bd858413145362fa11732" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>rbegin</name></member>
+      <member refid="d4/dcc/a08151_1a4caa6d40ccb22f0dc69117a0e534667d" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>rbegin</name></member>
+      <member refid="d4/dcc/a08151_1a318f0a0aa3bc695b43ef855a53607975" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>reference</name></member>
+      <member refid="d4/dcc/a08151_1ac16b95917bda3206ea3a22e8fa2d5f53" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>rend</name></member>
+      <member refid="d4/dcc/a08151_1afed1ad8b5ff4cd396dc8be57eae39f7b" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>rend</name></member>
+      <member refid="d4/dcc/a08151_1a4633260d6d023334683b683758608811" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>reverse_iterator</name></member>
+      <member refid="d4/dcc/a08151_1a52a752d2f8189e5e427ec942b0a9b204" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>size</name></member>
+      <member refid="d4/dcc/a08151_1a434654d4a0e19eeee44385dd0294832d" prot="public" virt="non-virtual"><scope>castor::ArrayView</scope><name>value_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

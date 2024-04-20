@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dir_6df497888ec5ad3f942d586622050415" kind="dir">
+    <compoundname>CastorUtils/Data/Text</compoundname>
+    <innerfile refid="d2/d5b/a01841">TextCoords.hpp</innerfile>
+    <innerfile refid="d2/dbd/a01844">TextFont.hpp</innerfile>
+    <innerfile refid="d3/d19/a01847">TextPoint.hpp</innerfile>
+    <innerfile refid="da/d18/a01850">TextPosition.hpp</innerfile>
+    <innerfile refid="db/d6b/a01853">TextQuaternion.hpp</innerfile>
+    <innerfile refid="da/d66/a01856">TextRgbaColour.hpp</innerfile>
+    <innerfile refid="d3/dce/a01859">TextRgbColour.hpp</innerfile>
+    <innerfile refid="d0/d4a/a01862">TextSize.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Data/Text/"/>
+  </compounddef>
+</doxygen>

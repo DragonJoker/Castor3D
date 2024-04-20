@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/d31/a04951" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::MipView</compoundname>
+    <includes local="no">TextureLayout.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d31/a04951_1ad7934d51067a1952360f589a74f18775" prot="public" static="no" mutable="no">
+        <type>TextureViewUPtr</type>
+        <definition>TextureViewUPtr castor3d::MipView::view</definition>
+        <argsstring></argsstring>
+        <name>view</name>
+        <qualifiedname>castor3d::MipView::view</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Texture/TextureLayout.hpp" line="21" column="17" bodyfile="Castor3D/Material/Texture/TextureLayout.hpp" bodystart="21" bodyend="-1"/>
+        <referencedby refid="d9/d31/a04951_1ac23bed4d978ef4c38473672b09fe4e25" compoundref="de/ddd/a00653" startline="25" endline="36">forEachView</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d31/a04951_1a72d4c3098133c98fc525cd6598b4c77d" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; TextureViewUPtr &gt;</type>
+        <definition>castor::Vector&lt; TextureViewUPtr &gt; castor3d::MipView::levels</definition>
+        <argsstring></argsstring>
+        <name>levels</name>
+        <qualifiedname>castor3d::MipView::levels</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Texture/TextureLayout.hpp" line="22" column="16" bodyfile="Castor3D/Material/Texture/TextureLayout.hpp" bodystart="22" bodyend="-1"/>
+        <referencedby refid="d9/d31/a04951_1ac23bed4d978ef4c38473672b09fe4e25" compoundref="de/ddd/a00653" startline="25" endline="36">forEachView</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d31/a04951_1ac23bed4d978ef4c38473672b09fe4e25" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::MipView::forEachView</definition>
+        <argsstring>(FuncT function) const</argsstring>
+        <name>forEachView</name>
+        <qualifiedname>castor3d::MipView::forEachView</qualifiedname>
+        <param>
+          <type>FuncT</type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Texture/TextureLayout.hpp" line="25" column="6" bodyfile="Castor3D/Material/Texture/TextureLayout.hpp" bodystart="25" bodyend="36"/>
+        <references refid="d9/d31/a04951_1a72d4c3098133c98fc525cd6598b4c77d" compoundref="de/ddd/a00653" startline="22">levels</references>
+        <references refid="d9/d31/a04951_1ad7934d51067a1952360f589a74f18775" compoundref="de/ddd/a00653" startline="21">view</references>
+        <referencedby refid="db/de9/a04955_1a8a1b9a6114bd1ced90ab0b403237586e" compoundref="de/ddd/a00653" startline="45" endline="53">castor3d::CubeView::forEachView</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Material/Texture/TextureLayout.hpp" line="19" column="1" bodyfile="Castor3D/Material/Texture/TextureLayout.hpp" bodystart="20" bodyend="37"/>
+    <listofallmembers>
+      <member refid="d9/d31/a04951_1ac23bed4d978ef4c38473672b09fe4e25" prot="public" virt="non-virtual"><scope>castor3d::MipView</scope><name>forEachView</name></member>
+      <member refid="d9/d31/a04951_1a72d4c3098133c98fc525cd6598b4c77d" prot="public" virt="non-virtual"><scope>castor3d::MipView</scope><name>levels</name></member>
+      <member refid="d9/d31/a04951_1ad7934d51067a1952360f589a74f18775" prot="public" virt="non-virtual"><scope>castor3d::MipView</scope><name>view</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

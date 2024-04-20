@@ -1,0 +1,5 @@
+<map id="castor3d::LoadingScreen::render" name="castor3d::LoadingScreen::render">
+<area shape="rect" id="Node000001" title="Renders the loading screen." alt="" coords="220,5,387,45"/>
+<area shape="rect" id="Node000002" href="$d2/d61/a05043.html#a72803ebc5f3bc97c25db3e32c525c884" title="Renders the loading screen." alt="" coords="5,5,172,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="206,28,172,28,172,23,206,23"/>
+</map>

@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d3e/a09139" kind="struct" language="C++" prot="public">
+    <compoundname>castor::LogN</compoundname>
+    <includes local="no">Math.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>int</type>
+        <declname>N</declname>
+        <defname>N</defname>
+      </param>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d3e/a09139_1a5529d78a3d8bd2fb3bc01149f76bb381" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double castor::LogN&lt; N, T &gt;::operator()</definition>
+        <argsstring>(T x) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::LogN::operator()</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Math.hpp" line="85" column="15" bodyfile="CastorUtils/Math/Math.hpp" bodystart="85" bodyend="88"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Cas récursif pour Logarithme Népérien. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/Math.hpp" line="83" column="14" bodyfile="CastorUtils/Math/Math.hpp" bodystart="84" bodyend="89"/>
+    <listofallmembers>
+      <member refid="dc/d3e/a09139_1a5529d78a3d8bd2fb3bc01149f76bb381" prot="public" virt="non-virtual"><scope>castor::LogN</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

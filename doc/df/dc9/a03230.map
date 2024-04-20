@@ -1,0 +1,71 @@
+<map id="castor3d::BinaryWriterBase&lt; TWritten &gt;" name="castor3d::BinaryWriterBase&lt; TWritten &gt;">
+<area shape="rect" id="Node000001" title="Binary data chunk writer base class." alt="" coords="5,527,188,567"/>
+<area shape="rect" id="Node000002" href="$d4/d9c/a03231.html" title=" " alt="" coords="473,15,656,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,513,111,413,134,284,149,219,166,161,187,114,210,82,239,61,270,44,304,32,339,24,409,17,473,19,473,24,409,23,340,29,305,37,272,49,242,65,214,86,191,117,171,163,154,221,139,285,117,414,104,513"/>
+<area shape="rect" id="Node000004" href="$d4/d9c/a03231.html" title=" " alt="" coords="473,79,656,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="100,512,115,426,139,316,171,213,190,174,210,147,229,136,255,126,322,112,399,103,473,98,473,103,400,108,323,117,257,131,232,140,214,151,194,177,176,215,144,317,120,427,106,513"/>
+<area shape="rect" id="Node000006" href="$d4/d9c/a03231.html" title=" " alt="" coords="473,143,656,183"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="96,513,102,448,119,366,134,323,153,282,179,244,210,211,229,200,256,190,323,176,399,167,473,163,473,168,400,173,324,181,257,195,232,205,214,215,183,247,158,284,139,325,124,367,107,449,101,513"/>
+<area shape="rect" id="Node000008" href="$d4/d9c/a03231.html" title=" " alt="" coords="473,207,656,247"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="99,513,109,459,129,394,144,361,162,329,184,300,210,275,230,264,256,255,323,241,400,232,473,227,473,232,400,238,324,246,258,260,232,269,214,279,188,304,166,332,148,363,134,396,114,460,104,514"/>
+<area shape="rect" id="Node000010" href="$d4/d9c/a03231.html" title=" " alt="" coords="473,271,656,311"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="104,512,117,471,139,423,170,375,189,354,211,336,230,326,257,318,324,305,473,291,473,297,325,310,258,323,232,331,213,341,192,358,174,379,144,425,122,473,109,514"/>
+<area shape="rect" id="Node000012" href="$d4/d9c/a03231.html" title=" " alt="" coords="473,335,656,375"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="114,513,153,460,180,433,211,411,275,383,344,364,412,354,473,350,473,356,413,360,345,370,277,388,213,416,183,437,157,463,118,517"/>
+<area shape="rect" id="Node000014" href="$d4/d9c/a03231.html" title=" " alt="" coords="473,399,656,439"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="136,517,171,496,211,478,278,457,347,441,473,423,473,428,348,447,279,462,213,482,174,500,139,521"/>
+<area shape="rect" id="Node000016" href="$d4/d9c/a03231.html" title=" " alt="" coords="449,463,680,503"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="201,526,212,524,449,493,450,498,212,529,202,531"/>
+<area shape="rect" id="Node000018" href="$d4/d9c/a03231.html" title=" " alt="" coords="473,527,656,567"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="202,544,473,544,473,549,202,549"/>
+<area shape="rect" id="Node000020" href="$d4/d9c/a03231.html" title=" " alt="" coords="473,591,656,631"/>
+<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="202,562,212,564,474,598,473,603,212,569,201,568"/>
+<area shape="rect" id="Node000022" href="$d4/d9c/a03231.html" title=" " alt="" coords="472,655,657,695"/>
+<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="138,572,173,594,213,612,279,633,347,648,472,666,471,671,346,653,278,638,211,617,171,598,135,577"/>
+<area shape="rect" id="Node000024" href="$d4/d9c/a03231.html" title=" " alt="" coords="457,719,672,759"/>
+<area shape="poly" id="edge23_Node000001_Node000024" title=" " alt="" coords="118,577,157,632,183,659,213,680,242,695,268,703,315,709,364,708,426,713,458,719,457,724,425,719,364,714,314,714,267,708,240,699,211,685,180,663,153,635,113,580"/>
+<area shape="rect" id="Node000026" href="$d4/d9c/a03231.html" title=" " alt="" coords="472,783,657,823"/>
+<area shape="poly" id="edge25_Node000001_Node000026" title=" " alt="" coords="111,579,126,616,147,659,176,700,214,734,241,750,266,759,313,764,364,762,426,768,482,780,481,785,425,773,363,768,313,769,265,764,239,755,210,738,172,704,143,662,121,619,106,581"/>
+<area shape="rect" id="Node000028" href="$d4/d9c/a03231.html" title=" " alt="" coords="468,847,661,887"/>
+<area shape="poly" id="edge27_Node000001_Node000028" title=" " alt="" coords="106,580,118,627,139,684,170,741,190,767,214,789,240,807,265,817,288,823,312,825,363,825,426,832,479,844,478,849,425,837,363,830,312,830,288,828,263,822,238,811,210,793,186,770,166,744,134,686,113,629,101,581"/>
+<area shape="rect" id="Node000030" href="$d4/d9c/a03231.html" title=" " alt="" coords="473,911,656,951"/>
+<area shape="poly" id="edge29_Node000001_Node000030" title=" " alt="" coords="103,580,111,639,130,714,144,752,163,789,186,823,214,853,232,864,257,875,324,894,400,908,474,918,473,924,399,913,322,899,255,880,229,869,210,857,182,826,158,792,139,754,125,715,106,641,98,581"/>
+<area shape="rect" id="Node000032" href="$d4/d9c/a03231.html" title=" " alt="" coords="473,975,656,1015"/>
+<area shape="poly" id="edge31_Node000001_Node000032" title=" " alt="" coords="100,581,103,655,118,751,132,801,152,849,179,894,214,933,242,954,273,970,306,982,340,991,409,1000,473,1001,473,1007,409,1006,339,997,304,988,271,975,239,958,210,937,175,897,147,852,127,803,112,752,97,655,94,581"/>
+<area shape="rect" id="Node000034" href="$d4/d9c/a03231.html" title=" " alt="" coords="473,1039,656,1079"/>
+<area shape="poly" id="edge33_Node000001_Node000034" title=" " alt="" coords="104,580,116,683,137,817,152,883,170,943,191,991,214,1022,242,1042,273,1057,306,1068,340,1074,409,1078,473,1074,473,1079,409,1084,339,1080,304,1073,271,1062,239,1047,210,1026,186,993,165,945,147,885,132,818,110,684,98,581"/>
+<area shape="rect" id="Node000003" href="$d0/da2/a03163.html" title="Animation binary loader." alt="" coords="769,15,921,55"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="669,32,769,32,769,37,669,37"/>
+<area shape="rect" id="Node000005" href="$d7/d45/a03175.html" title="Animable binary loader." alt="" coords="769,79,921,119"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="669,96,769,96,769,101,669,101"/>
+<area shape="rect" id="Node000007" href="$d1/d45/a03191.html" title="MovableObject loader." alt="" coords="769,143,921,183"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="669,160,769,160,769,165,669,165"/>
+<area shape="rect" id="Node000009" href="$d5/d73/a03203.html" title="MeshAnimation binary loader." alt="" coords="769,207,921,247"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="669,224,769,224,769,229,669,229"/>
+<area shape="rect" id="Node000011" href="$d9/d65/a03215.html" title="MeshMorphTarget binary loader." alt="" coords="769,271,921,311"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="669,288,769,288,769,293,669,293"/>
+<area shape="rect" id="Node000013" href="$db/dd3/a03251.html" title="MorphComponent loader." alt="" coords="769,335,921,375"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="669,352,769,352,769,357,669,357"/>
+<area shape="rect" id="Node000015" href="$dc/dc1/a03263.html" title="SceneNodeAnimation binary loader." alt="" coords="759,399,930,439"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="669,416,759,416,759,421,669,421"/>
+<area shape="rect" id="Node000017" href="$d8/dbf/a03275.html" title="SceneNodeAnimationKeyFrame binary loader." alt="" coords="729,463,960,503"/>
+<area shape="poly" id="edge16_Node000016_Node000017" title=" " alt="" coords="693,480,729,480,729,485,693,485"/>
+<area shape="rect" id="Node000019" href="$d8/dcc/a03287.html" title="Animable binary loader." alt="" coords="769,527,921,567"/>
+<area shape="poly" id="edge18_Node000018_Node000019" title=" " alt="" coords="669,544,769,544,769,549,669,549"/>
+<area shape="rect" id="Node000021" href="$d8/de2/a03299.html" title="SkeletonAnimation binary loader." alt="" coords="767,591,922,631"/>
+<area shape="poly" id="edge20_Node000020_Node000021" title=" " alt="" coords="670,608,767,608,767,613,670,613"/>
+<area shape="rect" id="Node000023" href="$de/d19/a03311.html" title="MovingBone binary loader." alt="" coords="752,655,937,695"/>
+<area shape="poly" id="edge22_Node000022_Node000023" title=" " alt="" coords="671,672,752,672,752,677,671,677"/>
+<area shape="rect" id="Node000025" href="$d4/d00/a03323.html" title="SkeletonAnimationKeyFrame binary loader." alt="" coords="737,719,952,759"/>
+<area shape="poly" id="edge24_Node000024_Node000025" title=" " alt="" coords="686,736,737,736,737,741,686,741"/>
+<area shape="rect" id="Node000027" href="$d9/db1/a03335.html" title="MovingBone binary loader." alt="" coords="752,783,937,823"/>
+<area shape="poly" id="edge26_Node000026_Node000027" title=" " alt="" coords="671,800,752,800,752,805,671,805"/>
+<area shape="rect" id="Node000029" href="$d9/dc9/a03347.html" title="SkeletonAnimationObject binary loader." alt="" coords="748,847,941,887"/>
+<area shape="poly" id="edge28_Node000028_Node000029" title=" " alt="" coords="675,864,748,864,748,869,675,869"/>
+<area shape="rect" id="Node000031" href="$d9/dd9/a03359.html" title="Animable binary loader." alt="" coords="769,911,921,951"/>
+<area shape="poly" id="edge30_Node000030_Node000031" title=" " alt="" coords="669,928,769,928,769,933,669,933"/>
+<area shape="rect" id="Node000033" href="$d9/d58/a03371.html" title="SkinComponent loader." alt="" coords="769,975,921,1015"/>
+<area shape="poly" id="edge32_Node000032_Node000033" title=" " alt="" coords="669,992,769,992,769,997,669,997"/>
+<area shape="rect" id="Node000035" href="$dc/d58/a03383.html" title="MovableObject loader." alt="" coords="769,1039,921,1079"/>
+<area shape="poly" id="edge34_Node000034_Node000035" title=" " alt="" coords="669,1056,769,1056,769,1061,669,1061"/>
+</map>

@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/d12/a07975" kind="class" language="C++" prot="public">
+    <compoundname>castor::BinaryLoader</compoundname>
+    <basecompoundref refid="d3/d77/a07999" prot="public" virt="non-virtual">castor::Loader&lt; T, FileType::eBinary &gt;</basecompoundref>
+    <includes local="no">BinaryLoader.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="protected-type">
+      <memberdef kind="typedef" id="d5/d12/a07975_1a136234917a1e3ff6a433a6187e85fa86" prot="protected" static="no">
+        <type>typename <ref refid="d3/d77/a07999" kindref="compound">Loader</ref>&lt; T, <ref refid="d2/dd2/a02279_1ac4972a01abb873aee032c3071b56cbe4aef6572f06eb221f3fcc2a3efd4f39c5e" kindref="member">FileType::eBinary</ref> &gt;::Type</type>
+        <definition>using castor::BinaryLoader&lt; T &gt;::Type =  typename Loader&lt; T, FileType::eBinary &gt;::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor::BinaryLoader::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/BinaryLoader.hpp" line="17" column="1" bodyfile="CastorUtils/Data/BinaryLoader.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d12/a07975_1a5ee3e1cc3a1418f3c1e7084e8196b41f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::BinaryLoader&lt; T &gt;::BinaryLoader</definition>
+        <argsstring>()=default</argsstring>
+        <name>BinaryLoader</name>
+        <qualifiedname>castor::BinaryLoader::BinaryLoader</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/BinaryLoader.hpp" line="26" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d12/a07975_1a6db06c50f70c9646125eb6d03a93e523" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::BinaryLoader&lt; T &gt;::~BinaryLoader</definition>
+        <argsstring>() noexcept override=default</argsstring>
+        <name>~BinaryLoader</name>
+        <qualifiedname>castor::BinaryLoader::~BinaryLoader</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/BinaryLoader.hpp" line="33" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Spécialisation partielle de <ref refid="d3/d77/a07999" kindref="compound">castor::Loader</ref>, pour les fichiers binaires. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5">
+        <label>castor::BinaryLoader&lt; Font &gt;</label>
+        <link refid="d5/d12/a07975"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Font &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Loader&lt; T, FileType::eBinary &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; T, FileType::eBinary &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::BinaryLoader&lt; T &gt;</label>
+        <link refid="d5/d12/a07975"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::Font::BinaryLoader</label>
+        <link refid="d1/dfc/a08759"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Loader&lt; T, FT &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::Loader&lt; T, FileType::eBinary &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; T, FileType::eBinary &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::BinaryLoader&lt; T &gt;</label>
+        <link refid="d5/d12/a07975"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Loader&lt; T, FT &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Data/BinaryLoader.hpp" line="13" column="1" bodyfile="CastorUtils/Data/BinaryLoader.hpp" bodystart="15" bodyend="34"/>
+    <listofallmembers>
+      <member refid="d5/d12/a07975_1a5ee3e1cc3a1418f3c1e7084e8196b41f" prot="public" virt="non-virtual"><scope>castor::BinaryLoader</scope><name>BinaryLoader</name></member>
+      <member refid="d3/d77/a07999_1a533c9398afec6cb4bcd884d38ff4ec57" prot="public" virt="non-virtual"><scope>castor::BinaryLoader</scope><name>Loader</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::BinaryLoader</scope><name>NonMovable</name></member>
+      <member refid="d3/d77/a07999_1aa06599d499d4c8d0248565cfd912252f" prot="public" virt="virtual"><scope>castor::BinaryLoader</scope><name>operator()</name></member>
+      <member refid="d5/d12/a07975_1a136234917a1e3ff6a433a6187e85fa86" prot="protected" virt="non-virtual"><scope>castor::BinaryLoader</scope><name>Type</name></member>
+      <member refid="d5/d12/a07975_1a6db06c50f70c9646125eb6d03a93e523" prot="public" virt="non-virtual"><scope>castor::BinaryLoader</scope><name>~BinaryLoader</name></member>
+      <member refid="d3/d77/a07999_1a7d9fe6e26c86cc1301619e8c76223124" prot="public" virt="virtual"><scope>castor::BinaryLoader</scope><name>~Loader</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::BinaryLoader</scope><name>~NonMovable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

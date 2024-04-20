@@ -1,0 +1,17 @@
+<map id="castor::BinaryFile" name="castor::BinaryFile">
+<area shape="rect" id="Node000001" title="User friendly File class." alt="" coords="185,388,309,413"/>
+<area shape="rect" id="Node000002" href="$d4/d10/a08003.html" title=" " alt="" coords="203,313,290,339"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="249,353,249,388,244,388,244,353"/>
+<area shape="rect" id="Node000003" href="$da/d87/a08319.html" title=" " alt="" coords="5,218,141,243"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="108,247,226,311,224,316,105,252"/>
+<area shape="rect" id="Node000004" href="$dd/dbb/a08207.html" title=" " alt="" coords="165,211,328,251"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="249,265,249,313,244,313,244,265"/>
+<area shape="rect" id="Node000005" href="$dd/dbb/a08207.html" title="Template class providing implicit conversion from a scoped enum to its integral base type." alt="" coords="165,108,328,148"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="249,162,249,211,244,211,244,162"/>
+<area shape="rect" id="Node000006" href="$d1/de1/a08011.html" title=" " alt="" coords="352,218,445,243"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="371,253,308,292,268,316,265,311,305,287,368,248"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="371,115,427,141"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="401,155,401,218,396,218,396,155"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="335,5,462,45"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="401,59,401,115,396,115,396,59"/>
+</map>

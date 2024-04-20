@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d79/a06187" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlayRenderer::OverlaysCommonData</compoundname>
+    <includes local="no">OverlayRenderer.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d79/a06187_1a7f690af76fcda7d706095193b7ceaa38" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::OverlayRenderer::OverlaysCommonData::baseDescriptorLayout</definition>
+        <argsstring></argsstring>
+        <name>baseDescriptorLayout</name>
+        <qualifiedname>castor3d::OverlayRenderer::OverlaysCommonData::baseDescriptorLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlayRenderer.hpp" line="184" column="31" bodyfile="Castor3D/Render/Overlays/OverlayRenderer.hpp" bodystart="184" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d79/a06187_1a63c4a27c5a5095ab646cc464097f687a" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/ddf/a07743" kindref="compound">CameraUbo</ref></type>
+        <definition>CameraUbo castor3d::OverlayRenderer::OverlaysCommonData::cameraUbo</definition>
+        <argsstring></argsstring>
+        <name>cameraUbo</name>
+        <qualifiedname>castor3d::OverlayRenderer::OverlaysCommonData::cameraUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlayRenderer.hpp" line="186" column="11" bodyfile="Castor3D/Render/Overlays/OverlayRenderer.hpp" bodystart="186" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d79/a06187_1a357459ef865ecf6633390b82cb3b6a89" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; <ref refid="da/da9/a06167_1a71e3377120068a1420db034ad91f4383" kindref="member">PanelVertexBufferPool</ref> &gt;</type>
+        <definition>castor::RawUniquePtr&lt; PanelVertexBufferPool &gt; castor3d::OverlayRenderer::OverlaysCommonData::panelVertexBuffer</definition>
+        <argsstring></argsstring>
+        <name>panelVertexBuffer</name>
+        <qualifiedname>castor3d::OverlayRenderer::OverlaysCommonData::panelVertexBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlayRenderer.hpp" line="187" column="22" bodyfile="Castor3D/Render/Overlays/OverlayRenderer.hpp" bodystart="187" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d79/a06187_1a1a2ca043b790fbe4765c053c727e118b" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; <ref refid="da/da9/a06167_1aecf3daccafa7be31fa685d71878b9a11" kindref="member">BorderPanelVertexBufferPool</ref> &gt;</type>
+        <definition>castor::RawUniquePtr&lt; BorderPanelVertexBufferPool &gt; castor3d::OverlayRenderer::OverlaysCommonData::borderVertexBuffer</definition>
+        <argsstring></argsstring>
+        <name>borderVertexBuffer</name>
+        <qualifiedname>castor3d::OverlayRenderer::OverlaysCommonData::borderVertexBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlayRenderer.hpp" line="188" column="22" bodyfile="Castor3D/Render/Overlays/OverlayRenderer.hpp" bodystart="188" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d79/a06187_1a2f3f567473d57410f57a2bbce9bca603" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; <ref refid="da/da9/a06167_1a573934c87175b259b707dd55e8d54ab3" kindref="member">TextVertexBufferPool</ref> &gt;</type>
+        <definition>castor::RawUniquePtr&lt; TextVertexBufferPool &gt; castor3d::OverlayRenderer::OverlaysCommonData::textVertexBuffer</definition>
+        <argsstring></argsstring>
+        <name>textVertexBuffer</name>
+        <qualifiedname>castor3d::OverlayRenderer::OverlaysCommonData::textVertexBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlayRenderer.hpp" line="189" column="22" bodyfile="Castor3D/Render/Overlays/OverlayRenderer.hpp" bodystart="189" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d79/a06187_1af9be744ad006e4acdae59fbeb94bf02f" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::OverlayRenderer::OverlaysCommonData::OverlaysCommonData</definition>
+        <argsstring>(RenderDevice const &amp;device, HdrConfigUbo const &amp;hdrConfigUbo)</argsstring>
+        <name>OverlaysCommonData</name>
+        <qualifiedname>castor3d::OverlayRenderer::OverlaysCommonData::OverlaysCommonData</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d72/a07767" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>hdrConfigUbo</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlayRenderer.hpp" line="181" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::CameraUbo</label>
+        <link refid="d1/ddf/a07743"/>
+      </node>
+      <node id="1">
+        <label>castor3d::OverlayRenderer::OverlaysCommonData</label>
+        <link refid="d0/d79/a06187"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>cameraUbo</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/Overlays/OverlayRenderer.hpp" line="179" column="1" bodyfile="Castor3D/Render/Overlays/OverlayRenderer.hpp" bodystart="180" bodyend="190"/>
+    <listofallmembers>
+      <member refid="d0/d79/a06187_1a7f690af76fcda7d706095193b7ceaa38" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlaysCommonData</scope><name>baseDescriptorLayout</name></member>
+      <member refid="d0/d79/a06187_1a1a2ca043b790fbe4765c053c727e118b" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlaysCommonData</scope><name>borderVertexBuffer</name></member>
+      <member refid="d0/d79/a06187_1a63c4a27c5a5095ab646cc464097f687a" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlaysCommonData</scope><name>cameraUbo</name></member>
+      <member refid="d0/d79/a06187_1af9be744ad006e4acdae59fbeb94bf02f" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlaysCommonData</scope><name>OverlaysCommonData</name></member>
+      <member refid="d0/d79/a06187_1a357459ef865ecf6633390b82cb3b6a89" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlaysCommonData</scope><name>panelVertexBuffer</name></member>
+      <member refid="d0/d79/a06187_1a2f3f567473d57410f57a2bbce9bca603" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlaysCommonData</scope><name>textVertexBuffer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

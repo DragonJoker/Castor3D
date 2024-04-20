@@ -1,4 +1,7 @@
-<map id="castor3d::shader::Intersection" name="castor3d::shader::Intersection">
-<area shape="rect" id="node1" title=" " alt="" coords="248,42,443,67"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,200,104"/>
+<map id="castor3d::RenderWindowDesc" name="castor3d::RenderWindowDesc">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,211,203,236"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="41,108,167,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,162,107,210,101,210,101,162"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="41,5,167,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="107,59,107,108,101,108,101,59"/>
 </map>

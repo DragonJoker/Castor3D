@@ -1,0 +1,716 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/daf/a06903" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ImageBackground</compoundname>
+    <basecompoundref refid="d4/d2c/a06895" prot="public" virt="non-virtual">castor3d::SceneBackground</basecompoundref>
+    <includes local="no">Image.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="da/daf/a06903_1ae552fc3d13d6fbbdd280f37191fb8659" prot="private" static="no" mutable="no">
+        <type>TextureLayoutUPtr</type>
+        <definition>TextureLayoutUPtr castor3d::ImageBackground::m_2dTexture</definition>
+        <argsstring></argsstring>
+        <name>m_2dTexture</name>
+        <qualifiedname>castor3d::ImageBackground::m_2dTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="100" column="19" bodyfile="Castor3D/Scene/Background/Image.hpp" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/daf/a06903_1a587202546e2285284e459b485954f113" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref></type>
+        <definition>castor::Path castor3d::ImageBackground::m_2dTexturePath</definition>
+        <argsstring></argsstring>
+        <name>m_2dTexturePath</name>
+        <qualifiedname>castor3d::ImageBackground::m_2dTexturePath</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="101" column="14" bodyfile="Castor3D/Scene/Background/Image.hpp" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/daf/a06903_1a8befd94cb7954827793590d5e30eeea2" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ImageBackground::m_ratio</definition>
+        <argsstring></argsstring>
+        <name>m_ratio</name>
+        <qualifiedname>castor3d::ImageBackground::m_ratio</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="102" column="7" bodyfile="Castor3D/Scene/Background/Image.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/daf/a06903_1a652fdc2f34dbc4923b9ea517bf4a3147" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ImageBackground::ImageBackground</definition>
+        <argsstring>(Engine &amp;engine, Scene &amp;scene, castor::String const &amp;name=castor::String{})</argsstring>
+        <name>ImageBackground</name>
+        <qualifiedname>castor3d::ImageBackground::ImageBackground</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+          <defval><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref>{}</defval>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La scène parente. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du fond. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="37" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="da/daf/a06903_1a23a5ca4ae4858063fe072fcbef9aff8a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ImageBackground::accept</definition>
+        <argsstring>(BackgroundVisitor &amp;visitor) override</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::ImageBackground::accept</qualifiedname>
+        <reimplements refid="d4/d2c/a06895_1abb50a43cc66dc731a9a3a6e6298a412d">accept</reimplements>
+        <param>
+          <type><ref refid="d6/d94/a06927" kindref="compound">BackgroundVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;acceptation de visiteur.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le visiteur.   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="43" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/daf/a06903_1ac6d1921fe6aa6a8f53f23dc6cfa177d9" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ImageBackground::accept</definition>
+        <argsstring>(ConfigurationVisitorBase &amp;visitor) override</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::ImageBackground::accept</qualifiedname>
+        <reimplements refid="d4/d2c/a06895_1aa8c0b4200fc64f75365330a4cdd214a2">accept</reimplements>
+        <param>
+          <type><ref refid="db/dc2/a05011" kindref="compound">ConfigurationVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;acceptation de visiteur.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le visiteur.   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="47" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/daf/a06903_1a0d2f88efdeb143a48bc29d595ba4a018" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::ImageBackground::write</definition>
+        <argsstring>(castor::String const &amp;tabs, castor::Path const &amp;folder, castor::StringStream &amp;stream) const override</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::ImageBackground::write</qualifiedname>
+        <reimplements refid="d4/d2c/a06895_1a1195664b9f3e1b590f9ed6c6296b37e3">write</reimplements>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae7002b6add23b6f33bfde31351b5e8c9" kindref="member">castor::StringStream</ref> &amp;</type>
+          <declname>stream</declname>
+        </param>
+        <briefdescription>
+<para>Ecrit le fond dans un flux texte.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>tabs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;indentation actuelle. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>folder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le dossier de travail. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>stream</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le flux.   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="51" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/daf/a06903_1a1f4245f454da8e9f623b659b6132ca6c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::ImageBackground::setImage</definition>
+        <argsstring>(castor::Path const &amp;folder, castor::Path const &amp;relative)</argsstring>
+        <name>setImage</name>
+        <qualifiedname>castor3d::ImageBackground::setImage</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>relative</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Définit l&apos;image de la texture. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">folder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le dossier de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">relative</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin d&apos;accès à l&apos;image, relatif à <computeroutput>folder</computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="70" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/daf/a06903_1a2bb36130e74336fbc91134e134bad857" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+        <definition>castor::String const  &amp; castor3d::ImageBackground::getModelName</definition>
+        <argsstring>() const override</argsstring>
+        <name>getModelName</name>
+        <qualifiedname>castor3d::ImageBackground::getModelName</qualifiedname>
+        <reimplements refid="d4/d2c/a06895_1a5d9cfcf9c82ee51d0dee28575854f0e7">getModelName</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le nom du modèle de fond.   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="75" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="da/daf/a06903_1a3fd126b47edb2994d0009554a26afd46" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+        <definition>castor::Path const  &amp; castor3d::ImageBackground::getImagePath</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getImagePath</name>
+        <qualifiedname>castor3d::ImageBackground::getImagePath</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="77" column="21" bodyfile="Castor3D/Scene/Background/Image.hpp" bodystart="77" bodyend="80"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="da/daf/a06903_1a7d853e929913ff9775fe9585943cc001" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ImageBackground::doInitialise</definition>
+        <argsstring>(RenderDevice const &amp;device) override</argsstring>
+        <name>doInitialise</name>
+        <qualifiedname>castor3d::ImageBackground::doInitialise</qualifiedname>
+        <reimplements refid="d4/d2c/a06895_1a9d7a8b209f7ff6324c469f276a35bc86">doInitialise</reimplements>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="83" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="da/daf/a06903_1ac6539327d47fabb8254f20933c435fdd" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ImageBackground::doCleanup</definition>
+        <argsstring>() override</argsstring>
+        <name>doCleanup</name>
+        <qualifiedname>castor3d::ImageBackground::doCleanup</qualifiedname>
+        <reimplements refid="d4/d2c/a06895_1a224d34c6944a0dbdd63066e383718fd9">doCleanup</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="84" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="da/daf/a06903_1a9bc84a5462b32f928ff859c588f6a2b2" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ImageBackground::doCpuUpdate</definition>
+        <argsstring>(CpuUpdater &amp;updater) const override</argsstring>
+        <name>doCpuUpdate</name>
+        <qualifiedname>castor3d::ImageBackground::doCpuUpdate</qualifiedname>
+        <reimplements refid="d4/d2c/a06895_1a59ff1c0b98d7aea210f10ce4bf3f4dd2">doCpuUpdate</reimplements>
+        <param>
+          <type><ref refid="dc/d23/a06511" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="85" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="da/daf/a06903_1a2a2171ab8206342b801c238e08a4919b" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ImageBackground::doGpuUpdate</definition>
+        <argsstring>(GpuUpdater &amp;updater) const override</argsstring>
+        <name>doGpuUpdate</name>
+        <qualifiedname>castor3d::ImageBackground::doGpuUpdate</qualifiedname>
+        <reimplements refid="d4/d2c/a06895_1a62c95edc026ada697aa8b4c3bf6f16ff">doGpuUpdate</reimplements>
+        <param>
+          <type><ref refid="d9/d4b/a06519" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="86" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="da/daf/a06903_1aafc2c191cbcb539b9a06b11619e01e20" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ImageBackground::doUpload</definition>
+        <argsstring>(UploadData &amp;uploader) override</argsstring>
+        <name>doUpload</name>
+        <qualifiedname>castor3d::ImageBackground::doUpload</qualifiedname>
+        <reimplements refid="d4/d2c/a06895_1a8bd3e5ac9d6adcb1c2ae3ed0579fe5a4">doUpload</reimplements>
+        <param>
+          <type><ref refid="d7/d12/a03583" kindref="compound">UploadData</ref> &amp;</type>
+          <declname>uploader</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="87" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="da/daf/a06903_1adcf40291d5f9b8ce15f561f8bb60d461" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ImageBackground::doAddPassBindings</definition>
+        <argsstring>(crg::FramePass &amp;pass, crg::ImageViewIdArray const &amp;targetImage, uint32_t &amp;index) const override</argsstring>
+        <name>doAddPassBindings</name>
+        <qualifiedname>castor3d::ImageBackground::doAddPassBindings</qualifiedname>
+        <reimplements refid="d4/d2c/a06895_1ad698af6f3e26c68440fbae6e98424641">doAddPassBindings</reimplements>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewIdArray const &amp;</type>
+          <declname>targetImage</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="88" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="da/daf/a06903_1a88551cc320ee63a2dbfba23220680114" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ImageBackground::doAddBindings</definition>
+        <argsstring>(ashes::VkDescriptorSetLayoutBindingArray &amp;bindings, VkShaderStageFlags shaderStages, uint32_t &amp;index) const override</argsstring>
+        <name>doAddBindings</name>
+        <qualifiedname>castor3d::ImageBackground::doAddBindings</qualifiedname>
+        <reimplements refid="d4/d2c/a06895_1a6466c466b78cf1c7b70ff9740fe9e2df">doAddBindings</reimplements>
+        <param>
+          <type>ashes::VkDescriptorSetLayoutBindingArray &amp;</type>
+          <declname>bindings</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaderStages</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="91" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="da/daf/a06903_1ad9b44536030c6c77780a567f6815d42d" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ImageBackground::doAddDescriptors</definition>
+        <argsstring>(ashes::WriteDescriptorSetArray &amp;descriptorWrites, crg::ImageViewIdArray const &amp;targetImage, uint32_t &amp;index) const override</argsstring>
+        <name>doAddDescriptors</name>
+        <qualifiedname>castor3d::ImageBackground::doAddDescriptors</qualifiedname>
+        <reimplements refid="d4/d2c/a06895_1a99015015fe98d3009446e217c5eed7ba">doAddDescriptors</reimplements>
+        <param>
+          <type>ashes::WriteDescriptorSetArray &amp;</type>
+          <declname>descriptorWrites</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewIdArray const &amp;</type>
+          <declname>targetImage</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="94" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="da/daf/a06903_1a8a44808a491cde077bb4b6b7511f2d3b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ImageBackground::doInitialise2DTexture</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>doInitialise2DTexture</name>
+        <qualifiedname>castor3d::ImageBackground::doInitialise2DTexture</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Background/Image.hpp" line="97" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ImageBackground</label>
+        <link refid="da/daf/a06903"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SceneBackground</label>
+        <link refid="d4/d2c/a06895"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::SignalT&lt; BackgroundChangedFunc &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; BackgroundChangedFunc &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor::SignalT&lt; OnSceneUpdateFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; OnSceneUpdateFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ImageBackground</label>
+        <link refid="da/daf/a06903"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::RenderDevice</label>
+        <link refid="dc/d32/a06415"/>
+        <childnode refid="15" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d5/d4e/a06559"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::Scene</label>
+        <link refid="dc/dc2/a07135"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>onUpdate</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>onSetBackground</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>CameraRootNode</edgelabel>
+          <edgelabel>ObjectRootNode</edgelabel>
+          <edgelabel>RootNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SceneBackground</label>
+        <link refid="d4/d2c/a06895"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>onChanged</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_type</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_textureId</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::Texture</label>
+        <link refid="d1/d95/a06703"/>
+        <childnode refid="14" relation="usage">
+          <edgelabel>device</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="7">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="8">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/Background/Image.hpp" line="13" column="1" bodyfile="Castor3D/Scene/Background/Image.hpp" bodystart="15" bodyend="103"/>
+    <listofallmembers>
+      <member refid="da/daf/a06903_1a23a5ca4ae4858063fe072fcbef9aff8a" prot="public" virt="virtual"><scope>castor3d::ImageBackground</scope><name>accept</name></member>
+      <member refid="da/daf/a06903_1ac6d1921fe6aa6a8f53f23dc6cfa177d9" prot="public" virt="virtual"><scope>castor3d::ImageBackground</scope><name>accept</name></member>
+      <member refid="d4/d2c/a06895_1ad6e78b0dab2d4c5c5448c26d491c37c7" prot="protected" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>adaptBuffer</name></member>
+      <member refid="d4/d2c/a06895_1ad9cd2f30637e0bd95c125b4bce38f481" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>addBindings</name></member>
+      <member refid="d4/d2c/a06895_1a2c630f388ad29b63ed337bf711d12298" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>addDescriptors</name></member>
+      <member refid="d4/d2c/a06895_1aa46caaaadccdc07eb22f4a2d254a18a7" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>addPassBindings</name></member>
+      <member refid="d4/d2c/a06895_1a3920629b20ce1e93163403ba58c0699d" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>cleanup</name></member>
+      <member refid="d4/d2c/a06895_1a9249588b2168f66b365c4350e745d705" prot="public" virt="virtual"><scope>castor3d::ImageBackground</scope><name>createBackgroundPass</name></member>
+      <member refid="da/daf/a06903_1a88551cc320ee63a2dbfba23220680114" prot="private" virt="virtual"><scope>castor3d::ImageBackground</scope><name>doAddBindings</name></member>
+      <member refid="da/daf/a06903_1ad9b44536030c6c77780a567f6815d42d" prot="private" virt="virtual"><scope>castor3d::ImageBackground</scope><name>doAddDescriptors</name></member>
+      <member refid="da/daf/a06903_1adcf40291d5f9b8ce15f561f8bb60d461" prot="private" virt="virtual"><scope>castor3d::ImageBackground</scope><name>doAddPassBindings</name></member>
+      <member refid="da/daf/a06903_1ac6539327d47fabb8254f20933c435fdd" prot="private" virt="virtual"><scope>castor3d::ImageBackground</scope><name>doCleanup</name></member>
+      <member refid="da/daf/a06903_1a9bc84a5462b32f928ff859c588f6a2b2" prot="private" virt="virtual"><scope>castor3d::ImageBackground</scope><name>doCpuUpdate</name></member>
+      <member refid="da/daf/a06903_1a2a2171ab8206342b801c238e08a4919b" prot="private" virt="virtual"><scope>castor3d::ImageBackground</scope><name>doGpuUpdate</name></member>
+      <member refid="da/daf/a06903_1a7d853e929913ff9775fe9585943cc001" prot="private" virt="virtual"><scope>castor3d::ImageBackground</scope><name>doInitialise</name></member>
+      <member refid="da/daf/a06903_1a8a44808a491cde077bb4b6b7511f2d3b" prot="private" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>doInitialise2DTexture</name></member>
+      <member refid="da/daf/a06903_1aafc2c191cbcb539b9a06b11619e01e20" prot="private" virt="virtual"><scope>castor3d::ImageBackground</scope><name>doUpload</name></member>
+      <member refid="d4/d2c/a06895_1a502daf84d8fae8b00514dbc602428e1a" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>getIbl</name></member>
+      <member refid="d4/d2c/a06895_1a4999ca35c3d01f835ac40479e31c3152" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>getImage</name></member>
+      <member refid="da/daf/a06903_1a3fd126b47edb2994d0009554a26afd46" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>getImagePath</name></member>
+      <member refid="d4/d2c/a06895_1aaa5feb67acca5752c7c682cadef8ac12" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>getModelID</name></member>
+      <member refid="da/daf/a06903_1a2bb36130e74336fbc91134e134bad857" prot="public" virt="virtual"><scope>castor3d::ImageBackground</scope><name>getModelName</name></member>
+      <member refid="d5/d3c/a08223_1abc1fa9ec1a50d2023373baa4d4c79519" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>getName</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>getOwner</name></member>
+      <member refid="d4/d2c/a06895_1abf5ed7665d1d17135cf0247568b81c86" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>getPassIndex</name></member>
+      <member refid="d4/d2c/a06895_1acd7e92c3194c941a9f228c88792ad996" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>getSampler</name></member>
+      <member refid="d4/d2c/a06895_1a167b5fc9b869aae87deaf88a025e345e" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>getScene</name></member>
+      <member refid="d4/d2c/a06895_1ab892f46431a125e19d02f6e0b7d8dc65" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>getTexture</name></member>
+      <member refid="d4/d2c/a06895_1ad3dc4038e0cbda5173345f15cbf94a04" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>getType</name></member>
+      <member refid="d4/d2c/a06895_1a5b920245a07f95563cca3dc6256fdd5e" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>hasIbl</name></member>
+      <member refid="d4/d2c/a06895_1a12202be903a7970780d206398dccfad5" prot="public" virt="virtual"><scope>castor3d::ImageBackground</scope><name>hasScattering</name></member>
+      <member refid="d4/d2c/a06895_1ae3d4c70a72427453dfb87b88aadcc0d9" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>HiddenPassIndex</name></member>
+      <member refid="da/daf/a06903_1a652fdc2f34dbc4923b9ea517bf4a3147" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>ImageBackground</name></member>
+      <member refid="d4/d2c/a06895_1a8aa9ef0444b4e26d44c035bea663ead0" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>initialise</name></member>
+      <member refid="d4/d2c/a06895_1ae06e5c64ec82641584b419aa49bcd0c9" prot="public" virt="virtual"><scope>castor3d::ImageBackground</scope><name>isDepthSampled</name></member>
+      <member refid="d4/d2c/a06895_1aef57d943e541ffe95dd2f254e231cc84" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>isHdr</name></member>
+      <member refid="d4/d2c/a06895_1a39b5244e58cd8c1bd39011d49e19dceb" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>isInitialised</name></member>
+      <member refid="d4/d2c/a06895_1a428d4723d5b1a8d37821d3199e058f56" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>isSRGB</name></member>
+      <member refid="d4/d2c/a06895_1a2ee7dc578815b7de2dcc9fa982c3fd08" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>isVisible</name></member>
+      <member refid="d4/d2c/a06895_1a0dc278b90d4127084fc9aa52f6bde52d" prot="protected" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>loadImage</name></member>
+      <member refid="da/daf/a06903_1ae552fc3d13d6fbbdd280f37191fb8659" prot="private" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>m_2dTexture</name></member>
+      <member refid="da/daf/a06903_1a587202546e2285284e459b485954f113" prot="private" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>m_2dTexturePath</name></member>
+      <member refid="d4/d2c/a06895_1aa7bdd065bd054b1f9e2de0a9a00a3aaa" prot="protected" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>m_hasIBLSupport</name></member>
+      <member refid="d4/d2c/a06895_1a6976c0fa06338604086b94015fa5c5ef" prot="protected" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>m_hdr</name></member>
+      <member refid="d4/d2c/a06895_1ab98f581b68c9f7ed909df9d37392d812" prot="protected" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>m_ibl</name></member>
+      <member refid="d4/d2c/a06895_1a205a26001f4ddcb22affe1806df1e9be" prot="protected" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>m_initialised</name></member>
+      <member refid="d5/d3c/a08223_1a869b429a7190ecf614d8221b270e6dca" prot="protected" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>m_name</name></member>
+      <member refid="d4/d2c/a06895_1a515ef36171ad1b2ecfa3827e3fb9f741" prot="protected" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>m_needsUpload</name></member>
+      <member refid="d4/d2c/a06895_1ab33cb97f06ec6b5c5b9c4e91a2e14bfe" prot="protected" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>m_passIndex</name></member>
+      <member refid="da/daf/a06903_1a8befd94cb7954827793590d5e30eeea2" prot="private" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>m_ratio</name></member>
+      <member refid="d4/d2c/a06895_1a10429230bb03a463591a8d5e76ca6611" prot="protected" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>m_sampler</name></member>
+      <member refid="d4/d2c/a06895_1a65fdb6af39d291d044c5a0774c1ec61f" prot="protected" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>m_scene</name></member>
+      <member refid="d4/d2c/a06895_1a6f3b48bb5b1d156426d498f16094ed96" prot="protected" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>m_srgb</name></member>
+      <member refid="d4/d2c/a06895_1aca3c54bee024597a7ada60d8ecad459f" prot="protected" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>m_texture</name></member>
+      <member refid="d4/d2c/a06895_1af1b89856f30d7e64667ccad4976f22be" prot="protected" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>m_textureId</name></member>
+      <member refid="d4/d2c/a06895_1a73d4d7f5b74ae6ec59285d799401fec8" prot="protected" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>m_type</name></member>
+      <member refid="d4/d2c/a06895_1aa36b861c754c01af49c48fb2771964ef" prot="protected" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>m_visible</name></member>
+      <member refid="d5/d3c/a08223_1a4a6e4748603541685b04f95fb91efb26" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>NamedBaseT</name></member>
+      <member refid="d4/d2c/a06895_1afa9be9f8f1c561cb4d63d5c1494b05af" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>notifyChanged</name></member>
+      <member refid="d4/d2c/a06895_1af44b4b2ffcfc43f0e823c1c3fafc7f25" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>onChanged</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>OwnedBy</name></member>
+      <member refid="d5/d3c/a08223_1a2d62ce1925efead03c4e0842c06b3e11" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>rename</name></member>
+      <member refid="d4/d2c/a06895_1a7390c0ae989fc5dc15f47ab6026469c6" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>SceneBackground</name></member>
+      <member refid="da/daf/a06903_1a1f4245f454da8e9f623b659b6132ca6c" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>setImage</name></member>
+      <member refid="d4/d2c/a06895_1a543af79281ff98e5d122b587623b188e" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>setVisible</name></member>
+      <member refid="d4/d2c/a06895_1ab51fedd3cda51b70196cf2b62e4caa04" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>update</name></member>
+      <member refid="d4/d2c/a06895_1a397189455798634e6890f80886a19208" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>update</name></member>
+      <member refid="d4/d2c/a06895_1ac133bd1ea0607b497aec17048a387c77" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>upload</name></member>
+      <member refid="d4/d2c/a06895_1aaeccc1de81ab8f872ef5e82d531ef29b" prot="public" virt="non-virtual"><scope>castor3d::ImageBackground</scope><name>VisiblePassIndex</name></member>
+      <member refid="da/daf/a06903_1a0d2f88efdeb143a48bc29d595ba4a018" prot="public" virt="virtual"><scope>castor3d::ImageBackground</scope><name>write</name></member>
+      <member refid="d4/d2c/a06895_1aa1884723b97782f2f2eeea86fc44527b" prot="public" virt="virtual"><scope>castor3d::ImageBackground</scope><name>~SceneBackground</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

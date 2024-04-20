@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d18/a05383" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SphereSection</compoundname>
+    <basecompoundref refid="d1/d5e/a05403" prot="public" virt="non-virtual">castor3d::MeshGenerator</basecompoundref>
+    <includes local="no">SphereSection.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d18/a05383_1a1f778ebff25f8190f2d0259a17f59710" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SphereSection::SphereSection</definition>
+        <argsstring>()</argsstring>
+        <name>SphereSection</name>
+        <qualifiedname>castor3d::SphereSection::SphereSection</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Generator/SphereSection.hpp" line="24" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="db/d18/a05383_1a1004014f8fc3f98c22ea90bb105f3e31" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> MeshGeneratorUPtr</type>
+        <definition>static C3D_API MeshGeneratorUPtr castor3d::SphereSection::create</definition>
+        <argsstring>()</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::SphereSection::create</qualifiedname>
+        <briefdescription>
+<para>Fonction de création, utilisée par la Factory.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Un cylindre   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Generator/SphereSection.hpp" line="28" column="34"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="db/d18/a05383_1a4c85ed84ad2673bcff9566303769611f" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SphereSection::doGenerate</definition>
+        <argsstring>(Mesh &amp;mesh, Parameters const &amp;parameters) override</argsstring>
+        <name>doGenerate</name>
+        <qualifiedname>castor3d::SphereSection::doGenerate</qualifiedname>
+        <reimplements refid="d1/d5e/a05403_1a690745122d7e670b311e317ae86c9b45">doGenerate</reimplements>
+        <param>
+          <type><ref refid="d2/dc7/a05391" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Génère le maillage. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le maillage. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les paramètres du générateur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Generator/SphereSection.hpp" line="31" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="d1/d5e/a05403"/>
+      </node>
+      <node id="1">
+        <label>castor3d::SphereSection</label>
+        <link refid="db/d18/a05383"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="d1/d5e/a05403"/>
+      </node>
+      <node id="1">
+        <label>castor3d::SphereSection</label>
+        <link refid="db/d18/a05383"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Model/Mesh/Generator/SphereSection.hpp" line="14" column="1" bodyfile="Castor3D/Model/Mesh/Generator/SphereSection.hpp" bodystart="16" bodyend="33"/>
+    <listofallmembers>
+      <member refid="d1/d5e/a05403_1a3207825be521c851f6fc654751f54cf1" prot="public" virt="virtual"><scope>castor3d::SphereSection</scope><name>computeNormals</name></member>
+      <member refid="db/d18/a05383_1a1004014f8fc3f98c22ea90bb105f3e31" prot="public" virt="non-virtual"><scope>castor3d::SphereSection</scope><name>create</name></member>
+      <member refid="db/d18/a05383_1a4c85ed84ad2673bcff9566303769611f" prot="private" virt="virtual"><scope>castor3d::SphereSection</scope><name>doGenerate</name></member>
+      <member refid="d1/d5e/a05403_1a9fdc140f2d871ca6cb81029250c346ae" prot="public" virt="virtual"><scope>castor3d::SphereSection</scope><name>generate</name></member>
+      <member refid="d1/d5e/a05403_1a3ccec3fd88667bbca33c6e81afdeff19" prot="public" virt="non-virtual"><scope>castor3d::SphereSection</scope><name>MeshGenerator</name></member>
+      <member refid="db/d18/a05383_1a1f778ebff25f8190f2d0259a17f59710" prot="public" virt="non-virtual"><scope>castor3d::SphereSection</scope><name>SphereSection</name></member>
+      <member refid="d1/d5e/a05403_1a2cf442c1a0d331b4b62158bbdb711b9c" prot="public" virt="virtual"><scope>castor3d::SphereSection</scope><name>~MeshGenerator</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

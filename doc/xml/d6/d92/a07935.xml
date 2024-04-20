@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d92/a07935" kind="class" language="C++" prot="public">
+    <compoundname>castor::AlignedMemoryAllocator</compoundname>
+    <includes local="no">AlignedMemoryAllocator.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>size_t</type>
+        <declname>Align</declname>
+        <defname>Align</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d6/d92/a07935_1aab3ac5d49d6ecaf9fabb55c7377a6b95" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint8_t *</type>
+        <definition>static uint8_t * castor::AlignedMemoryAllocator&lt; Align &gt;::allocate</definition>
+        <argsstring>(size_t size)</argsstring>
+        <name>allocate</name>
+        <qualifiedname>castor::AlignedMemoryAllocator::allocate</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Alloue de la mémoire. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;adresse mémoire de l&apos;espace alloué. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Align/AlignedMemoryAllocator.hpp" line="23" column="17" bodyfile="CastorUtils/Align/AlignedMemoryAllocator.hpp" bodystart="23" bodyend="27"/>
+        <references refid="d2/dd2/a02279_1ac966ce5a232271cb63f592293488a0e0">castor::alignedAlloc</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d92/a07935_1a17f4ecdfe27104d697c8cc923007d1f4" prot="public" static="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor::AlignedMemoryAllocator&lt; Align &gt;::deallocate</definition>
+        <argsstring>(uint8_t *space) noexcept</argsstring>
+        <name>deallocate</name>
+        <qualifiedname>castor::AlignedMemoryAllocator::deallocate</qualifiedname>
+        <param>
+          <type>uint8_t *</type>
+          <declname>space</declname>
+        </param>
+        <briefdescription>
+<para>Libère la mémoire donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">space</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La mémoire à libérer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Align/AlignedMemoryAllocator.hpp" line="36" column="13" bodyfile="CastorUtils/Align/AlignedMemoryAllocator.hpp" bodystart="36" bodyend="39"/>
+        <references refid="d2/dd2/a02279_1a4ae90a1c02af9510b8c10ed730dbb2f9">castor::alignedFree</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Allocateur de mémoire. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Alloue de la mémoire alignée. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="CastorUtils/Align/AlignedMemoryAllocator.hpp" line="12" column="1" bodyfile="CastorUtils/Align/AlignedMemoryAllocator.hpp" bodystart="13" bodyend="40"/>
+    <listofallmembers>
+      <member refid="d6/d92/a07935_1aab3ac5d49d6ecaf9fabb55c7377a6b95" prot="public" virt="non-virtual"><scope>castor::AlignedMemoryAllocator</scope><name>allocate</name></member>
+      <member refid="d6/d92/a07935_1a17f4ecdfe27104d697c8cc923007d1f4" prot="public" virt="non-virtual"><scope>castor::AlignedMemoryAllocator</scope><name>deallocate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

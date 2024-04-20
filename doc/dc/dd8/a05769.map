@@ -1,0 +1,16 @@
+<map id="castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;" name="castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="937,50,1104,105"/>
+<area shape="rect" id="Node000002" href="$d6/da8/a08227.html" title=" " alt="" coords="576,7,763,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="772,32,914,55,938,59,937,64,913,60,771,37"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="197,7,380,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="393,17,575,17,575,23,393,23"/>
+<area shape="rect" id="Node000004" href="$dc/d79/a08267.html" title=" " alt="" coords="575,57,764,97"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="778,75,937,75,937,80,778,80"/>
+<area shape="rect" id="Node000005" href="$da/d36/a08315.html" title=" " alt="" coords="5,82,148,107"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="162,90,574,77,575,83,162,95"/>
+<area shape="rect" id="Node000006" href="$dc/d79/a08267.html" title="Basic signal class." alt="" coords="197,111,380,137"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="162,104,198,109,197,114,161,109"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="394,119,471,113,550,104,596,95,597,100,551,109,471,119,394,124"/>
+<area shape="rect" id="Node000007" href="$d2/d2d/a05775.html" title=" " alt="" coords="586,122,753,177"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="766,136,838,125,913,109,940,102,941,107,914,115,839,130,767,141"/>
+</map>

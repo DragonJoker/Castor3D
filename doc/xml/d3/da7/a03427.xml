@@ -1,0 +1,487 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/da7/a03427" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::CmshImporterFile</compoundname>
+    <basecompoundref refid="db/df9/a03951" prot="public" virt="non-virtual">castor3d::ImporterFile</basecompoundref>
+    <includes local="no">CmshImporter.hpp</includes>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d3/da7/a03427_1a5e979c0c32fd1e2dda83d6b0fa83017f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::CmshImporterFile::CmshImporterFile</definition>
+        <argsstring>(Engine &amp;engine, Scene *scene, castor::Path const &amp;path, Parameters const &amp;parameters, ProgressBar *progress)</argsstring>
+        <name>CmshImporterFile</name>
+        <qualifiedname>castor3d::CmshImporterFile::CmshImporterFile</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="23" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/da7/a03427_1a6f3377b394e6cf15179724ac5a5de78c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>castor::StringArray</type>
+        <definition>castor::StringArray castor3d::CmshImporterFile::listMaterials</definition>
+        <argsstring>() override</argsstring>
+        <name>listMaterials</name>
+        <qualifiedname>castor3d::CmshImporterFile::listMaterials</qualifiedname>
+        <reimplements refid="db/df9/a03951_1affc47b32a32171190e85820f7adf4761">listMaterials</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="30" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1af15c04542f27e074f1c8da31780c2b68" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d4/d87/a03963" kindref="compound">MeshData</ref> &gt;</type>
+        <definition>castor::Vector&lt; MeshData &gt; castor3d::CmshImporterFile::listMeshes</definition>
+        <argsstring>() override</argsstring>
+        <name>listMeshes</name>
+        <qualifiedname>castor3d::CmshImporterFile::listMeshes</qualifiedname>
+        <reimplements refid="db/df9/a03951_1a826e83658a48fc837980b69cf46ceda9">listMeshes</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="31" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1a75dff04b7a79978eeaf6bfab02bef794" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>castor::StringArray</type>
+        <definition>castor::StringArray castor3d::CmshImporterFile::listSkeletons</definition>
+        <argsstring>() override</argsstring>
+        <name>listSkeletons</name>
+        <qualifiedname>castor3d::CmshImporterFile::listSkeletons</qualifiedname>
+        <reimplements refid="db/df9/a03951_1a85a41518e25628a08ac0336aab3d1fd2">listSkeletons</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="32" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1abb22b9ddcdc6f32f85cf0fcba7e1fdd8" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d5/d04/a03955" kindref="compound">NodeData</ref> &gt;</type>
+        <definition>castor::Vector&lt; NodeData &gt; castor3d::CmshImporterFile::listSceneNodes</definition>
+        <argsstring>() override</argsstring>
+        <name>listSceneNodes</name>
+        <qualifiedname>castor3d::CmshImporterFile::listSceneNodes</qualifiedname>
+        <reimplements refid="db/df9/a03951_1af6637e0bfba08b9a5b42e2e0bf6e3f55">listSceneNodes</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="33" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1a236f57ef93352c22f8b966d2c0ae4bfb" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="df/d0c/a03967" kindref="compound">LightData</ref> &gt;</type>
+        <definition>castor::Vector&lt; LightData &gt; castor3d::CmshImporterFile::listLights</definition>
+        <argsstring>() override</argsstring>
+        <name>listLights</name>
+        <qualifiedname>castor3d::CmshImporterFile::listLights</qualifiedname>
+        <reimplements refid="db/df9/a03951_1aa129182fdd34a955eb1c6645e333e0c4">listLights</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="34" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1a0aa7997b13f364256a2aa2ff59a27653" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d1/d55/a03959" kindref="compound">GeometryData</ref> &gt;</type>
+        <definition>castor::Vector&lt; GeometryData &gt; castor3d::CmshImporterFile::listGeometries</definition>
+        <argsstring>() override</argsstring>
+        <name>listGeometries</name>
+        <qualifiedname>castor3d::CmshImporterFile::listGeometries</qualifiedname>
+        <reimplements refid="db/df9/a03951_1a9a5144fc634ce149c4f5a04489a58aa5">listGeometries</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="35" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1a339298356a3b46d11a24cd62969d885d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d0/dce/a03971" kindref="compound">CameraData</ref> &gt;</type>
+        <definition>castor::Vector&lt; CameraData &gt; castor3d::CmshImporterFile::listCameras</definition>
+        <argsstring>() override</argsstring>
+        <name>listCameras</name>
+        <qualifiedname>castor3d::CmshImporterFile::listCameras</qualifiedname>
+        <reimplements refid="db/df9/a03951_1a6a961525e47a74c28d9e85c822e7bda5">listCameras</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="36" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1af8d08a1e227776be8b21f6c7c104b17a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>castor::StringArray</type>
+        <definition>castor::StringArray castor3d::CmshImporterFile::listMeshAnimations</definition>
+        <argsstring>(Mesh const &amp;mesh) override</argsstring>
+        <name>listMeshAnimations</name>
+        <qualifiedname>castor3d::CmshImporterFile::listMeshAnimations</qualifiedname>
+        <reimplements refid="db/df9/a03951_1a62be3135c1df3fd7b28d16f6fc601688">listMeshAnimations</reimplements>
+        <param>
+          <type><ref refid="d2/dc7/a05391" kindref="compound">Mesh</ref> const &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="37" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1ac77b31c0b06714ebca37bbafd059e97e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>castor::StringArray</type>
+        <definition>castor::StringArray castor3d::CmshImporterFile::listSkeletonAnimations</definition>
+        <argsstring>(Skeleton const &amp;skeleton) override</argsstring>
+        <name>listSkeletonAnimations</name>
+        <qualifiedname>castor3d::CmshImporterFile::listSkeletonAnimations</qualifiedname>
+        <reimplements refid="db/df9/a03951_1a74090ac02a3c5f333dc42a570940971f">listSkeletonAnimations</reimplements>
+        <param>
+          <type><ref refid="d6/d3e/a05683" kindref="compound">Skeleton</ref> const &amp;</type>
+          <declname>skeleton</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="38" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1aa0f6bd4d76947ece5e7ddaa06c44ee7c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>castor::StringArray</type>
+        <definition>castor::StringArray castor3d::CmshImporterFile::listSceneNodeAnimations</definition>
+        <argsstring>(SceneNode const &amp;node) override</argsstring>
+        <name>listSceneNodeAnimations</name>
+        <qualifiedname>castor3d::CmshImporterFile::listSceneNodeAnimations</qualifiedname>
+        <reimplements refid="db/df9/a03951_1aa4a13d003395855ab5831a3c86719f94">listSceneNodeAnimations</reimplements>
+        <param>
+          <type><ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> const &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="39" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1acced0fce3a25e899954ef29846fb5d41" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>castor::StringArray</type>
+        <definition>castor::StringArray castor3d::CmshImporterFile::listAllMeshAnimations</definition>
+        <argsstring>() override</argsstring>
+        <name>listAllMeshAnimations</name>
+        <qualifiedname>castor3d::CmshImporterFile::listAllMeshAnimations</qualifiedname>
+        <reimplements refid="db/df9/a03951_1a11f1759b71d67b5f0597ebd13fd3cb0b">listAllMeshAnimations</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="40" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1a1a6b80939a298ef4a210420055cfe933" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>castor::StringArray</type>
+        <definition>castor::StringArray castor3d::CmshImporterFile::listAllSkeletonAnimations</definition>
+        <argsstring>() override</argsstring>
+        <name>listAllSkeletonAnimations</name>
+        <qualifiedname>castor3d::CmshImporterFile::listAllSkeletonAnimations</qualifiedname>
+        <reimplements refid="db/df9/a03951_1a96f767d6ac51d95c2eace591ad6827df">listAllSkeletonAnimations</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="41" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1a1fb58f668d5901e45485b40a8750d94a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>castor::StringArray</type>
+        <definition>castor::StringArray castor3d::CmshImporterFile::listAllSceneNodeAnimations</definition>
+        <argsstring>() override</argsstring>
+        <name>listAllSceneNodeAnimations</name>
+        <qualifiedname>castor3d::CmshImporterFile::listAllSceneNodeAnimations</qualifiedname>
+        <reimplements refid="db/df9/a03951_1a4ef51aaf2966e94112d167b477bf3f9d">listAllSceneNodeAnimations</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="42" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1a638084f6803b057c195d8411ec183648" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>MaterialImporterUPtr</type>
+        <definition>MaterialImporterUPtr castor3d::CmshImporterFile::createMaterialImporter</definition>
+        <argsstring>() override</argsstring>
+        <name>createMaterialImporter</name>
+        <qualifiedname>castor3d::CmshImporterFile::createMaterialImporter</qualifiedname>
+        <reimplements refid="db/df9/a03951_1af6e9496b0a2a76cbb85ed3c8f1403f9e">createMaterialImporter</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="44" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1ad041d965a84d235fb64c8050a8be8012" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>AnimationImporterUPtr</type>
+        <definition>AnimationImporterUPtr castor3d::CmshImporterFile::createAnimationImporter</definition>
+        <argsstring>() override</argsstring>
+        <name>createAnimationImporter</name>
+        <qualifiedname>castor3d::CmshImporterFile::createAnimationImporter</qualifiedname>
+        <reimplements refid="db/df9/a03951_1ac7b6b7d6bb6e1c3ea59f61eb10050038">createAnimationImporter</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="45" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1a7e8308f3f8c15c9d6fe90f3b71cced3e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>SkeletonImporterUPtr</type>
+        <definition>SkeletonImporterUPtr castor3d::CmshImporterFile::createSkeletonImporter</definition>
+        <argsstring>() override</argsstring>
+        <name>createSkeletonImporter</name>
+        <qualifiedname>castor3d::CmshImporterFile::createSkeletonImporter</qualifiedname>
+        <reimplements refid="db/df9/a03951_1a2c485811dafffd69b92420e6deee1fd9">createSkeletonImporter</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="46" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1a73980dd0a414b5b21868c2ea3d9f050e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>MeshImporterUPtr</type>
+        <definition>MeshImporterUPtr castor3d::CmshImporterFile::createMeshImporter</definition>
+        <argsstring>() override</argsstring>
+        <name>createMeshImporter</name>
+        <qualifiedname>castor3d::CmshImporterFile::createMeshImporter</qualifiedname>
+        <reimplements refid="db/df9/a03951_1ac282bf29a22c61eb7365825071e41601">createMeshImporter</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="47" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1a01b0032f43891f6bca66304bbb0239d9" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>SceneNodeImporterUPtr</type>
+        <definition>SceneNodeImporterUPtr castor3d::CmshImporterFile::createSceneNodeImporter</definition>
+        <argsstring>() override</argsstring>
+        <name>createSceneNodeImporter</name>
+        <qualifiedname>castor3d::CmshImporterFile::createSceneNodeImporter</qualifiedname>
+        <reimplements refid="db/df9/a03951_1aeb275a46598e6b78273afa642ddcb2e9">createSceneNodeImporter</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="48" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1ae6147b1a1f2e78483f9608d0537a93e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>LightImporterUPtr</type>
+        <definition>LightImporterUPtr castor3d::CmshImporterFile::createLightImporter</definition>
+        <argsstring>() override</argsstring>
+        <name>createLightImporter</name>
+        <qualifiedname>castor3d::CmshImporterFile::createLightImporter</qualifiedname>
+        <reimplements refid="db/df9/a03951_1a482dda7bf5a18d882ac1e5494af0e5b8">createLightImporter</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="49" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/da7/a03427_1aa5bd405214e6e4bd7a603168af05356f" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>CameraImporterUPtr</type>
+        <definition>CameraImporterUPtr castor3d::CmshImporterFile::createCameraImporter</definition>
+        <argsstring>() override</argsstring>
+        <name>createCameraImporter</name>
+        <qualifiedname>castor3d::CmshImporterFile::createCameraImporter</qualifiedname>
+        <reimplements refid="db/df9/a03951_1a50b719073d1187bf5c9dbee2c47c4b4c">createCameraImporter</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="50" column="20"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d3/da7/a03427_1ab2036c5b2d1b16a483c9fc5369e0dbc3" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ImporterFileUPtr</type>
+        <definition>static ImporterFileUPtr castor3d::CmshImporterFile::create</definition>
+        <argsstring>(Engine &amp;engine, Scene *scene, castor::Path const &amp;path, Parameters const &amp;parameters, ProgressBar *progress)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::CmshImporterFile::create</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="52" column="25"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::CmshImporterFile</label>
+        <link refid="d3/da7/a03427"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ImporterFile</label>
+        <link refid="db/df9/a03951"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::CmshImporterFile</label>
+        <link refid="d3/da7/a03427"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ImporterFile</label>
+        <link refid="db/df9/a03951"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Binary/CmshImporter.hpp" line="19" column="1" bodyfile="Castor3D/Binary/CmshImporter.hpp" bodystart="21" bodyend="57"/>
+    <listofallmembers>
+      <member refid="d3/da7/a03427_1a5e979c0c32fd1e2dda83d6b0fa83017f" prot="private" virt="non-virtual"><scope>castor3d::CmshImporterFile</scope><name>CmshImporterFile</name></member>
+      <member refid="d3/da7/a03427_1ab2036c5b2d1b16a483c9fc5369e0dbc3" prot="public" virt="non-virtual"><scope>castor3d::CmshImporterFile</scope><name>create</name></member>
+      <member refid="d3/da7/a03427_1ad041d965a84d235fb64c8050a8be8012" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>createAnimationImporter</name></member>
+      <member refid="d3/da7/a03427_1aa5bd405214e6e4bd7a603168af05356f" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>createCameraImporter</name></member>
+      <member refid="d3/da7/a03427_1ae6147b1a1f2e78483f9608d0537a93e5" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>createLightImporter</name></member>
+      <member refid="d3/da7/a03427_1a638084f6803b057c195d8411ec183648" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>createMaterialImporter</name></member>
+      <member refid="d3/da7/a03427_1a73980dd0a414b5b21868c2ea3d9f050e" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>createMeshImporter</name></member>
+      <member refid="d3/da7/a03427_1a01b0032f43891f6bca66304bbb0239d9" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>createSceneNodeImporter</name></member>
+      <member refid="d3/da7/a03427_1a7e8308f3f8c15c9d6fe90f3b71cced3e" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>createSkeletonImporter</name></member>
+      <member refid="db/df9/a03951_1a0989a84d0147792136a11a9c0f05d827" prot="public" virt="non-virtual"><scope>castor3d::CmshImporterFile</scope><name>getExtension</name></member>
+      <member refid="db/df9/a03951_1aa1e824bafbc99651eae0fb321048202f" prot="public" virt="non-virtual"><scope>castor3d::CmshImporterFile</scope><name>getExternalName</name></member>
+      <member refid="db/df9/a03951_1acab685d9ea6aa7dbad474cfa536efb5f" prot="public" virt="non-virtual"><scope>castor3d::CmshImporterFile</scope><name>getFileName</name></member>
+      <member refid="db/df9/a03951_1a6b42d1c9bb4e9adc4c24b8cd4fedbf52" prot="public" virt="non-virtual"><scope>castor3d::CmshImporterFile</scope><name>getFilePath</name></member>
+      <member refid="db/df9/a03951_1a26248dda145358a38f6133f84a5bdd81" prot="public" virt="non-virtual"><scope>castor3d::CmshImporterFile</scope><name>getInternalName</name></member>
+      <member refid="db/df9/a03951_1a3c9336f1271abed1011a7bf7e93fcfbc" prot="public" virt="non-virtual"><scope>castor3d::CmshImporterFile</scope><name>getName</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::CmshImporterFile</scope><name>getOwner</name></member>
+      <member refid="db/df9/a03951_1a11f3ae063f98ea15833c567012f265d5" prot="public" virt="non-virtual"><scope>castor3d::CmshImporterFile</scope><name>getParameters</name></member>
+      <member refid="db/df9/a03951_1a1169709680a5f277f9af8081cc1fdee6" prot="public" virt="non-virtual"><scope>castor3d::CmshImporterFile</scope><name>getProgressBar</name></member>
+      <member refid="db/df9/a03951_1a9cedcad6f40d603057a4785c680caacd" prot="public" virt="non-virtual"><scope>castor3d::CmshImporterFile</scope><name>getScene</name></member>
+      <member refid="db/df9/a03951_1a1f564ef17139ef95c306af465785aaee" prot="protected" virt="non-virtual"><scope>castor3d::CmshImporterFile</scope><name>ImporterFile</name></member>
+      <member refid="d3/da7/a03427_1acced0fce3a25e899954ef29846fb5d41" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>listAllMeshAnimations</name></member>
+      <member refid="d3/da7/a03427_1a1fb58f668d5901e45485b40a8750d94a" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>listAllSceneNodeAnimations</name></member>
+      <member refid="d3/da7/a03427_1a1a6b80939a298ef4a210420055cfe933" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>listAllSkeletonAnimations</name></member>
+      <member refid="d3/da7/a03427_1a339298356a3b46d11a24cd62969d885d" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>listCameras</name></member>
+      <member refid="d3/da7/a03427_1a0aa7997b13f364256a2aa2ff59a27653" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>listGeometries</name></member>
+      <member refid="d3/da7/a03427_1a236f57ef93352c22f8b966d2c0ae4bfb" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>listLights</name></member>
+      <member refid="d3/da7/a03427_1a6f3377b394e6cf15179724ac5a5de78c" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>listMaterials</name></member>
+      <member refid="d3/da7/a03427_1af8d08a1e227776be8b21f6c7c104b17a" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>listMeshAnimations</name></member>
+      <member refid="d3/da7/a03427_1af15c04542f27e074f1c8da31780c2b68" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>listMeshes</name></member>
+      <member refid="d3/da7/a03427_1aa0f6bd4d76947ece5e7ddaa06c44ee7c" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>listSceneNodeAnimations</name></member>
+      <member refid="d3/da7/a03427_1abb22b9ddcdc6f32f85cf0fcba7e1fdd8" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>listSceneNodes</name></member>
+      <member refid="d3/da7/a03427_1ac77b31c0b06714ebca37bbafd059e97e" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>listSkeletonAnimations</name></member>
+      <member refid="d3/da7/a03427_1a75dff04b7a79978eeaf6bfab02bef794" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>listSkeletons</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::CmshImporterFile</scope><name>OwnedBy</name></member>
+      <member refid="db/df9/a03951_1a68919be06f3479f498a6f30a7019df9a" prot="public" virt="non-virtual"><scope>castor3d::CmshImporterFile</scope><name>setScene</name></member>
+      <member refid="db/df9/a03951_1a94b4288c521a39d485772b617451839b" prot="public" virt="virtual"><scope>castor3d::CmshImporterFile</scope><name>~ImporterFile</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

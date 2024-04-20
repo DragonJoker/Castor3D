@@ -1,0 +1,645 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/d44/a09387" kind="class" language="C++" prot="public">
+    <compoundname>castor::DynamicLibrary</compoundname>
+    <includes local="no">DynamicLibrary.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/d44/a09387_1ab477b662ef84fcbb1f85c00934c0b9b7" prot="private" static="no" mutable="no">
+        <type>void *</type>
+        <definition>void* castor::DynamicLibrary::m_library</definition>
+        <argsstring></argsstring>
+        <name>m_library</name>
+        <qualifiedname>castor::DynamicLibrary::m_library</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="215" column="7" bodyfile="CastorUtils/Miscellaneous/DynamicLibrary.hpp" bodystart="215" bodyend="215"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d44/a09387_1a4b64a2df29a2f647c8c217bf2f0985a2" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref></type>
+        <definition>Path castor::DynamicLibrary::m_pathLibrary</definition>
+        <argsstring></argsstring>
+        <name>m_pathLibrary</name>
+        <qualifiedname>castor::DynamicLibrary::m_pathLibrary</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="216" column="6" bodyfile="CastorUtils/Miscellaneous/DynamicLibrary.hpp" bodystart="216" bodyend="216"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d44/a09387_1aaab36cff500af46fd924fb0a7c0d9ad3" prot="public" static="no" const="no" explicit="yes" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::DynamicLibrary::DynamicLibrary</definition>
+        <argsstring>(Path const &amp;pathFile) noexcept</argsstring>
+        <name>DynamicLibrary</name>
+        <qualifiedname>castor::DynamicLibrary::DynamicLibrary</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>pathFile</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur, charge la bibliothèque. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pathFile</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin du fichier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="23" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d44/a09387_1a51ccdf00e31b8088489c1630e62344f8" prot="public" static="no" const="no" explicit="yes" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::DynamicLibrary::DynamicLibrary</definition>
+        <argsstring>(String const &amp;pathFile) noexcept</argsstring>
+        <name>DynamicLibrary</name>
+        <qualifiedname>castor::DynamicLibrary::DynamicLibrary</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>pathFile</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur, charge la bibliothèque. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pathFile</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin du fichier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="32" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d44/a09387_1a96b560debb92857fe77df6dd45c4275c" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::DynamicLibrary::DynamicLibrary</definition>
+        <argsstring>(DynamicLibrary const &amp;lib) noexcept</argsstring>
+        <name>DynamicLibrary</name>
+        <qualifiedname>castor::DynamicLibrary::DynamicLibrary</qualifiedname>
+        <param>
+          <type><ref refid="d7/d44/a09387" kindref="compound">DynamicLibrary</ref> const &amp;</type>
+          <declname>lib</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par copie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lib</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La <ref refid="d7/d44/a09387" kindref="compound">DynamicLibrary</ref> à copier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="41" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d44/a09387_1a399441fc82c512480d11c117e79582bc" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::DynamicLibrary::DynamicLibrary</definition>
+        <argsstring>(DynamicLibrary &amp;&amp;lib) noexcept</argsstring>
+        <name>DynamicLibrary</name>
+        <qualifiedname>castor::DynamicLibrary::DynamicLibrary</qualifiedname>
+        <param>
+          <type><ref refid="d7/d44/a09387" kindref="compound">DynamicLibrary</ref> &amp;&amp;</type>
+          <declname>lib</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lib</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La <ref refid="d7/d44/a09387" kindref="compound">DynamicLibrary</ref> à déplacer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="50" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d44/a09387_1aa2355f4edd8d10c2ec97acee0fd5db46" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::DynamicLibrary::~DynamicLibrary</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~DynamicLibrary</name>
+        <qualifiedname>castor::DynamicLibrary::~DynamicLibrary</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="57" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d44/a09387_1a4e968f3c815f08b74d5bb71352d8c9a7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d7/d44/a09387" kindref="compound">DynamicLibrary</ref> &amp;</type>
+        <definition>CU_API DynamicLibrary &amp; castor::DynamicLibrary::operator=</definition>
+        <argsstring>(DynamicLibrary const &amp;lib)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::DynamicLibrary::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/d44/a09387" kindref="compound">DynamicLibrary</ref> const &amp;</type>
+          <declname>lib</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par copie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lib</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La <ref refid="d7/d44/a09387" kindref="compound">DynamicLibrary</ref> à copier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cette <ref refid="d7/d44/a09387" kindref="compound">DynamicLibrary</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="68" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d44/a09387_1a6fcdf6dbdb1be34750215a3dcf5a659f" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d7/d44/a09387" kindref="compound">DynamicLibrary</ref> &amp;</type>
+        <definition>CU_API DynamicLibrary &amp; castor::DynamicLibrary::operator=</definition>
+        <argsstring>(DynamicLibrary &amp;&amp;lib) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::DynamicLibrary::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/d44/a09387" kindref="compound">DynamicLibrary</ref> &amp;&amp;</type>
+          <declname>lib</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lib</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La <ref refid="d7/d44/a09387" kindref="compound">DynamicLibrary</ref> à déplacer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cette <ref refid="d7/d44/a09387" kindref="compound">DynamicLibrary</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="79" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d44/a09387_1aedc2b6b4e2ee1af69de155aa1eb82d4f" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncType</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor::DynamicLibrary::getFunction</definition>
+        <argsstring>(FuncType &amp;function, char const *name) noexcept</argsstring>
+        <name>getFunction</name>
+        <qualifiedname>castor::DynamicLibrary::getFunction</qualifiedname>
+        <param>
+          <type>FuncType &amp;</type>
+          <declname>function</declname>
+        </param>
+        <param>
+          <type>char const *</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Récupère une fonction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la fonction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de la fonction </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si la fonction a été correctement récupérée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="93" column="6" bodyfile="CastorUtils/Miscellaneous/DynamicLibrary.hpp" bodystart="93" bodyend="96"/>
+        <references refid="d7/d44/a09387_1aedc2b6b4e2ee1af69de155aa1eb82d4f" compoundref="d7/db7/a02198" startline="93" endline="96">getFunction</references>
+        <references refid="d2/dd2/a02279_1ab063f33ab8c390c2522ef198128a0d77">castor::makeString</references>
+        <referencedby refid="d7/d44/a09387_1a94604a7fecda56ec2dc96a71afb62ffc" compoundref="d7/db7/a02198" startline="145" endline="148">getFunction</referencedby>
+        <referencedby refid="d7/d44/a09387_1aedc2b6b4e2ee1af69de155aa1eb82d4f" compoundref="d7/db7/a02198" startline="93" endline="96">getFunction</referencedby>
+        <referencedby refid="d7/d44/a09387_1ab9afed02bb8a6953060162dac097d6ad" compoundref="d7/db7/a02198" startline="110" endline="113">getFunction</referencedby>
+        <referencedby refid="d7/d44/a09387_1adf586f02dfe6b7673d6516b871fe6d65" compoundref="d7/db7/a02198" startline="162" endline="165">getFunction</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d7/d44/a09387_1ab9afed02bb8a6953060162dac097d6ad" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncType</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor::DynamicLibrary::getFunction</definition>
+        <argsstring>(FuncType &amp;function, wchar_t const *name) noexcept</argsstring>
+        <name>getFunction</name>
+        <qualifiedname>castor::DynamicLibrary::getFunction</qualifiedname>
+        <param>
+          <type>FuncType &amp;</type>
+          <declname>function</declname>
+        </param>
+        <param>
+          <type>wchar_t const *</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Récupère une fonction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la fonction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de la fonction </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si la fonction a été correctement récupérée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="110" column="6" bodyfile="CastorUtils/Miscellaneous/DynamicLibrary.hpp" bodystart="110" bodyend="113"/>
+        <references refid="d7/d44/a09387_1aedc2b6b4e2ee1af69de155aa1eb82d4f" compoundref="d7/db7/a02198" startline="93" endline="96">getFunction</references>
+        <references refid="d2/dd2/a02279_1ab063f33ab8c390c2522ef198128a0d77">castor::makeString</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/d44/a09387_1abf47af1c1143dd4b5c6e20f5e76c0452" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncType</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor::DynamicLibrary::getFunction</definition>
+        <argsstring>(FuncType &amp;function, String const &amp;name) noexcept</argsstring>
+        <name>getFunction</name>
+        <qualifiedname>castor::DynamicLibrary::getFunction</qualifiedname>
+        <param>
+          <type>FuncType &amp;</type>
+          <declname>function</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Récupère une fonction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la fonction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de la fonction </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si la fonction a été correctement récupérée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="127" column="6" bodyfile="CastorUtils/Miscellaneous/DynamicLibrary.hpp" bodystart="127" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d44/a09387_1a94604a7fecda56ec2dc96a71afb62ffc" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncType</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor::DynamicLibrary::getFunction</definition>
+        <argsstring>(char const *name, FuncType &amp;function) noexcept</argsstring>
+        <name>getFunction</name>
+        <qualifiedname>castor::DynamicLibrary::getFunction</qualifiedname>
+        <param>
+          <type>char const *</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>FuncType &amp;</type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+<para>Récupère une fonction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la fonction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de la fonction </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si la fonction a été correctement récupérée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="145" column="6" bodyfile="CastorUtils/Miscellaneous/DynamicLibrary.hpp" bodystart="145" bodyend="148"/>
+        <references refid="d7/d44/a09387_1aedc2b6b4e2ee1af69de155aa1eb82d4f" compoundref="d7/db7/a02198" startline="93" endline="96">getFunction</references>
+        <references refid="d2/dd2/a02279_1ab063f33ab8c390c2522ef198128a0d77">castor::makeString</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/d44/a09387_1adf586f02dfe6b7673d6516b871fe6d65" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncType</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor::DynamicLibrary::getFunction</definition>
+        <argsstring>(wchar_t const *name, FuncType &amp;function) noexcept</argsstring>
+        <name>getFunction</name>
+        <qualifiedname>castor::DynamicLibrary::getFunction</qualifiedname>
+        <param>
+          <type>wchar_t const *</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>FuncType &amp;</type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+<para>Récupère une fonction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la fonction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de la fonction </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si la fonction a été correctement récupérée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="162" column="6" bodyfile="CastorUtils/Miscellaneous/DynamicLibrary.hpp" bodystart="162" bodyend="165"/>
+        <references refid="d7/d44/a09387_1aedc2b6b4e2ee1af69de155aa1eb82d4f" compoundref="d7/db7/a02198" startline="93" endline="96">getFunction</references>
+        <references refid="d2/dd2/a02279_1ab063f33ab8c390c2522ef198128a0d77">castor::makeString</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/d44/a09387_1aae9d3b075d80c0161ff882b229c596e6" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncType</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor::DynamicLibrary::getFunction</definition>
+        <argsstring>(String const &amp;name, FuncType &amp;function) noexcept</argsstring>
+        <name>getFunction</name>
+        <qualifiedname>castor::DynamicLibrary::getFunction</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>FuncType &amp;</type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+<para>Récupère une fonction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la fonction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de la fonction </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si la fonction a été correctement récupérée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="179" column="6" bodyfile="CastorUtils/Miscellaneous/DynamicLibrary.hpp" bodystart="179" bodyend="183"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d44/a09387_1a8a0be0d6389fe1e04f3b157a4857b071" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::DynamicLibrary::isOpen</definition>
+        <argsstring>() const</argsstring>
+        <name>isOpen</name>
+        <qualifiedname>castor::DynamicLibrary::isOpen</qualifiedname>
+        <briefdescription>
+<para>Dit si la <ref refid="d7/d44/a09387" kindref="compound">DynamicLibrary</ref> est ouverte (chargée) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> si elle est ouverte, <computeroutput>false</computeroutput> sinon </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="192" column="13" bodyfile="CastorUtils/Miscellaneous/DynamicLibrary.hpp" bodystart="192" bodyend="195"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d44/a09387_1ae08a3ee42549559eb35673f9f1ed0935" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+        <definition>Path const  &amp; castor::DynamicLibrary::getPath</definition>
+        <argsstring>() const</argsstring>
+        <name>getPath</name>
+        <qualifiedname>castor::DynamicLibrary::getPath</qualifiedname>
+        <briefdescription>
+<para>Récupère le chemin vers le fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le chemin </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="204" column="20" bodyfile="CastorUtils/Miscellaneous/DynamicLibrary.hpp" bodystart="204" bodyend="207"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d7/d44/a09387_1a0b98b6516dd5c9b12cedb1bece7c11cf" prot="private" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::DynamicLibrary::doOpen</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>doOpen</name>
+        <qualifiedname>castor::DynamicLibrary::doOpen</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="210" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d44/a09387_1a8cb282554e3dc64cbd8ade235b07abf7" prot="private" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::DynamicLibrary::doClose</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>doClose</name>
+        <qualifiedname>castor::DynamicLibrary::doClose</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="211" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d44/a09387_1a32d188fc1017a5e1a48534f67fa7024e" prot="private" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a4740fbfe951df8deaa724800f527f14d" kindref="member">VoidFnType</ref></type>
+        <definition>CU_API VoidFnType castor::DynamicLibrary::doGetFunction</definition>
+        <argsstring>(String const &amp;name) noexcept</argsstring>
+        <name>doGetFunction</name>
+        <qualifiedname>castor::DynamicLibrary::doGetFunction</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="212" column="19"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Miscellaneous/DynamicLibrary.hpp" line="12" column="1" bodyfile="CastorUtils/Miscellaneous/DynamicLibrary.hpp" bodystart="13" bodyend="217"/>
+    <listofallmembers>
+      <member refid="d7/d44/a09387_1a8cb282554e3dc64cbd8ade235b07abf7" prot="private" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>doClose</name></member>
+      <member refid="d7/d44/a09387_1a32d188fc1017a5e1a48534f67fa7024e" prot="private" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>doGetFunction</name></member>
+      <member refid="d7/d44/a09387_1a0b98b6516dd5c9b12cedb1bece7c11cf" prot="private" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>doOpen</name></member>
+      <member refid="d7/d44/a09387_1aaab36cff500af46fd924fb0a7c0d9ad3" prot="public" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>DynamicLibrary</name></member>
+      <member refid="d7/d44/a09387_1a51ccdf00e31b8088489c1630e62344f8" prot="public" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>DynamicLibrary</name></member>
+      <member refid="d7/d44/a09387_1a96b560debb92857fe77df6dd45c4275c" prot="public" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>DynamicLibrary</name></member>
+      <member refid="d7/d44/a09387_1a399441fc82c512480d11c117e79582bc" prot="public" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>DynamicLibrary</name></member>
+      <member refid="d7/d44/a09387_1aedc2b6b4e2ee1af69de155aa1eb82d4f" prot="public" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>getFunction</name></member>
+      <member refid="d7/d44/a09387_1ab9afed02bb8a6953060162dac097d6ad" prot="public" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>getFunction</name></member>
+      <member refid="d7/d44/a09387_1abf47af1c1143dd4b5c6e20f5e76c0452" prot="public" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>getFunction</name></member>
+      <member refid="d7/d44/a09387_1a94604a7fecda56ec2dc96a71afb62ffc" prot="public" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>getFunction</name></member>
+      <member refid="d7/d44/a09387_1adf586f02dfe6b7673d6516b871fe6d65" prot="public" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>getFunction</name></member>
+      <member refid="d7/d44/a09387_1aae9d3b075d80c0161ff882b229c596e6" prot="public" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>getFunction</name></member>
+      <member refid="d7/d44/a09387_1ae08a3ee42549559eb35673f9f1ed0935" prot="public" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>getPath</name></member>
+      <member refid="d7/d44/a09387_1a8a0be0d6389fe1e04f3b157a4857b071" prot="public" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>isOpen</name></member>
+      <member refid="d7/d44/a09387_1ab477b662ef84fcbb1f85c00934c0b9b7" prot="private" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>m_library</name></member>
+      <member refid="d7/d44/a09387_1a4b64a2df29a2f647c8c217bf2f0985a2" prot="private" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>m_pathLibrary</name></member>
+      <member refid="d7/d44/a09387_1a4e968f3c815f08b74d5bb71352d8c9a7" prot="public" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>operator=</name></member>
+      <member refid="d7/d44/a09387_1a6fcdf6dbdb1be34750215a3dcf5a659f" prot="public" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>operator=</name></member>
+      <member refid="d7/d44/a09387_1aa2355f4edd8d10c2ec97acee0fd5db46" prot="public" virt="non-virtual"><scope>castor::DynamicLibrary</scope><name>~DynamicLibrary</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

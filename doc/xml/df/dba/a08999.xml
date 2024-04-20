@@ -1,0 +1,471 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/dba/a08999" kind="class" language="C++" prot="public">
+    <compoundname>castor::Position</compoundname>
+    <basecompoundref refid="da/d50/a08167" prot="private" virt="non-virtual">castor::DataHolderT&lt; PositionData &gt;</basecompoundref>
+    <basecompoundref refid="d9/d6a/a09103" prot="public" virt="non-virtual">castor::Coords&lt; int32_t, 2 &gt;</basecompoundref>
+    <includes local="no">Position.hpp</includes>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="df/dba/a08999_1af2d69b2865a4a77901b1eec12dfd92e7" prot="private" static="no">
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; int32_t, 2 &gt;</type>
+        <definition>using castor::Position::BaseType =  Coords&lt; int32_t, 2 &gt;</definition>
+        <argsstring></argsstring>
+        <name>BaseType</name>
+        <qualifiedname>castor::Position::BaseType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Position.hpp" line="30" column="1" bodyfile="CastorUtils/Graphics/Position.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/dba/a08999_1afd550cd5a60bdd24dc81fcfa10e84423" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Position::Position</definition>
+        <argsstring>(int32_t x=0, int32_t y=0)</argsstring>
+        <name>Position</name>
+        <qualifiedname>castor::Position::Position</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>x</declname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>y</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La position </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Position.hpp" line="41" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dba/a08999_1a07c0c8f653b6cf5e98bbe804f8d028ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Position::Position</definition>
+        <argsstring>(Position const &amp;obj)</argsstring>
+        <name>Position</name>
+        <qualifiedname>castor::Position::Position</qualifiedname>
+        <param>
+          <type><ref refid="df/dba/a08999" kindref="compound">Position</ref> const &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par copie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à copier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Position.hpp" line="50" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dba/a08999_1acf3d86d5e391baf5ab7489a921608ff8" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Position::Position</definition>
+        <argsstring>(Position &amp;&amp;obj) noexcept</argsstring>
+        <name>Position</name>
+        <qualifiedname>castor::Position::Position</qualifiedname>
+        <param>
+          <type><ref refid="df/dba/a08999" kindref="compound">Position</ref> &amp;&amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à déplacer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Position.hpp" line="59" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dba/a08999_1a7539e13b411ef3614c24b880551b7ce7" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Position::~Position</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~Position</name>
+        <qualifiedname>castor::Position::~Position</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Position.hpp" line="66" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dba/a08999_1a2fe6f60ce83a7245d08323f7e0f81524" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="df/dba/a08999" kindref="compound">Position</ref> &amp;</type>
+        <definition>CU_API Position &amp; castor::Position::operator=</definition>
+        <argsstring>(Position const &amp;obj)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Position::operator=</qualifiedname>
+        <param>
+          <type><ref refid="df/dba/a08999" kindref="compound">Position</ref> const &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par copie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à copier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Position.hpp" line="77" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dba/a08999_1a44df3a3e9271a6f27c8ecc82866dd8ca" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="df/dba/a08999" kindref="compound">Position</ref> &amp;</type>
+        <definition>CU_API Position &amp; castor::Position::operator=</definition>
+        <argsstring>(Position &amp;&amp;obj) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Position::operator=</qualifiedname>
+        <param>
+          <type><ref refid="df/dba/a08999" kindref="compound">Position</ref> &amp;&amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à déplacer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Position.hpp" line="88" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dba/a08999_1a14bac853e147e6d3c9fe96b1991cb739" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::Position::set</definition>
+        <argsstring>(int32_t x, int32_t y)</argsstring>
+        <name>set</name>
+        <qualifiedname>castor::Position::set</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+<para>Définit la position. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La position </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Position.hpp" line="97" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dba/a08999_1a50ada51ad9464dd4877c149b00238a7c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::Position::offset</definition>
+        <argsstring>(int32_t x, int32_t y)</argsstring>
+        <name>offset</name>
+        <qualifiedname>castor::Position::offset</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+<para>Déplace la position. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs de déplacement </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Position.hpp" line="106" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dba/a08999_1a9e2fbb6a0f6fab757a7e2e6e4a3fde6e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t castor::Position::y</definition>
+        <argsstring>() const</argsstring>
+        <name>y</name>
+        <qualifiedname>castor::Position::y</qualifiedname>
+        <briefdescription>
+<para>Récupère la coordonnée gauche. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La coordonnée gauche du rectangle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Position.hpp" line="115" column="9" bodyfile="CastorUtils/Graphics/Position.hpp" bodystart="115" bodyend="118"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; PositionData &gt;::getData</references>
+        <references refid="d1/d54/a08991_1af21f0bf53dc21cec8e16128779db2c1b" compoundref="d2/d8a/a02063" startline="21">castor::PositionData::position</references>
+        <references refid="da/d31/a08995_1ae56cb4fd1c2dc25d8a6f0e5dfe2e21a9" compoundref="d2/d8a/a02063" startline="19">castor::PositionData::Pos::y</references>
+        <referencedby refid="dd/df9/a08987_1a5713532df1210d37bbf350d69d928360" compoundref="d7/d13/a02045" startline="390" endline="393">castor::PxBufferBase::getAt</referencedby>
+        <referencedby refid="dd/df9/a08987_1af834c3a9e4d601d3e3db75a98e7e5b7b" compoundref="d7/d13/a02045" startline="395" endline="398">castor::PxBufferBase::getAt</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/dba/a08999_1a6ed2d33d5d75dda499ef41fed13d147b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int32_t &amp;</type>
+        <definition>int32_t &amp; castor::Position::y</definition>
+        <argsstring>()</argsstring>
+        <name>y</name>
+        <qualifiedname>castor::Position::y</qualifiedname>
+        <briefdescription>
+<para>Récupère la coordonnée gauche. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La coordonnée gauche du rectangle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Position.hpp" line="127" column="10" bodyfile="CastorUtils/Graphics/Position.hpp" bodystart="127" bodyend="130"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; PositionData &gt;::getData</references>
+        <references refid="d1/d54/a08991_1af21f0bf53dc21cec8e16128779db2c1b" compoundref="d2/d8a/a02063" startline="21">castor::PositionData::position</references>
+        <references refid="da/d31/a08995_1ae56cb4fd1c2dc25d8a6f0e5dfe2e21a9" compoundref="d2/d8a/a02063" startline="19">castor::PositionData::Pos::y</references>
+      </memberdef>
+      <memberdef kind="function" id="df/dba/a08999_1a1833e6a16b03d0bad7ce71ad604b69df" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t castor::Position::x</definition>
+        <argsstring>() const</argsstring>
+        <name>x</name>
+        <qualifiedname>castor::Position::x</qualifiedname>
+        <briefdescription>
+<para>Récupère la coordonnée droite. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La coordonnée droite du rectangle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Position.hpp" line="139" column="9" bodyfile="CastorUtils/Graphics/Position.hpp" bodystart="139" bodyend="142"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; PositionData &gt;::getData</references>
+        <references refid="d1/d54/a08991_1af21f0bf53dc21cec8e16128779db2c1b" compoundref="d2/d8a/a02063" startline="21">castor::PositionData::position</references>
+        <references refid="da/d31/a08995_1abc454d53a040be528f475c1556f5f8a0" compoundref="d2/d8a/a02063" startline="18">castor::PositionData::Pos::x</references>
+        <referencedby refid="dd/df9/a08987_1a5713532df1210d37bbf350d69d928360" compoundref="d7/d13/a02045" startline="390" endline="393">castor::PxBufferBase::getAt</referencedby>
+        <referencedby refid="dd/df9/a08987_1af834c3a9e4d601d3e3db75a98e7e5b7b" compoundref="d7/d13/a02045" startline="395" endline="398">castor::PxBufferBase::getAt</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/dba/a08999_1a84fae4c7d8c4867fff0128be91a8c223" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int32_t &amp;</type>
+        <definition>int32_t &amp; castor::Position::x</definition>
+        <argsstring>()</argsstring>
+        <name>x</name>
+        <qualifiedname>castor::Position::x</qualifiedname>
+        <briefdescription>
+<para>Récupère la coordonnée droite. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La coordonnée droite du rectangle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Position.hpp" line="151" column="10" bodyfile="CastorUtils/Graphics/Position.hpp" bodystart="151" bodyend="154"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; PositionData &gt;::getData</references>
+        <references refid="d1/d54/a08991_1af21f0bf53dc21cec8e16128779db2c1b" compoundref="d2/d8a/a02063" startline="21">castor::PositionData::position</references>
+        <references refid="da/d31/a08995_1abc454d53a040be528f475c1556f5f8a0" compoundref="d2/d8a/a02063" startline="18">castor::PositionData::Pos::x</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>castor::Coords&lt; int32_t, 2 &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; int32_t, 2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::DataHolderT&lt; PositionData &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; PositionData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Coords&lt; T, Count &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+      </node>
+      <node id="3">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="1">
+        <label>castor::Position</label>
+        <link refid="df/dba/a08999"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>castor::Coords&lt; int32_t, 2 &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; int32_t, 2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::DataHolderT&lt; PositionData &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; PositionData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Coords&lt; T, Count &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+      </node>
+      <node id="3">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="1">
+        <label>castor::Position</label>
+        <link refid="df/dba/a08999"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/Position.hpp" line="25" column="1" bodyfile="CastorUtils/Graphics/Position.hpp" bodystart="28" bodyend="158"/>
+    <listofallmembers>
+      <member refid="df/dba/a08999_1af2d69b2865a4a77901b1eec12dfd92e7" prot="private" virt="non-virtual"><scope>castor::Position</scope><name>BaseType</name></member>
+      <member refid="d9/d6a/a09103_1ae423ba2d6fbbe19b93f8337364d43740" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>begin</name></member>
+      <member refid="d9/d6a/a09103_1aa4a1173ea64fb7733962086448597fae" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>begin</name></member>
+      <member refid="d9/d6a/a09103_1a94573d926b28fd774cb7b1460bd646f6" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>const_iterator</name></member>
+      <member refid="d9/d6a/a09103_1accb88b430d4e2c3c193c907c097fabd0" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>constPtr</name></member>
+      <member refid="d9/d6a/a09103_1a75f4771f2e46024d2c1c46140a8f596c" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>Coords</name></member>
+      <member refid="d9/d6a/a09103_1a9aa8b07b52a81f1756eb5089e65a1ad0" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>Coords</name></member>
+      <member refid="d9/d6a/a09103_1ad6b0a1b4c2ec75857e6102aa56722d7d" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>Coords</name></member>
+      <member refid="d9/d6a/a09103_1aeb03d143ddb1a26fdfde00b2c3212dac" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>end</name></member>
+      <member refid="d9/d6a/a09103_1a98451ff98028153f07b5467630e3f5b3" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>end</name></member>
+      <member refid="d9/d6a/a09103_1adb214212d158c4c347af9c7c0f973a2a" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>iterator</name></member>
+      <member refid="df/dba/a08999_1a50ada51ad9464dd4877c149b00238a7c" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>offset</name></member>
+      <member refid="d9/d6a/a09103_1a4e758ceaf0230ca03133bf172fdc6552" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator*=</name></member>
+      <member refid="d9/d6a/a09103_1a902c19f1decbff33fc3ba6b14908f26f" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator*=</name></member>
+      <member refid="d9/d6a/a09103_1a16d100bc980825cc9ac58a3db6329339" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator*=</name></member>
+      <member refid="d9/d6a/a09103_1a87111886288381baa244151cac8398fa" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator*=</name></member>
+      <member refid="d9/d6a/a09103_1a98290333f21625932bc49bd7feb3aa2c" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator+=</name></member>
+      <member refid="d9/d6a/a09103_1aa6c9f261457444316555aff7f1948948" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator+=</name></member>
+      <member refid="d9/d6a/a09103_1a926b1e77b13b51c34e5f956aaead85c7" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator+=</name></member>
+      <member refid="d9/d6a/a09103_1a79dfffffae1cc234cb606f1c8838837d" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator+=</name></member>
+      <member refid="d9/d6a/a09103_1ab0fd249c7148489f4e9d0d68c0739a34" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator-=</name></member>
+      <member refid="d9/d6a/a09103_1ada307fda3dc9a8efaa12f607a35ea60b" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator-=</name></member>
+      <member refid="d9/d6a/a09103_1ab29316eb508e7f012713b94511e377ba" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator-=</name></member>
+      <member refid="d9/d6a/a09103_1ac3547dcdd54a4d457577976b0da43295" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator-=</name></member>
+      <member refid="d9/d6a/a09103_1a422c73e91d94d36a65926478003bca39" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator/=</name></member>
+      <member refid="d9/d6a/a09103_1a4b08c2cfb99ea8c3db51115c7b4fb2bb" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator/=</name></member>
+      <member refid="d9/d6a/a09103_1ab4b4bb9bd0e1689046aebb7adc3fd51c" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator/=</name></member>
+      <member refid="d9/d6a/a09103_1a57d38ef518880ed02803805ac5fd6011" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator/=</name></member>
+      <member refid="df/dba/a08999_1a2fe6f60ce83a7245d08323f7e0f81524" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator=</name></member>
+      <member refid="df/dba/a08999_1a44df3a3e9271a6f27c8ecc82866dd8ca" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator=</name></member>
+      <member refid="d9/d6a/a09103_1ab03428e4e41572fb3b165b4e9819d120" prot="public" virt="non-virtual" ambiguityscope="Coords&lt; int32_t, 2 &gt;::"><scope>castor::Position</scope><name>operator=</name></member>
+      <member refid="d9/d6a/a09103_1a8254f9513693b90533c62f2650242daa" prot="public" virt="non-virtual" ambiguityscope="Coords&lt; int32_t, 2 &gt;::"><scope>castor::Position</scope><name>operator=</name></member>
+      <member refid="d9/d6a/a09103_1ab34eef90cc275e4140b0a671b1b43729" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator[]</name></member>
+      <member refid="d9/d6a/a09103_1aa1069c59af90a81bed8ec20744c40976" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>operator[]</name></member>
+      <member refid="df/dba/a08999_1afd550cd5a60bdd24dc81fcfa10e84423" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>Position</name></member>
+      <member refid="df/dba/a08999_1a07c0c8f653b6cf5e98bbe804f8d028ae" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>Position</name></member>
+      <member refid="df/dba/a08999_1acf3d86d5e391baf5ab7489a921608ff8" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>Position</name></member>
+      <member refid="d9/d6a/a09103_1a4fd6d2393fd35f33dde94c7c9153360f" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>ptr</name></member>
+      <member refid="df/dba/a08999_1a14bac853e147e6d3c9fe96b1991cb739" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>set</name></member>
+      <member refid="d9/d6a/a09103_1ae52ce3eafd7305bb76a9a825998b3794" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>size</name></member>
+      <member refid="d9/d6a/a09103_1a31059aab49b93880080ec996ec252811" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>swap</name></member>
+      <member refid="df/dba/a08999_1a1833e6a16b03d0bad7ce71ad604b69df" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>x</name></member>
+      <member refid="df/dba/a08999_1a84fae4c7d8c4867fff0128be91a8c223" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>x</name></member>
+      <member refid="df/dba/a08999_1a9e2fbb6a0f6fab757a7e2e6e4a3fde6e" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>y</name></member>
+      <member refid="df/dba/a08999_1a6ed2d33d5d75dda499ef41fed13d147b" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>y</name></member>
+      <member refid="df/dba/a08999_1a7539e13b411ef3614c24b880551b7ce7" prot="public" virt="non-virtual"><scope>castor::Position</scope><name>~Position</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

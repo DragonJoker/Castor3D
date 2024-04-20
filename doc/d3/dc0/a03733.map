@@ -1,5 +1,7 @@
-<map id="castor3d::GlossinessMapComponent::ComponentsShader" name="castor3d::GlossinessMapComponent::ComponentsShader">
-<area shape="rect" id="node1" title=" " alt="" coords="5,167,241,207"/>
-<area shape="rect" id="node2" href="$d7/d1d/a04018.html" title=" " alt="" coords="8,79,239,119"/>
-<area shape="rect" id="node3" href="$d0/dee/a04014.html" title=" " alt="" coords="24,5,223,31"/>
+<map id="castor3d::FrameListener" name="castor3d::FrameListener">
+<area shape="rect" id="Node000001" title=" " alt="" coords="52,93,215,119"/>
+<area shape="rect" id="Node000002" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="5,5,112,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,39,125,91,121,95,76,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="137,5,279,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="191,43,146,95,142,91,187,39"/>
 </map>

@@ -1,0 +1,280 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/df3/a08087" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriterBase::WriterBlock</compoundname>
+    <includes local="no">TextWriter.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/df3/a08087_1a9027305a50ae9b6fcd859b3c1caa0aee" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d1b/a08083" kindref="compound">TextWriterBase</ref> *</type>
+        <definition>TextWriterBase* castor::TextWriterBase::WriterBlock::m_writer</definition>
+        <argsstring></argsstring>
+        <name>m_writer</name>
+        <qualifiedname>castor::TextWriterBase::WriterBlock::m_writer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextWriter.hpp" line="53" column="17" bodyfile="CastorUtils/Data/TextWriter.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/df3/a08087_1aced37f29b53fc37d43337ab052ec71bf" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>String castor::TextWriterBase::WriterBlock::m_name</definition>
+        <argsstring></argsstring>
+        <name>m_name</name>
+        <qualifiedname>castor::TextWriterBase::WriterBlock::m_name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextWriter.hpp" line="54" column="8" bodyfile="CastorUtils/Data/TextWriter.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/df3/a08087_1a2d12e21d27654f7d2aacfab415c89ca1" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ae7002b6add23b6f33bfde31351b5e8c9" kindref="member">StringStream</ref> &amp;</type>
+        <definition>StringStream&amp; castor::TextWriterBase::WriterBlock::m_file</definition>
+        <argsstring></argsstring>
+        <name>m_file</name>
+        <qualifiedname>castor::TextWriterBase::WriterBlock::m_file</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextWriter.hpp" line="55" column="15" bodyfile="CastorUtils/Data/TextWriter.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/df3/a08087_1aa7652563b3a199898e57f7263199eb09" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor::TextWriterBase::WriterBlock::m_result</definition>
+        <argsstring></argsstring>
+        <name>m_result</name>
+        <qualifiedname>castor::TextWriterBase::WriterBlock::m_result</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextWriter.hpp" line="56" column="6" bodyfile="CastorUtils/Data/TextWriter.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/df3/a08087_1aa4fedaf23c66fab0b1fcfa84b56ac81d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::TextWriterBase::WriterBlock::WriterBlock</definition>
+        <argsstring>(WriterBlock const &amp;rhs)=delete</argsstring>
+        <name>WriterBlock</name>
+        <qualifiedname>castor::TextWriterBase::WriterBlock::WriterBlock</qualifiedname>
+        <param>
+          <type><ref refid="d0/df3/a08087" kindref="compound">WriterBlock</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextWriter.hpp" line="33" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/df3/a08087_1a09e8ebd1088910145a75915346d11719" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d0/df3/a08087" kindref="compound">WriterBlock</ref> &amp;</type>
+        <definition>CU_API WriterBlock &amp; castor::TextWriterBase::WriterBlock::operator=</definition>
+        <argsstring>(WriterBlock const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::TextWriterBase::WriterBlock::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d0/df3/a08087" kindref="compound">WriterBlock</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextWriter.hpp" line="34" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/df3/a08087_1a3bdad02f1f1a5782cf88eb05dbce901f" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::TextWriterBase::WriterBlock::WriterBlock</definition>
+        <argsstring>(WriterBlock &amp;&amp;rhs) noexcept</argsstring>
+        <name>WriterBlock</name>
+        <qualifiedname>castor::TextWriterBase::WriterBlock::WriterBlock</qualifiedname>
+        <param>
+          <type><ref refid="d0/df3/a08087" kindref="compound">WriterBlock</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextWriter.hpp" line="35" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/df3/a08087_1a7b8af3f512cc8c0b5d54bb9bc8f8957b" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d0/df3/a08087" kindref="compound">WriterBlock</ref> &amp;</type>
+        <definition>CU_API WriterBlock &amp; castor::TextWriterBase::WriterBlock::operator=</definition>
+        <argsstring>(WriterBlock &amp;&amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::TextWriterBase::WriterBlock::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d0/df3/a08087" kindref="compound">WriterBlock</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextWriter.hpp" line="36" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/df3/a08087_1ac4162447ab40d074e83fb7241d0dab5a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::TextWriterBase::WriterBlock::WriterBlock</definition>
+        <argsstring>(TextWriterBase *writer, String const &amp;type, StringView name, StringStream &amp;rfile)</argsstring>
+        <name>WriterBlock</name>
+        <qualifiedname>castor::TextWriterBase::WriterBlock::WriterBlock</qualifiedname>
+        <param>
+          <type><ref refid="da/d1b/a08083" kindref="compound">TextWriterBase</ref> *</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref></type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae7002b6add23b6f33bfde31351b5e8c9" kindref="member">StringStream</ref> &amp;</type>
+          <declname>rfile</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextWriter.hpp" line="38" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/df3/a08087_1aac254d7298607c50c351f278e0da4723" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::TextWriterBase::WriterBlock::WriterBlock</definition>
+        <argsstring>(TextWriterBase *writer, StringView name, StringStream &amp;file)</argsstring>
+        <name>WriterBlock</name>
+        <qualifiedname>castor::TextWriterBase::WriterBlock::WriterBlock</qualifiedname>
+        <param>
+          <type><ref refid="da/d1b/a08083" kindref="compound">TextWriterBase</ref> *</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref></type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae7002b6add23b6f33bfde31351b5e8c9" kindref="member">StringStream</ref> &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextWriter.hpp" line="42" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/df3/a08087_1ae7277ed5eb3b6f564ccff27efd7dda2e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::TextWriterBase::WriterBlock::WriterBlock</definition>
+        <argsstring>(TextWriterBase *writer, StringStream &amp;file)</argsstring>
+        <name>WriterBlock</name>
+        <qualifiedname>castor::TextWriterBase::WriterBlock::WriterBlock</qualifiedname>
+        <param>
+          <type><ref refid="da/d1b/a08083" kindref="compound">TextWriterBase</ref> *</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae7002b6add23b6f33bfde31351b5e8c9" kindref="member">StringStream</ref> &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextWriter.hpp" line="45" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/df3/a08087_1a71c538cf4257a46f59e7afa875be94fb" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::TextWriterBase::WriterBlock::~WriterBlock</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~WriterBlock</name>
+        <qualifiedname>castor::TextWriterBase::WriterBlock::~WriterBlock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextWriter.hpp" line="47" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/df3/a08087_1a81e588e369b2516720e2a2216e8b38af" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::TextWriterBase::WriterBlock::operator bool</definition>
+        <argsstring>() const</argsstring>
+        <name>operator bool</name>
+        <qualifiedname>castor::TextWriterBase::WriterBlock::operator bool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextWriter.hpp" line="49" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/df3/a08087_1a2d3fd998c7bdaaf3c320ee1d714c036f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="da/d1b/a08083" kindref="compound">TextWriterBase</ref> const *</type>
+        <definition>CU_API TextWriterBase const  * castor::TextWriterBase::WriterBlock::operator-&gt;</definition>
+        <argsstring>() const</argsstring>
+        <name>operator-&gt;</name>
+        <qualifiedname>castor::TextWriterBase::WriterBlock::operator-&gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextWriter.hpp" line="50" column="30"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Data/TextWriter.hpp" line="30" column="1" bodyfile="CastorUtils/Data/TextWriter.hpp" bodystart="31" bodyend="57"/>
+    <listofallmembers>
+      <member refid="d0/df3/a08087_1a2d12e21d27654f7d2aacfab415c89ca1" prot="private" virt="non-virtual"><scope>castor::TextWriterBase::WriterBlock</scope><name>m_file</name></member>
+      <member refid="d0/df3/a08087_1aced37f29b53fc37d43337ab052ec71bf" prot="private" virt="non-virtual"><scope>castor::TextWriterBase::WriterBlock</scope><name>m_name</name></member>
+      <member refid="d0/df3/a08087_1aa7652563b3a199898e57f7263199eb09" prot="private" virt="non-virtual"><scope>castor::TextWriterBase::WriterBlock</scope><name>m_result</name></member>
+      <member refid="d0/df3/a08087_1a9027305a50ae9b6fcd859b3c1caa0aee" prot="private" virt="non-virtual"><scope>castor::TextWriterBase::WriterBlock</scope><name>m_writer</name></member>
+      <member refid="d0/df3/a08087_1a81e588e369b2516720e2a2216e8b38af" prot="public" virt="non-virtual"><scope>castor::TextWriterBase::WriterBlock</scope><name>operator bool</name></member>
+      <member refid="d0/df3/a08087_1a2d3fd998c7bdaaf3c320ee1d714c036f" prot="public" virt="non-virtual"><scope>castor::TextWriterBase::WriterBlock</scope><name>operator-&gt;</name></member>
+      <member refid="d0/df3/a08087_1a09e8ebd1088910145a75915346d11719" prot="public" virt="non-virtual"><scope>castor::TextWriterBase::WriterBlock</scope><name>operator=</name></member>
+      <member refid="d0/df3/a08087_1a7b8af3f512cc8c0b5d54bb9bc8f8957b" prot="public" virt="non-virtual"><scope>castor::TextWriterBase::WriterBlock</scope><name>operator=</name></member>
+      <member refid="d0/df3/a08087_1aa4fedaf23c66fab0b1fcfa84b56ac81d" prot="public" virt="non-virtual"><scope>castor::TextWriterBase::WriterBlock</scope><name>WriterBlock</name></member>
+      <member refid="d0/df3/a08087_1a3bdad02f1f1a5782cf88eb05dbce901f" prot="public" virt="non-virtual"><scope>castor::TextWriterBase::WriterBlock</scope><name>WriterBlock</name></member>
+      <member refid="d0/df3/a08087_1ac4162447ab40d074e83fb7241d0dab5a" prot="public" virt="non-virtual"><scope>castor::TextWriterBase::WriterBlock</scope><name>WriterBlock</name></member>
+      <member refid="d0/df3/a08087_1aac254d7298607c50c351f278e0da4723" prot="public" virt="non-virtual"><scope>castor::TextWriterBase::WriterBlock</scope><name>WriterBlock</name></member>
+      <member refid="d0/df3/a08087_1ae7277ed5eb3b6f564ccff27efd7dda2e" prot="public" virt="non-virtual"><scope>castor::TextWriterBase::WriterBlock</scope><name>WriterBlock</name></member>
+      <member refid="d0/df3/a08087_1a71c538cf4257a46f59e7afa875be94fb" prot="public" virt="non-virtual"><scope>castor::TextWriterBase::WriterBlock</scope><name>~WriterBlock</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

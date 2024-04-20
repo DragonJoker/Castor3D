@@ -1,0 +1,2106 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/df9/a08987" kind="class" language="C++" prot="public">
+    <compoundname>castor::PxBufferBase</compoundname>
+    <derivedcompoundref refid="d1/d39/a08803" prot="public" virt="non-virtual">castor::PxBuffer&lt; PF &gt;</derivedcompoundref>
+    <includes local="no">PixelBufferBase.hpp</includes>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="dd/df9/a08987_1ae97cb3ec537d5186779d67c6c3b99130" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="dd/df9/a08987_1abcbbb1571ed4efd710103ba7d8e8078a" kindref="member">PixelData</ref></type>
+        <definition>CU_API PixelData castor::PxBufferBase::getAt</definition>
+        <argsstring>(uint32_t x, uint32_t y, uint32_t index=0u, uint32_t level=0u)</argsstring>
+        <name>getAt</name>
+        <qualifiedname>castor::PxBufferBase::getAt</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+          <defval>0u</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Accesseurs. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="276" column="18"/>
+        <referencedby refid="dd/df9/a08987_1a5713532df1210d37bbf350d69d928360" compoundref="d7/d13/a02045" startline="390" endline="393">getAt</referencedby>
+        <referencedby refid="dd/df9/a08987_1af834c3a9e4d601d3e3db75a98e7e5b7b" compoundref="d7/d13/a02045" startline="395" endline="398">getAt</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a3e3b755e9ac2965995aff3dae565e698" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="dd/df9/a08987_1a7904a98af7b74471d162e28c9d278815" kindref="member">ConstPixelData</ref></type>
+        <definition>CU_API ConstPixelData castor::PxBufferBase::getAt</definition>
+        <argsstring>(uint32_t x, uint32_t y, uint32_t index=0u, uint32_t level=0u) const</argsstring>
+        <name>getAt</name>
+        <qualifiedname>castor::PxBufferBase::getAt</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+          <defval>0u</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="280" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1ae3650d9e6524272127cd60666ad6f00a" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint64_t</type>
+        <definition>uint64_t castor::PxBufferBase::getSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getSize</name>
+        <qualifiedname>castor::PxBufferBase::getSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>count() * (size of a pixel) </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="290" column="10" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="290" bodyend="293"/>
+        <references refid="dd/df9/a08987_1a5ee07455950ba1d92ff14a2b0faebe60" compoundref="d7/d13/a02045" startline="645">m_buffer</references>
+        <referencedby refid="dd/df9/a08987_1a17699c2221f4ab9d7e401753c5d24c98" compoundref="d7/d13/a02045" startline="310" endline="313">cend</referencedby>
+        <referencedby refid="dd/df9/a08987_1a9a6326ed68ffa3d7c2ddadcf52774ce9" compoundref="d7/d13/a02045" startline="300" endline="303">end</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a3e54a1a0fb7fa398737bce75ab543b4e" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint8_t const *</type>
+        <definition>uint8_t const  * castor::PxBufferBase::begin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::PxBufferBase::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="295" column="16" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="295" bodyend="298"/>
+        <references refid="dd/df9/a08987_1a5ee07455950ba1d92ff14a2b0faebe60" compoundref="d7/d13/a02045" startline="645">m_buffer</references>
+        <referencedby refid="dd/df9/a08987_1a9a6326ed68ffa3d7c2ddadcf52774ce9" compoundref="d7/d13/a02045" startline="300" endline="303">end</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a9a6326ed68ffa3d7c2ddadcf52774ce9" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint8_t const *</type>
+        <definition>uint8_t const  * castor::PxBufferBase::end</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::PxBufferBase::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="300" column="16" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="300" bodyend="303"/>
+        <references refid="dd/df9/a08987_1a3e54a1a0fb7fa398737bce75ab543b4e" compoundref="d7/d13/a02045" startline="295" endline="298">begin</references>
+        <references refid="dd/df9/a08987_1ae3650d9e6524272127cd60666ad6f00a" compoundref="d7/d13/a02045" startline="290" endline="293">getSize</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a3111dfa0c768dcbe75abaa42ad39379c" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint8_t const *</type>
+        <definition>uint8_t const  * castor::PxBufferBase::cbegin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>cbegin</name>
+        <qualifiedname>castor::PxBufferBase::cbegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="305" column="16" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="305" bodyend="308"/>
+        <references refid="dd/df9/a08987_1a5ee07455950ba1d92ff14a2b0faebe60" compoundref="d7/d13/a02045" startline="645">m_buffer</references>
+        <referencedby refid="dd/df9/a08987_1a17699c2221f4ab9d7e401753c5d24c98" compoundref="d7/d13/a02045" startline="310" endline="313">cend</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a17699c2221f4ab9d7e401753c5d24c98" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint8_t const *</type>
+        <definition>uint8_t const  * castor::PxBufferBase::cend</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>cend</name>
+        <qualifiedname>castor::PxBufferBase::cend</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="310" column="16" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="310" bodyend="313"/>
+        <references refid="dd/df9/a08987_1a3111dfa0c768dcbe75abaa42ad39379c" compoundref="d7/d13/a02045" startline="305" endline="308">cbegin</references>
+        <references refid="dd/df9/a08987_1ae3650d9e6524272127cd60666ad6f00a" compoundref="d7/d13/a02045" startline="290" endline="293">getSize</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a9be8f18b1764dc522ad4987f36608856" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint8_t const *</type>
+        <definition>uint8_t const  * castor::PxBufferBase::getConstPtr</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getConstPtr</name>
+        <qualifiedname>castor::PxBufferBase::getConstPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="315" column="16" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="315" bodyend="318"/>
+        <references refid="dd/df9/a08987_1a5ee07455950ba1d92ff14a2b0faebe60" compoundref="d7/d13/a02045" startline="645">m_buffer</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a9cf1921e9b6b772214222520a4cddad7" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint8_t *</type>
+        <definition>uint8_t * castor::PxBufferBase::getPtr</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>getPtr</name>
+        <qualifiedname>castor::PxBufferBase::getPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="320" column="10" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="320" bodyend="323"/>
+        <references refid="dd/df9/a08987_1a5ee07455950ba1d92ff14a2b0faebe60" compoundref="d7/d13/a02045" startline="645">m_buffer</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a33f681592de84ac7bdb3c6f95b598a58" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::PxBufferBase::isFlipped</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isFlipped</name>
+        <qualifiedname>castor::PxBufferBase::isFlipped</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="325" column="6" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="325" bodyend="328"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1ac87ea1116c4be4c2d9dcd3daf9494905" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+        <definition>PixelFormat castor::PxBufferBase::getFormat</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getFormat</name>
+        <qualifiedname>castor::PxBufferBase::getFormat</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="330" column="13" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="330" bodyend="333"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a73620ef43aee567accf951b50d23957b" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::PxBufferBase::getWidth</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getWidth</name>
+        <qualifiedname>castor::PxBufferBase::getWidth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="335" column="10" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="335" bodyend="338"/>
+        <references refid="d4/dd6/a09023_1a3cef6d7fb9e7e9e4e373f689b2b23b0c" compoundref="d9/d95/a02075" startline="113" endline="116">castor::Size::getWidth</references>
+        <references refid="dd/df9/a08987_1aa72fd741ad1b4dd72727b7b52729ae11" compoundref="d7/d13/a02045" startline="640">m_size</references>
+        <referencedby refid="dd/df9/a08987_1ae374d18cc00f62490deae65c1713e0e5" compoundref="d7/d13/a02045" startline="630" endline="633">doConvert</referencedby>
+        <referencedby refid="dd/df9/a08987_1a1ae7125e8d5e73e4b9e9d72b6c1b5e4a" compoundref="d7/d13/a02045" startline="385" endline="388">getCount</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a914ac0ada101f2aa932884e18a37a250" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::PxBufferBase::getHeight</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getHeight</name>
+        <qualifiedname>castor::PxBufferBase::getHeight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="340" column="10" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="340" bodyend="343"/>
+        <references refid="d4/dd6/a09023_1ab8e3c320eefc853f8fb36db35939844c" compoundref="d9/d95/a02075" startline="137" endline="140">castor::Size::getHeight</references>
+        <references refid="dd/df9/a08987_1aa72fd741ad1b4dd72727b7b52729ae11" compoundref="d7/d13/a02045" startline="640">m_size</references>
+        <referencedby refid="dd/df9/a08987_1a1ae7125e8d5e73e4b9e9d72b6c1b5e4a" compoundref="d7/d13/a02045" startline="385" endline="388">getCount</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1ac8a9dc2dd9f975f01b63c15212a3313d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>Point3ui</type>
+        <definition>Point3ui castor::PxBufferBase::getTiles</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getTiles</name>
+        <qualifiedname>castor::PxBufferBase::getTiles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="345" column="10" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="345" bodyend="348"/>
+        <references refid="dd/df9/a08987_1a691eb2ccdf0a09f080ae050b0dc998fe" compoundref="d7/d13/a02045" startline="644" endline="644">m_tiles</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a834e10b7496afe17390ddf69c3f383e2" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref></type>
+        <definition>Size castor::PxBufferBase::getTileSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getTileSize</name>
+        <qualifiedname>castor::PxBufferBase::getTileSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="350" column="6" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="350" bodyend="353"/>
+        <references refid="dd/df9/a08987_1ad304432fd9cfa3330576661bbba71f34" compoundref="d7/d13/a02045" startline="360" endline="363">getTileHeight</references>
+        <references refid="dd/df9/a08987_1a027e7feff5936185517a08ca11581288" compoundref="d7/d13/a02045" startline="355" endline="358">getTileWidth</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a027e7feff5936185517a08ca11581288" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::PxBufferBase::getTileWidth</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getTileWidth</name>
+        <qualifiedname>castor::PxBufferBase::getTileWidth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="355" column="10" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="355" bodyend="358"/>
+        <references refid="d4/dd6/a09023_1a3cef6d7fb9e7e9e4e373f689b2b23b0c" compoundref="d9/d95/a02075" startline="113" endline="116">castor::Size::getWidth</references>
+        <references refid="dd/df9/a08987_1aa72fd741ad1b4dd72727b7b52729ae11" compoundref="d7/d13/a02045" startline="640">m_size</references>
+        <references refid="dd/df9/a08987_1a691eb2ccdf0a09f080ae050b0dc998fe" compoundref="d7/d13/a02045" startline="644" endline="644">m_tiles</references>
+        <referencedby refid="dd/df9/a08987_1a834e10b7496afe17390ddf69c3f383e2" compoundref="d7/d13/a02045" startline="350" endline="353">getTileSize</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1ad304432fd9cfa3330576661bbba71f34" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::PxBufferBase::getTileHeight</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getTileHeight</name>
+        <qualifiedname>castor::PxBufferBase::getTileHeight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="360" column="10" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="360" bodyend="363"/>
+        <references refid="d4/dd6/a09023_1ab8e3c320eefc853f8fb36db35939844c" compoundref="d9/d95/a02075" startline="137" endline="140">castor::Size::getHeight</references>
+        <references refid="dd/df9/a08987_1aa72fd741ad1b4dd72727b7b52729ae11" compoundref="d7/d13/a02045" startline="640">m_size</references>
+        <references refid="dd/df9/a08987_1a691eb2ccdf0a09f080ae050b0dc998fe" compoundref="d7/d13/a02045" startline="644" endline="644">m_tiles</references>
+        <referencedby refid="dd/df9/a08987_1a834e10b7496afe17390ddf69c3f383e2" compoundref="d7/d13/a02045" startline="350" endline="353">getTileSize</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1acf5b112ac61e4376439c2132739381ec" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::PxBufferBase::getLayers</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getLayers</name>
+        <qualifiedname>castor::PxBufferBase::getLayers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="365" column="10" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="365" bodyend="368"/>
+        <references refid="dd/df9/a08987_1a69c35170d090e328a700c6ebc6168661" compoundref="d7/d13/a02045" startline="641">m_layers</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1af28492c18b265d0c1485c5bc60d35809" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::PxBufferBase::getLevels</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getLevels</name>
+        <qualifiedname>castor::PxBufferBase::getLevels</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="370" column="10" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="370" bodyend="373"/>
+        <references refid="dd/df9/a08987_1a4855f4c1d335079a412dafb0276b8777" compoundref="d7/d13/a02045" startline="642">m_levels</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a124eede8c1f80052781f6a7afad3c8fd" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::PxBufferBase::getAlign</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getAlign</name>
+        <qualifiedname>castor::PxBufferBase::getAlign</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="375" column="10" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="375" bodyend="378"/>
+        <references refid="dd/df9/a08987_1aa97233c4ebf3fa1274bcf1dbf81d4339" compoundref="d7/d13/a02045" startline="643">m_align</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1ab33d4c052a19248839bb637203ad0bcb" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+        <definition>Size const  &amp; castor::PxBufferBase::getDimensions</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getDimensions</name>
+        <qualifiedname>castor::PxBufferBase::getDimensions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="380" column="13" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="380" bodyend="383"/>
+        <references refid="dd/df9/a08987_1aa72fd741ad1b4dd72727b7b52729ae11" compoundref="d7/d13/a02045" startline="640">m_size</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a1ae7125e8d5e73e4b9e9d72b6c1b5e4a" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::PxBufferBase::getCount</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getCount</name>
+        <qualifiedname>castor::PxBufferBase::getCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="385" column="10" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="385" bodyend="388"/>
+        <references refid="dd/df9/a08987_1a914ac0ada101f2aa932884e18a37a250" compoundref="d7/d13/a02045" startline="340" endline="343">getHeight</references>
+        <references refid="dd/df9/a08987_1a73620ef43aee567accf951b50d23957b" compoundref="d7/d13/a02045" startline="335" endline="338">getWidth</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a5713532df1210d37bbf350d69d928360" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/df9/a08987_1abcbbb1571ed4efd710103ba7d8e8078a" kindref="member">PixelData</ref></type>
+        <definition>PixelData castor::PxBufferBase::getAt</definition>
+        <argsstring>(Position const &amp;position)</argsstring>
+        <name>getAt</name>
+        <qualifiedname>castor::PxBufferBase::getAt</qualifiedname>
+        <param>
+          <type><ref refid="df/dba/a08999" kindref="compound">Position</ref> const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="390" column="11" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="390" bodyend="393"/>
+        <references refid="dd/df9/a08987_1ae97cb3ec537d5186779d67c6c3b99130">getAt</references>
+        <references refid="df/dba/a08999_1a1833e6a16b03d0bad7ce71ad604b69df" compoundref="d2/d8a/a02063" startline="139" endline="142">castor::Position::x</references>
+        <references refid="df/dba/a08999_1a9e2fbb6a0f6fab757a7e2e6e4a3fde6e" compoundref="d2/d8a/a02063" startline="115" endline="118">castor::Position::y</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1af834c3a9e4d601d3e3db75a98e7e5b7b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/df9/a08987_1a7904a98af7b74471d162e28c9d278815" kindref="member">ConstPixelData</ref></type>
+        <definition>ConstPixelData castor::PxBufferBase::getAt</definition>
+        <argsstring>(Position const &amp;position) const</argsstring>
+        <name>getAt</name>
+        <qualifiedname>castor::PxBufferBase::getAt</qualifiedname>
+        <param>
+          <type><ref refid="df/dba/a08999" kindref="compound">Position</ref> const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="395" column="16" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="395" bodyend="398"/>
+        <references refid="dd/df9/a08987_1ae97cb3ec537d5186779d67c6c3b99130">getAt</references>
+        <references refid="df/dba/a08999_1a1833e6a16b03d0bad7ce71ad604b69df" compoundref="d2/d8a/a02063" startline="139" endline="142">castor::Position::x</references>
+        <references refid="df/dba/a08999_1a9e2fbb6a0f6fab757a7e2e6e4a3fde6e" compoundref="d2/d8a/a02063" startline="115" endline="118">castor::Position::y</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dd/df9/a08987_1adb1ea170c68df343dcd6e2f2364f0877" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; uint8_t &gt;</type>
+        <definition>using castor::PxBufferBase::PxArray =  Vector&lt; uint8_t &gt;</definition>
+        <argsstring></argsstring>
+        <name>PxArray</name>
+        <qualifiedname>castor::PxBufferBase::PxArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="44" column="1" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/df9/a08987_1abcbbb1571ed4efd710103ba7d8e8078a" prot="public" static="no">
+        <type>PxArray::iterator</type>
+        <definition>using castor::PxBufferBase::PixelData =  PxArray::iterator</definition>
+        <argsstring></argsstring>
+        <name>PixelData</name>
+        <qualifiedname>castor::PxBufferBase::PixelData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="45" column="1" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/df9/a08987_1a7904a98af7b74471d162e28c9d278815" prot="public" static="no">
+        <type>PxArray::const_iterator</type>
+        <definition>using castor::PxBufferBase::ConstPixelData =  PxArray::const_iterator</definition>
+        <argsstring></argsstring>
+        <name>ConstPixelData</name>
+        <qualifiedname>castor::PxBufferBase::ConstPixelData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="46" column="1" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/df9/a08987_1aa322ce34f373f05aeabac80e0d4447be" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+        <definition>PixelFormat castor::PxBufferBase::m_format</definition>
+        <argsstring></argsstring>
+        <name>m_format</name>
+        <qualifiedname>castor::PxBufferBase::m_format</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="636" column="13" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="636" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/df9/a08987_1a528137572e0f8456fd860754e7ea8d7e" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor::PxBufferBase::m_flipped</definition>
+        <argsstring></argsstring>
+        <name>m_flipped</name>
+        <qualifiedname>castor::PxBufferBase::m_flipped</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="637" column="6" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="637" bodyend="637"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="dd/df9/a08987_1aa72fd741ad1b4dd72727b7b52729ae11" prot="protected" static="no" mutable="no">
+        <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref></type>
+        <definition>Size castor::PxBufferBase::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>castor::PxBufferBase::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="640" column="6" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="640" bodyend="-1"/>
+        <referencedby refid="dd/df9/a08987_1ab33d4c052a19248839bb637203ad0bcb" compoundref="d7/d13/a02045" startline="380" endline="383">getDimensions</referencedby>
+        <referencedby refid="dd/df9/a08987_1a914ac0ada101f2aa932884e18a37a250" compoundref="d7/d13/a02045" startline="340" endline="343">getHeight</referencedby>
+        <referencedby refid="dd/df9/a08987_1ad304432fd9cfa3330576661bbba71f34" compoundref="d7/d13/a02045" startline="360" endline="363">getTileHeight</referencedby>
+        <referencedby refid="dd/df9/a08987_1a027e7feff5936185517a08ca11581288" compoundref="d7/d13/a02045" startline="355" endline="358">getTileWidth</referencedby>
+        <referencedby refid="dd/df9/a08987_1a73620ef43aee567accf951b50d23957b" compoundref="d7/d13/a02045" startline="335" endline="338">getWidth</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/df9/a08987_1a69c35170d090e328a700c6ebc6168661" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::PxBufferBase::m_layers</definition>
+        <argsstring></argsstring>
+        <name>m_layers</name>
+        <qualifiedname>castor::PxBufferBase::m_layers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="641" column="10" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="641" bodyend="-1"/>
+        <referencedby refid="dd/df9/a08987_1acf5b112ac61e4376439c2132739381ec" compoundref="d7/d13/a02045" startline="365" endline="368">getLayers</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/df9/a08987_1a4855f4c1d335079a412dafb0276b8777" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::PxBufferBase::m_levels</definition>
+        <argsstring></argsstring>
+        <name>m_levels</name>
+        <qualifiedname>castor::PxBufferBase::m_levels</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="642" column="10" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="642" bodyend="-1"/>
+        <referencedby refid="dd/df9/a08987_1af28492c18b265d0c1485c5bc60d35809" compoundref="d7/d13/a02045" startline="370" endline="373">getLevels</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/df9/a08987_1aa97233c4ebf3fa1274bcf1dbf81d4339" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::PxBufferBase::m_align</definition>
+        <argsstring></argsstring>
+        <name>m_align</name>
+        <qualifiedname>castor::PxBufferBase::m_align</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="643" column="10" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="643" bodyend="-1"/>
+        <referencedby refid="dd/df9/a08987_1a124eede8c1f80052781f6a7afad3c8fd" compoundref="d7/d13/a02045" startline="375" endline="378">getAlign</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/df9/a08987_1a691eb2ccdf0a09f080ae050b0dc998fe" prot="protected" static="no" mutable="no">
+        <type>Point3ui</type>
+        <definition>Point3ui castor::PxBufferBase::m_tiles</definition>
+        <argsstring></argsstring>
+        <name>m_tiles</name>
+        <qualifiedname>castor::PxBufferBase::m_tiles</qualifiedname>
+        <initializer>{ 1u, 1u, 1u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="644" column="10" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="644" bodyend="644"/>
+        <referencedby refid="dd/df9/a08987_1ad304432fd9cfa3330576661bbba71f34" compoundref="d7/d13/a02045" startline="360" endline="363">getTileHeight</referencedby>
+        <referencedby refid="dd/df9/a08987_1ac8a9dc2dd9f975f01b63c15212a3313d" compoundref="d7/d13/a02045" startline="345" endline="348">getTiles</referencedby>
+        <referencedby refid="dd/df9/a08987_1a027e7feff5936185517a08ca11581288" compoundref="d7/d13/a02045" startline="355" endline="358">getTileWidth</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/df9/a08987_1a5ee07455950ba1d92ff14a2b0faebe60" prot="protected" static="no" mutable="yes">
+        <type><ref refid="dd/df9/a08987_1adb1ea170c68df343dcd6e2f2364f0877" kindref="member">PxArray</ref></type>
+        <definition>PxArray castor::PxBufferBase::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor::PxBufferBase::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="645" column="17" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="645" bodyend="-1"/>
+        <referencedby refid="dd/df9/a08987_1a3e54a1a0fb7fa398737bce75ab543b4e" compoundref="d7/d13/a02045" startline="295" endline="298">begin</referencedby>
+        <referencedby refid="dd/df9/a08987_1a3111dfa0c768dcbe75abaa42ad39379c" compoundref="d7/d13/a02045" startline="305" endline="308">cbegin</referencedby>
+        <referencedby refid="dd/df9/a08987_1a9be8f18b1764dc522ad4987f36608856" compoundref="d7/d13/a02045" startline="315" endline="318">getConstPtr</referencedby>
+        <referencedby refid="dd/df9/a08987_1a9cf1921e9b6b772214222520a4cddad7" compoundref="d7/d13/a02045" startline="320" endline="323">getPtr</referencedby>
+        <referencedby refid="dd/df9/a08987_1ae3650d9e6524272127cd60666ad6f00a" compoundref="d7/d13/a02045" startline="290" endline="293">getSize</referencedby>
+        <referencedby refid="d1/d39/a08803_1a447c50175a9079ef7c3f6fce9d322618" compoundref="d1/dc4/a02042" startline="77" endline="80">castor::PxBuffer&lt; PF &gt;::pixelsBegin</referencedby>
+        <referencedby refid="d1/d39/a08803_1ad8a81007dcfcee4db60c5bb23895f1bb" compoundref="d1/dc4/a02042" startline="82" endline="85">castor::PxBuffer&lt; PF &gt;::pixelsEnd</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/df9/a08987_1a567ae3e875ffc8a8bb1f434a643bcb04" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::PxBufferBase::PxBufferBase</definition>
+        <argsstring>(PxBufferConvertOptions const *options, std::atomic_bool const *interrupt, Size const &amp;size, PixelFormat pixelFormat, uint32_t layers=1u, uint32_t levels=1u, uint8_t const *buffer=nullptr, PixelFormat bufferFormat=PixelFormat::eR8G8B8A8_UNORM, uint32_t bufferAlign=0u)</argsstring>
+        <name>PxBufferBase</name>
+        <qualifiedname>castor::PxBufferBase::PxBufferBase</qualifiedname>
+        <param>
+          <type><ref refid="d4/d51/a08983" kindref="compound">PxBufferConvertOptions</ref> const *</type>
+          <declname>options</declname>
+        </param>
+        <param>
+          <type>std::atomic_bool const *</type>
+          <declname>interrupt</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>pixelFormat</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>layers</declname>
+          <defval>1u</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>levels</declname>
+          <defval>1u</defval>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>buffer</declname>
+          <defval>nullptr</defval>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>bufferFormat</declname>
+          <defval>PixelFormat::eR8G8B8A8_UNORM</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>bufferAlign</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Crée un buffer depuis une source, données initialisées si aucune source n&apos;est donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">options</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les options de conversion. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">interrupt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la conversion est à interrompre. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dimensions du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pixelFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Format des pixels du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">layers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre de layers du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">levels</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre de miplevels du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le buffer source. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le format des pixels du buffer source. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferAlign</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;alignement mémoire du buffer source. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="73" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a57744939c8221f29ddd138db30ecb90e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::PxBufferBase::PxBufferBase</definition>
+        <argsstring>(Size const &amp;size, PixelFormat pixelFormat, uint32_t layers=1u, uint32_t levels=1u, uint8_t const *buffer=nullptr, PixelFormat bufferFormat=PixelFormat::eR8G8B8A8_UNORM, uint32_t bufferAlign=0u)</argsstring>
+        <name>PxBufferBase</name>
+        <qualifiedname>castor::PxBufferBase::PxBufferBase</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>pixelFormat</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>layers</declname>
+          <defval>1u</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>levels</declname>
+          <defval>1u</defval>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>buffer</declname>
+          <defval>nullptr</defval>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>bufferFormat</declname>
+          <defval>PixelFormat::eR8G8B8A8_UNORM</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>bufferAlign</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Crée un buffer depuis une source, données initialisées si aucune source n&apos;est donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dimensions du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pixelFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Format des pixels du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">layers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre de layers du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">levels</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre de miplevels du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le buffer source. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le format des pixels du buffer source. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferAlign</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;alignement mémoire du buffer source. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="102" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1acef8b29a48cdc9ddb91bd473702dfe41" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::PxBufferBase::PxBufferBase</definition>
+        <argsstring>(PxBufferBase const &amp;pixelBuffer)</argsstring>
+        <name>PxBufferBase</name>
+        <qualifiedname>castor::PxBufferBase::PxBufferBase</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>pixelBuffer</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par copie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pixelBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet <ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> à copier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="117" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1ae07c08d2cface7af291287a19b05dbea" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::PxBufferBase::PxBufferBase</definition>
+        <argsstring>(PxBufferBase &amp;&amp;pixelBuffer) noexcept</argsstring>
+        <name>PxBufferBase</name>
+        <qualifiedname>castor::PxBufferBase::PxBufferBase</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> &amp;&amp;</type>
+          <declname>pixelBuffer</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pixelBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet <ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> à déplacer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="126" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a11ebf587e16d046552e01d25728f909e" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::PxBufferBase::~PxBufferBase</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~PxBufferBase</name>
+        <qualifiedname>castor::PxBufferBase::~PxBufferBase</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="133" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a073da6da845c3073f7e436a2900c4206" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> &amp;</type>
+        <definition>CU_API PxBufferBase &amp; castor::PxBufferBase::operator=</definition>
+        <argsstring>(PxBufferBase const &amp;pixelBuffer)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::PxBufferBase::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>pixelBuffer</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par copie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pixelBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet <ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> à copier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet <ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="144" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1ae50a1cdac94c4fe833a3c8424f93a83b" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> &amp;</type>
+        <definition>CU_API PxBufferBase &amp; castor::PxBufferBase::operator=</definition>
+        <argsstring>(PxBufferBase &amp;&amp;pixelBuffer) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::PxBufferBase::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> &amp;&amp;</type>
+          <declname>pixelBuffer</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pixelBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet <ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> à déplacer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet <ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="155" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a0de8bbf1f9c22dd173ca37b86495e385" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::PxBufferBase::clear</definition>
+        <argsstring>()</argsstring>
+        <name>clear</name>
+        <qualifiedname>castor::PxBufferBase::clear</qualifiedname>
+        <briefdescription>
+<para>Deletes the data buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Détruit le tampon de données </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="161" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a22c2306b1fe58b48c134f55c25111124" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::PxBufferBase::initialise</definition>
+        <argsstring>(PxBufferConvertOptions const *options, std::atomic_bool const *interrupt, uint8_t const *buffer, PixelFormat bufferFormat, uint32_t bufferAlign=0u)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor::PxBufferBase::initialise</qualifiedname>
+        <param>
+          <type><ref refid="d4/d51/a08983" kindref="compound">PxBufferConvertOptions</ref> const *</type>
+          <declname>options</declname>
+        </param>
+        <param>
+          <type>std::atomic_bool const *</type>
+          <declname>interrupt</declname>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>bufferFormat</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>bufferAlign</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Initialise le buffer de données à celui donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Des conversions sont faites si besoin est. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">options</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les options de conversion. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">interrupt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la conversion est à interrompre. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Buffer de données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Format des pixels du buffer de données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferAlign</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Alignement des données du buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="180" column="13"/>
+        <referencedby refid="dd/df9/a08987_1a6162ecba9c293702ead57a696544378e" compoundref="d7/d13/a02045" startline="199" endline="204">initialise</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a6162ecba9c293702ead57a696544378e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::PxBufferBase::initialise</definition>
+        <argsstring>(uint8_t const *buffer, PixelFormat bufferFormat, uint32_t bufferAlign=0u)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor::PxBufferBase::initialise</qualifiedname>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>bufferFormat</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>bufferAlign</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Initialise le buffer de données à celui donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Des conversions sont faites si besoin est </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Buffer de données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Format des pixels du buffer de données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferAlign</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Alignement des données du buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="199" column="6" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="199" bodyend="204"/>
+        <references refid="dd/df9/a08987_1a22c2306b1fe58b48c134f55c25111124">initialise</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a5806cd5591c33b2ebc03164ff40d0d89" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::PxBufferBase::initialise</definition>
+        <argsstring>(Size const &amp;size)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor::PxBufferBase::initialise</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Initialise le buffer de données à la taille donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Des conversions sont faites si besoin est </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les dimensions du buffer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="215" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1ae5554a6b9b095cc58126b2a952977892" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::PxBufferBase::flip</definition>
+        <argsstring>()</argsstring>
+        <name>flip</name>
+        <qualifiedname>castor::PxBufferBase::flip</qualifiedname>
+        <briefdescription>
+<para>Effectue un échange vertical des pixels. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="222" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a2c7797ea8d2f520d39a8762bcb979f5c" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::PxBufferBase::swap</definition>
+        <argsstring>(PxBufferBase &amp;pixelBuffer) noexcept</argsstring>
+        <name>swap</name>
+        <qualifiedname>castor::PxBufferBase::swap</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> &amp;</type>
+          <declname>pixelBuffer</declname>
+        </param>
+        <briefdescription>
+<para>Echange les données de ce buffer avec celles du buffer donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pixelBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le buffer à échanger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="231" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a28fb272965fef7e8349cf5acedf71573" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::PxBufferBase::update</definition>
+        <argsstring>(uint32_t layers, uint32_t levels)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor::PxBufferBase::update</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>layers</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>levels</declname>
+        </param>
+        <briefdescription>
+<para>Met ç jour le conteneur du buffer, avec les nombres de layers et de miplevels donnés. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">layers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre de layers du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">levels</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre de miplevels du buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="242" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a71996cb68a73a1d1822d9ef52ee28ea1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::PxBufferBase::generateMips</definition>
+        <argsstring>()</argsstring>
+        <name>generateMips</name>
+        <qualifiedname>castor::PxBufferBase::generateMips</qualifiedname>
+        <briefdescription>
+<para>Génère les mipmaps. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="249" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a913e6dac264141eaf23c42cee132db00" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> uint32_t</type>
+        <definition>CU_API uint32_t castor::PxBufferBase::convertToTiles</definition>
+        <argsstring>(uint32_t maxSize)</argsstring>
+        <name>convertToTiles</name>
+        <qualifiedname>castor::PxBufferBase::convertToTiles</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>maxSize</declname>
+        </param>
+        <briefdescription>
+<para>Convvertit en tile map (aucun effet si m_layers &lt;= 1). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="256" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1ac1e0131fa58bb55a3c63d6ad5c673bb0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>PxBufferBaseUPtr</type>
+        <definition>PxBufferBaseUPtr castor::PxBufferBase::clone</definition>
+        <argsstring>() const</argsstring>
+        <name>clone</name>
+        <qualifiedname>castor::PxBufferBase::clone</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Un clone de ce buffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="263" column="18" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="263" bodyend="266"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dd/df9/a08987_1a6cac5cb051ac8092cc1219a2cf88d9eb" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> PxBufferBaseUPtr</type>
+        <definition>static CU_API PxBufferBaseUPtr castor::PxBufferBase::create</definition>
+        <argsstring>(PxBufferConvertOptions const *options, std::atomic_bool const *interrupt, Size const &amp;size, uint32_t layers, uint32_t levels, PixelFormat wantedFormat, uint8_t const *buffer=nullptr, PixelFormat bufferFormat=PixelFormat::eR8G8B8A8_UNORM, uint32_t bufferAlign=0u)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor::PxBufferBase::create</qualifiedname>
+        <param>
+          <type><ref refid="d4/d51/a08983" kindref="compound">PxBufferConvertOptions</ref> const *</type>
+          <declname>options</declname>
+        </param>
+        <param>
+          <type>std::atomic_bool const *</type>
+          <declname>interrupt</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>layers</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>levels</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>wantedFormat</declname>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>buffer</declname>
+          <defval>nullptr</defval>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>bufferFormat</declname>
+          <defval>PixelFormat::eR8G8B8A8_UNORM</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>bufferAlign</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Crée un buffer avec les données voulues. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Version interruptible. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">options</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les options de conversion. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">interrupt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la conversion est à interrompre. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dimensions du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">layers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Couches du buffer (layers ou slices). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">levels</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Niveaux de mip du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">wantedFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Format des pixels du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Buffer de données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Format des pixels du buffer de données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferAlign</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;alignement mémoire du buffer source. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le buffer créé. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="428" column="32"/>
+        <referencedby refid="dd/df9/a08987_1a6362592f2d822c2de46a2fbe0a401e9d" compoundref="d7/d13/a02045" startline="579" endline="594">create</referencedby>
+        <referencedby refid="dd/df9/a08987_1a2e2e076c00783e494932092dfe61a24f" compoundref="d7/d13/a02045" startline="461" endline="479">create</referencedby>
+        <referencedby refid="dd/df9/a08987_1a5f304b374ef20de947fa2f7ade5c11fc" compoundref="d7/d13/a02045" startline="541" endline="558">create</referencedby>
+        <referencedby refid="dd/df9/a08987_1ae5f5a4d3739d1274b92c8ad7dc02de56" compoundref="d7/d13/a02045" startline="613" endline="627">create</referencedby>
+        <referencedby refid="dd/df9/a08987_1a7a2354c2ea9d0a13272c2a1ea8d21d81" compoundref="d7/d13/a02045" startline="502" endline="518">create</referencedby>
+        <referencedby refid="d7/d16/a09479_1aece0aa64744fbe074707f2028c022a95" compoundref="d6/dd2/a02243" startline="27" endline="54">castor::WhiteNoise::generate</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a2e2e076c00783e494932092dfe61a24f" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> PxBufferBaseUPtr</type>
+        <definition>static CU_API PxBufferBaseUPtr castor::PxBufferBase::create</definition>
+        <argsstring>(PxBufferConvertOptions const *options, Size const &amp;size, uint32_t layers, uint32_t levels, PixelFormat wantedFormat, uint8_t const *buffer=nullptr, PixelFormat bufferFormat=PixelFormat::eR8G8B8A8_UNORM, uint32_t bufferAlign=0u)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor::PxBufferBase::create</qualifiedname>
+        <param>
+          <type><ref refid="d4/d51/a08983" kindref="compound">PxBufferConvertOptions</ref> const *</type>
+          <declname>options</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>layers</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>levels</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>wantedFormat</declname>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>buffer</declname>
+          <defval>nullptr</defval>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>bufferFormat</declname>
+          <defval>PixelFormat::eR8G8B8A8_UNORM</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>bufferAlign</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Crée un buffer avec les données voulues. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">options</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les options de conversion. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dimensions du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">layers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Couches du buffer (layers ou slices). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">levels</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Niveaux de mip du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">wantedFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Format des pixels du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Buffer de données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Format des pixels du buffer de données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferAlign</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;alignement mémoire du buffer source. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le buffer créé. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="461" column="32" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="461" bodyend="479"/>
+        <references refid="dd/df9/a08987_1a6cac5cb051ac8092cc1219a2cf88d9eb">create</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a7a2354c2ea9d0a13272c2a1ea8d21d81" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> PxBufferBaseUPtr</type>
+        <definition>static CU_API PxBufferBaseUPtr castor::PxBufferBase::create</definition>
+        <argsstring>(Size const &amp;size, uint32_t layers, uint32_t levels, PixelFormat wantedFormat, uint8_t const *buffer=nullptr, PixelFormat bufferFormat=PixelFormat::eR8G8B8A8_UNORM, uint32_t bufferAlign=0u)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor::PxBufferBase::create</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>layers</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>levels</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>wantedFormat</declname>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>buffer</declname>
+          <defval>nullptr</defval>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>bufferFormat</declname>
+          <defval>PixelFormat::eR8G8B8A8_UNORM</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>bufferAlign</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Crée un buffer avec les données voulues. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dimensions du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">layers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Couches du buffer (layers ou slices). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">levels</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Niveaux de mip du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">wantedFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Format des pixels du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Buffer de données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Format des pixels du buffer de données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferAlign</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;alignement mémoire du buffer source. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le buffer créé. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="502" column="32" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="502" bodyend="518"/>
+        <references refid="dd/df9/a08987_1a6cac5cb051ac8092cc1219a2cf88d9eb">create</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a5f304b374ef20de947fa2f7ade5c11fc" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> PxBufferBaseUPtr</type>
+        <definition>static CU_API PxBufferBaseUPtr castor::PxBufferBase::create</definition>
+        <argsstring>(PxBufferConvertOptions const *options, std::atomic_bool const *interrupt, Size const &amp;size, PixelFormat wantedFormat, uint8_t const *buffer=nullptr, PixelFormat bufferFormat=PixelFormat::eR8G8B8A8_UNORM, uint32_t bufferAlign=0u)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor::PxBufferBase::create</qualifiedname>
+        <param>
+          <type><ref refid="d4/d51/a08983" kindref="compound">PxBufferConvertOptions</ref> const *</type>
+          <declname>options</declname>
+        </param>
+        <param>
+          <type>std::atomic_bool const *</type>
+          <declname>interrupt</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>wantedFormat</declname>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>buffer</declname>
+          <defval>nullptr</defval>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>bufferFormat</declname>
+          <defval>PixelFormat::eR8G8B8A8_UNORM</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>bufferAlign</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Crée un buffer avec les données voulues. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">options</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les options de conversion. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">interrupt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la conversion est à interrompre. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dimensions du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">wantedFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Format des pixels du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Buffer de données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Format des pixels du buffer de données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferAlign</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;alignement mémoire du buffer source. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le buffer créé. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="541" column="32" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="541" bodyend="558"/>
+        <references refid="dd/df9/a08987_1a6cac5cb051ac8092cc1219a2cf88d9eb">create</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1a6362592f2d822c2de46a2fbe0a401e9d" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> PxBufferBaseUPtr</type>
+        <definition>static CU_API PxBufferBaseUPtr castor::PxBufferBase::create</definition>
+        <argsstring>(PxBufferConvertOptions const *options, Size const &amp;size, PixelFormat wantedFormat, uint8_t const *buffer=nullptr, PixelFormat bufferFormat=PixelFormat::eR8G8B8A8_UNORM, uint32_t bufferAlign=0u)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor::PxBufferBase::create</qualifiedname>
+        <param>
+          <type><ref refid="d4/d51/a08983" kindref="compound">PxBufferConvertOptions</ref> const *</type>
+          <declname>options</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>wantedFormat</declname>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>buffer</declname>
+          <defval>nullptr</defval>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>bufferFormat</declname>
+          <defval>PixelFormat::eR8G8B8A8_UNORM</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>bufferAlign</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Crée un buffer avec les données voulues. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">options</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les options de conversion. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dimensions du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">wantedFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Format des pixels du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Buffer de données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Format des pixels du buffer de données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferAlign</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;alignement mémoire du buffer source. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le buffer créé. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="579" column="32" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="579" bodyend="594"/>
+        <references refid="dd/df9/a08987_1a6cac5cb051ac8092cc1219a2cf88d9eb">create</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df9/a08987_1ae5f5a4d3739d1274b92c8ad7dc02de56" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> PxBufferBaseUPtr</type>
+        <definition>static CU_API PxBufferBaseUPtr castor::PxBufferBase::create</definition>
+        <argsstring>(Size const &amp;size, PixelFormat wantedFormat, uint8_t const *buffer=nullptr, PixelFormat bufferFormat=PixelFormat::eR8G8B8A8_UNORM, uint32_t bufferAlign=0u)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor::PxBufferBase::create</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>wantedFormat</declname>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>buffer</declname>
+          <defval>nullptr</defval>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>bufferFormat</declname>
+          <defval>PixelFormat::eR8G8B8A8_UNORM</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>bufferAlign</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+<para>Crée un buffer avec les données voulues. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dimensions du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">wantedFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Format des pixels du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Buffer de données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Format des pixels du buffer de données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferAlign</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;alignement mémoire du buffer source. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le buffer créé. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="613" column="32" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="613" bodyend="627"/>
+        <references refid="dd/df9/a08987_1a6cac5cb051ac8092cc1219a2cf88d9eb">create</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="dd/df9/a08987_1ae374d18cc00f62490deae65c1713e0e5" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::PxBufferBase::doConvert</definition>
+        <argsstring>(uint32_t x, uint32_t y) const</argsstring>
+        <name>doConvert</name>
+        <qualifiedname>castor::PxBufferBase::doConvert</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="630" column="10" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="630" bodyend="633"/>
+        <references refid="dd/df9/a08987_1a73620ef43aee567accf951b50d23957b" compoundref="d7/d13/a02045" startline="335" endline="338">getWidth</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::PxBuffer&lt; PF &gt;</label>
+        <link refid="d1/d39/a08803"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::PxBufferBase</label>
+        <link refid="dd/df9/a08987"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5">
+        <label>castor::Coords&lt; uint32_t, 2 &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::DataHolderT&lt; SizeData &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; SizeData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::Coords&lt; T, Count &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+      </node>
+      <node id="4">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="1">
+        <label>castor::PxBufferBase</label>
+        <link refid="dd/df9/a08987"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_size</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Size</label>
+        <link refid="d4/dd6/a09023"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="41" column="1" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="42" bodyend="646"/>
+    <listofallmembers>
+      <member refid="dd/df9/a08987_1a3e54a1a0fb7fa398737bce75ab543b4e" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>begin</name></member>
+      <member refid="dd/df9/a08987_1a3111dfa0c768dcbe75abaa42ad39379c" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>cbegin</name></member>
+      <member refid="dd/df9/a08987_1a17699c2221f4ab9d7e401753c5d24c98" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>cend</name></member>
+      <member refid="dd/df9/a08987_1a0de8bbf1f9c22dd173ca37b86495e385" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>clear</name></member>
+      <member refid="dd/df9/a08987_1ac1e0131fa58bb55a3c63d6ad5c673bb0" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>clone</name></member>
+      <member refid="dd/df9/a08987_1a7904a98af7b74471d162e28c9d278815" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>ConstPixelData</name></member>
+      <member refid="dd/df9/a08987_1a913e6dac264141eaf23c42cee132db00" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>convertToTiles</name></member>
+      <member refid="dd/df9/a08987_1a6cac5cb051ac8092cc1219a2cf88d9eb" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>create</name></member>
+      <member refid="dd/df9/a08987_1a2e2e076c00783e494932092dfe61a24f" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>create</name></member>
+      <member refid="dd/df9/a08987_1a7a2354c2ea9d0a13272c2a1ea8d21d81" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>create</name></member>
+      <member refid="dd/df9/a08987_1a5f304b374ef20de947fa2f7ade5c11fc" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>create</name></member>
+      <member refid="dd/df9/a08987_1a6362592f2d822c2de46a2fbe0a401e9d" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>create</name></member>
+      <member refid="dd/df9/a08987_1ae5f5a4d3739d1274b92c8ad7dc02de56" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>create</name></member>
+      <member refid="dd/df9/a08987_1ae374d18cc00f62490deae65c1713e0e5" prot="protected" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>doConvert</name></member>
+      <member refid="dd/df9/a08987_1a9a6326ed68ffa3d7c2ddadcf52774ce9" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>end</name></member>
+      <member refid="dd/df9/a08987_1ae5554a6b9b095cc58126b2a952977892" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>flip</name></member>
+      <member refid="dd/df9/a08987_1a71996cb68a73a1d1822d9ef52ee28ea1" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>generateMips</name></member>
+      <member refid="dd/df9/a08987_1a124eede8c1f80052781f6a7afad3c8fd" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getAlign</name></member>
+      <member refid="dd/df9/a08987_1ae97cb3ec537d5186779d67c6c3b99130" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getAt</name></member>
+      <member refid="dd/df9/a08987_1a3e3b755e9ac2965995aff3dae565e698" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getAt</name></member>
+      <member refid="dd/df9/a08987_1a5713532df1210d37bbf350d69d928360" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getAt</name></member>
+      <member refid="dd/df9/a08987_1af834c3a9e4d601d3e3db75a98e7e5b7b" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getAt</name></member>
+      <member refid="dd/df9/a08987_1a9be8f18b1764dc522ad4987f36608856" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getConstPtr</name></member>
+      <member refid="dd/df9/a08987_1a1ae7125e8d5e73e4b9e9d72b6c1b5e4a" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getCount</name></member>
+      <member refid="dd/df9/a08987_1ab33d4c052a19248839bb637203ad0bcb" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getDimensions</name></member>
+      <member refid="dd/df9/a08987_1ac87ea1116c4be4c2d9dcd3daf9494905" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getFormat</name></member>
+      <member refid="dd/df9/a08987_1a914ac0ada101f2aa932884e18a37a250" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getHeight</name></member>
+      <member refid="dd/df9/a08987_1acf5b112ac61e4376439c2132739381ec" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getLayers</name></member>
+      <member refid="dd/df9/a08987_1af28492c18b265d0c1485c5bc60d35809" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getLevels</name></member>
+      <member refid="dd/df9/a08987_1a9cf1921e9b6b772214222520a4cddad7" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getPtr</name></member>
+      <member refid="dd/df9/a08987_1ae3650d9e6524272127cd60666ad6f00a" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getSize</name></member>
+      <member refid="dd/df9/a08987_1ad304432fd9cfa3330576661bbba71f34" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getTileHeight</name></member>
+      <member refid="dd/df9/a08987_1ac8a9dc2dd9f975f01b63c15212a3313d" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getTiles</name></member>
+      <member refid="dd/df9/a08987_1a834e10b7496afe17390ddf69c3f383e2" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getTileSize</name></member>
+      <member refid="dd/df9/a08987_1a027e7feff5936185517a08ca11581288" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getTileWidth</name></member>
+      <member refid="dd/df9/a08987_1a73620ef43aee567accf951b50d23957b" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>getWidth</name></member>
+      <member refid="dd/df9/a08987_1a22c2306b1fe58b48c134f55c25111124" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>initialise</name></member>
+      <member refid="dd/df9/a08987_1a6162ecba9c293702ead57a696544378e" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>initialise</name></member>
+      <member refid="dd/df9/a08987_1a5806cd5591c33b2ebc03164ff40d0d89" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>initialise</name></member>
+      <member refid="dd/df9/a08987_1a33f681592de84ac7bdb3c6f95b598a58" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>isFlipped</name></member>
+      <member refid="dd/df9/a08987_1aa97233c4ebf3fa1274bcf1dbf81d4339" prot="protected" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>m_align</name></member>
+      <member refid="dd/df9/a08987_1a5ee07455950ba1d92ff14a2b0faebe60" prot="protected" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>m_buffer</name></member>
+      <member refid="dd/df9/a08987_1a528137572e0f8456fd860754e7ea8d7e" prot="private" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>m_flipped</name></member>
+      <member refid="dd/df9/a08987_1aa322ce34f373f05aeabac80e0d4447be" prot="private" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>m_format</name></member>
+      <member refid="dd/df9/a08987_1a69c35170d090e328a700c6ebc6168661" prot="protected" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>m_layers</name></member>
+      <member refid="dd/df9/a08987_1a4855f4c1d335079a412dafb0276b8777" prot="protected" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>m_levels</name></member>
+      <member refid="dd/df9/a08987_1aa72fd741ad1b4dd72727b7b52729ae11" prot="protected" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>m_size</name></member>
+      <member refid="dd/df9/a08987_1a691eb2ccdf0a09f080ae050b0dc998fe" prot="protected" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>m_tiles</name></member>
+      <member refid="dd/df9/a08987_1a073da6da845c3073f7e436a2900c4206" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>operator=</name></member>
+      <member refid="dd/df9/a08987_1ae50a1cdac94c4fe833a3c8424f93a83b" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>operator=</name></member>
+      <member refid="dd/df9/a08987_1abcbbb1571ed4efd710103ba7d8e8078a" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>PixelData</name></member>
+      <member refid="dd/df9/a08987_1adb1ea170c68df343dcd6e2f2364f0877" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>PxArray</name></member>
+      <member refid="dd/df9/a08987_1a567ae3e875ffc8a8bb1f434a643bcb04" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>PxBufferBase</name></member>
+      <member refid="dd/df9/a08987_1a57744939c8221f29ddd138db30ecb90e" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>PxBufferBase</name></member>
+      <member refid="dd/df9/a08987_1acef8b29a48cdc9ddb91bd473702dfe41" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>PxBufferBase</name></member>
+      <member refid="dd/df9/a08987_1ae07c08d2cface7af291287a19b05dbea" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>PxBufferBase</name></member>
+      <member refid="dd/df9/a08987_1a2c7797ea8d2f520d39a8762bcb979f5c" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>swap</name></member>
+      <member refid="dd/df9/a08987_1a28fb272965fef7e8349cf5acedf71573" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>update</name></member>
+      <member refid="dd/df9/a08987_1a11ebf587e16d046552e01d25728f909e" prot="public" virt="non-virtual"><scope>castor::PxBufferBase</scope><name>~PxBufferBase</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

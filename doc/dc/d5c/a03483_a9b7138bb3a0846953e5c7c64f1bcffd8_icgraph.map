@@ -1,0 +1,23 @@
+<map id="castor3d::GpuBufferBase::getBuffer" name="castor3d::GpuBufferBase::getBuffer">
+<area shape="rect" id="Node000001" title=" " alt="" coords="503,213,669,253"/>
+<area shape="rect" id="Node000002" href="$d7/d76/a03451.html#a4da4dcd4dd73b83fb0bc6b02ab0e739c" title=" " alt="" coords="284,181,455,221"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="489,222,454,217,455,211,490,216"/>
+<area shape="rect" id="Node000003" href="$d7/d76/a03451.html#aaf498e1f12b8c86de5b613e41e9fb87e" title=" " alt="" coords="284,245,455,285"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="490,250,455,255,454,250,489,245"/>
+<area shape="rect" id="Node000004" href="$d7/d76/a03451.html#a85b86bd4427a5401a0dbf8679afa5fab" title=" " alt="" coords="35,5,206,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="286,239,282,235,266,212,259,189,258,144,257,101,250,80,234,59,205,40,207,36,238,55,255,78,263,100,264,144,264,188,271,210,286,232,290,235"/>
+<area shape="rect" id="Node000005" href="$d7/d76/a03451.html#a1e1705c30831f81dd88e56851fc68125" title=" " alt="" coords="15,70,226,125"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="288,240,282,235,264,210,258,186,251,162,234,139,217,127,220,123,238,135,256,160,263,184,269,208,286,232,291,236"/>
+<area shape="rect" id="Node000006" href="$d7/d76/a03451.html#a9a2a774c320c6b16a3c5dca876e15794" title=" " alt="" coords="9,149,232,189"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="297,242,283,236,259,219,235,204,204,192,206,187,237,199,262,215,285,231,299,238"/>
+<area shape="rect" id="Node000007" href="$d7/d76/a03451.html#a7915ce19b57c143a64b14ff3a2cba6ec" title=" " alt="" coords="11,213,230,253"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="270,255,230,250,230,245,270,250"/>
+<area shape="rect" id="Node000008" href="$d7/d76/a03451.html#a6d2f25cb09688a26b3446a584cde170b" title=" " alt="" coords="5,277,236,317"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="271,281,237,285,236,280,270,275"/>
+<area shape="rect" id="Node000009" href="$d7/d76/a03451.html#a154cd5333c68a6d9825f46c95a103f38" title=" " alt="" coords="25,341,216,381"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="320,294,237,332,201,344,200,339,235,327,318,289"/>
+<area shape="rect" id="Node000010" href="$d7/d76/a03451.html#aad23adbbe095c75faaeb269b7e48fb74" title=" " alt="" coords="35,405,206,445"/>
+<area shape="poly" id="edge9_Node000003_Node000010" title=" " alt="" coords="346,298,299,348,270,374,237,396,207,409,205,404,235,391,266,369,296,344,342,294"/>
+<area shape="rect" id="Node000011" href="$d7/d76/a03451.html#a9110fc6d2de03fb35b3bc4ea8e5bbedc" title=" " alt="" coords="35,469,206,509"/>
+<area shape="poly" id="edge10_Node000003_Node000011" title=" " alt="" coords="357,299,338,336,312,380,278,423,238,460,207,475,205,471,234,455,274,419,307,377,333,334,352,297"/>
+</map>

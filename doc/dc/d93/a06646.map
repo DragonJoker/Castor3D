@@ -1,0 +1,19 @@
+<map id="castor3d::ShadowMapPassPoint" name="castor3d::ShadowMapPassPoint">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1009,106,1220,131"/>
+<area shape="rect" id="Node000002" href="$d4/df1/a06639.html" title=" " alt="" coords="779,106,960,131"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="974,116,1009,116,1009,121,974,121"/>
+<area shape="rect" id="Node000003" href="$d5/d96/a06531.html" title=" " alt="" coords="541,106,729,131"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="743,116,779,116,779,121,743,121"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title=" " alt="" coords="305,7,492,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="468,34,493,43,560,74,614,103,611,108,558,78,491,48,466,39"/>
+<area shape="rect" id="Node000005" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="5,7,188,33"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="202,17,305,17,305,23,202,23"/>
+<area shape="rect" id="Node000006" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="345,57,452,82"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="466,81,574,103,573,109,465,86"/>
+<area shape="rect" id="Node000007" href="$da/d50/a08167.html" title="Some data holder." alt="" coords="334,106,463,131"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="478,116,541,116,541,121,478,121"/>
+<area shape="rect" id="Node000008" href="$da/d50/a08167.html" title="Some data holder." alt="" coords="329,155,468,181"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="473,150,573,129,574,134,474,155"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="339,205,458,230"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="469,198,491,191,558,160,612,129,615,134,561,164,493,196,471,203"/>
+</map>

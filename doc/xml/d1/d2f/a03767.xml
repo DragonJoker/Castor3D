@@ -1,0 +1,204 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d2f/a03767" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::MouseEvent</compoundname>
+    <basecompoundref refid="d7/d88/a03771" prot="public" virt="non-virtual">castor3d::UserInputEvent</basecompoundref>
+    <includes local="no">MouseEvent.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/d2f/a03767_1a1ef4cad217e6769acbb9ba9b978f43d5" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a3c153b6d827714e22164290af1839578" kindref="member">MouseEventType</ref> const</type>
+        <definition>MouseEventType const castor3d::MouseEvent::m_mouseEventType</definition>
+        <argsstring></argsstring>
+        <name>m_mouseEventType</name>
+        <qualifiedname>castor3d::MouseEvent::m_mouseEventType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/MouseEvent.hpp" line="70" column="22" bodyfile="Castor3D/Event/UserInput/MouseEvent.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d2f/a03767_1abe5724dfdd7fb705ae4582c074741ce4" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a087f824502cd45431879fc5c96607682" kindref="member">MouseButton</ref> const</type>
+        <definition>MouseButton const castor3d::MouseEvent::m_button</definition>
+        <argsstring></argsstring>
+        <name>m_button</name>
+        <qualifiedname>castor3d::MouseEvent::m_button</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/MouseEvent.hpp" line="71" column="19" bodyfile="Castor3D/Event/UserInput/MouseEvent.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d2f/a03767_1aa9b251ac2dd7a7c7c000891d8e7b37e9" prot="private" static="no" mutable="no">
+        <type><ref refid="df/dba/a08999" kindref="compound">castor::Position</ref> const</type>
+        <definition>castor::Position const castor3d::MouseEvent::m_position</definition>
+        <argsstring></argsstring>
+        <name>m_position</name>
+        <qualifiedname>castor3d::MouseEvent::m_position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/MouseEvent.hpp" line="72" column="24" bodyfile="Castor3D/Event/UserInput/MouseEvent.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d2f/a03767_1acacd9e08c4a258a29f22e970118e67c1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::MouseEvent::MouseEvent</definition>
+        <argsstring>(MouseEventType type, castor::Position const &amp;position, MouseButton button=MouseButton::eCount)</argsstring>
+        <name>MouseEvent</name>
+        <qualifiedname>castor3d::MouseEvent::MouseEvent</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a3c153b6d827714e22164290af1839578" kindref="member">MouseEventType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="df/dba/a08999" kindref="compound">castor::Position</ref> const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a087f824502cd45431879fc5c96607682" kindref="member">MouseButton</ref></type>
+          <declname>button</declname>
+          <defval><ref refid="d9/dba/a02278_1a087f824502cd45431879fc5c96607682ae558bb69fadec037d9eae46601a4df8e" kindref="member">MouseButton::eCount</ref></defval>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type d&apos;évènement de souris. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La position, de la souris ou de la molette, selon le type d&apos;évènement. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">button</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le bouton de la souris. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/MouseEvent.hpp" line="29" column="1" bodyfile="Castor3D/Event/UserInput/MouseEvent.hpp" bodystart="29" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d2f/a03767_1a228955b6732220e64bdc170887f857a1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1a3c153b6d827714e22164290af1839578" kindref="member">MouseEventType</ref></type>
+        <definition>MouseEventType castor3d::MouseEvent::getMouseEventType</definition>
+        <argsstring>() const</argsstring>
+        <name>getMouseEventType</name>
+        <qualifiedname>castor3d::MouseEvent::getMouseEventType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le type d&apos;évènement de souris. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/MouseEvent.hpp" line="44" column="16" bodyfile="Castor3D/Event/UserInput/MouseEvent.hpp" bodystart="44" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d2f/a03767_1aa7d9cd30e83103377a44b4a516fe79da" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1a087f824502cd45431879fc5c96607682" kindref="member">MouseButton</ref></type>
+        <definition>MouseButton castor3d::MouseEvent::getButton</definition>
+        <argsstring>() const</argsstring>
+        <name>getButton</name>
+        <qualifiedname>castor3d::MouseEvent::getButton</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le bouton de la souris. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/MouseEvent.hpp" line="54" column="13" bodyfile="Castor3D/Event/UserInput/MouseEvent.hpp" bodystart="54" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d2f/a03767_1a1ec05e2f780e220869d3e3c7ffef27c5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="df/dba/a08999" kindref="compound">castor::Position</ref> const &amp;</type>
+        <definition>castor::Position const  &amp; castor3d::MouseEvent::getPosition</definition>
+        <argsstring>() const</argsstring>
+        <name>getPosition</name>
+        <qualifiedname>castor3d::MouseEvent::getPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La position, de la souris ou de la molette, selon le type d&apos;évènement. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/MouseEvent.hpp" line="64" column="25" bodyfile="Castor3D/Event/UserInput/MouseEvent.hpp" bodystart="64" bodyend="67"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::MouseEvent</label>
+        <link refid="d1/d2f/a03767"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::UserInputEvent</label>
+        <link refid="d7/d88/a03771"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::MouseEvent</label>
+        <link refid="d1/d2f/a03767"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::UserInputEvent</label>
+        <link refid="d7/d88/a03771"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Event/UserInput/MouseEvent.hpp" line="13" column="1" bodyfile="Castor3D/Event/UserInput/MouseEvent.hpp" bodystart="15" bodyend="73"/>
+    <listofallmembers>
+      <member refid="d1/d2f/a03767_1aa7d9cd30e83103377a44b4a516fe79da" prot="public" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>getButton</name></member>
+      <member refid="d7/d88/a03771_1ab45ab37b6687ae9a35165ea5b18f0a71" prot="public" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>getEventType</name></member>
+      <member refid="d1/d2f/a03767_1a228955b6732220e64bdc170887f857a1" prot="public" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>getMouseEventType</name></member>
+      <member refid="d1/d2f/a03767_1a1ec05e2f780e220869d3e3c7ffef27c5" prot="public" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>getPosition</name></member>
+      <member refid="d1/d2f/a03767_1abe5724dfdd7fb705ae4582c074741ce4" prot="private" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>m_button</name></member>
+      <member refid="d1/d2f/a03767_1a1ef4cad217e6769acbb9ba9b978f43d5" prot="private" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>m_mouseEventType</name></member>
+      <member refid="d1/d2f/a03767_1aa9b251ac2dd7a7c7c000891d8e7b37e9" prot="private" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>m_position</name></member>
+      <member refid="d1/d2f/a03767_1acacd9e08c4a258a29f22e970118e67c1" prot="public" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>MouseEvent</name></member>
+      <member refid="d7/d88/a03771_1a505a4c793b88cd3bf450b1897e508b8c" prot="public" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>operator=</name></member>
+      <member refid="d7/d88/a03771_1a83cd34f57f86598f54d26bb236c305da" prot="public" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>operator=</name></member>
+      <member refid="d7/d88/a03771_1aa153e8012937e339174f3d417bb2c85a" prot="public" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>UserInputEvent</name></member>
+      <member refid="d7/d88/a03771_1ac400e7c3f7be61af659db2150bbd1289" prot="public" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>UserInputEvent</name></member>
+      <member refid="d7/d88/a03771_1a1d946a77fa49158379ee4e5dfb84a556" prot="public" virt="non-virtual"><scope>castor3d::MouseEvent</scope><name>UserInputEvent</name></member>
+      <member refid="d7/d88/a03771_1a6fad3cec03f215138e8db7ae6cde872a" prot="public" virt="virtual"><scope>castor3d::MouseEvent</scope><name>~UserInputEvent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

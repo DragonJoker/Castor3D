@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/dae/a07695" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::PayloadT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">PayloadStructT&lt; FlagT &gt;</basecompoundref>
+    <includes local="no">GlslTaskPayload.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>sdw::var::Flag</type>
+        <declname>FlagT</declname>
+        <defname>FlagT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/dae/a07695_1a6ed8bbc4bceb3630b065a4fc6a7c87e4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::PayloadT&lt; FlagT &gt;::PayloadT</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled=true)</argsstring>
+        <name>PayloadT</name>
+        <qualifiedname>castor3d::shader::PayloadT::PayloadT</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslTaskPayload.hpp" line="24" column="1" bodyfile="Castor3D/Shader/Shaders/GlslTaskPayload.hpp" bodystart="24" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dae/a07695_1ab11ba2270cf6bf4bdd4a9ab768561632" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::PayloadT&lt; FlagT &gt;::meshletIndices</definition>
+        <argsstring>() const</argsstring>
+        <name>meshletIndices</name>
+        <qualifiedname>castor3d::shader::PayloadT::meshletIndices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslTaskPayload.hpp" line="31" column="6" bodyfile="Castor3D/Shader/Shaders/GlslTaskPayload.hpp" bodystart="31" bodyend="31"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>PayloadStructT&lt; FlagT &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::PayloadT&lt; FlagT &gt;</label>
+        <link refid="de/dae/a07695"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>PayloadStructT&lt; FlagT &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::PayloadT&lt; FlagT &gt;</label>
+        <link refid="de/dae/a07695"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslTaskPayload.hpp" line="21" column="1" bodyfile="Castor3D/Shader/Shaders/GlslTaskPayload.hpp" bodystart="23" bodyend="32"/>
+    <listofallmembers>
+      <member refid="de/dae/a07695_1ab11ba2270cf6bf4bdd4a9ab768561632" prot="public" virt="non-virtual"><scope>castor3d::shader::PayloadT</scope><name>meshletIndices</name></member>
+      <member refid="de/dae/a07695_1a6ed8bbc4bceb3630b065a4fc6a7c87e4" prot="public" virt="non-virtual"><scope>castor3d::shader::PayloadT</scope><name>PayloadT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

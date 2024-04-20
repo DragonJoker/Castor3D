@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/df8/a05311" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ColourWrapper</compoundname>
+    <includes local="no">MiscellaneousModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/df8/a05311_1afba341f6f01bdc27f2e73f44590a94b1" prot="public" static="no" mutable="no">
+        <type>castor::Point3f *</type>
+        <definition>castor::Point3f* castor3d::ColourWrapper::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>castor3d::ColourWrapper::value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/MiscellaneousModule.hpp" line="174" column="18" bodyfile="Castor3D/Miscellaneous/MiscellaneousModule.hpp" bodystart="174" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Contient un point pour le faire considérer comme une couleur par les visiteurs. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Miscellaneous/MiscellaneousModule.hpp" line="172" column="1" bodyfile="Castor3D/Miscellaneous/MiscellaneousModule.hpp" bodystart="173" bodyend="175"/>
+    <listofallmembers>
+      <member refid="d7/df8/a05311_1afba341f6f01bdc27f2e73f44590a94b1" prot="public" virt="non-virtual"><scope>castor3d::ColourWrapper</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

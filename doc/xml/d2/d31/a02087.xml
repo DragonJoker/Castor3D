@@ -1,0 +1,1016 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/d31/a02087" kind="file" language="C++">
+    <compoundname>stb_image_resize.h</compoundname>
+    <includes local="no">stdint.h</includes>
+    <incdepgraph>
+      <node id="1">
+        <label>CastorUtils/Graphics/stb_image_resize.h</label>
+        <link refid="d2/d31/a02087"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>stdint.h</label>
+      </node>
+    </incdepgraph>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="d2/d31/a02087_1ae1a1d3e88cf2d2d25c9e5864bb928050" prot="public" static="no">
+        <name>STBIRDEF</name>
+        <initializer>extern</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="202" column="11" bodyfile="CastorUtils/Graphics/stb_image_resize.h" bodystart="202" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="d2/d31/a02087_1a634e8c347ec36008c0a8f9b56cbb41bb" prot="public" static="no">
+        <name>STBIR_ALPHA_CHANNEL_NONE</name>
+        <initializer>-1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="240" column="9" bodyfile="CastorUtils/Graphics/stb_image_resize.h" bodystart="240" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="d2/d31/a02087_1af1dbff54b404455740b7f9d04b5a0177" prot="public" static="no">
+        <name>STBIR_FLAG_ALPHA_PREMULTIPLIED</name>
+        <initializer>(1 &lt;&lt; 0)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="245" column="9" bodyfile="CastorUtils/Graphics/stb_image_resize.h" bodystart="245" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="d2/d31/a02087_1a9d16fb3c3edd34d11e8e76b046208296" prot="public" static="no">
+        <name>STBIR_FLAG_ALPHA_USES_COLORSPACE</name>
+        <initializer>(1 &lt;&lt; 1)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="248" column="9" bodyfile="CastorUtils/Graphics/stb_image_resize.h" bodystart="248" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="enum">
+      <memberdef kind="enum" id="d2/d31/a02087_1a66999cce1ebadfca11aa694b3d377b9e" prot="public" static="no" strong="no">
+        <type></type>
+        <name>stbir_edge</name>
+        <enumvalue id="d2/d31/a02087_1a66999cce1ebadfca11aa694b3d377b9ea2174173c9b0d0bbbe7eb7eb4c04fc086" prot="public">
+          <name>STBIR_EDGE_CLAMP</name>
+          <initializer>= 1</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d2/d31/a02087_1a66999cce1ebadfca11aa694b3d377b9eab85276f10d1cafae1c33a76f0fb39d2f" prot="public">
+          <name>STBIR_EDGE_REFLECT</name>
+          <initializer>= 2</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d2/d31/a02087_1a66999cce1ebadfca11aa694b3d377b9ea1d5fe813103be8c12ee3498d15bbe7c3" prot="public">
+          <name>STBIR_EDGE_WRAP</name>
+          <initializer>= 3</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d2/d31/a02087_1a66999cce1ebadfca11aa694b3d377b9ea279078b3b5a12337c8905de9bff55769" prot="public">
+          <name>STBIR_EDGE_ZERO</name>
+          <initializer>= 4</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="255" column="1" bodyfile="CastorUtils/Graphics/stb_image_resize.h" bodystart="256" bodyend="261"/>
+      </memberdef>
+      <memberdef kind="enum" id="d2/d31/a02087_1a3be65f56c3f2d170554ea103443b4093" prot="public" static="no" strong="no">
+        <type></type>
+        <name>stbir_filter</name>
+        <enumvalue id="d2/d31/a02087_1a3be65f56c3f2d170554ea103443b4093a19ab5b25f8780af8ea2cac2a3f3b4c37" prot="public">
+          <name>STBIR_FILTER_DEFAULT</name>
+          <initializer>= 0</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d2/d31/a02087_1a3be65f56c3f2d170554ea103443b4093a96aa77466a9dcec62e17bf4050301b05" prot="public">
+          <name>STBIR_FILTER_BOX</name>
+          <initializer>= 1</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d2/d31/a02087_1a3be65f56c3f2d170554ea103443b4093ab60125093ca93d771b9c703aa4a22d65" prot="public">
+          <name>STBIR_FILTER_TRIANGLE</name>
+          <initializer>= 2</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d2/d31/a02087_1a3be65f56c3f2d170554ea103443b4093ae832b16990dc0b85fb3aef215b997700" prot="public">
+          <name>STBIR_FILTER_CUBICBSPLINE</name>
+          <initializer>= 3</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d2/d31/a02087_1a3be65f56c3f2d170554ea103443b4093ad24b388e0a27fa07c3eb76845f1f7959" prot="public">
+          <name>STBIR_FILTER_CATMULLROM</name>
+          <initializer>= 4</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d2/d31/a02087_1a3be65f56c3f2d170554ea103443b4093a730eb3ee0e0f29f1806ce6b7607094fc" prot="public">
+          <name>STBIR_FILTER_MITCHELL</name>
+          <initializer>= 5</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="284" column="1" bodyfile="CastorUtils/Graphics/stb_image_resize.h" bodystart="285" bodyend="292"/>
+      </memberdef>
+      <memberdef kind="enum" id="d2/d31/a02087_1afe1a8f53b27eff69118730bc14fd10ed" prot="public" static="no" strong="no">
+        <type></type>
+        <name>stbir_colorspace</name>
+        <enumvalue id="d2/d31/a02087_1afe1a8f53b27eff69118730bc14fd10edac9daf637ea73007832927d3fd707dd37" prot="public">
+          <name>STBIR_COLORSPACE_LINEAR</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d2/d31/a02087_1afe1a8f53b27eff69118730bc14fd10eda3bfa984cc5ebc6eb49f9d82c4a5c34c9" prot="public">
+          <name>STBIR_COLORSPACE_SRGB</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d2/d31/a02087_1afe1a8f53b27eff69118730bc14fd10eda8899565f02de9bcae20b4e75afd63609" prot="public">
+          <name>STBIR_MAX_COLORSPACES</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="294" column="1" bodyfile="CastorUtils/Graphics/stb_image_resize.h" bodystart="295" bodyend="300"/>
+      </memberdef>
+      <memberdef kind="enum" id="d2/d31/a02087_1ae66e0b8b43547463a26c4c9856e7feb7" prot="public" static="no" strong="no">
+        <type></type>
+        <name>stbir_datatype</name>
+        <enumvalue id="d2/d31/a02087_1ae66e0b8b43547463a26c4c9856e7feb7a7eca722966f28fcc1f8a2c0ff57a214b" prot="public">
+          <name>STBIR_TYPE_UINT8</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d2/d31/a02087_1ae66e0b8b43547463a26c4c9856e7feb7a1f4a3c0f3cb88d33c9d0922767c381b2" prot="public">
+          <name>STBIR_TYPE_UINT16</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d2/d31/a02087_1ae66e0b8b43547463a26c4c9856e7feb7a1c8361627ec8ef323de0124334a2717d" prot="public">
+          <name>STBIR_TYPE_UINT32</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d2/d31/a02087_1ae66e0b8b43547463a26c4c9856e7feb7af306ec3d4f43129b1c434eeb5a67c9d3" prot="public">
+          <name>STBIR_TYPE_FLOAT</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d2/d31/a02087_1ae66e0b8b43547463a26c4c9856e7feb7ac6713abb1a154ac8cd5abd8e2cfc00a1" prot="public">
+          <name>STBIR_MAX_TYPES</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="337" column="1" bodyfile="CastorUtils/Graphics/stb_image_resize.h" bodystart="338" bodyend="345"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="d2/d31/a02087_1a5f0301f0ca83988d42c35685bc8594eb" prot="public" static="no">
+        <type>uint8_t</type>
+        <definition>typedef uint8_t stbir_uint8</definition>
+        <argsstring></argsstring>
+        <name>stbir_uint8</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="191" column="18" bodyfile="CastorUtils/Graphics/stb_image_resize.h" bodystart="191" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/d31/a02087_1a71121f166a710e8a8da418ae3c86f1b9" prot="public" static="no">
+        <type>uint16_t</type>
+        <definition>typedef uint16_t stbir_uint16</definition>
+        <argsstring></argsstring>
+        <name>stbir_uint16</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="192" column="18" bodyfile="CastorUtils/Graphics/stb_image_resize.h" bodystart="192" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/d31/a02087_1abfd2d1a0b44b4b7513710cf96f0358d0" prot="public" static="no">
+        <type>uint32_t</type>
+        <definition>typedef uint32_t stbir_uint32</definition>
+        <argsstring></argsstring>
+        <name>stbir_uint32</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="193" column="18" bodyfile="CastorUtils/Graphics/stb_image_resize.h" bodystart="193" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="d2/d31/a02087_1a4128d1f01e30a5dc2bf7932b95660b09" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbir_resize_uint8</definition>
+        <argsstring>(const unsigned char *input_pixels, int input_w, int input_h, int input_stride_in_bytes, unsigned char *output_pixels, int output_w, int output_h, int output_stride_in_bytes, int num_channels)</argsstring>
+        <name>stbir_resize_uint8</name>
+        <param>
+          <type>const unsigned char *</type>
+          <declname>input_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type>unsigned char *</type>
+          <declname>output_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>num_channels</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="225" column="14" declfile="CastorUtils/Graphics/stb_image_resize.h" declline="225" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d31/a02087_1a48702812b9f2b785c98bcf9e1170cc17" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbir_resize_float</definition>
+        <argsstring>(const float *input_pixels, int input_w, int input_h, int input_stride_in_bytes, float *output_pixels, int output_w, int output_h, int output_stride_in_bytes, int num_channels)</argsstring>
+        <name>stbir_resize_float</name>
+        <param>
+          <type>const float *</type>
+          <declname>input_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type>float *</type>
+          <declname>output_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>num_channels</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="229" column="14" declfile="CastorUtils/Graphics/stb_image_resize.h" declline="229" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d31/a02087_1a46dd6ee2374d137fd38c667e386c8ff5" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbir_resize_uint8_srgb</definition>
+        <argsstring>(const unsigned char *input_pixels, int input_w, int input_h, int input_stride_in_bytes, unsigned char *output_pixels, int output_w, int output_h, int output_stride_in_bytes, int num_channels, int alpha_channel, int flags)</argsstring>
+        <name>stbir_resize_uint8_srgb</name>
+        <param>
+          <type>const unsigned char *</type>
+          <declname>input_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type>unsigned char *</type>
+          <declname>output_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>num_channels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>alpha_channel</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="250" column="14" declfile="CastorUtils/Graphics/stb_image_resize.h" declline="250" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d31/a02087_1a4a7c89336e90872da615f90b40e2c86a" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbir_resize_uint8_srgb_edgemode</definition>
+        <argsstring>(const unsigned char *input_pixels, int input_w, int input_h, int input_stride_in_bytes, unsigned char *output_pixels, int output_w, int output_h, int output_stride_in_bytes, int num_channels, int alpha_channel, int flags, stbir_edge edge_wrap_mode)</argsstring>
+        <name>stbir_resize_uint8_srgb_edgemode</name>
+        <param>
+          <type>const unsigned char *</type>
+          <declname>input_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type>unsigned char *</type>
+          <declname>output_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>num_channels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>alpha_channel</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a66999cce1ebadfca11aa694b3d377b9e" kindref="member">stbir_edge</ref></type>
+          <declname>edge_wrap_mode</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="264" column="14" declfile="CastorUtils/Graphics/stb_image_resize.h" declline="264" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d31/a02087_1aa20b1c483fc529011917066dc0f891fe" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbir_resize_uint8_generic</definition>
+        <argsstring>(const unsigned char *input_pixels, int input_w, int input_h, int input_stride_in_bytes, unsigned char *output_pixels, int output_w, int output_h, int output_stride_in_bytes, int num_channels, int alpha_channel, int flags, stbir_edge edge_wrap_mode, stbir_filter filter, stbir_colorspace space, void *alloc_context)</argsstring>
+        <name>stbir_resize_uint8_generic</name>
+        <param>
+          <type>const unsigned char *</type>
+          <declname>input_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type>unsigned char *</type>
+          <declname>output_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>num_channels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>alpha_channel</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a66999cce1ebadfca11aa694b3d377b9e" kindref="member">stbir_edge</ref></type>
+          <declname>edge_wrap_mode</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a3be65f56c3f2d170554ea103443b4093" kindref="member">stbir_filter</ref></type>
+          <declname>filter</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1afe1a8f53b27eff69118730bc14fd10ed" kindref="member">stbir_colorspace</ref></type>
+          <declname>space</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>alloc_context</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="304" column="14" declfile="CastorUtils/Graphics/stb_image_resize.h" declline="304" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d31/a02087_1ac8c81bd5191d94b783e2df5e9eafeb40" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbir_resize_uint16_generic</definition>
+        <argsstring>(const stbir_uint16 *input_pixels, int input_w, int input_h, int input_stride_in_bytes, stbir_uint16 *output_pixels, int output_w, int output_h, int output_stride_in_bytes, int num_channels, int alpha_channel, int flags, stbir_edge edge_wrap_mode, stbir_filter filter, stbir_colorspace space, void *alloc_context)</argsstring>
+        <name>stbir_resize_uint16_generic</name>
+        <param>
+          <type>const <ref refid="d2/d31/a02087_1a71121f166a710e8a8da418ae3c86f1b9" kindref="member">stbir_uint16</ref> *</type>
+          <declname>input_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a71121f166a710e8a8da418ae3c86f1b9" kindref="member">stbir_uint16</ref> *</type>
+          <declname>output_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>num_channels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>alpha_channel</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a66999cce1ebadfca11aa694b3d377b9e" kindref="member">stbir_edge</ref></type>
+          <declname>edge_wrap_mode</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a3be65f56c3f2d170554ea103443b4093" kindref="member">stbir_filter</ref></type>
+          <declname>filter</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1afe1a8f53b27eff69118730bc14fd10ed" kindref="member">stbir_colorspace</ref></type>
+          <declname>space</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>alloc_context</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="310" column="14" declfile="CastorUtils/Graphics/stb_image_resize.h" declline="310" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d31/a02087_1a52f937dd6220066a3eb0b343ccb2bf9d" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbir_resize_float_generic</definition>
+        <argsstring>(const float *input_pixels, int input_w, int input_h, int input_stride_in_bytes, float *output_pixels, int output_w, int output_h, int output_stride_in_bytes, int num_channels, int alpha_channel, int flags, stbir_edge edge_wrap_mode, stbir_filter filter, stbir_colorspace space, void *alloc_context)</argsstring>
+        <name>stbir_resize_float_generic</name>
+        <param>
+          <type>const float *</type>
+          <declname>input_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type>float *</type>
+          <declname>output_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>num_channels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>alpha_channel</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a66999cce1ebadfca11aa694b3d377b9e" kindref="member">stbir_edge</ref></type>
+          <declname>edge_wrap_mode</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a3be65f56c3f2d170554ea103443b4093" kindref="member">stbir_filter</ref></type>
+          <declname>filter</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1afe1a8f53b27eff69118730bc14fd10ed" kindref="member">stbir_colorspace</ref></type>
+          <declname>space</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>alloc_context</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="316" column="14" declfile="CastorUtils/Graphics/stb_image_resize.h" declline="316" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d31/a02087_1a632f5b8e5b32218e60c5c6debdf5d148" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbir_resize</definition>
+        <argsstring>(const void *input_pixels, int input_w, int input_h, int input_stride_in_bytes, void *output_pixels, int output_w, int output_h, int output_stride_in_bytes, stbir_datatype datatype, int num_channels, int alpha_channel, int flags, stbir_edge edge_mode_horizontal, stbir_edge edge_mode_vertical, stbir_filter filter_horizontal, stbir_filter filter_vertical, stbir_colorspace space, void *alloc_context)</argsstring>
+        <name>stbir_resize</name>
+        <param>
+          <type>const void *</type>
+          <declname>input_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>output_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1ae66e0b8b43547463a26c4c9856e7feb7" kindref="member">stbir_datatype</ref></type>
+          <declname>datatype</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>num_channels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>alpha_channel</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a66999cce1ebadfca11aa694b3d377b9e" kindref="member">stbir_edge</ref></type>
+          <declname>edge_mode_horizontal</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a66999cce1ebadfca11aa694b3d377b9e" kindref="member">stbir_edge</ref></type>
+          <declname>edge_mode_vertical</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a3be65f56c3f2d170554ea103443b4093" kindref="member">stbir_filter</ref></type>
+          <declname>filter_horizontal</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a3be65f56c3f2d170554ea103443b4093" kindref="member">stbir_filter</ref></type>
+          <declname>filter_vertical</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1afe1a8f53b27eff69118730bc14fd10ed" kindref="member">stbir_colorspace</ref></type>
+          <declname>space</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>alloc_context</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="347" column="14" declfile="CastorUtils/Graphics/stb_image_resize.h" declline="347" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d31/a02087_1a02f0b74649c0843f910cb0131114bda5" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbir_resize_subpixel</definition>
+        <argsstring>(const void *input_pixels, int input_w, int input_h, int input_stride_in_bytes, void *output_pixels, int output_w, int output_h, int output_stride_in_bytes, stbir_datatype datatype, int num_channels, int alpha_channel, int flags, stbir_edge edge_mode_horizontal, stbir_edge edge_mode_vertical, stbir_filter filter_horizontal, stbir_filter filter_vertical, stbir_colorspace space, void *alloc_context, float x_scale, float y_scale, float x_offset, float y_offset)</argsstring>
+        <name>stbir_resize_subpixel</name>
+        <param>
+          <type>const void *</type>
+          <declname>input_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>output_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1ae66e0b8b43547463a26c4c9856e7feb7" kindref="member">stbir_datatype</ref></type>
+          <declname>datatype</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>num_channels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>alpha_channel</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a66999cce1ebadfca11aa694b3d377b9e" kindref="member">stbir_edge</ref></type>
+          <declname>edge_mode_horizontal</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a66999cce1ebadfca11aa694b3d377b9e" kindref="member">stbir_edge</ref></type>
+          <declname>edge_mode_vertical</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a3be65f56c3f2d170554ea103443b4093" kindref="member">stbir_filter</ref></type>
+          <declname>filter_horizontal</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a3be65f56c3f2d170554ea103443b4093" kindref="member">stbir_filter</ref></type>
+          <declname>filter_vertical</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1afe1a8f53b27eff69118730bc14fd10ed" kindref="member">stbir_colorspace</ref></type>
+          <declname>space</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>alloc_context</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>x_scale</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>y_scale</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>x_offset</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>y_offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="355" column="14" declfile="CastorUtils/Graphics/stb_image_resize.h" declline="355" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d31/a02087_1ae1bc5b16ea9b6ffd03893ddf6b308dd8" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbir_resize_region</definition>
+        <argsstring>(const void *input_pixels, int input_w, int input_h, int input_stride_in_bytes, void *output_pixels, int output_w, int output_h, int output_stride_in_bytes, stbir_datatype datatype, int num_channels, int alpha_channel, int flags, stbir_edge edge_mode_horizontal, stbir_edge edge_mode_vertical, stbir_filter filter_horizontal, stbir_filter filter_vertical, stbir_colorspace space, void *alloc_context, float s0, float t0, float s1, float t1)</argsstring>
+        <name>stbir_resize_region</name>
+        <param>
+          <type>const void *</type>
+          <declname>input_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>output_pixels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>output_stride_in_bytes</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1ae66e0b8b43547463a26c4c9856e7feb7" kindref="member">stbir_datatype</ref></type>
+          <declname>datatype</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>num_channels</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>alpha_channel</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a66999cce1ebadfca11aa694b3d377b9e" kindref="member">stbir_edge</ref></type>
+          <declname>edge_mode_horizontal</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a66999cce1ebadfca11aa694b3d377b9e" kindref="member">stbir_edge</ref></type>
+          <declname>edge_mode_vertical</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a3be65f56c3f2d170554ea103443b4093" kindref="member">stbir_filter</ref></type>
+          <declname>filter_horizontal</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1a3be65f56c3f2d170554ea103443b4093" kindref="member">stbir_filter</ref></type>
+          <declname>filter_vertical</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d31/a02087_1afe1a8f53b27eff69118730bc14fd10ed" kindref="member">stbir_colorspace</ref></type>
+          <declname>space</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>alloc_context</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>s0</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>t0</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>s1</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>t1</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_resize.h" line="365" column="14" declfile="CastorUtils/Graphics/stb_image_resize.h" declline="365" declcolumn="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/stb_image_resize.h"/>
+  </compounddef>
+</doxygen>

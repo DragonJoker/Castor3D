@@ -1,0 +1,218 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/de2/a03983" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::MaterialContext</compoundname>
+    <includes local="no">Material.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/de2/a03983_1a7964a669411c769868a64e386881035e" prot="public" static="no" mutable="no">
+        <type><ref refid="de/dd6/a07151" kindref="compound">RootContext</ref> *</type>
+        <definition>RootContext* castor3d::MaterialContext::root</definition>
+        <argsstring></argsstring>
+        <name>root</name>
+        <qualifiedname>castor3d::MaterialContext::root</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Material.hpp" line="219" column="14" bodyfile="Castor3D/Material/Material.hpp" bodystart="219" bodyend="219"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/de2/a03983_1a5cd8f8b71bec035363e8ced58938d62b" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/db2/a07139" kindref="compound">SceneContext</ref> *</type>
+        <definition>SceneContext* castor3d::MaterialContext::scene</definition>
+        <argsstring></argsstring>
+        <name>scene</name>
+        <qualifiedname>castor3d::MaterialContext::scene</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Material.hpp" line="220" column="15" bodyfile="Castor3D/Material/Material.hpp" bodystart="220" bodyend="220"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/de2/a03983_1ab3d2c29b8948c17b755906ea03d273e5" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::MaterialContext::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>castor3d::MaterialContext::name</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Material.hpp" line="221" column="16" bodyfile="Castor3D/Material/Material.hpp" bodystart="221" bodyend="221"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/de2/a03983_1abbffaffb9f8f043aac04b7067a5024db" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a2d5a7b3dddf135df62427d0e6b755210" kindref="member">MaterialObs</ref></type>
+        <definition>MaterialObs castor3d::MaterialContext::material</definition>
+        <argsstring></argsstring>
+        <name>material</name>
+        <qualifiedname>castor3d::MaterialContext::material</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Material.hpp" line="222" column="13" bodyfile="Castor3D/Material/Material.hpp" bodystart="222" bodyend="222"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/de2/a03983_1afb22cfcc50397c3a7082baf93fa9b7b8" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1aaa0e5a3b387e5553d1e55b1346250296" kindref="member">MaterialPtr</ref></type>
+        <definition>MaterialPtr castor3d::MaterialContext::ownMaterial</definition>
+        <argsstring></argsstring>
+        <name>ownMaterial</name>
+        <qualifiedname>castor3d::MaterialContext::ownMaterial</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Material.hpp" line="223" column="13" bodyfile="Castor3D/Material/Material.hpp" bodystart="223" bodyend="223"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/de2/a03983_1aa3407ac29c61d60cb35c9529d05bf364" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::MaterialContext::passIndex</definition>
+        <argsstring></argsstring>
+        <name>passIndex</name>
+        <qualifiedname>castor3d::MaterialContext::passIndex</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Material.hpp" line="224" column="10" bodyfile="Castor3D/Material/Material.hpp" bodystart="224" bodyend="224"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/de2/a03983_1af7487096e3ffc3c1f884b1e021097f27" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::MaterialContext::createMaterial</definition>
+        <argsstring></argsstring>
+        <name>createMaterial</name>
+        <qualifiedname>castor3d::MaterialContext::createMaterial</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Material.hpp" line="225" column="6" bodyfile="Castor3D/Material/Material.hpp" bodystart="225" bodyend="225"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="5" relation="private-inheritance">
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::MaterialContext</label>
+        <link refid="d1/de2/a03983"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>scene</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::ProgressBar</label>
+        <link refid="d6/daf/a05323"/>
+      </node>
+      <node id="7">
+        <label>castor3d::RenderWindowDesc</label>
+        <link refid="de/d75/a06503"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::RootContext</label>
+        <link refid="de/dd6/a07151"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>engine</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>window</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>logger</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>progress</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::SceneContext</label>
+        <link refid="d3/db2/a07139"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>fontName</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor::LoggerInstance</label>
+        <link refid="d9/d93/a09063"/>
+      </node>
+      <node id="5">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="6">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="5" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Material.hpp" line="217" column="1" bodyfile="Castor3D/Material/Material.hpp" bodystart="218" bodyend="226"/>
+    <listofallmembers>
+      <member refid="d1/de2/a03983_1af7487096e3ffc3c1f884b1e021097f27" prot="public" virt="non-virtual"><scope>castor3d::MaterialContext</scope><name>createMaterial</name></member>
+      <member refid="d1/de2/a03983_1abbffaffb9f8f043aac04b7067a5024db" prot="public" virt="non-virtual"><scope>castor3d::MaterialContext</scope><name>material</name></member>
+      <member refid="d1/de2/a03983_1ab3d2c29b8948c17b755906ea03d273e5" prot="public" virt="non-virtual"><scope>castor3d::MaterialContext</scope><name>name</name></member>
+      <member refid="d1/de2/a03983_1afb22cfcc50397c3a7082baf93fa9b7b8" prot="public" virt="non-virtual"><scope>castor3d::MaterialContext</scope><name>ownMaterial</name></member>
+      <member refid="d1/de2/a03983_1aa3407ac29c61d60cb35c9529d05bf364" prot="public" virt="non-virtual"><scope>castor3d::MaterialContext</scope><name>passIndex</name></member>
+      <member refid="d1/de2/a03983_1a7964a669411c769868a64e386881035e" prot="public" virt="non-virtual"><scope>castor3d::MaterialContext</scope><name>root</name></member>
+      <member refid="d1/de2/a03983_1a5cd8f8b71bec035363e8ced58938d62b" prot="public" virt="non-virtual"><scope>castor3d::MaterialContext</scope><name>scene</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,1364 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/d10/a08003" kind="class" language="C++" prot="public">
+    <compoundname>castor::File</compoundname>
+    <basecompoundref refid="da/d87/a08319" prot="public" virt="non-virtual">castor::NonMovable</basecompoundref>
+    <derivedcompoundref refid="dc/d86/a07971" prot="public" virt="non-virtual">castor::BinaryFile</derivedcompoundref>
+    <derivedcompoundref refid="dc/d82/a08075" prot="public" virt="non-virtual">castor::TextFile</derivedcompoundref>
+    <includes local="no">File.hpp</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="enum" id="d4/d10/a08003_1a463ae685301229606c32746ba6800548" prot="public" static="no" strong="yes">
+        <type>uint32_t</type>
+        <name>CreateMode</name>
+        <qualifiedname>castor::File::CreateMode</qualifiedname>
+        <enumvalue id="d4/d10/a08003_1a463ae685301229606c32746ba6800548a4abaf1832ab517381165fc7ddab3eda7" prot="public">
+          <name>eUserRead</name>
+          <initializer>= 0x00000001</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Le propriétaire peut lire. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a463ae685301229606c32746ba6800548a5071018f830460cc48b945faa8216dc7" prot="public">
+          <name>eUserWrite</name>
+          <initializer>= 0x00000002</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Le propriétaire peut écrire. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a463ae685301229606c32746ba6800548a2e29f58bd80c5e09f52d12985a9fd942" prot="public">
+          <name>eUserExec</name>
+          <initializer>= 0x00000004</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Le propriétaire peut exécuter. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a463ae685301229606c32746ba6800548a6053ab57926cd5edaa66b1bb4d681394" prot="public">
+          <name>eGroupRead</name>
+          <initializer>= 0x00000010</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Le groupe du propriétaire peut lire. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a463ae685301229606c32746ba6800548a8976170e6d2a2b4a57b5048534fcad1b" prot="public">
+          <name>eGroupWrite</name>
+          <initializer>= 0x00000020</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Le groupe du propriétaire peut écrire. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a463ae685301229606c32746ba6800548ac3735afc767edd8a88fde1e7b014bd54" prot="public">
+          <name>eGroupExec</name>
+          <initializer>= 0x00000040</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Le groupe du propriétaire peut exécuter. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a463ae685301229606c32746ba6800548a0abae1c470ba648449adbd7d20828620" prot="public">
+          <name>eOthersRead</name>
+          <initializer>= 0x00000100</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Les autres peuvent lire. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a463ae685301229606c32746ba6800548a67de9fa1f0c714e0e09b86955637b397" prot="public">
+          <name>eOthersWrite</name>
+          <initializer>= 0x00000200</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Les autres peuvent écrire. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a463ae685301229606c32746ba6800548af95a921101fd206e1993e41a85fd647c" prot="public">
+          <name>eOthersExec</name>
+          <initializer>= 0x00000400</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Les autres peuvent exécuter. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a463ae685301229606c32746ba6800548aff895cb18b3753458e72aed9243b1bd3" prot="public">
+          <name>eUserRWX</name>
+          <initializer>= eUserRead | eUserWrite | eUserExec</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Droits en lecture, écriture et exécution pour le propriétaire. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a463ae685301229606c32746ba6800548abe07167c056a4dc6482ec08b6267a927" prot="public">
+          <name>eGroupRWX</name>
+          <initializer>= eGroupRead | eGroupWrite | eGroupExec</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Droits en lecture, écriture et exécution pour le groupe du propriétaire. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a463ae685301229606c32746ba6800548ab76fec0b20e9de74d079af65cddbdab6" prot="public">
+          <name>eOthersRWX</name>
+          <initializer>= eOthersRead | eOthersWrite | eOthersExec</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Droits en lecture, écriture et exécution pour les autres. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a463ae685301229606c32746ba6800548a8da0b7a44768419d08166a3c367bc022" prot="public">
+          <name>eAllRWX</name>
+          <initializer>= eUserRWX | eGroupRWX | eOthersRWX</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Droits en lecture, écriture et exécution pour tous les utilisateurs. </para>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Enumérateur des modes d&apos;ouverture. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="87" column="1" bodyfile="CastorUtils/Data/File.hpp" bodystart="89" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="enum" id="d4/d10/a08003_1a68eddcef6261f1852e55e010bdc23f95" prot="public" static="no" strong="yes">
+        <type>uint32_t</type>
+        <name>OpenMode</name>
+        <qualifiedname>castor::File::OpenMode</qualifiedname>
+        <enumvalue id="d4/d10/a08003_1a68eddcef6261f1852e55e010bdc23f95ade5137fda7c4886fb0d2ddfef43b8779" prot="public">
+          <name>eDummy</name>
+          <initializer>= 0x00000000</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Mode d&apos;ouverture &apos;dummy&apos;, à ne pas utiliser. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a68eddcef6261f1852e55e010bdc23f95a9b2e6bb8d43fb0a9fe6fcb74ba7c6b49" prot="public">
+          <name>eRead</name>
+          <initializer>= 0x00000001</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Mode d&apos;ouverture en lecture. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a68eddcef6261f1852e55e010bdc23f95a625445baf5fd9d7fcb95a2b35906dacb" prot="public">
+          <name>eWrite</name>
+          <initializer>= 0x00000002</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Mode d&apos;ouverture en création / écriture. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a68eddcef6261f1852e55e010bdc23f95aa34e4252bd545de693ec46e305a22b35" prot="public">
+          <name>eAppend</name>
+          <initializer>= 0x00000004</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Mode d&apos;ouverture en écriture en fin de fichier. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a68eddcef6261f1852e55e010bdc23f95aef6572f06eb221f3fcc2a3efd4f39c5e" prot="public">
+          <name>eBinary</name>
+          <initializer>= 0x00000008</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Mode d&apos;ouverture en binaire. </para>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Enumérateur des modes d&apos;ouverture. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="136" column="1" bodyfile="CastorUtils/Data/File.hpp" bodystart="138" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="enum" id="d4/d10/a08003_1a2d75cd840e492ab9fffd4221afbfb54b" prot="public" static="no" strong="yes">
+        <type>uint8_t</type>
+        <name>OffsetMode</name>
+        <qualifiedname>castor::File::OffsetMode</qualifiedname>
+        <enumvalue id="d4/d10/a08003_1a2d75cd840e492ab9fffd4221afbfb54ba7fa908e8f0cc8ae93a03bb70b43798ce" prot="public">
+          <name>eBeginning</name>
+          <initializer>= 0</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>L&apos;offset est défini par rapport au début du fichier. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a2d75cd840e492ab9fffd4221afbfb54ba8a4ae9088b5d080c176d9aeb3cb3cb9e" prot="public">
+          <name>eCurrent</name>
+          <initializer>= 1</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>L&apos;offset est défini par rapport à la position actuelle. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a2d75cd840e492ab9fffd4221afbfb54babcc187cb95316db4a37190acdecb7e50" prot="public">
+          <name>eEnd</name>
+          <initializer>= 2</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>L&apos;offset est défini par rapport à la fin du fichier. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a2d75cd840e492ab9fffd4221afbfb54bae558bb69fadec037d9eae46601a4df8e" prot="public">
+          <name>eCount</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a2d75cd840e492ab9fffd4221afbfb54babd967862789968b1f8571ca888fffc77" prot="public">
+          <name>eMin</name>
+          <initializer>=  eBeginning</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Modes d&apos;offset pour la fonction seek. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="161" column="1" bodyfile="CastorUtils/Data/File.hpp" bodystart="163" bodyend="174"/>
+      </memberdef>
+      <memberdef kind="enum" id="d4/d10/a08003_1a130e0284a5fcc0413ab10d8f4ff20ba8" prot="public" static="no" strong="yes">
+        <type>uint8_t</type>
+        <name>EncodingMode</name>
+        <qualifiedname>castor::File::EncodingMode</qualifiedname>
+        <enumvalue id="d4/d10/a08003_1a130e0284a5fcc0413ab10d8f4ff20ba8ad69cfe0fd0841b6126f637bd75c0fef6" prot="public">
+          <name>eAuto</name>
+          <initializer>= 0</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Encodage de texte en sélection automatique. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a130e0284a5fcc0413ab10d8f4ff20ba8a6b90ff532c402c0d9b3f38ee8b3dc3c2" prot="public">
+          <name>eASCII</name>
+          <initializer>= 1</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Encodage de texte en ASCII. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a130e0284a5fcc0413ab10d8f4ff20ba8aeded97d75144db9588a738c48b0092f5" prot="public">
+          <name>eUTF8</name>
+          <initializer>= 2</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Encodage de texte en UTF8. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a130e0284a5fcc0413ab10d8f4ff20ba8a171dc4c16b85f9294c51b934cd7f7e05" prot="public">
+          <name>eUTF16</name>
+          <initializer>= 3</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>Encodage de texte en UTF16. </para>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a130e0284a5fcc0413ab10d8f4ff20ba8ae558bb69fadec037d9eae46601a4df8e" prot="public">
+          <name>eCount</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d4/d10/a08003_1a130e0284a5fcc0413ab10d8f4ff20ba8abd967862789968b1f8571ca888fffc77" prot="public">
+          <name>eMin</name>
+          <initializer>=  eAuto</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Mode d&apos;encodage des fichiers texte. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="181" column="1" bodyfile="CastorUtils/Data/File.hpp" bodystart="183" bodyend="197"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/d10/a08003_1a59d4b384b23323dc018c3ac2e786f2a0" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; bool(<ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;path) &gt;</type>
+        <definition>using castor::File::TraverseDirFunction =  castor::Function&lt; bool( Path const &amp; path ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>TraverseDirFunction</name>
+        <qualifiedname>castor::File::TraverseDirFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="238" column="1" bodyfile="CastorUtils/Data/File.hpp" bodystart="238" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/d10/a08003_1ad1c8e1c6cfc95972ba363f271f19b877" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void(<ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;folder, <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;name) &gt;</type>
+        <definition>using castor::File::HitFileFunction =  castor::Function&lt; void( Path const &amp; folder, String const &amp; name ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>HitFileFunction</name>
+        <qualifiedname>castor::File::HitFileFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="239" column="1" bodyfile="CastorUtils/Data/File.hpp" bodystart="239" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/d10/a08003_1ac73c90bf5b3cdbfa0c3af07258300909" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; bool(<ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;folder, <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;name) &gt;</type>
+        <definition>using castor::File::FilterFunction =  castor::Function&lt; bool( Path const &amp; folder, String const &amp; name ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>FilterFunction</name>
+        <qualifiedname>castor::File::FilterFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="240" column="1" bodyfile="CastorUtils/Data/File.hpp" bodystart="240" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d4/d10/a08003_1a24dd154c6389092dcc881b3ac30daec9" prot="protected" static="no" mutable="no">
+        <type><ref refid="dd/dbb/a08207" kindref="compound">FlagCombination</ref>&lt; <ref refid="d4/d10/a08003_1a68eddcef6261f1852e55e010bdc23f95" kindref="member">OpenMode</ref> &gt;</type>
+        <definition>FlagCombination&lt; OpenMode &gt; castor::File::m_mode</definition>
+        <argsstring></argsstring>
+        <name>m_mode</name>
+        <qualifiedname>castor::File::m_mode</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le mode d&apos;ouverture. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="474" column="17" bodyfile="CastorUtils/Data/File.hpp" bodystart="474" bodyend="474"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a08003_1acf11a2594281adecf00f7d4911ce3608" prot="protected" static="no" mutable="no">
+        <type><ref refid="d4/d10/a08003_1a130e0284a5fcc0413ab10d8f4ff20ba8" kindref="member">EncodingMode</ref></type>
+        <definition>EncodingMode castor::File::m_encoding</definition>
+        <argsstring></argsstring>
+        <name>m_encoding</name>
+        <qualifiedname>castor::File::m_encoding</qualifiedname>
+        <initializer>{ <ref refid="d4/d10/a08003_1a130e0284a5fcc0413ab10d8f4ff20ba8a6b90ff532c402c0d9b3f38ee8b3dc3c2" kindref="member">EncodingMode::eASCII</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le mode d&apos;encodage. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="477" column="14" bodyfile="CastorUtils/Data/File.hpp" bodystart="477" bodyend="477"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a08003_1a312a6d588cc619b9f61b39683bc64b79" prot="protected" static="no" mutable="no">
+        <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref></type>
+        <definition>Path castor::File::m_fileFullPath</definition>
+        <argsstring></argsstring>
+        <name>m_fileFullPath</name>
+        <qualifiedname>castor::File::m_fileFullPath</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le chemin d&apos;accès au fichier. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="480" column="6" bodyfile="CastorUtils/Data/File.hpp" bodystart="480" bodyend="-1"/>
+        <referencedby refid="d4/d10/a08003_1aa465cc53643d8404a32a349265fb8f23" compoundref="d6/dbd/a01829" startline="434" endline="437">getFileFullPath</referencedby>
+        <referencedby refid="d4/d10/a08003_1a9b3f822268d6300fa8a816bf6fdbed32" compoundref="d6/dbd/a01829" startline="458" endline="461">getFileName</referencedby>
+        <referencedby refid="d4/d10/a08003_1a376c0e917c4da03a641d8dd3f1f1503d" compoundref="d6/dbd/a01829" startline="446" endline="449">getFilePath</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a08003_1a1bea7ad7a82f1d6b70b08a556b7560e3" prot="protected" static="no" mutable="no">
+        <type>FILE *</type>
+        <definition>FILE* castor::File::m_file</definition>
+        <argsstring></argsstring>
+        <name>m_file</name>
+        <qualifiedname>castor::File::m_file</qualifiedname>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le fichier. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="483" column="7" bodyfile="CastorUtils/Data/File.hpp" bodystart="483" bodyend="483"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a08003_1a1a8334c094efe5116d260302b227dea6" prot="protected" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t castor::File::m_cursor</definition>
+        <argsstring></argsstring>
+        <name>m_cursor</name>
+        <qualifiedname>castor::File::m_cursor</qualifiedname>
+        <initializer>{ 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La position actuelle du curseur dans le fichier. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="486" column="10" bodyfile="CastorUtils/Data/File.hpp" bodystart="486" bodyend="486"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a08003_1a6e61e402e1c184678526bc2e5a5b0a2d" prot="protected" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t castor::File::m_length</definition>
+        <argsstring></argsstring>
+        <name>m_length</name>
+        <qualifiedname>castor::File::m_length</qualifiedname>
+        <initializer>{ 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La taille totale du fichier. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="489" column="10" bodyfile="CastorUtils/Data/File.hpp" bodystart="489" bodyend="489"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d4/d10/a08003_1a75f6c4f5075361a0b95858b6eb3179b5" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::File::File</definition>
+        <argsstring>(Path const &amp;filePath, FlagCombination&lt; OpenMode &gt; const &amp;mode, EncodingMode encoding=EncodingMode::eASCII)</argsstring>
+        <name>File</name>
+        <qualifiedname>castor::File::File</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>filePath</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dbb/a08207" kindref="compound">FlagCombination</ref>&lt; <ref refid="d4/d10/a08003_1a68eddcef6261f1852e55e010bdc23f95" kindref="member">OpenMode</ref> &gt; const &amp;</type>
+          <declname>mode</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d10/a08003_1a130e0284a5fcc0413ab10d8f4ff20ba8" kindref="member">EncodingMode</ref></type>
+          <declname>encoding</declname>
+          <defval><ref refid="d4/d10/a08003_1a130e0284a5fcc0413ab10d8f4ff20ba8a6b90ff532c402c0d9b3f38ee8b3dc3c2" kindref="member">EncodingMode::eASCII</ref></defval>
+        </param>
+        <briefdescription>
+<para>Ouvre le fichier situé au chemin donné, avec le mode et l&apos;encodage donnés. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">filePath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin du fichier </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">mode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le mode d&apos;ouverture, combinaison d&apos;un ou plusieurs OpenMode </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">encoding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le mode d&apos;encodage du fichier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="212" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1aa6ee83e0d80b8feb8101c126ca5947c2" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::File::CU_DeclareInvariantBlock</definition>
+        <argsstring>()</argsstring>
+        <name>CU_DeclareInvariantBlock</name>
+        <qualifiedname>castor::File::CU_DeclareInvariantBlock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="464" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1a2e247e86a0521e7fbba94d6b98b3a2ff" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> uint64_t</type>
+        <definition>CU_API uint64_t castor::File::doWrite</definition>
+        <argsstring>(uint8_t const *buffer, uint64_t size)</argsstring>
+        <name>doWrite</name>
+        <qualifiedname>castor::File::doWrite</qualifiedname>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint64_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="465" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1abc4c42be831338d06615e8e13bc8ecde" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> uint64_t</type>
+        <definition>CU_API uint64_t castor::File::doRead</definition>
+        <argsstring>(uint8_t *buffer, uint64_t size)</argsstring>
+        <name>doRead</name>
+        <qualifiedname>castor::File::doRead</qualifiedname>
+        <param>
+          <type>uint8_t *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint64_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="466" column="17"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/d10/a08003_1a19873784f5a2580579e009ed11850c47" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>virtual CU_API castor::File::~File</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~File</name>
+        <qualifiedname>castor::File::~File</qualifiedname>
+        <briefdescription>
+<para>Destructeur, ferme le fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="223" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1a68e4988e182c38e0e81fc25e939ffd6a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> int</type>
+        <definition>CU_API int castor::File::seek</definition>
+        <argsstring>(long long offset, OffsetMode origin=OffsetMode::eBeginning)</argsstring>
+        <name>seek</name>
+        <qualifiedname>castor::File::seek</qualifiedname>
+        <param>
+          <type>long long</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d10/a08003_1a2d75cd840e492ab9fffd4221afbfb54b" kindref="member">OffsetMode</ref></type>
+          <declname>origin</declname>
+          <defval><ref refid="d4/d10/a08003_1a2d75cd840e492ab9fffd4221afbfb54ba7fa908e8f0cc8ae93a03bb70b43798ce" kindref="member">OffsetMode::eBeginning</ref></defval>
+        </param>
+        <briefdescription>
+<para>Fonction de déplacement dans le fichier, selon l&apos;offset et le mode donnés. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;offset </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">origin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le mode </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>0</computeroutput> si réussi </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="236" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1a55c43b3d78331caeae33c2426b294f35" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> long long</type>
+        <definition>CU_API long long castor::File::getLength</definition>
+        <argsstring>()</argsstring>
+        <name>getLength</name>
+        <qualifiedname>castor::File::getLength</qualifiedname>
+        <briefdescription>
+<para>Récupère la taille du fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="407" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1a5f2cc85958dde16a3793977d2f4e990b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::File::isOk</definition>
+        <argsstring>() const</argsstring>
+        <name>isOk</name>
+        <qualifiedname>castor::File::isOk</qualifiedname>
+        <briefdescription>
+<para>Dit si le curseur du fichier est OK. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> si le curseur du fichier n&apos;est pas en erreur ni EOF </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="416" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1acc5807a8213e745c150dc763f2f75708" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> long long</type>
+        <definition>CU_API long long castor::File::tell</definition>
+        <argsstring>()</argsstring>
+        <name>tell</name>
+        <qualifiedname>castor::File::tell</qualifiedname>
+        <briefdescription>
+<para>Récupère la position du curseur du fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="425" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1aa465cc53643d8404a32a349265fb8f23" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+        <definition>Path const  &amp; castor::File::getFileFullPath</definition>
+        <argsstring>() const</argsstring>
+        <name>getFileFullPath</name>
+        <qualifiedname>castor::File::getFileFullPath</qualifiedname>
+        <briefdescription>
+<para>Récupère le chemin, nom et extension du fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="434" column="13" bodyfile="CastorUtils/Data/File.hpp" bodystart="434" bodyend="437"/>
+        <references refid="d4/d10/a08003_1a312a6d588cc619b9f61b39683bc64b79" compoundref="d6/dbd/a01829" startline="480">m_fileFullPath</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1a376c0e917c4da03a641d8dd3f1f1503d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref></type>
+        <definition>Path castor::File::getFilePath</definition>
+        <argsstring>() const</argsstring>
+        <name>getFilePath</name>
+        <qualifiedname>castor::File::getFilePath</qualifiedname>
+        <briefdescription>
+<para>Récupère le chemin du fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="446" column="6" bodyfile="CastorUtils/Data/File.hpp" bodystart="446" bodyend="449"/>
+        <references refid="d1/de1/a08011_1a021cada3b105818664b03215854c2564">castor::Path::getPath</references>
+        <references refid="d4/d10/a08003_1a312a6d588cc619b9f61b39683bc64b79" compoundref="d6/dbd/a01829" startline="480">m_fileFullPath</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1a9b3f822268d6300fa8a816bf6fdbed32" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref></type>
+        <definition>Path castor::File::getFileName</definition>
+        <argsstring>() const</argsstring>
+        <name>getFileName</name>
+        <qualifiedname>castor::File::getFileName</qualifiedname>
+        <briefdescription>
+<para>Récupère le nom et l&apos;extension du fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="458" column="6" bodyfile="CastorUtils/Data/File.hpp" bodystart="458" bodyend="461"/>
+        <references refid="d1/de1/a08011_1a40af5ed69127b3ff27afbb51d9aa59d1">castor::Path::getFullFileName</references>
+        <references refid="d4/d10/a08003_1a312a6d588cc619b9f61b39683bc64b79" compoundref="d6/dbd/a01829" startline="480">m_fileFullPath</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d4/d10/a08003_1a54fa6ffc7651e924ef653f5469a51ba5" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>static CU_API bool castor::File::traverseDirectory</definition>
+        <argsstring>(Path const &amp;folderPath, TraverseDirFunction const &amp;directoryFunction, HitFileFunction const &amp;fileFunction)</argsstring>
+        <name>traverseDirectory</name>
+        <qualifiedname>castor::File::traverseDirectory</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>folderPath</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d10/a08003_1a59d4b384b23323dc018c3ac2e786f2a0" kindref="member">TraverseDirFunction</ref> const &amp;</type>
+          <declname>directoryFunction</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d10/a08003_1ad1c8e1c6cfc95972ba363f271f19b877" kindref="member">HitFileFunction</ref> const &amp;</type>
+          <declname>fileFunction</declname>
+        </param>
+        <briefdescription>
+<para>Traverses the files and directories of a directory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">folderPath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The directory path. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">directoryFunction</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>returns <computeroutput>true</computeroutput> to traverse it, <computeroutput>false</computeroutput> to ignore. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">fileFunction</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Placeholder to handle a file name. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any error occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="253" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1a91e4401c024cb93037259c2b2c894dd4" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> PathArray</type>
+        <definition>static CU_API PathArray castor::File::filterDirectoryFiles</definition>
+        <argsstring>(Path const &amp;folderPath, FilterFunction const &amp;onFile, bool recursive=false)</argsstring>
+        <name>filterDirectoryFiles</name>
+        <qualifiedname>castor::File::filterDirectoryFiles</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>folderPath</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d10/a08003_1ac73c90bf5b3cdbfa0c3af07258300909" kindref="member">FilterFunction</ref> const &amp;</type>
+          <declname>onFile</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>recursive</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Filters the files in a directory, recursively or not. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">folderPath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The directory path. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">onFile</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The filter function, returns <computeroutput>true</computeroutput> to add to the list, <computeroutput>false</computeroutput> to ignore. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">recursive</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if search must be recursive. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The files list. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="268" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1ad7adcfae5d489d33d2a2a9d076fa74d8" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>static CU_API bool castor::File::listDirectoryFiles</definition>
+        <argsstring>(Path const &amp;folderPath, PathArray &amp;files, bool recursive=false)</argsstring>
+        <name>listDirectoryFiles</name>
+        <qualifiedname>castor::File::listDirectoryFiles</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>folderPath</declname>
+        </param>
+        <param>
+          <type>PathArray &amp;</type>
+          <declname>files</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>recursive</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Liste tous les fichiers d&apos;un répertoire, récursivement ou pas. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">folderPath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin du dossier </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">files</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la liste des fichiers </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">recursive</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Définit si la recherche doit être récursive ou pas </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si le dossier a été listé </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="285" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1abfc768a522393be48398ada0fa4b587f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d1/de1/a08011" kindref="compound">Path</ref></type>
+        <definition>static CU_API Path castor::File::getExecutableDirectory</definition>
+        <argsstring>()</argsstring>
+        <name>getExecutableDirectory</name>
+        <qualifiedname>castor::File::getExecutableDirectory</qualifiedname>
+        <briefdescription>
+<para>donne le répertoire d&apos;exécution </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le répertoire </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="296" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1a3b93f73496721579346543b5b6d7646d" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d1/de1/a08011" kindref="compound">Path</ref></type>
+        <definition>static CU_API Path castor::File::getUserDirectory</definition>
+        <argsstring>()</argsstring>
+        <name>getUserDirectory</name>
+        <qualifiedname>castor::File::getUserDirectory</qualifiedname>
+        <briefdescription>
+<para>donne le répertoire de l&apos;utilisateur courant </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le répertoire </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="305" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1af36167ffa1e870b4dc069439952b63c4" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>static CU_API bool castor::File::directoryExists</definition>
+        <argsstring>(Path const &amp;folderPath)</argsstring>
+        <name>directoryExists</name>
+        <qualifiedname>castor::File::directoryExists</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>folderPath</declname>
+        </param>
+        <briefdescription>
+<para>Teste l&apos;existence d&apos;un dossier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">folderPath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin du dossier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si le dossier existe </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="316" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1afb3e0522b98e30df8a1b7cf462a2284f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>static CU_API bool castor::File::directoryCreate</definition>
+        <argsstring>(Path const &amp;folderPath, FlagCombination&lt; CreateMode &gt; const &amp;flags=CreateMode::eAllRWX)</argsstring>
+        <name>directoryCreate</name>
+        <qualifiedname>castor::File::directoryCreate</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>folderPath</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dbb/a08207" kindref="compound">FlagCombination</ref>&lt; <ref refid="d4/d10/a08003_1a463ae685301229606c32746ba6800548" kindref="member">CreateMode</ref> &gt; const &amp;</type>
+          <declname>flags</declname>
+          <defval><ref refid="d4/d10/a08003_1a463ae685301229606c32746ba6800548a8da0b7a44768419d08166a3c367bc022" kindref="member">CreateMode::eAllRWX</ref></defval>
+        </param>
+        <briefdescription>
+<para>Crée un dossier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">folderPath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin du dossier </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les droits d&apos;utilisation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si le dossier a été créé </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="329" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1a35bd33d4e6f24dc9ca22fa5bd57fbaf5" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>static CU_API bool castor::File::directoryDelete</definition>
+        <argsstring>(Path const &amp;folderPath)</argsstring>
+        <name>directoryDelete</name>
+        <qualifiedname>castor::File::directoryDelete</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>folderPath</declname>
+        </param>
+        <briefdescription>
+<para>Supprime un dossier vide. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">folderPath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin du dossier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si le dossier a été supprimé </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="341" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1af6be9c9a3363804c52591b4104d3a198" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>static CU_API bool castor::File::fileExists</definition>
+        <argsstring>(Path const &amp;filePath)</argsstring>
+        <name>fileExists</name>
+        <qualifiedname>castor::File::fileExists</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>filePath</declname>
+        </param>
+        <briefdescription>
+<para>Teste l&apos;existence d&apos;un fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">filePath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin du fichier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si le fichier existe </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="352" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1a9b702d7f5ff0d52fba3fe75f830e2745" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>static CU_API bool castor::File::deleteFile</definition>
+        <argsstring>(Path const &amp;filePath)</argsstring>
+        <name>deleteFile</name>
+        <qualifiedname>castor::File::deleteFile</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>filePath</declname>
+        </param>
+        <briefdescription>
+<para>Supprime un fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">filePath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin du fichier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si le fichier a été supprimé correctement </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="363" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1a8b2dfe1d0621223f02a197fb8a7f57d7" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>static CU_API bool castor::File::copyFile</definition>
+        <argsstring>(Path const &amp;filePath, Path const &amp;folderPath, bool allowReplace=false)</argsstring>
+        <name>copyFile</name>
+        <qualifiedname>castor::File::copyFile</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>filePath</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>folderPath</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>allowReplace</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Copie un fichier dans un dossier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">filePath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin du fichier. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">folderPath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le dossier de destination. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">allowReplace</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> pour autroiser le remplacement de fichiers existants. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si le fichier a été copié correctement. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="378" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1ac8092ffb9d8d2acbec545d760e5a65b1" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>static CU_API bool castor::File::copyFileName</definition>
+        <argsstring>(Path const &amp;srcFileName, Path const &amp;dstFileName, bool allowReplace=false)</argsstring>
+        <name>copyFileName</name>
+        <qualifiedname>castor::File::copyFileName</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>srcFileName</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>dstFileName</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>allowReplace</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Copie un fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> si le fichier a été copié correctement </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="389" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a08003_1a83921652df0d77dec5a2738d6167bf28" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>static CU_API String castor::File::normaliseFileName</definition>
+        <argsstring>(String const &amp;name)</argsstring>
+        <name>normaliseFileName</name>
+        <qualifiedname>castor::File::normaliseFileName</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Remplace les caractères non valides pour un nim de fichier par des &apos;_&apos;. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="398" column="22"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="d4/d10/a08003_1a5f52d03aab940072332fa72862568495" prot="private" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>static CU_API bool castor::File::deleteEmptyDirectory</definition>
+        <argsstring>(Path const &amp;folderPath)</argsstring>
+        <name>deleteEmptyDirectory</name>
+        <qualifiedname>castor::File::deleteEmptyDirectory</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>folderPath</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/File.hpp" line="469" column="20"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::BinaryFile</label>
+        <link refid="dc/d86/a07971"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::File</label>
+        <link refid="d4/d10/a08003"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="4">
+        <label>castor::TextFile</label>
+        <link refid="dc/d82/a08075"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor::FlagCombination&lt; OpenMode &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; OpenMode &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>String</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::File</label>
+        <link refid="d4/d10/a08003"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_mode</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_fileFullPath</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::FlagCombination&lt; FlagType &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="5">
+        <label>castor::Path</label>
+        <link refid="d1/de1/a08011"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Data/File.hpp" line="77" column="1" bodyfile="CastorUtils/Data/File.hpp" bodystart="79" bodyend="490"/>
+    <listofallmembers>
+      <member refid="d4/d10/a08003_1a8b2dfe1d0621223f02a197fb8a7f57d7" prot="public" virt="non-virtual"><scope>castor::File</scope><name>copyFile</name></member>
+      <member refid="d4/d10/a08003_1ac8092ffb9d8d2acbec545d760e5a65b1" prot="public" virt="non-virtual"><scope>castor::File</scope><name>copyFileName</name></member>
+      <member refid="d4/d10/a08003_1a463ae685301229606c32746ba6800548" prot="public" virt="non-virtual"><scope>castor::File</scope><name>CreateMode</name></member>
+      <member refid="d4/d10/a08003_1aa6ee83e0d80b8feb8101c126ca5947c2" prot="protected" virt="non-virtual"><scope>castor::File</scope><name>CU_DeclareInvariantBlock</name></member>
+      <member refid="d4/d10/a08003_1a5f52d03aab940072332fa72862568495" prot="private" virt="non-virtual"><scope>castor::File</scope><name>deleteEmptyDirectory</name></member>
+      <member refid="d4/d10/a08003_1a9b702d7f5ff0d52fba3fe75f830e2745" prot="public" virt="non-virtual"><scope>castor::File</scope><name>deleteFile</name></member>
+      <member refid="d4/d10/a08003_1afb3e0522b98e30df8a1b7cf462a2284f" prot="public" virt="non-virtual"><scope>castor::File</scope><name>directoryCreate</name></member>
+      <member refid="d4/d10/a08003_1a35bd33d4e6f24dc9ca22fa5bd57fbaf5" prot="public" virt="non-virtual"><scope>castor::File</scope><name>directoryDelete</name></member>
+      <member refid="d4/d10/a08003_1af36167ffa1e870b4dc069439952b63c4" prot="public" virt="non-virtual"><scope>castor::File</scope><name>directoryExists</name></member>
+      <member refid="d4/d10/a08003_1abc4c42be831338d06615e8e13bc8ecde" prot="protected" virt="non-virtual"><scope>castor::File</scope><name>doRead</name></member>
+      <member refid="d4/d10/a08003_1a2e247e86a0521e7fbba94d6b98b3a2ff" prot="protected" virt="non-virtual"><scope>castor::File</scope><name>doWrite</name></member>
+      <member refid="d4/d10/a08003_1a130e0284a5fcc0413ab10d8f4ff20ba8" prot="public" virt="non-virtual"><scope>castor::File</scope><name>EncodingMode</name></member>
+      <member refid="d4/d10/a08003_1a75f6c4f5075361a0b95858b6eb3179b5" prot="protected" virt="non-virtual"><scope>castor::File</scope><name>File</name></member>
+      <member refid="d4/d10/a08003_1af6be9c9a3363804c52591b4104d3a198" prot="public" virt="non-virtual"><scope>castor::File</scope><name>fileExists</name></member>
+      <member refid="d4/d10/a08003_1a91e4401c024cb93037259c2b2c894dd4" prot="public" virt="non-virtual"><scope>castor::File</scope><name>filterDirectoryFiles</name></member>
+      <member refid="d4/d10/a08003_1ac73c90bf5b3cdbfa0c3af07258300909" prot="public" virt="non-virtual"><scope>castor::File</scope><name>FilterFunction</name></member>
+      <member refid="d4/d10/a08003_1abfc768a522393be48398ada0fa4b587f" prot="public" virt="non-virtual"><scope>castor::File</scope><name>getExecutableDirectory</name></member>
+      <member refid="d4/d10/a08003_1aa465cc53643d8404a32a349265fb8f23" prot="public" virt="non-virtual"><scope>castor::File</scope><name>getFileFullPath</name></member>
+      <member refid="d4/d10/a08003_1a9b3f822268d6300fa8a816bf6fdbed32" prot="public" virt="non-virtual"><scope>castor::File</scope><name>getFileName</name></member>
+      <member refid="d4/d10/a08003_1a376c0e917c4da03a641d8dd3f1f1503d" prot="public" virt="non-virtual"><scope>castor::File</scope><name>getFilePath</name></member>
+      <member refid="d4/d10/a08003_1a55c43b3d78331caeae33c2426b294f35" prot="public" virt="non-virtual"><scope>castor::File</scope><name>getLength</name></member>
+      <member refid="d4/d10/a08003_1a3b93f73496721579346543b5b6d7646d" prot="public" virt="non-virtual"><scope>castor::File</scope><name>getUserDirectory</name></member>
+      <member refid="d4/d10/a08003_1ad1c8e1c6cfc95972ba363f271f19b877" prot="public" virt="non-virtual"><scope>castor::File</scope><name>HitFileFunction</name></member>
+      <member refid="d4/d10/a08003_1a5f2cc85958dde16a3793977d2f4e990b" prot="public" virt="non-virtual"><scope>castor::File</scope><name>isOk</name></member>
+      <member refid="d4/d10/a08003_1ad7adcfae5d489d33d2a2a9d076fa74d8" prot="public" virt="non-virtual"><scope>castor::File</scope><name>listDirectoryFiles</name></member>
+      <member refid="d4/d10/a08003_1a1a8334c094efe5116d260302b227dea6" prot="protected" virt="non-virtual"><scope>castor::File</scope><name>m_cursor</name></member>
+      <member refid="d4/d10/a08003_1acf11a2594281adecf00f7d4911ce3608" prot="protected" virt="non-virtual"><scope>castor::File</scope><name>m_encoding</name></member>
+      <member refid="d4/d10/a08003_1a1bea7ad7a82f1d6b70b08a556b7560e3" prot="protected" virt="non-virtual"><scope>castor::File</scope><name>m_file</name></member>
+      <member refid="d4/d10/a08003_1a312a6d588cc619b9f61b39683bc64b79" prot="protected" virt="non-virtual"><scope>castor::File</scope><name>m_fileFullPath</name></member>
+      <member refid="d4/d10/a08003_1a6e61e402e1c184678526bc2e5a5b0a2d" prot="protected" virt="non-virtual"><scope>castor::File</scope><name>m_length</name></member>
+      <member refid="d4/d10/a08003_1a24dd154c6389092dcc881b3ac30daec9" prot="protected" virt="non-virtual"><scope>castor::File</scope><name>m_mode</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::File</scope><name>NonMovable</name></member>
+      <member refid="d4/d10/a08003_1a83921652df0d77dec5a2738d6167bf28" prot="public" virt="non-virtual"><scope>castor::File</scope><name>normaliseFileName</name></member>
+      <member refid="d4/d10/a08003_1a2d75cd840e492ab9fffd4221afbfb54b" prot="public" virt="non-virtual"><scope>castor::File</scope><name>OffsetMode</name></member>
+      <member refid="d4/d10/a08003_1a68eddcef6261f1852e55e010bdc23f95" prot="public" virt="non-virtual"><scope>castor::File</scope><name>OpenMode</name></member>
+      <member refid="d4/d10/a08003_1a68e4988e182c38e0e81fc25e939ffd6a" prot="public" virt="non-virtual"><scope>castor::File</scope><name>seek</name></member>
+      <member refid="d4/d10/a08003_1acc5807a8213e745c150dc763f2f75708" prot="public" virt="non-virtual"><scope>castor::File</scope><name>tell</name></member>
+      <member refid="d4/d10/a08003_1a54fa6ffc7651e924ef653f5469a51ba5" prot="public" virt="non-virtual"><scope>castor::File</scope><name>traverseDirectory</name></member>
+      <member refid="d4/d10/a08003_1a59d4b384b23323dc018c3ac2e786f2a0" prot="public" virt="non-virtual"><scope>castor::File</scope><name>TraverseDirFunction</name></member>
+      <member refid="d4/d10/a08003_1a19873784f5a2580579e009ed11850c47" prot="public" virt="virtual"><scope>castor::File</scope><name>~File</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::File</scope><name>~NonMovable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

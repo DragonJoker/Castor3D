@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d94/a06507" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RenderPassRegisterInfo</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d0/d94/a06507_1a01b444b4b138a2766e3f61b8ca0e936d" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; crg::FramePassArray(<ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;, <ref refid="d8/dd8/a06575" kindref="compound">RenderTechnique</ref> &amp;, <ref refid="d9/dba/a02278_1aa858ad0e62fa3684b43ef243ce6be3ef" kindref="member">TechniquePasses</ref> &amp;, crg::FramePassArray) &gt;</type>
+        <definition>using castor3d::RenderPassRegisterInfo::Creator =  castor::Function&lt; crg::FramePassArray( RenderDevice const &amp;
+			, RenderTechnique &amp;
+			, TechniquePasses &amp;
+			, crg::FramePassArray ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>Creator</name>
+        <qualifiedname>castor3d::RenderPassRegisterInfo::Creator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="870" column="1" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="870" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d94/a06507_1a8c496f004119642adc59a22bd7d43153" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::RenderPassRegisterInfo::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>castor3d::RenderPassRegisterInfo::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="886" column="16" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="886" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d94/a06507_1ad49a30e9d4b7410b9bfe78dee4b2ffa2" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/d94/a06507_1a01b444b4b138a2766e3f61b8ca0e936d" kindref="member">Creator</ref></type>
+        <definition>Creator castor3d::RenderPassRegisterInfo::create</definition>
+        <argsstring></argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::RenderPassRegisterInfo::create</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="887" column="9" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="887" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d94/a06507_1af1528d59a7c3e61dea762e25ce54fe08" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1aa022298cb8b50ea099829baffdfee684" kindref="member">TechniquePassEvent</ref></type>
+        <definition>TechniquePassEvent castor3d::RenderPassRegisterInfo::event</definition>
+        <argsstring></argsstring>
+        <name>event</name>
+        <qualifiedname>castor3d::RenderPassRegisterInfo::event</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="888" column="20" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="888" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d94/a06507_1a57fc6fcd301ba05a753ea89a048389d9" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1afb9303568da281f04daae1254eca2870" kindref="member">RenderPassTypeID</ref></type>
+        <definition>RenderPassTypeID castor3d::RenderPassRegisterInfo::id</definition>
+        <argsstring></argsstring>
+        <name>id</name>
+        <qualifiedname>castor3d::RenderPassRegisterInfo::id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="889" column="18" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="889" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d94/a06507_1ab66e82712e56c69ce2987edaa76fbd38" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderPassRegisterInfo::RenderPassRegisterInfo</definition>
+        <argsstring>(castor::String pname, Creator pcreate, TechniquePassEvent pevent, RenderPassTypeID pid={})</argsstring>
+        <name>RenderPassRegisterInfo</name>
+        <qualifiedname>castor3d::RenderPassRegisterInfo::RenderPassRegisterInfo</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>pname</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d94/a06507_1a01b444b4b138a2766e3f61b8ca0e936d" kindref="member">Creator</ref></type>
+          <declname>pcreate</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa022298cb8b50ea099829baffdfee684" kindref="member">TechniquePassEvent</ref></type>
+          <declname>pevent</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1afb9303568da281f04daae1254eca2870" kindref="member">RenderPassTypeID</ref></type>
+          <declname>pid</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="875" column="1" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="875" bodyend="884"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderPassRegisterInfo</label>
+        <link refid="d0/d94/a06507"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/RenderModule.hpp" line="868" column="1" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="869" bodyend="890"/>
+    <listofallmembers>
+      <member refid="d0/d94/a06507_1ad49a30e9d4b7410b9bfe78dee4b2ffa2" prot="public" virt="non-virtual"><scope>castor3d::RenderPassRegisterInfo</scope><name>create</name></member>
+      <member refid="d0/d94/a06507_1a01b444b4b138a2766e3f61b8ca0e936d" prot="public" virt="non-virtual"><scope>castor3d::RenderPassRegisterInfo</scope><name>Creator</name></member>
+      <member refid="d0/d94/a06507_1af1528d59a7c3e61dea762e25ce54fe08" prot="public" virt="non-virtual"><scope>castor3d::RenderPassRegisterInfo</scope><name>event</name></member>
+      <member refid="d0/d94/a06507_1a57fc6fcd301ba05a753ea89a048389d9" prot="public" virt="non-virtual"><scope>castor3d::RenderPassRegisterInfo</scope><name>id</name></member>
+      <member refid="d0/d94/a06507_1a8c496f004119642adc59a22bd7d43153" prot="public" virt="non-virtual"><scope>castor3d::RenderPassRegisterInfo</scope><name>name</name></member>
+      <member refid="d0/d94/a06507_1ab66e82712e56c69ce2987edaa76fbd38" prot="public" virt="non-virtual"><scope>castor3d::RenderPassRegisterInfo</scope><name>RenderPassRegisterInfo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

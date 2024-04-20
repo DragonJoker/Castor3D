@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d63/a08283" kind="class" language="C++" prot="public">
+    <compoundname>castor::Unique</compoundname>
+    <basecompoundref refid="da/d87/a08319" prot="private" virt="non-virtual">castor::NonMovable</basecompoundref>
+    <includes local="no">Unique.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="dc/d63/a08283_1a417d491b92218a033d6237c56fd70dd3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::Unique&lt; T &gt;::Unique</definition>
+        <argsstring>(Unique const &amp;)=delete</argsstring>
+        <name>Unique</name>
+        <qualifiedname>castor::Unique::Unique</qualifiedname>
+        <param>
+          <type><ref refid="dc/d63/a08283" kindref="compound">Unique</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Unique.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d63/a08283_1aed21585b046e88045c1135be477c516b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/d63/a08283" kindref="compound">Unique</ref> &amp;</type>
+        <definition>Unique &amp; castor::Unique&lt; T &gt;::operator=</definition>
+        <argsstring>(Unique const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Unique::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dc/d63/a08283" kindref="compound">Unique</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Unique.hpp" line="19" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d63/a08283_1a620d1b9442fdc8c7a3670ee7f3bd67a0" prot="private" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Unique&lt; T &gt;::Unique</definition>
+        <argsstring>(Unique &amp;&amp;) noexcept=delete</argsstring>
+        <name>Unique</name>
+        <qualifiedname>castor::Unique::Unique</qualifiedname>
+        <param>
+          <type><ref refid="dc/d63/a08283" kindref="compound">Unique</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Unique.hpp" line="20" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d63/a08283_1a463808a4be0c5a15f15baed9af0eea99" prot="private" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="dc/d63/a08283" kindref="compound">Unique</ref> &amp;</type>
+        <definition>Unique &amp; castor::Unique&lt; T &gt;::operator=</definition>
+        <argsstring>(Unique &amp;&amp;) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Unique::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dc/d63/a08283" kindref="compound">Unique</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Unique.hpp" line="21" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="dc/d63/a08283_1a900b292d0ea4c8f7f244b65909eace9e" prot="protected" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Unique&lt; T &gt;::Unique</definition>
+        <argsstring>(T *pThis)</argsstring>
+        <name>Unique</name>
+        <qualifiedname>castor::Unique::Unique</qualifiedname>
+        <param>
+          <type>T *</type>
+          <declname>pThis</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Lance une exception si l&apos;instance est déjà initialisée. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Unique.hpp" line="32" column="10" bodyfile="CastorUtils/Design/Unique.hpp" bodystart="32" bodyend="42"/>
+        <references refid="d9/d17/a01937_1a5e1dd5e0ee533b05fed07205dc4c2db2" compoundref="d9/d17/a01937" startline="58">CU_UnicityError</references>
+        <references refid="d2/dd2/a02279_1a0de5c07d759081bd828afd9620e1b346a2c5bbc12f7834c4f6d81f001db6507cc">castor::eAnInstance</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d63/a08283_1a7b5f078babcc15d806aa8d3fd453e078" prot="protected" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Unique&lt; T &gt;::~Unique</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~Unique</name>
+        <qualifiedname>castor::Unique::~Unique</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Unique.hpp" line="49" column="1" bodyfile="CastorUtils/Design/Unique.hpp" bodystart="49" bodyend="52"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="dc/d63/a08283_1a7168a55aea3025a2275d91c6538baa66" prot="private" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>T *&amp;</type>
+        <definition>static T *&amp; castor::Unique&lt; T &gt;::doGetInstance</definition>
+        <argsstring>()</argsstring>
+        <name>doGetInstance</name>
+        <qualifiedname>castor::Unique::doGetInstance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;instance unique, nullptr s&apos;il n&apos;y en a pas. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Unique.hpp" line="61" column="11" bodyfile="CastorUtils/Design/Unique.hpp" bodystart="61" bodyend="65"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Représentation d&apos;un classe à instance unique. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Si une seconde instance est créée, une exception est lancée </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="1">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="1">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Design/Unique.hpp" line="15" column="1" bodyfile="CastorUtils/Design/Unique.hpp" bodystart="17" bodyend="66"/>
+    <listofallmembers>
+      <member refid="dc/d63/a08283_1a7168a55aea3025a2275d91c6538baa66" prot="private" virt="non-virtual"><scope>castor::Unique</scope><name>doGetInstance</name></member>
+      <member refid="dc/d63/a08283_1aed21585b046e88045c1135be477c516b" prot="private" virt="non-virtual"><scope>castor::Unique</scope><name>operator=</name></member>
+      <member refid="dc/d63/a08283_1a463808a4be0c5a15f15baed9af0eea99" prot="private" virt="non-virtual"><scope>castor::Unique</scope><name>operator=</name></member>
+      <member refid="dc/d63/a08283_1a417d491b92218a033d6237c56fd70dd3" prot="private" virt="non-virtual"><scope>castor::Unique</scope><name>Unique</name></member>
+      <member refid="dc/d63/a08283_1a620d1b9442fdc8c7a3670ee7f3bd67a0" prot="private" virt="non-virtual"><scope>castor::Unique</scope><name>Unique</name></member>
+      <member refid="dc/d63/a08283_1a900b292d0ea4c8f7f244b65909eace9e" prot="protected" virt="non-virtual"><scope>castor::Unique</scope><name>Unique</name></member>
+      <member refid="dc/d63/a08283_1a7b5f078babcc15d806aa8d3fd453e078" prot="protected" virt="non-virtual"><scope>castor::Unique</scope><name>~Unique</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

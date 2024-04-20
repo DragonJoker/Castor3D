@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d1a/a02288" kind="namespace" language="C++">
+    <compoundname>castor::debug</compoundname>
+    <innerclass refid="d6/d31/a09379" prot="public">castor::debug::Backtrace</innerclass>
+    <innerclass refid="d3/d44/a09383" prot="public">castor::debug::Backtraced</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="dc/d1a/a02288_1a683ab560f58905b082eca9d662578b40" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::debug::initialise</definition>
+        <argsstring>()</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor::debug::initialise</qualifiedname>
+        <briefdescription>
+<para>Initialise les données de débogage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Debug.hpp" line="36" column="13" declfile="CastorUtils/Miscellaneous/Debug.hpp" declline="36" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d1a/a02288_1ab4110c5d7008ae900a1bb9b946706087" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::debug::loadModule</definition>
+        <argsstring>(DynamicLibrary const &amp;library)</argsstring>
+        <name>loadModule</name>
+        <qualifiedname>castor::debug::loadModule</qualifiedname>
+        <param>
+          <type><ref refid="d7/d44/a09387" kindref="compound">DynamicLibrary</ref> const &amp;</type>
+          <declname>library</declname>
+        </param>
+        <briefdescription>
+<para>Charge les données de débogage pour la bibliothèque donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Debug.hpp" line="43" column="13" declfile="CastorUtils/Miscellaneous/Debug.hpp" declline="43" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d1a/a02288_1acd4ad13fe7cee22019c1331cc826da72" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::debug::unloadModule</definition>
+        <argsstring>(DynamicLibrary const &amp;library)</argsstring>
+        <name>unloadModule</name>
+        <qualifiedname>castor::debug::unloadModule</qualifiedname>
+        <param>
+          <type><ref refid="d7/d44/a09387" kindref="compound">DynamicLibrary</ref> const &amp;</type>
+          <declname>library</declname>
+        </param>
+        <briefdescription>
+<para>Décharge les données de débogage pour la bibliothèque donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Debug.hpp" line="50" column="13" declfile="CastorUtils/Miscellaneous/Debug.hpp" declline="50" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d1a/a02288_1ac69330596cf6494afab97012f2e55b55" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::debug::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor::debug::cleanup</qualifiedname>
+        <briefdescription>
+<para>Nettoie les données de débogage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Debug.hpp" line="57" column="13" declfile="CastorUtils/Miscellaneous/Debug.hpp" declline="57" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d1a/a02288_1a27924dc1026fcbb2d1d3a2d7ea0ae08d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1ac8dca26c22640aed8eaed8fee3a45069" kindref="member">OutputStream</ref> &amp;</type>
+        <definition>CU_API OutputStream &amp; castor::debug::operator&lt;&lt;</definition>
+        <argsstring>(OutputStream &amp;stream, Backtrace const &amp;)</argsstring>
+        <name>operator&lt;&lt;</name>
+        <qualifiedname>castor::debug::operator&lt;&lt;</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ac8dca26c22640aed8eaed8fee3a45069" kindref="member">OutputStream</ref> &amp;</type>
+          <declname>stream</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d31/a09379" kindref="compound">Backtrace</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+<para>Transmet la pile d&apos;appels dans un flux. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">stream</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le flux </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Debug.hpp" line="66" column="8" declfile="CastorUtils/Miscellaneous/Debug.hpp" declline="66" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d1a/a02288_1a6677037a66150846a255100e10d5c054" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1ac8dca26c22640aed8eaed8fee3a45069" kindref="member">OutputStream</ref> &amp;</type>
+        <definition>OutputStream &amp; castor::debug::operator&lt;&lt;</definition>
+        <argsstring>(OutputStream &amp;stream, Backtraced const &amp;traced)</argsstring>
+        <name>operator&lt;&lt;</name>
+        <qualifiedname>castor::debug::operator&lt;&lt;</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ac8dca26c22640aed8eaed8fee3a45069" kindref="member">OutputStream</ref> &amp;</type>
+          <declname>stream</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d44/a09383" kindref="compound">Backtraced</ref> const &amp;</type>
+          <declname>traced</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Debug.hpp" line="102" column="8" bodyfile="CastorUtils/Miscellaneous/Debug.hpp" bodystart="102" bodyend="109"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Miscellaneous/Debug.hpp" line="17" column="1"/>
+  </compounddef>
+</doxygen>

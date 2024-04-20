@@ -1,0 +1,5 @@
+<map id="castor3d::makeDescriptorWrite" name="castor3d::makeDescriptorWrite">
+<area shape="rect" id="Node000001" title="Creates a descriptor write for buffer texel view." alt="" coords="5,5,176,45"/>
+<area shape="rect" id="Node000002" href="$d9/dba/a02278.html#abbd4d499a27a5b3204b5db0e98efb4dd" title="Creates a descriptor write for uniform buffer range." alt="" coords="224,5,395,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,23,210,23,210,28,176,28"/>
+</map>

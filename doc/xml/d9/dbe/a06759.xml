@@ -1,0 +1,225 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/dbe/a06759" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::MeshletBoundsTransformPass</compoundname>
+    <includes local="no">MeshletBoundsTransformPass.hpp</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="enum" id="d9/dbe/a06759_1a91368c03404094accc52b4af8f70679e" prot="public" static="no" strong="no">
+        <type></type>
+        <name>Ids</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::Ids</qualifiedname>
+        <enumvalue id="d9/dbe/a06759_1a91368c03404094accc52b4af8f70679eaa14aed91eb84392ec50b411419785613" prot="public">
+          <name>ePositions</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d9/dbe/a06759_1a91368c03404094accc52b4af8f70679eaae6937358a0b05de662ea609d6e9542f" prot="public">
+          <name>eNormals</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d9/dbe/a06759_1a91368c03404094accc52b4af8f70679eae8c4450588580ebf2e3ac6f1e8a33f60" prot="public">
+          <name>eMeshlets</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d9/dbe/a06759_1a91368c03404094accc52b4af8f70679eaf02a04fe7038540d53373b5702b25d3c" prot="public">
+          <name>eOutCullData</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" line="21" column="1" bodyfile="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" bodystart="22" bodyend="27"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/dbe/a06759_1abdb2300527763c94792452438f62cd77" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::MeshletBoundsTransformPass::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" line="39" column="21" bodyfile="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dbe/a06759_1acddf84ff082d5a09c5383da0137c5a89" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/de9/a06767" kindref="compound">BoundsTransformPipeline</ref> const  &amp;</type>
+        <definition>BoundsTransformPipeline const&amp; castor3d::MeshletBoundsTransformPass::m_pipeline</definition>
+        <argsstring></argsstring>
+        <name>m_pipeline</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::m_pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" line="40" column="32" bodyfile="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dbe/a06759_1a9b9e4cf0c29d45ca3b3a32a06394a4b9" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d3d/a03515" kindref="compound">ObjectBufferOffset</ref> const  &amp;</type>
+        <definition>ObjectBufferOffset const&amp; castor3d::MeshletBoundsTransformPass::m_sourceOffsets</definition>
+        <argsstring></argsstring>
+        <name>m_sourceOffsets</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::m_sourceOffsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" line="41" column="27" bodyfile="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dbe/a06759_1a0a368971f7356cbc34955c31ec4b728f" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d3d/a03515" kindref="compound">ObjectBufferOffset</ref> const  &amp;</type>
+        <definition>ObjectBufferOffset const&amp; castor3d::MeshletBoundsTransformPass::m_finalOffsets</definition>
+        <argsstring></argsstring>
+        <name>m_finalOffsets</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::m_finalOffsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" line="42" column="27" bodyfile="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dbe/a06759_1abcf5877ec03bbded623f95292f78df80" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d76/a03451" kindref="compound">GpuBufferOffsetT</ref>&lt; <ref refid="d8/ddb/a05415" kindref="compound">MeshletCullData</ref> &gt; const  &amp;</type>
+        <definition>GpuBufferOffsetT&lt; MeshletCullData &gt; const&amp; castor3d::MeshletBoundsTransformPass::m_output</definition>
+        <argsstring></argsstring>
+        <name>m_output</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::m_output</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" line="43" column="25" bodyfile="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dbe/a06759_1a607671b0fb749b19b60db14cd1e3ed09" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::MeshletBoundsTransformPass::m_meshletCount</definition>
+        <argsstring></argsstring>
+        <name>m_meshletCount</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::m_meshletCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" line="44" column="10" bodyfile="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dbe/a06759_1ad8954c7eb3a8f2354f8126fa2f328cbd" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::MeshletBoundsTransformPass::m_descriptorSet</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSet</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::m_descriptorSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" line="45" column="25" bodyfile="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/dbe/a06759_1a1d8cd3cddd93aa320df4fe4eb1a4a09a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::MeshletBoundsTransformPass::MeshletBoundsTransformPass</definition>
+        <argsstring>(RenderDevice const &amp;device, SubmeshRenderNode const &amp;node, BoundsTransformPipeline const &amp;pipeline, GpuBufferOffsetT&lt; MeshletCullData &gt; const &amp;output)</argsstring>
+        <name>MeshletBoundsTransformPass</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::MeshletBoundsTransformPass</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d17/a06123" kindref="compound">SubmeshRenderNode</ref> const &amp;</type>
+          <declname>node</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/de9/a06767" kindref="compound">BoundsTransformPipeline</ref> const &amp;</type>
+          <declname>pipeline</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d76/a03451" kindref="compound">GpuBufferOffsetT</ref>&lt; <ref refid="d8/ddb/a05415" kindref="compound">MeshletCullData</ref> &gt; const &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" line="30" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dbe/a06759_1a9ef52b30dd19885330b48e796ffe4c7d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::MeshletBoundsTransformPass::recordInto</definition>
+        <argsstring>(crg::RecordContext &amp;context, VkCommandBuffer commandBuffer) const</argsstring>
+        <name>recordInto</name>
+        <qualifiedname>castor3d::MeshletBoundsTransformPass::recordInto</qualifiedname>
+        <param>
+          <type>crg::RecordContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>VkCommandBuffer</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" line="35" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" line="18" column="1" bodyfile="Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp" bodystart="19" bodyend="46"/>
+    <listofallmembers>
+      <member refid="d9/dbe/a06759_1a91368c03404094accc52b4af8f70679eae8c4450588580ebf2e3ac6f1e8a33f60" prot="public" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>eMeshlets</name></member>
+      <member refid="d9/dbe/a06759_1a91368c03404094accc52b4af8f70679eaae6937358a0b05de662ea609d6e9542f" prot="public" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>eNormals</name></member>
+      <member refid="d9/dbe/a06759_1a91368c03404094accc52b4af8f70679eaf02a04fe7038540d53373b5702b25d3c" prot="public" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>eOutCullData</name></member>
+      <member refid="d9/dbe/a06759_1a91368c03404094accc52b4af8f70679eaa14aed91eb84392ec50b411419785613" prot="public" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>ePositions</name></member>
+      <member refid="d9/dbe/a06759_1a91368c03404094accc52b4af8f70679e" prot="public" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>Ids</name></member>
+      <member refid="d9/dbe/a06759_1ad8954c7eb3a8f2354f8126fa2f328cbd" prot="private" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>m_descriptorSet</name></member>
+      <member refid="d9/dbe/a06759_1abdb2300527763c94792452438f62cd77" prot="private" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>m_device</name></member>
+      <member refid="d9/dbe/a06759_1a0a368971f7356cbc34955c31ec4b728f" prot="private" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>m_finalOffsets</name></member>
+      <member refid="d9/dbe/a06759_1a607671b0fb749b19b60db14cd1e3ed09" prot="private" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>m_meshletCount</name></member>
+      <member refid="d9/dbe/a06759_1abcf5877ec03bbded623f95292f78df80" prot="private" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>m_output</name></member>
+      <member refid="d9/dbe/a06759_1acddf84ff082d5a09c5383da0137c5a89" prot="private" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>m_pipeline</name></member>
+      <member refid="d9/dbe/a06759_1a9b9e4cf0c29d45ca3b3a32a06394a4b9" prot="private" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>m_sourceOffsets</name></member>
+      <member refid="d9/dbe/a06759_1a1d8cd3cddd93aa320df4fe4eb1a4a09a" prot="public" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>MeshletBoundsTransformPass</name></member>
+      <member refid="d9/dbe/a06759_1a9ef52b30dd19885330b48e796ffe4c7d" prot="public" virt="non-virtual"><scope>castor3d::MeshletBoundsTransformPass</scope><name>recordInto</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

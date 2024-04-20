@@ -1,0 +1,238 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/dfc/a08759" kind="class" language="C++" prot="public">
+    <compoundname>castor::Font::BinaryLoader</compoundname>
+    <basecompoundref refid="d5/d12/a07975" prot="public" virt="non-virtual">castor::BinaryLoader&lt; Font &gt;</basecompoundref>
+    <includes local="no">Font.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/dfc/a08759_1adc8f3fb7c61124f4be5193c1e77518cc" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::Font::BinaryLoader::m_height</definition>
+        <argsstring></argsstring>
+        <name>m_height</name>
+        <qualifiedname>castor::Font::BinaryLoader::m_height</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Hauteur voulue pour la police </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="59" column="10" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="59" bodyend="59"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/dfc/a08759_1a000bca0607bfd185d01833e7a5803112" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Font::BinaryLoader::BinaryLoader</definition>
+        <argsstring>()=default</argsstring>
+        <name>BinaryLoader</name>
+        <qualifiedname>castor::Font::BinaryLoader::BinaryLoader</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="37" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dfc/a08759_1aa338006249374de43c94779e4fc436ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::Font::BinaryLoader::operator()</definition>
+        <argsstring>(Font &amp;font, Path const &amp;path, uint32_t height)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::Font::BinaryLoader::operator()</qualifiedname>
+        <param>
+          <type><ref refid="d0/dbd/a08755" kindref="compound">Font</ref> &amp;</type>
+          <declname>font</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>height</declname>
+        </param>
+        <briefdescription>
+<para>Charge une police. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">font</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La police à charger </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin du fichier contenant la police </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">height</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La précision de la police </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="50" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/dfc/a08759_1ae98e4f3e5889a080ba9f733d809a867d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::Font::BinaryLoader::doLoad</definition>
+        <argsstring>(Font &amp;font, Path const &amp;path)</argsstring>
+        <name>doLoad</name>
+        <qualifiedname>castor::Font::BinaryLoader::doLoad</qualifiedname>
+        <param>
+          <type><ref refid="d0/dbd/a08755" kindref="compound">Font</ref> &amp;</type>
+          <declname>font</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="54" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para><ref refid="d3/d77/a07999" kindref="compound">Loader</ref> de <ref refid="d0/dbd/a08755" kindref="compound">Font</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Utilise FreeType pour charger la police </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::BinaryLoader&lt; Font &gt;</label>
+        <link refid="d5/d12/a07975"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Font &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::Loader&lt; T, FileType::eBinary &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; T, FileType::eBinary &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::BinaryLoader&lt; T &gt;</label>
+        <link refid="d5/d12/a07975"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::Font::BinaryLoader</label>
+        <link refid="d1/dfc/a08759"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::Loader&lt; T, FT &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Loader&lt; T, FT &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::BinaryLoader&lt; Font &gt;</label>
+        <link refid="d5/d12/a07975"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Font &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::Loader&lt; T, FileType::eBinary &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; T, FileType::eBinary &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::BinaryLoader&lt; T &gt;</label>
+        <link refid="d5/d12/a07975"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::Font::BinaryLoader</label>
+        <link refid="d1/dfc/a08759"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::Loader&lt; T, FT &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Loader&lt; T, FT &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/Font.hpp" line="27" column="1" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="29" bodyend="60"/>
+    <listofallmembers>
+      <member refid="d1/dfc/a08759_1a000bca0607bfd185d01833e7a5803112" prot="public" virt="non-virtual"><scope>castor::Font::BinaryLoader</scope><name>BinaryLoader</name></member>
+      <member refid="d1/dfc/a08759_1ae98e4f3e5889a080ba9f733d809a867d" prot="private" virt="non-virtual"><scope>castor::Font::BinaryLoader</scope><name>doLoad</name></member>
+      <member refid="d3/d77/a07999_1a533c9398afec6cb4bcd884d38ff4ec57" prot="public" virt="non-virtual"><scope>castor::Font::BinaryLoader</scope><name>Loader</name></member>
+      <member refid="d1/dfc/a08759_1adc8f3fb7c61124f4be5193c1e77518cc" prot="private" virt="non-virtual"><scope>castor::Font::BinaryLoader</scope><name>m_height</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::Font::BinaryLoader</scope><name>NonMovable</name></member>
+      <member refid="d1/dfc/a08759_1aa338006249374de43c94779e4fc436ee" prot="public" virt="non-virtual"><scope>castor::Font::BinaryLoader</scope><name>operator()</name></member>
+      <member refid="d3/d77/a07999_1aa06599d499d4c8d0248565cfd912252f" prot="public" virt="virtual" ambiguityscope="BinaryLoader&lt; Font &gt;::"><scope>castor::Font::BinaryLoader</scope><name>operator()</name></member>
+      <member refid="d5/d12/a07975_1a136234917a1e3ff6a433a6187e85fa86" prot="protected" virt="non-virtual"><scope>castor::Font::BinaryLoader</scope><name>Type</name></member>
+      <member refid="d5/d12/a07975_1a6db06c50f70c9646125eb6d03a93e523" prot="public" virt="non-virtual"><scope>castor::Font::BinaryLoader</scope><name>~BinaryLoader</name></member>
+      <member refid="d3/d77/a07999_1a7d9fe6e26c86cc1301619e8c76223124" prot="public" virt="virtual"><scope>castor::Font::BinaryLoader</scope><name>~Loader</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::Font::BinaryLoader</scope><name>~NonMovable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

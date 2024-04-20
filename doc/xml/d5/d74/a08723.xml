@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/d74/a08723" kind="struct" language="C++" prot="public">
+    <compoundname>castor::IsArithmeticType&lt; ParameterType::eLongDouble &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::true_type</basecompoundref>
+    <includes local="no">ParserParameterHelpers.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <briefdescription>
+<para>Structure utilisée pour déterminer si un ParameterType est un type arithmétique. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Spécialisation pour <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222a2f6409156266f1b5592ee6f7f481bec8" kindref="member">ParameterType::eLongDouble</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::IsArithmeticType&lt; ParameterType::eLongDouble &gt;</label>
+        <link refid="d5/d74/a08723"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::true_type</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::IsArithmeticType&lt; ParameterType::eLongDouble &gt;</label>
+        <link refid="d5/d74/a08723"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::true_type</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="950" column="1" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="952" bodyend="953"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

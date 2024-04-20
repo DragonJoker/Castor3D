@@ -1,0 +1,29 @@
+<map id="castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;" name="castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="620,156,805,196"/>
+<area shape="rect" id="Node000006" href="$d0/db0/a03631.html" title=" " alt="" coords="1072,5,1235,45"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="738,144,777,106,802,87,828,72,890,50,954,35,1016,26,1072,23,1072,28,1017,32,955,40,891,55,830,77,805,92,781,110,741,148"/>
+<area shape="rect" id="Node000007" href="$d8/d07/a03627.html" title=" " alt="" coords="1052,70,1255,125"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="787,149,829,139,944,118,1051,104,1052,110,945,123,830,144,788,155"/>
+<area shape="rect" id="Node000009" href="$d8/d07/a03627.html" title=" " alt="" coords="1059,149,1247,203"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="819,173,1059,173,1059,179,819,179"/>
+<area shape="rect" id="Node000011" href="$d8/d07/a03627.html" title=" " alt="" coords="1061,227,1246,282"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="788,197,830,208,950,229,1061,243,1060,249,949,235,829,213,787,203"/>
+<area shape="rect" id="Node000013" href="$d8/d07/a03627.html" title=" " alt="" coords="1054,306,1253,361"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="742,204,781,241,831,274,886,295,944,311,1054,327,1054,332,943,316,884,300,828,278,778,245,738,208"/>
+<area shape="rect" id="Node000002" href="$d6/da8/a08227.html" title=" " alt="" coords="385,137,568,162"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="582,159,620,163,620,168,582,164"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="8,137,191,162"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="204,147,385,147,385,152,204,152"/>
+<area shape="rect" id="Node000004" href="$d8/da3/a08255.html" title=" " alt="" coords="383,187,571,227"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="584,190,620,185,620,191,585,195"/>
+<area shape="rect" id="Node000005" href="$d8/da3/a08255.html" title="Base class for an element cache." alt="" coords="5,187,193,227"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="207,204,382,204,382,209,207,209"/>
+<area shape="rect" id="Node000008" href="$d0/d50/a03611.html" title="BillboardList cache." alt="" coords="1304,70,1507,125"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="1269,95,1304,95,1304,100,1269,100"/>
+<area shape="rect" id="Node000010" href="$dc/d6c/a03635.html" title="Geometry cache." alt="" coords="1315,149,1496,203"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="1261,173,1314,173,1314,179,1261,179"/>
+<area shape="rect" id="Node000012" href="$d6/d38/a03643.html" title="Light cache." alt="" coords="1324,227,1487,282"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="1260,252,1324,252,1324,257,1260,257"/>
+<area shape="rect" id="Node000014" href="$d6/da4/a03663.html" title="SceneNode cache." alt="" coords="1310,306,1501,361"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="1266,331,1310,331,1310,336,1266,336"/>
+</map>

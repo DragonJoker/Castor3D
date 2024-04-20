@@ -1,0 +1,7 @@
+<map id="castor3d::BinaryParserBase::doGetSubChunk" name="castor3d::BinaryParserBase::doGetSubChunk">
+<area shape="rect" id="Node000001" title="Retrieves a subchunk." alt="" coords="5,37,191,77"/>
+<area shape="rect" id="Node000002" href="$d5/d27/a03183.html#af711032d94753cb2d482fe2bcf3afb17" title="Checks that the remaining place can hold the given size." alt="" coords="239,5,393,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="191,41,225,36,226,41,192,46"/>
+<area shape="rect" id="Node000003" href="$d5/d27/a03183.html#ab3148d763e8fca01e746ec01991db22b" title="Retrieves a subchunk." alt="" coords="239,69,393,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="192,68,226,73,225,79,191,74"/>
+</map>

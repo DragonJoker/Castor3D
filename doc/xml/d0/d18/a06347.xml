@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d18/a06347" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PipelineBaseHash</compoundname>
+    <includes local="no">PipelineFlags.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d18/a06347_1acf43a2636b3a4e79bbce0027f5455eaa" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t castor3d::PipelineBaseHash::hi</definition>
+        <argsstring></argsstring>
+        <name>hi</name>
+        <qualifiedname>castor3d::PipelineBaseHash::hi</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/PipelineFlags.hpp" line="20" column="10" bodyfile="Castor3D/Render/PipelineFlags.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d18/a06347_1a8eb01612d455a9e78e19cd3a2810bf31" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t castor3d::PipelineBaseHash::lo</definition>
+        <argsstring></argsstring>
+        <name>lo</name>
+        <qualifiedname>castor3d::PipelineBaseHash::lo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/PipelineFlags.hpp" line="21" column="10" bodyfile="Castor3D/Render/PipelineFlags.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/PipelineFlags.hpp" line="18" column="1" bodyfile="Castor3D/Render/PipelineFlags.hpp" bodystart="19" bodyend="22"/>
+    <listofallmembers>
+      <member refid="d0/d18/a06347_1acf43a2636b3a4e79bbce0027f5455eaa" prot="public" virt="non-virtual"><scope>castor3d::PipelineBaseHash</scope><name>hi</name></member>
+      <member refid="d0/d18/a06347_1a8eb01612d455a9e78e19cd3a2810bf31" prot="public" virt="non-virtual"><scope>castor3d::PipelineBaseHash</scope><name>lo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

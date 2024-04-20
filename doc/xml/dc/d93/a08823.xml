@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d93/a08823" kind="struct" language="C++" prot="public">
+    <compoundname>castor::SingleComponentT</compoundname>
+    <templateparamlist>
+      <param>
+        <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+        <declname>PixelFormatT</declname>
+        <defname>PixelFormatT</defname>
+      </param>
+      <param>
+        <type>typename EnableT</type>
+        <defval>void</defval>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Donne le format d&apos;une composante d&apos;un format de pixels. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="462" column="1" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="462" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

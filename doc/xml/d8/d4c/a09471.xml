@@ -1,0 +1,215 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/d4c/a09471" kind="class" language="C++" prot="public">
+    <compoundname>castor::PerlinNoiseT</compoundname>
+    <includes local="no">PerlinNoise.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d8/d4c/a09471_1af08b66e7f7383eac6168992c85ab6471" prot="public" static="no">
+        <type>T</type>
+        <definition>using castor::PerlinNoiseT&lt; T &gt;::TypeT =  T</definition>
+        <argsstring></argsstring>
+        <name>TypeT</name>
+        <qualifiedname>castor::PerlinNoiseT::TypeT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/PerlinNoise.hpp" line="15" column="1" bodyfile="CastorUtils/Noise/PerlinNoise.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d8/d4c/a09471_1a656c3af660f58cdc3f235c60cf6f6253" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">Array</ref>&lt; uint32_t, 512u &gt;</type>
+        <definition>Array&lt; uint32_t, 512u &gt; castor::PerlinNoiseT&lt; T &gt;::m_permutations</definition>
+        <argsstring></argsstring>
+        <name>m_permutations</name>
+        <qualifiedname>castor::PerlinNoiseT::m_permutations</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/PerlinNoise.hpp" line="23" column="7" bodyfile="CastorUtils/Noise/PerlinNoise.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d4c/a09471_1a33ba42626e4f1befb1242904596f2fff" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::PerlinNoiseT&lt; TypeT &gt;::PerlinNoiseT</definition>
+        <argsstring>(std::default_random_engine rndEngine)</argsstring>
+        <name>PerlinNoiseT</name>
+        <qualifiedname>castor::PerlinNoiseT::PerlinNoiseT</qualifiedname>
+        <param>
+          <type>std::default_random_engine</type>
+          <declname>rndEngine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/PerlinNoise.hpp" line="18" column="10" bodyfile="CastorUtils/Noise/PerlinNoise.hpp" bodystart="32" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a09471_1a80794462a788612159cf083085fc69e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::PerlinNoiseT&lt; TypeT &gt;::PerlinNoiseT</definition>
+        <argsstring>()</argsstring>
+        <name>PerlinNoiseT</name>
+        <qualifiedname>castor::PerlinNoiseT::PerlinNoiseT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/PerlinNoise.hpp" line="19" column="1" bodyfile="CastorUtils/Noise/PerlinNoise.hpp" bodystart="47" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a09471_1ac678e3bc624011380017daa950773759" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d8/d4c/a09471_1af08b66e7f7383eac6168992c85ab6471" kindref="member">TypeT</ref></type>
+        <definition>TypeT castor::PerlinNoiseT&lt; TypeT &gt;::noise</definition>
+        <argsstring>(TypeT x, TypeT y, TypeT z)</argsstring>
+        <name>noise</name>
+        <qualifiedname>castor::PerlinNoiseT::noise</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4c/a09471_1af08b66e7f7383eac6168992c85ab6471" kindref="member">TypeT</ref></type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4c/a09471_1af08b66e7f7383eac6168992c85ab6471" kindref="member">TypeT</ref></type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4c/a09471_1af08b66e7f7383eac6168992c85ab6471" kindref="member">TypeT</ref></type>
+          <declname>z</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/PerlinNoise.hpp" line="20" column="7" bodyfile="CastorUtils/Noise/PerlinNoise.hpp" bodystart="53" bodyend="93"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d8/d4c/a09471_1a43d66958430734b8a31d85b264da6dc5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t castor::PerlinNoiseT&lt; TypeT &gt;::fastfloor</definition>
+        <argsstring>(TypeT fp)</argsstring>
+        <name>fastfloor</name>
+        <qualifiedname>castor::PerlinNoiseT::fastfloor</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4c/a09471_1af08b66e7f7383eac6168992c85ab6471" kindref="member">TypeT</ref></type>
+          <declname>fp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/PerlinNoise.hpp" line="25" column="9" bodyfile="CastorUtils/Noise/PerlinNoise.hpp" bodystart="96" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a09471_1a8f7b0369ec9e1b38c23272bbbbe95252" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d8/d4c/a09471_1af08b66e7f7383eac6168992c85ab6471" kindref="member">TypeT</ref></type>
+        <definition>TypeT castor::PerlinNoiseT&lt; TypeT &gt;::fade</definition>
+        <argsstring>(TypeT t)</argsstring>
+        <name>fade</name>
+        <qualifiedname>castor::PerlinNoiseT::fade</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4c/a09471_1af08b66e7f7383eac6168992c85ab6471" kindref="member">TypeT</ref></type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/PerlinNoise.hpp" line="26" column="7" bodyfile="CastorUtils/Noise/PerlinNoise.hpp" bodystart="103" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a09471_1a8b9f063ae8c7cbacfb17b8e35d63a75f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d8/d4c/a09471_1af08b66e7f7383eac6168992c85ab6471" kindref="member">TypeT</ref></type>
+        <definition>TypeT castor::PerlinNoiseT&lt; TypeT &gt;::lerp</definition>
+        <argsstring>(TypeT t, TypeT a, TypeT b)</argsstring>
+        <name>lerp</name>
+        <qualifiedname>castor::PerlinNoiseT::lerp</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4c/a09471_1af08b66e7f7383eac6168992c85ab6471" kindref="member">TypeT</ref></type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4c/a09471_1af08b66e7f7383eac6168992c85ab6471" kindref="member">TypeT</ref></type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4c/a09471_1af08b66e7f7383eac6168992c85ab6471" kindref="member">TypeT</ref></type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/PerlinNoise.hpp" line="27" column="7" bodyfile="CastorUtils/Noise/PerlinNoise.hpp" bodystart="109" bodyend="112"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d4c/a09471_1af20ede92759d956416c6c313f138a70c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d8/d4c/a09471_1af08b66e7f7383eac6168992c85ab6471" kindref="member">TypeT</ref></type>
+        <definition>TypeT castor::PerlinNoiseT&lt; TypeT &gt;::grad</definition>
+        <argsstring>(int hash, TypeT x, TypeT y, TypeT z)</argsstring>
+        <name>grad</name>
+        <qualifiedname>castor::PerlinNoiseT::grad</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>hash</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4c/a09471_1af08b66e7f7383eac6168992c85ab6471" kindref="member">TypeT</ref></type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4c/a09471_1af08b66e7f7383eac6168992c85ab6471" kindref="member">TypeT</ref></type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4c/a09471_1af08b66e7f7383eac6168992c85ab6471" kindref="member">TypeT</ref></type>
+          <declname>z</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/PerlinNoise.hpp" line="28" column="7" bodyfile="CastorUtils/Noise/PerlinNoise.hpp" bodystart="115" bodyend="122"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Générateur de bruit 3D de Perlin. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Noise/PerlinNoise.hpp" line="12" column="1" bodyfile="CastorUtils/Noise/PerlinNoise.hpp" bodystart="13" bodyend="29"/>
+    <listofallmembers>
+      <member refid="d8/d4c/a09471_1a8f7b0369ec9e1b38c23272bbbbe95252" prot="private" virt="non-virtual"><scope>castor::PerlinNoiseT</scope><name>fade</name></member>
+      <member refid="d8/d4c/a09471_1a43d66958430734b8a31d85b264da6dc5" prot="private" virt="non-virtual"><scope>castor::PerlinNoiseT</scope><name>fastfloor</name></member>
+      <member refid="d8/d4c/a09471_1af20ede92759d956416c6c313f138a70c" prot="private" virt="non-virtual"><scope>castor::PerlinNoiseT</scope><name>grad</name></member>
+      <member refid="d8/d4c/a09471_1a8b9f063ae8c7cbacfb17b8e35d63a75f" prot="private" virt="non-virtual"><scope>castor::PerlinNoiseT</scope><name>lerp</name></member>
+      <member refid="d8/d4c/a09471_1a656c3af660f58cdc3f235c60cf6f6253" prot="private" virt="non-virtual"><scope>castor::PerlinNoiseT</scope><name>m_permutations</name></member>
+      <member refid="d8/d4c/a09471_1ac678e3bc624011380017daa950773759" prot="public" virt="non-virtual"><scope>castor::PerlinNoiseT</scope><name>noise</name></member>
+      <member refid="d8/d4c/a09471_1a33ba42626e4f1befb1242904596f2fff" prot="public" virt="non-virtual"><scope>castor::PerlinNoiseT</scope><name>PerlinNoiseT</name></member>
+      <member refid="d8/d4c/a09471_1a80794462a788612159cf083085fc69e1" prot="public" virt="non-virtual"><scope>castor::PerlinNoiseT</scope><name>PerlinNoiseT</name></member>
+      <member refid="d8/d4c/a09471_1af08b66e7f7383eac6168992c85ab6471" prot="public" virt="non-virtual"><scope>castor::PerlinNoiseT</scope><name>TypeT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

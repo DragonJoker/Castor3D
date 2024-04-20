@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/d1c/a04103" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::AmbientData</compoundname>
+    <includes local="no">AmbientComponent.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d1c/a04103_1a7205ff93afffea34c4450ab176cac6c3" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ac3f6d2ca50f484925164c6f2a13c97e8" kindref="member">castor::AtomicGroupChangeTracked</ref>&lt; <ref refid="d2/dd2/a02279_1a4425e82836c5b73c4c0276ceeca8d663" kindref="member">castor::RgbColour</ref> &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; castor::RgbColour &gt; castor3d::AmbientData::colour</definition>
+        <argsstring></argsstring>
+        <name>colour</name>
+        <qualifiedname>castor3d::AmbientData::colour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Lighting/AmbientComponent.hpp" line="23" column="34" bodyfile="Castor3D/Material/Pass/Component/Lighting/AmbientComponent.hpp" bodystart="23" bodyend="-1"/>
+        <referencedby refid="d4/d6e/a04107_1aba3d71c72860a1dbb59eb38eb41945ef" compoundref="d9/d34/a00476" startline="98" endline="101">castor3d::AmbientComponent::getAmbientColour</referencedby>
+        <referencedby refid="d4/d6e/a04107_1a95a37f333e3a91cf4bafdfadc59ae243" compoundref="d9/d34/a00476" startline="108" endline="111">castor3d::AmbientComponent::setAmbient</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="de/d1c/a04103_1adf7439154ceff8c5dcdd5ea874d70b58" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ac3f6d2ca50f484925164c6f2a13c97e8" kindref="member">castor::AtomicGroupChangeTracked</ref>&lt; float &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; float &gt; castor3d::AmbientData::factor</definition>
+        <argsstring></argsstring>
+        <name>factor</name>
+        <qualifiedname>castor3d::AmbientData::factor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Lighting/AmbientComponent.hpp" line="24" column="34" bodyfile="Castor3D/Material/Pass/Component/Lighting/AmbientComponent.hpp" bodystart="24" bodyend="-1"/>
+        <referencedby refid="d4/d6e/a04107_1a036ae76d6596a55c0787438900c58667" compoundref="d9/d34/a00476" startline="103" endline="106">castor3d::AmbientComponent::getAmbientFactor</referencedby>
+        <referencedby refid="d4/d6e/a04107_1a35d128f8741abd41067489391c530d0f" compoundref="d9/d34/a00476" startline="113" endline="116">castor3d::AmbientComponent::setAmbientFactor</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d1c/a04103_1a6b1fd899075090510396f4799d3735dd" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::AmbientData::AmbientData</definition>
+        <argsstring>(std::atomic_bool &amp;dirty)</argsstring>
+        <name>AmbientData</name>
+        <qualifiedname>castor3d::AmbientData::AmbientData</qualifiedname>
+        <param>
+          <type>std::atomic_bool &amp;</type>
+          <declname>dirty</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Lighting/AmbientComponent.hpp" line="17" column="10" bodyfile="Castor3D/Material/Pass/Component/Lighting/AmbientComponent.hpp" bodystart="17" bodyend="21"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::GroupChangeTrackedT&lt; castor::RgbColourT &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; castor::RgbColourT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::GroupChangeTrackedT&lt; float &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; float &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::AmbientData</label>
+        <link refid="de/d1c/a04103"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>colour</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>factor</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Component/Lighting/AmbientComponent.hpp" line="15" column="1" bodyfile="Castor3D/Material/Pass/Component/Lighting/AmbientComponent.hpp" bodystart="16" bodyend="25"/>
+    <listofallmembers>
+      <member refid="de/d1c/a04103_1a6b1fd899075090510396f4799d3735dd" prot="public" virt="non-virtual"><scope>castor3d::AmbientData</scope><name>AmbientData</name></member>
+      <member refid="de/d1c/a04103_1a7205ff93afffea34c4450ab176cac6c3" prot="public" virt="non-virtual"><scope>castor3d::AmbientData</scope><name>colour</name></member>
+      <member refid="de/d1c/a04103_1adf7439154ceff8c5dcdd5ea874d70b58" prot="public" virt="non-virtual"><scope>castor3d::AmbientData</scope><name>factor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

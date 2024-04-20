@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/db3/a08707" kind="struct" language="C++" prot="public">
+    <compoundname>castor::IsArithmeticType&lt; ParameterType::eUInt32 &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::true_type</basecompoundref>
+    <includes local="no">ParserParameterHelpers.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <briefdescription>
+<para>Structure utilisée pour déterminer si un ParameterType est un type arithmétique. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Spécialisation pour <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222a0fdef21bbeab2c5de5749662bda11d15" kindref="member">ParameterType::eUInt32</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::IsArithmeticType&lt; ParameterType::eUInt32 &gt;</label>
+        <link refid="df/db3/a08707"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::true_type</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::IsArithmeticType&lt; ParameterType::eUInt32 &gt;</label>
+        <link refid="df/db3/a08707"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::true_type</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="898" column="1" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="900" bodyend="901"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

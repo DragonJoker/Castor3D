@@ -1,0 +1,731 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/d03/a03871" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::Layout</compoundname>
+    <basecompoundref refid="d5/d3c/a08223" prot="public" virt="non-virtual">castor::NamedBaseT&lt; String &gt;</basecompoundref>
+    <derivedcompoundref refid="dc/d02/a03883" prot="public" virt="non-virtual">castor3d::LayoutBox</derivedcompoundref>
+    <includes local="no">Layout.hpp</includes>
+    <innerclass refid="d5/d3c/a03875" prot="public">castor3d::Layout::Item</innerclass>
+    <sectiondef kind="user-defined">
+      <header>Controls management</header>
+      <memberdef kind="variable" id="d8/d03/a03871_1ab9240e9ea4c077d02e9f95009c47f79b" prot="protected" static="no" mutable="no">
+        <type><ref refid="d4/d16/a03859" kindref="compound">ControlsManager</ref> *</type>
+        <definition>ControlsManager* castor3d::Layout::m_manager</definition>
+        <argsstring></argsstring>
+        <name>m_manager</name>
+        <qualifiedname>castor3d::Layout::m_manager</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="298" column="18" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="298" bodyend="298"/>
+        <referencedby refid="d8/d03/a03871_1ae5347491b8e6879922f7f15129ec77d6" compoundref="d4/d13/a00377" startline="260" endline="264">getManager</referencedby>
+        <referencedby refid="d8/d03/a03871_1a57c59f64e1b870991fff99fa8015dad7" compoundref="d4/d13/a00377" startline="255" endline="258">hasManager</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d03/a03871_1a47725985b32b67c45d55693376a1213c" prot="protected" static="no" mutable="no">
+        <type><ref refid="d9/dc9/a03823" kindref="compound">LayoutControl</ref> *</type>
+        <definition>LayoutControl* castor3d::Layout::m_container</definition>
+        <argsstring></argsstring>
+        <name>m_container</name>
+        <qualifiedname>castor3d::Layout::m_container</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="299" column="16" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="299" bodyend="299"/>
+        <referencedby refid="d8/d03/a03871_1a479e82451ddd340bbdde4a3d2fce3257" compoundref="d4/d13/a00377" startline="271" endline="275">getContainer</referencedby>
+        <referencedby refid="d8/d03/a03871_1a2a73b71225e51ebcc530c7179872bc38" compoundref="d4/d13/a00377" startline="266" endline="269">hasContainer</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d03/a03871_1aa48440f1f3f9fcf3e09396f85b159658" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d5/d3c/a03875" kindref="compound">Item</ref> &gt;</type>
+        <definition>castor::Vector&lt; Item &gt; castor3d::Layout::m_items</definition>
+        <argsstring></argsstring>
+        <name>m_items</name>
+        <qualifiedname>castor3d::Layout::m_items</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="300" column="16" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="300" bodyend="-1"/>
+        <referencedby refid="d8/d03/a03871_1afe0c8414a089f078ef75034c753f3288" compoundref="d4/d13/a00377" startline="277" endline="280">begin</referencedby>
+        <referencedby refid="d8/d03/a03871_1ac1cb7fdda1742d6129fb8957dc0e3f75" compoundref="d4/d13/a00377" startline="282" endline="285">end</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d03/a03871_1a74ba93aabf4bbe36d6f8a1fdb53ea5ee" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; SpacerUPtr &gt;</type>
+        <definition>castor::Vector&lt; SpacerUPtr &gt; castor3d::Layout::m_spacers</definition>
+        <argsstring></argsstring>
+        <name>m_spacers</name>
+        <qualifiedname>castor3d::Layout::m_spacers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="301" column="16" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="301" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d03/a03871_1a79e5478dd49a91d06108701ad7d7d82a" prot="protected" static="no" mutable="no">
+        <type><ref refid="d1/d00/a03707" kindref="compound">CpuFrameEvent</ref> *</type>
+        <definition>CpuFrameEvent* castor3d::Layout::m_event</definition>
+        <argsstring></argsstring>
+        <name>m_event</name>
+        <qualifiedname>castor3d::Layout::m_event</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="302" column="16" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="302" bodyend="302"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d03/a03871_1aa5d2534f2d7c79aaa04c91e310663000" prot="protected" static="no" mutable="no">
+        <type>std::atomic_bool</type>
+        <definition>std::atomic_bool castor3d::Layout::m_updating</definition>
+        <argsstring></argsstring>
+        <name>m_updating</name>
+        <qualifiedname>castor3d::Layout::m_updating</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="303" column="18" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="303" bodyend="303"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d03/a03871_1a117ef63f9cab8fc17cc53e9704d55795" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Layout::addControl</definition>
+        <argsstring>(Control &amp;control, LayoutItemFlags flags={})</argsstring>
+        <name>addControl</name>
+        <qualifiedname>castor3d::Layout::addControl</qualifiedname>
+        <param>
+          <type><ref refid="d6/dee/a03795" kindref="compound">Control</ref> &amp;</type>
+          <declname>control</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d45/a03887" kindref="compound">LayoutItemFlags</ref></type>
+          <declname>flags</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Adds a control. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">control</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The layout flags for the control. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="235" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d03/a03871_1a4707a97b58a155edc0d770ce65317651" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Layout::removeControl</definition>
+        <argsstring>(Control const &amp;control, bool checkPresent=true)</argsstring>
+        <name>removeControl</name>
+        <qualifiedname>castor3d::Layout::removeControl</qualifiedname>
+        <param>
+          <type><ref refid="d6/dee/a03795" kindref="compound">Control</ref> const &amp;</type>
+          <declname>control</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>checkPresent</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Removes a control. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">control</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">checkPresent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> to log a warning if not found. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="244" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d03/a03871_1ae37a0266bc8070057d3c7cb2f7b42552" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Layout::addSpacer</definition>
+        <argsstring>(uint32_t size=Spacer::Dynamic)</argsstring>
+        <name>addSpacer</name>
+        <qualifiedname>castor3d::Layout::addSpacer</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+          <defval><ref refid="d8/d5b/a03867_1a58395237c82bf1921d1b39011682689c" kindref="member">Spacer::Dynamic</ref></defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Adds a space. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The space size </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="251" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d03/a03871_1a57c59f64e1b870991fff99fa8015dad7" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Layout::hasManager</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>hasManager</name>
+        <qualifiedname>castor3d::Layout::hasManager</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="255" column="6" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="255" bodyend="258"/>
+        <references refid="d8/d03/a03871_1ab9240e9ea4c077d02e9f95009c47f79b" compoundref="d4/d13/a00377" startline="298" endline="298">m_manager</references>
+        <referencedby refid="d8/d03/a03871_1ae5347491b8e6879922f7f15129ec77d6" compoundref="d4/d13/a00377" startline="260" endline="264">getManager</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/d03/a03871_1ae5347491b8e6879922f7f15129ec77d6" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/d16/a03859" kindref="compound">ControlsManager</ref> &amp;</type>
+        <definition>ControlsManager &amp; castor3d::Layout::getManager</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getManager</name>
+        <qualifiedname>castor3d::Layout::getManager</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="260" column="18" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="260" bodyend="264"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+        <references refid="d8/d03/a03871_1a57c59f64e1b870991fff99fa8015dad7" compoundref="d4/d13/a00377" startline="255" endline="258">hasManager</references>
+        <references refid="d8/d03/a03871_1ab9240e9ea4c077d02e9f95009c47f79b" compoundref="d4/d13/a00377" startline="298" endline="298">m_manager</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d03/a03871_1a2a73b71225e51ebcc530c7179872bc38" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Layout::hasContainer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>hasContainer</name>
+        <qualifiedname>castor3d::Layout::hasContainer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="266" column="6" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="266" bodyend="269"/>
+        <references refid="d8/d03/a03871_1a47725985b32b67c45d55693376a1213c" compoundref="d4/d13/a00377" startline="299" endline="299">m_container</references>
+        <referencedby refid="d8/d03/a03871_1a479e82451ddd340bbdde4a3d2fce3257" compoundref="d4/d13/a00377" startline="271" endline="275">getContainer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/d03/a03871_1a479e82451ddd340bbdde4a3d2fce3257" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d9/dc9/a03823" kindref="compound">LayoutControl</ref> &amp;</type>
+        <definition>LayoutControl &amp; castor3d::Layout::getContainer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getContainer</name>
+        <qualifiedname>castor3d::Layout::getContainer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="271" column="16" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="271" bodyend="275"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+        <references refid="d8/d03/a03871_1a2a73b71225e51ebcc530c7179872bc38" compoundref="d4/d13/a00377" startline="266" endline="269">hasContainer</references>
+        <references refid="d8/d03/a03871_1a47725985b32b67c45d55693376a1213c" compoundref="d4/d13/a00377" startline="299" endline="299">m_container</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d03/a03871_1afe0c8414a089f078ef75034c753f3288" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::Layout::begin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::Layout::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="277" column="6" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="277" bodyend="280"/>
+        <references refid="d8/d03/a03871_1aa48440f1f3f9fcf3e09396f85b159658" compoundref="d4/d13/a00377" startline="300">m_items</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d03/a03871_1ac1cb7fdda1742d6129fb8957dc0e3f75" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::Layout::end</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::Layout::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="282" column="6" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="282" bodyend="285"/>
+        <references refid="d8/d03/a03871_1aa48440f1f3f9fcf3e09396f85b159658" compoundref="d4/d13/a00377" startline="300">m_items</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d03/a03871_1ad2626b4cd34e4e26fe3f3fb12f2266a0" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Layout::update</definition>
+        <argsstring>()</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::Layout::update</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the layout and its controls. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="290" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d03/a03871_1a2087ae697bd6e373260985b29cadebc1" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::Layout::doUpdate</definition>
+        <argsstring>()=0</argsstring>
+        <name>doUpdate</name>
+        <qualifiedname>castor3d::Layout::doUpdate</qualifiedname>
+        <reimplementedby refid="dc/d02/a03883_1a40e327d7a73f47337775c4bf0ef1b928">doUpdate</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the dependant data. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="295" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <header>General</header>
+      <memberdef kind="function" id="d8/d03/a03871_1a257e2a8064ba8e055001a1fd8a92c6ad" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Layout::Layout</definition>
+        <argsstring>(Layout const &amp;) noexcept=delete</argsstring>
+        <name>Layout</name>
+        <qualifiedname>castor3d::Layout::Layout</qualifiedname>
+        <param>
+          <type><ref refid="d8/d03/a03871" kindref="compound">Layout</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="197" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d03/a03871_1a0643eecae76f23786c2b7f7e0eb44d2b" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d8/d03/a03871" kindref="compound">Layout</ref> &amp;</type>
+        <definition>C3D_API Layout &amp; castor3d::Layout::operator=</definition>
+        <argsstring>(Layout const &amp;) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::Layout::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d8/d03/a03871" kindref="compound">Layout</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="198" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d03/a03871_1a9a6073fe7256ceff8cb7d009e99d40a2" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Layout::Layout</definition>
+        <argsstring>(Layout &amp;&amp;) noexcept=delete</argsstring>
+        <name>Layout</name>
+        <qualifiedname>castor3d::Layout::Layout</qualifiedname>
+        <param>
+          <type><ref refid="d8/d03/a03871" kindref="compound">Layout</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="199" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d03/a03871_1a990131c2ac35ddc4731787ccb528ebb0" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d8/d03/a03871" kindref="compound">Layout</ref> &amp;</type>
+        <definition>C3D_API Layout &amp; castor3d::Layout::operator=</definition>
+        <argsstring>(Layout &amp;&amp;) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::Layout::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d8/d03/a03871" kindref="compound">Layout</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="200" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d03/a03871_1a905c6836fafc2aa33d03736dbee15ac6" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::Layout::~Layout</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~Layout</name>
+        <qualifiedname>castor3d::Layout::~Layout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="201" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d03/a03871_1aba189f2c4359c1b20e6b5c8c76346bc6" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Layout::Layout</definition>
+        <argsstring>(castor::String const &amp;typeName, ControlsManager &amp;manager)</argsstring>
+        <name>Layout</name>
+        <qualifiedname>castor3d::Layout::Layout</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>typeName</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d16/a03859" kindref="compound">ControlsManager</ref> &amp;</type>
+          <declname>manager</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor for global layout <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">typeName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The layout type name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">manager</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent controls manager. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="209" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d03/a03871_1ac1b01f729da4154e7ba26aa867b349c5" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Layout::Layout</definition>
+        <argsstring>(castor::String const &amp;typeName, LayoutControl &amp;container)</argsstring>
+        <name>Layout</name>
+        <qualifiedname>castor3d::Layout::Layout</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>typeName</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dc9/a03823" kindref="compound">LayoutControl</ref> &amp;</type>
+          <declname>container</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">typeName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The layout type name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent layout control. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="218" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d03/a03871_1a025672a3bbc206c9fd5371f2e4de5505" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Layout::markDirty</definition>
+        <argsstring>()</argsstring>
+        <name>markDirty</name>
+        <qualifiedname>castor3d::Layout::markDirty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Marks the layout as dirty. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="223" column="14"/>
+        <referencedby refid="dc/d02/a03883_1abecec9f40026ba98e4ff99bbd0015a2d" compoundref="d8/ddd/a00380" startline="31" endline="35">castor3d::LayoutBox::setHorizontal</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::Layout</label>
+        <link refid="d8/d03/a03871"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::LayoutBox</label>
+        <link refid="dc/d02/a03883"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="12">
+        <label>castor3d::NonClientEventHandler&lt; Control &gt;</label>
+        <link refid="d7/dfa/a03751"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+        <childnode refid="17" relation="template-instance">
+          <edgelabel>&lt; Control &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor::SignalT&lt; EnableFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+        <childnode refid="16" relation="template-instance">
+          <edgelabel>&lt; EnableFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor::SignalT&lt; OnControlChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+        <childnode refid="16" relation="template-instance">
+          <edgelabel>&lt; OnControlChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor::SignalT&lt; OnScrollContentFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+        <childnode refid="16" relation="template-instance">
+          <edgelabel>&lt; OnScrollContentFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::Control</label>
+        <link refid="d6/dee/a03795"/>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>onChanged</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::ControlsManager</label>
+        <link refid="d4/d16/a03859"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>Name</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor3d::CpuFrameEvent</label>
+        <link refid="d1/d00/a03707"/>
+      </node>
+      <node id="13">
+        <label>castor3d::EventHandler</label>
+        <link refid="da/db0/a03747"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>onEnable</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::Layout</label>
+        <link refid="d8/d03/a03871"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_manager</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_container</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_event</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::LayoutControl</label>
+        <link refid="d9/dc9/a03823"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::NonClientEventHandler&lt; Derived &gt;</label>
+        <link refid="d7/dfa/a03751"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::ScrollableCtrl</label>
+        <link refid="d9/d83/a03839"/>
+        <childnode refid="20" relation="usage">
+          <edgelabel>onScrollContent</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::StylesHolder</label>
+        <link refid="d0/ddf/a03935"/>
+      </node>
+      <node id="4">
+        <label>castor3d::UserInputListener</label>
+        <link refid="dc/d17/a03783"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_mutexHandlers</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="15">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="6">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="16">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="7">
+        <label>std::mutex</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Gui/Layout/Layout.hpp" line="54" column="1" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="56" bodyend="304"/>
+    <listofallmembers>
+      <member refid="d8/d03/a03871_1a117ef63f9cab8fc17cc53e9704d55795" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>addControl</name></member>
+      <member refid="d8/d03/a03871_1ae37a0266bc8070057d3c7cb2f7b42552" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>addSpacer</name></member>
+      <member refid="d8/d03/a03871_1afe0c8414a089f078ef75034c753f3288" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>begin</name></member>
+      <member refid="d8/d03/a03871_1a2087ae697bd6e373260985b29cadebc1" prot="private" virt="pure-virtual"><scope>castor3d::Layout</scope><name>doUpdate</name></member>
+      <member refid="d8/d03/a03871_1ac1cb7fdda1742d6129fb8957dc0e3f75" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>end</name></member>
+      <member refid="d8/d03/a03871_1a479e82451ddd340bbdde4a3d2fce3257" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>getContainer</name></member>
+      <member refid="d8/d03/a03871_1ae5347491b8e6879922f7f15129ec77d6" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>getManager</name></member>
+      <member refid="d5/d3c/a08223_1abc1fa9ec1a50d2023373baa4d4c79519" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>getName</name></member>
+      <member refid="d8/d03/a03871_1a2a73b71225e51ebcc530c7179872bc38" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>hasContainer</name></member>
+      <member refid="d8/d03/a03871_1a57c59f64e1b870991fff99fa8015dad7" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>hasManager</name></member>
+      <member refid="d8/d03/a03871_1a257e2a8064ba8e055001a1fd8a92c6ad" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>Layout</name></member>
+      <member refid="d8/d03/a03871_1a9a6073fe7256ceff8cb7d009e99d40a2" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>Layout</name></member>
+      <member refid="d8/d03/a03871_1aba189f2c4359c1b20e6b5c8c76346bc6" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>Layout</name></member>
+      <member refid="d8/d03/a03871_1ac1b01f729da4154e7ba26aa867b349c5" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>Layout</name></member>
+      <member refid="d8/d03/a03871_1a47725985b32b67c45d55693376a1213c" prot="protected" virt="non-virtual"><scope>castor3d::Layout</scope><name>m_container</name></member>
+      <member refid="d8/d03/a03871_1a79e5478dd49a91d06108701ad7d7d82a" prot="protected" virt="non-virtual"><scope>castor3d::Layout</scope><name>m_event</name></member>
+      <member refid="d8/d03/a03871_1aa48440f1f3f9fcf3e09396f85b159658" prot="protected" virt="non-virtual"><scope>castor3d::Layout</scope><name>m_items</name></member>
+      <member refid="d8/d03/a03871_1ab9240e9ea4c077d02e9f95009c47f79b" prot="protected" virt="non-virtual"><scope>castor3d::Layout</scope><name>m_manager</name></member>
+      <member refid="d5/d3c/a08223_1a869b429a7190ecf614d8221b270e6dca" prot="protected" virt="non-virtual"><scope>castor3d::Layout</scope><name>m_name</name></member>
+      <member refid="d8/d03/a03871_1a74ba93aabf4bbe36d6f8a1fdb53ea5ee" prot="protected" virt="non-virtual"><scope>castor3d::Layout</scope><name>m_spacers</name></member>
+      <member refid="d8/d03/a03871_1aa5d2534f2d7c79aaa04c91e310663000" prot="protected" virt="non-virtual"><scope>castor3d::Layout</scope><name>m_updating</name></member>
+      <member refid="d8/d03/a03871_1a025672a3bbc206c9fd5371f2e4de5505" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>markDirty</name></member>
+      <member refid="d5/d3c/a08223_1a4a6e4748603541685b04f95fb91efb26" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>NamedBaseT</name></member>
+      <member refid="d8/d03/a03871_1a0643eecae76f23786c2b7f7e0eb44d2b" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>operator=</name></member>
+      <member refid="d8/d03/a03871_1a990131c2ac35ddc4731787ccb528ebb0" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>operator=</name></member>
+      <member refid="d8/d03/a03871_1a4707a97b58a155edc0d770ce65317651" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>removeControl</name></member>
+      <member refid="d5/d3c/a08223_1a2d62ce1925efead03c4e0842c06b3e11" prot="public" virt="non-virtual"><scope>castor3d::Layout</scope><name>rename</name></member>
+      <member refid="d8/d03/a03871_1ad2626b4cd34e4e26fe3f3fb12f2266a0" prot="protected" virt="non-virtual"><scope>castor3d::Layout</scope><name>update</name></member>
+      <member refid="d8/d03/a03871_1a905c6836fafc2aa33d03736dbee15ac6" prot="public" virt="virtual"><scope>castor3d::Layout</scope><name>~Layout</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

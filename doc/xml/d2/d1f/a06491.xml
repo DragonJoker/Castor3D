@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/d1f/a06491" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PipelineAndID</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d1f/a06491_1a9c995b287f4bc5c86ec0b33188439013" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/deb/a06543" kindref="compound">RenderPipeline</ref> *</type>
+        <definition>RenderPipeline* castor3d::PipelineAndID::pipeline</definition>
+        <argsstring></argsstring>
+        <name>pipeline</name>
+        <qualifiedname>castor3d::PipelineAndID::pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="816" column="17" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="816" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d1f/a06491_1a5f21ad9b0d7bf3e390dbfeb033577984" prot="public" static="no" mutable="no">
+        <type>uint16_t</type>
+        <definition>uint16_t castor3d::PipelineAndID::id</definition>
+        <argsstring></argsstring>
+        <name>id</name>
+        <qualifiedname>castor3d::PipelineAndID::id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="817" column="10" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="817" bodyend="-1"/>
+        <referencedby refid="df/d40/a06071_1ad81372d12b8df0cfb713217d9994e2b4" compoundref="d2/d49/a01067" startline="233" endline="256">castor3d::InstantiatedPipelinesNodesT&lt; NodeT &gt;::emplace</referencedby>
+        <referencedby refid="db/d00/a06095_1ae57b18cb8665aa2c149fba1a3281b482" compoundref="d5/d67/a01070" startline="234" endline="257">castor3d::PipelinesNodesT&lt; NodeT &gt;::emplace</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; RenderNodesPass &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; RenderNodesPass &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PipelineAndID</label>
+        <link refid="d2/d1f/a06491"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>pipeline</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::RenderPipeline</label>
+        <link refid="d3/deb/a06543"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/RenderModule.hpp" line="814" column="1" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="815" bodyend="818"/>
+    <listofallmembers>
+      <member refid="d2/d1f/a06491_1a5f21ad9b0d7bf3e390dbfeb033577984" prot="public" virt="non-virtual"><scope>castor3d::PipelineAndID</scope><name>id</name></member>
+      <member refid="d2/d1f/a06491_1a9c995b287f4bc5c86ec0b33188439013" prot="public" virt="non-virtual"><scope>castor3d::PipelineAndID</scope><name>pipeline</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

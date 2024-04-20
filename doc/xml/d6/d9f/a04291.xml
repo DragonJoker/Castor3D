@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d9f/a04291" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SpecularFactorComponent::MaterialShader</compoundname>
+    <basecompoundref refid="d6/da6/a04827" prot="public" virt="non-virtual">castor3d::shader::PassMaterialShader</basecompoundref>
+    <includes local="no">SpecularFactorComponent.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d9f/a04291_1a7c9ae9778cce598ff83d7a4a2af7000b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SpecularFactorComponent::MaterialShader::MaterialShader</definition>
+        <argsstring>()</argsstring>
+        <name>MaterialShader</name>
+        <qualifiedname>castor3d::SpecularFactorComponent::MaterialShader::MaterialShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Lighting/SpecularFactorComponent.hpp" line="42" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d9f/a04291_1a23185e31f9d83e643af518560a6e562e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SpecularFactorComponent::MaterialShader::fillMaterialType</definition>
+        <argsstring>(sdw::type::BaseStruct &amp;type, sdw::expr::ExprList &amp;inits) const override</argsstring>
+        <name>fillMaterialType</name>
+        <qualifiedname>castor3d::SpecularFactorComponent::MaterialShader::fillMaterialType</qualifiedname>
+        <reimplements refid="d6/da6/a04827_1a2c3f9d590baea77d2602f7e9e205318f">fillMaterialType</reimplements>
+        <param>
+          <type>sdw::type::BaseStruct &amp;</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprList &amp;</type>
+          <declname>inits</declname>
+        </param>
+        <briefdescription>
+<para>Remplit la structure shader de matériau avec les membres fournis par ce composant, et leurs initialiseurs. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les membres. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">inits</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les initialiseurs des membres. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Lighting/SpecularFactorComponent.hpp" line="43" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::SpecularFactorComponent::MaterialShader</label>
+        <link refid="d6/d9f/a04291"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="d6/da6/a04827"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::SpecularFactorComponent::MaterialShader</label>
+        <link refid="d6/d9f/a04291"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="d6/da6/a04827"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Component/Lighting/SpecularFactorComponent.hpp" line="39" column="1" bodyfile="Castor3D/Material/Pass/Component/Lighting/SpecularFactorComponent.hpp" bodystart="41" bodyend="45"/>
+    <listofallmembers>
+      <member refid="d6/d9f/a04291_1a23185e31f9d83e643af518560a6e562e" prot="public" virt="virtual"><scope>castor3d::SpecularFactorComponent::MaterialShader</scope><name>fillMaterialType</name></member>
+      <member refid="d6/da6/a04827_1a2730417bcf60c1824af2c13e705a5cc4" prot="public" virt="non-virtual"><scope>castor3d::SpecularFactorComponent::MaterialShader</scope><name>getMaterialChunk</name></member>
+      <member refid="d6/d9f/a04291_1a7c9ae9778cce598ff83d7a4a2af7000b" prot="public" virt="non-virtual"><scope>castor3d::SpecularFactorComponent::MaterialShader</scope><name>MaterialShader</name></member>
+      <member refid="d2/d04/a04815_1a06fad613f64fa717de3e8032393fdbd7" prot="public" virt="non-virtual"><scope>castor3d::SpecularFactorComponent::MaterialShader</scope><name>operator=</name></member>
+      <member refid="d2/d04/a04815_1a0e5c7fea4f6928009d6da51c4d78a9df" prot="public" virt="non-virtual"><scope>castor3d::SpecularFactorComponent::MaterialShader</scope><name>operator=</name></member>
+      <member refid="d6/da6/a04827_1ae753c888953191f89fe24d9ebc8e9dd6" prot="public" virt="non-virtual"><scope>castor3d::SpecularFactorComponent::MaterialShader</scope><name>PassMaterialShader</name></member>
+      <member refid="d2/d04/a04815_1ab439edbbb2da660939e0209d9bfba3b0" prot="public" virt="non-virtual"><scope>castor3d::SpecularFactorComponent::MaterialShader</scope><name>PassShader</name></member>
+      <member refid="d2/d04/a04815_1ae0263dc410ae3d05ddea8cc9ad7eac73" prot="public" virt="non-virtual"><scope>castor3d::SpecularFactorComponent::MaterialShader</scope><name>PassShader</name></member>
+      <member refid="d2/d04/a04815_1aee18e0dfda227ed54fb966d7d75a1ea5" prot="public" virt="non-virtual"><scope>castor3d::SpecularFactorComponent::MaterialShader</scope><name>PassShader</name></member>
+      <member refid="d2/d04/a04815_1a56338db0aed5f44427291aa6c631872b" prot="public" virt="virtual"><scope>castor3d::SpecularFactorComponent::MaterialShader</scope><name>~PassShader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

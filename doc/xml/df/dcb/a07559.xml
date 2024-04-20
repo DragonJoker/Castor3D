@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/dcb/a07559" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::Meshlet</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_Meshlet&quot;, sdw::type::MemoryLayout::eStd430, sdw::UIntArrayField&lt; &quot;vertices&quot;, MaxMeshletVertexCount &gt;, sdw::UInt8ArrayField&lt; &quot;indices&quot;, MaxMeshletTriangleCount *3u &gt;, sdw::UIntField&lt; &quot;vertexCount&quot; &gt;, sdw::UIntField&lt; &quot;triangleCount&quot; &gt;, sdw::UIntField&lt; &quot;meshletIndex&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">GlslMeshlet.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/dcb/a07559_1a8a64cda651a1684385b0696ce439b478" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Meshlet::Meshlet</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled=true)</argsstring>
+        <name>Meshlet</name>
+        <qualifiedname>castor3d::shader::Meshlet::Meshlet</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshlet.hpp" line="27" column="1" bodyfile="Castor3D/Shader/Shaders/GlslMeshlet.hpp" bodystart="27" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dcb/a07559_1a425b0c2f8544e33de5f99ae9a7d37392" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::Meshlet::vertices</definition>
+        <argsstring>() const</argsstring>
+        <name>vertices</name>
+        <qualifiedname>castor3d::shader::Meshlet::vertices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshlet.hpp" line="34" column="6" bodyfile="Castor3D/Shader/Shaders/GlslMeshlet.hpp" bodystart="34" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dcb/a07559_1aa6a2bb59008093bc46bf4d470b1de254" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::Meshlet::indices</definition>
+        <argsstring>() const</argsstring>
+        <name>indices</name>
+        <qualifiedname>castor3d::shader::Meshlet::indices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshlet.hpp" line="35" column="6" bodyfile="Castor3D/Shader/Shaders/GlslMeshlet.hpp" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dcb/a07559_1aebdbd08d1be3f4029419d076b699b0ca" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::Meshlet::vertexCount</definition>
+        <argsstring>() const</argsstring>
+        <name>vertexCount</name>
+        <qualifiedname>castor3d::shader::Meshlet::vertexCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshlet.hpp" line="36" column="6" bodyfile="Castor3D/Shader/Shaders/GlslMeshlet.hpp" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dcb/a07559_1a76f7c7c7833057ff3cc7491636d0d7a5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::Meshlet::triangleCount</definition>
+        <argsstring>() const</argsstring>
+        <name>triangleCount</name>
+        <qualifiedname>castor3d::shader::Meshlet::triangleCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshlet.hpp" line="37" column="6" bodyfile="Castor3D/Shader/Shaders/GlslMeshlet.hpp" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="df/dcb/a07559_1aa05b1a21b202615301008706172e445c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::Meshlet::meshletIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>meshletIndex</name>
+        <qualifiedname>castor3d::shader::Meshlet::meshletIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslMeshlet.hpp" line="38" column="6" bodyfile="Castor3D/Shader/Shaders/GlslMeshlet.hpp" bodystart="38" bodyend="38"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::Meshlet</label>
+        <link refid="df/dcb/a07559"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_Meshlet&quot;, sdw::type::MemoryLayout::eStd430, sdw::UIntArrayField&lt; &quot;vertices&quot;, MaxMeshletVertexCount &gt;, sdw::UInt8ArrayField&lt; &quot;indices&quot;, MaxMeshletTriangleCount *3u &gt;, sdw::UIntField&lt; &quot;vertexCount&quot; &gt;, sdw::UIntField&lt; &quot;triangleCount&quot; &gt;, sdw::UIntField&lt; &quot;meshletIndex&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::Meshlet</label>
+        <link refid="df/dcb/a07559"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_Meshlet&quot;, sdw::type::MemoryLayout::eStd430, sdw::UIntArrayField&lt; &quot;vertices&quot;, MaxMeshletVertexCount &gt;, sdw::UInt8ArrayField&lt; &quot;indices&quot;, MaxMeshletTriangleCount *3u &gt;, sdw::UIntField&lt; &quot;vertexCount&quot; &gt;, sdw::UIntField&lt; &quot;triangleCount&quot; &gt;, sdw::UIntField&lt; &quot;meshletIndex&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslMeshlet.hpp" line="18" column="1" bodyfile="Castor3D/Shader/Shaders/GlslMeshlet.hpp" bodystart="26" bodyend="39"/>
+    <listofallmembers>
+      <member refid="df/dcb/a07559_1aa6a2bb59008093bc46bf4d470b1de254" prot="public" virt="non-virtual"><scope>castor3d::shader::Meshlet</scope><name>indices</name></member>
+      <member refid="df/dcb/a07559_1a8a64cda651a1684385b0696ce439b478" prot="public" virt="non-virtual"><scope>castor3d::shader::Meshlet</scope><name>Meshlet</name></member>
+      <member refid="df/dcb/a07559_1aa05b1a21b202615301008706172e445c" prot="public" virt="non-virtual"><scope>castor3d::shader::Meshlet</scope><name>meshletIndex</name></member>
+      <member refid="df/dcb/a07559_1a76f7c7c7833057ff3cc7491636d0d7a5" prot="public" virt="non-virtual"><scope>castor3d::shader::Meshlet</scope><name>triangleCount</name></member>
+      <member refid="df/dcb/a07559_1aebdbd08d1be3f4029419d076b699b0ca" prot="public" virt="non-virtual"><scope>castor3d::shader::Meshlet</scope><name>vertexCount</name></member>
+      <member refid="df/dcb/a07559_1a425b0c2f8544e33de5f99ae9a7d37392" prot="public" virt="non-virtual"><scope>castor3d::shader::Meshlet</scope><name>vertices</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

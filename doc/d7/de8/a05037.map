@@ -1,0 +1,7 @@
+<map id="castor3d::GpuObjectTracker::ObjectDeclaration" name="castor3d::GpuObjectTracker::ObjectDeclaration">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,240,191,280"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="35,108,161,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,162,101,240,95,240,95,162"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="35,5,161,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="101,59,101,108,95,108,95,59"/>
+</map>

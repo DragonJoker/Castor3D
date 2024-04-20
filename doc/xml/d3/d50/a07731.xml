@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/d50/a07731" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::BufferData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_BufferData&quot;, sdw::type::MemoryLayout::eStd430, sdw::Vec4Field&lt; &quot;data&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">SdwModule.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d50/a07731_1a2b03750406282d5f2dfc7d7b7255dc87" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::BufferData::BufferData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>BufferData</name>
+        <qualifiedname>castor3d::shader::BufferData::BufferData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/SdwModule.hpp" line="301" column="1" bodyfile="Castor3D/Shader/Shaders/SdwModule.hpp" bodystart="301" bodyend="306"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d50/a07731_1a049734da290f82cd82c293b6536d97fe" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::BufferData::data</definition>
+        <argsstring>() const</argsstring>
+        <name>data</name>
+        <qualifiedname>castor3d::shader::BufferData::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/SdwModule.hpp" line="308" column="6" bodyfile="Castor3D/Shader/Shaders/SdwModule.hpp" bodystart="308" bodyend="310"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::BufferData</label>
+        <link refid="d3/d50/a07731"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_BufferData&quot;, sdw::type::MemoryLayout::eStd430, sdw::Vec4Field&lt; &quot;data&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::BufferData</label>
+        <link refid="d3/d50/a07731"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_BufferData&quot;, sdw::type::MemoryLayout::eStd430, sdw::Vec4Field&lt; &quot;data&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/SdwModule.hpp" line="296" column="1" bodyfile="Castor3D/Shader/Shaders/SdwModule.hpp" bodystart="300" bodyend="311"/>
+    <listofallmembers>
+      <member refid="d3/d50/a07731_1a2b03750406282d5f2dfc7d7b7255dc87" prot="public" virt="non-virtual"><scope>castor3d::shader::BufferData</scope><name>BufferData</name></member>
+      <member refid="d3/d50/a07731_1a049734da290f82cd82c293b6536d97fe" prot="public" virt="non-virtual"><scope>castor3d::shader::BufferData</scope><name>data</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

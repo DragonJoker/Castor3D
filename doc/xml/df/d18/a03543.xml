@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d18/a03543" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ObjectBufferPool::ModelBuffers</compoundname>
+    <includes local="no">ObjectBufferPool.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/d18/a03543_1a201da668976797cea54e22eef1d8f021" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; GpuPackedBaseBufferUPtr, size_t(<ref refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0ae558bb69fadec037d9eae46601a4df8e" kindref="member">SubmeshData::eCount</ref>) &gt;</type>
+        <definition>castor::Array&lt; GpuPackedBaseBufferUPtr, size_t( SubmeshData::eCount ) &gt; castor3d::ObjectBufferPool::ModelBuffers::buffers</definition>
+        <argsstring></argsstring>
+        <name>buffers</name>
+        <qualifiedname>castor3d::ObjectBufferPool::ModelBuffers::buffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferPool.hpp" line="162" column="15" bodyfile="Castor3D/Buffer/ObjectBufferPool.hpp" bodystart="162" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d18/a03543_1ad7ff00cca9868fb707efe4ef1a0655b8" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ObjectBufferPool::ModelBuffers::ModelBuffers</definition>
+        <argsstring>(castor::Array&lt; GpuPackedBaseBufferUPtr, size_t(SubmeshData::eCount) &gt; bufs={})</argsstring>
+        <name>ModelBuffers</name>
+        <qualifiedname>castor3d::ObjectBufferPool::ModelBuffers::ModelBuffers</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; GpuPackedBaseBufferUPtr, size_t(<ref refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0ae558bb69fadec037d9eae46601a4df8e" kindref="member">SubmeshData::eCount</ref>) &gt;</type>
+          <declname>bufs</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferPool.hpp" line="157" column="10" bodyfile="Castor3D/Buffer/ObjectBufferPool.hpp" bodystart="157" bodyend="160"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Buffer/ObjectBufferPool.hpp" line="155" column="1" bodyfile="Castor3D/Buffer/ObjectBufferPool.hpp" bodystart="156" bodyend="163"/>
+    <listofallmembers>
+      <member refid="df/d18/a03543_1a201da668976797cea54e22eef1d8f021" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferPool::ModelBuffers</scope><name>buffers</name></member>
+      <member refid="df/d18/a03543_1ad7ff00cca9868fb707efe4ef1a0655b8" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferPool::ModelBuffers</scope><name>ModelBuffers</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

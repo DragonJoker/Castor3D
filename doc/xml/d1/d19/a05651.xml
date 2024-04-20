@@ -1,0 +1,208 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d19/a05651" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SubmeshUtils</compoundname>
+    <includes local="no">SubmeshUtils.hpp</includes>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d1/d19/a05651_1a1e91e6bb9a34e05d8d00fd1cad5c181c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::SubmeshUtils::computeFacesFromPolygonVertex</definition>
+        <argsstring>(castor::Point3fArray &amp;texcoords, TriFaceMapping const &amp;triFace)</argsstring>
+        <name>computeFacesFromPolygonVertex</name>
+        <qualifiedname>castor3d::SubmeshUtils::computeFacesFromPolygonVertex</qualifiedname>
+        <param>
+          <type>castor::Point3fArray &amp;</type>
+          <declname>texcoords</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d4e/a05623" kindref="compound">TriFaceMapping</ref> const &amp;</type>
+          <declname>triFace</declname>
+        </param>
+        <briefdescription>
+<para>Crée les faces à partir des points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Cette fonction suppose que les points sont tirés à la manière triangles fan. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">texcoords</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les coordonnées de texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">triFace</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le composant qui va recevoir les faces calculées. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp" line="32" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d19/a05651_1ae9da16d8be8723d2c238d81be4125c93" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::SubmeshUtils::computeNormals</definition>
+        <argsstring>(castor::Point3fArray const &amp;positions, castor::Point3fArray &amp;normals, FaceArray const &amp;triFace, bool reverted=false)</argsstring>
+        <name>computeNormals</name>
+        <qualifiedname>castor3d::SubmeshUtils::computeNormals</qualifiedname>
+        <param>
+          <type>castor::Point3fArray const &amp;</type>
+          <declname>positions</declname>
+        </param>
+        <param>
+          <type>castor::Point3fArray &amp;</type>
+          <declname>normals</declname>
+        </param>
+        <param>
+          <type>FaceArray const &amp;</type>
+          <declname>triFace</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>reverted</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Génère les normales. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">positions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les positions des sommets. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">normals</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les normales des sommets. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">triFace</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les triangles. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">reverted</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si les normales doivent être inversées. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp" line="48" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d19/a05651_1a8dea49270e1c13f0d3f914f6820e9289" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::SubmeshUtils::computeTangentsFromNormals</definition>
+        <argsstring>(castor::Point3fArray const &amp;positions, castor::Point3fArray const &amp;texcoords, castor::Point3fArray const &amp;normals, castor::Point4fArray &amp;tangents, FaceArray const &amp;faces)</argsstring>
+        <name>computeTangentsFromNormals</name>
+        <qualifiedname>castor3d::SubmeshUtils::computeTangentsFromNormals</qualifiedname>
+        <param>
+          <type>castor::Point3fArray const &amp;</type>
+          <declname>positions</declname>
+        </param>
+        <param>
+          <type>castor::Point3fArray const &amp;</type>
+          <declname>texcoords</declname>
+        </param>
+        <param>
+          <type>castor::Point3fArray const &amp;</type>
+          <declname>normals</declname>
+        </param>
+        <param>
+          <type>castor::Point4fArray &amp;</type>
+          <declname>tangents</declname>
+        </param>
+        <param>
+          <type>FaceArray const &amp;</type>
+          <declname>faces</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la tangente pour chaque vertex du sous-maillage. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Cette fonction suppose que les normales sont définies. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">positions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les positions des sommets. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">texcoords</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les coordonnées de texture des sommets. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">normals</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les normales des sommets. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">tangents</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les tangentes des sommets. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">faces</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les triangles. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp" line="70" column="21"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Fonctions utilitaires pour les sous-maillages. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp" line="17" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp" bodystart="18" bodyend="75"/>
+    <listofallmembers>
+      <member refid="d1/d19/a05651_1a1e91e6bb9a34e05d8d00fd1cad5c181c" prot="public" virt="non-virtual"><scope>castor3d::SubmeshUtils</scope><name>computeFacesFromPolygonVertex</name></member>
+      <member refid="d1/d19/a05651_1ae9da16d8be8723d2c238d81be4125c93" prot="public" virt="non-virtual"><scope>castor3d::SubmeshUtils</scope><name>computeNormals</name></member>
+      <member refid="d1/d19/a05651_1a8dea49270e1c13f0d3f914f6820e9289" prot="public" virt="non-virtual"><scope>castor3d::SubmeshUtils</scope><name>computeTangentsFromNormals</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

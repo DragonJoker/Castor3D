@@ -1,0 +1,12 @@
+<map id="castor::TextWriterT&lt; T &gt;" name="castor::TextWriterT&lt; T &gt;">
+<area shape="rect" id="Node000001" title="Partial castor::Writer specialisation for text files." alt="" coords="51,272,215,297"/>
+<area shape="rect" id="Node000002" href="$da/d1b/a08083.html" title=" " alt="" coords="5,190,161,215"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,226,128,271,123,273,95,229"/>
+<area shape="rect" id="Node000003" href="$dc/d3a/a07991.html" title=" " alt="" coords="185,183,309,223"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="210,233,151,274,148,270,207,228"/>
+<area shape="rect" id="Node000004" href="$da/d87/a08319.html" title=" " alt="" coords="158,5,294,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="223,45,218,80,219,120,229,153,240,181,236,184,224,154,214,120,212,80,217,44"/>
+<area shape="rect" id="Node000005" href="$dc/d3a/a07991.html" title="Main resource writer class." alt="" coords="228,80,379,120"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="249,39,287,78,283,82,245,42"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="288,133,260,184,255,181,284,131"/>
+</map>

@@ -1,0 +1,2597 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d91/a06563" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::RenderTarget</compoundname>
+    <basecompoundref refid="d6/da8/a08227" prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">RenderTarget.hpp</includes>
+    <innerclass refid="d0/d15/a06567" prot="private">castor3d::RenderTarget::StereoConfig</innerclass>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="dd/d91/a06563_1a5acddea076f97903fe502821d8ed22c0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/d2f/a06715" kindref="compound">HdrConfig</ref> const &amp;</type>
+        <definition>C3D_API HdrConfig const  &amp; castor3d::RenderTarget::getHdrConfig</definition>
+        <argsstring>() const</argsstring>
+        <name>getHdrConfig</name>
+        <qualifiedname>castor3d::RenderTarget::getHdrConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Accesseurs. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="223" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1aff624fea69a400fd940320306aba77bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/d2f/a06715" kindref="compound">HdrConfig</ref> &amp;</type>
+        <definition>C3D_API HdrConfig &amp; castor3d::RenderTarget::getHdrConfig</definition>
+        <argsstring>()</argsstring>
+        <name>getHdrConfig</name>
+        <qualifiedname>castor3d::RenderTarget::getHdrConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="224" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1aa75f63c1f103894e07f770f30e251662" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/d65/a06711" kindref="compound">ColourGradingConfig</ref> const &amp;</type>
+        <definition>C3D_API ColourGradingConfig const  &amp; castor3d::RenderTarget::getColourGradingConfig</definition>
+        <argsstring>() const</argsstring>
+        <name>getColourGradingConfig</name>
+        <qualifiedname>castor3d::RenderTarget::getColourGradingConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="225" column="36"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a3656d31bbddaff072bb5bf4105fa8b80" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/d65/a06711" kindref="compound">ColourGradingConfig</ref> &amp;</type>
+        <definition>C3D_API ColourGradingConfig &amp; castor3d::RenderTarget::getColourGradingConfig</definition>
+        <argsstring>()</argsstring>
+        <name>getColourGradingConfig</name>
+        <qualifiedname>castor3d::RenderTarget::getColourGradingConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="226" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a5eca73601321f0d739c7356ac1f05ccb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dba/a02278_1a1e0853cf26ea6ce64763fa7f60d50b00" kindref="member">ShadowMapLightTypeArray</ref></type>
+        <definition>C3D_API ShadowMapLightTypeArray castor3d::RenderTarget::getShadowMaps</definition>
+        <argsstring>() const</argsstring>
+        <name>getShadowMaps</name>
+        <qualifiedname>castor3d::RenderTarget::getShadowMaps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="227" column="33"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a8bd61e86ae333e2ee5e75994d2302e61" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dab/a07363" kindref="compound">ShadowBuffer</ref> *</type>
+        <definition>C3D_API ShadowBuffer * castor3d::RenderTarget::getShadowBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getShadowBuffer</name>
+        <qualifiedname>castor3d::RenderTarget::getShadowBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="228" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1afc279e22ea36c5dff1ca079f863f0360" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dba/a02278_1a794f7cc9220196745f2921e7aac25c65" kindref="member">TechniquePassVector</ref></type>
+        <definition>C3D_API TechniquePassVector castor3d::RenderTarget::getCustomRenderPasses</definition>
+        <argsstring>() const</argsstring>
+        <name>getCustomRenderPasses</name>
+        <qualifiedname>castor3d::RenderTarget::getCustomRenderPasses</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="229" column="29"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a0cf167da996ed08b130d56284d0971df" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/ddf/a07743" kindref="compound">CameraUbo</ref> const &amp;</type>
+        <definition>C3D_API CameraUbo const  &amp; castor3d::RenderTarget::getCameraUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getCameraUbo</name>
+        <qualifiedname>castor3d::RenderTarget::getCameraUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="230" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a50c918430818b3b3e6f97a0a69c5d7d8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/de1/a07827" kindref="compound">SceneUbo</ref> const &amp;</type>
+        <definition>C3D_API SceneUbo const  &amp; castor3d::RenderTarget::getSceneUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getSceneUbo</name>
+        <qualifiedname>castor3d::RenderTarget::getSceneUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="231" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a7c9f84b70da514dc4a45b439adb12505" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::RenderTarget::hasIndirect</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>hasIndirect</name>
+        <qualifiedname>castor3d::RenderTarget::hasIndirect</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="232" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a81c3404fa49bc39390c24302c334006e" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::RenderTarget::hasSss</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>hasSss</name>
+        <qualifiedname>castor3d::RenderTarget::hasSss</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="233" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1ac60ffdb6a2361e8d4b9fc6e654c88ba2" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::RenderTarget::areDebugTargetsEnabled</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>areDebugTargetsEnabled</name>
+        <qualifiedname>castor3d::RenderTarget::areDebugTargetsEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="234" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a2254ec39db71fcfe51df89e0e43c39c3" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="dd/daa/a06683" kindref="compound">SsaoConfig</ref> const &amp;</type>
+        <definition>SsaoConfig const  &amp; castor3d::RenderTarget::getSsaoConfig</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getSsaoConfig</name>
+        <qualifiedname>castor3d::RenderTarget::getSsaoConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="236" column="19" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="236" bodyend="239"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a32a2f9dfe1ffdd4472473fe829decc3a" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="dd/daa/a06683" kindref="compound">SsaoConfig</ref> &amp;</type>
+        <definition>SsaoConfig &amp; castor3d::RenderTarget::getSsaoConfig</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>getSsaoConfig</name>
+        <qualifiedname>castor3d::RenderTarget::getSsaoConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="241" column="13" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="241" bodyend="244"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a691e35bfd02229a2dc7bc623a5ce0cc5" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::RenderTarget::isInitialised</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isInitialised</name>
+        <qualifiedname>castor3d::RenderTarget::isInitialised</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="246" column="6" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="246" bodyend="249"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a36e271d4004d57a59345f9b17036c43b" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dd6/a09023" kindref="compound">castor::Size</ref> const &amp;</type>
+        <definition>castor::Size const  &amp; castor3d::RenderTarget::getSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getSize</name>
+        <qualifiedname>castor3d::RenderTarget::getSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="251" column="21" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="251" bodyend="254"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a6b945f2160f6ba082c3ede5d6ab08726" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::RenderTarget::hasTechnique</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>hasTechnique</name>
+        <qualifiedname>castor3d::RenderTarget::hasTechnique</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="256" column="6" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="256" bodyend="259"/>
+        <referencedby refid="dd/d91/a06563_1a24e2cb1c4f097d9735ac997800b1e7c9" compoundref="d0/d67/a01232" startline="261" endline="265">getTechnique</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a24e2cb1c4f097d9735ac997800b1e7c9" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/dd8/a06575" kindref="compound">RenderTechnique</ref> &amp;</type>
+        <definition>RenderTechnique &amp; castor3d::RenderTarget::getTechnique</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getTechnique</name>
+        <qualifiedname>castor3d::RenderTarget::getTechnique</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="261" column="18" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="261" bodyend="265"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+        <references refid="dd/d91/a06563_1a6b945f2160f6ba082c3ede5d6ab08726" compoundref="d0/d67/a01232" startline="256" endline="259">hasTechnique</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1aa386f264cf3e2acc229031cf1f9a5bfc" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>SceneRPtr</type>
+        <definition>SceneRPtr castor3d::RenderTarget::getScene</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getScene</name>
+        <qualifiedname>castor3d::RenderTarget::getScene</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="267" column="11" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="267" bodyend="270"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1ad99ad06885eedc96eaad147574422ee8" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>CameraRPtr</type>
+        <definition>CameraRPtr castor3d::RenderTarget::getCamera</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getCamera</name>
+        <qualifiedname>castor3d::RenderTarget::getCamera</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="272" column="12" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="272" bodyend="275"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a9f89097e6874c8bb7e26a4df63f776c1" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::RenderTarget::getTexture</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getTexture</name>
+        <qualifiedname>castor3d::RenderTarget::getTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="277" column="16" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="277" bodyend="280"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1ab9766cc729dbb2f84fb19a4924fc054d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::RenderTarget::getVelocity</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getVelocity</name>
+        <qualifiedname>castor3d::RenderTarget::getVelocity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="282" column="16" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="282" bodyend="285"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1ac0c33e3ab2e6890645c364b9dae03add" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>VkFormat</type>
+        <definition>VkFormat castor3d::RenderTarget::getPixelFormat</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getPixelFormat</name>
+        <qualifiedname>castor3d::RenderTarget::getPixelFormat</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="287" column="10" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="287" bodyend="290"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a0336501cd968e146f76bad0cf27030a0" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1a4ad78470d8077ac5aaa5443df9894203" kindref="member">TargetType</ref></type>
+        <definition>TargetType castor3d::RenderTarget::getTargetType</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getTargetType</name>
+        <qualifiedname>castor3d::RenderTarget::getTargetType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="292" column="12" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="292" bodyend="295"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a18573dad62c283bc47452e8db28658b7" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderTarget::getIndex</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getIndex</name>
+        <qualifiedname>castor3d::RenderTarget::getIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="297" column="10" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="297" bodyend="300"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a87494083761f4717a0683626298029c5" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>PostEffectArray const &amp;</type>
+        <definition>PostEffectArray const  &amp; castor3d::RenderTarget::getHDRPostEffects</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getHDRPostEffects</name>
+        <qualifiedname>castor3d::RenderTarget::getHDRPostEffects</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="302" column="24" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="302" bodyend="305"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a184e9fd241389a70744ce8f3085d5f4e" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>PostEffectArray const &amp;</type>
+        <definition>PostEffectArray const  &amp; castor3d::RenderTarget::getSRGBPostEffects</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getSRGBPostEffects</name>
+        <qualifiedname>castor3d::RenderTarget::getSRGBPostEffects</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="307" column="24" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="307" bodyend="310"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a8295d9ea90fd15f2c1c1b1121f66f03d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ToneMappingRPtr</type>
+        <definition>ToneMappingRPtr castor3d::RenderTarget::getToneMapping</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getToneMapping</name>
+        <qualifiedname>castor3d::RenderTarget::getToneMapping</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="312" column="17" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="312" bodyend="316"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1affaa44b37232ed7d43215980a60f2df3" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>crg::SemaphoreWaitArray const &amp;</type>
+        <definition>crg::SemaphoreWaitArray const  &amp; castor3d::RenderTarget::getSemaphore</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getSemaphore</name>
+        <qualifiedname>castor3d::RenderTarget::getSemaphore</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="318" column="32" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="318" bodyend="321"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1af2c48ff8eb37770adae915f79637de90" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d7/d57/a05931" kindref="compound">SceneCuller</ref> const &amp;</type>
+        <definition>SceneCuller const  &amp; castor3d::RenderTarget::getCuller</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getCuller</name>
+        <qualifiedname>castor3d::RenderTarget::getCuller</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="323" column="20" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="323" bodyend="327"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1ace0136eb6defb150a6ba9146819a9fd5" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d7/d57/a05931" kindref="compound">SceneCuller</ref> &amp;</type>
+        <definition>SceneCuller &amp; castor3d::RenderTarget::getCuller</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>getCuller</name>
+        <qualifiedname>castor3d::RenderTarget::getCuller</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="329" column="14" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="329" bodyend="333"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1afb8ee891592fb2861b3be58f99e608db" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>castor::Point2f const &amp;</type>
+        <definition>castor::Point2f const  &amp; castor3d::RenderTarget::getJitter</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getJitter</name>
+        <qualifiedname>castor3d::RenderTarget::getJitter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="335" column="24" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="335" bodyend="338"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1ac0825523b8ad2f8b5790b31652d701f8" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+        <definition>castor::String const  &amp; castor3d::RenderTarget::getName</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getName</name>
+        <qualifiedname>castor3d::RenderTarget::getName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="340" column="23" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="340" bodyend="343"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1aa17ceb342c53d5ce1abaee294b3e7564" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d7/d72/a07767" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+        <definition>HdrConfigUbo const  &amp; castor3d::RenderTarget::getHdrConfigUbo</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getHdrConfigUbo</name>
+        <qualifiedname>castor3d::RenderTarget::getHdrConfigUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="345" column="21" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="345" bodyend="349"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a940a04f9dda057d6475563ccddfc0f8e" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="da/d1e/a07759" kindref="compound">ColourGradingUbo</ref> const &amp;</type>
+        <definition>ColourGradingUbo const  &amp; castor3d::RenderTarget::getColourGradingUbo</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getColourGradingUbo</name>
+        <qualifiedname>castor3d::RenderTarget::getColourGradingUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="351" column="25" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="351" bodyend="355"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1ad812ef69607c1c9efbecb064503f301b" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>crg::FrameGraph &amp;</type>
+        <definition>crg::FrameGraph &amp; castor3d::RenderTarget::getGraph</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>getGraph</name>
+        <qualifiedname>castor3d::RenderTarget::getGraph</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="357" column="18" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="357" bodyend="360"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a17d523c19414936f35c78d75a01866f3" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>crg::ResourcesCache &amp;</type>
+        <definition>crg::ResourcesCache &amp; castor3d::RenderTarget::getResources</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>getResources</name>
+        <qualifiedname>castor3d::RenderTarget::getResources</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="362" column="22" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="362" bodyend="365"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a8de4d24576d28f5a6771ec7f0aea1088" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::RenderTarget::isInitialising</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isInitialising</name>
+        <qualifiedname>castor3d::RenderTarget::isInitialising</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="367" column="6" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="367" bodyend="370"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a6797d2757f4e8078534a9e9e3290c0e0" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::RenderTarget::isUsingStereo</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isUsingStereo</name>
+        <qualifiedname>castor3d::RenderTarget::isUsingStereo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="372" column="6" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="372" bodyend="375"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a1a5406b4241f8c4543013c8bf004ce18" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::RenderTarget::getIntraOcularDistance</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getIntraOcularDistance</name>
+        <qualifiedname>castor3d::RenderTarget::getIntraOcularDistance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="377" column="7" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="377" bodyend="380"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1ad44cbd9cd7a5ba1ad1451a693ff80284" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>IntermediateViewArray const &amp;</type>
+        <definition>IntermediateViewArray const  &amp; castor3d::RenderTarget::getIntermediateViews</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getIntermediateViews</name>
+        <qualifiedname>castor3d::RenderTarget::getIntermediateViews</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="382" column="30" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="382" bodyend="385"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a107d616d22da0651033e3823a62021e4" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::RenderTarget::isFullLoadingEnabled</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isFullLoadingEnabled</name>
+        <qualifiedname>castor3d::RenderTarget::isFullLoadingEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="387" column="6" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="387" bodyend="390"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a2a308c49c6f4fd42606b0c500a965ce6" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="db/da7/a05911" kindref="compound">ClustersConfig</ref> const &amp;</type>
+        <definition>ClustersConfig const  &amp; castor3d::RenderTarget::getClustersConfig</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getClustersConfig</name>
+        <qualifiedname>castor3d::RenderTarget::getClustersConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="392" column="23" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="392" bodyend="395"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1af85a8e16092f8c705efae3c3736a6897" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d1/d77/a05915" kindref="compound">FrustumClusters</ref> *</type>
+        <definition>FrustumClusters * castor3d::RenderTarget::getFrustumClusters</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getFrustumClusters</name>
+        <qualifiedname>castor3d::RenderTarget::getFrustumClusters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="397" column="18" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="397" bodyend="400"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="dd/d91/a06563_1af986f843b9c0ed3506b6b8c04d5c3fe0" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderTarget::setSsaoConfig</definition>
+        <argsstring>(SsaoConfig config) noexcept</argsstring>
+        <name>setSsaoConfig</name>
+        <qualifiedname>castor3d::RenderTarget::setSsaoConfig</qualifiedname>
+        <param>
+          <type><ref refid="dd/daa/a06683" kindref="compound">SsaoConfig</ref></type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Mutateurs. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="411" column="6" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="411" bodyend="414"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a3527c280332f27435f6d9e42ca5f9f00" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderTarget::setJitter</definition>
+        <argsstring>(castor::Point2f const &amp;value) noexcept</argsstring>
+        <name>setJitter</name>
+        <qualifiedname>castor3d::RenderTarget::setJitter</qualifiedname>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="416" column="6" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="416" bodyend="419"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a20a08af33630dab11696d82302a33f50" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderTarget::setStereo</definition>
+        <argsstring>(bool value) noexcept</argsstring>
+        <name>setStereo</name>
+        <qualifiedname>castor3d::RenderTarget::setStereo</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="421" column="6" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="421" bodyend="424"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1afede700388ab41681412dff6837615bc" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderTarget::setIntraOcularDistance</definition>
+        <argsstring>(float value) noexcept</argsstring>
+        <name>setIntraOcularDistance</name>
+        <qualifiedname>castor3d::RenderTarget::setIntraOcularDistance</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="426" column="6" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="426" bodyend="429"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1aa03b7afbfece0ed7f3a89541858f61b8" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d0/d65/a06523" kindref="compound">TargetDebugConfig</ref> &amp;</type>
+        <definition>TargetDebugConfig &amp; castor3d::RenderTarget::getDebugConfig</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>getDebugConfig</name>
+        <qualifiedname>castor3d::RenderTarget::getDebugConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="431" column="20" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="431" bodyend="434"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1ac59f7eadeb8a191252c318d1cca27905" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="db/da7/a05911" kindref="compound">ClustersConfig</ref> &amp;</type>
+        <definition>ClustersConfig &amp; castor3d::RenderTarget::getClustersConfig</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>getClustersConfig</name>
+        <qualifiedname>castor3d::RenderTarget::getClustersConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="436" column="17" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="436" bodyend="439"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1ad1d66e2064f485ff3e134d1efa5e4047" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderTarget::enableFullLoading</definition>
+        <argsstring>(bool value) noexcept</argsstring>
+        <name>enableFullLoading</name>
+        <qualifiedname>castor3d::RenderTarget::enableFullLoading</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="441" column="6" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="441" bodyend="444"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a1fa36adf95fa42de53eecff36beafcae" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderTarget::setClustersConfig</definition>
+        <argsstring>(ClustersConfig config) noexcept</argsstring>
+        <name>setClustersConfig</name>
+        <qualifiedname>castor3d::RenderTarget::setClustersConfig</qualifiedname>
+        <param>
+          <type><ref refid="db/da7/a05911" kindref="compound">ClustersConfig</ref></type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="446" column="6" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="446" bodyend="449"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="dd/d91/a06563_1ae81f85cc592b2a5d35b052b9fba5fabf" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void(<ref refid="dd/d91/a06563" kindref="compound">RenderTarget</ref> const &amp;, <ref refid="d3/d0e/a06399" kindref="compound">QueueData</ref> const &amp;) &gt;</type>
+        <definition>using castor3d::RenderTarget::OnInitialisedFunc =  castor::Function&lt; void( RenderTarget const &amp;, QueueData const &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnInitialisedFunc</name>
+        <qualifiedname>castor3d::RenderTarget::OnInitialisedFunc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="43" column="1" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d91/a06563_1ad5d90281989a640985362038a4b8e0c6" prot="private" static="no">
+        <type><ref refid="dc/d79/a08267" kindref="compound">castor::SignalT</ref>&lt; OnInitialisedFunc &gt;</type>
+        <definition>using castor3d::RenderTarget::OnInitialised =  castor::SignalT&lt; OnInitialisedFunc &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnInitialised</name>
+        <qualifiedname>castor3d::RenderTarget::OnInitialised</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="44" column="1" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d91/a06563_1a79561d010fd44cddb2b451f0cab5c3cd" prot="private" static="no">
+        <type><ref refid="d4/ddb/a08183" kindref="compound">castor::ConnectionT</ref>&lt; <ref refid="dc/d79/a08267" kindref="compound">OnInitialised</ref> &gt;</type>
+        <definition>using castor3d::RenderTarget::OnInitialisedConnection =  castor::ConnectionT&lt; OnInitialised &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnInitialisedConnection</name>
+        <qualifiedname>castor3d::RenderTarget::OnInitialisedConnection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="45" column="1" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/d91/a06563_1ab3f3ae48e3fc9960023480ef9e4627f1" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; PostEffectUPtr &gt;</type>
+        <definition>using castor3d::RenderTarget::PostEffectArray =  castor::Vector&lt; PostEffectUPtr &gt;</definition>
+        <argsstring></argsstring>
+        <name>PostEffectArray</name>
+        <qualifiedname>castor3d::RenderTarget::PostEffectArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="46" column="1" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dd/d91/a06563_1a7f6afd3a6c5d113aadf68e8042ade599" prot="public" static="yes" mutable="no">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>C3D_API const castor::String castor3d::RenderTarget::DefaultSamplerName</definition>
+        <argsstring></argsstring>
+        <name>DefaultSamplerName</name>
+        <qualifiedname>castor3d::RenderTarget::DefaultSamplerName</qualifiedname>
+        <briefdescription>
+<para>Le nom du sampler par défaut pour la cible de rendu. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="477" column="37" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="477" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="dd/d91/a06563_1aee7df955883cfb39ddb4f23f83d59d77" prot="private" static="yes" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderTarget::sm_uiCount</definition>
+        <argsstring></argsstring>
+        <name>sm_uiCount</name>
+        <qualifiedname>castor3d::RenderTarget::sm_uiCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="480" column="17" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="480" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/d91/a06563_1ab15bc02f85718b326e184d3ea6eb3bc1" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> &amp;</type>
+        <definition>RenderDevice&amp; castor3d::RenderTarget::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::RenderTarget::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="481" column="15" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="481" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a72cc4f0c2f6682ffaca9a4aeef96678f" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a4ad78470d8077ac5aaa5443df9894203" kindref="member">TargetType</ref></type>
+        <definition>TargetType castor3d::RenderTarget::m_type</definition>
+        <argsstring></argsstring>
+        <name>m_type</name>
+        <qualifiedname>castor3d::RenderTarget::m_type</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="482" column="12" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="482" bodyend="482"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1acb45fc2d1120c0a01f4529f3e663fe77" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/dd6/a09023" kindref="compound">castor::Size</ref></type>
+        <definition>castor::Size castor3d::RenderTarget::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>castor3d::RenderTarget::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="483" column="14" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="483" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1aa3f3f4c6ce97723ca6ef8fa1c851cd18" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/dd6/a09023" kindref="compound">castor::Size</ref></type>
+        <definition>castor::Size castor3d::RenderTarget::m_safeBandedSize</definition>
+        <argsstring></argsstring>
+        <name>m_safeBandedSize</name>
+        <qualifiedname>castor3d::RenderTarget::m_safeBandedSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="484" column="14" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="484" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a609b63ff4f27262293249be46f255b01" prot="private" static="no" mutable="no">
+        <type>VkFormat</type>
+        <definition>VkFormat castor3d::RenderTarget::m_pixelFormat</definition>
+        <argsstring></argsstring>
+        <name>m_pixelFormat</name>
+        <qualifiedname>castor3d::RenderTarget::m_pixelFormat</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="485" column="10" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="485" bodyend="485"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1aa3dc8483f01bebb09ebe533eac5dda56" prot="private" static="no" mutable="no">
+        <type>std::atomic_bool</type>
+        <definition>std::atomic_bool castor3d::RenderTarget::m_initialised</definition>
+        <argsstring></argsstring>
+        <name>m_initialised</name>
+        <qualifiedname>castor3d::RenderTarget::m_initialised</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="486" column="18" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="486" bodyend="486"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a5ae0d9edb47098cb3128307d77d2e4bf" prot="private" static="no" mutable="no">
+        <type>std::atomic_bool</type>
+        <definition>std::atomic_bool castor3d::RenderTarget::m_initialising</definition>
+        <argsstring></argsstring>
+        <name>m_initialising</name>
+        <qualifiedname>castor3d::RenderTarget::m_initialising</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="487" column="18" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="487" bodyend="487"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a577b51ed3ac08b802006b8f06bdd9763" prot="private" static="no" mutable="no">
+        <type>crg::ResourcesCache</type>
+        <definition>crg::ResourcesCache castor3d::RenderTarget::m_resources</definition>
+        <argsstring></argsstring>
+        <name>m_resources</name>
+        <qualifiedname>castor3d::RenderTarget::m_resources</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="488" column="21" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="488" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1abeb228abe5700346da23deabccb2cff9" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; <ref refid="d7/d72/a07767" kindref="compound">HdrConfigUbo</ref> &gt;</type>
+        <definition>castor::RawUniquePtr&lt; HdrConfigUbo &gt; castor3d::RenderTarget::m_hdrConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>m_hdrConfigUbo</name>
+        <qualifiedname>castor3d::RenderTarget::m_hdrConfigUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="489" column="22" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="489" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1aaa97fbb5fb277138e8a8f2fc556f353c" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; <ref refid="da/d1e/a07759" kindref="compound">ColourGradingUbo</ref> &gt;</type>
+        <definition>castor::RawUniquePtr&lt; ColourGradingUbo &gt; castor3d::RenderTarget::m_colourGradingUbo</definition>
+        <argsstring></argsstring>
+        <name>m_colourGradingUbo</name>
+        <qualifiedname>castor3d::RenderTarget::m_colourGradingUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="490" column="22" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="490" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a85aa11023807a7a2ad669abca3e78d49" prot="private" static="no" mutable="no">
+        <type>RenderTechniqueUPtr</type>
+        <definition>RenderTechniqueUPtr castor3d::RenderTarget::m_renderTechnique</definition>
+        <argsstring></argsstring>
+        <name>m_renderTechnique</name>
+        <qualifiedname>castor3d::RenderTarget::m_renderTechnique</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="491" column="21" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="491" bodyend="491"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a30dfe069e33f92ae1f7394386c43fe1b" prot="private" static="no" mutable="no">
+        <type>SceneRPtr</type>
+        <definition>SceneRPtr castor3d::RenderTarget::m_scene</definition>
+        <argsstring></argsstring>
+        <name>m_scene</name>
+        <qualifiedname>castor3d::RenderTarget::m_scene</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="492" column="11" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="492" bodyend="492"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1aa92a98cd4a2f61f7f640d1b54c5b5ebd" prot="private" static="no" mutable="no">
+        <type>CameraRPtr</type>
+        <definition>CameraRPtr castor3d::RenderTarget::m_camera</definition>
+        <argsstring></argsstring>
+        <name>m_camera</name>
+        <qualifiedname>castor3d::RenderTarget::m_camera</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="493" column="12" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="493" bodyend="493"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1af899a48aa01f0bc1347d3ad08b457b90" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderTarget::m_index</definition>
+        <argsstring></argsstring>
+        <name>m_index</name>
+        <qualifiedname>castor3d::RenderTarget::m_index</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="494" column="10" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="494" bodyend="494"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1af8d834750a166bcfc29d3785605af7f7" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::RenderTarget::m_name</definition>
+        <argsstring></argsstring>
+        <name>m_name</name>
+        <qualifiedname>castor3d::RenderTarget::m_name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="495" column="16" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="495" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a34230988042625718402ff8955564733" prot="private" static="no" mutable="no">
+        <type>PostEffectArray</type>
+        <definition>PostEffectArray castor3d::RenderTarget::m_hdrPostEffects</definition>
+        <argsstring></argsstring>
+        <name>m_hdrPostEffects</name>
+        <qualifiedname>castor3d::RenderTarget::m_hdrPostEffects</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="496" column="17" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="496" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a1e4b9ab1a8fc7e4c47fce54fae4aa8a8" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::RenderTarget::m_toneMappingName</definition>
+        <argsstring></argsstring>
+        <name>m_toneMappingName</name>
+        <qualifiedname>castor3d::RenderTarget::m_toneMappingName</qualifiedname>
+        <initializer>{ <ref refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" kindref="member">cuT</ref>( &quot;linear&quot; ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="497" column="16" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="497" bodyend="497"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1aaaba852872f215a8c93902383d149c66" prot="private" static="no" mutable="no">
+        <type>ToneMappingUPtr</type>
+        <definition>ToneMappingUPtr castor3d::RenderTarget::m_toneMapping</definition>
+        <argsstring></argsstring>
+        <name>m_toneMapping</name>
+        <qualifiedname>castor3d::RenderTarget::m_toneMapping</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="498" column="17" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="498" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a3c64f2de5230564b686352601d83cde0" prot="private" static="no" mutable="no">
+        <type>PostEffectArray</type>
+        <definition>PostEffectArray castor3d::RenderTarget::m_srgbPostEffects</definition>
+        <argsstring></argsstring>
+        <name>m_srgbPostEffects</name>
+        <qualifiedname>castor3d::RenderTarget::m_srgbPostEffects</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="499" column="17" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="499" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1afcf7cec248ecb82a716956f54dd9f292" prot="private" static="no" mutable="no">
+        <type>FramePassTimerUPtr</type>
+        <definition>FramePassTimerUPtr castor3d::RenderTarget::m_overlaysTimer</definition>
+        <argsstring></argsstring>
+        <name>m_overlaysTimer</name>
+        <qualifiedname>castor3d::RenderTarget::m_overlaysTimer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="500" column="20" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="500" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a833ff4d86e532a8cde5c2c8e6df92fb4" prot="private" static="no" mutable="no">
+        <type>FramePassTimerUPtr</type>
+        <definition>FramePassTimerUPtr castor3d::RenderTarget::m_cpuUpdateTimer</definition>
+        <argsstring></argsstring>
+        <name>m_cpuUpdateTimer</name>
+        <qualifiedname>castor3d::RenderTarget::m_cpuUpdateTimer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="501" column="20" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="501" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a8dae3fef9f0e7b959b0b7940fd296b18" prot="private" static="no" mutable="no">
+        <type>FramePassTimerUPtr</type>
+        <definition>FramePassTimerUPtr castor3d::RenderTarget::m_gpuUpdateTimer</definition>
+        <argsstring></argsstring>
+        <name>m_gpuUpdateTimer</name>
+        <qualifiedname>castor3d::RenderTarget::m_gpuUpdateTimer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="502" column="20" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="502" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a969dc42e2d104e02259c1c1c53f045d6" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::RenderTarget::m_combineStages</definition>
+        <argsstring></argsstring>
+        <name>m_combineStages</name>
+        <qualifiedname>castor3d::RenderTarget::m_combineStages</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="503" column="43" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="503" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a37b24f5fd0163449058298e47a4a5046" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/daa/a06683" kindref="compound">SsaoConfig</ref></type>
+        <definition>SsaoConfig castor3d::RenderTarget::m_ssaoConfig</definition>
+        <argsstring></argsstring>
+        <name>m_ssaoConfig</name>
+        <qualifiedname>castor3d::RenderTarget::m_ssaoConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="504" column="12" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="504" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a83c992bb94e35a8d73f281447961ce1b" prot="private" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::RenderTarget::m_jitter</definition>
+        <argsstring></argsstring>
+        <name>m_jitter</name>
+        <qualifiedname>castor3d::RenderTarget::m_jitter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="505" column="17" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="505" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a760a01615043abe09f87ec247ac7149e" prot="private" static="no" mutable="no">
+        <type>ashes::SemaphorePtr</type>
+        <definition>ashes::SemaphorePtr castor3d::RenderTarget::m_signalReady</definition>
+        <argsstring></argsstring>
+        <name>m_signalReady</name>
+        <qualifiedname>castor3d::RenderTarget::m_signalReady</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="506" column="21" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="506" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a296734acf22c51898d765524a282781b" prot="private" static="no" mutable="no">
+        <type>crg::SemaphoreWaitArray</type>
+        <definition>crg::SemaphoreWaitArray castor3d::RenderTarget::m_signalFinished</definition>
+        <argsstring></argsstring>
+        <name>m_signalFinished</name>
+        <qualifiedname>castor3d::RenderTarget::m_signalFinished</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="507" column="25" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="507" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1ae841ce6cef0889a6ad2188738712f935" prot="private" static="no" mutable="no">
+        <type>SceneCullerUPtr</type>
+        <definition>SceneCullerUPtr castor3d::RenderTarget::m_culler</definition>
+        <argsstring></argsstring>
+        <name>m_culler</name>
+        <qualifiedname>castor3d::RenderTarget::m_culler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="508" column="17" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="508" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a6829335fff97badf7fc41dc440e877a8" prot="private" static="no" mutable="no">
+        <type>crg::FrameGraph</type>
+        <definition>crg::FrameGraph castor3d::RenderTarget::m_graph</definition>
+        <argsstring></argsstring>
+        <name>m_graph</name>
+        <qualifiedname>castor3d::RenderTarget::m_graph</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="509" column="17" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="509" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a5a4e1517c306fc613d29160deb1325b2" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::RenderTarget::m_velocity</definition>
+        <argsstring></argsstring>
+        <name>m_velocity</name>
+        <qualifiedname>castor3d::RenderTarget::m_velocity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="510" column="9" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="510" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1af2c39d99b84bbb2ce8f5a341ffd620de" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; <ref refid="d1/d95/a06703" kindref="compound">Texture</ref>, 2u &gt;</type>
+        <definition>castor::Array&lt; Texture, 2u &gt; castor3d::RenderTarget::m_srgbObjects</definition>
+        <argsstring></argsstring>
+        <name>m_srgbObjects</name>
+        <qualifiedname>castor3d::RenderTarget::m_srgbObjects</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="511" column="15" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="511" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1ac9cf6132a8e9d687e556c95fe606d34a" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; <ref refid="d1/d95/a06703" kindref="compound">Texture</ref>, 2u &gt;</type>
+        <definition>castor::Array&lt; Texture, 2u &gt; castor3d::RenderTarget::m_hdrObjects</definition>
+        <argsstring></argsstring>
+        <name>m_hdrObjects</name>
+        <qualifiedname>castor3d::RenderTarget::m_hdrObjects</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="512" column="15" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="512" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a19764345b37e0287aa2f768ac84defab" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::RenderTarget::m_overlays</definition>
+        <argsstring></argsstring>
+        <name>m_overlays</name>
+        <qualifiedname>castor3d::RenderTarget::m_overlays</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="513" column="9" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="513" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1ad215f54c22296c78d191213442f17c1e" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::RenderTarget::m_combined</definition>
+        <argsstring></argsstring>
+        <name>m_combined</name>
+        <qualifiedname>castor3d::RenderTarget::m_combined</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="514" column="9" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="514" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1aa773cd67b838fcd23bb944a3a70c36b3" prot="private" static="no" mutable="no">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass&amp; castor3d::RenderTarget::m_overlayPassDesc</definition>
+        <argsstring></argsstring>
+        <name>m_overlayPassDesc</name>
+        <qualifiedname>castor3d::RenderTarget::m_overlayPassDesc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="515" column="17" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="515" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1aec385892bf0ce40c4e3a1714ef6d0953" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/d40/a06159" kindref="compound">OverlayPass</ref> *</type>
+        <definition>OverlayPass* castor3d::RenderTarget::m_overlayPass</definition>
+        <argsstring></argsstring>
+        <name>m_overlayPass</name>
+        <qualifiedname>castor3d::RenderTarget::m_overlayPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="516" column="14" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="516" bodyend="516"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a18ca360b4cb2d7a0469779ab8780d196" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderTarget::m_hdrCopyPassIndex</definition>
+        <argsstring></argsstring>
+        <name>m_hdrCopyPassIndex</name>
+        <qualifiedname>castor3d::RenderTarget::m_hdrCopyPassIndex</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="517" column="10" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="517" bodyend="517"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a905fb89c21e413274005e0e55f858396" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const  *</type>
+        <definition>Texture const* castor3d::RenderTarget::m_hdrCopyPassSource</definition>
+        <argsstring></argsstring>
+        <name>m_hdrCopyPassSource</name>
+        <qualifiedname>castor3d::RenderTarget::m_hdrCopyPassSource</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="518" column="16" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="518" bodyend="518"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a591b901bdc45eec1ccff82a1497bc3e2" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderTarget::m_combinePassIndex</definition>
+        <argsstring></argsstring>
+        <name>m_combinePassIndex</name>
+        <qualifiedname>castor3d::RenderTarget::m_combinePassIndex</qualifiedname>
+        <initializer>{ 1u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="519" column="10" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="519" bodyend="519"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1aede0a230b5e4b5b9d27d03c93bd1f4c9" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const  *</type>
+        <definition>Texture const* castor3d::RenderTarget::m_combinePassSource</definition>
+        <argsstring></argsstring>
+        <name>m_combinePassSource</name>
+        <qualifiedname>castor3d::RenderTarget::m_combinePassSource</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="520" column="16" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="520" bodyend="520"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1ae201328bbd4620a707e37de5b19f4c2b" prot="private" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::RenderTarget::m_combinePass</definition>
+        <argsstring></argsstring>
+        <name>m_combinePass</name>
+        <qualifiedname>castor3d::RenderTarget::m_combinePass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="521" column="17" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="521" bodyend="521"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1aee1aa315c7d46ec3d1cfb7629acf33b5" prot="private" static="no" mutable="no">
+        <type>crg::FramePass const  *</type>
+        <definition>crg::FramePass const* castor3d::RenderTarget::m_hdrLastPass</definition>
+        <argsstring></argsstring>
+        <name>m_hdrLastPass</name>
+        <qualifiedname>castor3d::RenderTarget::m_hdrLastPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="522" column="23" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="522" bodyend="522"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1acb6365c6aad5491fc10b3113408c01d3" prot="private" static="no" mutable="no">
+        <type>crg::RunnableGraphPtr</type>
+        <definition>crg::RunnableGraphPtr castor3d::RenderTarget::m_runnable</definition>
+        <argsstring></argsstring>
+        <name>m_runnable</name>
+        <qualifiedname>castor3d::RenderTarget::m_runnable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="523" column="23" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="523" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a18fa0fd959ecd6fcd381c22e9a5bbdf7" prot="private" static="no" mutable="no">
+        <type>ashes::SemaphorePtr</type>
+        <definition>ashes::SemaphorePtr castor3d::RenderTarget::m_combineSemaphore</definition>
+        <argsstring></argsstring>
+        <name>m_combineSemaphore</name>
+        <qualifiedname>castor3d::RenderTarget::m_combineSemaphore</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="524" column="21" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="524" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a991535a42ba982306ef69d5691a7c624" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d79/a08267" kindref="compound">OnInitialised</ref></type>
+        <definition>OnInitialised castor3d::RenderTarget::m_onInitialised</definition>
+        <argsstring></argsstring>
+        <name>m_onInitialised</name>
+        <qualifiedname>castor3d::RenderTarget::m_onInitialised</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="525" column="15" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="525" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1af50a05e4292dc43098d248c9c1e3667f" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; OnInitialisedConnection &gt;</type>
+        <definition>castor::Vector&lt; OnInitialisedConnection &gt; castor3d::RenderTarget::m_onTargetInitialised</definition>
+        <argsstring></argsstring>
+        <name>m_onTargetInitialised</name>
+        <qualifiedname>castor3d::RenderTarget::m_onTargetInitialised</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="526" column="16" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="526" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1ac3edfc45e0c659650367332bf1c3de00" prot="private" static="no" mutable="no">
+        <type>IntermediateViewArray</type>
+        <definition>IntermediateViewArray castor3d::RenderTarget::m_intermediates</definition>
+        <argsstring></argsstring>
+        <name>m_intermediates</name>
+        <qualifiedname>castor3d::RenderTarget::m_intermediates</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="527" column="23" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="527" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a88aab73d9f81e9f710cecbf05b38ba35" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/d65/a06523" kindref="compound">TargetDebugConfig</ref></type>
+        <definition>TargetDebugConfig castor3d::RenderTarget::m_debugConfig</definition>
+        <argsstring></argsstring>
+        <name>m_debugConfig</name>
+        <qualifiedname>castor3d::RenderTarget::m_debugConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="528" column="19" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="528" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1addad64fd4617933d04bfaebf4acea49e" prot="private" static="no" mutable="no">
+        <type><ref refid="db/da7/a05911" kindref="compound">ClustersConfig</ref></type>
+        <definition>ClustersConfig castor3d::RenderTarget::m_clustersConfig</definition>
+        <argsstring></argsstring>
+        <name>m_clustersConfig</name>
+        <qualifiedname>castor3d::RenderTarget::m_clustersConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="529" column="16" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="529" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a30e0763969a5802364fd3cf768126bef" prot="private" static="no" mutable="no">
+        <type>FrustumClustersUPtr</type>
+        <definition>FrustumClustersUPtr castor3d::RenderTarget::m_frustumClusters</definition>
+        <argsstring></argsstring>
+        <name>m_frustumClusters</name>
+        <qualifiedname>castor3d::RenderTarget::m_frustumClusters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="530" column="21" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="530" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1ad066a541dfa83d0427d11d80afcae6dd" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderTarget::m_enableFullLoading</definition>
+        <argsstring></argsstring>
+        <name>m_enableFullLoading</name>
+        <qualifiedname>castor3d::RenderTarget::m_enableFullLoading</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="531" column="6" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="531" bodyend="531"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a9a8fba1a3f2dafa3af0c1129f1c852cd" prot="private" static="no" mutable="no">
+        <type>DebugDrawerUPtr</type>
+        <definition>DebugDrawerUPtr castor3d::RenderTarget::m_debugDrawer</definition>
+        <argsstring></argsstring>
+        <name>m_debugDrawer</name>
+        <qualifiedname>castor3d::RenderTarget::m_debugDrawer</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="532" column="17" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="532" bodyend="532"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06563_1a267bdce619daf0c64dfbaf9dc31224db" prot="private" static="no" mutable="no">
+        <type>StereoConfig</type>
+        <definition>StereoConfig castor3d::RenderTarget::m_stereo</definition>
+        <argsstring></argsstring>
+        <name>m_stereo</name>
+        <qualifiedname>castor3d::RenderTarget::m_stereo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="539" column="14" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="539" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d91/a06563_1af4879b73a660276033a4143f6b8821c3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RenderTarget::RenderTarget</definition>
+        <argsstring>(Engine &amp;engine, TargetType type, castor::Size const &amp;size, castor::PixelFormat pixelFormat)</argsstring>
+        <name>RenderTarget</name>
+        <qualifiedname>castor3d::RenderTarget::RenderTarget</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4ad78470d8077ac5aaa5443df9894203" kindref="member">TargetType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">castor::Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">castor::PixelFormat</ref></type>
+          <declname>pixelFormat</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur spécifié. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type de render target. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les dimensions de la render target. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pixelFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le format des pixels de la render target. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="63" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1af0636de0b1876240ebc8357c26245456" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RenderTarget::~RenderTarget</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~RenderTarget</name>
+        <qualifiedname>castor3d::RenderTarget::~RenderTarget</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="73" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1af85202ea98e748ca406ae3f764885f00" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderTarget::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::RenderTarget::update</qualifiedname>
+        <param>
+          <type><ref refid="dc/d23/a06511" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour la passe de rendu, au niveau CPU. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données d&apos;update. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="82" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a48c61844d46a46e548abcfd04b4d4a43" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderTarget::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::RenderTarget::update</qualifiedname>
+        <param>
+          <type><ref refid="d9/d4b/a06519" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour la passe de rendu, au niveau GPU. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données d&apos;update. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="91" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a7e1f2a435bc006e42c9bd713f0df2e8f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderTarget::upload</definition>
+        <argsstring>(UploadData &amp;uploader)</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::RenderTarget::upload</qualifiedname>
+        <param>
+          <type><ref refid="d7/d12/a03583" kindref="compound">UploadData</ref> &amp;</type>
+          <declname>uploader</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour tous les tampons GPU d&apos;incrustations en VRAM. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">uploader</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les requêtes d&apos;upload. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="100" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1aec3b1fcdcfb3d22b1d282c0bca6f5e04" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::SemaphoreWaitArray</type>
+        <definition>C3D_API crg::SemaphoreWaitArray castor3d::RenderTarget::render</definition>
+        <argsstring>(ashes::Queue const &amp;queue, crg::SemaphoreWaitArray const &amp;toWait={})</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::RenderTarget::render</qualifiedname>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>crg::SemaphoreWaitArray const &amp;</type>
+          <declname>toWait</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+<para>Dessine une frame. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue recevant les commandes de dessin. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">toWait</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les sémaphores à attendre. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Les sémaphores signalés par ce dessin. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="113" column="33"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a3fa62a07ed372d956dc46368507e045f" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderTarget::countInitialisationSteps</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>countInitialisationSteps</name>
+        <qualifiedname>castor3d::RenderTarget::countInitialisationSteps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le nombre d&apos;étapes nécessaires à l&apos;initialisation, pour en montrer la progression. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="121" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a4c144224fde506fdd722eab03f11c8fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderTarget::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData, ProgressBar *progress=nullptr)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::RenderTarget::initialise</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d0e/a06399" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;initialisation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le device GPU. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">queueData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La queue recevant les commandes GPU. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La barre de progression optionnelle. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="134" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1aee035940edee3af33529d02cf7ee5223" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderTarget::initialise</definition>
+        <argsstring>(OnInitialisedFunc const &amp;onInitialised, ProgressBar *progress=nullptr)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::RenderTarget::initialise</qualifiedname>
+        <param>
+          <type>OnInitialisedFunc const &amp;</type>
+          <declname>onInitialised</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;initialisation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">onInitialised</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le callback appelé lorsque l&apos;initialisation est terminée. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La barre de progression optionnelle. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="147" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1abbac7c8ac0a6ebba8bd47f2be9819a97" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderTarget::cleanup</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::RenderTarget::cleanup</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de nettoyage. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le device GPU. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="157" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1ad80615238bf2017baaa293a10ee5648e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dba/a02278_1a4141612e14f3113f10b3872630c29b3d" kindref="member">ViewportType</ref></type>
+        <definition>C3D_API ViewportType castor3d::RenderTarget::getViewportType</definition>
+        <argsstring>() const</argsstring>
+        <name>getViewportType</name>
+        <qualifiedname>castor3d::RenderTarget::getViewportType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le ViewportType. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="164" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a55ccdb9e11ce04f84fc23474df1c2149" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderTarget::setViewportType</definition>
+        <argsstring>(ViewportType value)</argsstring>
+        <name>setViewportType</name>
+        <qualifiedname>castor3d::RenderTarget::setViewportType</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4141612e14f3113f10b3872630c29b3d" kindref="member">ViewportType</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Définit le ViewportType. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nouveau ViewportType. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="173" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1aed256633840e3e64e2c0b3d730542d44" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderTarget::setCamera</definition>
+        <argsstring>(Camera &amp;camera)</argsstring>
+        <name>setCamera</name>
+        <qualifiedname>castor3d::RenderTarget::setCamera</qualifiedname>
+        <param>
+          <type><ref refid="d2/dc3/a06951" kindref="compound">Camera</ref> &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <briefdescription>
+<para>Définit la caméra. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Définit aussi les caméras des yeux gauche et droit. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La nouvelle caméra. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="184" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a15792edb56900e206863d98da753c013" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderTarget::setScene</definition>
+        <argsstring>(Scene &amp;scene)</argsstring>
+        <name>setScene</name>
+        <qualifiedname>castor3d::RenderTarget::setScene</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+<para>Définit la scène. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La nouvelle scène. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="193" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a80a69fa1901bbfbe5b18fb3b0cec8230" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderTarget::setToneMappingType</definition>
+        <argsstring>(castor::StringView name)</argsstring>
+        <name>setToneMappingType</name>
+        <qualifiedname>castor3d::RenderTarget::setToneMappingType</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">castor::StringView</ref></type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Définit le type d&apos;implémentation de mappage de tons. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="202" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1aa34fe71c6a380b17779b16d1f57a33d3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> PostEffectRPtr</type>
+        <definition>C3D_API PostEffectRPtr castor3d::RenderTarget::getPostEffect</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>getPostEffect</name>
+        <qualifiedname>castor3d::RenderTarget::getPostEffect</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute un effet post rendu à la liste. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;effet. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="211" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a7129ab5461dea44cf155bd658e51907d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderTarget::resetSemaphore</definition>
+        <argsstring>()</argsstring>
+        <name>resetSemaphore</name>
+        <qualifiedname>castor3d::RenderTarget::resetSemaphore</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="212" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a02ffd6790fb7df9873b511b8a579fb07" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::FramePass const &amp;</type>
+        <definition>C3D_API crg::FramePass const  &amp; castor3d::RenderTarget::createVertexTransformPass</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph)</argsstring>
+        <name>createVertexTransformPass</name>
+        <qualifiedname>castor3d::RenderTarget::createVertexTransformPass</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="213" column="31"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="dd/d91/a06563_1aa364d6c3065b898f12eff2ae9ac5ba9e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderTarget::doInitialise</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData, ProgressBar *progress=nullptr)</argsstring>
+        <name>doInitialise</name>
+        <qualifiedname>castor3d::RenderTarget::doInitialise</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d0e/a06399" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="453" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1aaf32773ec047cd5bea61289c41d17a63" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::RenderTarget::doCreateOverlayPass</definition>
+        <argsstring>(ProgressBar *progress, RenderDevice const &amp;device)</argsstring>
+        <name>doCreateOverlayPass</name>
+        <qualifiedname>castor3d::RenderTarget::doCreateOverlayPass</qualifiedname>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="456" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a3e575ef7d0a3e3863751ddadda8ed5cd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::RenderTarget::doCreateCombinePass</definition>
+        <argsstring>(ProgressBar *progress, crg::ImageViewIdArray source)</argsstring>
+        <name>doCreateCombinePass</name>
+        <qualifiedname>castor3d::RenderTarget::doCreateCombinePass</qualifiedname>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewIdArray</type>
+          <declname>source</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="458" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a0b378b92aafbc5142049027475413903" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::RenderTarget::doInitialiseTechnique</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData, ProgressBar *progress, crg::FramePassArray previousPasses)</argsstring>
+        <name>doInitialiseTechnique</name>
+        <qualifiedname>castor3d::RenderTarget::doInitialiseTechnique</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d0e/a06399" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray</type>
+          <declname>previousPasses</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="460" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a1e2e19a8cb43415629404b543a9229ad" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderTarget::doCleanupTechnique</definition>
+        <argsstring>()</argsstring>
+        <name>doCleanupTechnique</name>
+        <qualifiedname>castor3d::RenderTarget::doCleanupTechnique</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="464" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a716630c8784266c1aa5500e41d7487f3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderTarget::doCleanupCopyCommands</definition>
+        <argsstring>()</argsstring>
+        <name>doCleanupCopyCommands</name>
+        <qualifiedname>castor3d::RenderTarget::doCleanupCopyCommands</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="465" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1aa03d8f5d677928ade1cf14026ecf1f79" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderTarget::doInitCombineProgram</definition>
+        <argsstring>()</argsstring>
+        <name>doInitCombineProgram</name>
+        <qualifiedname>castor3d::RenderTarget::doInitCombineProgram</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="466" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1a7d6e73a4d7c36fdbcacfde9a392d12ae" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderTarget::doCleanupCombineProgram</definition>
+        <argsstring>()</argsstring>
+        <name>doCleanupCombineProgram</name>
+        <qualifiedname>castor3d::RenderTarget::doCleanupCombineProgram</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="467" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1acb8f0c73a464e2657871a842e2426866" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::RenderTarget::doUpdatePostEffects</definition>
+        <argsstring>(CpuUpdater &amp;updater, PostEffectArray const &amp;effects, castor::Vector&lt; Texture const * &gt; const &amp;images) const</argsstring>
+        <name>doUpdatePostEffects</name>
+        <qualifiedname>castor3d::RenderTarget::doUpdatePostEffects</qualifiedname>
+        <param>
+          <type><ref refid="dc/d23/a06511" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <param>
+          <type>PostEffectArray const &amp;</type>
+          <declname>effects</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const * &gt; const &amp;</type>
+          <declname>images</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="468" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1af3d80dc6457c6bca6116ed445db2c05c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::SemaphoreWaitArray</type>
+        <definition>crg::SemaphoreWaitArray castor3d::RenderTarget::doRender</definition>
+        <argsstring>(ashes::Queue const &amp;queue, crg::SemaphoreWaitArray signalsToWait)</argsstring>
+        <name>doRender</name>
+        <qualifiedname>castor3d::RenderTarget::doRender</qualifiedname>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>crg::SemaphoreWaitArray</type>
+          <declname>signalsToWait</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="471" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06563_1ac56d6ad0bb8f7a94a09a2b50e2b0dddf" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderTarget::doListIntermediateViews</definition>
+        <argsstring>(IntermediateViewArray &amp;result) const</argsstring>
+        <name>doListIntermediateViews</name>
+        <qualifiedname>castor3d::RenderTarget::doListIntermediateViews</qualifiedname>
+        <param>
+          <type>IntermediateViewArray &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="473" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderTarget</label>
+        <link refid="dd/d91/a06563"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderTarget</label>
+        <link refid="dd/d91/a06563"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>DefaultSamplerName</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/RenderTarget.hpp" line="40" column="1" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="42" bodyend="540"/>
+    <listofallmembers>
+      <member refid="dd/d91/a06563_1ac60ffdb6a2361e8d4b9fc6e654c88ba2" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>areDebugTargetsEnabled</name></member>
+      <member refid="dd/d91/a06563_1abbac7c8ac0a6ebba8bd47f2be9819a97" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>cleanup</name></member>
+      <member refid="dd/d91/a06563_1a3fa62a07ed372d956dc46368507e045f" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>countInitialisationSteps</name></member>
+      <member refid="dd/d91/a06563_1a02ffd6790fb7df9873b511b8a579fb07" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>createVertexTransformPass</name></member>
+      <member refid="dd/d91/a06563_1a7f6afd3a6c5d113aadf68e8042ade599" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>DefaultSamplerName</name></member>
+      <member refid="dd/d91/a06563_1a7d6e73a4d7c36fdbcacfde9a392d12ae" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>doCleanupCombineProgram</name></member>
+      <member refid="dd/d91/a06563_1a716630c8784266c1aa5500e41d7487f3" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>doCleanupCopyCommands</name></member>
+      <member refid="dd/d91/a06563_1a1e2e19a8cb43415629404b543a9229ad" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>doCleanupTechnique</name></member>
+      <member refid="dd/d91/a06563_1a3e575ef7d0a3e3863751ddadda8ed5cd" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>doCreateCombinePass</name></member>
+      <member refid="dd/d91/a06563_1aaf32773ec047cd5bea61289c41d17a63" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>doCreateOverlayPass</name></member>
+      <member refid="dd/d91/a06563_1aa03d8f5d677928ade1cf14026ecf1f79" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>doInitCombineProgram</name></member>
+      <member refid="dd/d91/a06563_1aa364d6c3065b898f12eff2ae9ac5ba9e" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>doInitialise</name></member>
+      <member refid="dd/d91/a06563_1a0b378b92aafbc5142049027475413903" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>doInitialiseTechnique</name></member>
+      <member refid="dd/d91/a06563_1ac56d6ad0bb8f7a94a09a2b50e2b0dddf" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>doListIntermediateViews</name></member>
+      <member refid="dd/d91/a06563_1af3d80dc6457c6bca6116ed445db2c05c" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>doRender</name></member>
+      <member refid="dd/d91/a06563_1acb8f0c73a464e2657871a842e2426866" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>doUpdatePostEffects</name></member>
+      <member refid="dd/d91/a06563_1ad1d66e2064f485ff3e134d1efa5e4047" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>enableFullLoading</name></member>
+      <member refid="dd/d91/a06563_1ad99ad06885eedc96eaad147574422ee8" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getCamera</name></member>
+      <member refid="dd/d91/a06563_1a0cf167da996ed08b130d56284d0971df" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getCameraUbo</name></member>
+      <member refid="dd/d91/a06563_1a2a308c49c6f4fd42606b0c500a965ce6" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getClustersConfig</name></member>
+      <member refid="dd/d91/a06563_1ac59f7eadeb8a191252c318d1cca27905" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getClustersConfig</name></member>
+      <member refid="dd/d91/a06563_1aa75f63c1f103894e07f770f30e251662" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getColourGradingConfig</name></member>
+      <member refid="dd/d91/a06563_1a3656d31bbddaff072bb5bf4105fa8b80" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getColourGradingConfig</name></member>
+      <member refid="dd/d91/a06563_1a940a04f9dda057d6475563ccddfc0f8e" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getColourGradingUbo</name></member>
+      <member refid="dd/d91/a06563_1af2c48ff8eb37770adae915f79637de90" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getCuller</name></member>
+      <member refid="dd/d91/a06563_1ace0136eb6defb150a6ba9146819a9fd5" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getCuller</name></member>
+      <member refid="dd/d91/a06563_1afc279e22ea36c5dff1ca079f863f0360" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getCustomRenderPasses</name></member>
+      <member refid="dd/d91/a06563_1aa03b7afbfece0ed7f3a89541858f61b8" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getDebugConfig</name></member>
+      <member refid="dd/d91/a06563_1af85a8e16092f8c705efae3c3736a6897" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getFrustumClusters</name></member>
+      <member refid="dd/d91/a06563_1ad812ef69607c1c9efbecb064503f301b" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getGraph</name></member>
+      <member refid="dd/d91/a06563_1a5acddea076f97903fe502821d8ed22c0" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getHdrConfig</name></member>
+      <member refid="dd/d91/a06563_1aff624fea69a400fd940320306aba77bf" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getHdrConfig</name></member>
+      <member refid="dd/d91/a06563_1aa17ceb342c53d5ce1abaee294b3e7564" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getHdrConfigUbo</name></member>
+      <member refid="dd/d91/a06563_1a87494083761f4717a0683626298029c5" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getHDRPostEffects</name></member>
+      <member refid="dd/d91/a06563_1a18573dad62c283bc47452e8db28658b7" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getIndex</name></member>
+      <member refid="dd/d91/a06563_1ad44cbd9cd7a5ba1ad1451a693ff80284" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getIntermediateViews</name></member>
+      <member refid="dd/d91/a06563_1a1a5406b4241f8c4543013c8bf004ce18" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getIntraOcularDistance</name></member>
+      <member refid="dd/d91/a06563_1afb8ee891592fb2861b3be58f99e608db" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getJitter</name></member>
+      <member refid="dd/d91/a06563_1ac0825523b8ad2f8b5790b31652d701f8" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getName</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getOwner</name></member>
+      <member refid="dd/d91/a06563_1ac0c33e3ab2e6890645c364b9dae03add" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getPixelFormat</name></member>
+      <member refid="dd/d91/a06563_1aa34fe71c6a380b17779b16d1f57a33d3" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getPostEffect</name></member>
+      <member refid="dd/d91/a06563_1a17d523c19414936f35c78d75a01866f3" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getResources</name></member>
+      <member refid="dd/d91/a06563_1aa386f264cf3e2acc229031cf1f9a5bfc" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getScene</name></member>
+      <member refid="dd/d91/a06563_1a50c918430818b3b3e6f97a0a69c5d7d8" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getSceneUbo</name></member>
+      <member refid="dd/d91/a06563_1affaa44b37232ed7d43215980a60f2df3" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getSemaphore</name></member>
+      <member refid="dd/d91/a06563_1a8bd61e86ae333e2ee5e75994d2302e61" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getShadowBuffer</name></member>
+      <member refid="dd/d91/a06563_1a5eca73601321f0d739c7356ac1f05ccb" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getShadowMaps</name></member>
+      <member refid="dd/d91/a06563_1a36e271d4004d57a59345f9b17036c43b" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getSize</name></member>
+      <member refid="dd/d91/a06563_1a184e9fd241389a70744ce8f3085d5f4e" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getSRGBPostEffects</name></member>
+      <member refid="dd/d91/a06563_1a2254ec39db71fcfe51df89e0e43c39c3" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getSsaoConfig</name></member>
+      <member refid="dd/d91/a06563_1a32a2f9dfe1ffdd4472473fe829decc3a" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getSsaoConfig</name></member>
+      <member refid="dd/d91/a06563_1a0336501cd968e146f76bad0cf27030a0" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getTargetType</name></member>
+      <member refid="dd/d91/a06563_1a24e2cb1c4f097d9735ac997800b1e7c9" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getTechnique</name></member>
+      <member refid="dd/d91/a06563_1a9f89097e6874c8bb7e26a4df63f776c1" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getTexture</name></member>
+      <member refid="dd/d91/a06563_1a8295d9ea90fd15f2c1c1b1121f66f03d" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getToneMapping</name></member>
+      <member refid="dd/d91/a06563_1ab9766cc729dbb2f84fb19a4924fc054d" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getVelocity</name></member>
+      <member refid="dd/d91/a06563_1ad80615238bf2017baaa293a10ee5648e" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>getViewportType</name></member>
+      <member refid="dd/d91/a06563_1a7c9f84b70da514dc4a45b439adb12505" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>hasIndirect</name></member>
+      <member refid="dd/d91/a06563_1a81c3404fa49bc39390c24302c334006e" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>hasSss</name></member>
+      <member refid="dd/d91/a06563_1a6b945f2160f6ba082c3ede5d6ab08726" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>hasTechnique</name></member>
+      <member refid="dd/d91/a06563_1a4c144224fde506fdd722eab03f11c8fd" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>initialise</name></member>
+      <member refid="dd/d91/a06563_1aee035940edee3af33529d02cf7ee5223" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>initialise</name></member>
+      <member refid="dd/d91/a06563_1a107d616d22da0651033e3823a62021e4" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>isFullLoadingEnabled</name></member>
+      <member refid="dd/d91/a06563_1a691e35bfd02229a2dc7bc623a5ce0cc5" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>isInitialised</name></member>
+      <member refid="dd/d91/a06563_1a8de4d24576d28f5a6771ec7f0aea1088" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>isInitialising</name></member>
+      <member refid="dd/d91/a06563_1a6797d2757f4e8078534a9e9e3290c0e0" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>isUsingStereo</name></member>
+      <member refid="dd/d91/a06563_1aa92a98cd4a2f61f7f640d1b54c5b5ebd" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_camera</name></member>
+      <member refid="dd/d91/a06563_1addad64fd4617933d04bfaebf4acea49e" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_clustersConfig</name></member>
+      <member refid="dd/d91/a06563_1aaa97fbb5fb277138e8a8f2fc556f353c" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_colourGradingUbo</name></member>
+      <member refid="dd/d91/a06563_1ad215f54c22296c78d191213442f17c1e" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_combined</name></member>
+      <member refid="dd/d91/a06563_1ae201328bbd4620a707e37de5b19f4c2b" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_combinePass</name></member>
+      <member refid="dd/d91/a06563_1a591b901bdc45eec1ccff82a1497bc3e2" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_combinePassIndex</name></member>
+      <member refid="dd/d91/a06563_1aede0a230b5e4b5b9d27d03c93bd1f4c9" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_combinePassSource</name></member>
+      <member refid="dd/d91/a06563_1a18fa0fd959ecd6fcd381c22e9a5bbdf7" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_combineSemaphore</name></member>
+      <member refid="dd/d91/a06563_1a969dc42e2d104e02259c1c1c53f045d6" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_combineStages</name></member>
+      <member refid="dd/d91/a06563_1a833ff4d86e532a8cde5c2c8e6df92fb4" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_cpuUpdateTimer</name></member>
+      <member refid="dd/d91/a06563_1ae841ce6cef0889a6ad2188738712f935" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_culler</name></member>
+      <member refid="dd/d91/a06563_1a88aab73d9f81e9f710cecbf05b38ba35" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_debugConfig</name></member>
+      <member refid="dd/d91/a06563_1a9a8fba1a3f2dafa3af0c1129f1c852cd" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_debugDrawer</name></member>
+      <member refid="dd/d91/a06563_1ab15bc02f85718b326e184d3ea6eb3bc1" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_device</name></member>
+      <member refid="dd/d91/a06563_1ad066a541dfa83d0427d11d80afcae6dd" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_enableFullLoading</name></member>
+      <member refid="dd/d91/a06563_1a30e0763969a5802364fd3cf768126bef" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_frustumClusters</name></member>
+      <member refid="dd/d91/a06563_1a8dae3fef9f0e7b959b0b7940fd296b18" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_gpuUpdateTimer</name></member>
+      <member refid="dd/d91/a06563_1a6829335fff97badf7fc41dc440e877a8" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_graph</name></member>
+      <member refid="dd/d91/a06563_1abeb228abe5700346da23deabccb2cff9" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_hdrConfigUbo</name></member>
+      <member refid="dd/d91/a06563_1a18ca360b4cb2d7a0469779ab8780d196" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_hdrCopyPassIndex</name></member>
+      <member refid="dd/d91/a06563_1a905fb89c21e413274005e0e55f858396" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_hdrCopyPassSource</name></member>
+      <member refid="dd/d91/a06563_1aee1aa315c7d46ec3d1cfb7629acf33b5" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_hdrLastPass</name></member>
+      <member refid="dd/d91/a06563_1ac9cf6132a8e9d687e556c95fe606d34a" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_hdrObjects</name></member>
+      <member refid="dd/d91/a06563_1a34230988042625718402ff8955564733" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_hdrPostEffects</name></member>
+      <member refid="dd/d91/a06563_1af899a48aa01f0bc1347d3ad08b457b90" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_index</name></member>
+      <member refid="dd/d91/a06563_1aa3dc8483f01bebb09ebe533eac5dda56" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_initialised</name></member>
+      <member refid="dd/d91/a06563_1a5ae0d9edb47098cb3128307d77d2e4bf" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_initialising</name></member>
+      <member refid="dd/d91/a06563_1ac3edfc45e0c659650367332bf1c3de00" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_intermediates</name></member>
+      <member refid="dd/d91/a06563_1a83c992bb94e35a8d73f281447961ce1b" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_jitter</name></member>
+      <member refid="dd/d91/a06563_1af8d834750a166bcfc29d3785605af7f7" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_name</name></member>
+      <member refid="dd/d91/a06563_1a991535a42ba982306ef69d5691a7c624" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_onInitialised</name></member>
+      <member refid="dd/d91/a06563_1af50a05e4292dc43098d248c9c1e3667f" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_onTargetInitialised</name></member>
+      <member refid="dd/d91/a06563_1aec385892bf0ce40c4e3a1714ef6d0953" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_overlayPass</name></member>
+      <member refid="dd/d91/a06563_1aa773cd67b838fcd23bb944a3a70c36b3" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_overlayPassDesc</name></member>
+      <member refid="dd/d91/a06563_1a19764345b37e0287aa2f768ac84defab" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_overlays</name></member>
+      <member refid="dd/d91/a06563_1afcf7cec248ecb82a716956f54dd9f292" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_overlaysTimer</name></member>
+      <member refid="dd/d91/a06563_1a609b63ff4f27262293249be46f255b01" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_pixelFormat</name></member>
+      <member refid="dd/d91/a06563_1a85aa11023807a7a2ad669abca3e78d49" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_renderTechnique</name></member>
+      <member refid="dd/d91/a06563_1a577b51ed3ac08b802006b8f06bdd9763" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_resources</name></member>
+      <member refid="dd/d91/a06563_1acb6365c6aad5491fc10b3113408c01d3" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_runnable</name></member>
+      <member refid="dd/d91/a06563_1aa3f3f4c6ce97723ca6ef8fa1c851cd18" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_safeBandedSize</name></member>
+      <member refid="dd/d91/a06563_1a30dfe069e33f92ae1f7394386c43fe1b" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_scene</name></member>
+      <member refid="dd/d91/a06563_1a296734acf22c51898d765524a282781b" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_signalFinished</name></member>
+      <member refid="dd/d91/a06563_1a760a01615043abe09f87ec247ac7149e" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_signalReady</name></member>
+      <member refid="dd/d91/a06563_1acb45fc2d1120c0a01f4529f3e663fe77" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_size</name></member>
+      <member refid="dd/d91/a06563_1af2c39d99b84bbb2ce8f5a341ffd620de" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_srgbObjects</name></member>
+      <member refid="dd/d91/a06563_1a3c64f2de5230564b686352601d83cde0" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_srgbPostEffects</name></member>
+      <member refid="dd/d91/a06563_1a37b24f5fd0163449058298e47a4a5046" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_ssaoConfig</name></member>
+      <member refid="dd/d91/a06563_1a267bdce619daf0c64dfbaf9dc31224db" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_stereo</name></member>
+      <member refid="dd/d91/a06563_1aaaba852872f215a8c93902383d149c66" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_toneMapping</name></member>
+      <member refid="dd/d91/a06563_1a1e4b9ab1a8fc7e4c47fce54fae4aa8a8" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_toneMappingName</name></member>
+      <member refid="dd/d91/a06563_1a72cc4f0c2f6682ffaca9a4aeef96678f" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_type</name></member>
+      <member refid="dd/d91/a06563_1a5a4e1517c306fc613d29160deb1325b2" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>m_velocity</name></member>
+      <member refid="dd/d91/a06563_1ad5d90281989a640985362038a4b8e0c6" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>OnInitialised</name></member>
+      <member refid="dd/d91/a06563_1a79561d010fd44cddb2b451f0cab5c3cd" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>OnInitialisedConnection</name></member>
+      <member refid="dd/d91/a06563_1ae81f85cc592b2a5d35b052b9fba5fabf" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>OnInitialisedFunc</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>OwnedBy</name></member>
+      <member refid="dd/d91/a06563_1ab3f3ae48e3fc9960023480ef9e4627f1" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>PostEffectArray</name></member>
+      <member refid="dd/d91/a06563_1aec3b1fcdcfb3d22b1d282c0bca6f5e04" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>render</name></member>
+      <member refid="dd/d91/a06563_1af4879b73a660276033a4143f6b8821c3" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>RenderTarget</name></member>
+      <member refid="dd/d91/a06563_1a7129ab5461dea44cf155bd658e51907d" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>resetSemaphore</name></member>
+      <member refid="dd/d91/a06563_1aed256633840e3e64e2c0b3d730542d44" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>setCamera</name></member>
+      <member refid="dd/d91/a06563_1a1fa36adf95fa42de53eecff36beafcae" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>setClustersConfig</name></member>
+      <member refid="dd/d91/a06563_1afede700388ab41681412dff6837615bc" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>setIntraOcularDistance</name></member>
+      <member refid="dd/d91/a06563_1a3527c280332f27435f6d9e42ca5f9f00" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>setJitter</name></member>
+      <member refid="dd/d91/a06563_1a15792edb56900e206863d98da753c013" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>setScene</name></member>
+      <member refid="dd/d91/a06563_1af986f843b9c0ed3506b6b8c04d5c3fe0" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>setSsaoConfig</name></member>
+      <member refid="dd/d91/a06563_1a20a08af33630dab11696d82302a33f50" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>setStereo</name></member>
+      <member refid="dd/d91/a06563_1a80a69fa1901bbfbe5b18fb3b0cec8230" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>setToneMappingType</name></member>
+      <member refid="dd/d91/a06563_1a55ccdb9e11ce04f84fc23474df1c2149" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>setViewportType</name></member>
+      <member refid="dd/d91/a06563_1aee7df955883cfb39ddb4f23f83d59d77" prot="private" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>sm_uiCount</name></member>
+      <member refid="dd/d91/a06563_1af85202ea98e748ca406ae3f764885f00" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>update</name></member>
+      <member refid="dd/d91/a06563_1a48c61844d46a46e548abcfd04b4d4a43" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>update</name></member>
+      <member refid="dd/d91/a06563_1a7e1f2a435bc006e42c9bd713f0df2e8f" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>upload</name></member>
+      <member refid="dd/d91/a06563_1af0636de0b1876240ebc8357c26245456" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget</scope><name>~RenderTarget</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

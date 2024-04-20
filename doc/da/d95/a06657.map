@@ -1,4 +1,20 @@
-<map id="castor3d::shader::MorphTargetsData" name="castor3d::shader::MorphTargetsData">
-<area shape="rect" id="node1" title=" " alt="" coords="5,79,239,104"/>
-<area shape="rect" id="node2" title=" " alt="" coords="53,5,191,31"/>
+<map id="castor3d::ShadowMapResult" name="castor3d::ShadowMapResult">
+<area shape="rect" id="Node000001" title=" " alt="" coords="34,611,222,636"/>
+<area shape="rect" id="Node000002" href="$d0/d22/a05963.html" title=" " alt="" coords="63,521,193,561"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="131,575,131,610,125,610,125,575"/>
+<area shape="rect" id="Node000003" href="$d8/d33/a05959.html" title=" " alt="" coords="31,344,185,369"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="113,383,120,458,128,521,123,522,115,459,107,384"/>
+<area shape="rect" id="Node000009" href="$d0/d22/a05963.html" title=" " alt="" coords="129,419,260,459"/>
+<area shape="poly" id="edge9_Node000009_Node000003" title=" " alt="" coords="132,377,176,417,172,421,129,380"/>
+<area shape="rect" id="Node000004" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="5,256,112,281"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="74,292,103,342,99,345,70,295"/>
+<area shape="rect" id="Node000005" href="$dc/d32/a06415.html" title=" " alt="" coords="137,256,295,281"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="192,292,124,346,121,342,189,288"/>
+<area shape="rect" id="Node000006" href="$d5/d4e/a06559.html" title=" " alt="" coords="133,168,299,193"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="219,207,219,255,213,255,213,207"/>
+<area shape="rect" id="Node000007" href="$d6/da8/a08227.html" title=" " alt="" coords="123,93,309,119"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="219,133,219,168,213,168,213,133"/>
+<area shape="rect" id="Node000008" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="125,5,307,31"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="219,45,219,93,213,93,213,45"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="177,472,143,523,138,520,172,469"/>
 </map>

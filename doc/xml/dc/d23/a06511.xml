@@ -1,0 +1,686 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d23/a06511" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::CpuUpdater</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <innerclass refid="d6/dbd/a06515" prot="public">castor3d::CpuUpdater::DirtyObjects</innerclass>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/d23/a06511_1a592ede13e82863fa505c30444e9f5044" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1ab11a7c1374f16f01b45b8b2593402b4e" kindref="member">RenderQueueArray</ref> *</type>
+        <definition>RenderQueueArray* castor3d::CpuUpdater::queues</definition>
+        <argsstring></argsstring>
+        <name>queues</name>
+        <qualifiedname>castor3d::CpuUpdater::queues</qualifiedname>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="896" column="19" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="896" bodyend="896"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1aac3cc2ae2eaeac12716308c01f7492bd" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> *</type>
+        <definition>Scene* castor3d::CpuUpdater::scene</definition>
+        <argsstring></argsstring>
+        <name>scene</name>
+        <qualifiedname>castor3d::CpuUpdater::scene</qualifiedname>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="897" column="8" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="897" bodyend="897"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1a3a3aec8ad906beb2a0af15cb3816a44e" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dc3/a06951" kindref="compound">Camera</ref> *</type>
+        <definition>Camera* castor3d::CpuUpdater::camera</definition>
+        <argsstring></argsstring>
+        <name>camera</name>
+        <qualifiedname>castor3d::CpuUpdater::camera</qualifiedname>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="898" column="9" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="898" bodyend="898"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1a0950cfe342a82e4682c98a288eec0c0e" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> const  *</type>
+        <definition>SceneNode const* castor3d::CpuUpdater::node</definition>
+        <argsstring></argsstring>
+        <name>node</name>
+        <qualifiedname>castor3d::CpuUpdater::node</qualifiedname>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="899" column="18" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="899" bodyend="899"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1a3b4ceb041ad9efb4377ca27dc3219bee" prot="public" static="no" mutable="no">
+        <type><ref refid="da/d3c/a06987" kindref="compound">Light</ref> *</type>
+        <definition>Light* castor3d::CpuUpdater::light</definition>
+        <argsstring></argsstring>
+        <name>light</name>
+        <qualifiedname>castor3d::CpuUpdater::light</qualifiedname>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="900" column="8" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="900" bodyend="900"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1a1bf2640950ab85767dd9f10746814bae" prot="public" static="no" mutable="no">
+        <type><ref refid="db/d5b/a06803" kindref="compound">Viewport</ref> *</type>
+        <definition>Viewport* castor3d::CpuUpdater::viewport</definition>
+        <argsstring></argsstring>
+        <name>viewport</name>
+        <qualifiedname>castor3d::CpuUpdater::viewport</qualifiedname>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="901" column="11" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="901" bodyend="901"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1af3ca6a606b58e557bb73be05f0df33e8" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::CpuUpdater::index</definition>
+        <argsstring></argsstring>
+        <name>index</name>
+        <qualifiedname>castor3d::CpuUpdater::index</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="902" column="10" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="902" bodyend="902"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1ae226f28360b34614794d218babdb4c9f" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::CpuUpdater::combineIndex</definition>
+        <argsstring></argsstring>
+        <name>combineIndex</name>
+        <qualifiedname>castor3d::CpuUpdater::combineIndex</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="903" column="10" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="903" bodyend="903"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1a6f8426cd53d97b8ef87f92fb42e7751e" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::CpuUpdater::debugIndex</definition>
+        <argsstring></argsstring>
+        <name>debugIndex</name>
+        <qualifiedname>castor3d::CpuUpdater::debugIndex</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="904" column="10" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="904" bodyend="904"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1a2fe3361c0d9ab316c808e49e64c16ea7" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::CpuUpdater::jitter</definition>
+        <argsstring></argsstring>
+        <name>jitter</name>
+        <qualifiedname>castor3d::CpuUpdater::jitter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="905" column="17" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="905" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1a4a6eed6cf5bd03abd606388db3cebe98" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::CpuUpdater::voxelConeTracing</definition>
+        <argsstring></argsstring>
+        <name>voxelConeTracing</name>
+        <qualifiedname>castor3d::CpuUpdater::voxelConeTracing</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="906" column="6" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="906" bodyend="906"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1a4575b647758d298ba3e5d94b989028c1" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::CpuUpdater::gridCenter</definition>
+        <argsstring></argsstring>
+        <name>gridCenter</name>
+        <qualifiedname>castor3d::CpuUpdater::gridCenter</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="907" column="17" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="907" bodyend="907"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1a6b047fa13737aa54a5b3b6431e87f566" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::CpuUpdater::cellSize</definition>
+        <argsstring></argsstring>
+        <name>cellSize</name>
+        <qualifiedname>castor3d::CpuUpdater::cellSize</qualifiedname>
+        <initializer>{ 0.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="908" column="7" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="908" bodyend="908"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1aac5bbfcbea3521e3f84f5160a7b8873a" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a9bbae2d5d564fa58ccbb16ec1d0ed7a1" kindref="member">castor::Milliseconds</ref></type>
+        <definition>castor::Milliseconds castor3d::CpuUpdater::tslf</definition>
+        <argsstring></argsstring>
+        <name>tslf</name>
+        <qualifiedname>castor3d::CpuUpdater::tslf</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="909" column="22" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="909" bodyend="909"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1af42038019014f3033cc9454e2cad4ea9" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a9bbae2d5d564fa58ccbb16ec1d0ed7a1" kindref="member">castor::Milliseconds</ref></type>
+        <definition>castor::Milliseconds castor3d::CpuUpdater::time</definition>
+        <argsstring></argsstring>
+        <name>time</name>
+        <qualifiedname>castor3d::CpuUpdater::time</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="910" column="22" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="910" bodyend="910"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1a96236f64c55661b2c219a68c9932679a" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a9bbae2d5d564fa58ccbb16ec1d0ed7a1" kindref="member">castor::Milliseconds</ref></type>
+        <definition>castor::Milliseconds castor3d::CpuUpdater::total</definition>
+        <argsstring></argsstring>
+        <name>total</name>
+        <qualifiedname>castor3d::CpuUpdater::total</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="911" column="22" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="911" bodyend="911"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1aed6093e34ee7a4387238b91a3df7488d" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d6/d64/a06499" kindref="compound">TechniqueQueues</ref> &gt;</type>
+        <definition>castor::Vector&lt; TechniqueQueues &gt; castor3d::CpuUpdater::techniquesQueues</definition>
+        <argsstring></argsstring>
+        <name>techniquesQueues</name>
+        <qualifiedname>castor3d::CpuUpdater::techniquesQueues</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="912" column="16" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="912" bodyend="912"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1a9eb37ec6815c746d7498e121d1bb7b34" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::CpuUpdater::bandRatio</definition>
+        <argsstring></argsstring>
+        <name>bandRatio</name>
+        <qualifiedname>castor3d::CpuUpdater::bandRatio</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="913" column="17" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="913" bodyend="913"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1abe5fde0f2f2fc661cc1fccf10da47c8d" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::CpuUpdater::bgMtxModl</definition>
+        <argsstring></argsstring>
+        <name>bgMtxModl</name>
+        <qualifiedname>castor3d::CpuUpdater::bgMtxModl</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="914" column="20" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="914" bodyend="914"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1a4bd1fb836be1d5736a90ed379433aa7a" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::CpuUpdater::bgMtxView</definition>
+        <argsstring></argsstring>
+        <name>bgMtxView</name>
+        <qualifiedname>castor3d::CpuUpdater::bgMtxView</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="915" column="20" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="915" bodyend="915"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1a49724de54cf1f9576ce16bbedc9db2a4" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::CpuUpdater::bgMtxProj</definition>
+        <argsstring></argsstring>
+        <name>bgMtxProj</name>
+        <qualifiedname>castor3d::CpuUpdater::bgMtxProj</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="916" column="20" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="916" bodyend="916"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1ab566d6520cc3382a538e2b8b17df6fd4" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::CpuUpdater::isSafeBanded</definition>
+        <argsstring></argsstring>
+        <name>isSafeBanded</name>
+        <qualifiedname>castor3d::CpuUpdater::isSafeBanded</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="917" column="6" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="917" bodyend="917"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1a92cc575caa1991471cf06b3a3068d4c4" prot="public" static="no" mutable="no">
+        <type>crg::ImageViewIdArray</type>
+        <definition>crg::ImageViewIdArray castor3d::CpuUpdater::targetImage</definition>
+        <argsstring></argsstring>
+        <name>targetImage</name>
+        <qualifiedname>castor3d::CpuUpdater::targetImage</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="918" column="23" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="918" bodyend="918"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d23/a06511_1a988565decd717de21a15819ec2ff7d83" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a93b53452a3c421817a14b649ccec1fb7" kindref="member">castor::Map</ref>&lt; <ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> const *, <ref refid="d6/dbd/a06515" kindref="compound">DirtyObjects</ref> &gt;</type>
+        <definition>castor::Map&lt; Scene const *, DirtyObjects &gt; castor3d::CpuUpdater::dirtyScenes</definition>
+        <argsstring></argsstring>
+        <name>dirtyScenes</name>
+        <qualifiedname>castor3d::CpuUpdater::dirtyScenes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="938" column="13" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="938" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d23/a06511_1a8538dcc5a5ddb9941468726ee106a909" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::CpuUpdater::CpuUpdater</definition>
+        <argsstring>()=default</argsstring>
+        <name>CpuUpdater</name>
+        <qualifiedname>castor3d::CpuUpdater::CpuUpdater</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="894" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="17">
+        <label>Animable</label>
+        <link refid="d2/d7a/a03115"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+        <childnode refid="19" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="30">
+        <label>castor::ChangeTrackedT&lt; float &gt;</label>
+        <link refid="d2/def/a08159"/>
+        <childnode refid="31" relation="template-instance">
+          <edgelabel>&lt; float &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; AnimableHandlerT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; Scene &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor::RangedValue&lt; uint32_t &gt;</label>
+        <link refid="d8/de9/a09211"/>
+        <childnode refid="28" relation="template-instance">
+          <edgelabel>&lt; uint32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::SignalT&lt; BackgroundChangedFunc &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; BackgroundChangedFunc &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor::SignalT&lt; OnCameraChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; OnCameraChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor::SignalT&lt; OnLightChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; OnLightChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor::SignalT&lt; OnSceneNodeReparentFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; OnSceneNodeReparentFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::SignalT&lt; OnSceneUpdateFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; OnSceneUpdateFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>T</label>
+      </node>
+      <node id="32">
+        <label>std::atomic&lt; GlobalIlluminationType &gt;</label>
+        <childnode refid="33" relation="template-instance">
+          <edgelabel>&lt; GlobalIlluminationType &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d2/d7a/a03115"/>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::Camera</label>
+        <link refid="d2/dc3/a06951"/>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+        <childnode refid="23" relation="usage">
+          <edgelabel>onGpuChanged</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::CpuUpdater</label>
+        <link refid="dc/d23/a06511"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>queues</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>scene</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>camera</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>node</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>light</edgelabel>
+        </childnode>
+        <childnode refid="34" relation="usage">
+          <edgelabel>viewport</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor3d::Light</label>
+        <link refid="da/d3c/a06987"/>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>onGPUChanged</edgelabel>
+        </childnode>
+        <childnode refid="26" relation="usage">
+          <edgelabel>m_shadows</edgelabel>
+        </childnode>
+        <childnode refid="32" relation="usage">
+          <edgelabel>m_currentGlobalIllumination</edgelabel>
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor3d::LpvConfig</label>
+        <link refid="dd/d51/a06023"/>
+        <childnode refid="30" relation="usage">
+          <edgelabel>indirectAttenuation</edgelabel>
+          <edgelabel>texelAreaModifier</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::MovableObject</label>
+        <link refid="da/d09/a07047"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_notifyIndex</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Scene</label>
+        <link refid="dc/dc2/a07135"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>onUpdate</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>onSetBackground</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>CameraRootNode</edgelabel>
+          <edgelabel>ObjectRootNode</edgelabel>
+          <edgelabel>RootNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::SceneNode</label>
+        <link refid="d4/dc4/a07255"/>
+        <childnode refid="17" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>onParentChanged</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor3d::ShadowConfig</label>
+        <link refid="d7/dba/a07283"/>
+        <childnode refid="27" relation="usage">
+          <edgelabel>pcfFilterSize</edgelabel>
+          <edgelabel>pcfSampleCount</edgelabel>
+        </childnode>
+        <childnode refid="29" relation="usage">
+          <edgelabel>lpvConfig</edgelabel>
+        </childnode>
+      </node>
+      <node id="34">
+        <label>castor3d::Viewport</label>
+        <link refid="db/d5b/a06803"/>
+      </node>
+      <node id="31">
+        <label>castor::ChangeTrackedT&lt; ValueT, ControlT &gt;</label>
+        <link refid="d2/def/a08159"/>
+      </node>
+      <node id="22">
+        <label>castor::ConnectionT&lt; MySignalT &gt;</label>
+        <link refid="d4/ddb/a08183"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="9">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="6">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="18">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="28">
+        <label>castor::RangedValue&lt; T &gt;</label>
+        <link refid="d8/de9/a09211"/>
+      </node>
+      <node id="10">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="33">
+        <label>std::atomic&lt; T &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/RenderModule.hpp" line="892" column="1" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="893" bodyend="939"/>
+    <listofallmembers>
+      <member refid="dc/d23/a06511_1a9eb37ec6815c746d7498e121d1bb7b34" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>bandRatio</name></member>
+      <member refid="dc/d23/a06511_1abe5fde0f2f2fc661cc1fccf10da47c8d" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>bgMtxModl</name></member>
+      <member refid="dc/d23/a06511_1a49724de54cf1f9576ce16bbedc9db2a4" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>bgMtxProj</name></member>
+      <member refid="dc/d23/a06511_1a4bd1fb836be1d5736a90ed379433aa7a" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>bgMtxView</name></member>
+      <member refid="dc/d23/a06511_1a3a3aec8ad906beb2a0af15cb3816a44e" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>camera</name></member>
+      <member refid="dc/d23/a06511_1a6b047fa13737aa54a5b3b6431e87f566" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>cellSize</name></member>
+      <member refid="dc/d23/a06511_1ae226f28360b34614794d218babdb4c9f" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>combineIndex</name></member>
+      <member refid="dc/d23/a06511_1a8538dcc5a5ddb9941468726ee106a909" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>CpuUpdater</name></member>
+      <member refid="dc/d23/a06511_1a6f8426cd53d97b8ef87f92fb42e7751e" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>debugIndex</name></member>
+      <member refid="dc/d23/a06511_1a988565decd717de21a15819ec2ff7d83" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>dirtyScenes</name></member>
+      <member refid="dc/d23/a06511_1a4575b647758d298ba3e5d94b989028c1" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>gridCenter</name></member>
+      <member refid="dc/d23/a06511_1af3ca6a606b58e557bb73be05f0df33e8" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>index</name></member>
+      <member refid="dc/d23/a06511_1ab566d6520cc3382a538e2b8b17df6fd4" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>isSafeBanded</name></member>
+      <member refid="dc/d23/a06511_1a2fe3361c0d9ab316c808e49e64c16ea7" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>jitter</name></member>
+      <member refid="dc/d23/a06511_1a3b4ceb041ad9efb4377ca27dc3219bee" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>light</name></member>
+      <member refid="dc/d23/a06511_1a0950cfe342a82e4682c98a288eec0c0e" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>node</name></member>
+      <member refid="dc/d23/a06511_1a592ede13e82863fa505c30444e9f5044" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>queues</name></member>
+      <member refid="dc/d23/a06511_1aac3cc2ae2eaeac12716308c01f7492bd" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>scene</name></member>
+      <member refid="dc/d23/a06511_1a92cc575caa1991471cf06b3a3068d4c4" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>targetImage</name></member>
+      <member refid="dc/d23/a06511_1aed6093e34ee7a4387238b91a3df7488d" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>techniquesQueues</name></member>
+      <member refid="dc/d23/a06511_1af42038019014f3033cc9454e2cad4ea9" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>time</name></member>
+      <member refid="dc/d23/a06511_1a96236f64c55661b2c219a68c9932679a" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>total</name></member>
+      <member refid="dc/d23/a06511_1aac5bbfcbea3521e3f84f5160a7b8873a" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>tslf</name></member>
+      <member refid="dc/d23/a06511_1a1bf2640950ab85767dd9f10746814bae" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>viewport</name></member>
+      <member refid="dc/d23/a06511_1a4a6eed6cf5bd03abd606388db3cebe98" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater</scope><name>voxelConeTracing</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

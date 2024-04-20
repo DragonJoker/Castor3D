@@ -1,0 +1,7 @@
+<map id="castor3d::AlphaTestComponent::Plugin::getComponentFlags" name="castor3d::AlphaTestComponent::Plugin::getComponentFlags">
+<area shape="rect" id="Node000001" title=" " alt="" coords="257,37,461,77"/>
+<area shape="rect" id="Node000002" href="$d7/de9/a04715.html#acf1d29f482c0d41d61dbcff5bec0340e" title="Removes from given component flags the ones that are useless given the provided filter." alt="" coords="5,5,209,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="244,45,209,41,210,36,244,40"/>
+<area shape="rect" id="Node000003" href="$d7/de9/a04715.html#ae79f731f904bfd6baa625ecd9c9de3ad" title=" " alt="" coords="5,69,209,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="244,75,210,79,209,74,244,69"/>
+</map>

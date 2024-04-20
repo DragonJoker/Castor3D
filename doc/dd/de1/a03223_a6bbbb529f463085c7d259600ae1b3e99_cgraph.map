@@ -1,0 +1,11 @@
+<map id="castor3d::BinaryParserBase::parse" name="castor3d::BinaryParserBase::parse">
+<area shape="rect" id="Node000001" title="From chunk reader function." alt="" coords="5,101,191,141"/>
+<area shape="rect" id="Node000002" href="$dd/de1/a03223.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4" title=" " alt="" coords="239,5,424,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="139,99,238,55,256,48,258,53,240,60,141,104"/>
+<area shape="rect" id="Node000003" href="$d5/d27/a03183.html#a08e242acd79584a8c061b89c14f68452" title="Retrieves the chunk data size." alt="" coords="254,69,409,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="191,106,240,99,241,104,192,111"/>
+<area shape="rect" id="Node000004" href="$d5/d27/a03183.html#a4b542ea9ab36cf0aaa73e9f1fed8967b" title="Retrieves the chunk type." alt="" coords="254,133,409,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="192,131,241,138,240,144,191,137"/>
+<area shape="rect" id="Node000005" href="$d5/d27/a03183.html#a7a755e5c70676c80e150d61574442c2c" title="Resets the chunk, to be able to reparse it." alt="" coords="254,197,409,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="141,139,240,183,258,190,256,195,238,188,139,144"/>
+</map>

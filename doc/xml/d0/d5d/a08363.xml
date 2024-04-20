@@ -1,0 +1,234 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d5d/a08363" kind="struct" language="C++" prot="public">
+    <compoundname>castor::PreprocessedFile::Action</compoundname>
+    <includes local="no">FileParser.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d5d/a08363_1ada1292771b61babcad221f548387e8e0" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref></type>
+        <definition>Path castor::PreprocessedFile::Action::file</definition>
+        <argsstring></argsstring>
+        <name>file</name>
+        <qualifiedname>castor::PreprocessedFile::Action::file</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParser.hpp" line="39" column="6" bodyfile="CastorUtils/FileParser/FileParser.hpp" bodystart="39" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d5d/a08363_1ace2c06352581999386bbd424910cc2ba" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t castor::PreprocessedFile::Action::line</definition>
+        <argsstring></argsstring>
+        <name>line</name>
+        <qualifiedname>castor::PreprocessedFile::Action::line</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParser.hpp" line="40" column="10" bodyfile="CastorUtils/FileParser/FileParser.hpp" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d5d/a08363_1aea96a354c24aeec5258a564832880c7f" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>String castor::PreprocessedFile::Action::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>castor::PreprocessedFile::Action::name</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParser.hpp" line="41" column="8" bodyfile="CastorUtils/FileParser/FileParser.hpp" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d5d/a08363_1a2eee32fb3380be2339d10c8d3533a07a" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::PreprocessedFile::Action::section</definition>
+        <argsstring></argsstring>
+        <name>section</name>
+        <qualifiedname>castor::PreprocessedFile::Action::section</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParser.hpp" line="42" column="10" bodyfile="CastorUtils/FileParser/FileParser.hpp" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d5d/a08363_1ac227f14b1f09d7e87c125f8cba0f033d" prot="public" static="no" mutable="no">
+        <type><ref refid="de/d5d/a08415" kindref="compound">ParserFunctionAndParams</ref></type>
+        <definition>ParserFunctionAndParams castor::PreprocessedFile::Action::function</definition>
+        <argsstring></argsstring>
+        <name>function</name>
+        <qualifiedname>castor::PreprocessedFile::Action::function</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParser.hpp" line="43" column="25" bodyfile="CastorUtils/FileParser/FileParser.hpp" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d5d/a08363_1ac97ae3f454125019ffc406e3c73f12f8" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>String castor::PreprocessedFile::Action::params</definition>
+        <argsstring></argsstring>
+        <name>params</name>
+        <qualifiedname>castor::PreprocessedFile::Action::params</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParser.hpp" line="44" column="8" bodyfile="CastorUtils/FileParser/FileParser.hpp" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d5d/a08363_1a59a7404a3d7f244781996f10f06bd4f3" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor::PreprocessedFile::Action::implicit</definition>
+        <argsstring></argsstring>
+        <name>implicit</name>
+        <qualifiedname>castor::PreprocessedFile::Action::implicit</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParser.hpp" line="45" column="6" bodyfile="CastorUtils/FileParser/FileParser.hpp" bodystart="45" bodyend="45"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d5d/a08363_1a2ff1704715b08c4ae19f50e0f9561428" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::PreprocessedFile::Action::Action</definition>
+        <argsstring>()=default</argsstring>
+        <name>Action</name>
+        <qualifiedname>castor::PreprocessedFile::Action::Action</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParser.hpp" line="20" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d5d/a08363_1aac5688548f875652f1aad7997563b11b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::PreprocessedFile::Action::Action</definition>
+        <argsstring>(Path file, uint64_t line, String name={}, uint32_t section={}, ParserFunctionAndParams function={}, String params={}, bool implicit={})</argsstring>
+        <name>Action</name>
+        <qualifiedname>castor::PreprocessedFile::Action::Action</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref></type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>uint64_t</type>
+          <declname>line</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+          <declname>name</declname>
+          <defval>{}</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>section</declname>
+          <defval>{}</defval>
+        </param>
+        <param>
+          <type><ref refid="de/d5d/a08415" kindref="compound">ParserFunctionAndParams</ref></type>
+          <declname>function</declname>
+          <defval>{}</defval>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+          <declname>params</declname>
+          <defval>{}</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>implicit</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParser.hpp" line="22" column="1" bodyfile="CastorUtils/FileParser/FileParser.hpp" bodystart="22" bodyend="37"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3">
+        <label>String</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::ParserFunctionAndParams</label>
+        <link refid="de/d5d/a08415"/>
+      </node>
+      <node id="2">
+        <label>castor::Path</label>
+        <link refid="d1/de1/a08011"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::PreprocessedFile::Action</label>
+        <link refid="d0/d5d/a08363"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>file</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>name</edgelabel>
+          <edgelabel>params</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>function</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/FileParser/FileParser.hpp" line="18" column="1" bodyfile="CastorUtils/FileParser/FileParser.hpp" bodystart="19" bodyend="46"/>
+    <listofallmembers>
+      <member refid="d0/d5d/a08363_1a2ff1704715b08c4ae19f50e0f9561428" prot="public" virt="non-virtual"><scope>castor::PreprocessedFile::Action</scope><name>Action</name></member>
+      <member refid="d0/d5d/a08363_1aac5688548f875652f1aad7997563b11b" prot="public" virt="non-virtual"><scope>castor::PreprocessedFile::Action</scope><name>Action</name></member>
+      <member refid="d0/d5d/a08363_1ada1292771b61babcad221f548387e8e0" prot="public" virt="non-virtual"><scope>castor::PreprocessedFile::Action</scope><name>file</name></member>
+      <member refid="d0/d5d/a08363_1ac227f14b1f09d7e87c125f8cba0f033d" prot="public" virt="non-virtual"><scope>castor::PreprocessedFile::Action</scope><name>function</name></member>
+      <member refid="d0/d5d/a08363_1a59a7404a3d7f244781996f10f06bd4f3" prot="public" virt="non-virtual"><scope>castor::PreprocessedFile::Action</scope><name>implicit</name></member>
+      <member refid="d0/d5d/a08363_1ace2c06352581999386bbd424910cc2ba" prot="public" virt="non-virtual"><scope>castor::PreprocessedFile::Action</scope><name>line</name></member>
+      <member refid="d0/d5d/a08363_1aea96a354c24aeec5258a564832880c7f" prot="public" virt="non-virtual"><scope>castor::PreprocessedFile::Action</scope><name>name</name></member>
+      <member refid="d0/d5d/a08363_1ac97ae3f454125019ffc406e3c73f12f8" prot="public" virt="non-virtual"><scope>castor::PreprocessedFile::Action</scope><name>params</name></member>
+      <member refid="d0/d5d/a08363_1a2eee32fb3380be2339d10c8d3533a07a" prot="public" virt="non-virtual"><scope>castor::PreprocessedFile::Action</scope><name>section</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

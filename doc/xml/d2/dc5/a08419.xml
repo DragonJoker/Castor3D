@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/dc5/a08419" kind="struct" language="C++" prot="public">
+    <compoundname>castor::AdditionalParsers</compoundname>
+    <includes local="no">FileParserModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/dc5/a08419_1ab797a35bef291b2f5804412d78288b55" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a7138ba41c2c2c4ced36cacefe5eb2c33" kindref="member">AttributeParsers</ref></type>
+        <definition>AttributeParsers castor::AdditionalParsers::parsers</definition>
+        <argsstring></argsstring>
+        <name>parsers</name>
+        <qualifiedname>castor::AdditionalParsers::parsers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserModule.hpp" line="404" column="18" bodyfile="CastorUtils/FileParser/FileParserModule.hpp" bodystart="404" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dc5/a08419_1a6ee571e186df51cc76b2fa605a449dbf" prot="public" static="no" mutable="no">
+        <type>StrUInt32Map</type>
+        <definition>StrUInt32Map castor::AdditionalParsers::sections</definition>
+        <argsstring></argsstring>
+        <name>sections</name>
+        <qualifiedname>castor::AdditionalParsers::sections</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserModule.hpp" line="405" column="14" bodyfile="CastorUtils/FileParser/FileParserModule.hpp" bodystart="405" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dc5/a08419_1a607c587d4974eddb06d1eeb60be78904" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a60b7ae265f5b3f1c88303e2abbbc80ed" kindref="member">UserContextCreator</ref></type>
+        <definition>UserContextCreator castor::AdditionalParsers::contextCreator</definition>
+        <argsstring></argsstring>
+        <name>contextCreator</name>
+        <qualifiedname>castor::AdditionalParsers::contextCreator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserModule.hpp" line="406" column="20" bodyfile="CastorUtils/FileParser/FileParserModule.hpp" bodystart="406" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/dc5/a08419_1ae89e7c1ae9608251d106a4c8cff3aecf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::AdditionalParsers::AdditionalParsers</definition>
+        <argsstring>(AttributeParsers pparsers={}, StrUInt32Map psections={}, UserContextCreator pcontextCreator={})</argsstring>
+        <name>AdditionalParsers</name>
+        <qualifiedname>castor::AdditionalParsers::AdditionalParsers</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7138ba41c2c2c4ced36cacefe5eb2c33" kindref="member">AttributeParsers</ref></type>
+          <declname>pparsers</declname>
+          <defval>{}</defval>
+        </param>
+        <param>
+          <type>StrUInt32Map</type>
+          <declname>psections</declname>
+          <defval>{}</defval>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a60b7ae265f5b3f1c88303e2abbbc80ed" kindref="member">UserContextCreator</ref></type>
+          <declname>pcontextCreator</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserModule.hpp" line="395" column="1" bodyfile="CastorUtils/FileParser/FileParserModule.hpp" bodystart="395" bodyend="402"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/FileParser/FileParserModule.hpp" line="393" column="1" bodyfile="CastorUtils/FileParser/FileParserModule.hpp" bodystart="394" bodyend="407"/>
+    <listofallmembers>
+      <member refid="d2/dc5/a08419_1ae89e7c1ae9608251d106a4c8cff3aecf" prot="public" virt="non-virtual"><scope>castor::AdditionalParsers</scope><name>AdditionalParsers</name></member>
+      <member refid="d2/dc5/a08419_1a607c587d4974eddb06d1eeb60be78904" prot="public" virt="non-virtual"><scope>castor::AdditionalParsers</scope><name>contextCreator</name></member>
+      <member refid="d2/dc5/a08419_1ab797a35bef291b2f5804412d78288b55" prot="public" virt="non-virtual"><scope>castor::AdditionalParsers</scope><name>parsers</name></member>
+      <member refid="d2/dc5/a08419_1a6ee571e186df51cc76b2fa605a449dbf" prot="public" virt="non-virtual"><scope>castor::AdditionalParsers</scope><name>sections</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/d68/a03811" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::EditCtrl::Caret</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/d68/a03811_1a20bece043cfe786dd420bc2e6d5529bf" prot="public" static="no" mutable="no">
+        <type>CaretIndices</type>
+        <definition>CaretIndices castor3d::EditCtrl::Caret::indices</definition>
+        <argsstring></argsstring>
+        <name>indices</name>
+        <qualifiedname>castor3d::EditCtrl::Caret::indices</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlEdit.hpp" line="339" column="14" bodyfile="Castor3D/Gui/Controls/CtrlEdit.hpp" bodystart="339" bodyend="339"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d68/a03811_1ac958ef65478b474427bfcf978eb99260" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::EditCtrl::Caret::visible</definition>
+        <argsstring></argsstring>
+        <name>visible</name>
+        <qualifiedname>castor3d::EditCtrl::Caret::visible</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlEdit.hpp" line="340" column="6" bodyfile="Castor3D/Gui/Controls/CtrlEdit.hpp" bodystart="340" bodyend="340"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d68/a03811_1a10a566d28cd57e6875674812ba1d97ed" prot="public" static="no" mutable="no">
+        <type>PanelOverlayRPtr</type>
+        <definition>PanelOverlayRPtr castor3d::EditCtrl::Caret::overlay</definition>
+        <argsstring></argsstring>
+        <name>overlay</name>
+        <qualifiedname>castor3d::EditCtrl::Caret::overlay</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlEdit.hpp" line="341" column="18" bodyfile="Castor3D/Gui/Controls/CtrlEdit.hpp" bodystart="341" bodyend="341"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::EditCtrl::Caret</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>indices</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::EditCtrl::CaretIndices</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>captionIt</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;::const_iterator</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Gui/Controls/CtrlEdit.hpp" line="337" column="1" bodyfile="Castor3D/Gui/Controls/CtrlEdit.hpp" bodystart="338" bodyend="342"/>
+    <listofallmembers>
+      <member refid="d7/d68/a03811_1a20bece043cfe786dd420bc2e6d5529bf" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl::Caret</scope><name>indices</name></member>
+      <member refid="d7/d68/a03811_1a10a566d28cd57e6875674812ba1d97ed" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl::Caret</scope><name>overlay</name></member>
+      <member refid="d7/d68/a03811_1ac958ef65478b474427bfcf978eb99260" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl::Caret</scope><name>visible</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

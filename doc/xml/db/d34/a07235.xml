@@ -1,0 +1,490 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d34/a07235" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ObjectCacheTraitsBaseT</compoundname>
+    <includes local="no">SceneModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ObjT</type>
+      </param>
+      <param>
+        <type>typename KeyT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="db/d34/a07235_1a853816b8c208782f4686019a3274ab81" prot="public" static="no">
+        <type>ObjT</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementT =  ObjT</definition>
+        <argsstring></argsstring>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneModule.hpp" line="462" column="1" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="462" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/d34/a07235_1a68bea8c17c8513e441397e0e64600385" prot="public" static="no">
+        <type>KeyT</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementKeyT =  KeyT</definition>
+        <argsstring></argsstring>
+        <name>ElementKeyT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementKeyT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneModule.hpp" line="463" column="1" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="463" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/d34/a07235_1ae33914ce83f1d09d30f5304ca6b05f93" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1ac623881246e92c1d187a3a44b3e011f6" kindref="member">castor::UniquePtr</ref>&lt; <ref refid="db/d34/a07235_1a853816b8c208782f4686019a3274ab81" kindref="member">ElementT</ref> &gt;</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementPtrT =  castor::UniquePtr&lt; ElementT &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementPtrT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneModule.hpp" line="464" column="1" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="464" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/d34/a07235_1a173bf17844e9b310f434d41f7ab2827f" prot="public" static="no">
+        <type><ref refid="db/d34/a07235_1a853816b8c208782f4686019a3274ab81" kindref="member">ElementT</ref> *</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementObsT =  ElementT *</definition>
+        <argsstring></argsstring>
+        <name>ElementObsT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementObsT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneModule.hpp" line="465" column="1" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="465" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/d34/a07235_1a2c1daf3ebf9bfa976d68127122980888" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a93b53452a3c421817a14b649ccec1fb7" kindref="member">castor::Map</ref>&lt; KeyT, <ref refid="db/d34/a07235_1ae33914ce83f1d09d30f5304ca6b05f93" kindref="member">ElementPtrT</ref> &gt;</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementContT =  castor::Map&lt; KeyT, ElementPtrT &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementContT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementContT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneModule.hpp" line="466" column="1" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="466" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/d34/a07235_1a4e7679d24f6b50b63b5b369bd0e6fa91" prot="public" static="no">
+        <type><ref refid="d8/d07/a03627" kindref="compound">ObjectCacheBaseT</ref>&lt; <ref refid="db/d34/a07235_1a853816b8c208782f4686019a3274ab81" kindref="member">ElementT</ref>, KeyT &gt;</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementCacheT =  ObjectCacheBaseT&lt; ElementT, KeyT &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementCacheT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementCacheT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneModule.hpp" line="467" column="1" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="467" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/d34/a07235_1a71b93a346ad12b5f2f2c44433edc5e6d" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void(<ref refid="db/d34/a07235_1a853816b8c208782f4686019a3274ab81" kindref="member">ElementT</ref> &amp;) &gt;</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementInitialiserT =  castor::Function&lt; void( ElementT &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementInitialiserT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementInitialiserT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneModule.hpp" line="469" column="1" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="469" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/d34/a07235_1aa4ea2ac1a60b9bbda7909ae30a34d6c1" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void(<ref refid="db/d34/a07235_1a853816b8c208782f4686019a3274ab81" kindref="member">ElementT</ref> &amp;) &gt;</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementCleanerT =  castor::Function&lt; void( ElementT &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementCleanerT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementCleanerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneModule.hpp" line="470" column="1" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="470" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/d34/a07235_1a27431676a5134688e2e534234baa5d70" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void(<ref refid="db/d34/a07235_1a4e7679d24f6b50b63b5b369bd0e6fa91" kindref="member">ElementCacheT</ref> const &amp;, <ref refid="db/d34/a07235_1a2c1daf3ebf9bfa976d68127122980888" kindref="member">ElementContT</ref> &amp;, <ref refid="db/d34/a07235_1ae33914ce83f1d09d30f5304ca6b05f93" kindref="member">ElementPtrT</ref>, SceneNodeRPtr, SceneNodeRPtr) &gt;</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementMergerT =  castor::Function&lt; void( ElementCacheT const &amp;
+			, ElementContT &amp;
+			, ElementPtrT
+			, SceneNodeRPtr
+			, SceneNodeRPtr ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementMergerT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementMergerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneModule.hpp" line="471" column="1" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="471" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/d34/a07235_1aada8dd0a5a91a15adca4ae78dc0c198a" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void(<ref refid="db/d34/a07235_1a853816b8c208782f4686019a3274ab81" kindref="member">ElementT</ref> &amp;, <ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> &amp;, SceneNodeRPtr, SceneNodeRPtr, SceneNodeRPtr) &gt;</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementAttacherT =  castor::Function&lt; void( ElementT &amp;
+			, SceneNode &amp;
+			, SceneNodeRPtr
+			, SceneNodeRPtr
+			, SceneNodeRPtr ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementAttacherT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementAttacherT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneModule.hpp" line="476" column="1" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="476" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/d34/a07235_1a055a14f2ab8b92c5cfb2847b0638f136" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void(<ref refid="db/d34/a07235_1a853816b8c208782f4686019a3274ab81" kindref="member">ElementT</ref> &amp;) &gt;</type>
+        <definition>using castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::ElementDetacherT =  castor::Function&lt; void( ElementT &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementDetacherT</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::ElementDetacherT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneModule.hpp" line="481" column="1" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="481" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="db/d34/a07235_1a992c8bd17baaf6b688bd8a44da415b6b" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParametersT</declname>
+            <defname>ParametersT</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/d34/a07235_1ae33914ce83f1d09d30f5304ca6b05f93" kindref="member">ElementPtrT</ref></type>
+        <definition>static ElementPtrT castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::makeElement</definition>
+        <argsstring>(ElementCacheT const &amp;cache, ElementKeyT const &amp;key, ParametersT &amp;&amp;... params)</argsstring>
+        <name>makeElement</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::makeElement</qualifiedname>
+        <param>
+          <type><ref refid="db/d34/a07235_1a4e7679d24f6b50b63b5b369bd0e6fa91" kindref="member">ElementCacheT</ref> const &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d34/a07235_1a68bea8c17c8513e441397e0e64600385" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d45/a05315" kindref="compound">ParametersT</ref> &amp;&amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneModule.hpp" line="484" column="20" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="484" bodyend="490"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d34/a07235_1ab115f8314b2327f98427cb17bc4fe2e1" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d34/a07235_1a173bf17844e9b310f434d41f7ab2827f" kindref="member">ElementObsT</ref></type>
+        <definition>static ElementObsT castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::makeElementObs</definition>
+        <argsstring>(ElementPtrT const &amp;element)</argsstring>
+        <name>makeElementObs</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::makeElementObs</qualifiedname>
+        <param>
+          <type><ref refid="db/d34/a07235_1ae33914ce83f1d09d30f5304ca6b05f93" kindref="member">ElementPtrT</ref> const &amp;</type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneModule.hpp" line="492" column="20" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="492" bodyend="495"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d34/a07235_1a6114edb550747bbaee064c1c408e7384" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::areElementsEqual</definition>
+        <argsstring>(ElementObsT const &amp;lhs, ElementObsT const &amp;rhs)</argsstring>
+        <name>areElementsEqual</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::areElementsEqual</qualifiedname>
+        <param>
+          <type><ref refid="db/d34/a07235_1a173bf17844e9b310f434d41f7ab2827f" kindref="member">ElementObsT</ref> const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d34/a07235_1a173bf17844e9b310f434d41f7ab2827f" kindref="member">ElementObsT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneModule.hpp" line="497" column="13" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="497" bodyend="501"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d34/a07235_1a37c54dd5a82abdae8e3d96d44503d8a8" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::areElementsEqual</definition>
+        <argsstring>(ElementObsT const &amp;lhs, ElementPtrT const &amp;rhs)</argsstring>
+        <name>areElementsEqual</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::areElementsEqual</qualifiedname>
+        <param>
+          <type><ref refid="db/d34/a07235_1a173bf17844e9b310f434d41f7ab2827f" kindref="member">ElementObsT</ref> const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d34/a07235_1ae33914ce83f1d09d30f5304ca6b05f93" kindref="member">ElementPtrT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneModule.hpp" line="503" column="13" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="503" bodyend="507"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d34/a07235_1a4506c3bbd01ecf0498506f27f45d527e" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::areElementsEqual</definition>
+        <argsstring>(ElementPtrT const &amp;lhs, ElementObsT const &amp;rhs)</argsstring>
+        <name>areElementsEqual</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::areElementsEqual</qualifiedname>
+        <param>
+          <type><ref refid="db/d34/a07235_1ae33914ce83f1d09d30f5304ca6b05f93" kindref="member">ElementPtrT</ref> const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d34/a07235_1a173bf17844e9b310f434d41f7ab2827f" kindref="member">ElementObsT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneModule.hpp" line="509" column="13" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="509" bodyend="513"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d34/a07235_1afa4d106be42e8df00be2e3f37193f4e5" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::areElementsEqual</definition>
+        <argsstring>(ElementPtrT const &amp;lhs, ElementPtrT const &amp;rhs)</argsstring>
+        <name>areElementsEqual</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::areElementsEqual</qualifiedname>
+        <param>
+          <type><ref refid="db/d34/a07235_1ae33914ce83f1d09d30f5304ca6b05f93" kindref="member">ElementPtrT</ref> const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d34/a07235_1ae33914ce83f1d09d30f5304ca6b05f93" kindref="member">ElementPtrT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneModule.hpp" line="515" column="13" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="515" bodyend="519"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d34/a07235_1a0b36f2c9feead299e37021981646577c" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;::isElementObsNull</definition>
+        <argsstring>(ElementObsT const &amp;element)</argsstring>
+        <name>isElementObsNull</name>
+        <qualifiedname>castor3d::ObjectCacheTraitsBaseT::isElementObsNull</qualifiedname>
+        <param>
+          <type><ref refid="db/d34/a07235_1a173bf17844e9b310f434d41f7ab2827f" kindref="member">ElementObsT</ref> const &amp;</type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneModule.hpp" line="521" column="13" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="521" bodyend="524"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Structure d&apos;aide à la création d&apos;un <ref refid="df/d42/a03623" kindref="compound">castor3d::ObjectCacheTraitsT</ref>. <simplesect kind="remark"><para>Prédéfinit: <itemizedlist>
+<listitem>
+<para>ElementT: Le type de ressource. </para>
+</listitem>
+<listitem>
+<para>ElementPtrT: Le type de pointeur sur une ressource. </para>
+</listitem>
+<listitem>
+<para>ElementObjT: Le type d&apos;observateur sur une ressource. </para>
+</listitem>
+<listitem>
+<para>ElementContT: Le type de conteneur de ressources. </para>
+</listitem>
+<listitem>
+<para>ElementCacheT: Le type de base de cache de ressources. </para>
+</listitem>
+<listitem>
+<para>ElementInitialiserT: Le prototype de la fonction pour initialiser une ressource. </para>
+</listitem>
+<listitem>
+<para>ElementCleanerT: Le prototype de la fonction pour nettoyer une ressource. </para>
+</listitem>
+<listitem>
+<para>ElementMergerT: Le prototype de la fonction pour fusionner un élément d&apos;un cache dans un autre cache. </para>
+</listitem>
+<listitem>
+<para>ElementAttacherT: Le prototype de la fonction pour attacher un élément d&apos;un cache à un scene node. </para>
+</listitem>
+<listitem>
+<para>ElementDetacherT: Le prototype de la fonction pour détacher un élément d&apos;un cache d&apos;un scene node. </para>
+</listitem>
+<listitem>
+<para>static ElementPtrT makeElement( ElementKeyT const &amp;, ParametersT &amp;&amp; ... ): La fonction de création d&apos;un élément. </para>
+</listitem>
+</itemizedlist>
+Il ne reste donc ainsi qu&apos;à définir: <itemizedlist>
+<listitem>
+<para>Name: Le nom du type d&apos;élément. </para>
+</listitem>
+</itemizedlist>
+</para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ObjectCacheTraitsBaseT&lt; BillboardList, castor::String &gt;</label>
+        <link refid="db/d34/a07235"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; BillboardList, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::ObjectCacheTraitsBaseT&lt; Camera, castor::String &gt;</label>
+        <link refid="db/d34/a07235"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Camera, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::ObjectCacheTraitsBaseT&lt; Geometry, castor::String &gt;</label>
+        <link refid="db/d34/a07235"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Geometry, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::ObjectCacheTraitsBaseT&lt; Light, castor::String &gt;</label>
+        <link refid="db/d34/a07235"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Light, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::ObjectCacheTraitsBaseT&lt; ParticleSystem, castor::String &gt;</label>
+        <link refid="db/d34/a07235"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ParticleSystem, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::ObjectCacheTraitsBaseT&lt; SceneNode, castor::String &gt;</label>
+        <link refid="db/d34/a07235"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SceneNode, castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ObjectCacheTraitsBaseT&lt; ObjT, KeyT &gt;</label>
+        <link refid="db/d34/a07235"/>
+      </node>
+      <node id="3">
+        <label>castor3d::ObjectCacheTraitsT&lt; BillboardList, castor::String &gt;</label>
+        <link refid="d3/da3/a07239"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::ObjectCacheTraitsT&lt; Camera, castor::String &gt;</label>
+        <link refid="dc/d10/a07243"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::ObjectCacheTraitsT&lt; Geometry, castor::String &gt;</label>
+        <link refid="d8/d2e/a07247"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::ObjectCacheTraitsT&lt; Light, castor::String &gt;</label>
+        <link refid="d6/dbd/a07015"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::ObjectCacheTraitsT&lt; ParticleSystem, castor::String &gt;</label>
+        <link refid="d4/d5e/a07103"/>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::ObjectCacheTraitsT&lt; SceneNode, castor::String &gt;</label>
+        <link refid="d0/daa/a07251"/>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="Castor3D/Scene/SceneModule.hpp" line="460" column="1" bodyfile="Castor3D/Scene/SceneModule.hpp" bodystart="461" bodyend="525"/>
+    <listofallmembers>
+      <member refid="db/d34/a07235_1a6114edb550747bbaee064c1c408e7384" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>areElementsEqual</name></member>
+      <member refid="db/d34/a07235_1a37c54dd5a82abdae8e3d96d44503d8a8" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>areElementsEqual</name></member>
+      <member refid="db/d34/a07235_1a4506c3bbd01ecf0498506f27f45d527e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>areElementsEqual</name></member>
+      <member refid="db/d34/a07235_1afa4d106be42e8df00be2e3f37193f4e5" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>areElementsEqual</name></member>
+      <member refid="db/d34/a07235_1aada8dd0a5a91a15adca4ae78dc0c198a" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementAttacherT</name></member>
+      <member refid="db/d34/a07235_1a4e7679d24f6b50b63b5b369bd0e6fa91" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementCacheT</name></member>
+      <member refid="db/d34/a07235_1aa4ea2ac1a60b9bbda7909ae30a34d6c1" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementCleanerT</name></member>
+      <member refid="db/d34/a07235_1a2c1daf3ebf9bfa976d68127122980888" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementContT</name></member>
+      <member refid="db/d34/a07235_1a055a14f2ab8b92c5cfb2847b0638f136" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementDetacherT</name></member>
+      <member refid="db/d34/a07235_1a71b93a346ad12b5f2f2c44433edc5e6d" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementInitialiserT</name></member>
+      <member refid="db/d34/a07235_1a68bea8c17c8513e441397e0e64600385" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementKeyT</name></member>
+      <member refid="db/d34/a07235_1a27431676a5134688e2e534234baa5d70" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementMergerT</name></member>
+      <member refid="db/d34/a07235_1a173bf17844e9b310f434d41f7ab2827f" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementObsT</name></member>
+      <member refid="db/d34/a07235_1ae33914ce83f1d09d30f5304ca6b05f93" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementPtrT</name></member>
+      <member refid="db/d34/a07235_1a853816b8c208782f4686019a3274ab81" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>ElementT</name></member>
+      <member refid="db/d34/a07235_1a0b36f2c9feead299e37021981646577c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>isElementObsNull</name></member>
+      <member refid="db/d34/a07235_1a992c8bd17baaf6b688bd8a44da415b6b" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>makeElement</name></member>
+      <member refid="db/d34/a07235_1ab115f8314b2327f98427cb17bc4fe2e1" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheTraitsBaseT</scope><name>makeElementObs</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

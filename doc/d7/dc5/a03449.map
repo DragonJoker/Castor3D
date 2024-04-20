@@ -1,7 +1,7 @@
-<map id="castor3d::AttenuationComponent" name="castor3d::AttenuationComponent">
-<area shape="rect" id="node1" title=" " alt="" coords="21,347,233,372"/>
-<area shape="rect" id="node2" href="$d1/deb/a03418.html" title=" " alt="" coords="10,257,243,297"/>
-<area shape="rect" id="node3" href="$d2/d95/a04030.html" title=" " alt="" coords="5,80,181,105"/>
-<area shape="rect" id="node5" href="$d1/deb/a03418.html" title="Pass component holding base pass data." alt="" coords="115,155,349,195"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,5,181,31"/>
+<map id="castor3d::GpuBufferOffsetT&lt; DataT &gt;" name="castor3d::GpuBufferOffsetT&lt; DataT &gt;">
+<area shape="rect" id="Node000001" title="An offset and range of a GpuBuffer." alt="" coords="94,93,265,133"/>
+<area shape="rect" id="Node000002" href="$dc/d5c/a03483.html" title=" " alt="" coords="5,5,172,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,39,163,91,159,95,108,42"/>
+<area shape="rect" id="Node000003" href="$db/db8/a03471.html" title="A memory range, in bytes." alt="" coords="197,5,343,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="251,42,200,95,196,91,247,39"/>
 </map>

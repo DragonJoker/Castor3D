@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/dd1/a09223" kind="struct" language="C++" prot="public">
+    <compoundname>castor::SpeedTraitsT</compoundname>
+    <includes local="no">Speed.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ValueT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d1/dd1/a09223_1a9946d5534b5f04288354a04868a7e6fa" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ValueT</type>
+        <definition>static ValueT castor::SpeedTraitsT&lt; ValueT &gt;::convert</definition>
+        <argsstring>(double d)</argsstring>
+        <name>convert</name>
+        <qualifiedname>castor::SpeedTraitsT::convert</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>d</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="15" column="15" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="15" bodyend="18"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Les traits pour une vitesse. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/Speed.hpp" line="13" column="1" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="14" bodyend="19"/>
+    <listofallmembers>
+      <member refid="d1/dd1/a09223_1a9946d5534b5f04288354a04868a7e6fa" prot="public" virt="non-virtual"><scope>castor::SpeedTraitsT</scope><name>convert</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

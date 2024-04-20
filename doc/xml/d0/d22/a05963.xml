@@ -1,0 +1,641 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d22/a05963" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::GBufferT</compoundname>
+    <basecompoundref refid="d8/d33/a05959" prot="private" virt="non-virtual">castor3d::GBufferBase</basecompoundref>
+    <includes local="no">GBuffer.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename TextureEnumT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d0/d22/a05963_1ac434ba32755901d63f09f94e664901df" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::GBufferT&lt; TextureEnumT &gt;::operator[]</definition>
+        <argsstring>(TextureEnumT texture) const noexcept</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor3d::GBufferT::operator[]</qualifiedname>
+        <param>
+          <type>TextureEnumT</type>
+          <declname>texture</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Accesseurs. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GBuffer.hpp" line="342" column="16" bodyfile="Castor3D/Render/GBuffer.hpp" bodystart="342" bodyend="345"/>
+        <references refid="d0/d22/a05963_1aa428fdaab826631c58704a8621113548" compoundref="de/def/a01016" startline="385">castor3d::GBufferT&lt; TextureEnumT &gt;::m_result</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d22/a05963_1abfd121ee454a83d537ec36c8988b6a74" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::GBufferT&lt; TextureEnumT &gt;::cbegin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>cbegin</name>
+        <qualifiedname>castor3d::GBufferT::cbegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GBuffer.hpp" line="347" column="6" bodyfile="Castor3D/Render/GBuffer.hpp" bodystart="347" bodyend="350"/>
+        <references refid="d0/d22/a05963_1aa428fdaab826631c58704a8621113548" compoundref="de/def/a01016" startline="385">castor3d::GBufferT&lt; TextureEnumT &gt;::m_result</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d22/a05963_1a2fd7a7a9c4e200d4107582bd610526bf" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::GBufferT&lt; TextureEnumT &gt;::cend</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>cend</name>
+        <qualifiedname>castor3d::GBufferT::cend</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GBuffer.hpp" line="352" column="6" bodyfile="Castor3D/Render/GBuffer.hpp" bodystart="352" bodyend="355"/>
+        <references refid="d0/d22/a05963_1aa428fdaab826631c58704a8621113548" compoundref="de/def/a01016" startline="385">castor3d::GBufferT&lt; TextureEnumT &gt;::m_result</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d22/a05963_1a76ab93fa783e158cbd87969362aaf014" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::GBufferT&lt; TextureEnumT &gt;::begin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::GBufferT::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GBuffer.hpp" line="357" column="6" bodyfile="Castor3D/Render/GBuffer.hpp" bodystart="357" bodyend="360"/>
+        <references refid="d0/d22/a05963_1aa428fdaab826631c58704a8621113548" compoundref="de/def/a01016" startline="385">castor3d::GBufferT&lt; TextureEnumT &gt;::m_result</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d22/a05963_1a98c25599ea005c88bf160caeb560590e" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::GBufferT&lt; TextureEnumT &gt;::end</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::GBufferT::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GBuffer.hpp" line="362" column="6" bodyfile="Castor3D/Render/GBuffer.hpp" bodystart="362" bodyend="365"/>
+        <references refid="d0/d22/a05963_1aa428fdaab826631c58704a8621113548" compoundref="de/def/a01016" startline="385">castor3d::GBufferT&lt; TextureEnumT &gt;::m_result</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d22/a05963_1a97b372e1c56f60a5750c4d86ee3a48e9" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::GBufferT&lt; TextureEnumT &gt;::begin</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::GBufferT::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GBuffer.hpp" line="367" column="6" bodyfile="Castor3D/Render/GBuffer.hpp" bodystart="367" bodyend="370"/>
+        <references refid="d0/d22/a05963_1aa428fdaab826631c58704a8621113548" compoundref="de/def/a01016" startline="385">castor3d::GBufferT&lt; TextureEnumT &gt;::m_result</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d22/a05963_1a8a8b5cd4d8f264dc1765fe67be726552" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::GBufferT&lt; TextureEnumT &gt;::end</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::GBufferT::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GBuffer.hpp" line="372" column="6" bodyfile="Castor3D/Render/GBuffer.hpp" bodystart="372" bodyend="375"/>
+        <references refid="d0/d22/a05963_1aa428fdaab826631c58704a8621113548" compoundref="de/def/a01016" startline="385">castor3d::GBufferT&lt; TextureEnumT &gt;::m_result</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d22/a05963_1a4dbad74f793174a41d2fdbf012e3a0d2" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::GBufferT&lt; TextureEnumT &gt;::size</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>size</name>
+        <qualifiedname>castor3d::GBufferT::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GBuffer.hpp" line="377" column="6" bodyfile="Castor3D/Render/GBuffer.hpp" bodystart="377" bodyend="380"/>
+        <references refid="d0/d22/a05963_1aa428fdaab826631c58704a8621113548" compoundref="de/def/a01016" startline="385">castor3d::GBufferT&lt; TextureEnumT &gt;::m_result</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d0/d22/a05963_1a85d98036f6e7d2020583590ed62009bd" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; TextureUPtr &gt;</type>
+        <definition>castor::Vector&lt; TextureUPtr &gt; castor3d::GBufferT&lt; TextureEnumT &gt;::m_owned</definition>
+        <argsstring></argsstring>
+        <name>m_owned</name>
+        <qualifiedname>castor3d::GBufferT::m_owned</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GBuffer.hpp" line="384" column="16" bodyfile="Castor3D/Render/GBuffer.hpp" bodystart="384" bodyend="-1"/>
+        <referencedby refid="d0/d22/a05963_1a0309aa085d6e4ad81c24f2c3edc948ae" compoundref="de/def/a01016" startline="326" endline="332">castor3d::GBufferT&lt; TextureEnumT &gt;::create</referencedby>
+        <referencedby refid="d0/d22/a05963_1a65abf0cecbe8b0cf7ad8ce2aff436a7b" compoundref="de/def/a01016" startline="318" endline="324">castor3d::GBufferT&lt; TextureEnumT &gt;::~GBufferT</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d22/a05963_1aa428fdaab826631c58704a8621113548" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const * &gt;</type>
+        <definition>castor::Vector&lt; Texture const * &gt; castor3d::GBufferT&lt; TextureEnumT &gt;::m_result</definition>
+        <argsstring></argsstring>
+        <name>m_result</name>
+        <qualifiedname>castor3d::GBufferT::m_result</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GBuffer.hpp" line="385" column="16" bodyfile="Castor3D/Render/GBuffer.hpp" bodystart="385" bodyend="-1"/>
+        <referencedby refid="d0/d22/a05963_1a76ab93fa783e158cbd87969362aaf014" compoundref="de/def/a01016" startline="357" endline="360">castor3d::GBufferT&lt; TextureEnumT &gt;::begin</referencedby>
+        <referencedby refid="d0/d22/a05963_1a97b372e1c56f60a5750c4d86ee3a48e9" compoundref="de/def/a01016" startline="367" endline="370">castor3d::GBufferT&lt; TextureEnumT &gt;::begin</referencedby>
+        <referencedby refid="d0/d22/a05963_1abfd121ee454a83d537ec36c8988b6a74" compoundref="de/def/a01016" startline="347" endline="350">castor3d::GBufferT&lt; TextureEnumT &gt;::cbegin</referencedby>
+        <referencedby refid="d0/d22/a05963_1a2fd7a7a9c4e200d4107582bd610526bf" compoundref="de/def/a01016" startline="352" endline="355">castor3d::GBufferT&lt; TextureEnumT &gt;::cend</referencedby>
+        <referencedby refid="d0/d22/a05963_1a98c25599ea005c88bf160caeb560590e" compoundref="de/def/a01016" startline="362" endline="365">castor3d::GBufferT&lt; TextureEnumT &gt;::end</referencedby>
+        <referencedby refid="d0/d22/a05963_1a8a8b5cd4d8f264dc1765fe67be726552" compoundref="de/def/a01016" startline="372" endline="375">castor3d::GBufferT&lt; TextureEnumT &gt;::end</referencedby>
+        <referencedby refid="d0/d22/a05963_1ac434ba32755901d63f09f94e664901df" compoundref="de/def/a01016" startline="342" endline="345">castor3d::GBufferT&lt; TextureEnumT &gt;::operator[]</referencedby>
+        <referencedby refid="d0/d22/a05963_1a4dbad74f793174a41d2fdbf012e3a0d2" compoundref="de/def/a01016" startline="377" endline="380">castor3d::GBufferT&lt; TextureEnumT &gt;::size</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d22/a05963_1a67a677fc6cbdb36e74fa6b74a65c5015" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GBufferT&lt; TextureEnumT &gt;::GBufferT</definition>
+        <argsstring>(GBufferT const &amp;rhs)=delete</argsstring>
+        <name>GBufferT</name>
+        <qualifiedname>castor3d::GBufferT::GBufferT</qualifiedname>
+        <param>
+          <type><ref refid="d0/d22/a05963" kindref="compound">GBufferT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GBuffer.hpp" line="201" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d22/a05963_1aa803d666fd91abf546fa7bb32507b038" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d0/d22/a05963" kindref="compound">GBufferT</ref> &amp;</type>
+        <definition>GBufferT &amp; castor3d::GBufferT&lt; TextureEnumT &gt;::operator=</definition>
+        <argsstring>(GBufferT const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::GBufferT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d0/d22/a05963" kindref="compound">GBufferT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GBuffer.hpp" line="202" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d22/a05963_1a24ab1f217e50f8de9ef5fea0d48785c3" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GBufferT&lt; TextureEnumT &gt;::GBufferT</definition>
+        <argsstring>(GBufferT &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>GBufferT</name>
+        <qualifiedname>castor3d::GBufferT::GBufferT</qualifiedname>
+        <param>
+          <type><ref refid="d0/d22/a05963" kindref="compound">GBufferT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GBuffer.hpp" line="203" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d22/a05963_1aad8744d0eae473ca52441c6c8e66cd89" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d0/d22/a05963" kindref="compound">GBufferT</ref> &amp;</type>
+        <definition>GBufferT &amp; castor3d::GBufferT&lt; TextureEnumT &gt;::operator=</definition>
+        <argsstring>(GBufferT &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::GBufferT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d0/d22/a05963" kindref="compound">GBufferT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GBuffer.hpp" line="204" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d22/a05963_1a5e071c7723d6b58c0a4c24ed4e9bfe09" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GBufferT&lt; TextureEnumT &gt;::GBufferT</definition>
+        <argsstring>(crg::ResourcesCache &amp;resources, RenderDevice const &amp;device, castor::String name, castor::Array&lt; Texture const *, size_t(TextureEnumT::eCount) &gt; const &amp;inputs, VkImageCreateFlags createFlags, castor::Size const &amp;size, uint32_t layerCount=1u, VkSampleCountFlagBits sampleCount=VK_SAMPLE_COUNT_1_BIT)</argsstring>
+        <name>GBufferT</name>
+        <qualifiedname>castor3d::GBufferT::GBufferT</qualifiedname>
+        <param>
+          <type>crg::ResourcesCache &amp;</type>
+          <declname>resources</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; <ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const *, size_t(TextureEnumT::eCount) &gt; const &amp;</type>
+          <declname>inputs</declname>
+        </param>
+        <param>
+          <type>VkImageCreateFlags</type>
+          <declname>createFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">castor::Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>layerCount</declname>
+          <defval>1u</defval>
+        </param>
+        <param>
+          <type>VkSampleCountFlagBits</type>
+          <declname>sampleCount</declname>
+          <defval>VK_SAMPLE_COUNT_1_BIT</defval>
+        </param>
+        <briefdescription>
+<para>Initialise les données liées au g-buffer 2D ou 2D-Array. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">resources</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le gestionnaire de ressources du graphe. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le device GPU. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">inputs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les images déjà existantes. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">createFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les flags de création pour les images restant à créer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les dimensions du g-buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">layerCount</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre de layers du g-buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sampleCount</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre de samples des images. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GBuffer.hpp" line="245" column="1" bodyfile="Castor3D/Render/GBuffer.hpp" bodystart="245" bodyend="263"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d22/a05963_1ad3fed57d2e9159966bf67250c6af1724" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GBufferT&lt; TextureEnumT &gt;::GBufferT</definition>
+        <argsstring>(crg::ResourcesCache &amp;resources, RenderDevice const &amp;device, castor::String name, castor::Array&lt; Texture const *, size_t(TextureEnumT::eCount) &gt; const &amp;inputs, VkImageCreateFlags createFlags, VkExtent3D const &amp;size, VkSampleCountFlagBits sampleCount=VK_SAMPLE_COUNT_1_BIT)</argsstring>
+        <name>GBufferT</name>
+        <qualifiedname>castor3d::GBufferT::GBufferT</qualifiedname>
+        <param>
+          <type>crg::ResourcesCache &amp;</type>
+          <declname>resources</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; <ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const *, size_t(TextureEnumT::eCount) &gt; const &amp;</type>
+          <declname>inputs</declname>
+        </param>
+        <param>
+          <type>VkImageCreateFlags</type>
+          <declname>createFlags</declname>
+        </param>
+        <param>
+          <type>VkExtent3D const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>VkSampleCountFlagBits</type>
+          <declname>sampleCount</declname>
+          <defval>VK_SAMPLE_COUNT_1_BIT</defval>
+        </param>
+        <briefdescription>
+<para>Initialise les données liées au g-buffer 3D. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">resources</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le gestionnaire de ressources du graphe. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le device GPU. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">inputs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les images déjà existantes. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">createFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les flags de création pour les images restant à créer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les dimensions du g-buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sampleCount</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre de samples des images. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GBuffer.hpp" line="300" column="1" bodyfile="Castor3D/Render/GBuffer.hpp" bodystart="300" bodyend="316"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d22/a05963_1a65abf0cecbe8b0cf7ad8ce2aff436a7b" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GBufferT&lt; TextureEnumT &gt;::~GBufferT</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~GBufferT</name>
+        <qualifiedname>castor3d::GBufferT::~GBufferT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GBuffer.hpp" line="318" column="1" bodyfile="Castor3D/Render/GBuffer.hpp" bodystart="318" bodyend="324"/>
+        <references refid="d0/d22/a05963_1a85d98036f6e7d2020583590ed62009bd" compoundref="de/def/a01016" startline="384">castor3d::GBufferT&lt; TextureEnumT &gt;::m_owned</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d22/a05963_1a0309aa085d6e4ad81c24f2c3edc948ae" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::GBufferT&lt; TextureEnumT &gt;::create</definition>
+        <argsstring>() const</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::GBufferT::create</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GBuffer.hpp" line="326" column="6" bodyfile="Castor3D/Render/GBuffer.hpp" bodystart="326" bodyend="332"/>
+        <references refid="d0/d22/a05963_1a85d98036f6e7d2020583590ed62009bd" compoundref="de/def/a01016" startline="384">castor3d::GBufferT&lt; TextureEnumT &gt;::m_owned</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>castor3d::GBufferT&lt; LpvTexture &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; LpvTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::GBufferT&lt; PpTexture &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; PpTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::GBufferT&lt; SmTexture &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SmTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::GBufferT&lt; WbTexture &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; WbTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d8/d33/a05959"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::LightVolumePassResult</label>
+        <link refid="dc/d72/a06019"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::PrepassResult</label>
+        <link refid="de/da2/a06375"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::ShadowMapResult</label>
+        <link refid="d1/d15/a06659"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::TransparentPassResult</label>
+        <link refid="df/de9/a06791"/>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="6">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d8/d33/a05959"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RenderDevice</label>
+        <link refid="dc/d32/a06415"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d5/d4e/a06559"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="7">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/GBuffer.hpp" line="197" column="1" bodyfile="Castor3D/Render/GBuffer.hpp" bodystart="199" bodyend="386"/>
+    <listofallmembers>
+      <member refid="d0/d22/a05963_1a76ab93fa783e158cbd87969362aaf014" prot="public" virt="non-virtual"><scope>castor3d::GBufferT</scope><name>begin</name></member>
+      <member refid="d0/d22/a05963_1a97b372e1c56f60a5750c4d86ee3a48e9" prot="public" virt="non-virtual"><scope>castor3d::GBufferT</scope><name>begin</name></member>
+      <member refid="d0/d22/a05963_1abfd121ee454a83d537ec36c8988b6a74" prot="public" virt="non-virtual"><scope>castor3d::GBufferT</scope><name>cbegin</name></member>
+      <member refid="d0/d22/a05963_1a2fd7a7a9c4e200d4107582bd610526bf" prot="public" virt="non-virtual"><scope>castor3d::GBufferT</scope><name>cend</name></member>
+      <member refid="d0/d22/a05963_1a0309aa085d6e4ad81c24f2c3edc948ae" prot="public" virt="non-virtual"><scope>castor3d::GBufferT</scope><name>create</name></member>
+      <member refid="d0/d22/a05963_1a98c25599ea005c88bf160caeb560590e" prot="public" virt="non-virtual"><scope>castor3d::GBufferT</scope><name>end</name></member>
+      <member refid="d0/d22/a05963_1a8a8b5cd4d8f264dc1765fe67be726552" prot="public" virt="non-virtual"><scope>castor3d::GBufferT</scope><name>end</name></member>
+      <member refid="d0/d22/a05963_1a67a677fc6cbdb36e74fa6b74a65c5015" prot="public" virt="non-virtual"><scope>castor3d::GBufferT</scope><name>GBufferT</name></member>
+      <member refid="d0/d22/a05963_1a24ab1f217e50f8de9ef5fea0d48785c3" prot="public" virt="non-virtual"><scope>castor3d::GBufferT</scope><name>GBufferT</name></member>
+      <member refid="d0/d22/a05963_1a5e071c7723d6b58c0a4c24ed4e9bfe09" prot="public" virt="non-virtual"><scope>castor3d::GBufferT</scope><name>GBufferT</name></member>
+      <member refid="d0/d22/a05963_1ad3fed57d2e9159966bf67250c6af1724" prot="public" virt="non-virtual"><scope>castor3d::GBufferT</scope><name>GBufferT</name></member>
+      <member refid="d0/d22/a05963_1a85d98036f6e7d2020583590ed62009bd" prot="protected" virt="non-virtual"><scope>castor3d::GBufferT</scope><name>m_owned</name></member>
+      <member refid="d0/d22/a05963_1aa428fdaab826631c58704a8621113548" prot="protected" virt="non-virtual"><scope>castor3d::GBufferT</scope><name>m_result</name></member>
+      <member refid="d0/d22/a05963_1aa803d666fd91abf546fa7bb32507b038" prot="public" virt="non-virtual"><scope>castor3d::GBufferT</scope><name>operator=</name></member>
+      <member refid="d0/d22/a05963_1aad8744d0eae473ca52441c6c8e66cd89" prot="public" virt="non-virtual"><scope>castor3d::GBufferT</scope><name>operator=</name></member>
+      <member refid="d0/d22/a05963_1ac434ba32755901d63f09f94e664901df" prot="public" virt="non-virtual"><scope>castor3d::GBufferT</scope><name>operator[]</name></member>
+      <member refid="d0/d22/a05963_1a4dbad74f793174a41d2fdbf012e3a0d2" prot="public" virt="non-virtual"><scope>castor3d::GBufferT</scope><name>size</name></member>
+      <member refid="d0/d22/a05963_1a65abf0cecbe8b0cf7ad8ce2aff436a7b" prot="public" virt="non-virtual"><scope>castor3d::GBufferT</scope><name>~GBufferT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

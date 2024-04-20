@@ -1,5 +1,7 @@
-<map id="castor3d::ToneMappingPlugin" name="castor3d::ToneMappingPlugin">
-<area shape="rect" id="node1" title=" " alt="" coords="5,152,199,177"/>
-<area shape="rect" id="node2" href="$d5/d8e/a04874.html" title=" " alt="" coords="44,79,160,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="9,5,195,31"/>
+<map id="castor3d::PassFactoryEntry" name="castor3d::PassFactoryEntry">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,211,191,236"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="35,108,161,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,162,101,210,95,210,95,162"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="35,5,161,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="101,59,101,108,95,108,95,59"/>
 </map>

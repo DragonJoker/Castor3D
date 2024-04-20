@@ -1,0 +1,738 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/ddf/a07743" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::CameraUbo</compoundname>
+    <includes local="no">CameraUbo.hpp</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d1/ddf/a07743_1a1a25cb1c4bb257d5cb5c9013bfaeb5e5" prot="public" static="no">
+        <type><ref refid="df/dc2/a07879" kindref="compound">CameraUboConfiguration</ref></type>
+        <definition>using castor3d::CameraUbo::Configuration =  CameraUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <qualifiedname>castor3d::CameraUbo::Configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="144" column="1" bodyfile="Castor3D/Shader/Ubos/CameraUbo.hpp" bodystart="144" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/ddf/a07743_1ae33ecd3677806bb02c9f86670fd2eaf1" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::CameraUbo::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::CameraUbo::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="304" column="21" bodyfile="Castor3D/Shader/Ubos/CameraUbo.hpp" bodystart="304" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/ddf/a07743_1a1e4319e0c75e6191c9e8579d29832995" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d63/a03459" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d1/ddf/a07743_1a1a25cb1c4bb257d5cb5c9013bfaeb5e5" kindref="member">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::CameraUbo::m_ubo</definition>
+        <argsstring></argsstring>
+        <name>m_ubo</name>
+        <qualifiedname>castor3d::CameraUbo::m_ubo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="305" column="22" bodyfile="Castor3D/Shader/Ubos/CameraUbo.hpp" bodystart="305" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/ddf/a07743_1a5a9bbf3da471046beb4bfc0d32711c92" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::CameraUbo::CameraUbo</definition>
+        <argsstring>(CameraUbo const &amp;rhs)=delete</argsstring>
+        <name>CameraUbo</name>
+        <qualifiedname>castor3d::CameraUbo::CameraUbo</qualifiedname>
+        <param>
+          <type><ref refid="d1/ddf/a07743" kindref="compound">CameraUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="145" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/ddf/a07743_1a8bf683395d047bf1ec7f4834a4bae642" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/ddf/a07743" kindref="compound">CameraUbo</ref> &amp;</type>
+        <definition>C3D_API CameraUbo &amp; castor3d::CameraUbo::operator=</definition>
+        <argsstring>(CameraUbo const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::CameraUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d1/ddf/a07743" kindref="compound">CameraUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="146" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/ddf/a07743_1aab83e2cc8472ae071feb0568cefccea6" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::CameraUbo::CameraUbo</definition>
+        <argsstring>(CameraUbo &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>CameraUbo</name>
+        <qualifiedname>castor3d::CameraUbo::CameraUbo</qualifiedname>
+        <param>
+          <type><ref refid="d1/ddf/a07743" kindref="compound">CameraUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="147" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/ddf/a07743_1a3b7c6725e14c4bf7587a27f3d4b8e440" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/ddf/a07743" kindref="compound">CameraUbo</ref> &amp;</type>
+        <definition>C3D_API CameraUbo &amp; castor3d::CameraUbo::operator=</definition>
+        <argsstring>(CameraUbo &amp;&amp;rhs) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::CameraUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d1/ddf/a07743" kindref="compound">CameraUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="148" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/ddf/a07743_1aafbb8487758f4f9d2d5d5b33d39a6df9" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::CameraUbo::CameraUbo</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>CameraUbo</name>
+        <qualifiedname>castor3d::CameraUbo::CameraUbo</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="149" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/ddf/a07743_1af2ddeb8f00aa498720c408e608d18c10" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::CameraUbo::~CameraUbo</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~CameraUbo</name>
+        <qualifiedname>castor3d::CameraUbo::~CameraUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="150" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/ddf/a07743_1af42521835956210668f21241ceeee898" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/ddf/a07743_1a1a25cb1c4bb257d5cb5c9013bfaeb5e5" kindref="member">Configuration</ref> &amp;</type>
+        <definition>C3D_API Configuration &amp; castor3d::CameraUbo::cpuUpdate</definition>
+        <argsstring>(castor::Size const &amp;size, Camera const &amp;camera, castor::Matrix4x4f const &amp;view, castor::Matrix4x4f const &amp;projection, uint32_t debugIndex, castor::Point2f const &amp;jitter=castor::Point2f{})</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::CameraUbo::cpuUpdate</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">castor::Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dc3/a06951" kindref="compound">Camera</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>projection</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>debugIndex</declname>
+        </param>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>jitter</declname>
+          <defval>castor::Point2f{}</defval>
+        </param>
+        <briefdescription>
+<para>Met à jour l&apos;UBO avec les valeurs données. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les dimensions du rendu. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La caméra contenant les données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">view</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La nouvelle matrice de vue. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">projection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La nouvelle matrice de projection. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugIndex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;indice des données de debug actuellement sélectionnées. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">jitter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de jittering. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="169" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/ddf/a07743_1acef670b48757815dd7da78137e285f3e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/ddf/a07743_1a1a25cb1c4bb257d5cb5c9013bfaeb5e5" kindref="member">Configuration</ref> &amp;</type>
+        <definition>C3D_API Configuration &amp; castor3d::CameraUbo::cpuUpdate</definition>
+        <argsstring>(Camera const &amp;camera, castor::Matrix4x4f const &amp;view, castor::Matrix4x4f const &amp;projection, uint32_t debugIndex, bool safeBanded, castor::Point2f const &amp;jitter=castor::Point2f{})</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::CameraUbo::cpuUpdate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dc3/a06951" kindref="compound">Camera</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>projection</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>debugIndex</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>safeBanded</declname>
+        </param>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>jitter</declname>
+          <defval>castor::Point2f{}</defval>
+        </param>
+        <briefdescription>
+<para>Met à jour l&apos;UBO avec les valeurs données. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La caméra contenant les données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">view</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La nouvelle matrice de vue. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">projection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La nouvelle matrice de projection. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugIndex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;indice des données de debug actuellement sélectionnées. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">safeBanded</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> pour utiliser la taille avec les safebands. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">jitter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de jittering. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="193" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/ddf/a07743_1af764dbc8551965ad43d30293e3bf9bb7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/ddf/a07743_1a1a25cb1c4bb257d5cb5c9013bfaeb5e5" kindref="member">Configuration</ref> &amp;</type>
+        <definition>C3D_API Configuration &amp; castor3d::CameraUbo::cpuUpdate</definition>
+        <argsstring>(Camera const &amp;camera, uint32_t debugIndex, bool safeBanded, castor::Point2f const &amp;jitter=castor::Point2f{})</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::CameraUbo::cpuUpdate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dc3/a06951" kindref="compound">Camera</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>debugIndex</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>safeBanded</declname>
+        </param>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>jitter</declname>
+          <defval>castor::Point2f{}</defval>
+        </param>
+        <briefdescription>
+<para>Met à jour l&apos;UBO avec les valeurs données. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La caméra contenant les données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugIndex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;indice des données de debug actuellement sélectionnées. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">safeBanded</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> pour utiliser la taille et la matrice de projection avec les safebands. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">jitter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de jittering. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="213" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/ddf/a07743_1af9ff9fcc44429360926f4c8841fd383c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/ddf/a07743_1a1a25cb1c4bb257d5cb5c9013bfaeb5e5" kindref="member">Configuration</ref> &amp;</type>
+        <definition>C3D_API Configuration &amp; castor3d::CameraUbo::cpuUpdate</definition>
+        <argsstring>(castor::Size const &amp;size, Camera const &amp;camera, uint32_t debugIndex, bool safeBanded, castor::Point2f const &amp;jitter=castor::Point2f{})</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::CameraUbo::cpuUpdate</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">castor::Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dc3/a06951" kindref="compound">Camera</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>debugIndex</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>safeBanded</declname>
+        </param>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>jitter</declname>
+          <defval>castor::Point2f{}</defval>
+        </param>
+        <briefdescription>
+<para>Met à jour l&apos;UBO avec les valeurs données. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les dimensions du rendu. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La caméra contenant les données. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugIndex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;indice des données de debug actuellement sélectionnées. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">safeBanded</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> pour utiliser la matrice de projection avec les safebands. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">jitter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de jittering. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="233" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/ddf/a07743_1a4359ad81501bd1b3b84ac4ff92b0ac68" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/ddf/a07743_1a1a25cb1c4bb257d5cb5c9013bfaeb5e5" kindref="member">Configuration</ref> &amp;</type>
+        <definition>C3D_API Configuration &amp; castor3d::CameraUbo::cpuUpdate</definition>
+        <argsstring>(castor::Size const &amp;size, castor::Matrix4x4f const &amp;view, castor::Matrix4x4f const &amp;projection, uint32_t debugIndex, Frustum const &amp;frustum, castor::Point2f const &amp;jitter=castor::Point2f{})</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::CameraUbo::cpuUpdate</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">castor::Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>projection</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>debugIndex</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d5d/a05955" kindref="compound">Frustum</ref> const &amp;</type>
+          <declname>frustum</declname>
+        </param>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>jitter</declname>
+          <defval>castor::Point2f{}</defval>
+        </param>
+        <briefdescription>
+<para>Met à jour l&apos;UBO avec les valeurs données. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les dimensions du rendu. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">view</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La nouvelle matrice de vue. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">projection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La nouvelle matrice de projection. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugIndex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;indice des données de debug actuellement sélectionnées. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">frustum</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le frustum depuis lequel les plans sont copiés. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">jitter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de jittering. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="256" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/ddf/a07743_1ab67df3c1ba47854cd9919f19955a74d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/ddf/a07743_1a1a25cb1c4bb257d5cb5c9013bfaeb5e5" kindref="member">Configuration</ref> &amp;</type>
+        <definition>C3D_API Configuration &amp; castor3d::CameraUbo::cpuUpdate</definition>
+        <argsstring>(castor::Size const &amp;size, castor::Matrix4x4f const &amp;projection, uint32_t debugIndex)</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::CameraUbo::cpuUpdate</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">castor::Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>projection</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>debugIndex</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour l&apos;UBO avec les valeurs données. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>La matrice de vue ne sera pas mise à jour. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les dimensions du rendu. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">projection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La nouvelle matrice de projection. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugIndex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;indice des données de debug actuellement sélectionnées. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="276" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/ddf/a07743_1abb12820b94f44699ea4dc7eea1c7e8b3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::CameraUbo::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t binding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::CameraUbo::createPassBinding</qualifiedname>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="280" column="6" bodyfile="Castor3D/Shader/Ubos/CameraUbo.hpp" bodystart="280" bodyend="284"/>
+        <references refid="d4/d63/a03459_1a926b4f99af45e4423f45a276b7d72505" compoundref="dd/d52/a00221" startline="86" endline="94">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createPassBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/ddf/a07743_1a7deb1f3b5177a66f76fe0e9fbecae3f2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::CameraUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <qualifiedname>castor3d::CameraUbo::createSizedBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="286" column="6" bodyfile="Castor3D/Shader/Ubos/CameraUbo.hpp" bodystart="286" bodyend="290"/>
+        <references refid="d4/d63/a03459_1a2c6ad146d4910651544564c25ca7dccd" compoundref="dd/d52/a00221" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/ddf/a07743_1a3c070be8082ddfd5829e8216fb6eaddb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>ashes::WriteDescriptorSet castor3d::CameraUbo::getDescriptorWrite</definition>
+        <argsstring>(uint32_t dstBinding, uint32_t dstArrayElement=0u) const</argsstring>
+        <name>getDescriptorWrite</name>
+        <qualifiedname>castor3d::CameraUbo::getDescriptorWrite</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="292" column="27" bodyfile="Castor3D/Shader/Ubos/CameraUbo.hpp" bodystart="292" bodyend="296"/>
+        <references refid="d4/d63/a03459_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="dd/d52/a00221" startline="107" endline="120">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/ddf/a07743_1a5baa642cea8bcde6ce9e533930798efe" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d63/a03459" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d1/ddf/a07743_1a1a25cb1c4bb257d5cb5c9013bfaeb5e5" kindref="member">Configuration</ref> &gt; const &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const  &amp; castor3d::CameraUbo::getUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getUbo</name>
+        <qualifiedname>castor3d::CameraUbo::getUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="298" column="29" bodyfile="Castor3D/Shader/Ubos/CameraUbo.hpp" bodystart="298" bodyend="301"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/Ubos/CameraUbo.hpp" line="141" column="1" bodyfile="Castor3D/Shader/Ubos/CameraUbo.hpp" bodystart="142" bodyend="306"/>
+    <listofallmembers>
+      <member refid="d1/ddf/a07743_1a5a9bbf3da471046beb4bfc0d32711c92" prot="public" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>CameraUbo</name></member>
+      <member refid="d1/ddf/a07743_1aab83e2cc8472ae071feb0568cefccea6" prot="public" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>CameraUbo</name></member>
+      <member refid="d1/ddf/a07743_1aafbb8487758f4f9d2d5d5b33d39a6df9" prot="public" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>CameraUbo</name></member>
+      <member refid="d1/ddf/a07743_1a1a25cb1c4bb257d5cb5c9013bfaeb5e5" prot="public" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>Configuration</name></member>
+      <member refid="d1/ddf/a07743_1af42521835956210668f21241ceeee898" prot="public" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>cpuUpdate</name></member>
+      <member refid="d1/ddf/a07743_1acef670b48757815dd7da78137e285f3e" prot="public" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>cpuUpdate</name></member>
+      <member refid="d1/ddf/a07743_1af764dbc8551965ad43d30293e3bf9bb7" prot="public" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>cpuUpdate</name></member>
+      <member refid="d1/ddf/a07743_1af9ff9fcc44429360926f4c8841fd383c" prot="public" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>cpuUpdate</name></member>
+      <member refid="d1/ddf/a07743_1a4359ad81501bd1b3b84ac4ff92b0ac68" prot="public" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>cpuUpdate</name></member>
+      <member refid="d1/ddf/a07743_1ab67df3c1ba47854cd9919f19955a74d7" prot="public" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>cpuUpdate</name></member>
+      <member refid="d1/ddf/a07743_1abb12820b94f44699ea4dc7eea1c7e8b3" prot="public" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>createPassBinding</name></member>
+      <member refid="d1/ddf/a07743_1a7deb1f3b5177a66f76fe0e9fbecae3f2" prot="public" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>createSizedBinding</name></member>
+      <member refid="d1/ddf/a07743_1a3c070be8082ddfd5829e8216fb6eaddb" prot="public" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>getDescriptorWrite</name></member>
+      <member refid="d1/ddf/a07743_1a5baa642cea8bcde6ce9e533930798efe" prot="public" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>getUbo</name></member>
+      <member refid="d1/ddf/a07743_1ae33ecd3677806bb02c9f86670fd2eaf1" prot="private" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>m_device</name></member>
+      <member refid="d1/ddf/a07743_1a1e4319e0c75e6191c9e8579d29832995" prot="private" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>m_ubo</name></member>
+      <member refid="d1/ddf/a07743_1a8bf683395d047bf1ec7f4834a4bae642" prot="public" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>operator=</name></member>
+      <member refid="d1/ddf/a07743_1a3b7c6725e14c4bf7587a27f3d4b8e440" prot="public" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>operator=</name></member>
+      <member refid="d1/ddf/a07743_1af2ddeb8f00aa498720c408e608d18c10" prot="public" virt="non-virtual"><scope>castor3d::CameraUbo</scope><name>~CameraUbo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

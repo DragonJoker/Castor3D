@@ -1,18 +1,18 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_fcb43395d330995dd2aec2f440085857" kind="dir">
-    <compoundname>Render/Transform</compoundname>
-    <innerfile refid="d5/df4/a01322">MeshletBoundsTransformingPass.hpp</innerfile>
-    <innerfile refid="dd/d5d/a01325">MeshletBoundsTransformPass.hpp</innerfile>
-    <innerfile refid="dc/dd9/a01328">TransformModule.hpp</innerfile>
-    <innerfile refid="dc/d8e/a01331">TransformPipeline.hpp</innerfile>
-    <innerfile refid="d4/dd1/a01334">VertexTransforming.hpp</innerfile>
-    <innerfile refid="db/dec/a01337">VertexTransformingPass.hpp</innerfile>
-    <innerfile refid="d7/d51/a01340">VertexTransformPass.hpp</innerfile>
+    <compoundname>Castor3D/Render/Transform</compoundname>
+    <innerfile refid="dd/d5d/a01325">MeshletBoundsTransformingPass.hpp</innerfile>
+    <innerfile refid="dc/dd9/a01328">MeshletBoundsTransformPass.hpp</innerfile>
+    <innerfile refid="dc/d8e/a01331">TransformModule.hpp</innerfile>
+    <innerfile refid="d4/dd1/a01334">TransformPipeline.hpp</innerfile>
+    <innerfile refid="db/dec/a01337">VertexTransforming.hpp</innerfile>
+    <innerfile refid="d7/d51/a01340">VertexTransformingPass.hpp</innerfile>
+    <innerfile refid="d3/da4/a01343">VertexTransformPass.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Transform/"/>
+    <location file="Castor3D/Render/Transform/"/>
   </compounddef>
 </doxygen>

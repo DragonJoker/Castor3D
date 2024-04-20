@@ -1,0 +1,800 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d1f/a05947" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::EnvironmentMap</compoundname>
+    <basecompoundref refid="d6/da8/a08227" prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">EnvironmentMap.hpp</includes>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d1/d1f/a05947_1ac580072430c2edcb4f3742630c2af093" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>VkExtent3D const &amp;</type>
+        <definition>VkExtent3D const  &amp; castor3d::EnvironmentMap::getSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getSize</name>
+        <qualifiedname>castor3d::EnvironmentMap::getSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Accesseurs. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="139" column="19" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="139" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d1f/a05947_1aff60daa779c4a65d3d46337ba1df44a1" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> &amp;</type>
+        <definition>Scene &amp; castor3d::EnvironmentMap::getScene</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getScene</name>
+        <qualifiedname>castor3d::EnvironmentMap::getScene</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="144" column="8" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="144" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d1f/a05947_1a7b753ab1b613e473ee22a8294567f352" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::EnvironmentMap::getColourId</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getColourId</name>
+        <qualifiedname>castor3d::EnvironmentMap::getColourId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="149" column="16" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="149" bodyend="152"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d1f/a05947_1aa0552db765e2f6705db4d631f3598024" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>VkImageView</type>
+        <definition>VkImageView castor3d::EnvironmentMap::getColourView</definition>
+        <argsstring>(uint32_t index) const noexcept</argsstring>
+        <name>getColourView</name>
+        <qualifiedname>castor3d::EnvironmentMap::getColourView</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="154" column="13" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="154" bodyend="157"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d1f/a05947_1a0d1831229f12c4957b709d1c4c1ab86b" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>crg::ImageViewId</type>
+        <definition>crg::ImageViewId castor3d::EnvironmentMap::getColourViewId</definition>
+        <argsstring>(uint32_t index, CubeMapFace face) const noexcept</argsstring>
+        <name>getColourViewId</name>
+        <qualifiedname>castor3d::EnvironmentMap::getColourViewId</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="159" column="18" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="159" bodyend="163"/>
+        <references refid="d1/d95/a06703_1a5e7bec43e8734a924c29f5d3e07327b7" compoundref="d8/d7a/a01292" startline="195" endline="195">castor3d::Texture::subViewsId</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d1f/a05947_1a3879480218c6ee6b02eaa1a8dfb74d33" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>crg::ImageViewId</type>
+        <definition>crg::ImageViewId castor3d::EnvironmentMap::getDepthViewId</definition>
+        <argsstring>(uint32_t index, CubeMapFace face) const noexcept</argsstring>
+        <name>getDepthViewId</name>
+        <qualifiedname>castor3d::EnvironmentMap::getDepthViewId</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="165" column="18" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="165" bodyend="169"/>
+        <references refid="d1/d95/a06703_1a5e7bec43e8734a924c29f5d3e07327b7" compoundref="d8/d7a/a01292" startline="195" endline="195">castor3d::Texture::subViewsId</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d1f/a05947_1a4e3bc5cd3d1797d6d3e52723d4b32607" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>crg::ImageViewId</type>
+        <definition>crg::ImageViewId castor3d::EnvironmentMap::getTmpImage</definition>
+        <argsstring>(uint32_t index, CubeMapFace face) const noexcept</argsstring>
+        <name>getTmpImage</name>
+        <qualifiedname>castor3d::EnvironmentMap::getTmpImage</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="171" column="18" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="171" bodyend="175"/>
+        <references refid="d1/d95/a06703_1a5e7bec43e8734a924c29f5d3e07327b7" compoundref="d8/d7a/a01292" startline="195" endline="195">castor3d::Texture::subViewsId</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d1/d1f/a05947_1a5c321c7c18b259a98870063ba20820cd" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; EnvironmentMapPassUPtr, size_t(<ref refid="d9/dba/a02278_1a13e6b0c4ce255c1deb4c525562111e5bae558bb69fadec037d9eae46601a4df8e" kindref="member">CubeMapFace::eCount</ref>) &gt;</type>
+        <definition>using castor3d::EnvironmentMap::EnvironmentMapPasses =  castor::Array&lt; EnvironmentMapPassUPtr, size_t( CubeMapFace::eCount ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>EnvironmentMapPasses</name>
+        <qualifiedname>castor3d::EnvironmentMap::EnvironmentMapPasses</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="32" column="1" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/d1f/a05947_1ab72a61038881e10c6a26ab9164698523" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::EnvironmentMap::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::EnvironmentMap::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="182" column="21" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="182" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a05947_1a9824e0d369585ed1bb8b2319014460cd" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> &amp;</type>
+        <definition>Scene&amp; castor3d::EnvironmentMap::m_scene</definition>
+        <argsstring></argsstring>
+        <name>m_scene</name>
+        <qualifiedname>castor3d::EnvironmentMap::m_scene</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="183" column="8" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="183" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a05947_1a0343c3ec3288476548ddb1090070af9e" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::EnvironmentMap::m_environmentMap</definition>
+        <argsstring></argsstring>
+        <name>m_environmentMap</name>
+        <qualifiedname>castor3d::EnvironmentMap::m_environmentMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="184" column="9" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="184" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a05947_1ada27d328696a7a5d740e093243ccbc49" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::EnvironmentMap::m_depthBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_depthBuffer</name>
+        <qualifiedname>castor3d::EnvironmentMap::m_depthBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="185" column="9" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="185" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a05947_1ab50763c72460a0a7af5946ad0bba0705" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::EnvironmentMap::m_tmpImage</definition>
+        <argsstring></argsstring>
+        <name>m_tmpImage</name>
+        <qualifiedname>castor3d::EnvironmentMap::m_tmpImage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="186" column="9" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="186" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a05947_1a9609d46ddbb0ed570e7cb1975857c8b6" prot="private" static="no" mutable="no">
+        <type>VkExtent3D</type>
+        <definition>VkExtent3D castor3d::EnvironmentMap::m_extent</definition>
+        <argsstring></argsstring>
+        <name>m_extent</name>
+        <qualifiedname>castor3d::EnvironmentMap::m_extent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="187" column="12" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="187" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a05947_1abdcafd26e3ed24284da4244e1f647bda" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ae55d0b1917b046899c7780d186c58c37" kindref="member">castor::Set</ref>&lt; <ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> * &gt;</type>
+        <definition>castor::Set&lt; SceneNode * &gt; castor3d::EnvironmentMap::m_reflectionNodes</definition>
+        <argsstring></argsstring>
+        <name>m_reflectionNodes</name>
+        <qualifiedname>castor3d::EnvironmentMap::m_reflectionNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="188" column="13" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="188" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a05947_1a74a40054889ef0e9d606f861c4494b88" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ae55d0b1917b046899c7780d186c58c37" kindref="member">castor::Set</ref>&lt; <ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> * &gt;</type>
+        <definition>castor::Set&lt; SceneNode * &gt; castor3d::EnvironmentMap::m_savedReflectionNodes</definition>
+        <argsstring></argsstring>
+        <name>m_savedReflectionNodes</name>
+        <qualifiedname>castor3d::EnvironmentMap::m_savedReflectionNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="189" column="13" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="189" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a05947_1a5aa21fbab28171fb650658df6a39b3f5" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a93b53452a3c421817a14b649ccec1fb7" kindref="member">castor::Map</ref>&lt; <ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> const *, uint32_t &gt;</type>
+        <definition>castor::Map&lt; SceneNode const *, uint32_t &gt; castor3d::EnvironmentMap::m_sortedNodes</definition>
+        <argsstring></argsstring>
+        <name>m_sortedNodes</name>
+        <qualifiedname>castor3d::EnvironmentMap::m_sortedNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="190" column="13" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="190" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a05947_1aba31a0cf1fc6e3b6312b38c4e2c14e24" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d1/d1f/a05947_1a5c321c7c18b259a98870063ba20820cd" kindref="member">EnvironmentMapPasses</ref> &gt;</type>
+        <definition>castor::Vector&lt; EnvironmentMapPasses &gt; castor3d::EnvironmentMap::m_passes</definition>
+        <argsstring></argsstring>
+        <name>m_passes</name>
+        <qualifiedname>castor3d::EnvironmentMap::m_passes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="191" column="16" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="191" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a05947_1ad681435fb865cbc0f2f53d695b582dd5" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::EnvironmentMap::m_first</definition>
+        <argsstring></argsstring>
+        <name>m_first</name>
+        <qualifiedname>castor3d::EnvironmentMap::m_first</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="192" column="6" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="192" bodyend="192"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a05947_1a2967ff07f264c4669da8be6220ea188f" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::EnvironmentMap::m_render</definition>
+        <argsstring></argsstring>
+        <name>m_render</name>
+        <qualifiedname>castor3d::EnvironmentMap::m_render</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="193" column="10" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="193" bodyend="193"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a05947_1a137d3daa8bf8161293a105124cbe4472" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::EnvironmentMap::m_count</definition>
+        <argsstring></argsstring>
+        <name>m_count</name>
+        <qualifiedname>castor3d::EnvironmentMap::m_count</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="194" column="10" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="194" bodyend="194"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a05947_1aba0211170413a606612a4772b8c41889" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1af2569378867762585c925eb1bc53ef82" kindref="member">OnSceneNodeChangedConnection</ref></type>
+        <definition>OnSceneNodeChangedConnection castor3d::EnvironmentMap::m_onNodeChanged</definition>
+        <argsstring></argsstring>
+        <name>m_onNodeChanged</name>
+        <qualifiedname>castor3d::EnvironmentMap::m_onNodeChanged</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="195" column="30" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="195" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a05947_1abbeae16feb0f1f908286be3fc0f2cac8" prot="private" static="no" mutable="no">
+        <type>ashes::Image *</type>
+        <definition>ashes::Image* castor3d::EnvironmentMap::m_image</definition>
+        <argsstring></argsstring>
+        <name>m_image</name>
+        <qualifiedname>castor3d::EnvironmentMap::m_image</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="196" column="15" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="196" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a05947_1a87a159a08c82eba6e09b9b8cae0bf02f" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; ashes::ImageView &gt;</type>
+        <definition>castor::Vector&lt; ashes::ImageView &gt; castor3d::EnvironmentMap::m_environmentMapViews</definition>
+        <argsstring></argsstring>
+        <name>m_environmentMapViews</name>
+        <qualifiedname>castor3d::EnvironmentMap::m_environmentMapViews</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="197" column="16" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="197" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a05947_1a6cb122ef950fd098b147078a954ec7ba" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1aa9aaabdfd3f2390090570dc50b5b7b5e" kindref="member">OnBackgroundChangedConnection</ref></type>
+        <definition>OnBackgroundChangedConnection castor3d::EnvironmentMap::m_onSetBackground</definition>
+        <argsstring></argsstring>
+        <name>m_onSetBackground</name>
+        <qualifiedname>castor3d::EnvironmentMap::m_onSetBackground</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="198" column="31" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="198" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d1f/a05947_1a94135f6305d3b9eb3980144ac947a85c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::EnvironmentMap::EnvironmentMap</definition>
+        <argsstring>(crg::ResourcesCache &amp;resources, RenderDevice const &amp;device, QueueData const &amp;queueData, Scene &amp;scene)</argsstring>
+        <name>EnvironmentMap</name>
+        <qualifiedname>castor3d::EnvironmentMap::EnvironmentMap</qualifiedname>
+        <param>
+          <type>crg::ResourcesCache &amp;</type>
+          <declname>resources</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d0e/a06399" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">resources</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le gestionnaire de ressources. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le device GPU. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">queueData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La queue recevant les commandes d&apos;initialisation. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La scène. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="49" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d1f/a05947_1a36e97438f427e386c4b2dc4d3a3b1f7c" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::EnvironmentMap::cleanup</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::EnvironmentMap::cleanup</qualifiedname>
+        <briefdescription>
+<para>Vide les passes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="59" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d1f/a05947_1acf66bd2d5bb74fbde919c38b18cf1a88" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::EnvironmentMap::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::EnvironmentMap::update</qualifiedname>
+        <param>
+          <type><ref refid="dc/d23/a06511" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour la passe de rendu, au niveau CPU. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données d&apos;update. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="68" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d1f/a05947_1a1f556e2ba060285c4ab12956f82edd45" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::EnvironmentMap::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::EnvironmentMap::update</qualifiedname>
+        <param>
+          <type><ref refid="d9/d4b/a06519" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour la passe de rendu, au niveau GPU. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données d&apos;update. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="77" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d1f/a05947_1ab604c1f4d516208655ae8cadadbbc430" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::SemaphoreWaitArray</type>
+        <definition>C3D_API crg::SemaphoreWaitArray castor3d::EnvironmentMap::render</definition>
+        <argsstring>(crg::SemaphoreWaitArray const &amp;toWait, ashes::Queue const &amp;queue)</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::EnvironmentMap::render</qualifiedname>
+        <param>
+          <type>crg::SemaphoreWaitArray const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <briefdescription>
+<para>Dessine la texture d&apos;environnement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">toWait</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les sémaphores à attendre. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue recevant les commandes de dessin. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Les sémaphores signalés par ce dessin. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="90" column="33"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d1f/a05947_1ab0170b42d376e174d3740263d4b61028" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::EnvironmentMap::addNode</definition>
+        <argsstring>(SceneNode &amp;node)</argsstring>
+        <name>addNode</name>
+        <qualifiedname>castor3d::EnvironmentMap::addNode</qualifiedname>
+        <param>
+          <type><ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para>Crée une reflection map pour le noeud donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le noeud de scène depuis lequel la reflection map est générée. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="100" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d1f/a05947_1a7f855dca45cac5a2f245cd3bc12f00ec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::EnvironmentMap::removeNode</definition>
+        <argsstring>(SceneNode &amp;node)</argsstring>
+        <name>removeNode</name>
+        <qualifiedname>castor3d::EnvironmentMap::removeNode</qualifiedname>
+        <param>
+          <type><ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para>Crée une reflection map pour le noeud donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le noeud de scène depuis lequel la reflection map est générée. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="109" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d1f/a05947_1a6ea51e39001a66843fb6572cd515dc3c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::EnvironmentMap::hasNode</definition>
+        <argsstring>(SceneNode &amp;node) const</argsstring>
+        <name>hasNode</name>
+        <qualifiedname>castor3d::EnvironmentMap::hasNode</qualifiedname>
+        <param>
+          <type><ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Dit s&apos;il y a une reflection map pour le noeud donné. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le noeud de scène. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="118" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d1f/a05947_1a8f8a7835b4c2757ed35b46e24cdbd984" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::EnvironmentMap::getIndex</definition>
+        <argsstring>(SceneNode const &amp;node) const</argsstring>
+        <name>getIndex</name>
+        <qualifiedname>castor3d::EnvironmentMap::getIndex</qualifiedname>
+        <param>
+          <type><ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> const &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Appelez hasEnvironmentMap avant d&apos;appeler cette fonction (celle-ci retournant une référence sur une <ref refid="d1/d1f/a05947" kindref="compound">EnvironmentMap</ref> existante) </para>
+</simplesect>
+<simplesect kind="return"><para>Récupère la reflection map pour le noeud donné. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le noeud de scène. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="129" column="18"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/d1f/a05947_1a00a3f66a8f3cd7f80d75f23319ca4646" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EnvironmentMap::doAddPass</definition>
+        <argsstring>()</argsstring>
+        <name>doAddPass</name>
+        <qualifiedname>castor3d::EnvironmentMap::doAddPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="179" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::EnvironmentMap</label>
+        <link refid="d1/d1f/a05947"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::EnvironmentMap</label>
+        <link refid="d1/d1f/a05947"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" line="28" column="1" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp" bodystart="30" bodyend="199"/>
+    <listofallmembers>
+      <member refid="d1/d1f/a05947_1ab0170b42d376e174d3740263d4b61028" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>addNode</name></member>
+      <member refid="d1/d1f/a05947_1a36e97438f427e386c4b2dc4d3a3b1f7c" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>cleanup</name></member>
+      <member refid="d1/d1f/a05947_1a00a3f66a8f3cd7f80d75f23319ca4646" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>doAddPass</name></member>
+      <member refid="d1/d1f/a05947_1a94135f6305d3b9eb3980144ac947a85c" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>EnvironmentMap</name></member>
+      <member refid="d1/d1f/a05947_1a5c321c7c18b259a98870063ba20820cd" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>EnvironmentMapPasses</name></member>
+      <member refid="d1/d1f/a05947_1a7b753ab1b613e473ee22a8294567f352" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>getColourId</name></member>
+      <member refid="d1/d1f/a05947_1aa0552db765e2f6705db4d631f3598024" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>getColourView</name></member>
+      <member refid="d1/d1f/a05947_1a0d1831229f12c4957b709d1c4c1ab86b" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>getColourViewId</name></member>
+      <member refid="d1/d1f/a05947_1a3879480218c6ee6b02eaa1a8dfb74d33" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>getDepthViewId</name></member>
+      <member refid="d1/d1f/a05947_1a8f8a7835b4c2757ed35b46e24cdbd984" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>getIndex</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>getOwner</name></member>
+      <member refid="d1/d1f/a05947_1aff60daa779c4a65d3d46337ba1df44a1" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>getScene</name></member>
+      <member refid="d1/d1f/a05947_1ac580072430c2edcb4f3742630c2af093" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>getSize</name></member>
+      <member refid="d1/d1f/a05947_1a4e3bc5cd3d1797d6d3e52723d4b32607" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>getTmpImage</name></member>
+      <member refid="d1/d1f/a05947_1a6ea51e39001a66843fb6572cd515dc3c" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>hasNode</name></member>
+      <member refid="d1/d1f/a05947_1a137d3daa8bf8161293a105124cbe4472" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>m_count</name></member>
+      <member refid="d1/d1f/a05947_1ada27d328696a7a5d740e093243ccbc49" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>m_depthBuffer</name></member>
+      <member refid="d1/d1f/a05947_1ab72a61038881e10c6a26ab9164698523" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>m_device</name></member>
+      <member refid="d1/d1f/a05947_1a0343c3ec3288476548ddb1090070af9e" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>m_environmentMap</name></member>
+      <member refid="d1/d1f/a05947_1a87a159a08c82eba6e09b9b8cae0bf02f" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>m_environmentMapViews</name></member>
+      <member refid="d1/d1f/a05947_1a9609d46ddbb0ed570e7cb1975857c8b6" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>m_extent</name></member>
+      <member refid="d1/d1f/a05947_1ad681435fb865cbc0f2f53d695b582dd5" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>m_first</name></member>
+      <member refid="d1/d1f/a05947_1abbeae16feb0f1f908286be3fc0f2cac8" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>m_image</name></member>
+      <member refid="d1/d1f/a05947_1aba0211170413a606612a4772b8c41889" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>m_onNodeChanged</name></member>
+      <member refid="d1/d1f/a05947_1a6cb122ef950fd098b147078a954ec7ba" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>m_onSetBackground</name></member>
+      <member refid="d1/d1f/a05947_1aba31a0cf1fc6e3b6312b38c4e2c14e24" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>m_passes</name></member>
+      <member refid="d1/d1f/a05947_1abdcafd26e3ed24284da4244e1f647bda" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>m_reflectionNodes</name></member>
+      <member refid="d1/d1f/a05947_1a2967ff07f264c4669da8be6220ea188f" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>m_render</name></member>
+      <member refid="d1/d1f/a05947_1a74a40054889ef0e9d606f861c4494b88" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>m_savedReflectionNodes</name></member>
+      <member refid="d1/d1f/a05947_1a9824e0d369585ed1bb8b2319014460cd" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>m_scene</name></member>
+      <member refid="d1/d1f/a05947_1a5aa21fbab28171fb650658df6a39b3f5" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>m_sortedNodes</name></member>
+      <member refid="d1/d1f/a05947_1ab50763c72460a0a7af5946ad0bba0705" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>m_tmpImage</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>OwnedBy</name></member>
+      <member refid="d1/d1f/a05947_1a7f855dca45cac5a2f245cd3bc12f00ec" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>removeNode</name></member>
+      <member refid="d1/d1f/a05947_1ab604c1f4d516208655ae8cadadbbc430" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>render</name></member>
+      <member refid="d1/d1f/a05947_1acf66bd2d5bb74fbde919c38b18cf1a88" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>update</name></member>
+      <member refid="d1/d1f/a05947_1a1f556e2ba060285c4ab12956f82edd45" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMap</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d76/a09475" kind="class" language="C++" prot="public">
+    <compoundname>castor::SimplexNoiseT</compoundname>
+    <includes local="no">SimplexNoise.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d0/d76/a09475_1ab40403d78d311090bc2ac97a34e35290" prot="public" static="no">
+        <type>T</type>
+        <definition>using castor::SimplexNoiseT&lt; T &gt;::TypeT =  T</definition>
+        <argsstring></argsstring>
+        <name>TypeT</name>
+        <qualifiedname>castor::SimplexNoiseT::TypeT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/SimplexNoise.hpp" line="15" column="1" bodyfile="CastorUtils/Noise/SimplexNoise.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d76/a09475_1a36feb3f3f8df7db04dcfc69e57479bb6" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">Array</ref>&lt; uint32_t, 512u &gt;</type>
+        <definition>Array&lt; uint32_t, 512u &gt; castor::SimplexNoiseT&lt; T &gt;::m_permutations</definition>
+        <argsstring></argsstring>
+        <name>m_permutations</name>
+        <qualifiedname>castor::SimplexNoiseT::m_permutations</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/SimplexNoise.hpp" line="23" column="7" bodyfile="CastorUtils/Noise/SimplexNoise.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d76/a09475_1a411e8bafa098cab4a562f316d6bb7117" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::SimplexNoiseT&lt; TypeT &gt;::SimplexNoiseT</definition>
+        <argsstring>(std::default_random_engine rndEngine)</argsstring>
+        <name>SimplexNoiseT</name>
+        <qualifiedname>castor::SimplexNoiseT::SimplexNoiseT</qualifiedname>
+        <param>
+          <type>std::default_random_engine</type>
+          <declname>rndEngine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/SimplexNoise.hpp" line="18" column="10" bodyfile="CastorUtils/Noise/SimplexNoise.hpp" bodystart="31" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d76/a09475_1a5b0890982a8e6aa906cd3b52f0da5060" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::SimplexNoiseT&lt; TypeT &gt;::SimplexNoiseT</definition>
+        <argsstring>()</argsstring>
+        <name>SimplexNoiseT</name>
+        <qualifiedname>castor::SimplexNoiseT::SimplexNoiseT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/SimplexNoise.hpp" line="19" column="1" bodyfile="CastorUtils/Noise/SimplexNoise.hpp" bodystart="47" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d76/a09475_1a4b82607d3da97120fc4f09e8250f9388" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d0/d76/a09475_1ab40403d78d311090bc2ac97a34e35290" kindref="member">TypeT</ref></type>
+        <definition>TypeT castor::SimplexNoiseT&lt; TypeT &gt;::noise</definition>
+        <argsstring>(TypeT x, TypeT y, TypeT z)</argsstring>
+        <name>noise</name>
+        <qualifiedname>castor::SimplexNoiseT::noise</qualifiedname>
+        <param>
+          <type><ref refid="d0/d76/a09475_1ab40403d78d311090bc2ac97a34e35290" kindref="member">TypeT</ref></type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d76/a09475_1ab40403d78d311090bc2ac97a34e35290" kindref="member">TypeT</ref></type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d76/a09475_1ab40403d78d311090bc2ac97a34e35290" kindref="member">TypeT</ref></type>
+          <declname>z</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/SimplexNoise.hpp" line="20" column="7" bodyfile="CastorUtils/Noise/SimplexNoise.hpp" bodystart="53" bodyend="184"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d0/d76/a09475_1ab4626d8ee8909e00c30fed8ca1a7ed80" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>uint8_t</type>
+        <definition>uint8_t castor::SimplexNoiseT&lt; TypeT &gt;::hash</definition>
+        <argsstring>(int32_t i)</argsstring>
+        <name>hash</name>
+        <qualifiedname>castor::SimplexNoiseT::hash</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/SimplexNoise.hpp" line="25" column="9" bodyfile="CastorUtils/Noise/SimplexNoise.hpp" bodystart="187" bodyend="190"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d76/a09475_1a62a9ce6ebe1194a65b8d35ddb625b0e5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t castor::SimplexNoiseT&lt; TypeT &gt;::fastfloor</definition>
+        <argsstring>(TypeT fp)</argsstring>
+        <name>fastfloor</name>
+        <qualifiedname>castor::SimplexNoiseT::fastfloor</qualifiedname>
+        <param>
+          <type><ref refid="d0/d76/a09475_1ab40403d78d311090bc2ac97a34e35290" kindref="member">TypeT</ref></type>
+          <declname>fp</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/SimplexNoise.hpp" line="26" column="9" bodyfile="CastorUtils/Noise/SimplexNoise.hpp" bodystart="193" bodyend="197"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d76/a09475_1a7a63076ecdcf7813cf710c7d2d7b7c4f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d0/d76/a09475_1ab40403d78d311090bc2ac97a34e35290" kindref="member">TypeT</ref></type>
+        <definition>TypeT castor::SimplexNoiseT&lt; TypeT &gt;::grad</definition>
+        <argsstring>(int32_t hash, TypeT x, TypeT y, TypeT z)</argsstring>
+        <name>grad</name>
+        <qualifiedname>castor::SimplexNoiseT::grad</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>hash</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d76/a09475_1ab40403d78d311090bc2ac97a34e35290" kindref="member">TypeT</ref></type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d76/a09475_1ab40403d78d311090bc2ac97a34e35290" kindref="member">TypeT</ref></type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d76/a09475_1ab40403d78d311090bc2ac97a34e35290" kindref="member">TypeT</ref></type>
+          <declname>z</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/SimplexNoise.hpp" line="27" column="7" bodyfile="CastorUtils/Noise/SimplexNoise.hpp" bodystart="200" bodyend="207"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Générateur de bruit 3D Simplex. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Noise/SimplexNoise.hpp" line="12" column="1" bodyfile="CastorUtils/Noise/SimplexNoise.hpp" bodystart="13" bodyend="28"/>
+    <listofallmembers>
+      <member refid="d0/d76/a09475_1a62a9ce6ebe1194a65b8d35ddb625b0e5" prot="private" virt="non-virtual"><scope>castor::SimplexNoiseT</scope><name>fastfloor</name></member>
+      <member refid="d0/d76/a09475_1a7a63076ecdcf7813cf710c7d2d7b7c4f" prot="private" virt="non-virtual"><scope>castor::SimplexNoiseT</scope><name>grad</name></member>
+      <member refid="d0/d76/a09475_1ab4626d8ee8909e00c30fed8ca1a7ed80" prot="private" virt="non-virtual"><scope>castor::SimplexNoiseT</scope><name>hash</name></member>
+      <member refid="d0/d76/a09475_1a36feb3f3f8df7db04dcfc69e57479bb6" prot="private" virt="non-virtual"><scope>castor::SimplexNoiseT</scope><name>m_permutations</name></member>
+      <member refid="d0/d76/a09475_1a4b82607d3da97120fc4f09e8250f9388" prot="public" virt="non-virtual"><scope>castor::SimplexNoiseT</scope><name>noise</name></member>
+      <member refid="d0/d76/a09475_1a411e8bafa098cab4a562f316d6bb7117" prot="public" virt="non-virtual"><scope>castor::SimplexNoiseT</scope><name>SimplexNoiseT</name></member>
+      <member refid="d0/d76/a09475_1a5b0890982a8e6aa906cd3b52f0da5060" prot="public" virt="non-virtual"><scope>castor::SimplexNoiseT</scope><name>SimplexNoiseT</name></member>
+      <member refid="d0/d76/a09475_1ab40403d78d311090bc2ac97a34e35290" prot="public" virt="non-virtual"><scope>castor::SimplexNoiseT</scope><name>TypeT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,19 @@
+<map id="castor3d::GpuBufferOffsetT&lt; DataT &gt;" name="castor3d::GpuBufferOffsetT&lt; DataT &gt;">
+<area shape="rect" id="Node000001" title="An offset and range of a GpuBuffer." alt="" coords="5,251,176,291"/>
+<area shape="rect" id="Node000002" href="$d7/d76/a03451.html" title=" " alt="" coords="471,11,642,51"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="98,236,111,197,131,151,160,107,178,88,198,71,230,53,264,39,336,22,407,16,471,18,471,23,407,21,337,27,266,44,233,58,202,76,182,92,164,110,136,154,116,199,103,238"/>
+<area shape="rect" id="Node000003" href="$d7/d76/a03451.html" title=" " alt="" coords="455,75,658,130"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="111,238,149,195,172,175,199,158,262,132,329,114,395,104,455,100,455,105,395,110,330,120,264,137,201,162,176,179,152,199,115,241"/>
+<area shape="rect" id="Node000004" href="$d7/d76/a03451.html" title=" " alt="" coords="453,155,661,195"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="151,243,199,228,330,201,452,183,453,188,331,206,201,233,153,248"/>
+<area shape="rect" id="Node000005" href="$d7/d76/a03451.html" title=" " alt="" coords="471,219,642,259"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="190,261,471,242,471,247,190,267"/>
+<area shape="rect" id="Node000006" href="$d7/d76/a03451.html" title=" " alt="" coords="453,283,660,323"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="190,279,200,280,453,296,453,301,200,285,190,284"/>
+<area shape="rect" id="Node000007" href="$d7/d76/a03451.html" title=" " alt="" coords="471,347,642,387"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="148,294,201,312,271,329,343,341,472,357,471,363,342,347,270,334,199,317,146,299"/>
+<area shape="rect" id="Node000008" href="$d7/d76/a03451.html" title=" " alt="" coords="413,411,700,451"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="115,300,152,344,175,365,201,382,252,403,306,417,361,426,413,431,413,436,360,431,305,422,250,408,199,386,172,369,148,348,111,304"/>
+<area shape="rect" id="Node000009" href="$d7/d76/a03451.html" title=" " alt="" coords="450,475,663,530"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="103,303,116,342,136,386,164,429,182,447,201,463,230,479,260,492,324,508,389,514,450,513,450,519,389,519,323,513,258,497,227,484,199,468,178,451,160,432,131,389,111,344,98,305"/>
+</map>

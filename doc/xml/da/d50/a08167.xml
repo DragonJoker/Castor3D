@@ -1,0 +1,323 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d50/a08167" kind="class" language="C++" prot="public">
+    <compoundname>castor::DataHolderT</compoundname>
+    <derivedcompoundref refid="d5/d96/a06531" prot="private" virt="non-virtual">castor3d::RenderNodesPass</derivedcompoundref>
+    <derivedcompoundref refid="d5/d96/a06531" prot="private" virt="non-virtual">castor3d::RenderNodesPass</derivedcompoundref>
+    <includes local="no">DataHolder.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class Data</type>
+      </param>
+      <param>
+        <type>size_t</type>
+        <declname>Index</declname>
+        <defname>Index</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="da/d50/a08167_1ae0e145bcdded09ef4f23347bc0bda643" prot="private" static="no" mutable="no">
+        <type>Data</type>
+        <definition>Data castor::DataHolderT&lt; Data, Index &gt;::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <qualifiedname>castor::DataHolderT::m_data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DataHolder.hpp" line="38" column="6" bodyfile="CastorUtils/Design/DataHolder.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d50/a08167_1a10e2d04d7ff8cdd35fc4a4767374a7ee" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::DataHolderT&lt; Data, Index &gt;::DataHolderT</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>DataHolderT</name>
+        <qualifiedname>castor::DataHolderT::DataHolderT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DataHolder.hpp" line="15" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d50/a08167_1a8c916c15a317fb9496b0f0cd6d2e6631" prot="public" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::DataHolderT&lt; Data, Index &gt;::DataHolderT</definition>
+        <argsstring>(Data d) noexcept</argsstring>
+        <name>DataHolderT</name>
+        <qualifiedname>castor::DataHolderT::DataHolderT</qualifiedname>
+        <param>
+          <type>Data</type>
+          <declname>d</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DataHolder.hpp" line="17" column="10" bodyfile="CastorUtils/Design/DataHolder.hpp" bodystart="17" bodyend="20"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>Data &amp;</type>
+        <definition>Data &amp; castor::DataHolderT&lt; Data, Index &gt;::getData</definition>
+        <argsstring>()</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor::DataHolderT::getData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DataHolder.hpp" line="22" column="7" bodyfile="CastorUtils/Design/DataHolder.hpp" bodystart="22" bodyend="25"/>
+        <referencedby refid="d5/d96/a06531_1a2e2a95a6c5f4416897fddfb72f828af7" compoundref="da/d19/a01217" startline="764" endline="767">castor3d::RenderNodesPass::getCuller</referencedby>
+        <referencedby refid="d5/d96/a06531_1ace7bc19e7a5bfeca3bf92be92a4e8ff9" compoundref="da/d19/a01217" startline="910" endline="913">castor3d::RenderNodesPass::getRenderQueue</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d50/a08167_1abfb8cb106cf96be2481ab1f88cd2c006" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Data const &amp;</type>
+        <definition>Data const  &amp; castor::DataHolderT&lt; Data, Index &gt;::getData</definition>
+        <argsstring>() const</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor::DataHolderT::getData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DataHolder.hpp" line="27" column="13" bodyfile="CastorUtils/Design/DataHolder.hpp" bodystart="27" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d50/a08167_1ab8599478c3a26dfcc9571c920644b562" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::DataHolderT&lt; Data, Index &gt;::setData</definition>
+        <argsstring>(Data data)</argsstring>
+        <name>setData</name>
+        <qualifiedname>castor::DataHolderT::setData</qualifiedname>
+        <param>
+          <type>Data</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DataHolder.hpp" line="32" column="6" bodyfile="CastorUtils/Design/DataHolder.hpp" bodystart="32" bodyend="35"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Conteneur de donnée. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Utilisé pour forcer l&apos;ordre d&apos;initialisation des données via l&apos;héritage. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="22">
+        <label>castor::DataHolderT&lt; PositionData &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; PositionData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor::DataHolderT&lt; QuaternionDataT&lt; T &gt; &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; QuaternionDataT&lt; T &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor::DataHolderT&lt; RectangleData &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; RectangleData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor::DataHolderT&lt; RootContext &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; RootContext &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="28">
+        <label>castor::DataHolderT&lt; SizeData &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SizeData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor::DataHolderT&lt; TextureUPtr &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; TextureUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor::DataHolderT&lt; ashes::CommandBufferPtr &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ashes::CommandBufferPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::DepthPass</label>
+        <link refid="d8/dcb/a06367"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::DirectUploadData</label>
+        <link refid="d1/def/a03475"/>
+        <childnode refid="15" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::ForwardRenderTechniquePass</label>
+        <link refid="da/d78/a06259"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PickingPass</label>
+        <link refid="d3/d83/a06287"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::PrepassResult</label>
+        <link refid="de/da2/a06375"/>
+        <childnode refid="18" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::RenderNodesPass&lt; RenderQueueUPtr &gt;</label>
+        <link refid="d5/d96/a06531"/>
+        <childnode refid="1" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::RenderNodesPass&lt; SceneCuller * &gt;</label>
+        <link refid="d5/d96/a06531"/>
+        <childnode refid="1" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RenderTechniqueNodesPass</label>
+        <link refid="df/d90/a06587"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor3d::SceneFileParser</label>
+        <link refid="df/d78/a07147"/>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::ShadowMapPass</label>
+        <link refid="d4/df1/a06639"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::ShadowMapPassDirectional</label>
+        <link refid="dd/d9b/a06643"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::ShadowMapPassPoint</label>
+        <link refid="d8/d17/a06647"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::ShadowMapPassSpot</label>
+        <link refid="d1/d57/a06651"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::StagedUploadData</label>
+        <link refid="d3/d1c/a03551"/>
+        <childnode refid="15" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::TransparentPass</label>
+        <link refid="d1/d96/a06787"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::VisibilityPass</label>
+        <link refid="dc/d1d/a06379"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::VoxelizePass</label>
+        <link refid="d3/df2/a06043"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="23">
+        <label>castor::Position</label>
+        <link refid="df/dba/a08999"/>
+        <childnode refid="22" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor::QuaternionT&lt; T &gt;</label>
+        <link refid="dc/dc3/a09203"/>
+        <childnode refid="24" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor::Rectangle</label>
+        <link refid="d4/da5/a09011"/>
+        <childnode refid="26" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor::Size</label>
+        <link refid="d4/dd6/a09023"/>
+        <childnode refid="28" relation="private-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/Design/DataHolder.hpp" line="12" column="1" bodyfile="CastorUtils/Design/DataHolder.hpp" bodystart="13" bodyend="39"/>
+    <listofallmembers>
+      <member refid="da/d50/a08167_1a10e2d04d7ff8cdd35fc4a4767374a7ee" prot="public" virt="non-virtual"><scope>castor::DataHolderT</scope><name>DataHolderT</name></member>
+      <member refid="da/d50/a08167_1a8c916c15a317fb9496b0f0cd6d2e6631" prot="public" virt="non-virtual"><scope>castor::DataHolderT</scope><name>DataHolderT</name></member>
+      <member refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" prot="public" virt="non-virtual"><scope>castor::DataHolderT</scope><name>getData</name></member>
+      <member refid="da/d50/a08167_1abfb8cb106cf96be2481ab1f88cd2c006" prot="public" virt="non-virtual"><scope>castor::DataHolderT</scope><name>getData</name></member>
+      <member refid="da/d50/a08167_1ae0e145bcdded09ef4f23347bc0bda643" prot="private" virt="non-virtual"><scope>castor::DataHolderT</scope><name>m_data</name></member>
+      <member refid="da/d50/a08167_1ab8599478c3a26dfcc9571c920644b562" prot="public" virt="non-virtual"><scope>castor::DataHolderT</scope><name>setData</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

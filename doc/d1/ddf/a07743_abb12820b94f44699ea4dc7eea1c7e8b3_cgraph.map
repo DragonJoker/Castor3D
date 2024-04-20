@@ -1,0 +1,15 @@
+<map id="castor3d::CameraUbo::createPassBinding" name="castor3d::CameraUbo::createPassBinding">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,69,153,109"/>
+<area shape="rect" id="Node000002" href="$d4/d63/a03459.html#a926b4f99af45e4423f45a276b7d72505" title=" " alt="" coords="201,69,392,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,87,187,87,187,92,153,92"/>
+<area shape="rect" id="Node000003" href="$d4/d63/a03459.html#af6031892474c15c1ff806ca0e9842242" title=" " alt="" coords="440,5,631,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="371,67,446,46,448,51,373,72"/>
+<area shape="rect" id="Node000005" href="$d4/d63/a03459.html#af1486cfa4c196f82e0cbc2440edea70e" title=" " alt="" coords="440,69,631,109"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="392,87,426,87,426,92,392,92"/>
+<area shape="rect" id="Node000006" href="$d4/d63/a03459.html#a11dc3f75dd4cd054c5ee5fd4e0c1f67f" title=" " alt="" coords="440,133,631,173"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="373,107,448,127,446,132,371,112"/>
+<area shape="rect" id="Node000004" href="$dd/d6d/a03547.html#aef1ea7312b5f180989b18ef8a5503012" title=" " alt="" coords="679,69,861,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="610,43,684,63,683,68,609,48"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="631,87,665,87,665,92,631,92"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="609,131,683,110,684,115,610,136"/>
+</map>

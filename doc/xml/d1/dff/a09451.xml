@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/dff/a09451" kind="class" language="C++" prot="public">
+    <compoundname>castor::SpinMutex</compoundname>
+    <includes local="no">SpinMutex.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/dff/a09451_1a2c12bcdc85acdcc90e87d8d604e31be9" prot="private" static="no" mutable="no">
+        <type>std::atomic_bool</type>
+        <definition>std::atomic_bool castor::SpinMutex::m_lock</definition>
+        <argsstring></argsstring>
+        <name>m_lock</name>
+        <qualifiedname>castor::SpinMutex::m_lock</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/SpinMutex.hpp" line="23" column="18" bodyfile="CastorUtils/Multithreading/SpinMutex.hpp" bodystart="23" bodyend="23"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/dff/a09451_1ac43f88c06a8860e9e67c8be22aed7658" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::SpinMutex::lock</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>lock</name>
+        <qualifiedname>castor::SpinMutex::lock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/SpinMutex.hpp" line="18" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dff/a09451_1affd95b54ea95bc664e3966bcd7d9315a" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::SpinMutex::try_lock</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>try_lock</name>
+        <qualifiedname>castor::SpinMutex::try_lock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/SpinMutex.hpp" line="19" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dff/a09451_1ac428be7832e5da7abc6ea8872328cea5" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::SpinMutex::unlock</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>unlock</name>
+        <qualifiedname>castor::SpinMutex::unlock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/SpinMutex.hpp" line="20" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Multithreading/SpinMutex.hpp" line="15" column="1" bodyfile="CastorUtils/Multithreading/SpinMutex.hpp" bodystart="16" bodyend="24"/>
+    <listofallmembers>
+      <member refid="d1/dff/a09451_1ac43f88c06a8860e9e67c8be22aed7658" prot="public" virt="non-virtual"><scope>castor::SpinMutex</scope><name>lock</name></member>
+      <member refid="d1/dff/a09451_1a2c12bcdc85acdcc90e87d8d604e31be9" prot="private" virt="non-virtual"><scope>castor::SpinMutex</scope><name>m_lock</name></member>
+      <member refid="d1/dff/a09451_1affd95b54ea95bc664e3966bcd7d9315a" prot="public" virt="non-virtual"><scope>castor::SpinMutex</scope><name>try_lock</name></member>
+      <member refid="d1/dff/a09451_1ac428be7832e5da7abc6ea8872328cea5" prot="public" virt="non-virtual"><scope>castor::SpinMutex</scope><name>unlock</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

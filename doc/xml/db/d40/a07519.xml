@@ -1,0 +1,247 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d40/a07519" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::Light</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_Light&quot;, sdw::type::MemoryLayout::eC, sdw::Vec3Field&lt; &quot;colour&quot; &gt;, sdw::FloatField&lt; &quot;range&quot; &gt;, sdw::Vec2Field&lt; &quot;intensity&quot; &gt;, sdw::IntField&lt; &quot;shadowMapIndex&quot; &gt;, sdw::UIntField&lt; &quot;cascadeCount&quot; &gt;, sdw::Vec3Field&lt; &quot;posDir&quot; &gt;, sdw::FloatField&lt; &quot;exponent&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">GlslLight.hpp</includes>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="db/d40/a07519_1a543f8c2a5de9b68879bf453304660736" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class LightsBuffer</definition>
+        <argsstring></argsstring>
+        <name>LightsBuffer</name>
+        <qualifiedname>castor3d::shader::Light::LightsBuffer</qualifiedname>
+        <param>
+          <type><ref refid="dc/d39/a07535" kindref="compound">LightsBuffer</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="30" column="14" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="db/d40/a07519_1a224997bd7df4a5fd919e061e3c3c07a7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>struct</type>
+        <definition>friend struct DirectionalLight</definition>
+        <argsstring></argsstring>
+        <name>DirectionalLight</name>
+        <qualifiedname>castor3d::shader::Light::DirectionalLight</qualifiedname>
+        <param>
+          <type><ref refid="de/d0f/a07523" kindref="compound">DirectionalLight</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="31" column="15" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="db/d40/a07519_1aabbef3401fd7341a21641d02ce191c47" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>struct</type>
+        <definition>friend struct PointLight</definition>
+        <argsstring></argsstring>
+        <name>PointLight</name>
+        <qualifiedname>castor3d::shader::Light::PointLight</qualifiedname>
+        <param>
+          <type><ref refid="d3/da8/a07527" kindref="compound">PointLight</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="32" column="15" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="db/d40/a07519_1a9cf39a2ff94b6284530061b719476634" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>struct</type>
+        <definition>friend struct SpotLight</definition>
+        <argsstring></argsstring>
+        <name>SpotLight</name>
+        <qualifiedname>castor3d::shader::Light::SpotLight</qualifiedname>
+        <param>
+          <type><ref refid="d3/d77/a07531" kindref="compound">SpotLight</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="33" column="15" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d40/a07519_1a4dc2790eed9bb970fa215168d08a2f20" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Light::Light</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>Light</name>
+        <qualifiedname>castor3d::shader::Light::Light</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="35" column="1" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="35" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d40/a07519_1ae6c185e00755ce3ec219909b8a08e29b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::Light::colour</definition>
+        <argsstring>() const</argsstring>
+        <name>colour</name>
+        <qualifiedname>castor3d::shader::Light::colour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="43" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d40/a07519_1aba25003feb0cd64d34dd95a09c96ea1c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::Light::intensity</definition>
+        <argsstring>() const</argsstring>
+        <name>intensity</name>
+        <qualifiedname>castor3d::shader::Light::intensity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="44" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d40/a07519_1adae0a3c5d7808bebcd89f77633a27e1e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::Light::range</definition>
+        <argsstring>() const</argsstring>
+        <name>range</name>
+        <qualifiedname>castor3d::shader::Light::range</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="45" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d40/a07519_1aa16fa363f04c4907c463e0b16e5c9f66" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::Light::shadowMapIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>shadowMapIndex</name>
+        <qualifiedname>castor3d::shader::Light::shadowMapIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="46" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="46" bodyend="46"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="db/d40/a07519_1a763c9d85b4d98546491975e24e15a953" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::Light::posDir</definition>
+        <argsstring>() const</argsstring>
+        <name>posDir</name>
+        <qualifiedname>castor3d::shader::Light::posDir</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="49" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d40/a07519_1a2546bf4a880dfc7060dab19e11cf737a" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::Light::exponent</definition>
+        <argsstring>() const</argsstring>
+        <name>exponent</name>
+        <qualifiedname>castor3d::shader::Light::exponent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="50" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="50" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d40/a07519_1afa44701b828b687ffea3e78449bd5bc2" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::Light::cascadeCount</definition>
+        <argsstring>() const</argsstring>
+        <name>cascadeCount</name>
+        <qualifiedname>castor3d::shader::Light::cascadeCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="51" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="51" bodyend="51"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::Light</label>
+        <link refid="db/d40/a07519"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_Light&quot;, sdw::type::MemoryLayout::eC, sdw::Vec3Field&lt; &quot;colour&quot; &gt;, sdw::FloatField&lt; &quot;range&quot; &gt;, sdw::Vec2Field&lt; &quot;intensity&quot; &gt;, sdw::IntField&lt; &quot;shadowMapIndex&quot; &gt;, sdw::UIntField&lt; &quot;cascadeCount&quot; &gt;, sdw::Vec3Field&lt; &quot;posDir&quot; &gt;, sdw::FloatField&lt; &quot;exponent&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::Light</label>
+        <link refid="db/d40/a07519"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_Light&quot;, sdw::type::MemoryLayout::eC, sdw::Vec3Field&lt; &quot;colour&quot; &gt;, sdw::FloatField&lt; &quot;range&quot; &gt;, sdw::Vec2Field&lt; &quot;intensity&quot; &gt;, sdw::IntField&lt; &quot;shadowMapIndex&quot; &gt;, sdw::UIntField&lt; &quot;cascadeCount&quot; &gt;, sdw::Vec3Field&lt; &quot;posDir&quot; &gt;, sdw::FloatField&lt; &quot;exponent&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="19" column="1" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="29" bodyend="52"/>
+    <listofallmembers>
+      <member refid="db/d40/a07519_1afa44701b828b687ffea3e78449bd5bc2" prot="private" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>cascadeCount</name></member>
+      <member refid="db/d40/a07519_1ae6c185e00755ce3ec219909b8a08e29b" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>colour</name></member>
+      <member refid="db/d40/a07519_1a224997bd7df4a5fd919e061e3c3c07a7" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>DirectionalLight</name></member>
+      <member refid="db/d40/a07519_1a2546bf4a880dfc7060dab19e11cf737a" prot="private" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>exponent</name></member>
+      <member refid="db/d40/a07519_1aba25003feb0cd64d34dd95a09c96ea1c" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>intensity</name></member>
+      <member refid="db/d40/a07519_1a4dc2790eed9bb970fa215168d08a2f20" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>Light</name></member>
+      <member refid="db/d40/a07519_1a543f8c2a5de9b68879bf453304660736" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>LightsBuffer</name></member>
+      <member refid="db/d40/a07519_1aabbef3401fd7341a21641d02ce191c47" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>PointLight</name></member>
+      <member refid="db/d40/a07519_1a763c9d85b4d98546491975e24e15a953" prot="private" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>posDir</name></member>
+      <member refid="db/d40/a07519_1adae0a3c5d7808bebcd89f77633a27e1e" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>range</name></member>
+      <member refid="db/d40/a07519_1aa16fa363f04c4907c463e0b16e5c9f66" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>shadowMapIndex</name></member>
+      <member refid="db/d40/a07519_1a9cf39a2ff94b6284530061b719476634" prot="public" virt="non-virtual"><scope>castor3d::shader::Light</scope><name>SpotLight</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

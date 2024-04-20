@@ -1,26 +1,26 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_35457c071cb011022340bc8ab70dfd4c" kind="dir">
-    <compoundname>Gui/Theme</compoundname>
-    <innerfile refid="db/dbc/a00395">StyleButton.hpp</innerfile>
-    <innerfile refid="d9/dd1/a00398">StyleComboBox.hpp</innerfile>
-    <innerfile refid="d7/d00/a00401">StyleControl.hpp</innerfile>
-    <innerfile refid="d9/de6/a00404">StyleEdit.hpp</innerfile>
-    <innerfile refid="d1/d98/a00407">StyleExpandablePanel.hpp</innerfile>
-    <innerfile refid="d8/d91/a00410">StyleFrame.hpp</innerfile>
-    <innerfile refid="da/d9c/a00413">StyleListBox.hpp</innerfile>
-    <innerfile refid="df/d15/a00416">StylePanel.hpp</innerfile>
-    <innerfile refid="d3/d29/a00419">StyleProgress.hpp</innerfile>
-    <innerfile refid="db/d43/a00422">StyleScrollable.hpp</innerfile>
-    <innerfile refid="dc/d2f/a00425">StyleScrollBar.hpp</innerfile>
-    <innerfile refid="d4/dd3/a00428">StylesHolder.hpp</innerfile>
-    <innerfile refid="df/d70/a00431">StyleSlider.hpp</innerfile>
-    <innerfile refid="d1/d7e/a00434">StyleStatic.hpp</innerfile>
-    <innerfile refid="d4/da8/a00437">Theme.hpp</innerfile>
+    <compoundname>Castor3D/Gui/Theme</compoundname>
+    <innerfile refid="dd/df5/a00386">StyleButton.hpp</innerfile>
+    <innerfile refid="dc/dc9/a00389">StyleComboBox.hpp</innerfile>
+    <innerfile refid="d4/d27/a00392">StyleControl.hpp</innerfile>
+    <innerfile refid="db/dbc/a00395">StyleEdit.hpp</innerfile>
+    <innerfile refid="d9/dd1/a00398">StyleExpandablePanel.hpp</innerfile>
+    <innerfile refid="d7/d00/a00401">StyleFrame.hpp</innerfile>
+    <innerfile refid="d9/de6/a00404">StyleListBox.hpp</innerfile>
+    <innerfile refid="d1/d98/a00407">StylePanel.hpp</innerfile>
+    <innerfile refid="d8/d91/a00410">StyleProgress.hpp</innerfile>
+    <innerfile refid="da/d9c/a00413">StyleScrollable.hpp</innerfile>
+    <innerfile refid="df/d15/a00416">StyleScrollBar.hpp</innerfile>
+    <innerfile refid="d3/d29/a00419">StylesHolder.hpp</innerfile>
+    <innerfile refid="db/d43/a00422">StyleSlider.hpp</innerfile>
+    <innerfile refid="dc/d2f/a00425">StyleStatic.hpp</innerfile>
+    <innerfile refid="d4/dd3/a00428">Theme.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Gui/Theme/"/>
+    <location file="Castor3D/Gui/Theme/"/>
   </compounddef>
 </doxygen>

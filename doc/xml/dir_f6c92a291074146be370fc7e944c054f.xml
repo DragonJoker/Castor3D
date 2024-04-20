@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_f6c92a291074146be370fc7e944c054f" kind="dir">
-    <compoundname>Render/GlobalIllumination</compoundname>
-    <innerdir refid="dir_7108b733bb1fee5c7687037800af29fb">Render/GlobalIllumination/LightPropagationVolumes</innerdir>
-    <innerdir refid="dir_b70b22b959ecebdb1f17b0f917c94768">Render/GlobalIllumination/VoxelConeTracing</innerdir>
-    <innerfile refid="df/dce/a00974">GlobalIlluminationModule.hpp</innerfile>
+    <compoundname>Castor3D/Render/GlobalIllumination</compoundname>
+    <innerdir refid="dir_7108b733bb1fee5c7687037800af29fb">Castor3D/Render/GlobalIllumination/LightPropagationVolumes</innerdir>
+    <innerdir refid="dir_b70b22b959ecebdb1f17b0f917c94768">Castor3D/Render/GlobalIllumination/VoxelConeTracing</innerdir>
+    <innerfile refid="db/daf/a01019">GlobalIlluminationModule.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/GlobalIllumination/"/>
+    <location file="Castor3D/Render/GlobalIllumination/"/>
   </compounddef>
 </doxygen>

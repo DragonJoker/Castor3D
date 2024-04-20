@@ -1,0 +1,13 @@
+<map id="castor3d::MovableObject::markDirty" name="castor3d::MovableObject::markDirty">
+<area shape="rect" id="Node000001" title="Adds the object to dirty object list in the scene." alt="" coords="283,119,448,159"/>
+<area shape="rect" id="Node000002" href="$d2/dc3/a06951.html#a38dae7d74ec72af0fa347c0eefb8872b" title=" " alt="" coords="36,5,204,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="331,112,287,77,234,46,198,33,200,28,236,41,290,73,334,108"/>
+<area shape="rect" id="Node000003" href="$da/d3c/a06987.html#ac251086294c1586f164bf32242e3fd8f" title=" " alt="" coords="35,55,205,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="274,118,196,98,198,93,275,113"/>
+<area shape="rect" id="Node000004" href="$da/d3c/a06987.html#aff7b307ba1a84311d4002067130a1249" title=" " alt="" coords="30,119,210,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="269,142,210,142,210,137,269,137"/>
+<area shape="rect" id="Node000005" href="$d2/dc3/a06951.html#ae8bb96f14872d17f9c01d458e5058ed5" title=" " alt="" coords="31,184,209,209"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="272,165,235,174,180,187,179,181,234,169,270,160"/>
+<area shape="rect" id="Node000006" href="$d2/dc3/a06951.html#abfa6db9cee09d6cc4f1ca671b5968d5d" title=" " alt="" coords="5,233,235,259"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="328,170,285,198,236,223,196,236,195,231,234,218,282,193,325,165"/>
+</map>

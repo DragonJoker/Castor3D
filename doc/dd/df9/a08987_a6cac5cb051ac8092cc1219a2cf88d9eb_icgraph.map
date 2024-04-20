@@ -1,0 +1,15 @@
+<map id="castor::PxBufferBase::create" name="castor::PxBufferBase::create">
+<area shape="rect" id="Node000001" title="Creates a buffer with the given data." alt="" coords="199,165,344,205"/>
+<area shape="rect" id="Node000002" href="$dd/df9/a08987.html#a6362592f2d822c2de46a2fbe0a401e9d" title="Creates a buffer with the given data." alt="" coords="5,5,151,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="245,156,203,107,149,59,130,48,132,43,152,55,207,104,249,153"/>
+<area shape="rect" id="Node000003" href="$dd/df9/a08987.html#a2e2e076c00783e494932092dfe61a24f" title="Creates a buffer with the given data." alt="" coords="5,69,151,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="220,161,149,124,124,112,126,107,152,119,223,156"/>
+<area shape="rect" id="Node000004" href="$dd/df9/a08987.html#a5f304b374ef20de947fa2f7ade5c11fc" title="Creates a buffer with the given data." alt="" coords="5,133,151,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="185,174,151,168,152,163,186,168"/>
+<area shape="rect" id="Node000005" href="$dd/df9/a08987.html#ae5f5a4d3739d1274b92c8ad7dc02de56" title="Creates a buffer with the given data." alt="" coords="5,197,151,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="186,202,152,208,151,203,185,197"/>
+<area shape="rect" id="Node000006" href="$dd/df9/a08987.html#a7a2354c2ea9d0a13272c2a1ea8d21d81" title="Creates a buffer with the given data." alt="" coords="5,261,151,301"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="223,215,152,252,126,264,124,259,149,247,220,210"/>
+<area shape="rect" id="Node000007" href="$d7/d16/a09479.html#aece0aa64744fbe074707f2028c022a95" title=" " alt="" coords="11,325,145,365"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="249,218,207,267,152,315,132,327,130,323,149,311,203,263,245,215"/>
+</map>

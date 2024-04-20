@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/d15/a08643" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserParameterHelper&lt; ParameterType::eRectangle &gt;</compoundname>
+    <includes local="no">ParserParameterHelpers.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/d15/a08643_1a3e4c9cca68652d38a2d7986208367d98" prot="public" static="no">
+        <type><ref refid="d4/da5/a09011" kindref="compound">Rectangle</ref></type>
+        <definition>using castor::ParserParameterHelper&lt; ParameterType::eRectangle &gt;::ValueType =  Rectangle</definition>
+        <argsstring></argsstring>
+        <name>ValueType</name>
+        <qualifiedname>castor::ParserParameterHelper&lt; ParameterType::eRectangle &gt;::ValueType</qualifiedname>
+        <briefdescription>
+<para>~english The parameter value type. Le type de valeur du paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="688" column="1" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="688" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="de/d15/a08643_1ab7c9f3c21b142a45fc51fd82a342c928" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> constexpr <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222" kindref="member">ParameterType</ref></type>
+        <definition>CU_API constexpr ParameterType castor::ParserParameterHelper&lt; ParameterType::eRectangle &gt;::ParamType</definition>
+        <argsstring></argsstring>
+        <name>ParamType</name>
+        <qualifiedname>castor::ParserParameterHelper&lt; ParameterType::eRectangle &gt;::ParamType</qualifiedname>
+        <initializer>= <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222adcdf05803336aa422a607fb1afff749c" kindref="member">ParameterType::eRectangle</ref></initializer>
+        <briefdescription>
+<para>~english The parameter type. Le type de paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="690" column="39" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="690" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d15/a08643_1a20541f709746741632b82f5e447d2301" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref> constexpr</type>
+        <definition>CU_API StringView constexpr castor::ParserParameterHelper&lt; ParameterType::eRectangle &gt;::StringType</definition>
+        <argsstring></argsstring>
+        <name>StringType</name>
+        <qualifiedname>castor::ParserParameterHelper&lt; ParameterType::eRectangle &gt;::StringType</qualifiedname>
+        <initializer>= <ref refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" kindref="member">cuT</ref>( &quot;rectangle&quot; )</initializer>
+        <briefdescription>
+<para>~english The parameter type name. Le nom du type de paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="692" column="36" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="692" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Specialisation de <ref refid="de/db2/a08403" kindref="compound">ParserParameterHelper</ref> pour <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222adcdf05803336aa422a607fb1afff749c" kindref="member">ParameterType::eRectangle</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserParameterHelper&lt; ParameterType::eRectangle &gt;</label>
+        <link refid="de/d15/a08643"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>StringType</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::basic_string_view&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="685" column="10" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="686" bodyend="693"/>
+    <listofallmembers>
+      <member refid="de/d15/a08643_1ab7c9f3c21b142a45fc51fd82a342c928" prot="public" virt="non-virtual"><scope>castor::ParserParameterHelper&lt; ParameterType::eRectangle &gt;</scope><name>ParamType</name></member>
+      <member refid="de/d15/a08643_1a20541f709746741632b82f5e447d2301" prot="public" virt="non-virtual"><scope>castor::ParserParameterHelper&lt; ParameterType::eRectangle &gt;</scope><name>StringType</name></member>
+      <member refid="de/d15/a08643_1a3e4c9cca68652d38a2d7986208367d98" prot="public" virt="non-virtual"><scope>castor::ParserParameterHelper&lt; ParameterType::eRectangle &gt;</scope><name>ValueType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

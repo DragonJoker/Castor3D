@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dir_d31b06848c74e058bfe0cc0eae81a8c8" kind="dir">
+    <compoundname>Castor3D</compoundname>
+    <innerdir refid="dir_7468c8c0b9d8888a461e576549a90882">Castor3D/Animation</innerdir>
+    <innerdir refid="dir_c0f5ae8941de6c2ef5bf77de2d17611b">Castor3D/Binary</innerdir>
+    <innerdir refid="dir_1f951589f8acf476d21b7aaa617ace7f">Castor3D/Buffer</innerdir>
+    <innerdir refid="dir_47d4dc702f95fd3b4895cd578fa02d5a">Castor3D/Cache</innerdir>
+    <innerdir refid="dir_fd1ba99bf4a0b5f690afa549d5d5adac">Castor3D/Event</innerdir>
+    <innerdir refid="dir_bc5d8233c26a470289e79521f10c511e">Castor3D/Gui</innerdir>
+    <innerdir refid="dir_bc92629874efa68fdb2baff2456ea0c1">Castor3D/Material</innerdir>
+    <innerdir refid="dir_8eaf0d3926bbb6a7bcb1f8356136eebb">Castor3D/Miscellaneous</innerdir>
+    <innerdir refid="dir_48b9b82601b5e90070b208b7d796c277">Castor3D/Model</innerdir>
+    <innerdir refid="dir_0f9b0433c36f34fe4ee722c8e6ecda73">Castor3D/Overlay</innerdir>
+    <innerdir refid="dir_57142e14a7f7b0849a2232e480543b36">Castor3D/Plugin</innerdir>
+    <innerdir refid="dir_ee81606feaed1a7650f95054c2670416">Castor3D/Render</innerdir>
+    <innerdir refid="dir_40533bd5f36be4afaf2f8adef25fbc6c">Castor3D/Scene</innerdir>
+    <innerdir refid="dir_73b4ff1c0d48677e07219a6e5cbe5dfd">Castor3D/Shader</innerdir>
+    <innerfile refid="d3/d5e/a00275">Castor3DModule.hpp</innerfile>
+    <innerfile refid="dc/d5d/a00278">Castor3DPch.hpp</innerfile>
+    <innerfile refid="d2/d04/a00281">Castor3DPrerequisites.hpp</innerfile>
+    <innerfile refid="db/dc3/a00284">Engine.hpp</innerfile>
+    <innerfile refid="df/d70/a00431">ImporterFile.hpp</innerfile>
+    <innerfile refid="d1/d7e/a00434">Limits.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/"/>
+  </compounddef>
+</doxygen>

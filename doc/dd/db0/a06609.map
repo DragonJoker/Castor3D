@@ -1,4 +1,11 @@
-<map id="castor3d::shader::CameraData" name="castor3d::shader::CameraData">
-<area shape="rect" id="node1" title=" " alt="" coords="500,108,699,133"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,452,236"/>
+<map id="castor3d::RenderWindow::InputListener" name="castor3d::RenderWindow::InputListener">
+<area shape="rect" id="Node000001" title=" " alt="" coords="135,256,302,296"/>
+<area shape="rect" id="Node000002" href="$dc/d17/a03783.html" title=" " alt="" coords="128,181,309,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="221,220,221,256,216,256,216,220"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="5,93,192,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="128,125,204,179,201,183,125,129"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="7,5,190,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="101,45,101,93,96,93,96,45"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="217,93,301,119"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="250,132,227,182,222,180,245,130"/>
 </map>

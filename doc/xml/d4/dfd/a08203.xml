@@ -1,0 +1,319 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/dfd/a08203" kind="struct" language="C++" prot="public">
+    <compoundname>castor::FlagIterator</compoundname>
+    <includes local="no">FlagCombination.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename FlagTypeT</type>
+      </param>
+      <param>
+        <type>typename IteratorTraitsT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d4/dfd/a08203_1a8d9a702d0c5f64bd96b0838ceff5a296" prot="public" static="no">
+        <type>typename std::underlying_type&lt; FlagTypeT &gt;::type</type>
+        <definition>using castor::FlagIterator&lt; FlagTypeT, IteratorTraitsT &gt;::BaseType =  typename std::underlying_type&lt; FlagTypeT &gt;::type</definition>
+        <argsstring></argsstring>
+        <name>BaseType</name>
+        <qualifiedname>castor::FlagIterator::BaseType</qualifiedname>
+        <briefdescription>
+<para>The basic integer type. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="19" column="1" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d4/dfd/a08203_1a91f574df531f851f8e1e805e1e391d01" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/dfd/a08203_1a8d9a702d0c5f64bd96b0838ceff5a296" kindref="member">BaseType</ref></type>
+        <definition>BaseType castor::FlagIterator&lt; FlagTypeT, IteratorTraitsT &gt;::m_initialValue</definition>
+        <argsstring></argsstring>
+        <name>m_initialValue</name>
+        <qualifiedname>castor::FlagIterator::m_initialValue</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="100" column="10" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dfd/a08203_1a9e4259a92978220f332487ac4fce0eba" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t castor::FlagIterator&lt; FlagTypeT, IteratorTraitsT &gt;::m_index</definition>
+        <argsstring></argsstring>
+        <name>m_index</name>
+        <qualifiedname>castor::FlagIterator::m_index</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="101" column="8" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="101" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dfd/a08203_1a461038dbed7db5f7acdfd00a470dbb33" prot="private" static="no" mutable="no">
+        <type>FlagTypeT</type>
+        <definition>FlagTypeT castor::FlagIterator&lt; FlagTypeT, IteratorTraitsT &gt;::m_value</definition>
+        <argsstring></argsstring>
+        <name>m_value</name>
+        <qualifiedname>castor::FlagIterator::m_value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="102" column="11" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/dfd/a08203_1a765e638ae282877c53c6703fe3255185" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr castor::FlagIterator&lt; FlagTypeT, IteratorTraitsT &gt;::FlagIterator</definition>
+        <argsstring>(FlagIterator &amp;&amp;value) noexcept</argsstring>
+        <name>FlagIterator</name>
+        <qualifiedname>castor::FlagIterator::FlagIterator</qualifiedname>
+        <param>
+          <type><ref refid="d4/dfd/a08203" kindref="compound">FlagIterator</ref> &amp;&amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="22" column="11" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="22" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dfd/a08203_1aa1e3b210054a2a0eae9a3a73fa3b4aa5" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr castor::FlagIterator&lt; FlagTypeT, IteratorTraitsT &gt;::FlagIterator</definition>
+        <argsstring>(FlagIterator const &amp;value)</argsstring>
+        <name>FlagIterator</name>
+        <qualifiedname>castor::FlagIterator::FlagIterator</qualifiedname>
+        <param>
+          <type><ref refid="d4/dfd/a08203" kindref="compound">FlagIterator</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="29" column="11" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="29" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dfd/a08203_1acacebcb93bfa6368f60a9b81056847de" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr <ref refid="d4/dfd/a08203" kindref="compound">FlagIterator</ref> &amp;</type>
+        <definition>constexpr FlagIterator &amp; castor::FlagIterator&lt; FlagTypeT, IteratorTraitsT &gt;::operator=</definition>
+        <argsstring>(FlagIterator &amp;&amp;value) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::FlagIterator::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d4/dfd/a08203" kindref="compound">FlagIterator</ref> &amp;&amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="36" column="25" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="36" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dfd/a08203_1a4a4517329d72760d11ace6ec38b54554" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr <ref refid="d4/dfd/a08203" kindref="compound">FlagIterator</ref> &amp;</type>
+        <definition>constexpr FlagIterator &amp; castor::FlagIterator&lt; FlagTypeT, IteratorTraitsT &gt;::operator=</definition>
+        <argsstring>(FlagIterator const &amp;value)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::FlagIterator::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d4/dfd/a08203" kindref="compound">FlagIterator</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="43" column="25" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="43" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dfd/a08203_1a37d6534b355c1661f2f2a405f2facaf7" prot="public" static="no" constexpr="yes" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr castor::FlagIterator&lt; FlagTypeT, IteratorTraitsT &gt;::FlagIterator</definition>
+        <argsstring>(BaseType contValue)</argsstring>
+        <name>FlagIterator</name>
+        <qualifiedname>castor::FlagIterator::FlagIterator</qualifiedname>
+        <param>
+          <type><ref refid="d4/dfd/a08203_1a8d9a702d0c5f64bd96b0838ceff5a296" kindref="member">BaseType</ref></type>
+          <declname>contValue</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Begin ctor. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="52" column="20" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="52" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dfd/a08203_1aad50f38f7db513cac401780a55046a78" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr castor::FlagIterator&lt; FlagTypeT, IteratorTraitsT &gt;::FlagIterator</definition>
+        <argsstring>(BaseType contValue, FlagTypeT iterValue)</argsstring>
+        <name>FlagIterator</name>
+        <qualifiedname>castor::FlagIterator::FlagIterator</qualifiedname>
+        <param>
+          <type><ref refid="d4/dfd/a08203_1a8d9a702d0c5f64bd96b0838ceff5a296" kindref="member">BaseType</ref></type>
+          <declname>contValue</declname>
+        </param>
+        <param>
+          <type>FlagTypeT</type>
+          <declname>iterValue</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>End ctor. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="60" column="11" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="60" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dfd/a08203_1a04bbc68e92cd5dd372b892e3b2aa630c" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr <ref refid="d4/dfd/a08203" kindref="compound">FlagIterator</ref> &amp;</type>
+        <definition>constexpr FlagIterator &amp; castor::FlagIterator&lt; FlagTypeT, IteratorTraitsT &gt;::operator++</definition>
+        <argsstring>()</argsstring>
+        <name>operator++</name>
+        <qualifiedname>castor::FlagIterator::operator++</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="68" column="25" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="68" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dfd/a08203_1a5edfff775ada06c60f0bb6e4b5001563" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr <ref refid="d4/dfd/a08203" kindref="compound">FlagIterator</ref></type>
+        <definition>constexpr FlagIterator castor::FlagIterator&lt; FlagTypeT, IteratorTraitsT &gt;::operator++</definition>
+        <argsstring>(int)</argsstring>
+        <name>operator++</name>
+        <qualifiedname>castor::FlagIterator::operator++</qualifiedname>
+        <param>
+          <type>int</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="74" column="24" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="74" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dfd/a08203_1a0ce4189271bb5a1ec7166bf56c8ca0ed" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr FlagTypeT</type>
+        <definition>constexpr FlagTypeT castor::FlagIterator&lt; FlagTypeT, IteratorTraitsT &gt;::operator*</definition>
+        <argsstring>() const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>castor::FlagIterator::operator*</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="81" column="21" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="81" bodyend="84"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d4/dfd/a08203_1acdf0af4ce2f8686fa1c15c408d2909d3" prot="private" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr void</type>
+        <definition>constexpr void castor::FlagIterator&lt; FlagTypeT, IteratorTraitsT &gt;::doGetNextValue</definition>
+        <argsstring>()</argsstring>
+        <name>doGetNextValue</name>
+        <qualifiedname>castor::FlagIterator::doGetNextValue</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="87" column="16" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="87" bodyend="97"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="d4/dfd/a08203_1a05757599817ccad42e517e34ef445a88" prot="private" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FlagType</type>
+          </param>
+          <param>
+            <type>typename <ref refid="dd/deb/a08171" kindref="compound">IteratorTraits</ref></type>
+          </param>
+        </templateparamlist>
+        <type>constexpr bool</type>
+        <definition>constexpr bool operator==</definition>
+        <argsstring>(FlagIterator&lt; FlagType, IteratorTraits &gt; const &amp;lhs, FlagIterator&lt; FlagType, IteratorTraits &gt; const &amp;rhs)</argsstring>
+        <name>operator==</name>
+        <qualifiedname>castor::FlagIterator::operator==</qualifiedname>
+        <param>
+          <type><ref refid="d4/dfd/a08203" kindref="compound">FlagIterator</ref>&lt; FlagType, <ref refid="dd/deb/a08171" kindref="compound">IteratorTraits</ref> &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dfd/a08203" kindref="compound">FlagIterator</ref>&lt; FlagType, <ref refid="dd/deb/a08171" kindref="compound">IteratorTraits</ref> &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="105" column="23"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Template iterator class on a binary combination of flags. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>FlagType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scoped enum type. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <location file="CastorUtils/Design/FlagCombination.hpp" line="15" column="1" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="16" bodyend="107"/>
+    <listofallmembers>
+      <member refid="d4/dfd/a08203_1a8d9a702d0c5f64bd96b0838ceff5a296" prot="public" virt="non-virtual"><scope>castor::FlagIterator</scope><name>BaseType</name></member>
+      <member refid="d4/dfd/a08203_1acdf0af4ce2f8686fa1c15c408d2909d3" prot="private" virt="non-virtual"><scope>castor::FlagIterator</scope><name>doGetNextValue</name></member>
+      <member refid="d4/dfd/a08203_1a765e638ae282877c53c6703fe3255185" prot="public" virt="non-virtual"><scope>castor::FlagIterator</scope><name>FlagIterator</name></member>
+      <member refid="d4/dfd/a08203_1aa1e3b210054a2a0eae9a3a73fa3b4aa5" prot="public" virt="non-virtual"><scope>castor::FlagIterator</scope><name>FlagIterator</name></member>
+      <member refid="d4/dfd/a08203_1a37d6534b355c1661f2f2a405f2facaf7" prot="public" virt="non-virtual"><scope>castor::FlagIterator</scope><name>FlagIterator</name></member>
+      <member refid="d4/dfd/a08203_1aad50f38f7db513cac401780a55046a78" prot="public" virt="non-virtual"><scope>castor::FlagIterator</scope><name>FlagIterator</name></member>
+      <member refid="d4/dfd/a08203_1a9e4259a92978220f332487ac4fce0eba" prot="private" virt="non-virtual"><scope>castor::FlagIterator</scope><name>m_index</name></member>
+      <member refid="d4/dfd/a08203_1a91f574df531f851f8e1e805e1e391d01" prot="private" virt="non-virtual"><scope>castor::FlagIterator</scope><name>m_initialValue</name></member>
+      <member refid="d4/dfd/a08203_1a461038dbed7db5f7acdfd00a470dbb33" prot="private" virt="non-virtual"><scope>castor::FlagIterator</scope><name>m_value</name></member>
+      <member refid="d4/dfd/a08203_1a0ce4189271bb5a1ec7166bf56c8ca0ed" prot="public" virt="non-virtual"><scope>castor::FlagIterator</scope><name>operator*</name></member>
+      <member refid="d4/dfd/a08203_1a04bbc68e92cd5dd372b892e3b2aa630c" prot="public" virt="non-virtual"><scope>castor::FlagIterator</scope><name>operator++</name></member>
+      <member refid="d4/dfd/a08203_1a5edfff775ada06c60f0bb6e4b5001563" prot="public" virt="non-virtual"><scope>castor::FlagIterator</scope><name>operator++</name></member>
+      <member refid="d4/dfd/a08203_1acacebcb93bfa6368f60a9b81056847de" prot="public" virt="non-virtual"><scope>castor::FlagIterator</scope><name>operator=</name></member>
+      <member refid="d4/dfd/a08203_1a4a4517329d72760d11ace6ec38b54554" prot="public" virt="non-virtual"><scope>castor::FlagIterator</scope><name>operator=</name></member>
+      <member refid="d4/dfd/a08203_1a05757599817ccad42e517e34ef445a88" prot="private" virt="non-virtual"><scope>castor::FlagIterator</scope><name>operator==</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

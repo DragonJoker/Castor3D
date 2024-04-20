@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/d0e/a08483" kind="struct" language="C++" prot="public">
+    <compoundname>castor::RegexFormat&lt; float &gt;</compoundname>
+    <includes local="no">ParserParameterHelpers.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d8/d0e/a08483_1a2e5f47a37e16965b7114245ac7b6f439" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a98169622bc976df3189194c2b35fbf60" kindref="member">xchar</ref> const  *const</type>
+        <definition>CU_API xchar const* const castor::RegexFormat&lt; float &gt;::Value</definition>
+        <argsstring></argsstring>
+        <name>Value</name>
+        <qualifiedname>castor::RegexFormat&lt; float &gt;::Value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="108" column="34" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Spécialisation de <ref refid="d7/dd6/a08395" kindref="compound">RegexFormat</ref> pour float. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="106" column="1" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="107" bodyend="109"/>
+    <listofallmembers>
+      <member refid="d8/d0e/a08483_1a2e5f47a37e16965b7114245ac7b6f439" prot="public" virt="non-virtual"><scope>castor::RegexFormat&lt; float &gt;</scope><name>Value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

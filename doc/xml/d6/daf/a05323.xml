@@ -1,0 +1,388 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/daf/a05323" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ProgressBar</compoundname>
+    <includes local="no">ProgressBar.hpp</includes>
+    <innerclass refid="d0/d31/a05327" prot="private">castor3d::ProgressBar::ProgressData</innerclass>
+    <innerclass refid="dc/d4e/a05331" prot="private">castor3d::ProgressBar::ProgressLabel</innerclass>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/daf/a05323_1aa48caa813f92b061ab9ee9bf83cd1c2b" prot="private" static="no" mutable="no">
+        <type>FrameListenerRPtr</type>
+        <definition>FrameListenerRPtr castor3d::ProgressBar::m_listener</definition>
+        <argsstring></argsstring>
+        <name>m_listener</name>
+        <qualifiedname>castor3d::ProgressBar::m_listener</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="90" column="19" bodyfile="Castor3D/Miscellaneous/ProgressBar.hpp" bodystart="90" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/daf/a05323_1a5a13c3e41c1676a50c0b76a70a1f111c" prot="private" static="no" mutable="no">
+        <type>ProgressLabel</type>
+        <definition>ProgressLabel castor3d::ProgressBar::m_global</definition>
+        <argsstring></argsstring>
+        <name>m_global</name>
+        <qualifiedname>castor3d::ProgressBar::m_global</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="91" column="15" bodyfile="Castor3D/Miscellaneous/ProgressBar.hpp" bodystart="91" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/daf/a05323_1ae1420aa58be80fd7ed85f51a0ef531c7" prot="private" static="no" mutable="no">
+        <type>ProgressLabel</type>
+        <definition>ProgressLabel castor3d::ProgressBar::m_local</definition>
+        <argsstring></argsstring>
+        <name>m_local</name>
+        <qualifiedname>castor3d::ProgressBar::m_local</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="92" column="15" bodyfile="Castor3D/Miscellaneous/ProgressBar.hpp" bodystart="92" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/daf/a05323_1a2402403cdc572d66eec235b0b3622af7" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aac3763b795438810958473f0b84908fb" kindref="member">castor::Mutex</ref></type>
+        <definition>castor::Mutex castor3d::ProgressBar::m_mutex</definition>
+        <argsstring></argsstring>
+        <name>m_mutex</name>
+        <qualifiedname>castor3d::ProgressBar::m_mutex</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="93" column="15" bodyfile="Castor3D/Miscellaneous/ProgressBar.hpp" bodystart="93" bodyend="93"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/daf/a05323_1a9871d18a11ec146bef7550d0a3bc58a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ProgressBar::ProgressBar</definition>
+        <argsstring>(Engine &amp;engine, ProgressCtrlRPtr globalProgress, ProgressCtrlRPtr localProgress=nullptr)</argsstring>
+        <name>ProgressBar</name>
+        <qualifiedname>castor3d::ProgressBar::ProgressBar</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>ProgressCtrlRPtr</type>
+          <declname>globalProgress</declname>
+        </param>
+        <param>
+          <type>ProgressCtrlRPtr</type>
+          <declname>localProgress</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="19" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/daf/a05323_1a7f836cca1681d876188a69903869f438" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressBar::update</definition>
+        <argsstring>(ProgressCtrlRPtr globalProgress, ProgressCtrlRPtr localProgress=nullptr)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::ProgressBar::update</qualifiedname>
+        <param>
+          <type>ProgressCtrlRPtr</type>
+          <declname>globalProgress</declname>
+        </param>
+        <param>
+          <type>ProgressCtrlRPtr</type>
+          <declname>localProgress</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="23" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/daf/a05323_1a3d8a86545e653cf52ced3133583bc97d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressBar::initGlobalRange</definition>
+        <argsstring>(uint32_t value)</argsstring>
+        <name>initGlobalRange</name>
+        <qualifiedname>castor3d::ProgressBar::initGlobalRange</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="26" column="14"/>
+        <referencedby refid="d2/d61/a05043_1a147f71e110c49d12bc1740bbb78aff20" compoundref="df/d9e/a00686" startline="116" endline="119">castor3d::LoadingScreen::initGlobalRange</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d6/daf/a05323_1aa75a73c66c881ee0b3a99f07eeab69fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::ProgressBar::incGlobalRange</definition>
+        <argsstring>(uint32_t value)</argsstring>
+        <name>incGlobalRange</name>
+        <qualifiedname>castor3d::ProgressBar::incGlobalRange</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="27" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/daf/a05323_1a9b87a94e57eff051dc2d0f0fb25db915" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressBar::stepGlobal</definition>
+        <argsstring>(castor::String const &amp;globalTitle)</argsstring>
+        <name>stepGlobal</name>
+        <qualifiedname>castor3d::ProgressBar::stepGlobal</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>globalTitle</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="28" column="14"/>
+        <referencedby refid="d2/d61/a05043_1ad9027badf78f056f9cd45de1c9bce8c6" compoundref="df/d9e/a00686" startline="121" endline="124">castor3d::LoadingScreen::stepGlobal</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d6/daf/a05323_1a59c5046b3000146f2b832d755149eb5e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressBar::setGlobalStep</definition>
+        <argsstring>(castor::String const &amp;globalTitle, uint32_t count)</argsstring>
+        <name>setGlobalStep</name>
+        <qualifiedname>castor3d::ProgressBar::setGlobalStep</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>globalTitle</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="29" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/daf/a05323_1a7f41e7819ff006afcb30096dd48c08c8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressBar::initLocalRange</definition>
+        <argsstring>(castor::String const &amp;globalLabel, uint32_t value)</argsstring>
+        <name>initLocalRange</name>
+        <qualifiedname>castor3d::ProgressBar::initLocalRange</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>globalLabel</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="31" column="14"/>
+        <referencedby refid="d2/d61/a05043_1aa3b933b58032ce6570b967f5da23207b" compoundref="df/d9e/a00686" startline="126" endline="130">castor3d::LoadingScreen::initLocalRange</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d6/daf/a05323_1aba66f237db55cac2c9bdef9df0bcacfa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressBar::stepLocal</definition>
+        <argsstring>(castor::String const &amp;label)</argsstring>
+        <name>stepLocal</name>
+        <qualifiedname>castor3d::ProgressBar::stepLocal</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>label</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="33" column="14"/>
+        <referencedby refid="d2/d61/a05043_1a114d4ece9cab47a96ade46a8b0f62732" compoundref="df/d9e/a00686" startline="132" endline="135">castor3d::LoadingScreen::stepLocal</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d6/daf/a05323_1a2c7f580d3985805267522d9789940e9e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressBar::setLocalStep</definition>
+        <argsstring>(castor::String const &amp;label, uint32_t count)</argsstring>
+        <name>setLocalStep</name>
+        <qualifiedname>castor3d::ProgressBar::setLocalStep</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>label</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="34" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/daf/a05323_1a1d85d8de084efff81211b35180f867dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressBar::setGlobalTitle</definition>
+        <argsstring>(castor::String const &amp;globalTitle)</argsstring>
+        <name>setGlobalTitle</name>
+        <qualifiedname>castor3d::ProgressBar::setGlobalTitle</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>globalTitle</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="36" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/daf/a05323_1a5f26524c4895d2fd0986e078fcb67853" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressBar::stepGlobalStartLocal</definition>
+        <argsstring>(castor::String const &amp;globalLabel, uint32_t rangeMax)</argsstring>
+        <name>stepGlobalStartLocal</name>
+        <qualifiedname>castor3d::ProgressBar::stepGlobalStartLocal</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>globalLabel</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>rangeMax</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="37" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/daf/a05323_1accc848148d25feef7602497a787404d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressBar::setLocal</definition>
+        <argsstring>(castor::String const &amp;globalLabel, castor::String const &amp;localLabel, uint32_t rangeMax, uint32_t value)</argsstring>
+        <name>setLocal</name>
+        <qualifiedname>castor3d::ProgressBar::setLocal</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>globalLabel</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>localLabel</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>rangeMax</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="39" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/daf/a05323_1a32fd204d7e061d22407f173d522b2f7c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressBar::lock</definition>
+        <argsstring>()</argsstring>
+        <name>lock</name>
+        <qualifiedname>castor3d::ProgressBar::lock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="44" column="6" bodyfile="Castor3D/Miscellaneous/ProgressBar.hpp" bodystart="44" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/daf/a05323_1a8a562cfbdda467fa310463c8f02e9e49" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressBar::unlock</definition>
+        <argsstring>()</argsstring>
+        <name>unlock</name>
+        <qualifiedname>castor3d::ProgressBar::unlock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="49" column="6" bodyfile="Castor3D/Miscellaneous/ProgressBar.hpp" bodystart="49" bodyend="52"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="16" column="1" bodyfile="Castor3D/Miscellaneous/ProgressBar.hpp" bodystart="17" bodyend="94"/>
+    <listofallmembers>
+      <member refid="d6/daf/a05323_1aa75a73c66c881ee0b3a99f07eeab69fa" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>incGlobalRange</name></member>
+      <member refid="d6/daf/a05323_1a3d8a86545e653cf52ced3133583bc97d" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>initGlobalRange</name></member>
+      <member refid="d6/daf/a05323_1a7f41e7819ff006afcb30096dd48c08c8" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>initLocalRange</name></member>
+      <member refid="d6/daf/a05323_1a32fd204d7e061d22407f173d522b2f7c" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>lock</name></member>
+      <member refid="d6/daf/a05323_1a5a13c3e41c1676a50c0b76a70a1f111c" prot="private" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>m_global</name></member>
+      <member refid="d6/daf/a05323_1aa48caa813f92b061ab9ee9bf83cd1c2b" prot="private" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>m_listener</name></member>
+      <member refid="d6/daf/a05323_1ae1420aa58be80fd7ed85f51a0ef531c7" prot="private" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>m_local</name></member>
+      <member refid="d6/daf/a05323_1a2402403cdc572d66eec235b0b3622af7" prot="private" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>m_mutex</name></member>
+      <member refid="d6/daf/a05323_1a9871d18a11ec146bef7550d0a3bc58a9" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>ProgressBar</name></member>
+      <member refid="d6/daf/a05323_1a59c5046b3000146f2b832d755149eb5e" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>setGlobalStep</name></member>
+      <member refid="d6/daf/a05323_1a1d85d8de084efff81211b35180f867dd" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>setGlobalTitle</name></member>
+      <member refid="d6/daf/a05323_1accc848148d25feef7602497a787404d6" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>setLocal</name></member>
+      <member refid="d6/daf/a05323_1a2c7f580d3985805267522d9789940e9e" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>setLocalStep</name></member>
+      <member refid="d6/daf/a05323_1a9b87a94e57eff051dc2d0f0fb25db915" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>stepGlobal</name></member>
+      <member refid="d6/daf/a05323_1a5f26524c4895d2fd0986e078fcb67853" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>stepGlobalStartLocal</name></member>
+      <member refid="d6/daf/a05323_1aba66f237db55cac2c9bdef9df0bcacfa" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>stepLocal</name></member>
+      <member refid="d6/daf/a05323_1a8a562cfbdda467fa310463c8f02e9e49" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>unlock</name></member>
+      <member refid="d6/daf/a05323_1a7f836cca1681d876188a69903869f438" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

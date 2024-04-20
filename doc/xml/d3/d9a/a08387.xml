@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/d9a/a08387" kind="class" language="C++" prot="public">
+    <compoundname>castor::ParserParameter</compoundname>
+    <templateparamlist>
+      <param>
+        <type><ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222" kindref="member">ParameterType</ref></type>
+        <declname>Type</declname>
+        <defname>Type</defname>
+      </param>
+      <param>
+        <type>typename Enable</type>
+        <defval>void</defval>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Parmètre de parseur spécifié. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="7">
+        <label>castor::ParserParameter&lt; ParameterType::eText &gt;</label>
+        <link refid="d3/d9a/a08387"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ParameterType::eText &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::ParserParameter&lt; ParameterType::eUInt32 &gt;</label>
+        <link refid="d3/d9a/a08387"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ParameterType::eUInt32 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::ParserParameter&lt; ParameterType::eUInt64 &gt;</label>
+        <link refid="d3/d9a/a08387"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ParameterType::eUInt64 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::ParserParameter&lt; ParameterType::eBitwiseOred32BitsCheckedText &gt;</label>
+        <link refid="d7/d2a/a08439"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;</label>
+        <link refid="da/d71/a08443"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::ParserParameter&lt; ParameterType::eCheckedText &gt;</label>
+        <link refid="d2/d2a/a08435"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::ParserParameter&lt; ParameterType::eName &gt;</label>
+        <link refid="da/dd0/a08431"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::ParserParameter&lt; Type, Enable &gt;</label>
+        <link refid="d3/d9a/a08387"/>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/FileParser/FileParserModule.hpp" line="230" column="1" bodyfile="CastorUtils/FileParser/FileParserModule.hpp" bodystart="230" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

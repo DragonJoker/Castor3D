@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d15/a06567" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::RenderTarget::StereoConfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d15/a06567_1a47d10b4c7f7948ca8cd452de358f7cee" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderTarget::StereoConfig::enabled</definition>
+        <argsstring></argsstring>
+        <name>enabled</name>
+        <qualifiedname>castor3d::RenderTarget::StereoConfig::enabled</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="536" column="6" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="536" bodyend="536"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d15/a06567_1aabe58a342cbfc2e1ca9866250863ed71" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::RenderTarget::StereoConfig::intraOcularDistance</definition>
+        <argsstring></argsstring>
+        <name>intraOcularDistance</name>
+        <qualifiedname>castor3d::RenderTarget::StereoConfig::intraOcularDistance</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTarget.hpp" line="537" column="7" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="537" bodyend="537"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/RenderTarget.hpp" line="534" column="1" bodyfile="Castor3D/Render/RenderTarget.hpp" bodystart="535" bodyend="538"/>
+    <listofallmembers>
+      <member refid="d0/d15/a06567_1a47d10b4c7f7948ca8cd452de358f7cee" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget::StereoConfig</scope><name>enabled</name></member>
+      <member refid="d0/d15/a06567_1aabe58a342cbfc2e1ca9866250863ed71" prot="public" virt="non-virtual"><scope>castor3d::RenderTarget::StereoConfig</scope><name>intraOcularDistance</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

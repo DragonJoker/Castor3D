@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/dc3/a09191" kind="struct" language="C++" prot="public">
+    <compoundname>castor::PointData</compoundname>
+    <includes local="no">PointData.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+      <param>
+        <type>uint32_t</type>
+        <declname>TCount</declname>
+        <defname>TCount</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/dc3/a09191_1afaf78fe23bd224fedfbf8da57ff3dd4a" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">Array</ref>&lt; T, TCount &gt;</type>
+        <definition>Array&lt; T, TCount &gt; castor::PointData&lt; T, TCount &gt;::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>castor::PointData::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PointData.hpp" line="14" column="7" bodyfile="CastorUtils/Math/PointData.hpp" bodystart="14" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Conteneur des données d&apos;un point. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::PointData&lt; float, TCount &gt;</label>
+        <link refid="d6/dc3/a09191"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; float, TCount &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::PointData&lt; T, TCount &gt;</label>
+        <link refid="d6/dc3/a09191"/>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/Math/PointData.hpp" line="12" column="1" bodyfile="CastorUtils/Math/PointData.hpp" bodystart="13" bodyend="15"/>
+    <listofallmembers>
+      <member refid="d6/dc3/a09191_1afaf78fe23bd224fedfbf8da57ff3dd4a" prot="public" virt="non-virtual"><scope>castor::PointData</scope><name>data</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

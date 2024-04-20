@@ -1,0 +1,36 @@
+<map id="castor3d::Control" name="castor3d::Control">
+<area shape="rect" id="Node000001" title=" " alt="" coords="869,252,991,277"/>
+<area shape="rect" id="Node000006" href="$d4/ddc/a03787.html" title=" " alt="" coords="1071,5,1210,31"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="934,238,946,195,966,142,996,88,1016,63,1038,41,1070,25,1072,29,1042,45,1020,66,1001,90,971,144,951,197,939,239"/>
+<area shape="rect" id="Node000007" href="$d6/d8b/a03791.html" title=" " alt="" coords="1059,55,1223,80"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="938,238,952,204,974,164,1003,124,1038,91,1062,78,1065,83,1042,95,1007,128,978,167,957,207,943,240"/>
+<area shape="rect" id="Node000008" href="$d8/d73/a03799.html" title=" " alt="" coords="1079,104,1202,129"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="944,238,983,188,1009,162,1039,140,1078,123,1080,128,1041,144,1013,166,987,192,949,242"/>
+<area shape="rect" id="Node000009" href="$d7/dab/a03815.html" title=" " alt="" coords="1040,153,1241,179"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="956,241,994,214,1039,189,1075,176,1077,181,1041,194,996,219,959,246"/>
+<area shape="rect" id="Node000010" href="$d4/daf/a03819.html" title=" " alt="" coords="1072,203,1209,228"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="997,246,1085,225,1086,231,999,251"/>
+<area shape="rect" id="Node000011" href="$d9/dc9/a03823.html" title=" " alt="" coords="1061,252,1221,277"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="1004,262,1060,262,1060,267,1004,267"/>
+<area shape="rect" id="Node000013" href="$d2/db0/a03827.html" title=" " alt="" coords="1069,301,1213,327"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="999,278,1086,299,1085,304,997,283"/>
+<area shape="rect" id="Node000014" href="$d1/da3/a03835.html" title=" " alt="" coords="1065,351,1217,376"/>
+<area shape="poly" id="edge14_Node000001_Node000014" title=" " alt="" coords="958,284,996,312,1041,337,1073,348,1071,353,1039,342,993,316,955,288"/>
+<area shape="rect" id="Node000015" href="$d1/db8/a03847.html" title=" " alt="" coords="1064,400,1217,425"/>
+<area shape="poly" id="edge15_Node000001_Node000015" title=" " alt="" coords="948,288,986,338,1012,365,1041,386,1066,398,1064,402,1039,391,1009,369,982,342,944,291"/>
+<area shape="rect" id="Node000016" href="$d5/d12/a03851.html" title=" " alt="" coords="1074,449,1207,475"/>
+<area shape="poly" id="edge16_Node000001_Node000016" title=" " alt="" coords="943,289,957,323,978,363,1006,403,1041,436,1075,451,1073,456,1039,440,1002,406,974,366,952,325,938,291"/>
+<area shape="rect" id="Node000017" href="$d5/daa/a03855.html" title=" " alt="" coords="1073,499,1208,524"/>
+<area shape="poly" id="edge17_Node000001_Node000017" title=" " alt="" coords="939,290,951,333,971,386,1001,440,1020,464,1042,485,1074,502,1072,506,1038,490,1016,468,996,443,966,389,946,335,934,292"/>
+<area shape="rect" id="Node000002" href="$d7/dfa/a03751.html" title=" " alt="" coords="652,245,820,285"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="834,262,869,262,869,267,834,267"/>
+<area shape="rect" id="Node000003" href="$da/db0/a03747.html" title=" " alt="" coords="161,247,317,272"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="331,256,628,258,652,259,652,264,628,263,331,261"/>
+<area shape="rect" id="Node000005" href="$d7/dfa/a03751.html" title="Description of an event handler, class that can receive event." alt="" coords="367,279,535,319"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="321,272,367,281,366,286,320,277"/>
+<area shape="rect" id="Node000004" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="5,247,112,272"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="126,257,161,257,161,262,126,262"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="548,285,651,272,652,277,549,290"/>
+<area shape="rect" id="Node000012" href="$dd/d89/a03831.html" title=" " alt="" coords="1291,252,1424,277"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="1235,262,1291,262,1291,267,1235,267"/>
+</map>

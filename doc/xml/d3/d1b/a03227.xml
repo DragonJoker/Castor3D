@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/d1b/a03227" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BinaryParser</compoundname>
+    <templateparamlist>
+      <param>
+        <type>class TParsed</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Classe spécialisable de lecture d&apos;un chunk de données binaires. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Binary/BinaryModule.hpp" line="42" column="1" bodyfile="Castor3D/Binary/BinaryModule.hpp" bodystart="42" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

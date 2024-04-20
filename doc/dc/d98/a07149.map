@@ -1,0 +1,22 @@
+<map id="castor3d::RootContext" name="castor3d::RootContext">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1001,117,1153,143"/>
+<area shape="rect" id="Node000002" href="$d8/d4f/a03703.html" title=" " alt="" coords="740,37,860,63"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="869,63,978,93,1043,115,1041,120,977,98,868,69"/>
+<area shape="rect" id="Node000003" href="$dc/d63/a08283.html" title=" " alt="" coords="445,35,616,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="629,46,740,47,740,52,629,51"/>
+<area shape="rect" id="Node000004" href="$da/d87/a08319.html" title=" " alt="" coords="5,5,141,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="155,13,165,13,294,13,422,25,469,32,469,37,421,30,293,18,165,18,155,18"/>
+<area shape="rect" id="Node000005" href="$dc/d63/a08283.html" title="Representation of a Unique instance class." alt="" coords="191,35,328,60"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="155,28,191,34,190,39,154,33"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="342,45,445,45,445,50,342,50"/>
+<area shape="rect" id="Node000006" href="$de/d75/a06503.html" title=" " alt="" coords="701,91,899,116"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="913,111,1001,120,1001,125,912,117"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="467,85,594,125"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="608,102,701,101,701,106,608,107"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="196,85,323,125"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="337,102,467,102,467,107,337,107"/>
+<area shape="rect" id="Node000009" href="$d9/d93/a09063.html" title=" " alt="" coords="723,140,877,165"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="891,152,977,147,1022,140,1023,145,978,153,891,157"/>
+<area shape="rect" id="Node000010" href="$d6/daf/a05323.html" title=" " alt="" coords="724,189,876,215"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="889,189,977,170,1050,140,1052,145,978,175,890,194"/>
+</map>

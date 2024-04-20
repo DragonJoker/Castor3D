@@ -1,0 +1,370 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d83/a05443" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BaseDataComponentT::Plugin</compoundname>
+    <basecompoundref refid="db/de6/a05607" prot="public" virt="non-virtual">castor3d::SubmeshComponentPlugin</basecompoundref>
+    <includes local="no">BaseDataComponent.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d83/a05443_1a78091fa4965ee6e0a3d3b2c7aa6cdc9d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>SubmeshComponentUPtr</type>
+        <definition>SubmeshComponentUPtr castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt;::Plugin::createComponent</definition>
+        <argsstring>(Submesh &amp;submesh) const override</argsstring>
+        <name>createComponent</name>
+        <qualifiedname>castor3d::BaseDataComponentT::Plugin::createComponent</qualifiedname>
+        <reimplements refid="db/de6/a05607_1a7f8d72918ca4c01509c4980d57efb787">createComponent</reimplements>
+        <param>
+          <type><ref refid="dd/df1/a05635" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+<para>Crée un composant pour le submesh donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;ajoute pas le composant au submesh. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le submesh. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" line="142" column="22" bodyfile="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" bodystart="142" bodyend="145"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1a9acd025eb07a60642a338052ccbc981c" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="virtual">
+        <type><ref refid="d9/dba/a02278_1af0f2b6cb91a8d84eb40f3d6d11c054d4" kindref="member">SubmeshComponentFlag</ref></type>
+        <definition>SubmeshComponentFlag castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt;::Plugin::getPositionFlag</definition>
+        <argsstring>() const noexcept override</argsstring>
+        <name>getPositionFlag</name>
+        <qualifiedname>castor3d::BaseDataComponentT::Plugin::getPositionFlag</qualifiedname>
+        <reimplements refid="db/de6/a05607_1a947607bc8d72daf824574b468a28edb1">getPositionFlag</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" line="147" column="22" bodyfile="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" bodystart="147" bodyend="150"/>
+        <references refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0a86054f7db6bf2e232beaeb45c577adc0">castor3d::ePositions</references>
+        <references refid="db/de6/a05607_1ae2d8bf546001401b29ccd5c8b8441395" compoundref="d8/d2d/a00815" startline="405" endline="408">castor3d::SubmeshComponentPlugin::getComponentFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1a04fa817ea451f27ffd9fec13023d0dfa" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="virtual">
+        <type><ref refid="d9/dba/a02278_1af0f2b6cb91a8d84eb40f3d6d11c054d4" kindref="member">SubmeshComponentFlag</ref></type>
+        <definition>SubmeshComponentFlag castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt;::Plugin::getNormalFlag</definition>
+        <argsstring>() const noexcept override</argsstring>
+        <name>getNormalFlag</name>
+        <qualifiedname>castor3d::BaseDataComponentT::Plugin::getNormalFlag</qualifiedname>
+        <reimplements refid="db/de6/a05607_1aa343bd5d57e629be87426b9edb270212">getNormalFlag</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" line="152" column="22" bodyfile="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" bodystart="152" bodyend="155"/>
+        <references refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0aca16ec8aa6a422c2e2b106f1d6ba1f02">castor3d::eNormals</references>
+        <references refid="db/de6/a05607_1ae2d8bf546001401b29ccd5c8b8441395" compoundref="d8/d2d/a00815" startline="405" endline="408">castor3d::SubmeshComponentPlugin::getComponentFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1ac508a60a6643e7c9ebd443da45658c80" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="virtual">
+        <type><ref refid="d9/dba/a02278_1af0f2b6cb91a8d84eb40f3d6d11c054d4" kindref="member">SubmeshComponentFlag</ref></type>
+        <definition>SubmeshComponentFlag castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt;::Plugin::getTangentFlag</definition>
+        <argsstring>() const noexcept override</argsstring>
+        <name>getTangentFlag</name>
+        <qualifiedname>castor3d::BaseDataComponentT::Plugin::getTangentFlag</qualifiedname>
+        <reimplements refid="db/de6/a05607_1adf8b51246f96bf65433d2cf03e848765">getTangentFlag</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" line="157" column="22" bodyfile="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" bodystart="157" bodyend="160"/>
+        <references refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0a1174aebe21c2cb96f9a4a3df15609827">castor3d::eTangents</references>
+        <references refid="db/de6/a05607_1ae2d8bf546001401b29ccd5c8b8441395" compoundref="d8/d2d/a00815" startline="405" endline="408">castor3d::SubmeshComponentPlugin::getComponentFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1a440c1b0486e63f6154c3771ee644482c" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="virtual">
+        <type><ref refid="d9/dba/a02278_1af0f2b6cb91a8d84eb40f3d6d11c054d4" kindref="member">SubmeshComponentFlag</ref></type>
+        <definition>SubmeshComponentFlag castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt;::Plugin::getBitangentFlag</definition>
+        <argsstring>() const noexcept override</argsstring>
+        <name>getBitangentFlag</name>
+        <qualifiedname>castor3d::BaseDataComponentT::Plugin::getBitangentFlag</qualifiedname>
+        <reimplements refid="db/de6/a05607_1ae160238b188152471ee00d7c53990642">getBitangentFlag</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" line="162" column="22" bodyfile="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" bodystart="162" bodyend="165"/>
+        <references refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0a022430a10ab2825f0bd09ed7201a601b">castor3d::eBitangents</references>
+        <references refid="db/de6/a05607_1ae2d8bf546001401b29ccd5c8b8441395" compoundref="d8/d2d/a00815" startline="405" endline="408">castor3d::SubmeshComponentPlugin::getComponentFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1ad440a52a8d41acfee2f9f4a0daaafffb" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="virtual">
+        <type><ref refid="d9/dba/a02278_1af0f2b6cb91a8d84eb40f3d6d11c054d4" kindref="member">SubmeshComponentFlag</ref></type>
+        <definition>SubmeshComponentFlag castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt;::Plugin::getTexcoord0Flag</definition>
+        <argsstring>() const noexcept override</argsstring>
+        <name>getTexcoord0Flag</name>
+        <qualifiedname>castor3d::BaseDataComponentT::Plugin::getTexcoord0Flag</qualifiedname>
+        <reimplements refid="db/de6/a05607_1aea31484558dba08bf299d953876a366a">getTexcoord0Flag</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" line="167" column="22" bodyfile="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" bodystart="167" bodyend="170"/>
+        <references refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0aac51a7e78a31dbad6087d1566334d6fb">castor3d::eTexcoords0</references>
+        <references refid="db/de6/a05607_1ae2d8bf546001401b29ccd5c8b8441395" compoundref="d8/d2d/a00815" startline="405" endline="408">castor3d::SubmeshComponentPlugin::getComponentFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1a7916d52ce019f0374312d2c7631b30f0" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="virtual">
+        <type><ref refid="d9/dba/a02278_1af0f2b6cb91a8d84eb40f3d6d11c054d4" kindref="member">SubmeshComponentFlag</ref></type>
+        <definition>SubmeshComponentFlag castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt;::Plugin::getTexcoord1Flag</definition>
+        <argsstring>() const noexcept override</argsstring>
+        <name>getTexcoord1Flag</name>
+        <qualifiedname>castor3d::BaseDataComponentT::Plugin::getTexcoord1Flag</qualifiedname>
+        <reimplements refid="db/de6/a05607_1ad3f3cf527e54b502f0f395dc43014ed7">getTexcoord1Flag</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" line="172" column="22" bodyfile="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" bodystart="172" bodyend="175"/>
+        <references refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0ad1699ddcbb518119e47b434ff56817da">castor3d::eTexcoords1</references>
+        <references refid="db/de6/a05607_1ae2d8bf546001401b29ccd5c8b8441395" compoundref="d8/d2d/a00815" startline="405" endline="408">castor3d::SubmeshComponentPlugin::getComponentFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1a821b70825609c5c00286ae9516218f97" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="virtual">
+        <type><ref refid="d9/dba/a02278_1af0f2b6cb91a8d84eb40f3d6d11c054d4" kindref="member">SubmeshComponentFlag</ref></type>
+        <definition>SubmeshComponentFlag castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt;::Plugin::getTexcoord2Flag</definition>
+        <argsstring>() const noexcept override</argsstring>
+        <name>getTexcoord2Flag</name>
+        <qualifiedname>castor3d::BaseDataComponentT::Plugin::getTexcoord2Flag</qualifiedname>
+        <reimplements refid="db/de6/a05607_1ad0d305353a1ad742dc1b3caa6a13dd34">getTexcoord2Flag</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" line="177" column="22" bodyfile="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" bodystart="177" bodyend="180"/>
+        <references refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0abb2a8dc5ab084c3aadfec1cfb81949ce">castor3d::eTexcoords2</references>
+        <references refid="db/de6/a05607_1ae2d8bf546001401b29ccd5c8b8441395" compoundref="d8/d2d/a00815" startline="405" endline="408">castor3d::SubmeshComponentPlugin::getComponentFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1afaf80dddcd6a13d02b23b5d6a9094249" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="virtual">
+        <type><ref refid="d9/dba/a02278_1af0f2b6cb91a8d84eb40f3d6d11c054d4" kindref="member">SubmeshComponentFlag</ref></type>
+        <definition>SubmeshComponentFlag castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt;::Plugin::getTexcoord3Flag</definition>
+        <argsstring>() const noexcept override</argsstring>
+        <name>getTexcoord3Flag</name>
+        <qualifiedname>castor3d::BaseDataComponentT::Plugin::getTexcoord3Flag</qualifiedname>
+        <reimplements refid="db/de6/a05607_1a0d38e0331724898614d924f7e161e353">getTexcoord3Flag</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" line="182" column="22" bodyfile="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" bodystart="182" bodyend="185"/>
+        <references refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0ad2be9354ac0d2389c2a985388c59fd90">castor3d::eTexcoords3</references>
+        <references refid="db/de6/a05607_1ae2d8bf546001401b29ccd5c8b8441395" compoundref="d8/d2d/a00815" startline="405" endline="408">castor3d::SubmeshComponentPlugin::getComponentFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1a0bca252a7448aab8357969adfe0bd22d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="virtual">
+        <type><ref refid="d9/dba/a02278_1af0f2b6cb91a8d84eb40f3d6d11c054d4" kindref="member">SubmeshComponentFlag</ref></type>
+        <definition>SubmeshComponentFlag castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt;::Plugin::getColourFlag</definition>
+        <argsstring>() const noexcept override</argsstring>
+        <name>getColourFlag</name>
+        <qualifiedname>castor3d::BaseDataComponentT::Plugin::getColourFlag</qualifiedname>
+        <reimplements refid="db/de6/a05607_1af76d5bb3d874e9d21caa50079a8d3593">getColourFlag</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" line="187" column="22" bodyfile="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" bodystart="187" bodyend="190"/>
+        <references refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0a010fb4abc202c6b23b6442f2c9d60a6e">castor3d::eColours</references>
+        <references refid="db/de6/a05607_1ae2d8bf546001401b29ccd5c8b8441395" compoundref="d8/d2d/a00815" startline="405" endline="408">castor3d::SubmeshComponentPlugin::getComponentFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1a56f98ae9641978dcaa517d1743b17376" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="virtual">
+        <type><ref refid="d9/dba/a02278_1af0f2b6cb91a8d84eb40f3d6d11c054d4" kindref="member">SubmeshComponentFlag</ref></type>
+        <definition>SubmeshComponentFlag castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt;::Plugin::getVelocityFlag</definition>
+        <argsstring>() const noexcept override</argsstring>
+        <name>getVelocityFlag</name>
+        <qualifiedname>castor3d::BaseDataComponentT::Plugin::getVelocityFlag</qualifiedname>
+        <reimplements refid="db/de6/a05607_1a65abd3814de668ce176486b410810877">getVelocityFlag</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" line="192" column="22" bodyfile="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" bodystart="192" bodyend="195"/>
+        <references refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0ab2c25b5cef640a0733b40b4ded88d091">castor3d::eVelocity</references>
+        <references refid="db/de6/a05607_1ae2d8bf546001401b29ccd5c8b8441395" compoundref="d8/d2d/a00815" startline="405" endline="408">castor3d::SubmeshComponentPlugin::getComponentFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1a29331c2f7ef3f18ad0f5b7882379002c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="da/d68/a02280_1a647624d2633b279d54a09cb7de2e5c6b" kindref="member">shader::SubmeshVertexSurfaceShaderPtr</ref></type>
+        <definition>shader::SubmeshVertexSurfaceShaderPtr castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt;::Plugin::createVertexSurfaceShader</definition>
+        <argsstring>() const override</argsstring>
+        <name>createVertexSurfaceShader</name>
+        <qualifiedname>castor3d::BaseDataComponentT::Plugin::createVertexSurfaceShader</qualifiedname>
+        <reimplements refid="db/de6/a05607_1a353a30b6e4686f507eb1e7855831fb9b">createVertexSurfaceShader</reimplements>
+        <briefdescription>
+<para>Les shaders pour la surface de vertex du composant. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" line="197" column="39" bodyfile="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" bodystart="197" bodyend="200"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1af2ec2605680c93e74f196fa7b2f533b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::SubmeshComponentPlugin::SubmeshComponentPlugin</definition>
+        <argsstring>(SubmeshComponentPlugin const &amp;)=delete</argsstring>
+        <name>SubmeshComponentPlugin</name>
+        <qualifiedname>castor3d::BaseDataComponentT::Plugin::SubmeshComponentPlugin</qualifiedname>
+        <param>
+          <type><ref refid="db/de6/a05607" kindref="compound">SubmeshComponentPlugin</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" line="140" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1a0f55311906cf1ea0d395e519da82b919" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SubmeshComponentPlugin::SubmeshComponentPlugin</definition>
+        <argsstring>(SubmeshComponentPlugin &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>SubmeshComponentPlugin</name>
+        <qualifiedname>castor3d::BaseDataComponentT::Plugin::SubmeshComponentPlugin</qualifiedname>
+        <param>
+          <type><ref refid="db/de6/a05607" kindref="compound">SubmeshComponentPlugin</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" line="140" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d83/a05443_1aa45bed165ac9d162fcee04ffee25736e" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SubmeshComponentPlugin::SubmeshComponentPlugin</definition>
+        <argsstring>(SubmeshComponentRegister const &amp;submeshComponents, castor::UserContextCreator const &amp;pcreateParserContext={})</argsstring>
+        <name>SubmeshComponentPlugin</name>
+        <qualifiedname>castor3d::BaseDataComponentT::Plugin::SubmeshComponentPlugin</qualifiedname>
+        <param>
+          <type><ref refid="da/d5c/a05615" kindref="compound">SubmeshComponentRegister</ref> const &amp;</type>
+          <declname>submeshComponents</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a60b7ae265f5b3f1c88303e2abbbc80ed" kindref="member">castor::UserContextCreator</ref> const &amp;</type>
+          <declname>pcreateParserContext</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submeshComponents</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le registre de composants. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pcreateParserContext</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La fonction de création d&apos;un contexte défini par l&apos;utilisateur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" line="140" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp" bodystart="346" bodyend="351"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt;::Plugin</label>
+        <link refid="dd/d83/a05443"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SubmeshComponentPlugin</label>
+        <link refid="db/de6/a05607"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt;::Plugin</label>
+        <link refid="dd/d83/a05443"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SubmeshComponentPlugin</label>
+        <link refid="db/de6/a05607"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" line="136" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp" bodystart="138" bodyend="201"/>
+    <listofallmembers>
+      <member refid="dd/d83/a05443_1a78091fa4965ee6e0a3d3b2c7aa6cdc9d" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>createComponent</name></member>
+      <member refid="db/de6/a05607_1ada1194785aa645ce4fd8cbd8e9ccedd7" prot="public" virt="non-virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>createParserContext</name></member>
+      <member refid="db/de6/a05607_1a683338ec632eb0b70e8d8276fed1055b" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>createParsers</name></member>
+      <member refid="db/de6/a05607_1ad2ff1ab3ab8bf2cf2e020491042eb23f" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>createRasterSurfaceShader</name></member>
+      <member refid="db/de6/a05607_1a9af9ff2d30814a3b6d4271480f135e17" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>createRenderShader</name></member>
+      <member refid="db/de6/a05607_1a4ab892f8600a579ba7a112e20c5cae41" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>createSections</name></member>
+      <member refid="dd/d83/a05443_1a29331c2f7ef3f18ad0f5b7882379002c" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>createVertexSurfaceShader</name></member>
+      <member refid="dd/d83/a05443_1a440c1b0486e63f6154c3771ee644482c" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getBitangentFlag</name></member>
+      <member refid="dd/d83/a05443_1a0bca252a7448aab8357969adfe0bd22d" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getColourFlag</name></member>
+      <member refid="db/de6/a05607_1ae2d8bf546001401b29ccd5c8b8441395" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getComponentFlags</name></member>
+      <member refid="db/de6/a05607_1a4c5e33b84f3db3768e765660e4459a88" prot="public" virt="non-virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getId</name></member>
+      <member refid="db/de6/a05607_1a7d22936c56f121a721f78be9bd8e56f9" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getIndexFlag</name></member>
+      <member refid="db/de6/a05607_1a5dd80501a7de76b68c65ba5d81c0df7d" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getInstantiationFlag</name></member>
+      <member refid="db/de6/a05607_1ac8d883306a8a7bddfcecaab94f696407" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getLineIndexFlag</name></member>
+      <member refid="db/de6/a05607_1ab8c260af62e905b9fd46752196e44686" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getMeshletFlag</name></member>
+      <member refid="db/de6/a05607_1ab20316a816bb7926d8b21845f5cd1dff" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getMorphFlag</name></member>
+      <member refid="dd/d83/a05443_1a04fa817ea451f27ffd9fec13023d0dfa" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getNormalFlag</name></member>
+      <member refid="db/de6/a05607_1a1a7e6ccebb44326bd5a5e5faaf682e59" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getPassMaskFlag</name></member>
+      <member refid="dd/d83/a05443_1a9acd025eb07a60642a338052ccbc981c" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getPositionFlag</name></member>
+      <member refid="db/de6/a05607_1ae84db74e8449d7618fe976b88e11ae9b" prot="public" virt="non-virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getRegister</name></member>
+      <member refid="db/de6/a05607_1a17611007595d29a0ca01ac93013839f1" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getRenderFlag</name></member>
+      <member refid="db/de6/a05607_1a80e5805632f4b674e3f052d8a822fcf4" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getSkinFlag</name></member>
+      <member refid="dd/d83/a05443_1ac508a60a6643e7c9ebd443da45658c80" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getTangentFlag</name></member>
+      <member refid="dd/d83/a05443_1ad440a52a8d41acfee2f9f4a0daaafffb" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getTexcoord0Flag</name></member>
+      <member refid="dd/d83/a05443_1a7916d52ce019f0374312d2c7631b30f0" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getTexcoord1Flag</name></member>
+      <member refid="dd/d83/a05443_1a821b70825609c5c00286ae9516218f97" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getTexcoord2Flag</name></member>
+      <member refid="dd/d83/a05443_1afaf80dddcd6a13d02b23b5d6a9094249" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getTexcoord3Flag</name></member>
+      <member refid="db/de6/a05607_1a69ba33e59aa8ef40d05a2e9d69a7ffad" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getTriangleIndexFlag</name></member>
+      <member refid="dd/d83/a05443_1a56f98ae9641978dcaa517d1743b17376" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>getVelocityFlag</name></member>
+      <member refid="db/de6/a05607_1a9d4eaa2af8d022fc9c1e3559b3a01b3d" prot="public" virt="non-virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>operator=</name></member>
+      <member refid="db/de6/a05607_1a24aabe68a4b81751a6e12ab3497aabee" prot="public" virt="non-virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>operator=</name></member>
+      <member refid="dd/d83/a05443_1af2ec2605680c93e74f196fa7b2f533b5" prot="public" virt="non-virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>SubmeshComponentPlugin</name></member>
+      <member refid="dd/d83/a05443_1a0f55311906cf1ea0d395e519da82b919" prot="public" virt="non-virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>SubmeshComponentPlugin</name></member>
+      <member refid="dd/d83/a05443_1aa45bed165ac9d162fcee04ffee25736e" prot="public" virt="non-virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>SubmeshComponentPlugin</name></member>
+      <member refid="db/de6/a05607_1a5bf299fb88212a5fccb81465954a0e75" prot="public" virt="virtual"><scope>castor3d::BaseDataComponentT::Plugin</scope><name>~SubmeshComponentPlugin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

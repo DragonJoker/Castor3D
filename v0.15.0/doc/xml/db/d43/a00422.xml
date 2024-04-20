@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="db/d43/a00422" kind="file" language="C++">
+    <compoundname>StyleScrollable.hpp</compoundname>
+    <includes refid="db/d43/a00422" local="yes">StyleScrollable.hpp</includes>
+    <includedby refid="d9/de6/a00404" local="yes">Gui/Theme/StyleEdit.hpp</includedby>
+    <includedby refid="df/d15/a00416" local="yes">Gui/Theme/StylePanel.hpp</includedby>
+    <includedby refid="db/d43/a00422" local="yes">Gui/Theme/StyleScrollable.hpp</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>Gui/Theme/StyleScrollable.hpp</label>
+        <link refid="db/d43/a00422"/>
+        <childnode refid="1" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="3">
+        <label>Gui/Controls/CtrlEdit.hpp</label>
+        <link refid="d8/d8e/a00344"/>
+      </node>
+      <node id="8">
+        <label>Gui/Controls/CtrlExpandablePanel.hpp</label>
+        <link refid="d1/dc6/a00347"/>
+      </node>
+      <node id="9">
+        <label>Gui/Controls/CtrlFrame.hpp</label>
+        <link refid="db/d10/a00350"/>
+      </node>
+      <node id="17">
+        <label>Gui/Controls/CtrlLayoutControl.hpp</label>
+        <link refid="db/ddc/a00353"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>Gui/Controls/CtrlPanel.hpp</label>
+        <link refid="d4/def/a00359"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>Gui/Controls/CtrlProgress.hpp</label>
+        <link refid="de/dd7/a00362"/>
+      </node>
+      <node id="10">
+        <label>Gui/Controls/CtrlScrollBar.hpp</label>
+        <link refid="d8/d21/a00368"/>
+      </node>
+      <node id="16">
+        <label>Gui/Controls/CtrlScrollable.hpp</label>
+        <link refid="dd/db5/a00365"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>Gui/ControlsManager.hpp</label>
+        <link refid="d4/d13/a00377"/>
+      </node>
+      <node id="2">
+        <label>Gui/Theme/StyleEdit.hpp</label>
+        <link refid="d9/de6/a00404"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>Gui/Theme/StyleExpandablePanel.hpp</label>
+        <link refid="d1/d98/a00407"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>Gui/Theme/StyleFrame.hpp</label>
+        <link refid="d8/d91/a00410"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>Gui/Theme/StylePanel.hpp</label>
+        <link refid="df/d15/a00416"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>Gui/Theme/StyleProgress.hpp</label>
+        <link refid="d3/d29/a00419"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>Gui/Theme/StyleScrollBar.hpp</label>
+        <link refid="dc/d2f/a00425"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Gui/Theme/StyleScrollable.hpp</label>
+        <link refid="db/d43/a00422"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="1" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>Gui/Theme/Theme.hpp</label>
+        <link refid="d4/da8/a00437"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="d0/d9d/a03289" prot="public">castor3d::ScrollableStyle</innerclass>
+    <innernamespace refid="d3/d5e/a01725">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Gui/Theme/StyleScrollable.hpp"/>
+  </compounddef>
+</doxygen>

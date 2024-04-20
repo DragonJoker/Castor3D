@@ -1,0 +1,7 @@
+<map id="castor3d::prepareChunkData" name="castor3d::prepareChunkData">
+<area shape="rect" id="Node000001" title="Sets given value to big endian." alt="" coords="5,35,192,60"/>
+<area shape="rect" id="Node000002" href="$d2/dd2/a02279.html#a90cf51f94dda321c89fc40fa450d0b91" title="Convert from little or big endian to the other." alt="" coords="240,5,411,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,33,226,28,227,33,193,38"/>
+<area shape="rect" id="Node000003" href="$da/d5d/a08743.html#a60331acaf54f87c0c3e80d6d61334a9b" title="Retrieves the component value." alt="" coords="241,55,410,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="193,56,227,61,227,66,192,62"/>
+</map>

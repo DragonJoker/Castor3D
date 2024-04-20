@@ -1,0 +1,12 @@
+<map id="castor3d::LightVolumePassResult" name="castor3d::LightVolumePassResult">
+<area shape="rect" id="Node000001" title=" " alt="" coords="11,347,193,387"/>
+<area shape="rect" id="Node000002" href="$d0/d22/a05963.html" title=" " alt="" coords="37,257,167,297"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,311,105,347,99,347,99,311"/>
+<area shape="rect" id="Node000003" href="$d8/d33/a05959.html" title=" " alt="" coords="5,80,159,105"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="87,119,94,194,102,257,97,258,89,195,81,120"/>
+<area shape="rect" id="Node000005" href="$d0/d22/a05963.html" title=" " alt="" coords="103,155,234,195"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="106,113,150,153,146,157,103,116"/>
+<area shape="rect" id="Node000004" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="29,5,135,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="85,45,85,80,79,80,79,45"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="151,208,117,259,112,256,146,205"/>
+</map>

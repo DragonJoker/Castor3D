@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d0e/a03395" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ChunkParserBase</compoundname>
+    <derivedcompoundref refid="d0/d87/a03399" prot="public" virt="non-virtual">castor3d::ChunkParser&lt; T &gt;</derivedcompoundref>
+    <derivedcompoundref refid="da/dc7/a03407" prot="public" virt="non-virtual">castor3d::ChunkParser&lt; castor::Path &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d5/dff/a03403" prot="public" virt="non-virtual">castor3d::ChunkParser&lt; castor::String &gt;</derivedcompoundref>
+    <includes local="no">ChunkParser.hpp</includes>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d6/d0e/a03395_1a062463121032ba679336be2382c508d0" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool castor3d::ChunkParserBase::parse</definition>
+        <argsstring>(uint8_t *values, size_t size, BinaryChunk &amp;chunk)</argsstring>
+        <name>parse</name>
+        <qualifiedname>castor3d::ChunkParserBase::parse</qualifiedname>
+        <param>
+          <type>uint8_t *</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d27/a03183" kindref="compound">BinaryChunk</ref> &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <briefdescription>
+<para>Récupère un tableau de valeurs à partir d&apos;un chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les valeurs </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La taille des valeurs </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">chunk</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chunk contenant les valeurs </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si une erreur quelconque est arrivée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/ChunkParser.hpp" line="30" column="20" bodyfile="Castor3D/Binary/ChunkParser.hpp" bodystart="30" bodyend="42"/>
+        <references refid="d5/d27/a03183_1af711032d94753cb2d482fe2bcf3afb17">castor3d::BinaryChunk::checkAvailable</references>
+        <references refid="d5/d27/a03183_1a7c1bb3cf53d6b4a6856c9964c54fac11">castor3d::BinaryChunk::get</references>
+        <referencedby refid="da/dc7/a03407_1ab3e16eea9051bc679aff2782279aafea" compoundref="db/ddf/a00164" startline="179" endline="199">castor3d::ChunkParser&lt; castor::Path &gt;::parse</referencedby>
+        <referencedby refid="d5/dff/a03403_1acf5c3a4513e23e175339295361d35119" compoundref="db/ddf/a00164" startline="134" endline="154">castor3d::ChunkParser&lt; castor::String &gt;::parse</referencedby>
+        <referencedby refid="d0/d87/a03399_1ad15c5a1f67d963aaebd202df3e903042" compoundref="db/ddf/a00164" startline="101" endline="109">castor3d::ChunkParser&lt; T &gt;::parse</referencedby>
+        <referencedby refid="d0/d87/a03399_1a51aa9cc211a27e96cdfbdb431808cc8f" compoundref="db/ddf/a00164" startline="69" endline="88">castor3d::ChunkParser&lt; T &gt;::parse</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ChunkParser&lt; T &gt;</label>
+        <link refid="d0/d87/a03399"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::ChunkParser&lt; castor::Path &gt;</label>
+        <link refid="da/dc7/a03407"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::ChunkParser&lt; castor::String &gt;</label>
+        <link refid="d5/dff/a03403"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ChunkParserBase</label>
+        <link refid="d6/d0e/a03395"/>
+      </node>
+    </inheritancegraph>
+    <location file="Castor3D/Binary/ChunkParser.hpp" line="13" column="1" bodyfile="Castor3D/Binary/ChunkParser.hpp" bodystart="14" bodyend="43"/>
+    <listofallmembers>
+      <member refid="d6/d0e/a03395_1a062463121032ba679336be2382c508d0" prot="public" virt="non-virtual"><scope>castor3d::ChunkParserBase</scope><name>parse</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

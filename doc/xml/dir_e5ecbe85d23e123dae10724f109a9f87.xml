@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_e5ecbe85d23e123dae10724f109a9f87" kind="dir">
-    <compoundname>Material/Pass/Shaders</compoundname>
-    <innerfile refid="d4/d10/a00635">GlslPbrLighting.hpp</innerfile>
-    <innerfile refid="d1/daa/a00638">GlslPhongLighting.hpp</innerfile>
+    <compoundname>Castor3D/Material/Pass/Shaders</compoundname>
+    <innerfile refid="da/dd1/a00629">GlslPbrLighting.hpp</innerfile>
+    <innerfile refid="d4/d2a/a00632">GlslPhongLighting.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Material/Pass/Shaders/"/>
+    <location file="Castor3D/Material/Pass/Shaders/"/>
   </compounddef>
 </doxygen>

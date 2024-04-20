@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dir_97324af3b5ce9ff3c1bac87d62f66657" kind="dir">
+    <compoundname>CastorUtils/Log</compoundname>
+    <innerfile refid="d9/dff/a02099">ELogType.hpp</innerfile>
+    <innerfile refid="db/d95/a11696">Logger.hpp</innerfile>
+    <innerfile refid="d0/dfe/a02102">LoggerConsole.hpp</innerfile>
+    <innerfile refid="db/d7a/a02105">LoggerImpl.hpp</innerfile>
+    <innerfile refid="d8/dd8/a02108">LoggerInstance.hpp</innerfile>
+    <innerfile refid="d4/d64/a02111">LoggerStream.hpp</innerfile>
+    <innerfile refid="da/d4a/a02114">LoggerStreambuf.hpp</innerfile>
+    <innerfile refid="d0/d79/a02117">LogModule.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Log/"/>
+  </compounddef>
+</doxygen>

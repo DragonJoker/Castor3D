@@ -1,0 +1,9 @@
+<map id="castor3d::RenderQuadBuilder" name="castor3d::RenderQuadBuilder">
+<area shape="rect" id="Node000001" title=" " alt="" coords="675,45,867,70"/>
+<area shape="rect" id="Node000002" href="$dd/d4d/a06283.html" title=" " alt="" coords="397,37,625,77"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="639,55,674,55,674,60,639,60"/>
+<area shape="rect" id="Node000003" href="$d6/d5e/a06299.html" title=" " alt="" coords="30,5,173,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="186,29,397,46,397,51,186,35"/>
+<area shape="rect" id="Node000004" href="$dd/d4d/a06283.html" title="Used to create a RenderQuad variable." alt="" coords="5,69,197,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="211,87,291,85,373,79,405,75,405,80,374,84,291,90,211,92"/>
+</map>

@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/dec/a09507" kind="struct" language="C++" prot="public">
+    <compoundname>castor::manip::DigitChars&lt; char &gt;</compoundname>
+    <includes local="no">StreamBaseManipulators.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d5/dec/a09507_1ab75651ef57aae580426af57f98606f13" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>std::string_view constexpr</type>
+        <definition>std::string_view constexpr castor::manip::DigitChars&lt; char &gt;::digitCharLc</definition>
+        <argsstring></argsstring>
+        <name>digitCharLc</name>
+        <qualifiedname>castor::manip::DigitChars&lt; char &gt;::digitCharLc</qualifiedname>
+        <initializer>{ &quot;0123456789abcdefghijklmnopqrstuvwxyz&quot; }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="186" column="35" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="186" bodyend="186"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dec/a09507_1a6d8469b8a1467f758eabefef48c292ad" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>std::string_view constexpr</type>
+        <definition>std::string_view constexpr castor::manip::DigitChars&lt; char &gt;::digitCharUc</definition>
+        <argsstring></argsstring>
+        <name>digitCharUc</name>
+        <qualifiedname>castor::manip::DigitChars&lt; char &gt;::digitCharUc</qualifiedname>
+        <initializer>{ &quot;0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot; }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="187" column="35" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="187" bodyend="187"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::manip::DigitChars&lt; char &gt;</label>
+        <link refid="d5/dec/a09507"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>digitCharLc</edgelabel>
+          <edgelabel>digitCharUc</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string_view&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string_view</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="184" column="1" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="185" bodyend="188"/>
+    <listofallmembers>
+      <member refid="d5/dec/a09507_1ab75651ef57aae580426af57f98606f13" prot="public" virt="non-virtual"><scope>castor::manip::DigitChars&lt; char &gt;</scope><name>digitCharLc</name></member>
+      <member refid="d5/dec/a09507_1a6d8469b8a1467f758eabefef48c292ad" prot="public" virt="non-virtual"><scope>castor::manip::DigitChars&lt; char &gt;</scope><name>digitCharUc</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/df8/a07267" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SceneNodeDetacherT</compoundname>
+    <includes local="no">SceneNode.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename CacheT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="df/df8/a07267_1a1ef2a7c03a3c0fa925591e34125c84f2" prot="public" static="no">
+        <type>typename CacheT::ElementT</type>
+        <definition>using castor3d::SceneNodeDetacherT&lt; CacheT &gt;::ElementT =  typename CacheT::ElementT</definition>
+        <argsstring></argsstring>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::SceneNodeDetacherT::ElementT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNode.hpp" line="415" column="1" bodyfile="Castor3D/Scene/SceneNode.hpp" bodystart="415" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/df8/a07267_1a3fb483a439ca2e9fb02c95097f8f2939" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneNodeDetacherT&lt; CacheT &gt;::operator()</definition>
+        <argsstring>(ElementT &amp;element) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor3d::SceneNodeDetacherT::operator()</qualifiedname>
+        <param>
+          <type><ref refid="df/df8/a07267_1a1ef2a7c03a3c0fa925591e34125c84f2" kindref="member">ElementT</ref> &amp;</type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNode.hpp" line="417" column="6" bodyfile="Castor3D/Scene/SceneNode.hpp" bodystart="417" bodyend="420"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Scene/SceneNode.hpp" line="413" column="1" bodyfile="Castor3D/Scene/SceneNode.hpp" bodystart="414" bodyend="421"/>
+    <listofallmembers>
+      <member refid="df/df8/a07267_1a1ef2a7c03a3c0fa925591e34125c84f2" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeDetacherT</scope><name>ElementT</name></member>
+      <member refid="df/df8/a07267_1a3fb483a439ca2e9fb02c95097f8f2939" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeDetacherT</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

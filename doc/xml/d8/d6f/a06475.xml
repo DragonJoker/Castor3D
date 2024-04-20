@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/d6f/a06475" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::DrawConstants</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d6f/a06475_1a0830c898652ee7dd5b6a2e3694e89ffe" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::DrawConstants::pipelineId</definition>
+        <argsstring></argsstring>
+        <name>pipelineId</name>
+        <qualifiedname>castor3d::DrawConstants::pipelineId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="144" column="10" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d6f/a06475_1af343acd694c9c48ad4cef2ecb3c41168" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::DrawConstants::drawId</definition>
+        <argsstring></argsstring>
+        <name>drawId</name>
+        <qualifiedname>castor3d::DrawConstants::drawId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="145" column="9" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="145" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Données de dessin pour un noeud de rendu. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/RenderModule.hpp" line="142" column="1" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="143" bodyend="146"/>
+    <listofallmembers>
+      <member refid="d8/d6f/a06475_1af343acd694c9c48ad4cef2ecb3c41168" prot="public" virt="non-virtual"><scope>castor3d::DrawConstants</scope><name>drawId</name></member>
+      <member refid="d8/d6f/a06475_1a0830c898652ee7dd5b6a2e3694e89ffe" prot="public" virt="non-virtual"><scope>castor3d::DrawConstants</scope><name>pipelineId</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/dfa/a04759" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OpacityData</compoundname>
+    <includes local="no">OpacityComponent.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/dfa/a04759_1a32abb6f3bf3b77498a2dfd03667773a2" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ac3f6d2ca50f484925164c6f2a13c97e8" kindref="member">castor::AtomicGroupChangeTracked</ref>&lt; float &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; float &gt; castor3d::OpacityData::opacity</definition>
+        <argsstring></argsstring>
+        <name>opacity</name>
+        <qualifiedname>castor3d::OpacityData::opacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp" line="23" column="34" bodyfile="Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp" bodystart="23" bodyend="-1"/>
+        <referencedby refid="de/d5f/a04763_1a23e2475f74629dbe5f84003c89a24ad1" compoundref="dc/d25/a00596" startline="105" endline="108">castor3d::OpacityComponent::getOpacity</referencedby>
+        <referencedby refid="de/d5f/a04763_1a92c82c0efe277624eec672f73c478c9b" compoundref="dc/d25/a00596" startline="100" endline="103">castor3d::OpacityComponent::needsAlphaProcessing</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dfa/a04759_1a456e18351bd91ae99a856f39da27319c" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ac3f6d2ca50f484925164c6f2a13c97e8" kindref="member">castor::AtomicGroupChangeTracked</ref>&lt; <ref refid="d8/de9/a09211" kindref="compound">castor::RangedValue</ref>&lt; uint32_t &gt; &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; castor::RangedValue&lt; uint32_t &gt; &gt; castor3d::OpacityData::bwAccumulationOperator</definition>
+        <argsstring></argsstring>
+        <name>bwAccumulationOperator</name>
+        <qualifiedname>castor3d::OpacityData::bwAccumulationOperator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp" line="24" column="34" bodyfile="Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp" bodystart="24" bodyend="-1"/>
+        <referencedby refid="de/d5f/a04763_1ac918a441b227616d7864afcc47251a21" compoundref="dc/d25/a00596" startline="110" endline="113">castor3d::OpacityComponent::getBWAccumulationOperator</referencedby>
+        <referencedby refid="de/d5f/a04763_1ae15722b4b9fe6d7528e2bd886e5bb9a2" compoundref="dc/d25/a00596" startline="115" endline="118">castor3d::OpacityComponent::setBWAccumulationOperator</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/dfa/a04759_1ae2429084888a1e60997926d5ba329994" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::OpacityData::OpacityData</definition>
+        <argsstring>(std::atomic_bool &amp;dirty)</argsstring>
+        <name>OpacityData</name>
+        <qualifiedname>castor3d::OpacityData::OpacityData</qualifiedname>
+        <param>
+          <type>std::atomic_bool &amp;</type>
+          <declname>dirty</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp" line="17" column="10" bodyfile="Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp" bodystart="17" bodyend="21"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>castor::GroupChangeTrackedT&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::GroupChangeTrackedT&lt; float &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; float &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::OpacityData</label>
+        <link refid="d0/dfa/a04759"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>opacity</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>bwAccumulationOperator</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp" line="15" column="1" bodyfile="Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp" bodystart="16" bodyend="25"/>
+    <listofallmembers>
+      <member refid="d0/dfa/a04759_1a456e18351bd91ae99a856f39da27319c" prot="public" virt="non-virtual"><scope>castor3d::OpacityData</scope><name>bwAccumulationOperator</name></member>
+      <member refid="d0/dfa/a04759_1a32abb6f3bf3b77498a2dfd03667773a2" prot="public" virt="non-virtual"><scope>castor3d::OpacityData</scope><name>opacity</name></member>
+      <member refid="d0/dfa/a04759_1ae2429084888a1e60997926d5ba329994" prot="public" virt="non-virtual"><scope>castor3d::OpacityData</scope><name>OpacityData</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

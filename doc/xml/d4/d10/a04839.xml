@@ -1,0 +1,1582 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/d10/a04839" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::PassComponentRegister</compoundname>
+    <basecompoundref refid="d6/da8/a08227" prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">PassComponentRegister.hpp</includes>
+    <innerclass refid="d4/d06/a04843" prot="private">castor3d::PassComponentRegister::Component</innerclass>
+    <sectiondef kind="user-defined">
+      <description><para>Construction / Destruction. </para>
+</description>
+      <memberdef kind="function" id="d4/d10/a04839_1a98606fed35e76034b51bda9ec03dfcd3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::PassComponentRegister::PassComponentRegister</definition>
+        <argsstring>(PassComponentRegister const &amp;)=delete</argsstring>
+        <name>PassComponentRegister</name>
+        <qualifiedname>castor3d::PassComponentRegister::PassComponentRegister</qualifiedname>
+        <param>
+          <type><ref refid="d4/d10/a04839" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="27" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a236cc298a884d9a38eaceec873762758" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::PassComponentRegister::PassComponentRegister</definition>
+        <argsstring>(PassComponentRegister &amp;&amp;) noexcept=delete</argsstring>
+        <name>PassComponentRegister</name>
+        <qualifiedname>castor3d::PassComponentRegister::PassComponentRegister</qualifiedname>
+        <param>
+          <type><ref refid="d4/d10/a04839" kindref="compound">PassComponentRegister</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="28" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a9b25f1f42c01f4dd07e32e1296533949" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d4/d10/a04839" kindref="compound">PassComponentRegister</ref> &amp;</type>
+        <definition>PassComponentRegister &amp; castor3d::PassComponentRegister::operator=</definition>
+        <argsstring>(PassComponentRegister const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::PassComponentRegister::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d4/d10/a04839" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="29" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a8633e21a11cd455e99acd7e95f243717" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/d10/a04839" kindref="compound">PassComponentRegister</ref> &amp;</type>
+        <definition>PassComponentRegister &amp; castor3d::PassComponentRegister::operator=</definition>
+        <argsstring>(PassComponentRegister &amp;&amp;) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::PassComponentRegister::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d4/d10/a04839" kindref="compound">PassComponentRegister</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="30" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a42d0a34d13a41337817b2f4ccef6c0db" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PassComponentRegister::PassComponentRegister</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>PassComponentRegister</name>
+        <qualifiedname>castor3d::PassComponentRegister::PassComponentRegister</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="31" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a13a9df13216025e946f6e98299c2394f" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PassComponentRegister::~PassComponentRegister</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~PassComponentRegister</name>
+        <qualifiedname>castor3d::PassComponentRegister::~PassComponentRegister</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="32" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <description><para>Enregistrement de type de passe. </para>
+</description>
+      <memberdef kind="function" id="d4/d10/a04839_1a85c277f7a61e971ac75bbcedfe22e335" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/dc1/a04099" kindref="compound">PassComponentCombine</ref></type>
+        <definition>C3D_API PassComponentCombine castor3d::PassComponentRegister::registerPassComponentCombine</definition>
+        <argsstring>(Pass const &amp;pass)</argsstring>
+        <name>registerPassComponentCombine</name>
+        <qualifiedname>castor3d::PassComponentRegister::registerPassComponentCombine</qualifiedname>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="43" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a385885f8eccf439f330ec6e3c3b82654" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dba/a02278_1aa92b6425dedb6ad34d3fd7ba8996bd80" kindref="member">PassComponentCombineID</ref></type>
+        <definition>C3D_API PassComponentCombineID castor3d::PassComponentRegister::registerPassComponentCombine</definition>
+        <argsstring>(PassComponentCombine &amp;combine)</argsstring>
+        <name>registerPassComponentCombine</name>
+        <qualifiedname>castor3d::PassComponentRegister::registerPassComponentCombine</qualifiedname>
+        <param>
+          <type><ref refid="d1/dc1/a04099" kindref="compound">PassComponentCombine</ref> &amp;</type>
+          <declname>combine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="44" column="32"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1ab00356486ca87ac0714e0e2f7cd9cc77" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dba/a02278_1aa92b6425dedb6ad34d3fd7ba8996bd80" kindref="member">PassComponentCombineID</ref></type>
+        <definition>C3D_API PassComponentCombineID castor3d::PassComponentRegister::getPassComponentCombineID</definition>
+        <argsstring>(PassComponentCombine const &amp;combine) const</argsstring>
+        <name>getPassComponentCombineID</name>
+        <qualifiedname>castor3d::PassComponentRegister::getPassComponentCombineID</qualifiedname>
+        <param>
+          <type><ref refid="d1/dc1/a04099" kindref="compound">PassComponentCombine</ref> const &amp;</type>
+          <declname>combine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="45" column="32"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a6ca8fc65ac0325956f6ffc20f1879a40" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dba/a02278_1a45bc048346b1eb09d5d30d9f8cd0b921" kindref="member">TextureCombineID</ref></type>
+        <definition>C3D_API TextureCombineID castor3d::PassComponentRegister::getTextureCombineID</definition>
+        <argsstring>(TextureCombine const &amp;combine) const</argsstring>
+        <name>getTextureCombineID</name>
+        <qualifiedname>castor3d::PassComponentRegister::getTextureCombineID</qualifiedname>
+        <param>
+          <type><ref refid="d9/d0d/a03995" kindref="compound">TextureCombine</ref> const &amp;</type>
+          <declname>combine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="46" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1aab3fcc216a15538d8fc6d5aafb868688" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/dc1/a04099" kindref="compound">PassComponentCombine</ref></type>
+        <definition>C3D_API PassComponentCombine castor3d::PassComponentRegister::getPassComponentCombine</definition>
+        <argsstring>(Pass const &amp;pass) const</argsstring>
+        <name>getPassComponentCombine</name>
+        <qualifiedname>castor3d::PassComponentRegister::getPassComponentCombine</qualifiedname>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="47" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1ad2d9baf381dd42aa25c25b3a5fbd86dd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/dc1/a04099" kindref="compound">PassComponentCombine</ref></type>
+        <definition>C3D_API PassComponentCombine castor3d::PassComponentRegister::getPassComponentCombine</definition>
+        <argsstring>(PassComponentCombineID id) const</argsstring>
+        <name>getPassComponentCombine</name>
+        <qualifiedname>castor3d::PassComponentRegister::getPassComponentCombine</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa92b6425dedb6ad34d3fd7ba8996bd80" kindref="member">PassComponentCombineID</ref></type>
+          <declname>id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="48" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a5b8c7d2001d1072306efc3436400c592" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/d0d/a03995" kindref="compound">TextureCombine</ref></type>
+        <definition>C3D_API TextureCombine castor3d::PassComponentRegister::getTextureCombine</definition>
+        <argsstring>(Pass const &amp;pass) const</argsstring>
+        <name>getTextureCombine</name>
+        <qualifiedname>castor3d::PassComponentRegister::getTextureCombine</qualifiedname>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="49" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a1388ed9d51d250bbf28975c4c867513d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/d0d/a03995" kindref="compound">TextureCombine</ref></type>
+        <definition>C3D_API TextureCombine castor3d::PassComponentRegister::getTextureCombine</definition>
+        <argsstring>(TextureCombineID id) const</argsstring>
+        <name>getTextureCombine</name>
+        <qualifiedname>castor3d::PassComponentRegister::getTextureCombine</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a45bc048346b1eb09d5d30d9f8cd0b921" kindref="member">TextureCombineID</ref></type>
+          <declname>id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="50" column="24"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <description><para>Gestion des composants de matériau shader. </para>
+</description>
+      <memberdef kind="function" id="d4/d10/a04839_1ae07e8d48c443c8b95991a58bb3b41fe0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PassComponentRegister::fillBuffer</definition>
+        <argsstring>(Pass const &amp;pass, PassBuffer &amp;buffer) const</argsstring>
+        <name>fillBuffer</name>
+        <qualifiedname>castor3d::PassComponentRegister::fillBuffer</qualifiedname>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/da8/a07331" kindref="compound">PassBuffer</ref> &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Remplit le pass buffer avec les valeurs d&apos;initialisation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le pass buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La passe, pour ne pas initialiser les données de ses composants actifs. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="71" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a5a01e79894a991711471c31665a67a8c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/da6/a04827" kindref="compound">shader::PassMaterialShader</ref> *</type>
+        <definition>C3D_API shader::PassMaterialShader * castor3d::PassComponentRegister::getMaterialShader</definition>
+        <argsstring>(castor::String const &amp;componentType) const</argsstring>
+        <name>getMaterialShader</name>
+        <qualifiedname>castor3d::PassComponentRegister::getMaterialShader</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>componentType</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="73" column="37"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a27b5572ee5b3b6347dc9b0d87a883365" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PassComponentRegister::fillMaterial</definition>
+        <argsstring>(sdw::type::BaseStruct &amp;material, sdw::expr::ExprList &amp;inits, uint32_t padIndex) const</argsstring>
+        <name>fillMaterial</name>
+        <qualifiedname>castor3d::PassComponentRegister::fillMaterial</qualifiedname>
+        <param>
+          <type>sdw::type::BaseStruct &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprList &amp;</type>
+          <declname>inits</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>padIndex</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="74" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a4d548fb3cc2a159463ce754f21c63e0d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto const &amp;</type>
+        <definition>auto const  &amp; castor3d::PassComponentRegister::getMaterialShaders</definition>
+        <argsstring>() const</argsstring>
+        <name>getMaterialShaders</name>
+        <qualifiedname>castor3d::PassComponentRegister::getMaterialShaders</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="78" column="13" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="78" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a1560e33722e6e629c21a472eb9355212" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::PassComponentRegister::getPassBufferStride</definition>
+        <argsstring>() const</argsstring>
+        <name>getPassBufferStride</name>
+        <qualifiedname>castor3d::PassComponentRegister::getPassBufferStride</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="83" column="14" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="83" bodyend="86"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <description><para>Gestion des composants de sortie des shaders. </para>
+</description>
+      <memberdef kind="function" id="d4/d10/a04839_1a43466d7d224421a6b90503941bc28249" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="da/d68/a02280_1a812e5c7f680d852b0d6359f2d85b8c44" kindref="member">shader::PassComponentsShaderPtr</ref> &gt;</type>
+        <definition>C3D_API castor::Vector&lt; shader::PassComponentsShaderPtr &gt; castor3d::PassComponentRegister::getComponentsShaders</definition>
+        <argsstring>(TextureCombine const &amp;texturesFlags, ComponentModeFlags filter, castor::Vector&lt; UpdateComponent &gt; &amp;updateComponents, castor::Vector&lt; FinishComponent &gt; &amp;finishComponents) const</argsstring>
+        <name>getComponentsShaders</name>
+        <qualifiedname>castor3d::PassComponentRegister::getComponentsShaders</qualifiedname>
+        <param>
+          <type><ref refid="d9/d0d/a03995" kindref="compound">TextureCombine</ref> const &amp;</type>
+          <declname>texturesFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a924293b8f4fc39410f651e98ed535eb0" kindref="member">ComponentModeFlags</ref></type>
+          <declname>filter</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d9/dba/a02278_1ad8f128235f28bc0f8396cc3e9fbc8367" kindref="member">UpdateComponent</ref> &gt; &amp;</type>
+          <declname>updateComponents</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d9/dba/a02278_1a4819c6f135247d56aa23159ff3d53ae2" kindref="member">FinishComponent</ref> &gt; &amp;</type>
+          <declname>finishComponents</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="97" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a0831184a3434548a35b6b035566c105f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="da/d68/a02280_1a812e5c7f680d852b0d6359f2d85b8c44" kindref="member">shader::PassComponentsShaderPtr</ref> &gt;</type>
+        <definition>C3D_API castor::Vector&lt; shader::PassComponentsShaderPtr &gt; castor3d::PassComponentRegister::getComponentsShaders</definition>
+        <argsstring>(PipelineFlags const &amp;flags, ComponentModeFlags filter, castor::Vector&lt; UpdateComponent &gt; &amp;updateComponents, castor::Vector&lt; FinishComponent &gt; &amp;finishComponents) const</argsstring>
+        <name>getComponentsShaders</name>
+        <qualifiedname>castor3d::PassComponentRegister::getComponentsShaders</qualifiedname>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a924293b8f4fc39410f651e98ed535eb0" kindref="member">ComponentModeFlags</ref></type>
+          <declname>filter</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d9/dba/a02278_1ad8f128235f28bc0f8396cc3e9fbc8367" kindref="member">UpdateComponent</ref> &gt; &amp;</type>
+          <declname>updateComponents</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d9/dba/a02278_1a4819c6f135247d56aa23159ff3d53ae2" kindref="member">FinishComponent</ref> &gt; &amp;</type>
+          <declname>finishComponents</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="101" column="24"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <description><para>Gestion des composants de sortie des shaders. </para>
+</description>
+      <memberdef kind="function" id="d4/d10/a04839_1ac86edc5490c40ef26cf2973b70ae60cf" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="da/d68/a02280_1a4bd7d9b4277cb2d4188dd68b7e3d30f3" kindref="member">shader::PassReflRefrShaderPtr</ref></type>
+        <definition>C3D_API shader::PassReflRefrShaderPtr castor3d::PassComponentRegister::getReflRefrShader</definition>
+        <argsstring>(PassComponentCombine const &amp;combine) const</argsstring>
+        <name>getReflRefrShader</name>
+        <qualifiedname>castor3d::PassComponentRegister::getReflRefrShader</qualifiedname>
+        <param>
+          <type><ref refid="d1/dc1/a04099" kindref="compound">PassComponentCombine</ref> const &amp;</type>
+          <declname>combine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="115" column="39"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <description><para>Gestion des composants de base. </para>
+</description>
+      <memberdef kind="function" id="d4/d10/a04839_1a71b8e1d877866922c45cce7d1e9fcdd8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/dc1/a04099" kindref="compound">PassComponentCombine</ref></type>
+        <definition>C3D_API PassComponentCombine castor3d::PassComponentRegister::filterComponentFlags</definition>
+        <argsstring>(ComponentModeFlags filter, PassComponentCombine const &amp;combine) const</argsstring>
+        <name>filterComponentFlags</name>
+        <qualifiedname>castor3d::PassComponentRegister::filterComponentFlags</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a924293b8f4fc39410f651e98ed535eb0" kindref="member">ComponentModeFlags</ref></type>
+          <declname>filter</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc1/a04099" kindref="compound">PassComponentCombine</ref> const &amp;</type>
+          <declname>combine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="126" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a0d6b89237521d7933987a9055628ebed" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PassComponentRegister::hasOpacity</definition>
+        <argsstring>(PipelineFlags const &amp;flags) const</argsstring>
+        <name>hasOpacity</name>
+        <qualifiedname>castor3d::PassComponentRegister::hasOpacity</qualifiedname>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="128" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1ac0fbf1f635c975d60f8dbc5ba874ffaa" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PassComponentRegister::needsEnvironmentMapping</definition>
+        <argsstring>(PassComponentCombineID combineID) const</argsstring>
+        <name>needsEnvironmentMapping</name>
+        <qualifiedname>castor3d::PassComponentRegister::needsEnvironmentMapping</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa92b6425dedb6ad34d3fd7ba8996bd80" kindref="member">PassComponentCombineID</ref></type>
+          <declname>combineID</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="129" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a97fcdef4464bdc5bd063cf988cf8b219" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PassComponentRegister::hasDeferredLighting</definition>
+        <argsstring>(PassComponentFlagsSet const &amp;combineID) const</argsstring>
+        <name>hasDeferredLighting</name>
+        <qualifiedname>castor3d::PassComponentRegister::hasDeferredLighting</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a61c264295a54f724562c0b628545e5d0" kindref="member">PassComponentFlagsSet</ref> const &amp;</type>
+          <declname>combineID</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="130" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a45a4dc9c7a43ce680d301efbd2cd707c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1ad77e61bf7d7ca8d88ae3f528ed7ef891" kindref="member">PassComponentFlag</ref></type>
+        <definition>PassComponentFlag castor3d::PassComponentRegister::getAlphaBlendingFlag</definition>
+        <argsstring>() const</argsstring>
+        <name>getAlphaBlendingFlag</name>
+        <qualifiedname>castor3d::PassComponentRegister::getAlphaBlendingFlag</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="132" column="19" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="132" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a7d582bdea7b52279f269be452471e27c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1ad77e61bf7d7ca8d88ae3f528ed7ef891" kindref="member">PassComponentFlag</ref></type>
+        <definition>PassComponentFlag castor3d::PassComponentRegister::getAlphaTestFlag</definition>
+        <argsstring>() const</argsstring>
+        <name>getAlphaTestFlag</name>
+        <qualifiedname>castor3d::PassComponentRegister::getAlphaTestFlag</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="137" column="19" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="137" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a976860d85af5b4e2daf66562598a5d2b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1ad77e61bf7d7ca8d88ae3f528ed7ef891" kindref="member">PassComponentFlag</ref></type>
+        <definition>PassComponentFlag castor3d::PassComponentRegister::getTransmissionFlag</definition>
+        <argsstring>() const</argsstring>
+        <name>getTransmissionFlag</name>
+        <qualifiedname>castor3d::PassComponentRegister::getTransmissionFlag</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="142" column="19" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="142" bodyend="145"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a89268310a8894c2a9575b0aba5de9dcd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1ad77e61bf7d7ca8d88ae3f528ed7ef891" kindref="member">PassComponentFlag</ref></type>
+        <definition>PassComponentFlag castor3d::PassComponentRegister::getParallaxOcclusionMappingOneFlag</definition>
+        <argsstring>() const</argsstring>
+        <name>getParallaxOcclusionMappingOneFlag</name>
+        <qualifiedname>castor3d::PassComponentRegister::getParallaxOcclusionMappingOneFlag</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="147" column="19" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="147" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1afc786988f337aedb3926bc5825ffe1d6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1ad77e61bf7d7ca8d88ae3f528ed7ef891" kindref="member">PassComponentFlag</ref></type>
+        <definition>PassComponentFlag castor3d::PassComponentRegister::getParallaxOcclusionMappingRepeatFlag</definition>
+        <argsstring>() const</argsstring>
+        <name>getParallaxOcclusionMappingRepeatFlag</name>
+        <qualifiedname>castor3d::PassComponentRegister::getParallaxOcclusionMappingRepeatFlag</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="152" column="19" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="152" bodyend="155"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <description><para>Gestion des composants de texture. </para>
+</description>
+      <memberdef kind="function" id="d4/d10/a04839_1a89e065d8ffdb476ec3a4cbae1252902f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PassComponentRegister::updateMapComponents</definition>
+        <argsstring>(castor::Vector&lt; TextureFlagConfiguration &gt; const &amp;texConfigs, Pass &amp;result)</argsstring>
+        <name>updateMapComponents</name>
+        <qualifiedname>castor3d::PassComponentRegister::updateMapComponents</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d2/d77/a04939" kindref="compound">TextureFlagConfiguration</ref> &gt; const &amp;</type>
+          <declname>texConfigs</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute ou supprime les composants de texture de la passe, selon s&apos;ils sont nécessaires ou pas. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">texConfigs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Utilisé pour déterminer si un composant de texture est nécessaire. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">result</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La passe. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="176" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a8efc2b285420435090742249cd28ac01" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PassComponentRegister::writeTextureConfig</definition>
+        <argsstring>(TextureConfiguration const &amp;configuration, castor::String const &amp;tabs, castor::StringStream &amp;file) const</argsstring>
+        <name>writeTextureConfig</name>
+        <qualifiedname>castor3d::PassComponentRegister::writeTextureConfig</qualifiedname>
+        <param>
+          <type><ref refid="d5/dc1/a04943" kindref="compound">TextureConfiguration</ref> const &amp;</type>
+          <declname>configuration</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae7002b6add23b6f33bfde31351b5e8c9" kindref="member">castor::StringStream</ref> &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+<para>Ecrit la configuration de texture pour ce composant dans un fichier de scène. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">configuration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Contient les données de configuration de texture de ce composant. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tabs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le niveau d&apos;indentation dans le fichier de sortie. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le fichier de sortie. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="190" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1ab11da0701ef8036c6919d4686840abd2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PassComponentRegister::fillChannels</definition>
+        <argsstring>(PassComponentTextureFlag const &amp;flags, TextureContext &amp;parsingContext) const</argsstring>
+        <name>fillChannels</name>
+        <qualifiedname>castor3d::PassComponentRegister::fillChannels</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d3c/a05003" kindref="compound">TextureContext</ref> &amp;</type>
+          <declname>parsingContext</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="193" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1afb93ca1b01c25cfbde729ecee46a90e1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/d0d/a03995" kindref="compound">TextureCombine</ref></type>
+        <definition>C3D_API TextureCombine castor3d::PassComponentRegister::filterTextureFlags</definition>
+        <argsstring>(ComponentModeFlags filter, TextureCombine const &amp;combine) const</argsstring>
+        <name>filterTextureFlags</name>
+        <qualifiedname>castor3d::PassComponentRegister::filterTextureFlags</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a924293b8f4fc39410f651e98ed535eb0" kindref="member">ComponentModeFlags</ref></type>
+          <declname>filter</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d0d/a03995" kindref="compound">TextureCombine</ref> const &amp;</type>
+          <declname>combine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="195" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a6ec9ba0cece604db43439fef60821e9b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref></type>
+        <definition>C3D_API PassComponentTextureFlag castor3d::PassComponentRegister::getColourMapFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>getColourMapFlags</name>
+        <qualifiedname>castor3d::PassComponentRegister::getColourMapFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="197" column="34"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1ab829b0ed857a9cc3b674dd19c3645f20" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref></type>
+        <definition>C3D_API PassComponentTextureFlag castor3d::PassComponentRegister::getOpacityMapFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>getOpacityMapFlags</name>
+        <qualifiedname>castor3d::PassComponentRegister::getOpacityMapFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="198" column="34"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a22d0e9746c1a37262afdce8640364af8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref></type>
+        <definition>C3D_API PassComponentTextureFlag castor3d::PassComponentRegister::getNormalMapFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>getNormalMapFlags</name>
+        <qualifiedname>castor3d::PassComponentRegister::getNormalMapFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="199" column="34"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a77e62052f5fbf2a0b5e0d0bd4510adf3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref></type>
+        <definition>C3D_API PassComponentTextureFlag castor3d::PassComponentRegister::getHeightMapFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>getHeightMapFlags</name>
+        <qualifiedname>castor3d::PassComponentRegister::getHeightMapFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="200" column="34"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1aec590425a6cea7ed5cd7292f30245abd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref></type>
+        <definition>C3D_API PassComponentTextureFlag castor3d::PassComponentRegister::getOcclusionMapFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>getOcclusionMapFlags</name>
+        <qualifiedname>castor3d::PassComponentRegister::getOcclusionMapFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="201" column="34"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1ab38730535159fa9f9b4be214e47a39dd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PassComponentRegister::fillTextureConfiguration</definition>
+        <argsstring>(PassComponentTextureFlag const &amp;flags, TextureConfiguration &amp;result) const</argsstring>
+        <name>fillTextureConfiguration</name>
+        <qualifiedname>castor3d::PassComponentRegister::fillTextureConfiguration</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/dc1/a04943" kindref="compound">TextureConfiguration</ref> &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="202" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a505568aba38dffc7ca9f964ba20c326b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PassComponentRegister::hasTexcoordModif</definition>
+        <argsstring>(PassComponentTextureFlag const &amp;flag, PipelineFlags const *flags) const</argsstring>
+        <name>hasTexcoordModif</name>
+        <qualifiedname>castor3d::PassComponentRegister::hasTexcoordModif</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref> const &amp;</type>
+          <declname>flag</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const *</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="204" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1af380479e3097db1aec5f986e190b3f26" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1a93b53452a3c421817a14b649ccec1fb7" kindref="member">castor::Map</ref>&lt; uint32_t, <ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref> &gt;</type>
+        <definition>C3D_API castor::Map&lt; uint32_t, PassComponentTextureFlag &gt; castor3d::PassComponentRegister::getTexcoordModifs</definition>
+        <argsstring>(PipelineFlags const &amp;flags) const</argsstring>
+        <name>getTexcoordModifs</name>
+        <qualifiedname>castor3d::PassComponentRegister::getTexcoordModifs</qualifiedname>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="206" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a45f3c8d3fd46e21db29fcaa7d721ea8a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1a93b53452a3c421817a14b649ccec1fb7" kindref="member">castor::Map</ref>&lt; uint32_t, <ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref> &gt;</type>
+        <definition>C3D_API castor::Map&lt; uint32_t, PassComponentTextureFlag &gt; castor3d::PassComponentRegister::getTexcoordModifs</definition>
+        <argsstring>(TextureCombine const &amp;combine) const</argsstring>
+        <name>getTexcoordModifs</name>
+        <qualifiedname>castor3d::PassComponentRegister::getTexcoordModifs</qualifiedname>
+        <param>
+          <type><ref refid="d9/d0d/a03995" kindref="compound">TextureCombine</ref> const &amp;</type>
+          <declname>combine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="207" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a5edb293f261b913262631686b6cdf38b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::UInt32StrMap const &amp;</type>
+        <definition>castor::UInt32StrMap const  &amp; castor3d::PassComponentRegister::getTextureChannels</definition>
+        <argsstring>() const</argsstring>
+        <name>getTextureChannels</name>
+        <qualifiedname>castor3d::PassComponentRegister::getTextureChannels</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="209" column="29" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="209" bodyend="212"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <description><para>Enregistrement des composants. </para>
+</description>
+      <memberdef kind="function" id="d4/d10/a04839_1af84519ca1d95e08536a79a98280a316c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dba/a02278_1a11544af0f8079d1c8711ccf824ad3ec6" kindref="member">PassComponentID</ref></type>
+        <definition>C3D_API PassComponentID castor3d::PassComponentRegister::registerComponent</definition>
+        <argsstring>(castor::String const &amp;componentType, PassComponentPluginUPtr componentPlugin)</argsstring>
+        <name>registerComponent</name>
+        <qualifiedname>castor3d::PassComponentRegister::registerComponent</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>componentType</declname>
+        </param>
+        <param>
+          <type>PassComponentPluginUPtr</type>
+          <declname>componentPlugin</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="223" column="25"/>
+        <referencedby refid="d4/d10/a04839_1ab5484c9fbd1fe00eb2b92d67cfea58af" compoundref="d4/d14/a00608" startline="241" endline="245">registerComponent</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1aae1f5718235314c98c2245c71639b431" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PassComponentRegister::unregisterComponent</definition>
+        <argsstring>(castor::String const &amp;componentType) noexcept</argsstring>
+        <name>unregisterComponent</name>
+        <qualifiedname>castor3d::PassComponentRegister::unregisterComponent</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>componentType</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="225" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a106e84f6962b36b298c0f6cb92273a6d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dba/a02278_1a11544af0f8079d1c8711ccf824ad3ec6" kindref="member">PassComponentID</ref></type>
+        <definition>C3D_API PassComponentID castor3d::PassComponentRegister::getNameId</definition>
+        <argsstring>(castor::String const &amp;componentType) const</argsstring>
+        <name>getNameId</name>
+        <qualifiedname>castor3d::PassComponentRegister::getNameId</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>componentType</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="226" column="25"/>
+        <referencedby refid="d4/d10/a04839_1ae834b4a714763b436dcd6bae3ba277ae" compoundref="d4/d14/a00608" startline="235" endline="238">getPlugin</referencedby>
+        <referencedby refid="d4/d10/a04839_1ab0e67c6065bedbba1a16504ca9b6bbc3" compoundref="d4/d14/a00608" startline="229" endline="232">getPlugin</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a7077cb9058c84659c059a052524a0bc7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/d2e/a04831" kindref="compound">PassComponentPlugin</ref> const &amp;</type>
+        <definition>C3D_API PassComponentPlugin const  &amp; castor3d::PassComponentRegister::getPlugin</definition>
+        <argsstring>(PassComponentID componentId) const</argsstring>
+        <name>getPlugin</name>
+        <qualifiedname>castor3d::PassComponentRegister::getPlugin</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a11544af0f8079d1c8711ccf824ad3ec6" kindref="member">PassComponentID</ref></type>
+          <declname>componentId</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="227" column="36"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1ab0e67c6065bedbba1a16504ca9b6bbc3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/d2e/a04831" kindref="compound">PassComponentPlugin</ref> const &amp;</type>
+        <definition>PassComponentPlugin const  &amp; castor3d::PassComponentRegister::getPlugin</definition>
+        <argsstring>(castor::String const &amp;componentType) const</argsstring>
+        <name>getPlugin</name>
+        <qualifiedname>castor3d::PassComponentRegister::getPlugin</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>componentType</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="229" column="28" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="229" bodyend="232"/>
+        <references refid="d4/d10/a04839_1a106e84f6962b36b298c0f6cb92273a6d">getNameId</references>
+        <references refid="d4/d10/a04839_1ae834b4a714763b436dcd6bae3ba277ae" compoundref="d4/d14/a00608" startline="235" endline="238">getPlugin</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1ae834b4a714763b436dcd6bae3ba277ae" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ComponentT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d2/d2e/a04831" kindref="compound">PassComponentPlugin</ref> const &amp;</type>
+        <definition>PassComponentPlugin const  &amp; castor3d::PassComponentRegister::getPlugin</definition>
+        <argsstring>() const</argsstring>
+        <name>getPlugin</name>
+        <qualifiedname>castor3d::PassComponentRegister::getPlugin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="235" column="28" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="235" bodyend="238"/>
+        <references refid="d4/d10/a04839_1a106e84f6962b36b298c0f6cb92273a6d">getNameId</references>
+        <references refid="d4/d10/a04839_1ae834b4a714763b436dcd6bae3ba277ae" compoundref="d4/d14/a00608" startline="235" endline="238">getPlugin</references>
+        <referencedby refid="d4/d10/a04839_1ae834b4a714763b436dcd6bae3ba277ae" compoundref="d4/d14/a00608" startline="235" endline="238">getPlugin</referencedby>
+        <referencedby refid="d4/d10/a04839_1ab0e67c6065bedbba1a16504ca9b6bbc3" compoundref="d4/d14/a00608" startline="229" endline="232">getPlugin</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1ab5484c9fbd1fe00eb2b92d67cfea58af" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ComponentT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/dba/a02278_1a11544af0f8079d1c8711ccf824ad3ec6" kindref="member">PassComponentID</ref></type>
+        <definition>PassComponentID castor3d::PassComponentRegister::registerComponent</definition>
+        <argsstring>(CreatePassComponentPlugin const &amp;createPlugin=&amp;ComponentT::createPlugin)</argsstring>
+        <name>registerComponent</name>
+        <qualifiedname>castor3d::PassComponentRegister::registerComponent</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1ae103c2002c62249a5f7321d49ec93845" kindref="member">CreatePassComponentPlugin</ref> const &amp;</type>
+          <declname>createPlugin</declname>
+          <defval>&amp;ComponentT::createPlugin</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="241" column="17" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="241" bodyend="245"/>
+        <references refid="d4/d10/a04839_1af84519ca1d95e08536a79a98280a316c">registerComponent</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a7dbf56ab49ee339ae869c01bc5704e8f" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::PassComponentRegister::begin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::PassComponentRegister::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="247" column="6" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="247" bodyend="250"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a08f36b68aada98bf0df974c553fe97a7" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::PassComponentRegister::end</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::PassComponentRegister::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="252" column="6" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="252" bodyend="255"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d4/d10/a04839_1a9de769f98a3d3dca39d3cd8e8ef0bda6" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; Component &gt;</type>
+        <definition>using castor3d::PassComponentRegister::Components =  castor::Vector&lt; Component &gt;</definition>
+        <argsstring></argsstring>
+        <name>Components</name>
+        <qualifiedname>castor3d::PassComponentRegister::Components</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="271" column="1" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="271" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/d10/a04839_1ac9a2849e2225a5cf6109fa4d8b0321a1" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void(sdw::type::BaseStruct &amp;type, sdw::expr::ExprList &amp;inits, uint32_t &amp;padIndex) &gt;</type>
+        <definition>using castor3d::PassComponentRegister::FillMaterialType =  castor::Function&lt; void ( sdw::type::BaseStruct &amp; type
+			, sdw::expr::ExprList &amp; inits
+			, uint32_t &amp; padIndex ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>FillMaterialType</name>
+        <qualifiedname>castor3d::PassComponentRegister::FillMaterialType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="282" column="1" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="282" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d4/d10/a04839_1ab651e56b98fe243a25d62e587aa8df44" prot="private" static="no" mutable="no">
+        <type>Components</type>
+        <definition>Components castor3d::PassComponentRegister::m_registered</definition>
+        <argsstring></argsstring>
+        <name>m_registered</name>
+        <qualifiedname>castor3d::PassComponentRegister::m_registered</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="287" column="12" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="287" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a04839_1a36eed8f0da6748a7533d65bbe2d2d2b7" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a93b53452a3c421817a14b649ccec1fb7" kindref="member">castor::Map</ref>&lt; <ref refid="d9/dba/a02278_1a11544af0f8079d1c8711ccf824ad3ec6" kindref="member">PassComponentID</ref>, <ref refid="da/d68/a02280_1a23ce5ac3c9cae7cbfeacfef6182c9c75" kindref="member">shader::PassMaterialShaderPtr</ref> &gt;</type>
+        <definition>castor::Map&lt; PassComponentID, shader::PassMaterialShaderPtr &gt; castor3d::PassComponentRegister::m_materialShaders</definition>
+        <argsstring></argsstring>
+        <name>m_materialShaders</name>
+        <qualifiedname>castor3d::PassComponentRegister::m_materialShaders</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="288" column="13" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="288" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a04839_1a9e1845aaa0ae0b5e51ff45c6a58cbcd5" prot="private" static="no" mutable="no">
+        <type>castor::UInt32StrMap</type>
+        <definition>castor::UInt32StrMap castor3d::PassComponentRegister::m_channels</definition>
+        <argsstring></argsstring>
+        <name>m_channels</name>
+        <qualifiedname>castor3d::PassComponentRegister::m_channels</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="289" column="22" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="289" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a04839_1a1f3fb483ede098435d2eff554047daa2" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a60fc618664d8c1aba535e15e3322c579" kindref="member">ChannelFillers</ref></type>
+        <definition>ChannelFillers castor3d::PassComponentRegister::m_channelsFillers</definition>
+        <argsstring></argsstring>
+        <name>m_channelsFillers</name>
+        <qualifiedname>castor3d::PassComponentRegister::m_channelsFillers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="290" column="16" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="290" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a04839_1a3a520c027965fc641044660f68436857" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::PassComponentRegister::m_pauseOrder</definition>
+        <argsstring></argsstring>
+        <name>m_pauseOrder</name>
+        <qualifiedname>castor3d::PassComponentRegister::m_pauseOrder</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="291" column="6" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="291" bodyend="291"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a04839_1a28be740da00c3bf0cd4fe07a50618291" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d9/dba/a02278_1a11544af0f8079d1c8711ccf824ad3ec6" kindref="member">PassComponentID</ref> &gt;</type>
+        <definition>castor::Vector&lt; PassComponentID &gt; castor3d::PassComponentRegister::m_bufferOrder</definition>
+        <argsstring></argsstring>
+        <name>m_bufferOrder</name>
+        <qualifiedname>castor3d::PassComponentRegister::m_bufferOrder</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="292" column="16" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="292" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a04839_1ac130df06b66025361ca61c02fb83e4e6" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d6/da6/a04827" kindref="compound">shader::PassMaterialShader</ref> * &gt;</type>
+        <definition>castor::Vector&lt; shader::PassMaterialShader * &gt; castor3d::PassComponentRegister::m_bufferShaders</definition>
+        <argsstring></argsstring>
+        <name>m_bufferShaders</name>
+        <qualifiedname>castor3d::PassComponentRegister::m_bufferShaders</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="293" column="16" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="293" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a04839_1af92ca4371858207bd9f0408b0d8f398f" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; FillMaterialType &gt;</type>
+        <definition>castor::Vector&lt; FillMaterialType &gt; castor3d::PassComponentRegister::m_fillMaterial</definition>
+        <argsstring></argsstring>
+        <name>m_fillMaterial</name>
+        <qualifiedname>castor3d::PassComponentRegister::m_fillMaterial</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="294" column="16" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="294" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a04839_1a93ce82fac107cf3f0ba4de70a3b21bda" prot="private" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::PassComponentRegister::m_bufferStride</definition>
+        <argsstring></argsstring>
+        <name>m_bufferStride</name>
+        <qualifiedname>castor3d::PassComponentRegister::m_bufferStride</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="295" column="14" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="295" bodyend="295"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a04839_1ab4e891567e4517d488c54b496fb8957a" prot="private" static="no" mutable="yes">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d1/dc1/a04099" kindref="compound">PassComponentCombine</ref> &gt;</type>
+        <definition>castor::Vector&lt; PassComponentCombine &gt; castor3d::PassComponentRegister::m_componentCombines</definition>
+        <argsstring></argsstring>
+        <name>m_componentCombines</name>
+        <qualifiedname>castor3d::PassComponentRegister::m_componentCombines</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="296" column="24" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="296" bodyend="296"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a04839_1a8246c7556fc9a9ef4cb55defd72d634d" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1ad77e61bf7d7ca8d88ae3f528ed7ef891" kindref="member">PassComponentFlag</ref></type>
+        <definition>PassComponentFlag castor3d::PassComponentRegister::m_alphaBlendingFlag</definition>
+        <argsstring></argsstring>
+        <name>m_alphaBlendingFlag</name>
+        <qualifiedname>castor3d::PassComponentRegister::m_alphaBlendingFlag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="297" column="19" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="297" bodyend="297"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a04839_1a2bd3b324d53b657c41ec55b78ae167de" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1ad77e61bf7d7ca8d88ae3f528ed7ef891" kindref="member">PassComponentFlag</ref></type>
+        <definition>PassComponentFlag castor3d::PassComponentRegister::m_alphaTestFlag</definition>
+        <argsstring></argsstring>
+        <name>m_alphaTestFlag</name>
+        <qualifiedname>castor3d::PassComponentRegister::m_alphaTestFlag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="298" column="19" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="298" bodyend="298"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a04839_1a0b584a83b35380cdeb84cb7dc8ecf483" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1ad77e61bf7d7ca8d88ae3f528ed7ef891" kindref="member">PassComponentFlag</ref></type>
+        <definition>PassComponentFlag castor3d::PassComponentRegister::m_transmissionFlag</definition>
+        <argsstring></argsstring>
+        <name>m_transmissionFlag</name>
+        <qualifiedname>castor3d::PassComponentRegister::m_transmissionFlag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="299" column="19" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="299" bodyend="299"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a04839_1a98e073f92ce54a00ad0f27d27a0fde5b" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1ad77e61bf7d7ca8d88ae3f528ed7ef891" kindref="member">PassComponentFlag</ref></type>
+        <definition>PassComponentFlag castor3d::PassComponentRegister::m_parallaxOcclusionMappingOneFlag</definition>
+        <argsstring></argsstring>
+        <name>m_parallaxOcclusionMappingOneFlag</name>
+        <qualifiedname>castor3d::PassComponentRegister::m_parallaxOcclusionMappingOneFlag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="300" column="19" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="300" bodyend="300"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a04839_1a0f0208787d3a7376825f75d6bd0e57db" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1ad77e61bf7d7ca8d88ae3f528ed7ef891" kindref="member">PassComponentFlag</ref></type>
+        <definition>PassComponentFlag castor3d::PassComponentRegister::m_parallaxOcclusionMappingRepeatFlag</definition>
+        <argsstring></argsstring>
+        <name>m_parallaxOcclusionMappingRepeatFlag</name>
+        <qualifiedname>castor3d::PassComponentRegister::m_parallaxOcclusionMappingRepeatFlag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="301" column="19" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="301" bodyend="301"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d10/a04839_1a902d07629046bff1fb211332dda2283f" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1ad77e61bf7d7ca8d88ae3f528ed7ef891" kindref="member">PassComponentFlag</ref></type>
+        <definition>PassComponentFlag castor3d::PassComponentRegister::m_deferredDiffuseLightingFlag</definition>
+        <argsstring></argsstring>
+        <name>m_deferredDiffuseLightingFlag</name>
+        <qualifiedname>castor3d::PassComponentRegister::m_deferredDiffuseLightingFlag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="302" column="19" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="302" bodyend="302"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d4/d10/a04839_1a718358a160447fc91765539992adbb2d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Component &amp;</type>
+        <definition>Component &amp; castor3d::PassComponentRegister::getNextId</definition>
+        <argsstring>()</argsstring>
+        <name>getNextId</name>
+        <qualifiedname>castor3d::PassComponentRegister::getNextId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="274" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1aeddaceed26f936686e84e07b714211c7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::PassComponentRegister::registerComponent</definition>
+        <argsstring>(Component &amp;componentDesc, castor::String const &amp;componentType, PassComponentPluginUPtr componentPlugin)</argsstring>
+        <name>registerComponent</name>
+        <qualifiedname>castor3d::PassComponentRegister::registerComponent</qualifiedname>
+        <param>
+          <type>Component &amp;</type>
+          <declname>componentDesc</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>componentType</declname>
+        </param>
+        <param>
+          <type>PassComponentPluginUPtr</type>
+          <declname>componentPlugin</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="275" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1ab006401f0a9459dc940fce29a52cd339" prot="private" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::PassComponentRegister::unregisterComponent</definition>
+        <argsstring>(PassComponentID id) noexcept</argsstring>
+        <name>unregisterComponent</name>
+        <qualifiedname>castor3d::PassComponentRegister::unregisterComponent</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a11544af0f8079d1c8711ccf824ad3ec6" kindref="member">PassComponentID</ref></type>
+          <declname>id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="278" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a57634c0cfbced984512b780730dc5361" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::PassComponentRegister::reorderBuffer</definition>
+        <argsstring>()</argsstring>
+        <name>reorderBuffer</name>
+        <qualifiedname>castor3d::PassComponentRegister::reorderBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="279" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d10/a04839_1a4aa84f1b24d0f28a4a434e185efcfd05" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::PassComponentRegister::fillPassComponentCombine</definition>
+        <argsstring>(PassComponentCombine &amp;combine) const</argsstring>
+        <name>fillPassComponentCombine</name>
+        <qualifiedname>castor3d::PassComponentRegister::fillPassComponentCombine</qualifiedname>
+        <param>
+          <type><ref refid="d1/dc1/a04099" kindref="compound">PassComponentCombine</ref> &amp;</type>
+          <declname>combine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="280" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PassComponentRegister</label>
+        <link refid="d4/d10/a04839"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PassComponentRegister</label>
+        <link refid="d4/d10/a04839"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" line="18" column="1" bodyfile="Castor3D/Material/Pass/Component/PassComponentRegister.hpp" bodystart="20" bodyend="303"/>
+    <listofallmembers>
+      <member refid="d4/d10/a04839_1a7dbf56ab49ee339ae869c01bc5704e8f" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>begin</name></member>
+      <member refid="d4/d10/a04839_1a9de769f98a3d3dca39d3cd8e8ef0bda6" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>Components</name></member>
+      <member refid="d4/d10/a04839_1a08f36b68aada98bf0df974c553fe97a7" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>end</name></member>
+      <member refid="d4/d10/a04839_1ae07e8d48c443c8b95991a58bb3b41fe0" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>fillBuffer</name></member>
+      <member refid="d4/d10/a04839_1ab11da0701ef8036c6919d4686840abd2" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>fillChannels</name></member>
+      <member refid="d4/d10/a04839_1a27b5572ee5b3b6347dc9b0d87a883365" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>fillMaterial</name></member>
+      <member refid="d4/d10/a04839_1ac9a2849e2225a5cf6109fa4d8b0321a1" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>FillMaterialType</name></member>
+      <member refid="d4/d10/a04839_1a4aa84f1b24d0f28a4a434e185efcfd05" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>fillPassComponentCombine</name></member>
+      <member refid="d4/d10/a04839_1ab38730535159fa9f9b4be214e47a39dd" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>fillTextureConfiguration</name></member>
+      <member refid="d4/d10/a04839_1a71b8e1d877866922c45cce7d1e9fcdd8" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>filterComponentFlags</name></member>
+      <member refid="d4/d10/a04839_1afb93ca1b01c25cfbde729ecee46a90e1" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>filterTextureFlags</name></member>
+      <member refid="d4/d10/a04839_1a45a4dc9c7a43ce680d301efbd2cd707c" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getAlphaBlendingFlag</name></member>
+      <member refid="d4/d10/a04839_1a7d582bdea7b52279f269be452471e27c" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getAlphaTestFlag</name></member>
+      <member refid="d4/d10/a04839_1a6ec9ba0cece604db43439fef60821e9b" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getColourMapFlags</name></member>
+      <member refid="d4/d10/a04839_1a43466d7d224421a6b90503941bc28249" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getComponentsShaders</name></member>
+      <member refid="d4/d10/a04839_1a0831184a3434548a35b6b035566c105f" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getComponentsShaders</name></member>
+      <member refid="d4/d10/a04839_1a77e62052f5fbf2a0b5e0d0bd4510adf3" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getHeightMapFlags</name></member>
+      <member refid="d4/d10/a04839_1a5a01e79894a991711471c31665a67a8c" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getMaterialShader</name></member>
+      <member refid="d4/d10/a04839_1a4d548fb3cc2a159463ce754f21c63e0d" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getMaterialShaders</name></member>
+      <member refid="d4/d10/a04839_1a106e84f6962b36b298c0f6cb92273a6d" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getNameId</name></member>
+      <member refid="d4/d10/a04839_1a718358a160447fc91765539992adbb2d" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getNextId</name></member>
+      <member refid="d4/d10/a04839_1a22d0e9746c1a37262afdce8640364af8" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getNormalMapFlags</name></member>
+      <member refid="d4/d10/a04839_1aec590425a6cea7ed5cd7292f30245abd" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getOcclusionMapFlags</name></member>
+      <member refid="d4/d10/a04839_1ab829b0ed857a9cc3b674dd19c3645f20" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getOpacityMapFlags</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getOwner</name></member>
+      <member refid="d4/d10/a04839_1a89268310a8894c2a9575b0aba5de9dcd" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getParallaxOcclusionMappingOneFlag</name></member>
+      <member refid="d4/d10/a04839_1afc786988f337aedb3926bc5825ffe1d6" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getParallaxOcclusionMappingRepeatFlag</name></member>
+      <member refid="d4/d10/a04839_1a1560e33722e6e629c21a472eb9355212" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getPassBufferStride</name></member>
+      <member refid="d4/d10/a04839_1aab3fcc216a15538d8fc6d5aafb868688" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getPassComponentCombine</name></member>
+      <member refid="d4/d10/a04839_1ad2d9baf381dd42aa25c25b3a5fbd86dd" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getPassComponentCombine</name></member>
+      <member refid="d4/d10/a04839_1ab00356486ca87ac0714e0e2f7cd9cc77" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getPassComponentCombineID</name></member>
+      <member refid="d4/d10/a04839_1a7077cb9058c84659c059a052524a0bc7" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getPlugin</name></member>
+      <member refid="d4/d10/a04839_1ab0e67c6065bedbba1a16504ca9b6bbc3" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getPlugin</name></member>
+      <member refid="d4/d10/a04839_1ae834b4a714763b436dcd6bae3ba277ae" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getPlugin</name></member>
+      <member refid="d4/d10/a04839_1ac86edc5490c40ef26cf2973b70ae60cf" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getReflRefrShader</name></member>
+      <member refid="d4/d10/a04839_1af380479e3097db1aec5f986e190b3f26" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getTexcoordModifs</name></member>
+      <member refid="d4/d10/a04839_1a45f3c8d3fd46e21db29fcaa7d721ea8a" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getTexcoordModifs</name></member>
+      <member refid="d4/d10/a04839_1a5edb293f261b913262631686b6cdf38b" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getTextureChannels</name></member>
+      <member refid="d4/d10/a04839_1a5b8c7d2001d1072306efc3436400c592" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getTextureCombine</name></member>
+      <member refid="d4/d10/a04839_1a1388ed9d51d250bbf28975c4c867513d" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getTextureCombine</name></member>
+      <member refid="d4/d10/a04839_1a6ca8fc65ac0325956f6ffc20f1879a40" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getTextureCombineID</name></member>
+      <member refid="d4/d10/a04839_1a976860d85af5b4e2daf66562598a5d2b" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>getTransmissionFlag</name></member>
+      <member refid="d4/d10/a04839_1a97fcdef4464bdc5bd063cf988cf8b219" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>hasDeferredLighting</name></member>
+      <member refid="d4/d10/a04839_1a0d6b89237521d7933987a9055628ebed" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>hasOpacity</name></member>
+      <member refid="d4/d10/a04839_1a505568aba38dffc7ca9f964ba20c326b" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>hasTexcoordModif</name></member>
+      <member refid="d4/d10/a04839_1a8246c7556fc9a9ef4cb55defd72d634d" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>m_alphaBlendingFlag</name></member>
+      <member refid="d4/d10/a04839_1a2bd3b324d53b657c41ec55b78ae167de" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>m_alphaTestFlag</name></member>
+      <member refid="d4/d10/a04839_1a28be740da00c3bf0cd4fe07a50618291" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>m_bufferOrder</name></member>
+      <member refid="d4/d10/a04839_1ac130df06b66025361ca61c02fb83e4e6" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>m_bufferShaders</name></member>
+      <member refid="d4/d10/a04839_1a93ce82fac107cf3f0ba4de70a3b21bda" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>m_bufferStride</name></member>
+      <member refid="d4/d10/a04839_1a9e1845aaa0ae0b5e51ff45c6a58cbcd5" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>m_channels</name></member>
+      <member refid="d4/d10/a04839_1a1f3fb483ede098435d2eff554047daa2" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>m_channelsFillers</name></member>
+      <member refid="d4/d10/a04839_1ab4e891567e4517d488c54b496fb8957a" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>m_componentCombines</name></member>
+      <member refid="d4/d10/a04839_1a902d07629046bff1fb211332dda2283f" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>m_deferredDiffuseLightingFlag</name></member>
+      <member refid="d4/d10/a04839_1af92ca4371858207bd9f0408b0d8f398f" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>m_fillMaterial</name></member>
+      <member refid="d4/d10/a04839_1a36eed8f0da6748a7533d65bbe2d2d2b7" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>m_materialShaders</name></member>
+      <member refid="d4/d10/a04839_1a98e073f92ce54a00ad0f27d27a0fde5b" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>m_parallaxOcclusionMappingOneFlag</name></member>
+      <member refid="d4/d10/a04839_1a0f0208787d3a7376825f75d6bd0e57db" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>m_parallaxOcclusionMappingRepeatFlag</name></member>
+      <member refid="d4/d10/a04839_1a3a520c027965fc641044660f68436857" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>m_pauseOrder</name></member>
+      <member refid="d4/d10/a04839_1ab651e56b98fe243a25d62e587aa8df44" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>m_registered</name></member>
+      <member refid="d4/d10/a04839_1a0b584a83b35380cdeb84cb7dc8ecf483" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>m_transmissionFlag</name></member>
+      <member refid="d4/d10/a04839_1ac0fbf1f635c975d60f8dbc5ba874ffaa" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>needsEnvironmentMapping</name></member>
+      <member refid="d4/d10/a04839_1a9b25f1f42c01f4dd07e32e1296533949" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>operator=</name></member>
+      <member refid="d4/d10/a04839_1a8633e21a11cd455e99acd7e95f243717" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>operator=</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>OwnedBy</name></member>
+      <member refid="d4/d10/a04839_1a98606fed35e76034b51bda9ec03dfcd3" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>PassComponentRegister</name></member>
+      <member refid="d4/d10/a04839_1a236cc298a884d9a38eaceec873762758" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>PassComponentRegister</name></member>
+      <member refid="d4/d10/a04839_1a42d0a34d13a41337817b2f4ccef6c0db" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>PassComponentRegister</name></member>
+      <member refid="d4/d10/a04839_1af84519ca1d95e08536a79a98280a316c" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>registerComponent</name></member>
+      <member refid="d4/d10/a04839_1ab5484c9fbd1fe00eb2b92d67cfea58af" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>registerComponent</name></member>
+      <member refid="d4/d10/a04839_1aeddaceed26f936686e84e07b714211c7" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>registerComponent</name></member>
+      <member refid="d4/d10/a04839_1a85c277f7a61e971ac75bbcedfe22e335" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>registerPassComponentCombine</name></member>
+      <member refid="d4/d10/a04839_1a385885f8eccf439f330ec6e3c3b82654" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>registerPassComponentCombine</name></member>
+      <member refid="d4/d10/a04839_1a57634c0cfbced984512b780730dc5361" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>reorderBuffer</name></member>
+      <member refid="d4/d10/a04839_1aae1f5718235314c98c2245c71639b431" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>unregisterComponent</name></member>
+      <member refid="d4/d10/a04839_1ab006401f0a9459dc940fce29a52cd339" prot="private" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>unregisterComponent</name></member>
+      <member refid="d4/d10/a04839_1a89e065d8ffdb476ec3a4cbae1252902f" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>updateMapComponents</name></member>
+      <member refid="d4/d10/a04839_1a8efc2b285420435090742249cd28ac01" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>writeTextureConfig</name></member>
+      <member refid="d4/d10/a04839_1a13a9df13216025e946f6e98299c2394f" prot="public" virt="non-virtual"><scope>castor3d::PassComponentRegister</scope><name>~PassComponentRegister</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

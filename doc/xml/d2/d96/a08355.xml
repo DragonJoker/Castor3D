@@ -1,0 +1,443 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/d96/a08355" kind="class" language="C++" prot="public">
+    <compoundname>castor::Exception</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::exception</basecompoundref>
+    <derivedcompoundref refid="d0/d49/a05895" prot="public" virt="non-virtual">castor3d::PluginException</derivedcompoundref>
+    <derivedcompoundref refid="dc/d54/a05339" prot="public" virt="non-virtual">castor3d::VersionException</derivedcompoundref>
+    <derivedcompoundref refid="d5/df8/a08007" prot="public" virt="non-virtual">castor::LoaderException</derivedcompoundref>
+    <derivedcompoundref refid="d3/da9/a08411" prot="public" virt="non-virtual">castor::ParserParameterTypeException&lt; ExpectedT &gt;</derivedcompoundref>
+    <derivedcompoundref refid="df/d8c/a08351" prot="public" virt="non-virtual">castor::UnicityException</derivedcompoundref>
+    <derivedcompoundref refid="df/ddb/a09039" prot="public" virt="non-virtual">castor::UnsupportedFormatException</derivedcompoundref>
+    <includes local="no">Exception.hpp</includes>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d2/d96/a08355_1a7b3f321153f9f0fe0b7e71e328822448" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::Exception::m_line</definition>
+        <argsstring></argsstring>
+        <name>m_line</name>
+        <qualifiedname>castor::Exception::m_line</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Exception/Exception.hpp" line="190" column="10" bodyfile="CastorUtils/Exception/Exception.hpp" bodystart="190" bodyend="-1"/>
+        <referencedby refid="d2/d96/a08355_1aee67527c1afbd1f29dec9191a36cf89e" compoundref="d0/dce/a01946" startline="139" endline="187">getFullDescription</referencedby>
+        <referencedby refid="d2/d96/a08355_1a80c010456bf1cd71b21ad38347f522d5" compoundref="d0/dce/a01946" startline="115" endline="118">getLine</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d96/a08355_1aeeb89f384eb9fc4189a5d3b49491b87c" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref></type>
+        <definition>MbString castor::Exception::m_description</definition>
+        <argsstring></argsstring>
+        <name>m_description</name>
+        <qualifiedname>castor::Exception::m_description</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Exception/Exception.hpp" line="191" column="10" bodyfile="CastorUtils/Exception/Exception.hpp" bodystart="191" bodyend="-1"/>
+        <referencedby refid="d2/d96/a08355_1ac6d91176e5c1302307ad7e21bfff40c1" compoundref="d0/dce/a01946" startline="127" endline="130">getDescription</referencedby>
+        <referencedby refid="d2/d96/a08355_1aee67527c1afbd1f29dec9191a36cf89e" compoundref="d0/dce/a01946" startline="139" endline="187">getFullDescription</referencedby>
+        <referencedby refid="d2/d96/a08355_1a18163f7cb9b8953865ce54e0073892a5" compoundref="d0/dce/a01946" startline="79" endline="82">what</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d96/a08355_1a304ae098a78df1d109b798702b9a4fb5" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref></type>
+        <definition>MbString castor::Exception::m_filename</definition>
+        <argsstring></argsstring>
+        <name>m_filename</name>
+        <qualifiedname>castor::Exception::m_filename</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Exception/Exception.hpp" line="192" column="10" bodyfile="CastorUtils/Exception/Exception.hpp" bodystart="192" bodyend="-1"/>
+        <referencedby refid="d2/d96/a08355_1a989a591d3c82e148275a16be6ff0780d" compoundref="d0/dce/a01946" startline="91" endline="94">getFileName</referencedby>
+        <referencedby refid="d2/d96/a08355_1aee67527c1afbd1f29dec9191a36cf89e" compoundref="d0/dce/a01946" startline="139" endline="187">getFullDescription</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d96/a08355_1aaf2d800d4ff757a6b755a888e11b31c5" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref></type>
+        <definition>MbString castor::Exception::m_functionName</definition>
+        <argsstring></argsstring>
+        <name>m_functionName</name>
+        <qualifiedname>castor::Exception::m_functionName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Exception/Exception.hpp" line="193" column="10" bodyfile="CastorUtils/Exception/Exception.hpp" bodystart="193" bodyend="-1"/>
+        <referencedby refid="d2/d96/a08355_1aee67527c1afbd1f29dec9191a36cf89e" compoundref="d0/dce/a01946" startline="139" endline="187">getFullDescription</referencedby>
+        <referencedby refid="d2/d96/a08355_1af6c65d07734b666514bcfeac7a080aa5" compoundref="d0/dce/a01946" startline="103" endline="106">getFunction</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d96/a08355_1ab03a4184301dd65c8a1e3b1dc304bbd5" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref></type>
+        <definition>MbString castor::Exception::m_callStack</definition>
+        <argsstring></argsstring>
+        <name>m_callStack</name>
+        <qualifiedname>castor::Exception::m_callStack</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Exception/Exception.hpp" line="194" column="10" bodyfile="CastorUtils/Exception/Exception.hpp" bodystart="194" bodyend="-1"/>
+        <referencedby refid="d2/d96/a08355_1ada321c02ff8fd2e8084701084961b3f2" compoundref="d0/dce/a01946" startline="37" endline="49">Exception</referencedby>
+        <referencedby refid="d2/d96/a08355_1aee67527c1afbd1f29dec9191a36cf89e" compoundref="d0/dce/a01946" startline="139" endline="187">getFullDescription</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d96/a08355_1ada321c02ff8fd2e8084701084961b3f2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Exception::Exception</definition>
+        <argsstring>(MbString const &amp;description, char const *file, char const *function, uint32_t line)</argsstring>
+        <name>Exception</name>
+        <qualifiedname>castor::Exception::Exception</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref> const &amp;</type>
+          <declname>description</declname>
+        </param>
+        <param>
+          <type>char const *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>char const *</type>
+          <declname>function</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>line</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur spécifié </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">description</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La description de l&apos;exception </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du fichier </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de la fonction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">line</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le numéro de ligne </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Exception/Exception.hpp" line="37" column="1" bodyfile="CastorUtils/Exception/Exception.hpp" bodystart="37" bodyend="49"/>
+        <references refid="d2/d96/a08355_1ab03a4184301dd65c8a1e3b1dc304bbd5" compoundref="d0/dce/a01946" startline="194">m_callStack</references>
+        <references refid="d2/dd2/a02279_1af41ea5b34edb8c4103f57937867ea4d6" compoundref="d5/d12/a01799" startline="197" endline="200">castor::makeStringStream</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d96/a08355_1a99bb999221629bf5932f8e3a270b32c7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Exception::Exception</definition>
+        <argsstring>(WString const &amp;description, char const *file, char const *function, uint32_t line)</argsstring>
+        <name>Exception</name>
+        <qualifiedname>castor::Exception::Exception</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae5b1e9a2409f0870782a59af6208c267" kindref="member">WString</ref> const &amp;</type>
+          <declname>description</declname>
+        </param>
+        <param>
+          <type>char const *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>char const *</type>
+          <declname>function</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>line</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur spécifié </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">description</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La description de l&apos;exception </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du fichier </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de la fonction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">line</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le numéro de ligne </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Exception/Exception.hpp" line="64" column="1" bodyfile="CastorUtils/Exception/Exception.hpp" bodystart="64" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d96/a08355_1a18163f7cb9b8953865ce54e0073892a5" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>char const *</type>
+        <definition>char const  * castor::Exception::what</definition>
+        <argsstring>() const noexcept override</argsstring>
+        <name>what</name>
+        <qualifiedname>castor::Exception::what</qualifiedname>
+        <briefdescription>
+<para>Récupère la description de l&apos;exception. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La description de l&apos;exception </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Exception/Exception.hpp" line="79" column="13" bodyfile="CastorUtils/Exception/Exception.hpp" bodystart="79" bodyend="82"/>
+        <references refid="d2/d96/a08355_1aeeb89f384eb9fc4189a5d3b49491b87c" compoundref="d0/dce/a01946" startline="191">m_description</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d96/a08355_1a989a591d3c82e148275a16be6ff0780d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref> const &amp;</type>
+        <definition>MbString const  &amp; castor::Exception::getFileName</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getFileName</name>
+        <qualifiedname>castor::Exception::getFileName</qualifiedname>
+        <briefdescription>
+<para>Récupère le nom du fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le nom du fichier </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Exception/Exception.hpp" line="91" column="17" bodyfile="CastorUtils/Exception/Exception.hpp" bodystart="91" bodyend="94"/>
+        <references refid="d2/d96/a08355_1a304ae098a78df1d109b798702b9a4fb5" compoundref="d0/dce/a01946" startline="192">m_filename</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d96/a08355_1af6c65d07734b666514bcfeac7a080aa5" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref> const &amp;</type>
+        <definition>MbString const  &amp; castor::Exception::getFunction</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getFunction</name>
+        <qualifiedname>castor::Exception::getFunction</qualifiedname>
+        <briefdescription>
+<para>Récupère le nom de la fonction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le nom de la fonction </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Exception/Exception.hpp" line="103" column="17" bodyfile="CastorUtils/Exception/Exception.hpp" bodystart="103" bodyend="106"/>
+        <references refid="d2/d96/a08355_1aaf2d800d4ff757a6b755a888e11b31c5" compoundref="d0/dce/a01946" startline="193">m_functionName</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d96/a08355_1a80c010456bf1cd71b21ad38347f522d5" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::Exception::getLine</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getLine</name>
+        <qualifiedname>castor::Exception::getLine</qualifiedname>
+        <briefdescription>
+<para>Récupère le numéro de ligne. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le numéro de ligne </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Exception/Exception.hpp" line="115" column="10" bodyfile="CastorUtils/Exception/Exception.hpp" bodystart="115" bodyend="118"/>
+        <references refid="d2/d96/a08355_1a7b3f321153f9f0fe0b7e71e328822448" compoundref="d0/dce/a01946" startline="190">m_line</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d96/a08355_1ac6d91176e5c1302307ad7e21bfff40c1" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref> const &amp;</type>
+        <definition>MbString const  &amp; castor::Exception::getDescription</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getDescription</name>
+        <qualifiedname>castor::Exception::getDescription</qualifiedname>
+        <briefdescription>
+<para>Récupère la description de l&apos;exception. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La description de l&apos;exception </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Exception/Exception.hpp" line="127" column="17" bodyfile="CastorUtils/Exception/Exception.hpp" bodystart="127" bodyend="130"/>
+        <references refid="d2/d96/a08355_1aeeb89f384eb9fc4189a5d3b49491b87c" compoundref="d0/dce/a01946" startline="191">m_description</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d96/a08355_1aee67527c1afbd1f29dec9191a36cf89e" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref></type>
+        <definition>MbString castor::Exception::getFullDescription</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getFullDescription</name>
+        <qualifiedname>castor::Exception::getFullDescription</qualifiedname>
+        <briefdescription>
+<para>Récupère le texte complet de l&apos;exception (description, ligne, fichier et fonction) </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La texte complet de l&apos;exception </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Exception/Exception.hpp" line="139" column="10" bodyfile="CastorUtils/Exception/Exception.hpp" bodystart="139" bodyend="187"/>
+        <references refid="d2/d96/a08355_1ab03a4184301dd65c8a1e3b1dc304bbd5" compoundref="d0/dce/a01946" startline="194">m_callStack</references>
+        <references refid="d2/d96/a08355_1aeeb89f384eb9fc4189a5d3b49491b87c" compoundref="d0/dce/a01946" startline="191">m_description</references>
+        <references refid="d2/d96/a08355_1a304ae098a78df1d109b798702b9a4fb5" compoundref="d0/dce/a01946" startline="192">m_filename</references>
+        <references refid="d2/d96/a08355_1aaf2d800d4ff757a6b755a888e11b31c5" compoundref="d0/dce/a01946" startline="193">m_functionName</references>
+        <references refid="d2/d96/a08355_1a7b3f321153f9f0fe0b7e71e328822448" compoundref="d0/dce/a01946" startline="190">m_line</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor3d::PluginException</label>
+        <link refid="d0/d49/a05895"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::VersionException</label>
+        <link refid="dc/d54/a05339"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::Exception</label>
+        <link refid="d2/d96/a08355"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::LoaderException</label>
+        <link refid="d5/df8/a08007"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::ParserParameterTypeException&lt; ExpectedT &gt;</label>
+        <link refid="d3/da9/a08411"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::UnicityException</label>
+        <link refid="df/d8c/a08351"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::UnsupportedFormatException</label>
+        <link refid="df/ddb/a09039"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::exception</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>std::basic_string&lt; mbchar &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; mbchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::Exception</label>
+        <link refid="d2/d96/a08355"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_callStack</edgelabel>
+          <edgelabel>m_description</edgelabel>
+          <edgelabel>m_filename</edgelabel>
+          <edgelabel>m_functionName</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::exception</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Exception/Exception.hpp" line="19" column="1" bodyfile="CastorUtils/Exception/Exception.hpp" bodystart="21" bodyend="195"/>
+    <listofallmembers>
+      <member refid="d2/d96/a08355_1ada321c02ff8fd2e8084701084961b3f2" prot="public" virt="non-virtual"><scope>castor::Exception</scope><name>Exception</name></member>
+      <member refid="d2/d96/a08355_1a99bb999221629bf5932f8e3a270b32c7" prot="public" virt="non-virtual"><scope>castor::Exception</scope><name>Exception</name></member>
+      <member refid="d2/d96/a08355_1ac6d91176e5c1302307ad7e21bfff40c1" prot="public" virt="non-virtual"><scope>castor::Exception</scope><name>getDescription</name></member>
+      <member refid="d2/d96/a08355_1a989a591d3c82e148275a16be6ff0780d" prot="public" virt="non-virtual"><scope>castor::Exception</scope><name>getFileName</name></member>
+      <member refid="d2/d96/a08355_1aee67527c1afbd1f29dec9191a36cf89e" prot="public" virt="non-virtual"><scope>castor::Exception</scope><name>getFullDescription</name></member>
+      <member refid="d2/d96/a08355_1af6c65d07734b666514bcfeac7a080aa5" prot="public" virt="non-virtual"><scope>castor::Exception</scope><name>getFunction</name></member>
+      <member refid="d2/d96/a08355_1a80c010456bf1cd71b21ad38347f522d5" prot="public" virt="non-virtual"><scope>castor::Exception</scope><name>getLine</name></member>
+      <member refid="d2/d96/a08355_1ab03a4184301dd65c8a1e3b1dc304bbd5" prot="protected" virt="non-virtual"><scope>castor::Exception</scope><name>m_callStack</name></member>
+      <member refid="d2/d96/a08355_1aeeb89f384eb9fc4189a5d3b49491b87c" prot="protected" virt="non-virtual"><scope>castor::Exception</scope><name>m_description</name></member>
+      <member refid="d2/d96/a08355_1a304ae098a78df1d109b798702b9a4fb5" prot="protected" virt="non-virtual"><scope>castor::Exception</scope><name>m_filename</name></member>
+      <member refid="d2/d96/a08355_1aaf2d800d4ff757a6b755a888e11b31c5" prot="protected" virt="non-virtual"><scope>castor::Exception</scope><name>m_functionName</name></member>
+      <member refid="d2/d96/a08355_1a7b3f321153f9f0fe0b7e71e328822448" prot="protected" virt="non-virtual"><scope>castor::Exception</scope><name>m_line</name></member>
+      <member refid="d2/d96/a08355_1a18163f7cb9b8953865ce54e0073892a5" prot="public" virt="non-virtual"><scope>castor::Exception</scope><name>what</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

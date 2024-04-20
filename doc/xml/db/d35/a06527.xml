@@ -1,0 +1,1139 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d35/a06527" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RenderNodesPassDesc</compoundname>
+    <includes local="no">RenderNodesPass.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d35/a06527_1a8ed2fdbc92a9dd7c3ce918bc6fd2cef2" prot="public" static="no" mutable="no">
+        <type>VkExtent3D</type>
+        <definition>VkExtent3D castor3d::RenderNodesPassDesc::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="273" column="12" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="273" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d35/a06527_1a4906fb15aa47e3c7bc1a9e262d00edfe" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/ddf/a07743" kindref="compound">CameraUbo</ref> const  &amp;</type>
+        <definition>CameraUbo const&amp; castor3d::RenderNodesPassDesc::m_cameraUbo</definition>
+        <argsstring></argsstring>
+        <name>m_cameraUbo</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_cameraUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="274" column="18" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="274" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d35/a06527_1a713c2bc1c34b5ae7e8626f259534c566" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/de1/a07827" kindref="compound">SceneUbo</ref> const  *</type>
+        <definition>SceneUbo const* castor3d::RenderNodesPassDesc::m_sceneUbo</definition>
+        <argsstring></argsstring>
+        <name>m_sceneUbo</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_sceneUbo</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="275" column="17" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="275" bodyend="275"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d35/a06527_1adc6b6c9b01873cd7b353a14c1a551ced" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/d57/a05931" kindref="compound">SceneCuller</ref> &amp;</type>
+        <definition>SceneCuller&amp; castor3d::RenderNodesPassDesc::m_culler</definition>
+        <argsstring></argsstring>
+        <name>m_culler</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_culler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="276" column="14" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="276" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d35/a06527_1ab7070b0c7ed80ed42bbb4ed8e8b265dc" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1aaf8baf4f7c0e40a56f28725647738de2" kindref="member">RenderFilters</ref></type>
+        <definition>RenderFilters castor3d::RenderNodesPassDesc::m_filters</definition>
+        <argsstring></argsstring>
+        <name>m_filters</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_filters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="277" column="15" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="277" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d35/a06527_1a77bd9d12566877c3fcf15ccaeba7117f" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderNodesPassDesc::m_oit</definition>
+        <argsstring></argsstring>
+        <name>m_oit</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_oit</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="278" column="6" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="278" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d35/a06527_1ad2e42e20cebdd695d43da2c2a16ea28b" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderNodesPassDesc::m_forceTwoSided</definition>
+        <argsstring></argsstring>
+        <name>m_forceTwoSided</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_forceTwoSided</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="279" column="6" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="279" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d35/a06527_1acd0fd0782cc665ee498cfad805f82b70" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderNodesPassDesc::m_safeBand</definition>
+        <argsstring></argsstring>
+        <name>m_safeBand</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_safeBand</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="280" column="6" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="280" bodyend="280"/>
+        <referencedby refid="db/d35/a06527_1ad8ccbed6034876b2da9f357c1805b7f0" compoundref="da/d19/a01217" startline="165" endline="169">safeBand</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="db/d35/a06527_1a60cf2eccaf24e7c341cde03a5ce5732e" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderNodesPassDesc::m_meshShading</definition>
+        <argsstring></argsstring>
+        <name>m_meshShading</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_meshShading</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="281" column="6" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="281" bodyend="281"/>
+        <referencedby refid="db/d35/a06527_1adb12faf0f1607335c2dae0c83862d18d" compoundref="da/d19/a01217" startline="223" endline="227">meshShading</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="db/d35/a06527_1ac473ff8cada8f79d3cee5d914eb8898b" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> const  *</type>
+        <definition>SceneNode const* castor3d::RenderNodesPassDesc::m_ignored</definition>
+        <argsstring></argsstring>
+        <name>m_ignored</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_ignored</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="282" column="18" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="282" bodyend="282"/>
+        <referencedby refid="db/d35/a06527_1abcf78a5bf38e31afc9e7bb02d7787d21" compoundref="da/d19/a01217" startline="154" endline="158">ignored</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="db/d35/a06527_1ab1e84c38e0ddc0654de807e751714780" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderNodesPassDesc::m_index</definition>
+        <argsstring></argsstring>
+        <name>m_index</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_index</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="283" column="10" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="283" bodyend="283"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d35/a06527_1afd383e8cc537c494ca71fa20a9238556" prot="public" static="no" mutable="no">
+        <type>std::optional&lt; bool &gt;</type>
+        <definition>std::optional&lt; bool &gt; castor3d::RenderNodesPassDesc::m_handleStatic</definition>
+        <argsstring></argsstring>
+        <name>m_handleStatic</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_handleStatic</qualifiedname>
+        <initializer>{ std::nullopt }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="284" column="15" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="284" bodyend="284"/>
+        <referencedby refid="db/d35/a06527_1a3d98de37b2f2a7705a2a404013ec6d41" compoundref="da/d19/a01217" startline="187" endline="191">isStatic</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="db/d35/a06527_1a4f555d451b6df62cd0f594eeb4d6a43e" prot="public" static="no" mutable="no">
+        <type>crg::ru::Config</type>
+        <definition>crg::ru::Config castor3d::RenderNodesPassDesc::m_ruConfig</definition>
+        <argsstring></argsstring>
+        <name>m_ruConfig</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_ruConfig</qualifiedname>
+        <initializer>{ 1u, true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="285" column="17" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="285" bodyend="285"/>
+        <referencedby refid="db/d35/a06527_1ae3578277a5df6e9f67bac83b6ac11237" compoundref="da/d19/a01217" startline="211" endline="216">implicitAction</referencedby>
+        <referencedby refid="db/d35/a06527_1ada75b6f219d0ad827910800b30437c29" compoundref="da/d19/a01217" startline="176" endline="180">passCount</referencedby>
+        <referencedby refid="db/d35/a06527_1a6a4d69515ab56e1662ea9199a278bb56" compoundref="da/d19/a01217" startline="198" endline="202">resettable</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="db/d35/a06527_1ad43595fbc414bb74b1e92af1b7fc2569" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a924293b8f4fc39410f651e98ed535eb0" kindref="member">ComponentModeFlags</ref></type>
+        <definition>ComponentModeFlags castor3d::RenderNodesPassDesc::m_componentModeFlags</definition>
+        <argsstring></argsstring>
+        <name>m_componentModeFlags</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_componentModeFlags</qualifiedname>
+        <initializer>{ <ref refid="d9/dba/a02278_1a5a21f743634dd3f3fbe545a01fd7c536a205a605c9a22391af5e09fa60fe30678" kindref="member">ComponentModeFlag::eAll</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="286" column="20" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="286" bodyend="286"/>
+        <referencedby refid="db/d35/a06527_1ae88b2c2864c23be164670d8a4e92a496" compoundref="da/d19/a01217" startline="234" endline="238">componentModeFlags</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="db/d35/a06527_1aacc43669ddbb3619cc2e243b29e9db18" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderNodesPassDesc::m_allowClusteredLighting</definition>
+        <argsstring></argsstring>
+        <name>m_allowClusteredLighting</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_allowClusteredLighting</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="287" column="6" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="287" bodyend="287"/>
+        <referencedby refid="db/d35/a06527_1aa3ccd499f0555d9832edee4a50438c86" compoundref="da/d19/a01217" startline="245" endline="249">allowClusteredLighting</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="db/d35/a06527_1a4aa46dcd13b18f640db886e83a0c2ea4" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1aeac54b11ae520bd6c9f31956d7ecd468" kindref="member">DeferredLightingFilter</ref></type>
+        <definition>DeferredLightingFilter castor3d::RenderNodesPassDesc::m_deferredLightingFilter</definition>
+        <argsstring></argsstring>
+        <name>m_deferredLightingFilter</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_deferredLightingFilter</qualifiedname>
+        <initializer>{ <ref refid="d9/dba/a02278_1aeac54b11ae520bd6c9f31956d7ecd468a26b16d3dbea71b2c3c6cd8eab33c460c" kindref="member">DeferredLightingFilter::eIgnore</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="288" column="24" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="288" bodyend="288"/>
+        <referencedby refid="db/d35/a06527_1a4faf054432e866d4d89803b97f04de76" compoundref="da/d19/a01217" startline="256" endline="260">deferredLightingFilter</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="db/d35/a06527_1adad61e69b80f2bfeb7c7b29766fc77f1" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a91a6789d3df127aedb89e9bf8854b39f" kindref="member">ParallaxOcclusionFilter</ref></type>
+        <definition>ParallaxOcclusionFilter castor3d::RenderNodesPassDesc::m_parallaxOcclusionFilter</definition>
+        <argsstring></argsstring>
+        <name>m_parallaxOcclusionFilter</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::m_parallaxOcclusionFilter</qualifiedname>
+        <initializer>{ <ref refid="d9/dba/a02278_1a91a6789d3df127aedb89e9bf8854b39fa26b16d3dbea71b2c3c6cd8eab33c460c" kindref="member">ParallaxOcclusionFilter::eIgnore</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="289" column="25" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="289" bodyend="289"/>
+        <referencedby refid="db/d35/a06527_1a8442225ee6132c7f3e15f1107a2ec510" compoundref="da/d19/a01217" startline="267" endline="271">parallaxOcclusionFilter</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="db/d35/a06527_1a9295137fe0dc3e0141c723c2285ddc97" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderNodesPassDesc::RenderNodesPassDesc</definition>
+        <argsstring>(VkExtent3D size, CameraUbo const &amp;cameraUbo, SceneUbo const *sceneUbo, SceneCuller &amp;culler, RenderFilters filters, bool oit, bool forceTwoSided)</argsstring>
+        <name>RenderNodesPassDesc</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::RenderNodesPassDesc</qualifiedname>
+        <param>
+          <type>VkExtent3D</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/ddf/a07743" kindref="compound">CameraUbo</ref> const &amp;</type>
+          <declname>cameraUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/de1/a07827" kindref="compound">SceneUbo</ref> const *</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d57/a05931" kindref="compound">SceneCuller</ref> &amp;</type>
+          <declname>culler</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aaf8baf4f7c0e40a56f28725647738de2" kindref="member">RenderFilters</ref></type>
+          <declname>filters</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>oit</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>forceTwoSided</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="33" column="1" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="33" bodyend="48"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d35/a06527_1ac69af3d1bef173ba50c73909416204a2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderNodesPassDesc::RenderNodesPassDesc</definition>
+        <argsstring>(VkExtent3D size, CameraUbo const &amp;cameraUbo, SceneUbo const &amp;sceneUbo, SceneCuller &amp;culler, RenderFilters filters, bool oit, bool forceTwoSided)</argsstring>
+        <name>RenderNodesPassDesc</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::RenderNodesPassDesc</qualifiedname>
+        <param>
+          <type>VkExtent3D</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/ddf/a07743" kindref="compound">CameraUbo</ref> const &amp;</type>
+          <declname>cameraUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/de1/a07827" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d57/a05931" kindref="compound">SceneCuller</ref> &amp;</type>
+          <declname>culler</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aaf8baf4f7c0e40a56f28725647738de2" kindref="member">RenderFilters</ref></type>
+          <declname>filters</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>oit</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>forceTwoSided</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="51" column="1" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="51" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d35/a06527_1adf7d35f24c74458c506d281e830ad60a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderNodesPassDesc::RenderNodesPassDesc</definition>
+        <argsstring>(VkExtent3D size, CameraUbo const &amp;cameraUbo, SceneCuller &amp;culler)</argsstring>
+        <name>RenderNodesPassDesc</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::RenderNodesPassDesc</qualifiedname>
+        <param>
+          <type>VkExtent3D</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/ddf/a07743" kindref="compound">CameraUbo</ref> const &amp;</type>
+          <declname>cameraUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d57/a05931" kindref="compound">SceneCuller</ref> &amp;</type>
+          <declname>culler</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur pour les passes d&apos;ombres. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les dimensions de la zone de rendu. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cameraUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;UBO des matrices de la scène. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">culler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le culler pour cette passe. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="79" column="1" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="79" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d35/a06527_1aeb2b68792280a01d51e9567b6cd86a75" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderNodesPassDesc::RenderNodesPassDesc</definition>
+        <argsstring>(VkExtent3D size, CameraUbo const &amp;cameraUbo, SceneUbo const &amp;sceneUbo, SceneCuller &amp;culler)</argsstring>
+        <name>RenderNodesPassDesc</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::RenderNodesPassDesc</qualifiedname>
+        <param>
+          <type>VkExtent3D</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/ddf/a07743" kindref="compound">CameraUbo</ref> const &amp;</type>
+          <declname>cameraUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/de1/a07827" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d57/a05931" kindref="compound">SceneCuller</ref> &amp;</type>
+          <declname>culler</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur pour les passes opaques. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les dimensions de la zone de rendu. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cameraUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;UBO des matrices de la scène. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sceneUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;UBO de scène. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">culler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le culler pour cette passe. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="105" column="1" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="105" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d35/a06527_1abf8a5401ffe7d06977e2bd6289ee5ca1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderNodesPassDesc::RenderNodesPassDesc</definition>
+        <argsstring>(VkExtent3D size, CameraUbo const &amp;cameraUbo, SceneUbo const &amp;sceneUbo, SceneCuller &amp;culler, bool oit)</argsstring>
+        <name>RenderNodesPassDesc</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::RenderNodesPassDesc</qualifiedname>
+        <param>
+          <type>VkExtent3D</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/ddf/a07743" kindref="compound">CameraUbo</ref> const &amp;</type>
+          <declname>cameraUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/de1/a07827" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d57/a05931" kindref="compound">SceneCuller</ref> &amp;</type>
+          <declname>culler</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>oit</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur pour les passes transparents. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les dimensions de la zone de rendu. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cameraUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;UBO des matrices de la scène. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sceneUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;UBO de scène. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">culler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le culler pour cette passe. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">oit</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le statut de rendu indépendant de l&apos;ordre des objets. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="134" column="1" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="134" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d35/a06527_1abcf78a5bf38e31afc9e7bb02d7787d21" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d35/a06527" kindref="compound">RenderNodesPassDesc</ref> &amp;</type>
+        <definition>RenderNodesPassDesc &amp; castor3d::RenderNodesPassDesc::ignored</definition>
+        <argsstring>(SceneNode const &amp;value)</argsstring>
+        <name>ignored</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::ignored</qualifiedname>
+        <param>
+          <type><ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le scene node à ignorer pendant le rendu. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="154" column="22" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="154" bodyend="158"/>
+        <references refid="db/d35/a06527_1ac473ff8cada8f79d3cee5d914eb8898b" compoundref="da/d19/a01217" startline="282" endline="282">m_ignored</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d35/a06527_1ad8ccbed6034876b2da9f357c1805b7f0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d35/a06527" kindref="compound">RenderNodesPassDesc</ref> &amp;</type>
+        <definition>RenderNodesPassDesc &amp; castor3d::RenderNodesPassDesc::safeBand</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>safeBand</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::safeBand</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le scene node à ignorer pendant le rendu. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="165" column="22" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="165" bodyend="169"/>
+        <references refid="db/d35/a06527_1acd0fd0782cc665ee498cfad805f82b70" compoundref="da/d19/a01217" startline="280" endline="280">m_safeBand</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d35/a06527_1ada75b6f219d0ad827910800b30437c29" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d35/a06527" kindref="compound">RenderNodesPassDesc</ref> &amp;</type>
+        <definition>RenderNodesPassDesc &amp; castor3d::RenderNodesPassDesc::passCount</definition>
+        <argsstring>(uint32_t value)</argsstring>
+        <name>passCount</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::passCount</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre maximum de variantes de la frame pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="176" column="22" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="176" bodyend="180"/>
+        <references refid="db/d35/a06527_1a4f555d451b6df62cd0f594eeb4d6a43e" compoundref="da/d19/a01217" startline="285" endline="285">m_ruConfig</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d35/a06527_1a3d98de37b2f2a7705a2a404013ec6d41" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d35/a06527" kindref="compound">RenderNodesPassDesc</ref> &amp;</type>
+        <definition>RenderNodesPassDesc &amp; castor3d::RenderNodesPassDesc::isStatic</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>isStatic</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::isStatic</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> si la passe est pour les noeuds statiques. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="187" column="22" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="187" bodyend="191"/>
+        <references refid="db/d35/a06527_1afd383e8cc537c494ca71fa20a9238556" compoundref="da/d19/a01217" startline="284" endline="284">m_handleStatic</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d35/a06527_1a6a4d69515ab56e1662ea9199a278bb56" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d35/a06527" kindref="compound">RenderNodesPassDesc</ref> &amp;</type>
+        <definition>RenderNodesPassDesc &amp; castor3d::RenderNodesPassDesc::resettable</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>resettable</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::resettable</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le statut resettable de la frame pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="198" column="22" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="198" bodyend="202"/>
+        <references refid="db/d35/a06527_1a4f555d451b6df62cd0f594eeb4d6a43e" compoundref="da/d19/a01217" startline="285" endline="285">m_ruConfig</references>
+        <references refid="db/d35/a06527_1a6a4d69515ab56e1662ea9199a278bb56" compoundref="da/d19/a01217" startline="198" endline="202">resettable</references>
+        <referencedby refid="db/d35/a06527_1a6a4d69515ab56e1662ea9199a278bb56" compoundref="da/d19/a01217" startline="198" endline="202">resettable</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/d35/a06527_1ae3578277a5df6e9f67bac83b6ac11237" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d35/a06527" kindref="compound">RenderNodesPassDesc</ref> &amp;</type>
+        <definition>RenderNodesPassDesc &amp; castor3d::RenderNodesPassDesc::implicitAction</definition>
+        <argsstring>(crg::ImageViewId view, crg::RecordContext::ImplicitAction action)</argsstring>
+        <name>implicitAction</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::implicitAction</qualifiedname>
+        <param>
+          <type>crg::ImageViewId</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>crg::RecordContext::ImplicitAction</type>
+          <declname>action</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">view</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;image view sur laquelle est appliquée l&apos;action. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">action</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;action. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="211" column="22" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="211" bodyend="216"/>
+        <references refid="db/d35/a06527_1ae3578277a5df6e9f67bac83b6ac11237" compoundref="da/d19/a01217" startline="211" endline="216">implicitAction</references>
+        <references refid="db/d35/a06527_1a4f555d451b6df62cd0f594eeb4d6a43e" compoundref="da/d19/a01217" startline="285" endline="285">m_ruConfig</references>
+        <referencedby refid="db/d35/a06527_1ae3578277a5df6e9f67bac83b6ac11237" compoundref="da/d19/a01217" startline="211" endline="216">implicitAction</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/d35/a06527_1adb12faf0f1607335c2dae0c83862d18d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d35/a06527" kindref="compound">RenderNodesPassDesc</ref> &amp;</type>
+        <definition>RenderNodesPassDesc &amp; castor3d::RenderNodesPassDesc::meshShading</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>meshShading</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::meshShading</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le statut d&apos;utilisation des mesh shaders. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="223" column="22" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="223" bodyend="227"/>
+        <references refid="db/d35/a06527_1a60cf2eccaf24e7c341cde03a5ce5732e" compoundref="da/d19/a01217" startline="281" endline="281">m_meshShading</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d35/a06527_1ae88b2c2864c23be164670d8a4e92a496" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d35/a06527" kindref="compound">RenderNodesPassDesc</ref> &amp;</type>
+        <definition>RenderNodesPassDesc &amp; castor3d::RenderNodesPassDesc::componentModeFlags</definition>
+        <argsstring>(ComponentModeFlags value)</argsstring>
+        <name>componentModeFlags</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::componentModeFlags</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a924293b8f4fc39410f651e98ed535eb0" kindref="member">ComponentModeFlags</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les indicateurs de composants de la passe de noeuds. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="234" column="22" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="234" bodyend="238"/>
+        <references refid="db/d35/a06527_1ad43595fbc414bb74b1e92af1b7fc2569" compoundref="da/d19/a01217" startline="286" endline="286">m_componentModeFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d35/a06527_1aa3ccd499f0555d9832edee4a50438c86" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d35/a06527" kindref="compound">RenderNodesPassDesc</ref> &amp;</type>
+        <definition>RenderNodesPassDesc &amp; castor3d::RenderNodesPassDesc::allowClusteredLighting</definition>
+        <argsstring>(bool value=true)</argsstring>
+        <name>allowClusteredLighting</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::allowClusteredLighting</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> si la passe supporte l&apos;éclairage par cluster. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="245" column="22" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="245" bodyend="249"/>
+        <references refid="db/d35/a06527_1aacc43669ddbb3619cc2e243b29e9db18" compoundref="da/d19/a01217" startline="287" endline="287">m_allowClusteredLighting</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d35/a06527_1a4faf054432e866d4d89803b97f04de76" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d35/a06527" kindref="compound">RenderNodesPassDesc</ref> &amp;</type>
+        <definition>RenderNodesPassDesc &amp; castor3d::RenderNodesPassDesc::deferredLightingFilter</definition>
+        <argsstring>(DeferredLightingFilter value)</argsstring>
+        <name>deferredLightingFilter</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::deferredLightingFilter</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aeac54b11ae520bd6c9f31956d7ecd468" kindref="member">DeferredLightingFilter</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le mode de filtrage de l&apos;éclairage différé. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="256" column="22" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="256" bodyend="260"/>
+        <references refid="db/d35/a06527_1a4aa46dcd13b18f640db886e83a0c2ea4" compoundref="da/d19/a01217" startline="288" endline="288">m_deferredLightingFilter</references>
+      </memberdef>
+      <memberdef kind="function" id="db/d35/a06527_1a8442225ee6132c7f3e15f1107a2ec510" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d35/a06527" kindref="compound">RenderNodesPassDesc</ref> &amp;</type>
+        <definition>RenderNodesPassDesc &amp; castor3d::RenderNodesPassDesc::parallaxOcclusionFilter</definition>
+        <argsstring>(ParallaxOcclusionFilter value)</argsstring>
+        <name>parallaxOcclusionFilter</name>
+        <qualifiedname>castor3d::RenderNodesPassDesc::parallaxOcclusionFilter</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a91a6789d3df127aedb89e9bf8854b39f" kindref="member">ParallaxOcclusionFilter</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le mode de filtrage du parallax occlusion. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderNodesPass.hpp" line="267" column="22" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="267" bodyend="271"/>
+        <references refid="db/d35/a06527_1adad61e69b80f2bfeb7c7b29766fc77f1" compoundref="da/d19/a01217" startline="289" endline="289">m_parallaxOcclusionFilter</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="16">
+        <label>Animable</label>
+        <link refid="d2/d7a/a03115"/>
+        <childnode refid="17" relation="public-inheritance">
+        </childnode>
+        <childnode refid="18" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor::FlagCombination&lt; ComponentModeFlag &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="25" relation="template-instance">
+          <edgelabel>&lt; ComponentModeFlag &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor::FlagCombination&lt; RenderFilter &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="25" relation="template-instance">
+          <edgelabel>&lt; RenderFilter &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; AnimableHandlerT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; Scene &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor::SignalT&lt; OnCameraChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnCameraChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor::SignalT&lt; OnSceneNodeReparentFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnSceneNodeReparentFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor::SignalT&lt; SceneCullerBillboardSignalFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; SceneCullerBillboardSignalFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::SignalT&lt; SceneCullerSignalFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; SceneCullerSignalFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::SignalT&lt; SceneCullerSubmeshSignalFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; SceneCullerSubmeshSignalFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d2/d7a/a03115"/>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::Camera</label>
+        <link refid="d2/dc3/a06951"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>onGpuChanged</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::CameraUbo</label>
+        <link refid="d1/ddf/a07743"/>
+      </node>
+      <node id="11">
+        <label>castor3d::MovableObject</label>
+        <link refid="da/d09/a07047"/>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_notifyIndex</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor3d::RenderCounts</label>
+        <link refid="d9/d53/a06479"/>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderNodesPassDesc</label>
+        <link refid="db/d35/a06527"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_cameraUbo</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_sceneUbo</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_culler</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>m_filters</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_ignored</edgelabel>
+        </childnode>
+        <childnode refid="26" relation="usage">
+          <edgelabel>m_componentModeFlags</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::SceneCuller</label>
+        <link refid="d7/d57/a05931"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>onCompute</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>onSubmeshChanged</edgelabel>
+          <edgelabel>onSubmeshRemoved</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>onBillboardChanged</edgelabel>
+          <edgelabel>onBillboardRemoved</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_camera</edgelabel>
+        </childnode>
+        <childnode refid="23" relation="usage">
+          <edgelabel>m_total</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::SceneNode</label>
+        <link refid="d4/dc4/a07255"/>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>onParentChanged</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::SceneUbo</label>
+        <link refid="d5/de1/a07827"/>
+      </node>
+      <node id="21">
+        <label>castor::ConnectionT&lt; MySignalT &gt;</label>
+        <link refid="d4/ddb/a08183"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor::FlagCombination&lt; FlagType &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+      </node>
+      <node id="14">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="6">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="13">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="17">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="7">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/RenderNodesPass.hpp" line="30" column="1" bodyfile="Castor3D/Render/RenderNodesPass.hpp" bodystart="31" bodyend="290"/>
+    <listofallmembers>
+      <member refid="db/d35/a06527_1aa3ccd499f0555d9832edee4a50438c86" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>allowClusteredLighting</name></member>
+      <member refid="db/d35/a06527_1ae88b2c2864c23be164670d8a4e92a496" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>componentModeFlags</name></member>
+      <member refid="db/d35/a06527_1a4faf054432e866d4d89803b97f04de76" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>deferredLightingFilter</name></member>
+      <member refid="db/d35/a06527_1abcf78a5bf38e31afc9e7bb02d7787d21" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>ignored</name></member>
+      <member refid="db/d35/a06527_1ae3578277a5df6e9f67bac83b6ac11237" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>implicitAction</name></member>
+      <member refid="db/d35/a06527_1a3d98de37b2f2a7705a2a404013ec6d41" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>isStatic</name></member>
+      <member refid="db/d35/a06527_1aacc43669ddbb3619cc2e243b29e9db18" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_allowClusteredLighting</name></member>
+      <member refid="db/d35/a06527_1a4906fb15aa47e3c7bc1a9e262d00edfe" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_cameraUbo</name></member>
+      <member refid="db/d35/a06527_1ad43595fbc414bb74b1e92af1b7fc2569" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_componentModeFlags</name></member>
+      <member refid="db/d35/a06527_1adc6b6c9b01873cd7b353a14c1a551ced" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_culler</name></member>
+      <member refid="db/d35/a06527_1a4aa46dcd13b18f640db886e83a0c2ea4" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_deferredLightingFilter</name></member>
+      <member refid="db/d35/a06527_1ab7070b0c7ed80ed42bbb4ed8e8b265dc" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_filters</name></member>
+      <member refid="db/d35/a06527_1ad2e42e20cebdd695d43da2c2a16ea28b" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_forceTwoSided</name></member>
+      <member refid="db/d35/a06527_1afd383e8cc537c494ca71fa20a9238556" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_handleStatic</name></member>
+      <member refid="db/d35/a06527_1ac473ff8cada8f79d3cee5d914eb8898b" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_ignored</name></member>
+      <member refid="db/d35/a06527_1ab1e84c38e0ddc0654de807e751714780" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_index</name></member>
+      <member refid="db/d35/a06527_1a60cf2eccaf24e7c341cde03a5ce5732e" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_meshShading</name></member>
+      <member refid="db/d35/a06527_1a77bd9d12566877c3fcf15ccaeba7117f" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_oit</name></member>
+      <member refid="db/d35/a06527_1adad61e69b80f2bfeb7c7b29766fc77f1" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_parallaxOcclusionFilter</name></member>
+      <member refid="db/d35/a06527_1a4f555d451b6df62cd0f594eeb4d6a43e" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_ruConfig</name></member>
+      <member refid="db/d35/a06527_1acd0fd0782cc665ee498cfad805f82b70" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_safeBand</name></member>
+      <member refid="db/d35/a06527_1a713c2bc1c34b5ae7e8626f259534c566" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_sceneUbo</name></member>
+      <member refid="db/d35/a06527_1a8ed2fdbc92a9dd7c3ce918bc6fd2cef2" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>m_size</name></member>
+      <member refid="db/d35/a06527_1adb12faf0f1607335c2dae0c83862d18d" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>meshShading</name></member>
+      <member refid="db/d35/a06527_1a8442225ee6132c7f3e15f1107a2ec510" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>parallaxOcclusionFilter</name></member>
+      <member refid="db/d35/a06527_1ada75b6f219d0ad827910800b30437c29" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>passCount</name></member>
+      <member refid="db/d35/a06527_1a9295137fe0dc3e0141c723c2285ddc97" prot="private" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>RenderNodesPassDesc</name></member>
+      <member refid="db/d35/a06527_1ac69af3d1bef173ba50c73909416204a2" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>RenderNodesPassDesc</name></member>
+      <member refid="db/d35/a06527_1adf7d35f24c74458c506d281e830ad60a" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>RenderNodesPassDesc</name></member>
+      <member refid="db/d35/a06527_1aeb2b68792280a01d51e9567b6cd86a75" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>RenderNodesPassDesc</name></member>
+      <member refid="db/d35/a06527_1abf8a5401ffe7d06977e2bd6289ee5ca1" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>RenderNodesPassDesc</name></member>
+      <member refid="db/d35/a06527_1a6a4d69515ab56e1662ea9199a278bb56" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>resettable</name></member>
+      <member refid="db/d35/a06527_1ad8ccbed6034876b2da9f357c1805b7f0" prot="public" virt="non-virtual"><scope>castor3d::RenderNodesPassDesc</scope><name>safeBand</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/d88/a03771" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::UserInputEvent</compoundname>
+    <derivedcompoundref refid="d7/d87/a03759" prot="public" virt="non-virtual">castor3d::HandlerEvent</derivedcompoundref>
+    <derivedcompoundref refid="d4/df0/a03763" prot="public" virt="non-virtual">castor3d::KeyboardEvent</derivedcompoundref>
+    <derivedcompoundref refid="d1/d2f/a03767" prot="public" virt="non-virtual">castor3d::MouseEvent</derivedcompoundref>
+    <includes local="no">UserInputEvent.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/d88/a03771_1a5973899c9785c2dffaae34250aec448b" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1abdf15c31ed466fee351daf42b2b45ad5" kindref="member">UserInputEventType</ref></type>
+        <definition>UserInputEventType castor3d::UserInputEvent::m_eventType</definition>
+        <argsstring></argsstring>
+        <name>m_eventType</name>
+        <qualifiedname>castor3d::UserInputEvent::m_eventType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputEvent.hpp" line="57" column="20" bodyfile="Castor3D/Event/UserInput/UserInputEvent.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d88/a03771_1aa153e8012937e339174f3d417bb2c85a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::UserInputEvent::UserInputEvent</definition>
+        <argsstring>(UserInputEvent &amp;&amp;)=default</argsstring>
+        <name>UserInputEvent</name>
+        <qualifiedname>castor3d::UserInputEvent::UserInputEvent</qualifiedname>
+        <param>
+          <type><ref refid="d7/d88/a03771" kindref="compound">UserInputEvent</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputEvent.hpp" line="22" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d88/a03771_1ac400e7c3f7be61af659db2150bbd1289" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::UserInputEvent::UserInputEvent</definition>
+        <argsstring>(UserInputEvent const &amp;)=default</argsstring>
+        <name>UserInputEvent</name>
+        <qualifiedname>castor3d::UserInputEvent::UserInputEvent</qualifiedname>
+        <param>
+          <type><ref refid="d7/d88/a03771" kindref="compound">UserInputEvent</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputEvent.hpp" line="23" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d88/a03771_1a505a4c793b88cd3bf450b1897e508b8c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/d88/a03771" kindref="compound">UserInputEvent</ref> &amp;</type>
+        <definition>C3D_API UserInputEvent &amp; castor3d::UserInputEvent::operator=</definition>
+        <argsstring>(UserInputEvent &amp;&amp;)=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::UserInputEvent::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/d88/a03771" kindref="compound">UserInputEvent</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputEvent.hpp" line="24" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d88/a03771_1a83cd34f57f86598f54d26bb236c305da" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/d88/a03771" kindref="compound">UserInputEvent</ref> &amp;</type>
+        <definition>C3D_API UserInputEvent &amp; castor3d::UserInputEvent::operator=</definition>
+        <argsstring>(UserInputEvent const &amp;)=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::UserInputEvent::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/d88/a03771" kindref="compound">UserInputEvent</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputEvent.hpp" line="25" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d88/a03771_1a1d946a77fa49158379ee4e5dfb84a556" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::UserInputEvent::UserInputEvent</definition>
+        <argsstring>(UserInputEventType type)</argsstring>
+        <name>UserInputEvent</name>
+        <qualifiedname>castor3d::UserInputEvent::UserInputEvent</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1abdf15c31ed466fee351daf42b2b45ad5" kindref="member">UserInputEventType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type d&apos;évènement entrée utilisateur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputEvent.hpp" line="34" column="10" bodyfile="Castor3D/Event/UserInput/UserInputEvent.hpp" bodystart="34" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d88/a03771_1a6fad3cec03f215138e8db7ae6cde872a" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::UserInputEvent::~UserInputEvent</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~UserInputEvent</name>
+        <qualifiedname>castor3d::UserInputEvent::~UserInputEvent</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputEvent.hpp" line="44" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d88/a03771_1ab45ab37b6687ae9a35165ea5b18f0a71" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1abdf15c31ed466fee351daf42b2b45ad5" kindref="member">UserInputEventType</ref></type>
+        <definition>UserInputEventType castor3d::UserInputEvent::getEventType</definition>
+        <argsstring>() const</argsstring>
+        <name>getEventType</name>
+        <qualifiedname>castor3d::UserInputEvent::getEventType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le type d&apos;évènement entrée utilisateur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputEvent.hpp" line="51" column="20" bodyfile="Castor3D/Event/UserInput/UserInputEvent.hpp" bodystart="51" bodyend="54"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Description d&apos;un évènement de tpye entrée utilisateur. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Vous pouvez utiliser cette classe, mais il est conseillé d&apos;utiliser les classes <ref refid="d1/d2f/a03767" kindref="compound">MouseEvent</ref> ou <ref refid="d4/df0/a03763" kindref="compound">KeyboardEvent</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::HandlerEvent</label>
+        <link refid="d7/d87/a03759"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::KeyboardEvent</label>
+        <link refid="d4/df0/a03763"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::MouseEvent</label>
+        <link refid="d1/d2f/a03767"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::UserInputEvent</label>
+        <link refid="d7/d88/a03771"/>
+      </node>
+    </inheritancegraph>
+    <location file="Castor3D/Event/UserInput/UserInputEvent.hpp" line="19" column="1" bodyfile="Castor3D/Event/UserInput/UserInputEvent.hpp" bodystart="20" bodyend="58"/>
+    <listofallmembers>
+      <member refid="d7/d88/a03771_1ab45ab37b6687ae9a35165ea5b18f0a71" prot="public" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>getEventType</name></member>
+      <member refid="d7/d88/a03771_1a5973899c9785c2dffaae34250aec448b" prot="private" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>m_eventType</name></member>
+      <member refid="d7/d88/a03771_1a505a4c793b88cd3bf450b1897e508b8c" prot="public" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>operator=</name></member>
+      <member refid="d7/d88/a03771_1a83cd34f57f86598f54d26bb236c305da" prot="public" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>operator=</name></member>
+      <member refid="d7/d88/a03771_1aa153e8012937e339174f3d417bb2c85a" prot="public" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>UserInputEvent</name></member>
+      <member refid="d7/d88/a03771_1ac400e7c3f7be61af659db2150bbd1289" prot="public" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>UserInputEvent</name></member>
+      <member refid="d7/d88/a03771_1a1d946a77fa49158379ee4e5dfb84a556" prot="public" virt="non-virtual"><scope>castor3d::UserInputEvent</scope><name>UserInputEvent</name></member>
+      <member refid="d7/d88/a03771_1a6fad3cec03f215138e8db7ae6cde872a" prot="public" virt="virtual"><scope>castor3d::UserInputEvent</scope><name>~UserInputEvent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

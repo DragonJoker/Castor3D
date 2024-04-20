@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/df7/a04795" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RefractionData</compoundname>
+    <includes local="no">RefractionComponent.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/df7/a04795_1aa33dd66394715f9487da890f67c67bfc" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ac3f6d2ca50f484925164c6f2a13c97e8" kindref="member">castor::AtomicGroupChangeTracked</ref>&lt; float &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; float &gt; castor3d::RefractionData::factor</definition>
+        <argsstring></argsstring>
+        <name>factor</name>
+        <qualifiedname>castor3d::RefractionData::factor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp" line="22" column="34" bodyfile="Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp" bodystart="22" bodyend="-1"/>
+        <referencedby refid="d5/d6b/a04799_1a0f3caf0fc3d6a7db7712e0ede10c67aa" compoundref="d5/d0a/a00602" startline="112" endline="115">castor3d::RefractionComponent::getRefractionRatio</referencedby>
+        <referencedby refid="d5/d6b/a04799_1a594f1f9acaf4f034d3805527af5d7d0b" compoundref="d5/d0a/a00602" startline="97" endline="100">castor3d::RefractionComponent::setRefractionRatio</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/df7/a04795_1a25c59c4858766317a04b9b227c548618" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ac3f6d2ca50f484925164c6f2a13c97e8" kindref="member">castor::AtomicGroupChangeTracked</ref>&lt; bool &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; bool &gt; castor3d::RefractionData::enabled</definition>
+        <argsstring></argsstring>
+        <name>enabled</name>
+        <qualifiedname>castor3d::RefractionData::enabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp" line="23" column="34" bodyfile="Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp" bodystart="23" bodyend="-1"/>
+        <referencedby refid="d5/d6b/a04799_1a557676f2d2f5859306a62556f66873d1" compoundref="d5/d0a/a00602" startline="102" endline="105">castor3d::RefractionComponent::enableRefraction</referencedby>
+        <referencedby refid="d5/d6b/a04799_1ab9b61a2d1d8d225adac834a14873d602" compoundref="d5/d0a/a00602" startline="107" endline="110">castor3d::RefractionComponent::hasRefraction</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/df7/a04795_1a22807d51dfec692185f4328118ed5a8d" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RefractionData::RefractionData</definition>
+        <argsstring>(std::atomic_bool &amp;dirty)</argsstring>
+        <name>RefractionData</name>
+        <qualifiedname>castor3d::RefractionData::RefractionData</qualifiedname>
+        <param>
+          <type>std::atomic_bool &amp;</type>
+          <declname>dirty</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp" line="16" column="10" bodyfile="Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp" bodystart="16" bodyend="20"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>castor::GroupChangeTrackedT&lt; bool &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; bool &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::GroupChangeTrackedT&lt; float &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; float &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::RefractionData</label>
+        <link refid="d5/df7/a04795"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>factor</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>enabled</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp" line="14" column="1" bodyfile="Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp" bodystart="15" bodyend="24"/>
+    <listofallmembers>
+      <member refid="d5/df7/a04795_1a25c59c4858766317a04b9b227c548618" prot="public" virt="non-virtual"><scope>castor3d::RefractionData</scope><name>enabled</name></member>
+      <member refid="d5/df7/a04795_1aa33dd66394715f9487da890f67c67bfc" prot="public" virt="non-virtual"><scope>castor3d::RefractionData</scope><name>factor</name></member>
+      <member refid="d5/df7/a04795_1a22807d51dfec692185f4328118ed5a8d" prot="public" virt="non-virtual"><scope>castor3d::RefractionData</scope><name>RefractionData</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

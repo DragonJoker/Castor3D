@@ -1,0 +1,263 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/d93/a05019" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock</compoundname>
+    <includes local="no">ConfigurationVisitor.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d93/a05019_1a62ff33dc09213b4f82f8cda12f55e5af" prot="public" static="no" mutable="no">
+        <type><ref refid="db/dc2/a05011" kindref="compound">ConfigurationVisitorBase</ref> &amp;</type>
+        <definition>ConfigurationVisitorBase&amp; castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock::parent</definition>
+        <argsstring></argsstring>
+        <name>parent</name>
+        <qualifiedname>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock::parent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" line="99" column="27" bodyfile="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d93/a05019_1a7c73b82e32509dfb07048b68b25118fc" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock::category</definition>
+        <argsstring></argsstring>
+        <name>category</name>
+        <qualifiedname>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock::category</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" line="100" column="16" bodyfile="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d93/a05019_1a23136e083fbe668d927ad3fe8340f861" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; <ref refid="db/dc2/a05011" kindref="compound">ConfigurationVisitorBase</ref> &gt;</type>
+        <definition>castor::RawUniquePtr&lt; ConfigurationVisitorBase &gt; castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock::configuration</definition>
+        <argsstring></argsstring>
+        <name>configuration</name>
+        <qualifiedname>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock::configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" line="101" column="22" bodyfile="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" bodystart="101" bodyend="-1"/>
+        <referencedby refid="de/d93/a05019_1a7e940572cfa71d1f7794df8cd4b198a2" compoundref="d8/d13/a00671" startline="66" endline="69">operator*</referencedby>
+        <referencedby refid="de/d93/a05019_1a395223e0aa1f3160c00ded37b27f9c76" compoundref="d8/d13/a00671" startline="77" endline="81">visit</referencedby>
+        <referencedby refid="de/d93/a05019_1a9b1f1ebefd042b5eeea42ad095aff7dd" compoundref="d8/d13/a00671" startline="92" endline="97">visit</referencedby>
+        <referencedby refid="de/d93/a05019_1aaf7b856c56ad50eb44c53da7c91598c3" compoundref="d8/d13/a00671" startline="84" endline="89">visit</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d93/a05019_1aeae749e90b19ac468d74b17e6e0482d0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock::ConfigurationVisitorBlock</definition>
+        <argsstring>(ConfigurationVisitorBase &amp;par, castor::String const &amp;cat, castor::RawUniquePtr&lt; ConfigurationVisitorBase &gt; config)</argsstring>
+        <name>ConfigurationVisitorBlock</name>
+        <qualifiedname>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock::ConfigurationVisitorBlock</qualifiedname>
+        <param>
+          <type><ref refid="db/dc2/a05011" kindref="compound">ConfigurationVisitorBase</ref> &amp;</type>
+          <declname>par</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>cat</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; <ref refid="db/dc2/a05011" kindref="compound">ConfigurationVisitorBase</ref> &gt;</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" line="57" column="1" bodyfile="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" bodystart="57" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d93/a05019_1a7e940572cfa71d1f7794df8cd4b198a2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/dc2/a05011" kindref="compound">ConfigurationVisitorBase</ref> &amp;</type>
+        <definition>ConfigurationVisitorBase &amp; castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock::operator*</definition>
+        <argsstring>() const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock::operator*</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" line="66" column="27" bodyfile="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" bodystart="66" bodyend="69"/>
+        <references refid="de/d93/a05019_1a23136e083fbe668d927ad3fe8340f861" compoundref="d8/d13/a00671" startline="101">configuration</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d93/a05019_1a326676fef156cec6c1e37d17cf7c5265" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d93/a05019" kindref="compound">ConfigurationVisitorBlock</ref></type>
+        <definition>ConfigurationVisitorBlock castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock::visit</definition>
+        <argsstring>(castor::String const &amp;name, ControlsList const &amp;controls=ControlsList{})</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock::visit</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dc2/a05011_1a90451b3b1c591f72d09d82c64ea952c2" kindref="member">ControlsList</ref> const &amp;</type>
+          <declname>controls</declname>
+          <defval><ref refid="db/dc2/a05011_1a90451b3b1c591f72d09d82c64ea952c2" kindref="member">ControlsList</ref>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" line="71" column="27" bodyfile="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" bodystart="71" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d93/a05019_1a395223e0aa1f3160c00ded37b27f9c76" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d93/a05019" kindref="compound">ConfigurationVisitorBlock</ref></type>
+        <definition>ConfigurationVisitorBlock castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock::visit</definition>
+        <argsstring>(castor::String const &amp;name, AtomicControlsList const &amp;controls)</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock::visit</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dc2/a05011_1a1cabb3a0a7c596f19e89da0358c6670a" kindref="member">AtomicControlsList</ref> const &amp;</type>
+          <declname>controls</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" line="77" column="27" bodyfile="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" bodystart="77" bodyend="81"/>
+        <references refid="de/d93/a05019_1a23136e083fbe668d927ad3fe8340f861" compoundref="d8/d13/a00671" startline="101">configuration</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d93/a05019_1aaf7b856c56ad50eb44c53da7c91598c3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ValueT</type>
+          </param>
+          <param>
+            <type>typename ...</type>
+            <declname>ParamsT</declname>
+            <defname>ParamsT</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock::visit</definition>
+        <argsstring>(castor::String const &amp;name, ValueT &amp;value, ParamsT &amp;&amp;... params)</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock::visit</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ValueT &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>ParamsT &amp;&amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" line="84" column="6" bodyfile="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" bodystart="84" bodyend="89"/>
+        <references refid="de/d93/a05019_1a23136e083fbe668d927ad3fe8340f861" compoundref="d8/d13/a00671" startline="101">configuration</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d93/a05019_1a9b1f1ebefd042b5eeea42ad095aff7dd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParamsT</declname>
+            <defname>ParamsT</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock::visit</definition>
+        <argsstring>(castor::String const &amp;name, ColourWrapper value, ParamsT &amp;&amp;... params)</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock::visit</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/df8/a05311" kindref="compound">ColourWrapper</ref></type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>ParamsT &amp;&amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" line="92" column="6" bodyfile="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" bodystart="92" bodyend="97"/>
+        <references refid="de/d93/a05019_1a23136e083fbe668d927ad3fe8340f861" compoundref="d8/d13/a00671" startline="101">configuration</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ConfigurationVisitorBase</label>
+        <link refid="db/dc2/a05011"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>config</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::ConfigurationVisitorBase::Config</label>
+        <link refid="d0/d0c/a05015"/>
+      </node>
+      <node id="1">
+        <label>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock</label>
+        <link refid="de/d93/a05019"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>parent</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>category</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" line="55" column="1" bodyfile="Castor3D/Miscellaneous/ConfigurationVisitor.hpp" bodystart="56" bodyend="102"/>
+    <listofallmembers>
+      <member refid="de/d93/a05019_1a7c73b82e32509dfb07048b68b25118fc" prot="public" virt="non-virtual"><scope>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock</scope><name>category</name></member>
+      <member refid="de/d93/a05019_1a23136e083fbe668d927ad3fe8340f861" prot="public" virt="non-virtual"><scope>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock</scope><name>configuration</name></member>
+      <member refid="de/d93/a05019_1aeae749e90b19ac468d74b17e6e0482d0" prot="public" virt="non-virtual"><scope>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock</scope><name>ConfigurationVisitorBlock</name></member>
+      <member refid="de/d93/a05019_1a7e940572cfa71d1f7794df8cd4b198a2" prot="public" virt="non-virtual"><scope>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock</scope><name>operator*</name></member>
+      <member refid="de/d93/a05019_1a62ff33dc09213b4f82f8cda12f55e5af" prot="public" virt="non-virtual"><scope>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock</scope><name>parent</name></member>
+      <member refid="de/d93/a05019_1a326676fef156cec6c1e37d17cf7c5265" prot="public" virt="non-virtual"><scope>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock</scope><name>visit</name></member>
+      <member refid="de/d93/a05019_1a395223e0aa1f3160c00ded37b27f9c76" prot="public" virt="non-virtual"><scope>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock</scope><name>visit</name></member>
+      <member refid="de/d93/a05019_1aaf7b856c56ad50eb44c53da7c91598c3" prot="public" virt="non-virtual"><scope>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock</scope><name>visit</name></member>
+      <member refid="de/d93/a05019_1a9b1f1ebefd042b5eeea42ad095aff7dd" prot="public" virt="non-virtual"><scope>castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock</scope><name>visit</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

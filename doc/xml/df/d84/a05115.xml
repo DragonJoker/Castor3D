@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d84/a05115" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::VkStructTraits&lt; VkImageCreateInfo &gt;</compoundname>
+    <includes local="no">makeVkType.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="df/d84/a05115_1a3b370ac1c1870117f76082bc61039115" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>VkStructureType constexpr</type>
+        <definition>VkStructureType constexpr castor3d::VkStructTraits&lt; VkImageCreateInfo &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>castor3d::VkStructTraits&lt; VkImageCreateInfo &gt;::value</qualifiedname>
+        <initializer>= VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/makeVkType.hpp" line="31" column="65" bodyfile="Castor3D/Miscellaneous/makeVkType.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Miscellaneous/makeVkType.hpp" line="31" column="10" bodyfile="Castor3D/Miscellaneous/makeVkType.hpp" bodystart="31" bodyend="31"/>
+    <listofallmembers>
+      <member refid="df/d84/a05115_1a3b370ac1c1870117f76082bc61039115" prot="public" virt="non-virtual"><scope>castor3d::VkStructTraits&lt; VkImageCreateInfo &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

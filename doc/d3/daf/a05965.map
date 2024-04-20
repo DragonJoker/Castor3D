@@ -1,4 +1,31 @@
-<map id="castor3d::LightFactory" name="castor3d::LightFactory">
-<area shape="rect" id="node1" title=" " alt="" coords="268,27,420,53"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,220,75"/>
+<map id="castor3d::IndirectLightingData" name="castor3d::IndirectLightingData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="2192,120,2387,145"/>
+<area shape="rect" id="Node000002" href="$da/dff/a07783.html" title=" " alt="" coords="1880,5,2063,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="2033,32,2063,41,2117,56,2169,74,2264,117,2262,122,2167,79,2115,61,2062,46,2031,37"/>
+<area shape="rect" id="Node000003" href="$d6/d47/a07775.html" title=" " alt="" coords="1887,55,2056,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="2070,90,2218,117,2217,123,2069,96"/>
+<area shape="rect" id="Node000004" href="$d0/d63/a07931.html" title=" " alt="" coords="1893,120,2050,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="2064,130,2192,130,2192,135,2064,135"/>
+<area shape="rect" id="Node000005" href="$dc/d72/a06019.html" title=" " alt="" coords="1880,170,2063,210"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="2076,168,2218,143,2219,148,2077,174"/>
+<area shape="rect" id="Node000006" href="$d0/d22/a05963.html" title=" " alt="" coords="1700,158,1831,198"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1844,180,1880,182,1880,187,1844,185"/>
+<area shape="rect" id="Node000007" href="$d8/d33/a05959.html" title=" " alt="" coords="1107,163,1260,188"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="1273,163,1284,162,1480,149,1566,151,1676,159,1700,162,1699,168,1676,165,1566,156,1480,155,1284,167,1274,168"/>
+<area shape="rect" id="Node000013" href="$d0/d22/a05963.html" title=" " alt="" coords="1431,171,1561,211"/>
+<area shape="poly" id="edge13_Node000013_Node000007" title=" " alt="" coords="1274,177,1431,185,1430,191,1274,183"/>
+<area shape="rect" id="Node000008" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="867,159,974,184"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="988,170,1106,172,1106,177,988,175"/>
+<area shape="rect" id="Node000009" href="$dc/d32/a06415.html" title=" " alt="" coords="841,224,1000,249"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="988,218,1128,185,1129,191,989,223"/>
+<area shape="rect" id="Node000014" href="$d1/d95/a06703.html" title=" " alt="" coords="1284,239,1407,264"/>
+<area shape="poly" id="edge15_Node000014_Node000009" title=" " alt="" coords="1014,237,1284,247,1284,252,1014,243"/>
+<area shape="rect" id="Node000010" href="$d5/d4e/a06559.html" title=" " alt="" coords="541,224,708,249"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="722,234,841,234,841,239,722,239"/>
+<area shape="rect" id="Node000011" href="$d6/da8/a08227.html" title=" " alt="" coords="305,224,492,249"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="506,234,541,234,541,239,506,239"/>
+<area shape="rect" id="Node000012" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="5,224,188,249"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="202,234,305,234,305,239,202,239"/>
+<area shape="poly" id="edge12_Node000006_Node000013" title=" " alt="" coords="1575,185,1700,179,1700,184,1575,190"/>
+<area shape="poly" id="edge14_Node000001_Node000014" title=" " alt="" coords="1420,249,1629,249,1973,249,2017,245,2062,237,2147,207,2218,172,2268,143,2270,148,2221,177,2149,212,2063,242,2018,251,1973,254,1629,254,1420,254"/>
 </map>

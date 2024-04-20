@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/d20/a06067" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::InstantiatedBuffersNodesViewT::BufferNodes</compoundname>
+    <includes local="no">InstantiatedPipelinesNodes.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/d20/a06067_1ae48c4ad05cbb848b701f576da9603b7b" prot="public" static="no" mutable="no">
+        <type>ashes::BufferBase const  *</type>
+        <definition>ashes::BufferBase const* castor3d::InstantiatedBuffersNodesViewT&lt; NodeT &gt;::BufferNodes::buffer</definition>
+        <argsstring></argsstring>
+        <name>buffer</name>
+        <qualifiedname>castor3d::InstantiatedBuffersNodesViewT::BufferNodes::buffer</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp" line="115" column="26" bodyfile="Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp" bodystart="115" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d20/a06067_1a12793bb8f2a2821fba1d275b001868e6" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/ddd/a06063_1a8a059d06c4e6a58ad19b8c2c6ed7a789" kindref="member">NodesView</ref></type>
+        <definition>NodesView castor3d::InstantiatedBuffersNodesViewT&lt; NodeT &gt;::BufferNodes::nodes</definition>
+        <argsstring></argsstring>
+        <name>nodes</name>
+        <qualifiedname>castor3d::InstantiatedBuffersNodesViewT::BufferNodes::nodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp" line="116" column="11" bodyfile="Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d20/a06067_1a2127f881dc6b73749de805e91a17234c" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::InstantiatedBuffersNodesViewT&lt; NodeT &gt;::BufferNodes::BufferNodes</definition>
+        <argsstring>(ashes::BufferBase const *buffer)</argsstring>
+        <name>BufferNodes</name>
+        <qualifiedname>castor3d::InstantiatedBuffersNodesViewT::BufferNodes::BufferNodes</qualifiedname>
+        <param>
+          <type>ashes::BufferBase const *</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp" line="110" column="10" bodyfile="Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp" bodystart="110" bodyend="113"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp" line="108" column="1" bodyfile="Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp" bodystart="109" bodyend="117"/>
+    <listofallmembers>
+      <member refid="d7/d20/a06067_1ae48c4ad05cbb848b701f576da9603b7b" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedBuffersNodesViewT::BufferNodes</scope><name>buffer</name></member>
+      <member refid="d7/d20/a06067_1a2127f881dc6b73749de805e91a17234c" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedBuffersNodesViewT::BufferNodes</scope><name>BufferNodes</name></member>
+      <member refid="d7/d20/a06067_1a12793bb8f2a2821fba1d275b001868e6" prot="public" virt="non-virtual"><scope>castor3d::InstantiatedBuffersNodesViewT::BufferNodes</scope><name>nodes</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

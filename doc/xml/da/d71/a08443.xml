@@ -1,0 +1,299 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d71/a08443" kind="class" language="C++" prot="public">
+    <compoundname>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;</compoundname>
+    <basecompoundref refid="d3/d9a/a08387" prot="public" virt="non-virtual">castor::ParserParameter&lt; ParameterType::eUInt64 &gt;</basecompoundref>
+    <includes local="no">ParserParameter.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d71/a08443_1ab7d9890e4791685da47f36fc602aa709" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref></type>
+        <definition>StringView castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;::m_name</definition>
+        <argsstring></argsstring>
+        <name>m_name</name>
+        <qualifiedname>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;::m_name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameter.hpp" line="448" column="12" bodyfile="CastorUtils/FileParser/ParserParameter.hpp" bodystart="448" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d71/a08443_1a55fd2cfefc297935a16c6ee6b4afe16a" prot="public" static="no" mutable="no">
+        <type>UInt64StrMap const</type>
+        <definition>UInt64StrMap const castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;::m_values</definition>
+        <argsstring></argsstring>
+        <name>m_values</name>
+        <qualifiedname>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;::m_values</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameter.hpp" line="449" column="20" bodyfile="CastorUtils/FileParser/ParserParameter.hpp" bodystart="449" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d71/a08443_1aa62f63ce7073b2d7563b252ec8964c69" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;::ParserParameter</definition>
+        <argsstring>(UInt64StrMap const &amp;values, StringView name=ParserParameterStringType&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;)</argsstring>
+        <name>ParserParameter</name>
+        <qualifiedname>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;::ParserParameter</qualifiedname>
+        <param>
+          <type>UInt64StrMap const &amp;</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref></type>
+          <declname>name</declname>
+          <defval><ref refid="d2/dd2/a02279_1a1eceb832ad748cd8c3dc80525ebac874" kindref="member">ParserParameterStringType</ref>&lt; <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222a5800fa8fcf052b2dcef27ca1a66b9c54" kindref="member">ParameterType::eBitwiseOred64BitsCheckedText</ref> &gt;</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs utilisées pour valider la valeur récupérée. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du type de paramètre. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameter.hpp" line="409" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d71/a08443_1a900884edeadbfa7bb3d006c9b8afa3e6" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;::ParserParameter</definition>
+        <argsstring>(uint64_t value, UInt64StrMap const &amp;values, StringView name=ParserParameterStringType&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;)</argsstring>
+        <name>ParserParameter</name>
+        <qualifiedname>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;::ParserParameter</qualifiedname>
+        <param>
+          <type>uint64_t</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>UInt64StrMap const &amp;</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref></type>
+          <declname>name</declname>
+          <defval><ref refid="d2/dd2/a02279_1a1eceb832ad748cd8c3dc80525ebac874" kindref="member">ParserParameterStringType</ref>&lt; <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222a5800fa8fcf052b2dcef27ca1a66b9c54" kindref="member">ParameterType::eBitwiseOred64BitsCheckedText</ref> &gt;</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameter.hpp" line="417" column="10" bodyfile="CastorUtils/FileParser/ParserParameter.hpp" bodystart="417" bodyend="424"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d71/a08443_1a552565bd9efd42fda2eff6eeb5c8c048" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222" kindref="member">ParameterType</ref></type>
+        <definition>ParameterType castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;::getType</definition>
+        <argsstring>() const override</argsstring>
+        <name>getType</name>
+        <qualifiedname>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;::getType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le type du paramètre.   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameter.hpp" line="428" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d71/a08443_1aee0cc105d1f117f193c1412ff0a46b27" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222" kindref="member">ParameterType</ref></type>
+        <definition>ParameterType castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;::getBaseType</definition>
+        <argsstring>() const override</argsstring>
+        <name>getBaseType</name>
+        <qualifiedname>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;::getBaseType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le type de base du paramètre (comme <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222a8c15e6038102a3065760b26043b9c162" kindref="member">ParameterType::eText</ref> pour <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222aa866af182acab9fffb643ecb752cd9e5" kindref="member">ParameterType::eName</ref>).   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameter.hpp" line="432" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d71/a08443_1acdafd46810b38505fb5e743c920c9267" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref></type>
+        <definition>StringView castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;::getStrType</definition>
+        <argsstring>() const override</argsstring>
+        <name>getStrType</name>
+        <qualifiedname>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;::getStrType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le type du chaîne paramètre.   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameter.hpp" line="436" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d71/a08443_1af0de110489573739e07b2824edfc9dfb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1ae025149db64e1fa986a71e2460c50263" kindref="member">ParserParameterBaseSPtr</ref></type>
+        <definition>ParserParameterBaseSPtr castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;::clone</definition>
+        <argsstring>() const override</argsstring>
+        <name>clone</name>
+        <qualifiedname>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;::clone</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Une copie de ce paramètre.   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameter.hpp" line="440" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d71/a08443_1a54615d13a2f99e2d8fcb47b63dd20b61" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;::parse</definition>
+        <argsstring>(LoggerInstance &amp;logger, String &amp;params) override</argsstring>
+        <name>parse</name>
+        <qualifiedname>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;::parse</qualifiedname>
+        <param>
+          <type><ref refid="d9/d93/a09063" kindref="compound">LoggerInstance</ref> &amp;</type>
+          <declname>logger</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> &amp;</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+<para>Vérifie le paramètre.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">logger</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;instance de logger. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le texte contenant la valeur du paramètre. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un problème quelconque est arrivé.   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameter.hpp" line="444" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Specialisation de <ref refid="d3/d9a/a08387" kindref="compound">ParserParameter</ref> pour <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222a5800fa8fcf052b2dcef27ca1a66b9c54" kindref="member">ParameterType::eBitwiseOred64BitsCheckedText</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para></para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::ParserParameter&lt; ParameterType::eUInt64 &gt;</label>
+        <link refid="d3/d9a/a08387"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; ParameterType::eUInt64 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::ParserParameter&lt; Type, Enable &gt;</label>
+        <link refid="d3/d9a/a08387"/>
+      </node>
+      <node id="1">
+        <label>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;</label>
+        <link refid="da/d71/a08443"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::ParserParameter&lt; ParameterType::eUInt64 &gt;</label>
+        <link refid="d3/d9a/a08387"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; ParameterType::eUInt64 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::basic_string_view&lt; xchar &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::ParserParameter&lt; Type, Enable &gt;</label>
+        <link refid="d3/d9a/a08387"/>
+      </node>
+      <node id="1">
+        <label>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;</label>
+        <link refid="da/d71/a08443"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_name</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_values</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>UInt64StrMap</label>
+      </node>
+      <node id="5">
+        <label>std::basic_string_view&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/FileParser/ParserParameter.hpp" line="395" column="10" bodyfile="CastorUtils/FileParser/ParserParameter.hpp" bodystart="397" bodyend="450"/>
+    <listofallmembers>
+      <member refid="da/d71/a08443_1af0de110489573739e07b2824edfc9dfb" prot="public" virt="non-virtual"><scope>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;</scope><name>clone</name></member>
+      <member refid="da/d71/a08443_1aee0cc105d1f117f193c1412ff0a46b27" prot="public" virt="non-virtual"><scope>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;</scope><name>getBaseType</name></member>
+      <member refid="da/d71/a08443_1acdafd46810b38505fb5e743c920c9267" prot="public" virt="non-virtual"><scope>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;</scope><name>getStrType</name></member>
+      <member refid="da/d71/a08443_1a552565bd9efd42fda2eff6eeb5c8c048" prot="public" virt="non-virtual"><scope>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;</scope><name>getType</name></member>
+      <member refid="da/d71/a08443_1ab7d9890e4791685da47f36fc602aa709" prot="public" virt="non-virtual"><scope>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;</scope><name>m_name</name></member>
+      <member refid="da/d71/a08443_1a55fd2cfefc297935a16c6ee6b4afe16a" prot="public" virt="non-virtual"><scope>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;</scope><name>m_values</name></member>
+      <member refid="da/d71/a08443_1a54615d13a2f99e2d8fcb47b63dd20b61" prot="public" virt="non-virtual"><scope>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;</scope><name>parse</name></member>
+      <member refid="da/d71/a08443_1aa62f63ce7073b2d7563b252ec8964c69" prot="public" virt="non-virtual"><scope>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;</scope><name>ParserParameter</name></member>
+      <member refid="da/d71/a08443_1a900884edeadbfa7bb3d006c9b8afa3e6" prot="public" virt="non-virtual"><scope>castor::ParserParameter&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;</scope><name>ParserParameter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

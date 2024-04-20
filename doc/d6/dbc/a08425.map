@@ -1,0 +1,9 @@
+<map id="castor::ParserParameter&lt; Type, std::enable_if_t&lt; IsArithmeticType&lt; Type &gt;::value &gt; &gt;" name="castor::ParserParameter&lt; Type, std::enable_if_t&lt; IsArithmeticType&lt; Type &gt;::value &gt; &gt;">
+<area shape="rect" id="Node000001" title="Specified parser parameter." alt="" coords="75,181,258,251"/>
+<area shape="rect" id="Node000002" href="$de/d2b/a08447.html" title=" " alt="" coords="5,93,200,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,129,149,180,144,182,114,132"/>
+<area shape="rect" id="Node000003" href="$d9/da8/a09207.html" title=" " alt="" coords="225,93,413,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="292,129,216,183,213,179,289,125"/>
+<area shape="rect" id="Node000004" href="$d9/da8/a09207.html" title="A range class." alt="" coords="251,5,386,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="321,45,321,93,316,93,316,45"/>
+</map>

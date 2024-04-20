@@ -1,0 +1,484 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d9b/a04615" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SheenMapComponent::Plugin</compoundname>
+    <basecompoundref refid="d9/d87/a04855" prot="public" virt="non-virtual">castor3d::PassMapComponentPlugin</basecompoundref>
+    <includes local="no">SheenMapComponent.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d9b/a04615_1af4ada9044fe3ba70da61190b992545ed" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>PassComponentUPtr</type>
+        <definition>PassComponentUPtr castor3d::SheenMapComponent::Plugin::createComponent</definition>
+        <argsstring>(Pass &amp;pass) const override</argsstring>
+        <name>createComponent</name>
+        <qualifiedname>castor3d::SheenMapComponent::Plugin::createComponent</qualifiedname>
+        <reimplements refid="d2/d2e/a04831_1a44a1a547e8c6bdae20b284cc75b98fcd">createComponent</reimplements>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+<para>Crée un composant pour la passe donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;ajoute pas le composant à la passe. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La passe. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" line="54" column="19" bodyfile="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" bodystart="54" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d9b/a04615_1a8b4c84b9f03a728f43b04dd07a974f97" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SheenMapComponent::Plugin::createParsers</definition>
+        <argsstring>(castor::AttributeParsers &amp;parsers, ChannelFillers &amp;channelFillers) const override</argsstring>
+        <name>createParsers</name>
+        <qualifiedname>castor3d::SheenMapComponent::Plugin::createParsers</qualifiedname>
+        <reimplements refid="d2/d2e/a04831_1a03565ed4fc5d52779331284917b83f43">createParsers</reimplements>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7138ba41c2c2c4ced36cacefe5eb2c33" kindref="member">castor::AttributeParsers</ref> &amp;</type>
+          <declname>parsers</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a60fc618664d8c1aba535e15e3322c579" kindref="member">ChannelFillers</ref> &amp;</type>
+          <declname>channelFillers</declname>
+        </param>
+        <briefdescription>
+<para>Remplit les listes données avec les parsers de ce composant. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">parsers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les parsers. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">channelFillers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les canaux de textures et le moyen de les remplir. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" line="59" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d9b/a04615_1ad696079c101be525b547c566ee8346b3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::SheenMapComponent::Plugin::isComponentNeeded</definition>
+        <argsstring>(TextureCombine const &amp;textures, ComponentModeFlags const &amp;filter) const override</argsstring>
+        <name>isComponentNeeded</name>
+        <qualifiedname>castor3d::SheenMapComponent::Plugin::isComponentNeeded</qualifiedname>
+        <reimplements refid="d2/d2e/a04831_1ae36bd47493f7d615418cde61ed7f6717">isComponentNeeded</reimplements>
+        <param>
+          <type><ref refid="d9/d0d/a03995" kindref="compound">TextureCombine</ref> const &amp;</type>
+          <declname>textures</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a924293b8f4fc39410f651e98ed535eb0" kindref="member">ComponentModeFlags</ref> const &amp;</type>
+          <declname>filter</declname>
+        </param>
+        <briefdescription>
+<para>Détermine si les shaders pour l&apos;éclairage du composant sont nécessaires. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">textures</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pour vérifier du point de vue des textures. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">filter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pour vérifier du point de vue de la passe de rendu. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" line="61" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d9b/a04615_1a472308509ba8a1124f2f5d8eb0c81f2b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SheenMapComponent::Plugin::createMapComponent</definition>
+        <argsstring>(Pass &amp;pass, castor::Vector&lt; PassComponentUPtr &gt; &amp;result) const override</argsstring>
+        <name>createMapComponent</name>
+        <qualifiedname>castor3d::SheenMapComponent::Plugin::createMapComponent</qualifiedname>
+        <reimplements refid="d2/d2e/a04831_1a7fdb582b6091868eb5f203df90780633">createMapComponent</reimplements>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; PassComponentUPtr &gt; &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+<para>Crée le composant de texture. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La passe parent. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">result</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit le composant créé. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" line="63" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d9b/a04615_1a9734bcda0f49aa1c7623601fdf4b5581" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::SheenMapComponent::Plugin::isMapComponent</definition>
+        <argsstring>() const override</argsstring>
+        <name>isMapComponent</name>
+        <qualifiedname>castor3d::SheenMapComponent::Plugin::isMapComponent</qualifiedname>
+        <reimplements refid="d2/d2e/a04831_1ae06b854e0cc17ad1cc044d1316c1b752">isMapComponent</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> si le composant traite des données de texture. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" line="66" column="6" bodyfile="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" bodystart="66" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d9b/a04615_1af48514313a594538062fe23a5cbc0132" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="da/d68/a02280_1a812e5c7f680d852b0d6359f2d85b8c44" kindref="member">shader::PassComponentsShaderPtr</ref></type>
+        <definition>shader::PassComponentsShaderPtr castor3d::SheenMapComponent::Plugin::createComponentsShader</definition>
+        <argsstring>() const override</argsstring>
+        <name>createComponentsShader</name>
+        <qualifiedname>castor3d::SheenMapComponent::Plugin::createComponentsShader</qualifiedname>
+        <reimplements refid="d2/d2e/a04831_1aa124938351f50e44e4f2d28cfdbfedbc">createComponentsShader</reimplements>
+        <briefdescription>
+<para>Crée les shaders pour l&apos;éclairage du composant. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" line="71" column="33" bodyfile="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" bodystart="71" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d9b/a04615_1ab40c2a3f8d9c9e1cc2f1686c86b68a66" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="da/d68/a02280_1a23ce5ac3c9cae7cbfeacfef6182c9c75" kindref="member">shader::PassMaterialShaderPtr</ref></type>
+        <definition>shader::PassMaterialShaderPtr castor3d::SheenMapComponent::Plugin::createMaterialShader</definition>
+        <argsstring>() const override</argsstring>
+        <name>createMaterialShader</name>
+        <qualifiedname>castor3d::SheenMapComponent::Plugin::createMaterialShader</qualifiedname>
+        <reimplements refid="d2/d2e/a04831_1a2e178e79ea995d0e8674559acfbc4447">createMaterialShader</reimplements>
+        <briefdescription>
+<para>Crée les shaders de matériau du composant. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" line="76" column="31" bodyfile="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" bodystart="76" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d9b/a04615_1ad6546fa03dcb98ec38a75fd9b0e1a409" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SheenMapComponent::Plugin::filterTextureFlags</definition>
+        <argsstring>(ComponentModeFlags filter, TextureCombine &amp;texturesFlags) const override</argsstring>
+        <name>filterTextureFlags</name>
+        <qualifiedname>castor3d::SheenMapComponent::Plugin::filterTextureFlags</qualifiedname>
+        <reimplements refid="d2/d2e/a04831_1a2024dbae92bf8babbfbaa7dad9d6c564">filterTextureFlags</reimplements>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a924293b8f4fc39410f651e98ed535eb0" kindref="member">ComponentModeFlags</ref></type>
+          <declname>filter</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d0d/a03995" kindref="compound">TextureCombine</ref> &amp;</type>
+          <declname>texturesFlags</declname>
+        </param>
+        <briefdescription>
+<para>Enlève des indicateurs de textures donnés ceux qui sont inutiles, par rapport au filtre donné. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" line="81" column="6" bodyfile="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" bodystart="81" bodyend="88"/>
+        <references refid="d9/dba/a02278_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d9/dba/a02278_1a5a21f743634dd3f3fbe545a01fd7c536aece07b339b1dbc84b46645675227caa5">castor3d::eSpecularLighting</references>
+        <references refid="dc/d9b/a04615_1ad4f5acb1487b4e3a3883e56639dd3241" compoundref="d0/d3e/a00566" startline="90" endline="93">getTextureFlags</references>
+        <references refid="d9/dba/a02278_1ad3d63b41dd70de2c73275db13818a77d">castor3d::remFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d9b/a04615_1ad4f5acb1487b4e3a3883e56639dd3241" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref></type>
+        <definition>PassComponentTextureFlag castor3d::SheenMapComponent::Plugin::getTextureFlags</definition>
+        <argsstring>() const override</argsstring>
+        <name>getTextureFlags</name>
+        <qualifiedname>castor3d::SheenMapComponent::Plugin::getTextureFlags</qualifiedname>
+        <reimplements refid="d2/d2e/a04831_1af4fd935719c75c665f67aff1c05e780b">getTextureFlags</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Les indicateurs de textures pour ce composant. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" line="90" column="26" bodyfile="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" bodystart="90" bodyend="93"/>
+        <references refid="d2/d2e/a04831_1a3d4ca319e7c6e2dc3e40e81211846fee" compoundref="d0/d1c/a00605" startline="1015" endline="1018">castor3d::PassComponentPlugin::getId</references>
+        <references refid="d9/dba/a02278_1a813eb0a53ad6b3f96433a39acae9f59b" compoundref="d0/dc4/a00443" startline="41" endline="46">castor3d::makeTextureFlag</references>
+        <references refid="d6/d55/a04603_1ad0adc0a59e87cf90e94235c627a24241" compoundref="d0/d3e/a00566" startline="18">castor3d::SheenMapComponent::Sheen</references>
+        <referencedby refid="dc/d9b/a04615_1a3ee350ce01adffab7778cdb1d32eb566" compoundref="d0/d3e/a00566" startline="95" endline="100">fillTextureConfiguration</referencedby>
+        <referencedby refid="dc/d9b/a04615_1ad6546fa03dcb98ec38a75fd9b0e1a409" compoundref="d0/d3e/a00566" startline="81" endline="88">filterTextureFlags</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dc/d9b/a04615_1a3ee350ce01adffab7778cdb1d32eb566" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SheenMapComponent::Plugin::fillTextureConfiguration</definition>
+        <argsstring>(TextureConfiguration &amp;result, uint32_t mask) const override</argsstring>
+        <name>fillTextureConfiguration</name>
+        <qualifiedname>castor3d::SheenMapComponent::Plugin::fillTextureConfiguration</qualifiedname>
+        <reimplements refid="d2/d2e/a04831_1a906cb616e5d7d7a63d3f070ca76e7a11">fillTextureConfiguration</reimplements>
+        <param>
+          <type><ref refid="d5/dc1/a04943" kindref="compound">TextureConfiguration</ref> &amp;</type>
+          <declname>configuration</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>mask</declname>
+        </param>
+        <briefdescription>
+<para>Remplit une configuration de texture, pour utilisation par ce composant. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>configuration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La configuration de texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>mask</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur du masque. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" line="95" column="6" bodyfile="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" bodystart="95" bodyend="100"/>
+        <references refid="d9/dba/a02278_1aca9266480e6d0378e87f784f76d6994d">castor3d::addFlagConfiguration</references>
+        <references refid="d9/dba/a02278_1a25bb1f0235e1c248f89ec5430ef066faa191d0b2eb45d7d9a428f016bd34a7912">castor3d::eNormalised</references>
+        <references refid="dc/d9b/a04615_1ad4f5acb1487b4e3a3883e56639dd3241" compoundref="d0/d3e/a00566" startline="90" endline="93">getTextureFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d9b/a04615_1a4e5447299c9596925ce971b31338b845" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::SheenMapComponent::Plugin::getTextureFlagsName</definition>
+        <argsstring>(PassComponentTextureFlag const &amp;flags) const override</argsstring>
+        <name>getTextureFlagsName</name>
+        <qualifiedname>castor3d::SheenMapComponent::Plugin::getTextureFlagsName</qualifiedname>
+        <reimplements refid="d2/d2e/a04831_1af066b3208f0c2c71d7da481988aa748d">getTextureFlagsName</reimplements>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Les noms concaténés des indicateurs de textures. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" line="102" column="16" bodyfile="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" bodystart="102" bodyend="108"/>
+        <references refid="d9/dba/a02278_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" compoundref="d5/d12/a01799" startline="51">cuT</references>
+        <references refid="d2/d2e/a04831_1a3d4ca319e7c6e2dc3e40e81211846fee" compoundref="d0/d1c/a00605" startline="1015" endline="1018">castor3d::PassComponentPlugin::getId</references>
+        <references refid="d6/d55/a04603_1ad0adc0a59e87cf90e94235c627a24241" compoundref="d0/d3e/a00566" startline="18">castor3d::SheenMapComponent::Sheen</references>
+        <references refid="d9/dba/a02278_1a5cbc21c417aed0309b98437010c46766" compoundref="d0/dc4/a00443" startline="48" endline="52">castor3d::splitTextureFlag</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d9b/a04615_1a9fde009fbe78b4a7b7155c1a623d4ef1" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PassMapComponentPlugin::PassMapComponentPlugin</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponent, UpdateComponent const &amp;pupdateComponent=nullptr)</argsstring>
+        <name>PassMapComponentPlugin</name>
+        <qualifiedname>castor3d::SheenMapComponent::Plugin::PassMapComponentPlugin</qualifiedname>
+        <param>
+          <type><ref refid="d4/d10/a04839" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponent</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1ad8f128235f28bc0f8396cc3e9fbc8367" kindref="member">UpdateComponent</ref> const &amp;</type>
+          <declname>pupdateComponent</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" line="52" column="1" bodyfile="Castor3D/Material/Pass/Component/PassMapComponent.hpp" bodystart="56" bodyend="60"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="dc/d9b/a04615_1a16c9d774a7a0dc40b776ca9fbe338015" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::SheenMapComponent::Plugin::doWriteTextureConfig</definition>
+        <argsstring>(TextureConfiguration const &amp;configuration, uint32_t mask, castor::String const &amp;tabs, castor::StringStream &amp;file) const override</argsstring>
+        <name>doWriteTextureConfig</name>
+        <qualifiedname>castor3d::SheenMapComponent::Plugin::doWriteTextureConfig</qualifiedname>
+        <reimplements refid="d9/d87/a04855_1ac1ff251cb68902e01abfc29d7094e8f5">doWriteTextureConfig</reimplements>
+        <param>
+          <type><ref refid="d5/dc1/a04943" kindref="compound">TextureConfiguration</ref> const &amp;</type>
+          <declname>configuration</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>mask</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae7002b6add23b6f33bfde31351b5e8c9" kindref="member">castor::StringStream</ref> &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" line="111" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="d2/d2e/a04831"/>
+      </node>
+      <node id="2">
+        <label>castor3d::PassMapComponentPlugin</label>
+        <link refid="d9/d87/a04855"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SheenMapComponent::Plugin</label>
+        <link refid="dc/d9b/a04615"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="d2/d2e/a04831"/>
+      </node>
+      <node id="2">
+        <label>castor3d::PassMapComponentPlugin</label>
+        <link refid="d9/d87/a04855"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SheenMapComponent::Plugin</label>
+        <link refid="dc/d9b/a04615"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" line="48" column="1" bodyfile="Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp" bodystart="50" bodyend="115"/>
+    <listofallmembers>
+      <member refid="dc/d9b/a04615_1af4ada9044fe3ba70da61190b992545ed" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>createComponent</name></member>
+      <member refid="dc/d9b/a04615_1af48514313a594538062fe23a5cbc0132" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>createComponentsShader</name></member>
+      <member refid="dc/d9b/a04615_1a472308509ba8a1124f2f5d8eb0c81f2b" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>createMapComponent</name></member>
+      <member refid="dc/d9b/a04615_1ab40c2a3f8d9c9e1cc2f1686c86b68a66" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>createMaterialShader</name></member>
+      <member refid="dc/d9b/a04615_1a8b4c84b9f03a728f43b04dd07a974f97" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>createParsers</name></member>
+      <member refid="d2/d2e/a04831_1a8b27a2b87afa0fc6ffeaa24835cba3ce" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>createReflRefrShader</name></member>
+      <member refid="d2/d2e/a04831_1a682e78ef2f8f5d7b3e292ccda2f35246" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>createSections</name></member>
+      <member refid="dc/d9b/a04615_1a16c9d774a7a0dc40b776ca9fbe338015" prot="private" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>doWriteTextureConfig</name></member>
+      <member refid="dc/d9b/a04615_1a3ee350ce01adffab7778cdb1d32eb566" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>fillTextureConfiguration</name></member>
+      <member refid="d2/d2e/a04831_1abc8e6df1a7fd3efc21bad6893a1faf40" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>filterComponentFlags</name></member>
+      <member refid="dc/d9b/a04615_1ad6546fa03dcb98ec38a75fd9b0e1a409" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>filterTextureFlags</name></member>
+      <member refid="d2/d2e/a04831_1a33ade4752a210d4244a56a623e15ec5c" prot="public" virt="non-virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>finishComponent</name></member>
+      <member refid="d2/d2e/a04831_1ad3c669e54d61cc035d47d4d8e2bb31c4" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>getAlphaBlendingFlag</name></member>
+      <member refid="d2/d2e/a04831_1ac0444937fb369fb5027dd293be4fa094" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>getAlphaTestFlag</name></member>
+      <member refid="d2/d2e/a04831_1a7812f3b1ee259188bc7c8279b47d3a2b" prot="public" virt="non-virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>getBaseTextureConfiguration</name></member>
+      <member refid="d2/d2e/a04831_1aee7e3af3cda6d7c8d54be36dfbb00547" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>getColourMapFlags</name></member>
+      <member refid="d2/d2e/a04831_1aefb50eb6d6e24464451c862ec58c6f05" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>getComponentFlags</name></member>
+      <member refid="d2/d2e/a04831_1a6991ffc411175734a59f6888b1a4c843" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>getDeferredDiffuseLightingFlag</name></member>
+      <member refid="d2/d2e/a04831_1a1dded831fff02eed2257ee6bb90b98ae" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>getHeightMapFlags</name></member>
+      <member refid="d2/d2e/a04831_1a3d4ca319e7c6e2dc3e40e81211846fee" prot="public" virt="non-virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>getId</name></member>
+      <member refid="d2/d2e/a04831_1ab678401d89828bd889d148263bbee8e1" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>getNormalMapFlags</name></member>
+      <member refid="d2/d2e/a04831_1a360b4fe120d634b660ac783c9bac5e89" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>getOcclusionMapFlags</name></member>
+      <member refid="d2/d2e/a04831_1a67e7c95405499797a50911bc1b757750" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>getOpacityMapFlags</name></member>
+      <member refid="d2/d2e/a04831_1a10e44068acfd0a7a5954e133af2c501a" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>getParallaxOcclusionMappingOneFlag</name></member>
+      <member refid="d2/d2e/a04831_1aa8bb9186a42b13732f02d592d022eaf0" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>getParallaxOcclusionMappingRepeatFlag</name></member>
+      <member refid="d2/d2e/a04831_1a8ae21dee0e6e02f4ef142d1912a1c0da" prot="public" virt="non-virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>getRegister</name></member>
+      <member refid="dc/d9b/a04615_1ad4f5acb1487b4e3a3883e56639dd3241" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>getTextureFlags</name></member>
+      <member refid="dc/d9b/a04615_1a4e5447299c9596925ce971b31338b845" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>getTextureFlagsName</name></member>
+      <member refid="d2/d2e/a04831_1aec5a74b05eab81dfd6a6e68e2784c3bc" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>getTransmissionFlag</name></member>
+      <member refid="d2/d2e/a04831_1a2f8e460d4e850283ba56ae0d30783240" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>hasTexcoordModif</name></member>
+      <member refid="dc/d9b/a04615_1ad696079c101be525b547c566ee8346b3" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>isComponentNeeded</name></member>
+      <member refid="dc/d9b/a04615_1a9734bcda0f49aa1c7623601fdf4b5581" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>isMapComponent</name></member>
+      <member refid="d2/d2e/a04831_1aaf274eb0a582709a095658ae14871196" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>isReflRefrComponent</name></member>
+      <member refid="d2/d2e/a04831_1a12838a9228bf978ec3f360d997e37488" prot="public" virt="non-virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>operator=</name></member>
+      <member refid="d2/d2e/a04831_1ad102a7448f2e4d2b4420fc7722c37c13" prot="public" virt="non-virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>operator=</name></member>
+      <member refid="d2/d2e/a04831_1aa76b0d332cde3ba881e14c7128a1686e" prot="public" virt="non-virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>PassComponentPlugin</name></member>
+      <member refid="d2/d2e/a04831_1a15552d2047bd01bc4b9113c383ee3950" prot="public" virt="non-virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>PassComponentPlugin</name></member>
+      <member refid="d2/d2e/a04831_1a6bff5b701d4743f0b443330d297ca05d" prot="public" virt="non-virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>PassComponentPlugin</name></member>
+      <member refid="dc/d9b/a04615_1a9fde009fbe78b4a7b7155c1a623d4ef1" prot="public" virt="non-virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>PassMapComponentPlugin</name></member>
+      <member refid="d2/d2e/a04831_1a40b00cfb3f94741567b4836449c9eb25" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>replacesMapSampling</name></member>
+      <member refid="d2/d2e/a04831_1a8af4e83de626dbaa70d30f65f8174d85" prot="public" virt="non-virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>updateComponent</name></member>
+      <member refid="d9/d87/a04855_1a1b7bdc11daaaa9909eade69909f66a49" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>writeTextureConfig</name></member>
+      <member refid="d9/d87/a04855_1a1635e514dc809fd37a4535fe3f88f728" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>zeroBuffer</name></member>
+      <member refid="d2/d2e/a04831_1a8442a3dd6abd51dddef6e25443d573ef" prot="public" virt="virtual"><scope>castor3d::SheenMapComponent::Plugin</scope><name>~PassComponentPlugin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

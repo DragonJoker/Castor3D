@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/dd8/a07591" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::DirectLighting</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_DirectLighting&quot;, sdw::type::MemoryLayout::eC, sdw::Vec3Field&lt; &quot;ambient&quot; &gt;, sdw::Vec3Field&lt; &quot;diffuse&quot; &gt;, sdw::Vec3Field&lt; &quot;specular&quot; &gt;, sdw::Vec3Field&lt; &quot;scattering&quot; &gt;, sdw::Vec3Field&lt; &quot;coatingSpecular&quot; &gt;, sdw::Vec2Field&lt; &quot;sheen&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">GlslOutputComponents.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/dd8/a07591_1abd9c44574ea7b705cebd907b9c47bf04" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::DirectLighting::DirectLighting</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>DirectLighting</name>
+        <qualifiedname>castor3d::shader::DirectLighting::DirectLighting</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="24" column="1" bodyfile="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" bodystart="24" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dd8/a07591_1acf9e994854f76d6d50e4db47870fe774" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::DirectLighting::DirectLighting</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>DirectLighting</name>
+        <qualifiedname>castor3d::shader::DirectLighting::DirectLighting</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="31" column="10" bodyfile="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" bodystart="31" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dd8/a07591_1af927a2367bf8c0fe8f987c8123ebcbde" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DirectLighting::ambient</definition>
+        <argsstring>() const</argsstring>
+        <name>ambient</name>
+        <qualifiedname>castor3d::shader::DirectLighting::ambient</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="38" column="6" bodyfile="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" bodystart="38" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dd8/a07591_1a4d9f47202f181e471f10f54d11697bd9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DirectLighting::diffuse</definition>
+        <argsstring>() const</argsstring>
+        <name>diffuse</name>
+        <qualifiedname>castor3d::shader::DirectLighting::diffuse</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="39" column="6" bodyfile="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" bodystart="39" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dd8/a07591_1a032c2b7bda62d8f1cc2a020ccdf3f27f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DirectLighting::specular</definition>
+        <argsstring>() const</argsstring>
+        <name>specular</name>
+        <qualifiedname>castor3d::shader::DirectLighting::specular</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="40" column="6" bodyfile="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dd8/a07591_1a4796a23de92cdd748b011d7b3fce7961" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DirectLighting::scattering</definition>
+        <argsstring>() const</argsstring>
+        <name>scattering</name>
+        <qualifiedname>castor3d::shader::DirectLighting::scattering</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="41" column="6" bodyfile="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dd8/a07591_1a7b05f1b812ec4285acd73b396678fe56" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DirectLighting::coatingSpecular</definition>
+        <argsstring>() const</argsstring>
+        <name>coatingSpecular</name>
+        <qualifiedname>castor3d::shader::DirectLighting::coatingSpecular</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="42" column="6" bodyfile="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dd8/a07591_1abc6fd3dce70f3faa619f5c4bb1bdbfac" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DirectLighting::sheen</definition>
+        <argsstring>() const</argsstring>
+        <name>sheen</name>
+        <qualifiedname>castor3d::shader::DirectLighting::sheen</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="43" column="6" bodyfile="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" bodystart="43" bodyend="43"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="d8/dd8/a07591_1ae6c58d7012d2ef038716c4fc460b0f77" prot="private" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::expr::ExprList</type>
+        <definition>static C3D_API sdw::expr::ExprList castor3d::shader::DirectLighting::makeZero</definition>
+        <argsstring>()</argsstring>
+        <name>makeZero</name>
+        <qualifiedname>castor3d::shader::DirectLighting::makeZero</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="46" column="36"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::DirectLighting</label>
+        <link refid="d8/dd8/a07591"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_DirectLighting&quot;, sdw::type::MemoryLayout::eC, sdw::Vec3Field&lt; &quot;ambient&quot; &gt;, sdw::Vec3Field&lt; &quot;diffuse&quot; &gt;, sdw::Vec3Field&lt; &quot;specular&quot; &gt;, sdw::Vec3Field&lt; &quot;scattering&quot; &gt;, sdw::Vec3Field&lt; &quot;coatingSpecular&quot; &gt;, sdw::Vec2Field&lt; &quot;sheen&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::DirectLighting</label>
+        <link refid="d8/dd8/a07591"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_DirectLighting&quot;, sdw::type::MemoryLayout::eC, sdw::Vec3Field&lt; &quot;ambient&quot; &gt;, sdw::Vec3Field&lt; &quot;diffuse&quot; &gt;, sdw::Vec3Field&lt; &quot;specular&quot; &gt;, sdw::Vec3Field&lt; &quot;scattering&quot; &gt;, sdw::Vec3Field&lt; &quot;coatingSpecular&quot; &gt;, sdw::Vec2Field&lt; &quot;sheen&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="14" column="1" bodyfile="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" bodystart="23" bodyend="47"/>
+    <listofallmembers>
+      <member refid="d8/dd8/a07591_1af927a2367bf8c0fe8f987c8123ebcbde" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectLighting</scope><name>ambient</name></member>
+      <member refid="d8/dd8/a07591_1a7b05f1b812ec4285acd73b396678fe56" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectLighting</scope><name>coatingSpecular</name></member>
+      <member refid="d8/dd8/a07591_1a4d9f47202f181e471f10f54d11697bd9" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectLighting</scope><name>diffuse</name></member>
+      <member refid="d8/dd8/a07591_1abd9c44574ea7b705cebd907b9c47bf04" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectLighting</scope><name>DirectLighting</name></member>
+      <member refid="d8/dd8/a07591_1acf9e994854f76d6d50e4db47870fe774" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectLighting</scope><name>DirectLighting</name></member>
+      <member refid="d8/dd8/a07591_1ae6c58d7012d2ef038716c4fc460b0f77" prot="private" virt="non-virtual"><scope>castor3d::shader::DirectLighting</scope><name>makeZero</name></member>
+      <member refid="d8/dd8/a07591_1a4796a23de92cdd748b011d7b3fce7961" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectLighting</scope><name>scattering</name></member>
+      <member refid="d8/dd8/a07591_1abc6fd3dce70f3faa619f5c4bb1bdbfac" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectLighting</scope><name>sheen</name></member>
+      <member refid="d8/dd8/a07591_1a032c2b7bda62d8f1cc2a020ccdf3f27f" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectLighting</scope><name>specular</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

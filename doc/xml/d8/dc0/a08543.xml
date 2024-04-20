@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/dc0/a08543" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserParameterHelper&lt; ParameterType::eInt16 &gt;</compoundname>
+    <includes local="no">ParserParameterHelpers.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d8/dc0/a08543_1adf6922c010049128e8bc79b52318c6c0" prot="public" static="no">
+        <type>int16_t</type>
+        <definition>using castor::ParserParameterHelper&lt; ParameterType::eInt16 &gt;::ValueType =  int16_t</definition>
+        <argsstring></argsstring>
+        <name>ValueType</name>
+        <qualifiedname>castor::ParserParameterHelper&lt; ParameterType::eInt16 &gt;::ValueType</qualifiedname>
+        <briefdescription>
+<para>~english The parameter value type. Le type de valeur du paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="313" column="1" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="313" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d8/dc0/a08543_1af77e4953cf4143b91d9edfb7625c24f3" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> constexpr <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222" kindref="member">ParameterType</ref></type>
+        <definition>CU_API constexpr ParameterType castor::ParserParameterHelper&lt; ParameterType::eInt16 &gt;::ParamType</definition>
+        <argsstring></argsstring>
+        <name>ParamType</name>
+        <qualifiedname>castor::ParserParameterHelper&lt; ParameterType::eInt16 &gt;::ParamType</qualifiedname>
+        <initializer>= <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222a3845503e40242d6618309692c516108f" kindref="member">ParameterType::eInt16</ref></initializer>
+        <briefdescription>
+<para>~english The parameter type. Le type de paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="315" column="39" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="315" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dc0/a08543_1a91d74b30e68420ac6fe0025f833867f9" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref> constexpr</type>
+        <definition>CU_API StringView constexpr castor::ParserParameterHelper&lt; ParameterType::eInt16 &gt;::StringType</definition>
+        <argsstring></argsstring>
+        <name>StringType</name>
+        <qualifiedname>castor::ParserParameterHelper&lt; ParameterType::eInt16 &gt;::StringType</qualifiedname>
+        <initializer>= <ref refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" kindref="member">cuT</ref>( &quot;16 bits signed integer&quot; )</initializer>
+        <briefdescription>
+<para>~english The parameter type name. Le nom du type de paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="317" column="36" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="317" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Specialisation de <ref refid="de/db2/a08403" kindref="compound">ParserParameterHelper</ref> pour <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222a3845503e40242d6618309692c516108f" kindref="member">ParameterType::eInt16</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserParameterHelper&lt; ParameterType::eInt16 &gt;</label>
+        <link refid="d8/dc0/a08543"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>StringType</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::basic_string_view&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="310" column="10" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="311" bodyend="318"/>
+    <listofallmembers>
+      <member refid="d8/dc0/a08543_1af77e4953cf4143b91d9edfb7625c24f3" prot="public" virt="non-virtual"><scope>castor::ParserParameterHelper&lt; ParameterType::eInt16 &gt;</scope><name>ParamType</name></member>
+      <member refid="d8/dc0/a08543_1a91d74b30e68420ac6fe0025f833867f9" prot="public" virt="non-virtual"><scope>castor::ParserParameterHelper&lt; ParameterType::eInt16 &gt;</scope><name>StringType</name></member>
+      <member refid="d8/dc0/a08543_1adf6922c010049128e8bc79b52318c6c0" prot="public" virt="non-virtual"><scope>castor::ParserParameterHelper&lt; ParameterType::eInt16 &gt;</scope><name>ValueType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

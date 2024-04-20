@@ -1,0 +1,9 @@
+<map id="castor::DynamicLibrary::getFunction" name="castor::DynamicLibrary::getFunction">
+<area shape="rect" id="Node000001" title="Retrieves a function." alt="" coords="5,59,161,99"/>
+<area shape="rect" id="Node000002" href="$d7/d44/a09387.html#aedc2b6b4e2ee1af69de155aa1eb82d4f" title="Retrieves a function." alt="" coords="209,29,365,69"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,65,195,60,196,65,162,70"/>
+<area shape="rect" id="Node000003" href="$d2/dd2/a02279.html#ab063f33ab8c390c2522ef198128a0d77" title=" " alt="" coords="413,66,545,91"/>
+<area shape="poly" id="edge4_Node000001_Node000003" title=" " alt="" coords="162,78,209,79,365,79,400,78,400,83,365,84,209,84,162,83"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="251,30,249,20,255,11,268,5,287,3,310,6,322,13,320,17,308,11,287,8,269,10,258,15,254,21,256,28"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="366,59,400,64,399,69,365,64"/>
+</map>

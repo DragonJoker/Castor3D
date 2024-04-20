@@ -1,4 +1,10 @@
-<map id="castor3d::DebugOverlays" name="castor3d::DebugOverlays">
-<area shape="rect" id="node1" title=" " alt="" coords="15,79,182,104"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,31"/>
+<map id="castor3d::OpacityData" name="castor3d::OpacityData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="769,49,921,74"/>
+<area shape="rect" id="Node000002" href="$d2/d4c/a08211.html" title=" " alt="" coords="381,5,572,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="586,33,769,51,769,57,586,39"/>
+<area shape="rect" id="Node000003" href="$d2/d4c/a08211.html" title="Templated class that provide std::array style buffer view." alt="" coords="5,41,196,81"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="209,48,381,32,381,37,210,54"/>
+<area shape="rect" id="Node000004" href="$d2/d4c/a08211.html" title=" " alt="" coords="381,70,572,125"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="210,80,220,81,381,93,381,98,220,87,209,85"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="586,84,769,66,769,71,586,89"/>
 </map>

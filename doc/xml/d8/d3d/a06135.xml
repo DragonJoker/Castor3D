@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/d3d/a06135" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SubsurfaceScatteringPass::BlurConfiguration</compoundname>
+    <includes local="no">SubsurfaceScatteringPass.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d3d/a06135_1afa2b6185c9d8bdd7e07c6e1f399b8ff4" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::SubsurfaceScatteringPass::BlurConfiguration::blurPixelSize</definition>
+        <argsstring></argsstring>
+        <name>blurPixelSize</name>
+        <qualifiedname>castor3d::SubsurfaceScatteringPass::BlurConfiguration::blurPixelSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/SubsurfaceScatteringPass.hpp" line="92" column="17" bodyfile="Castor3D/Render/Opaque/SubsurfaceScatteringPass.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d3d/a06135_1a24df45312c604ae07e7ff4f691e908f3" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SubsurfaceScatteringPass::BlurConfiguration::blurCorrection</definition>
+        <argsstring></argsstring>
+        <name>blurCorrection</name>
+        <qualifiedname>castor3d::SubsurfaceScatteringPass::BlurConfiguration::blurCorrection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/SubsurfaceScatteringPass.hpp" line="93" column="7" bodyfile="Castor3D/Render/Opaque/SubsurfaceScatteringPass.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/Opaque/SubsurfaceScatteringPass.hpp" line="90" column="1" bodyfile="Castor3D/Render/Opaque/SubsurfaceScatteringPass.hpp" bodystart="91" bodyend="94"/>
+    <listofallmembers>
+      <member refid="d8/d3d/a06135_1a24df45312c604ae07e7ff4f691e908f3" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::BlurConfiguration</scope><name>blurCorrection</name></member>
+      <member refid="d8/d3d/a06135_1afa2b6185c9d8bdd7e07c6e1f399b8ff4" prot="public" virt="non-virtual"><scope>castor3d::SubsurfaceScatteringPass::BlurConfiguration</scope><name>blurPixelSize</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

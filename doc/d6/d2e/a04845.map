@@ -1,4 +1,7 @@
-<map id="castor3d::TextOverlay" name="castor3d::TextOverlay">
-<area shape="rect" id="node1" title=" " alt="" coords="19,79,167,104"/>
-<area shape="rect" id="node2" href="$dc/d6d/a04802.html" title=" " alt="" coords="5,5,180,31"/>
+<map id="castor3d::shader::PassMapMaterialShader" name="castor3d::shader::PassMapMaterialShader">
+<area shape="rect" id="Node000001" title=" " alt="" coords="15,167,198,207"/>
+<area shape="rect" id="Node000002" href="$d6/da6/a04827.html" title=" " alt="" coords="5,79,208,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,133,109,166,104,166,104,133"/>
+<area shape="rect" id="Node000003" href="$d2/d04/a04815.html" title=" " alt="" coords="7,5,206,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="109,44,109,79,104,79,104,44"/>
 </map>

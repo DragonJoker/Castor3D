@@ -1,0 +1,209 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/db3/a07883" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ClustersUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/db3/a07883_1ad399ca07e6117030f273f939d69ef503" prot="public" static="no" mutable="no">
+        <type>castor::Point3ui</type>
+        <definition>castor::Point3ui castor3d::ClustersUboConfiguration::gridDim</definition>
+        <argsstring></argsstring>
+        <name>gridDim</name>
+        <qualifiedname>castor3d::ClustersUboConfiguration::gridDim</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="232" column="18" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="232" bodyend="232"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db3/a07883_1a1a5279778f7a96147e40686477338568" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ClustersUboConfiguration::splitScheme</definition>
+        <argsstring></argsstring>
+        <name>splitScheme</name>
+        <qualifiedname>castor3d::ClustersUboConfiguration::splitScheme</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="234" column="10" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="234" bodyend="234"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db3/a07883_1adbd9c36f60456c38f7a78a739ee41a73" prot="public" static="no" mutable="no">
+        <type>castor::Point2ui</type>
+        <definition>castor::Point2ui castor3d::ClustersUboConfiguration::clusterSize</definition>
+        <argsstring></argsstring>
+        <name>clusterSize</name>
+        <qualifiedname>castor3d::ClustersUboConfiguration::clusterSize</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="236" column="18" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="236" bodyend="236"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db3/a07883_1ac1b46c321867369421026dd81bea0afd" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::ClustersUboConfiguration::viewNearFar</definition>
+        <argsstring></argsstring>
+        <name>viewNearFar</name>
+        <qualifiedname>castor3d::ClustersUboConfiguration::viewNearFar</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="238" column="17" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="238" bodyend="238"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db3/a07883_1abdb115d07d50308a9550af39fe7c6827" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ClustersUboConfiguration::pointLightLevelsCount</definition>
+        <argsstring></argsstring>
+        <name>pointLightLevelsCount</name>
+        <qualifiedname>castor3d::ClustersUboConfiguration::pointLightLevelsCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="240" column="10" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="240" bodyend="240"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db3/a07883_1a5a2118db2b1e6be73975024fa41b5112" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ClustersUboConfiguration::spotLightLevelsCount</definition>
+        <argsstring></argsstring>
+        <name>spotLightLevelsCount</name>
+        <qualifiedname>castor3d::ClustersUboConfiguration::spotLightLevelsCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="242" column="10" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="242" bodyend="242"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db3/a07883_1af19d25b69353d57c0120d9dac457341e" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ClustersUboConfiguration::pointLightsCount</definition>
+        <argsstring></argsstring>
+        <name>pointLightsCount</name>
+        <qualifiedname>castor3d::ClustersUboConfiguration::pointLightsCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="244" column="10" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="244" bodyend="244"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db3/a07883_1a70eebc985865749dc8c83c94b7850c3f" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ClustersUboConfiguration::spotLightsCount</definition>
+        <argsstring></argsstring>
+        <name>spotLightsCount</name>
+        <qualifiedname>castor3d::ClustersUboConfiguration::spotLightsCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="246" column="10" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="246" bodyend="246"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db3/a07883_1ab555ade75b42b9b9b4e9dfdf5563b4fe" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ClustersUboConfiguration::bias</definition>
+        <argsstring></argsstring>
+        <name>bias</name>
+        <qualifiedname>castor3d::ClustersUboConfiguration::bias</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="248" column="7" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="248" bodyend="248"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db3/a07883_1a9d670bbfcf7a93e7b17328f821476051" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ClustersUboConfiguration::enableWaveIntrinsics</definition>
+        <argsstring></argsstring>
+        <name>enableWaveIntrinsics</name>
+        <qualifiedname>castor3d::ClustersUboConfiguration::enableWaveIntrinsics</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="250" column="10" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="250" bodyend="250"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db3/a07883_1a66ee6237d2a25b0a416f312a838be9b2" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ClustersUboConfiguration::pad0</definition>
+        <argsstring></argsstring>
+        <name>pad0</name>
+        <qualifiedname>castor3d::ClustersUboConfiguration::pad0</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="251" column="7" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="251" bodyend="251"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/db3/a07883_1a2f49f959dc6abc53180fc63b572f441e" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ClustersUboConfiguration::pad1</definition>
+        <argsstring></argsstring>
+        <name>pad1</name>
+        <qualifiedname>castor3d::ClustersUboConfiguration::pad1</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="252" column="7" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="252" bodyend="252"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Données des clusters. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="229" column="1" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="230" bodyend="253"/>
+    <listofallmembers>
+      <member refid="d4/db3/a07883_1ab555ade75b42b9b9b4e9dfdf5563b4fe" prot="public" virt="non-virtual"><scope>castor3d::ClustersUboConfiguration</scope><name>bias</name></member>
+      <member refid="d4/db3/a07883_1adbd9c36f60456c38f7a78a739ee41a73" prot="public" virt="non-virtual"><scope>castor3d::ClustersUboConfiguration</scope><name>clusterSize</name></member>
+      <member refid="d4/db3/a07883_1a9d670bbfcf7a93e7b17328f821476051" prot="public" virt="non-virtual"><scope>castor3d::ClustersUboConfiguration</scope><name>enableWaveIntrinsics</name></member>
+      <member refid="d4/db3/a07883_1ad399ca07e6117030f273f939d69ef503" prot="public" virt="non-virtual"><scope>castor3d::ClustersUboConfiguration</scope><name>gridDim</name></member>
+      <member refid="d4/db3/a07883_1a66ee6237d2a25b0a416f312a838be9b2" prot="public" virt="non-virtual"><scope>castor3d::ClustersUboConfiguration</scope><name>pad0</name></member>
+      <member refid="d4/db3/a07883_1a2f49f959dc6abc53180fc63b572f441e" prot="public" virt="non-virtual"><scope>castor3d::ClustersUboConfiguration</scope><name>pad1</name></member>
+      <member refid="d4/db3/a07883_1abdb115d07d50308a9550af39fe7c6827" prot="public" virt="non-virtual"><scope>castor3d::ClustersUboConfiguration</scope><name>pointLightLevelsCount</name></member>
+      <member refid="d4/db3/a07883_1af19d25b69353d57c0120d9dac457341e" prot="public" virt="non-virtual"><scope>castor3d::ClustersUboConfiguration</scope><name>pointLightsCount</name></member>
+      <member refid="d4/db3/a07883_1a1a5279778f7a96147e40686477338568" prot="public" virt="non-virtual"><scope>castor3d::ClustersUboConfiguration</scope><name>splitScheme</name></member>
+      <member refid="d4/db3/a07883_1a5a2118db2b1e6be73975024fa41b5112" prot="public" virt="non-virtual"><scope>castor3d::ClustersUboConfiguration</scope><name>spotLightLevelsCount</name></member>
+      <member refid="d4/db3/a07883_1a70eebc985865749dc8c83c94b7850c3f" prot="public" virt="non-virtual"><scope>castor3d::ClustersUboConfiguration</scope><name>spotLightsCount</name></member>
+      <member refid="d4/db3/a07883_1ac1b46c321867369421026dd81bea0afd" prot="public" virt="non-virtual"><scope>castor3d::ClustersUboConfiguration</scope><name>viewNearFar</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

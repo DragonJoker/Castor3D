@@ -1,0 +1,11 @@
+<map id="castor3d::ParticleElementDeclaration" name="castor3d::ParticleElementDeclaration">
+<area shape="rect" id="Node000001" title=" " alt="" coords="77,211,249,251"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,132,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="98,156,148,209,144,212,94,160"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,5,132,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="71,59,71,108,66,108,66,59"/>
+<area shape="rect" id="Node000004" href="$dd/dbb/a08207.html" title=" " alt="" coords="157,108,319,148"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="218,161,179,212,175,209,214,157"/>
+<area shape="rect" id="Node000005" href="$dd/dbb/a08207.html" title="Template class providing implicit conversion from a scoped enum to its integral base type." alt="" coords="157,5,319,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="241,59,241,108,235,108,235,59"/>
+</map>

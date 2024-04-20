@@ -1,0 +1,313 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d6f/a08735" kind="class" language="C++" prot="public">
+    <compoundname>castor::BoundingSphere</compoundname>
+    <basecompoundref refid="da/dc6/a08731" prot="public" virt="non-virtual">castor::BoundingContainer&lt; 3 &gt;</basecompoundref>
+    <includes local="no">BoundingSphere.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/d6f/a08735_1a8f5771772e0aba98aa894e9881db7683" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor::BoundingSphere::m_radius</definition>
+        <argsstring></argsstring>
+        <name>m_radius</name>
+        <qualifiedname>castor::BoundingSphere::m_radius</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le rayon de la sphère. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingSphere.hpp" line="92" column="7" bodyfile="CastorUtils/Graphics/BoundingSphere.hpp" bodystart="92" bodyend="92"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d6f/a08735_1a95d0a50a51bd3592de6f4dcdf20801f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::BoundingSphere::BoundingSphere</definition>
+        <argsstring>()=default</argsstring>
+        <name>BoundingSphere</name>
+        <qualifiedname>castor::BoundingSphere::BoundingSphere</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingSphere.hpp" line="15" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d6f/a08735_1aedf754abbd81c4a4573199f41f0d173c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::BoundingSphere::BoundingSphere</definition>
+        <argsstring>(Point3f const &amp;center, float radius)</argsstring>
+        <name>BoundingSphere</name>
+        <qualifiedname>castor::BoundingSphere::BoundingSphere</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>center</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>radius</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur spécifié. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">center</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le centre de la sphère. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le rayon de la sphère. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingSphere.hpp" line="26" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d6f/a08735_1a86293218cbac4f169c2d1404df4c10a4" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::BoundingSphere::BoundingSphere</definition>
+        <argsstring>(BoundingBox const &amp;box)</argsstring>
+        <name>BoundingSphere</name>
+        <qualifiedname>castor::BoundingSphere::BoundingSphere</qualifiedname>
+        <param>
+          <type><ref refid="d6/d51/a08727" kindref="compound">BoundingBox</ref> const &amp;</type>
+          <declname>box</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;une CubeBox. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">box</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La <ref refid="d6/d51/a08727" kindref="compound">BoundingBox</ref>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingSphere.hpp" line="35" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d6f/a08735_1a29fbda2a7a43c4e2575a69d70cc5fff5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::BoundingSphere::load</definition>
+        <argsstring>(Point3f const &amp;center, float radius)</argsstring>
+        <name>load</name>
+        <qualifiedname>castor::BoundingSphere::load</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>center</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>radius</declname>
+        </param>
+        <briefdescription>
+<para>Réinitialise la sphere box. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">center</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le centre. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le rayon. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingSphere.hpp" line="46" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d6f/a08735_1a53232b446785afdd88b010943705d443" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::BoundingSphere::load</definition>
+        <argsstring>(BoundingBox const &amp;box)</argsstring>
+        <name>load</name>
+        <qualifiedname>castor::BoundingSphere::load</qualifiedname>
+        <param>
+          <type><ref refid="d6/d51/a08727" kindref="compound">BoundingBox</ref> const &amp;</type>
+          <declname>box</declname>
+        </param>
+        <briefdescription>
+<para>Réinitialise à partir d&apos;une CubeBox. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">box</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La <ref refid="d6/d51/a08727" kindref="compound">BoundingBox</ref>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingSphere.hpp" line="55" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d6f/a08735_1a15f6358c506226832f22b94c57bc974c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::BoundingSphere::isWithin</definition>
+        <argsstring>(Point3f const &amp;point) const override</argsstring>
+        <name>isWithin</name>
+        <qualifiedname>castor::BoundingSphere::isWithin</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Teste si un point est contenu dans le conteneur (mais pas à la limite). </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point à tester. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si le point est dans le conteneur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingSphere.hpp" line="66" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d6f/a08735_1a07701d9af39af25e469f39c26b20ab0d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::BoundingSphere::isOnLimits</definition>
+        <argsstring>(Point3f const &amp;point) const override</argsstring>
+        <name>isOnLimits</name>
+        <qualifiedname>castor::BoundingSphere::isOnLimits</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Teste si un point est sur la limite du conteneur, et pas dedans. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point à tester. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si le point est sur la limite. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingSphere.hpp" line="77" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d6f/a08735_1abff51a5e60cb93ebe259d3eea7394fc0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor::BoundingSphere::getRadius</definition>
+        <argsstring>() const</argsstring>
+        <name>getRadius</name>
+        <qualifiedname>castor::BoundingSphere::getRadius</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le rayon. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingSphere.hpp" line="84" column="7" bodyfile="CastorUtils/Graphics/BoundingSphere.hpp" bodystart="84" bodyend="87"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>BoundingContainer3D</label>
+        <link refid="da/dc6/a08731"/>
+      </node>
+      <node id="1">
+        <label>castor::BoundingSphere</label>
+        <link refid="dd/d6f/a08735"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>BoundingContainer3D</label>
+        <link refid="da/dc6/a08731"/>
+      </node>
+      <node id="1">
+        <label>castor::BoundingSphere</label>
+        <link refid="dd/d6f/a08735"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/BoundingSphere.hpp" line="11" column="1" bodyfile="CastorUtils/Graphics/BoundingSphere.hpp" bodystart="13" bodyend="93"/>
+    <listofallmembers>
+      <member refid="da/dc6/a08731_1ae812b72b4c22180211ea369c47c807ec" prot="public" virt="non-virtual"><scope>castor::BoundingSphere</scope><name>BoundingContainer</name></member>
+      <member refid="da/dc6/a08731_1a40f770e152228f625222849ab31166fc" prot="public" virt="non-virtual"><scope>castor::BoundingSphere</scope><name>BoundingContainer</name></member>
+      <member refid="da/dc6/a08731_1a77c73fd155594406312d8fc82d84d60b" prot="public" virt="non-virtual"><scope>castor::BoundingSphere</scope><name>BoundingContainer</name></member>
+      <member refid="da/dc6/a08731_1a883c22c6046853f2a64d407c8f5de458" prot="public" virt="non-virtual"><scope>castor::BoundingSphere</scope><name>BoundingContainer</name></member>
+      <member refid="dd/d6f/a08735_1a95d0a50a51bd3592de6f4dcdf20801f9" prot="public" virt="non-virtual"><scope>castor::BoundingSphere</scope><name>BoundingSphere</name></member>
+      <member refid="dd/d6f/a08735_1aedf754abbd81c4a4573199f41f0d173c" prot="public" virt="non-virtual"><scope>castor::BoundingSphere</scope><name>BoundingSphere</name></member>
+      <member refid="dd/d6f/a08735_1a86293218cbac4f169c2d1404df4c10a4" prot="public" virt="non-virtual"><scope>castor::BoundingSphere</scope><name>BoundingSphere</name></member>
+      <member refid="da/dc6/a08731_1a3e50ad04847a8533434c6e4a59583359" prot="public" virt="non-virtual"><scope>castor::BoundingSphere</scope><name>getCenter</name></member>
+      <member refid="dd/d6f/a08735_1abff51a5e60cb93ebe259d3eea7394fc0" prot="public" virt="non-virtual"><scope>castor::BoundingSphere</scope><name>getRadius</name></member>
+      <member refid="dd/d6f/a08735_1a07701d9af39af25e469f39c26b20ab0d" prot="public" virt="non-virtual"><scope>castor::BoundingSphere</scope><name>isOnLimits</name></member>
+      <member refid="da/dc6/a08731_1a15b371f2c35be936aac7025e469c738f" prot="public" virt="pure-virtual" ambiguityscope="castor::BoundingContainer::"><scope>castor::BoundingSphere</scope><name>isOnLimits</name></member>
+      <member refid="dd/d6f/a08735_1a15f6358c506226832f22b94c57bc974c" prot="public" virt="non-virtual"><scope>castor::BoundingSphere</scope><name>isWithin</name></member>
+      <member refid="da/dc6/a08731_1a2e7294ec987f1a067009faf3155ab402" prot="public" virt="pure-virtual" ambiguityscope="castor::BoundingContainer::"><scope>castor::BoundingSphere</scope><name>isWithin</name></member>
+      <member refid="dd/d6f/a08735_1a29fbda2a7a43c4e2575a69d70cc5fff5" prot="public" virt="non-virtual"><scope>castor::BoundingSphere</scope><name>load</name></member>
+      <member refid="dd/d6f/a08735_1a53232b446785afdd88b010943705d443" prot="public" virt="non-virtual"><scope>castor::BoundingSphere</scope><name>load</name></member>
+      <member refid="dd/d6f/a08735_1a8f5771772e0aba98aa894e9881db7683" prot="private" virt="non-virtual"><scope>castor::BoundingSphere</scope><name>m_radius</name></member>
+      <member refid="da/dc6/a08731_1aa459d046786830e4e3223a51e832b3cd" prot="public" virt="non-virtual"><scope>castor::BoundingSphere</scope><name>MyPoint</name></member>
+      <member refid="da/dc6/a08731_1a426566d32bc1c42d74b188f257b3ccda" prot="public" virt="non-virtual"><scope>castor::BoundingSphere</scope><name>operator=</name></member>
+      <member refid="da/dc6/a08731_1ade60d404c88a6b78c17cca7e044d9d69" prot="public" virt="non-virtual"><scope>castor::BoundingSphere</scope><name>operator=</name></member>
+      <member refid="da/dc6/a08731_1a1cb2689d6741a63bb85d722e02c56cba" prot="protected" virt="non-virtual"><scope>castor::BoundingSphere</scope><name>setCenter</name></member>
+      <member refid="da/dc6/a08731_1a50781789daa8a61109aae08c384a5cbf" prot="public" virt="virtual"><scope>castor::BoundingSphere</scope><name>~BoundingContainer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

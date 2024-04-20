@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dir_c0f5ae8941de6c2ef5bf77de2d17611b" kind="dir">
+    <compoundname>Binary</compoundname>
+    <innerfile refid="df/d6a/a00119">BinaryAnimation.hpp</innerfile>
+    <innerfile refid="df/dc8/a00122">BinaryBoneNode.hpp</innerfile>
+    <innerfile refid="dc/dfe/a00125">BinaryChunk.hpp</innerfile>
+    <innerfile refid="d1/d88/a00128">BinaryMesh.hpp</innerfile>
+    <innerfile refid="d7/d06/a00131">BinaryMeshAnimation.hpp</innerfile>
+    <innerfile refid="de/d76/a00134">BinaryMeshMorphTarget.hpp</innerfile>
+    <innerfile refid="d2/df5/a00137">BinaryModule.hpp</innerfile>
+    <innerfile refid="d5/db1/a00140">BinaryMorphComponent.hpp</innerfile>
+    <innerfile refid="d7/dce/a00143">BinaryParser.hpp</innerfile>
+    <innerfile refid="d9/db6/a00146">BinarySceneNodeAnimation.hpp</innerfile>
+    <innerfile refid="da/d1e/a00149">BinarySceneNodeAnimationKeyFrame.hpp</innerfile>
+    <innerfile refid="d7/d9a/a00152">BinarySkeleton.hpp</innerfile>
+    <innerfile refid="d3/df8/a00155">BinarySkeletonAnimation.hpp</innerfile>
+    <innerfile refid="d6/db8/a00158">BinarySkeletonAnimationBone.hpp</innerfile>
+    <innerfile refid="d6/d7d/a00161">BinarySkeletonAnimationKeyFrame.hpp</innerfile>
+    <innerfile refid="db/ddf/a00164">BinarySkeletonAnimationNode.hpp</innerfile>
+    <innerfile refid="dc/de6/a00167">BinarySkeletonAnimationObject.hpp</innerfile>
+    <innerfile refid="d5/dcb/a00170">BinarySkeletonNode.hpp</innerfile>
+    <innerfile refid="d7/d3f/a00173">BinarySkinComponent.hpp</innerfile>
+    <innerfile refid="d5/de9/a00176">BinarySubmesh.hpp</innerfile>
+    <innerfile refid="db/dd9/a00179">BinaryWriter.hpp</innerfile>
+    <innerfile refid="d7/d25/a00182">ChunkData.hpp</innerfile>
+    <innerfile refid="de/df3/a00185">ChunkParser.hpp</innerfile>
+    <innerfile refid="da/d15/a00188">ChunkWriter.hpp</innerfile>
+    <innerfile refid="d9/dd0/a00191">CmshImporter.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Binary/"/>
+  </compounddef>
+</doxygen>

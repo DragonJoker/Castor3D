@@ -1,0 +1,9 @@
+<map id="castor::Rectangle" name="castor::Rectangle">
+<area shape="rect" id="Node000001" title=" " alt="" coords="108,197,232,223"/>
+<area shape="rect" id="Node000002" href="$da/d50/a08167.html" title=" " alt="" coords="5,108,143,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,155,158,195,154,199,106,159"/>
+<area shape="rect" id="Node000003" href="$da/d50/a08167.html" title="Some data holder." alt="" coords="5,5,143,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="77,59,77,108,71,108,71,59"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="167,115,240,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="196,154,177,198,172,196,191,152"/>
+</map>

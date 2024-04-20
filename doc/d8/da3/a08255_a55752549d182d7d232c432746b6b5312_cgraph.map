@@ -1,0 +1,29 @@
+<map id="castor::ResourceCacheBaseT::removeNoLock" name="castor::ResourceCacheBaseT::removeNoLock">
+<area shape="rect" id="Node000001" title="Logging version of tryRemove." alt="" coords="5,124,193,164"/>
+<area shape="rect" id="Node000002" href="$d8/da3/a08255.html#a7b9ac51df57e111ec2af31f89a97cbac" title="Sets all the elements to be cleaned up." alt="" coords="477,67,665,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,121,241,109,356,96,463,88,464,94,356,101,242,115,180,127"/>
+<area shape="rect" id="Node000006" href="$d8/da3/a08255.html#a74a35e486aa159b89451ccfb86e2dbd9" title=" " alt="" coords="241,124,429,164"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="194,141,227,141,227,147,194,147"/>
+<area shape="rect" id="Node000007" href="$d8/da3/a08255.html#a6537032eaeeadaffea633743e3218e53" title=" " alt="" coords="241,192,429,232"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="170,161,253,186,252,191,169,167"/>
+<area shape="rect" id="Node000003" href="$d8/da3/a08255.html#a9623d8ca68e009f78e842011a9caceb4" title=" " alt="" coords="713,5,901,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="648,64,716,46,718,51,650,69"/>
+<area shape="rect" id="Node000004" href="$d8/da3/a08255.html#a16408750c3e49683268744e1f35761df" title=" " alt="" coords="713,69,901,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="666,85,699,85,699,91,666,90"/>
+<area shape="rect" id="Node000005" href="$d2/dd2/a02279.html#a58f3178234ce83e643568e48a0ed6a3f" title=" " alt="" coords="949,137,1116,162"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="645,104,714,119,829,134,936,142,935,147,828,139,713,124,644,109"/>
+<area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="418,121,475,107,476,112,419,127"/>
+<area shape="rect" id="Node000008" href="$d8/da3/a08255.html#a846eb5869a3b833ce9200edb493a3463" title=" " alt="" coords="477,131,665,171"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="412,189,480,172,482,177,414,194"/>
+<area shape="rect" id="Node000009" href="$d9/d93/a09063.html#a7fb14049e4aa52e127cb89e73f63a0a3" title="Logs a warning, from a std::basic_string&lt; CharT &gt;" alt="" coords="494,195,649,235"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="430,210,480,211,480,216,430,216"/>
+<area shape="rect" id="Node000013" href="$d2/dd2/a02279.html#af41ea5b34edb8c4103f57937867ea4d6" title=" " alt="" coords="484,259,659,285"/>
+<area shape="poly" id="edge14_Node000007_Node000013" title=" " alt="" coords="416,230,508,253,507,259,414,235"/>
+<area shape="rect" id="Node000010" href="$d9/d93/a09063.html#af8c57bc4b8bfeb532f32493316e157a1" title="Pushes a message into the queue." alt="" coords="730,188,885,228"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="649,210,716,208,716,213,649,215"/>
+<area shape="poly" id="edge12_Node000010_Node000005" title=" " alt="" coords="884,185,969,163,971,168,885,191"/>
+<area shape="rect" id="Node000011" href="$d9/d93/a09063.html#afa966debfbe3f79d0bea9cf2bc4c7889" title=" " alt="" coords="955,187,1110,227"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="885,205,942,205,942,210,885,210"/>
+<area shape="rect" id="Node000012" href="$d2/dd2/a02279.html#ab0fb14b20a64ca391cfd363dfdf2ea78" title=" " alt="" coords="983,251,1083,277"/>
+<area shape="poly" id="edge13_Node000010_Node000012" title=" " alt="" coords="885,225,970,246,968,251,884,230"/>
+</map>

@@ -1,24 +1,26 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_bfd6c3ec76afce51786bb17a92b28154" kind="dir">
-    <compoundname>Material/Pass/Component/Lighting</compoundname>
-    <innerfile refid="d4/ddf/a00488">AmbientComponent.hpp</innerfile>
-    <innerfile refid="d6/d60/a00491">AttenuationComponent.hpp</innerfile>
-    <innerfile refid="d5/d0f/a00494">ClearcoatComponent.hpp</innerfile>
-    <innerfile refid="d4/d1e/a00497">EmissiveComponent.hpp</innerfile>
-    <innerfile refid="de/d4e/a00500">IridescenceComponent.hpp</innerfile>
-    <innerfile refid="d4/de5/a00503">LightingModelComponent.hpp</innerfile>
-    <innerfile refid="d4/d1f/a00506">MetalnessComponent.hpp</innerfile>
-    <innerfile refid="df/db6/a00509">RoughnessComponent.hpp</innerfile>
-    <innerfile refid="d4/dfb/a00512">SheenComponent.hpp</innerfile>
-    <innerfile refid="dc/d19/a00515">SpecularComponent.hpp</innerfile>
-    <innerfile refid="d5/dee/a00518">SubsurfaceScatteringComponent.hpp</innerfile>
-    <innerfile refid="d7/def/a00521">ThicknessComponent.hpp</innerfile>
-    <innerfile refid="d9/d24/a00524">TransmissionComponent.hpp</innerfile>
+    <compoundname>Castor3D/Material/Pass/Component/Lighting</compoundname>
+    <innerfile refid="d9/d34/a00476">AmbientComponent.hpp</innerfile>
+    <innerfile refid="d9/d4a/a00479">AttenuationComponent.hpp</innerfile>
+    <innerfile refid="db/d8e/a00482">ClearcoatComponent.hpp</innerfile>
+    <innerfile refid="d6/d1a/a00485">EmissiveComponent.hpp</innerfile>
+    <innerfile refid="d4/ddf/a00488">IridescenceComponent.hpp</innerfile>
+    <innerfile refid="d6/d60/a00491">LightingModelComponent.hpp</innerfile>
+    <innerfile refid="d5/d0f/a00494">MetalnessComponent.hpp</innerfile>
+    <innerfile refid="d4/d1e/a00497">RoughnessComponent.hpp</innerfile>
+    <innerfile refid="de/d4e/a00500">SheenComponent.hpp</innerfile>
+    <innerfile refid="d4/de5/a00503">SpecularComponent.hpp</innerfile>
+    <innerfile refid="d4/d1f/a00506">SpecularFactorComponent.hpp</innerfile>
+    <innerfile refid="df/db6/a00509">SubsurfaceScatteringComponent.hpp</innerfile>
+    <innerfile refid="d4/dfb/a00512">ThicknessComponent.hpp</innerfile>
+    <innerfile refid="dc/d19/a00515">TransmissionComponent.hpp</innerfile>
+    <innerfile refid="d5/dee/a00518">TransmittanceComponent.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Material/Pass/Component/Lighting/"/>
+    <location file="Castor3D/Material/Pass/Component/Lighting/"/>
   </compounddef>
 </doxygen>

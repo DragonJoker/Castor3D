@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d9c/a07643" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::AllShadowData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_AllShadowData&quot;, sdw::type::MemoryLayout::eStd140, sdw::StructFieldT&lt; DirectionalShadowData, &quot;directional&quot; &gt;, sdw::StructFieldArrayT&lt; PointShadowData, &quot;point&quot;, MaxPointShadowMapCount &gt;, sdw::StructFieldArrayT&lt; SpotShadowData, &quot;spot&quot;, MaxSpotShadowMapCount &gt; &gt;</basecompoundref>
+    <includes local="no">GlslShadow.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d9c/a07643_1a386e9fd363dc73e8ff5cd3225bca5f7d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::AllShadowData::AllShadowData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>AllShadowData</name>
+        <qualifiedname>castor3d::shader::AllShadowData::AllShadowData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="119" column="1" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="119" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d9c/a07643_1acfa06cff0854178a89197c7d66a92fbc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::AllShadowData::directional</definition>
+        <argsstring>() const</argsstring>
+        <name>directional</name>
+        <qualifiedname>castor3d::shader::AllShadowData::directional</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="126" column="6" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="126" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d9c/a07643_1a37b9dc3a4553fb252953509eb723ca43" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::AllShadowData::point</definition>
+        <argsstring>() const</argsstring>
+        <name>point</name>
+        <qualifiedname>castor3d::shader::AllShadowData::point</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="127" column="6" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="127" bodyend="127"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d9c/a07643_1ac1bd2049334b37859d2fac5783470f31" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::AllShadowData::spot</definition>
+        <argsstring>() const</argsstring>
+        <name>spot</name>
+        <qualifiedname>castor3d::shader::AllShadowData::spot</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="128" column="6" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="128" bodyend="128"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::AllShadowData</label>
+        <link refid="df/d9c/a07643"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_AllShadowData&quot;, sdw::type::MemoryLayout::eStd140, sdw::StructFieldT&lt; DirectionalShadowData, &quot;directional&quot; &gt;, sdw::StructFieldArrayT&lt; PointShadowData, &quot;point&quot;, MaxPointShadowMapCount &gt;, sdw::StructFieldArrayT&lt; SpotShadowData, &quot;spot&quot;, MaxSpotShadowMapCount &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::AllShadowData</label>
+        <link refid="df/d9c/a07643"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_AllShadowData&quot;, sdw::type::MemoryLayout::eStd140, sdw::StructFieldT&lt; DirectionalShadowData, &quot;directional&quot; &gt;, sdw::StructFieldArrayT&lt; PointShadowData, &quot;point&quot;, MaxPointShadowMapCount &gt;, sdw::StructFieldArrayT&lt; SpotShadowData, &quot;spot&quot;, MaxSpotShadowMapCount &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="112" column="1" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="118" bodyend="129"/>
+    <listofallmembers>
+      <member refid="df/d9c/a07643_1a386e9fd363dc73e8ff5cd3225bca5f7d" prot="public" virt="non-virtual"><scope>castor3d::shader::AllShadowData</scope><name>AllShadowData</name></member>
+      <member refid="df/d9c/a07643_1acfa06cff0854178a89197c7d66a92fbc" prot="public" virt="non-virtual"><scope>castor3d::shader::AllShadowData</scope><name>directional</name></member>
+      <member refid="df/d9c/a07643_1a37b9dc3a4553fb252953509eb723ca43" prot="public" virt="non-virtual"><scope>castor3d::shader::AllShadowData</scope><name>point</name></member>
+      <member refid="df/d9c/a07643_1ac1bd2049334b37859d2fac5783470f31" prot="public" virt="non-virtual"><scope>castor3d::shader::AllShadowData</scope><name>spot</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,4 +1,14 @@
-<map id="castor3d::shader::RsmConfigData" name="castor3d::shader::RsmConfigData">
-<area shape="rect" id="node1" title=" " alt="" coords="5,79,223,104"/>
-<area shape="rect" id="node2" title=" " alt="" coords="45,5,183,31"/>
+<map id="castor3d::SsaoConfig" name="castor3d::SsaoConfig">
+<area shape="rect" id="Node000001" title=" " alt="" coords="669,77,816,102"/>
+<area shape="rect" id="Node000002" href="$d8/de9/a09211.html" title=" " alt="" coords="375,5,518,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="532,41,684,74,682,79,531,46"/>
+<area shape="rect" id="Node000003" href="$d8/de9/a09211.html" title="A value inside a range." alt="" coords="5,50,180,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="193,49,375,30,375,35,194,55"/>
+<area shape="rect" id="Node000006" href="$d8/de9/a09211.html" title=" " alt="" coords="375,69,518,109"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="194,71,204,72,375,83,375,89,204,77,194,76"/>
+<area shape="rect" id="Node000004" href="$d2/def/a08159.html" title=" " alt="" coords="365,134,528,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="541,144,645,121,709,99,711,105,646,127,542,149"/>
+<area shape="rect" id="Node000005" href="$d2/def/a08159.html" title="Templated class that provide std::array style buffer view." alt="" coords="11,141,174,181"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="188,159,365,159,365,164,188,164"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="532,87,669,87,669,92,532,92"/>
 </map>

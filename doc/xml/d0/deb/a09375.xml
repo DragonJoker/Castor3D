@@ -1,0 +1,209 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/deb/a09375" kind="struct" language="C++" prot="private">
+    <compoundname>castor::CpuInformations::CpuInformationsInternal</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/deb/a09375_1affcd480e209a102798fd7cc27630ecd1" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::CpuInformationsInternal::m_isIntel</definition>
+        <argsstring></argsstring>
+        <name>m_isIntel</name>
+        <qualifiedname>castor::CpuInformations::CpuInformationsInternal::m_isIntel</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="26" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="26" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/deb/a09375_1a56891428dc88454582404b1320caae73" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::CpuInformationsInternal::m_isAMD</definition>
+        <argsstring></argsstring>
+        <name>m_isAMD</name>
+        <qualifiedname>castor::CpuInformations::CpuInformationsInternal::m_isAMD</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="27" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="27" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/deb/a09375_1a069b127b3bf046d719457c076bbc3156" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::CpuInformations::CpuInformationsInternal::m_coreCount</definition>
+        <argsstring></argsstring>
+        <name>m_coreCount</name>
+        <qualifiedname>castor::CpuInformations::CpuInformationsInternal::m_coreCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="28" column="10" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="28" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/deb/a09375_1ad3c1aed35ef129400100da59a7bec3eb" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>String castor::CpuInformations::CpuInformationsInternal::m_vendor</definition>
+        <argsstring></argsstring>
+        <name>m_vendor</name>
+        <qualifiedname>castor::CpuInformations::CpuInformationsInternal::m_vendor</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="29" column="8" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="29" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/deb/a09375_1a2bf8ef5247da7b27be49e414aae496dc" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>String castor::CpuInformations::CpuInformationsInternal::m_model</definition>
+        <argsstring></argsstring>
+        <name>m_model</name>
+        <qualifiedname>castor::CpuInformations::CpuInformationsInternal::m_model</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="30" column="8" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="30" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/deb/a09375_1a953a1050b4dbc4fb727ba972d62c66ca" prot="public" static="no" mutable="no">
+        <type>std::bitset&lt; 32 &gt;</type>
+        <definition>std::bitset&lt; 32 &gt; castor::CpuInformations::CpuInformationsInternal::m_f_1_ECX</definition>
+        <argsstring></argsstring>
+        <name>m_f_1_ECX</name>
+        <qualifiedname>castor::CpuInformations::CpuInformationsInternal::m_f_1_ECX</qualifiedname>
+        <initializer>{ 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="31" column="13" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="31" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/deb/a09375_1a6addb0c47493eeb40b49a29f07407c1d" prot="public" static="no" mutable="no">
+        <type>std::bitset&lt; 32 &gt;</type>
+        <definition>std::bitset&lt; 32 &gt; castor::CpuInformations::CpuInformationsInternal::m_f_1_EDX</definition>
+        <argsstring></argsstring>
+        <name>m_f_1_EDX</name>
+        <qualifiedname>castor::CpuInformations::CpuInformationsInternal::m_f_1_EDX</qualifiedname>
+        <initializer>{ 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="32" column="13" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/deb/a09375_1aa2d179cf5db8911b361603505a6a13f5" prot="public" static="no" mutable="no">
+        <type>std::bitset&lt; 32 &gt;</type>
+        <definition>std::bitset&lt; 32 &gt; castor::CpuInformations::CpuInformationsInternal::m_f_7_EBX</definition>
+        <argsstring></argsstring>
+        <name>m_f_7_EBX</name>
+        <qualifiedname>castor::CpuInformations::CpuInformationsInternal::m_f_7_EBX</qualifiedname>
+        <initializer>{ 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="33" column="13" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/deb/a09375_1a79dfabfc77d987d15217d827a23b11fd" prot="public" static="no" mutable="no">
+        <type>std::bitset&lt; 32 &gt;</type>
+        <definition>std::bitset&lt; 32 &gt; castor::CpuInformations::CpuInformationsInternal::m_f_7_ECX</definition>
+        <argsstring></argsstring>
+        <name>m_f_7_ECX</name>
+        <qualifiedname>castor::CpuInformations::CpuInformationsInternal::m_f_7_ECX</qualifiedname>
+        <initializer>{ 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="34" column="13" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="34" bodyend="34"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/deb/a09375_1a0cab95ae3e788905a67608029d4d2bb7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::CpuInformations::CpuInformationsInternal::CpuInformationsInternal</definition>
+        <argsstring>()</argsstring>
+        <name>CpuInformationsInternal</name>
+        <qualifiedname>castor::CpuInformations::CpuInformationsInternal::CpuInformationsInternal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="24" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::bitset&lt; 32 &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; 32 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::CpuInformations::CpuInformationsInternal</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_model</edgelabel>
+          <edgelabel>m_vendor</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_f_1_ECX</edgelabel>
+          <edgelabel>m_f_1_EDX</edgelabel>
+          <edgelabel>m_f_7_EBX</edgelabel>
+          <edgelabel>m_f_7_ECX</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="5">
+        <label>std::bitset&lt; Bits &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="22" column="1" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="23" bodyend="35"/>
+    <listofallmembers>
+      <member refid="d0/deb/a09375_1a0cab95ae3e788905a67608029d4d2bb7" prot="public" virt="non-virtual"><scope>castor::CpuInformations::CpuInformationsInternal</scope><name>CpuInformationsInternal</name></member>
+      <member refid="d0/deb/a09375_1a069b127b3bf046d719457c076bbc3156" prot="public" virt="non-virtual"><scope>castor::CpuInformations::CpuInformationsInternal</scope><name>m_coreCount</name></member>
+      <member refid="d0/deb/a09375_1a953a1050b4dbc4fb727ba972d62c66ca" prot="public" virt="non-virtual"><scope>castor::CpuInformations::CpuInformationsInternal</scope><name>m_f_1_ECX</name></member>
+      <member refid="d0/deb/a09375_1a6addb0c47493eeb40b49a29f07407c1d" prot="public" virt="non-virtual"><scope>castor::CpuInformations::CpuInformationsInternal</scope><name>m_f_1_EDX</name></member>
+      <member refid="d0/deb/a09375_1aa2d179cf5db8911b361603505a6a13f5" prot="public" virt="non-virtual"><scope>castor::CpuInformations::CpuInformationsInternal</scope><name>m_f_7_EBX</name></member>
+      <member refid="d0/deb/a09375_1a79dfabfc77d987d15217d827a23b11fd" prot="public" virt="non-virtual"><scope>castor::CpuInformations::CpuInformationsInternal</scope><name>m_f_7_ECX</name></member>
+      <member refid="d0/deb/a09375_1a56891428dc88454582404b1320caae73" prot="public" virt="non-virtual"><scope>castor::CpuInformations::CpuInformationsInternal</scope><name>m_isAMD</name></member>
+      <member refid="d0/deb/a09375_1affcd480e209a102798fd7cc27630ecd1" prot="public" virt="non-virtual"><scope>castor::CpuInformations::CpuInformationsInternal</scope><name>m_isIntel</name></member>
+      <member refid="d0/deb/a09375_1a2bf8ef5247da7b27be49e414aae496dc" prot="public" virt="non-virtual"><scope>castor::CpuInformations::CpuInformationsInternal</scope><name>m_model</name></member>
+      <member refid="d0/deb/a09375_1ad3c1aed35ef129400100da59a7bec3eb" prot="public" virt="non-virtual"><scope>castor::CpuInformations::CpuInformationsInternal</scope><name>m_vendor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

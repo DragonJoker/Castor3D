@@ -1,0 +1,35 @@
+<map id="castor3d::SceneRenderNodes::NodeData" name="castor3d::SceneRenderNodes::NodeData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1879,211,2073,251"/>
+<area shape="rect" id="Node000002" href="$df/d6c/a04863.html" title=" " alt="" coords="1649,219,1759,244"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1773,229,1878,229,1878,234,1773,234"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="581,285,773,311"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="787,294,1091,284,1276,274,1461,261,1648,237,1649,243,1462,266,1276,280,1091,289,787,299"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="5,208,188,233"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="202,232,581,283,581,288,201,237"/>
+<area shape="rect" id="Node000012" href="$d6/da8/a08227.html" title=" " alt="" coords="369,93,557,133"/>
+<area shape="poly" id="edge13_Node000012_Node000004" title=" " alt="" coords="153,202,394,130,395,135,155,207"/>
+<area shape="rect" id="Node000005" href="$dc/d79/a08267.html" title=" " alt="" coords="1243,211,1461,251"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="1475,229,1648,229,1648,234,1475,234"/>
+<area shape="rect" id="Node000006" href="$da/d36/a08315.html" title=" " alt="" coords="392,183,535,208"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="548,200,798,218,1004,229,1243,230,1242,235,1004,234,797,223,548,205"/>
+<area shape="rect" id="Node000007" href="$dc/d79/a08267.html" title="Basic signal class." alt="" coords="797,183,980,208"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="548,193,797,193,797,198,548,198"/>
+<area shape="rect" id="Node000014" href="$dc/d79/a08267.html" title=" " alt="" coords="1265,113,1439,153"/>
+<area shape="poly" id="edge16_Node000014_Node000006" title=" " alt="" coords="548,178,581,174,772,157,962,144,1264,132,1265,137,962,150,772,162,582,179,549,184"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="989,207,1004,209,1243,225,1242,230,1004,214,989,212"/>
+<area shape="poly" id="edge17_Node000014_Node000007" title=" " alt="" coords="993,188,1102,179,1218,163,1279,150,1280,155,1219,169,1103,184,994,193"/>
+<area shape="rect" id="Node000008" href="$d4/dc4/a07255.html" title=" " alt="" coords="1631,87,1777,112"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="1745,116,1935,209,1933,214,1743,121"/>
+<area shape="rect" id="Node000009" href="$d2/d7a/a03115.html" title=" " alt="" coords="1314,63,1390,88"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="1404,76,1631,92,1630,97,1403,81"/>
+<area shape="rect" id="Node000010" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="797,5,980,31"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="994,26,1219,53,1314,67,1313,72,1218,58,993,31"/>
+<area shape="rect" id="Node000011" href="$d2/d7a/a03115.html" title="Animable public interface." alt="" coords="813,55,964,95"/>
+<area shape="poly" id="edge11_Node000009_Node000011" title=" " alt="" coords="978,73,1314,73,1314,78,978,78"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="571,101,813,79,813,85,571,106"/>
+<area shape="rect" id="Node000013" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="1299,13,1405,39"/>
+<area shape="poly" id="edge14_Node000008_Node000013" title=" " alt="" coords="1420,33,1594,66,1662,84,1660,89,1593,71,1419,39"/>
+<area shape="poly" id="edge15_Node000008_Node000014" title=" " alt="" coords="1453,122,1593,109,1630,105,1631,110,1594,114,1453,127"/>
+<area shape="rect" id="Node000015" href="$df/d83/a07127.html" title=" " alt="" coords="1617,268,1791,293"/>
+<area shape="poly" id="edge18_Node000001_Node000015" title=" " alt="" coords="1788,263,1878,246,1879,252,1788,268"/>
+</map>

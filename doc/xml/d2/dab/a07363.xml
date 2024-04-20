@@ -1,0 +1,260 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/dab/a07363" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ShadowBuffer</compoundname>
+    <includes local="no">ShadowBuffer.hpp</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d2/dab/a07363_1a5cef387cb83e3d474adea7b1d8f222fa" prot="public" static="no">
+        <type><ref refid="d4/dcc/a08151" kindref="compound">castor::ArrayView</ref>&lt; <ref refid="d1/d4b/a07031" kindref="compound">AllShadowData</ref> &gt;</type>
+        <definition>using castor3d::ShadowBuffer::ShadowsData =  castor::ArrayView&lt; AllShadowData &gt;</definition>
+        <argsstring></argsstring>
+        <name>ShadowsData</name>
+        <qualifiedname>castor3d::ShadowBuffer::ShadowsData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp" line="22" column="1" bodyfile="Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/dab/a07363_1a33b4ad3b9583907d7b35d60014fd9a8d" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::ShadowBuffer::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::ShadowBuffer::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp" line="88" column="21" bodyfile="Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dab/a07363_1a02bd84633a66f2257e1cdc83a1e657b4" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d63/a03459" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d1/d4b/a07031" kindref="compound">AllShadowData</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; AllShadowData &gt; castor3d::ShadowBuffer::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor3d::ShadowBuffer::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp" line="89" column="22" bodyfile="Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/dab/a07363_1aea297b80be64a91965b32521dc95d106" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShadowBuffer::ShadowBuffer</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>ShadowBuffer</name>
+        <qualifiedname>castor3d::ShadowBuffer::ShadowBuffer</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le device GPU. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp" line="33" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dab/a07363_1a01786a5ec34912d49e21c3a4be7e2d7b" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShadowBuffer::~ShadowBuffer</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~ShadowBuffer</name>
+        <qualifiedname>castor3d::ShadowBuffer::~ShadowBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp" line="34" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dab/a07363_1aa4b8fefb4b3b817d8c67e86b51a59de9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkDescriptorSetLayoutBinding</type>
+        <definition>C3D_API VkDescriptorSetLayoutBinding castor3d::ShadowBuffer::createLayoutBinding</definition>
+        <argsstring>(uint32_t binding, VkShaderStageFlags stages=(VK_SHADER_STAGE_FRAGMENT_BIT|VK_SHADER_STAGE_GEOMETRY_BIT|VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT|VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT|VK_SHADER_STAGE_VERTEX_BIT)) const</argsstring>
+        <name>createLayoutBinding</name>
+        <qualifiedname>castor3d::ShadowBuffer::createLayoutBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>stages</declname>
+          <defval>(VK_SHADER_STAGE_FRAGMENT_BIT|VK_SHADER_STAGE_GEOMETRY_BIT|VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT|VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT|VK_SHADER_STAGE_VERTEX_BIT)</defval>
+        </param>
+        <briefdescription>
+<para>Crée une attache de layout de set de descripteurs. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp" line="41" column="38"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dab/a07363_1ad94c3b3bdbe01e66be265f0aef375947" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ShadowBuffer::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t binding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::ShadowBuffer::createPassBinding</qualifiedname>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Crée une attache de frame pass. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp" line="53" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dab/a07363_1a9aaad710e50b2cee94e120faaae49590" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::WriteDescriptorSet</type>
+        <definition>C3D_API ashes::WriteDescriptorSet castor3d::ShadowBuffer::getBinding</definition>
+        <argsstring>(uint32_t binding) const</argsstring>
+        <name>getBinding</name>
+        <qualifiedname>castor3d::ShadowBuffer::getBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Crée le descriptor write pour ce tampon. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp" line="60" column="35"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dab/a07363_1a5d1a1e9fc28276d5cc43675542bad285" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ShadowBuffer::addBinding</definition>
+        <argsstring>(ashes::WriteDescriptorSetArray &amp;descriptorWrites, uint32_t &amp;binding) const</argsstring>
+        <name>addBinding</name>
+        <qualifiedname>castor3d::ShadowBuffer::addBinding</qualifiedname>
+        <param>
+          <type>ashes::WriteDescriptorSetArray &amp;</type>
+          <declname>descriptorWrites</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Crée le descriptor write pour ce tampon. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp" line="67" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dab/a07363_1a5622eaede6328bc26f9496f1b84de836" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ShadowBuffer::createBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;binding) const</argsstring>
+        <name>createBinding</name>
+        <qualifiedname>castor3d::ShadowBuffer::createBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Crée une attache de set de descripteurs au point donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">descriptorSet</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le set de descripteurs recevant l&apos;attache. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">binding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;attache de layout de set de descripteurs. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp" line="79" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dab/a07363_1a10d50915850982b7f11a2eefc63166fe" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::ShadowBuffer::getData</definition>
+        <argsstring>()</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::ShadowBuffer::getData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp" line="82" column="7" bodyfile="Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp" bodystart="82" bodyend="85"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp" line="19" column="1" bodyfile="Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp" bodystart="20" bodyend="90"/>
+    <listofallmembers>
+      <member refid="d2/dab/a07363_1a5d1a1e9fc28276d5cc43675542bad285" prot="public" virt="non-virtual"><scope>castor3d::ShadowBuffer</scope><name>addBinding</name></member>
+      <member refid="d2/dab/a07363_1a5622eaede6328bc26f9496f1b84de836" prot="public" virt="non-virtual"><scope>castor3d::ShadowBuffer</scope><name>createBinding</name></member>
+      <member refid="d2/dab/a07363_1aa4b8fefb4b3b817d8c67e86b51a59de9" prot="public" virt="non-virtual"><scope>castor3d::ShadowBuffer</scope><name>createLayoutBinding</name></member>
+      <member refid="d2/dab/a07363_1ad94c3b3bdbe01e66be265f0aef375947" prot="public" virt="non-virtual"><scope>castor3d::ShadowBuffer</scope><name>createPassBinding</name></member>
+      <member refid="d2/dab/a07363_1a9aaad710e50b2cee94e120faaae49590" prot="public" virt="non-virtual"><scope>castor3d::ShadowBuffer</scope><name>getBinding</name></member>
+      <member refid="d2/dab/a07363_1a10d50915850982b7f11a2eefc63166fe" prot="public" virt="non-virtual"><scope>castor3d::ShadowBuffer</scope><name>getData</name></member>
+      <member refid="d2/dab/a07363_1a02bd84633a66f2257e1cdc83a1e657b4" prot="private" virt="non-virtual"><scope>castor3d::ShadowBuffer</scope><name>m_buffer</name></member>
+      <member refid="d2/dab/a07363_1a33b4ad3b9583907d7b35d60014fd9a8d" prot="private" virt="non-virtual"><scope>castor3d::ShadowBuffer</scope><name>m_device</name></member>
+      <member refid="d2/dab/a07363_1aea297b80be64a91965b32521dc95d106" prot="public" virt="non-virtual"><scope>castor3d::ShadowBuffer</scope><name>ShadowBuffer</name></member>
+      <member refid="d2/dab/a07363_1a5cef387cb83e3d474adea7b1d8f222fa" prot="public" virt="non-virtual"><scope>castor3d::ShadowBuffer</scope><name>ShadowsData</name></member>
+      <member refid="d2/dab/a07363_1a01786a5ec34912d49e21c3a4be7e2d7b" prot="public" virt="non-virtual"><scope>castor3d::ShadowBuffer</scope><name>~ShadowBuffer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/de5/a08379" kind="struct" language="C++" prot="public">
+    <compoundname>castor::BlockContext</compoundname>
+    <includes local="no">FileParserContext.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/de5/a08379_1a1a1ceed9e876249992981eb95b4f7c85" prot="public" static="no" mutable="no">
+        <type>void *</type>
+        <definition>void* castor::BlockContext::context</definition>
+        <argsstring></argsstring>
+        <name>context</name>
+        <qualifiedname>castor::BlockContext::context</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserContext.hpp" line="67" column="7" bodyfile="CastorUtils/FileParser/FileParserContext.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de5/a08379_1a2e1158c020966bc54b50566829295e61" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a27a5fadabd88829c1fb75daab222a523" kindref="member">ContextDeleterPtr</ref></type>
+        <definition>ContextDeleterPtr castor::BlockContext::dtor</definition>
+        <argsstring></argsstring>
+        <name>dtor</name>
+        <qualifiedname>castor::BlockContext::dtor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserContext.hpp" line="68" column="19" bodyfile="CastorUtils/FileParser/FileParserContext.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/de5/a08379_1a1b7873fbecb99b73f0cef71c7546e621" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::BlockContext::BlockContext</definition>
+        <argsstring>(BlockContext const &amp;rhs)=delete</argsstring>
+        <name>BlockContext</name>
+        <qualifiedname>castor::BlockContext::BlockContext</qualifiedname>
+        <param>
+          <type><ref refid="d5/de5/a08379" kindref="compound">BlockContext</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserContext.hpp" line="47" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de5/a08379_1ac700074afa7c0bcd5aa4efe5ddc67d67" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d5/de5/a08379" kindref="compound">BlockContext</ref> &amp;</type>
+        <definition>CU_API BlockContext &amp; castor::BlockContext::operator=</definition>
+        <argsstring>(BlockContext const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::BlockContext::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d5/de5/a08379" kindref="compound">BlockContext</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserContext.hpp" line="48" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de5/a08379_1a503d5faeb2e27e66f4aa7de3645c587d" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::BlockContext::BlockContext</definition>
+        <argsstring>(BlockContext &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>BlockContext</name>
+        <qualifiedname>castor::BlockContext::BlockContext</qualifiedname>
+        <param>
+          <type><ref refid="d5/de5/a08379" kindref="compound">BlockContext</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserContext.hpp" line="49" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de5/a08379_1aaf6a8c66bb081fb9762b9aea96c587ed" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d5/de5/a08379" kindref="compound">BlockContext</ref> &amp;</type>
+        <definition>CU_API BlockContext &amp; castor::BlockContext::operator=</definition>
+        <argsstring>(BlockContext &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::BlockContext::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d5/de5/a08379" kindref="compound">BlockContext</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserContext.hpp" line="50" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de5/a08379_1a2ad2cf5ad7be4501f573342548e11a12" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::BlockContext::BlockContext</definition>
+        <argsstring>(void *pcontext, ContextDeleterPtr pdtor)</argsstring>
+        <name>BlockContext</name>
+        <qualifiedname>castor::BlockContext::BlockContext</qualifiedname>
+        <param>
+          <type>void *</type>
+          <declname>pcontext</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a27a5fadabd88829c1fb75daab222a523" kindref="member">ContextDeleterPtr</ref></type>
+          <declname>pdtor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserContext.hpp" line="52" column="1" bodyfile="CastorUtils/FileParser/FileParserContext.hpp" bodystart="52" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de5/a08379_1a9568075665f422185da6028f27d91136" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::BlockContext::~BlockContext</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~BlockContext</name>
+        <qualifiedname>castor::BlockContext::~BlockContext</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserContext.hpp" line="59" column="1" bodyfile="CastorUtils/FileParser/FileParserContext.hpp" bodystart="59" bodyend="65"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/FileParser/FileParserContext.hpp" line="45" column="1" bodyfile="CastorUtils/FileParser/FileParserContext.hpp" bodystart="46" bodyend="69"/>
+    <listofallmembers>
+      <member refid="d5/de5/a08379_1a1b7873fbecb99b73f0cef71c7546e621" prot="public" virt="non-virtual"><scope>castor::BlockContext</scope><name>BlockContext</name></member>
+      <member refid="d5/de5/a08379_1a503d5faeb2e27e66f4aa7de3645c587d" prot="public" virt="non-virtual"><scope>castor::BlockContext</scope><name>BlockContext</name></member>
+      <member refid="d5/de5/a08379_1a2ad2cf5ad7be4501f573342548e11a12" prot="public" virt="non-virtual"><scope>castor::BlockContext</scope><name>BlockContext</name></member>
+      <member refid="d5/de5/a08379_1a1a1ceed9e876249992981eb95b4f7c85" prot="public" virt="non-virtual"><scope>castor::BlockContext</scope><name>context</name></member>
+      <member refid="d5/de5/a08379_1a2e1158c020966bc54b50566829295e61" prot="public" virt="non-virtual"><scope>castor::BlockContext</scope><name>dtor</name></member>
+      <member refid="d5/de5/a08379_1ac700074afa7c0bcd5aa4efe5ddc67d67" prot="public" virt="non-virtual"><scope>castor::BlockContext</scope><name>operator=</name></member>
+      <member refid="d5/de5/a08379_1aaf6a8c66bb081fb9762b9aea96c587ed" prot="public" virt="non-virtual"><scope>castor::BlockContext</scope><name>operator=</name></member>
+      <member refid="d5/de5/a08379_1a9568075665f422185da6028f27d91136" prot="public" virt="non-virtual"><scope>castor::BlockContext</scope><name>~BlockContext</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

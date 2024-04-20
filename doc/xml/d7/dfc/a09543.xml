@@ -1,0 +1,241 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/dfc/a09543" kind="struct" language="C++" prot="public">
+    <compoundname>castor::format::BasicPrefixBuffer</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::basic_streambuf&lt; char_type, traits &gt;</basecompoundref>
+    <basecompoundref prot="public" virt="non-virtual">prefix_type</basecompoundref>
+    <includes local="no">StreamPrefixBuffer.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename prefix_type</type>
+      </param>
+      <param>
+        <type>typename char_type</type>
+      </param>
+      <param>
+        <type>typename traits</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d7/dfc/a09543_1ae88f560827222ff1a9e8c236823e876d" prot="public" static="no">
+        <type>typename traits::int_type</type>
+        <definition>using castor::format::BasicPrefixBuffer&lt; prefix_type, char_type, traits &gt;::int_type =  typename traits::int_type</definition>
+        <argsstring></argsstring>
+        <name>int_type</name>
+        <qualifiedname>castor::format::BasicPrefixBuffer::int_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBuffer.hpp" line="24" column="1" bodyfile="CastorUtils/Stream/StreamPrefixBuffer.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d7/dfc/a09543_1abf0214d8a1efa5625b7763975a2c4776" prot="public" static="no">
+        <type>typename traits::pos_type</type>
+        <definition>using castor::format::BasicPrefixBuffer&lt; prefix_type, char_type, traits &gt;::pos_type =  typename traits::pos_type</definition>
+        <argsstring></argsstring>
+        <name>pos_type</name>
+        <qualifiedname>castor::format::BasicPrefixBuffer::pos_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBuffer.hpp" line="25" column="1" bodyfile="CastorUtils/Stream/StreamPrefixBuffer.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d7/dfc/a09543_1a2872539344cab9e9e02283531f597365" prot="public" static="no">
+        <type>typename traits::off_type</type>
+        <definition>using castor::format::BasicPrefixBuffer&lt; prefix_type, char_type, traits &gt;::off_type =  typename traits::off_type</definition>
+        <argsstring></argsstring>
+        <name>off_type</name>
+        <qualifiedname>castor::format::BasicPrefixBuffer::off_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBuffer.hpp" line="26" column="1" bodyfile="CastorUtils/Stream/StreamPrefixBuffer.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/dfc/a09543_1a8791685ce7b33dfff0a9d8c85bbd20a7" prot="private" static="no" mutable="no">
+        <type>std::basic_streambuf&lt; char_type, traits &gt; *</type>
+        <definition>std::basic_streambuf&lt; char_type, traits &gt;* castor::format::BasicPrefixBuffer&lt; prefix_type, char_type, traits &gt;::m_sbuf</definition>
+        <argsstring></argsstring>
+        <name>m_sbuf</name>
+        <qualifiedname>castor::format::BasicPrefixBuffer::m_sbuf</qualifiedname>
+        <briefdescription>
+<para>Le tampon interne. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBuffer.hpp" line="87" column="23" bodyfile="CastorUtils/Stream/StreamPrefixBuffer.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dfc/a09543_1a53fd2df20a2d7398dde446f0fd6b995c" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor::format::BasicPrefixBuffer&lt; prefix_type, char_type, traits &gt;::m_set</definition>
+        <argsstring></argsstring>
+        <name>m_set</name>
+        <qualifiedname>castor::format::BasicPrefixBuffer::m_set</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>Dit si le flux doit être préfixé. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBuffer.hpp" line="89" column="6" bodyfile="CastorUtils/Stream/StreamPrefixBuffer.hpp" bodystart="89" bodyend="89"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/dfc/a09543_1a72cbb14f85d5be858ea50cecff680226" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::format::BasicPrefixBuffer&lt; prefix_type, char_type, traits &gt;::BasicPrefixBuffer</definition>
+        <argsstring>(std::basic_streambuf&lt; char_type, traits &gt; *sbuf)</argsstring>
+        <name>BasicPrefixBuffer</name>
+        <qualifiedname>castor::format::BasicPrefixBuffer::BasicPrefixBuffer</qualifiedname>
+        <param>
+          <type>std::basic_streambuf&lt; char_type, traits &gt; *</type>
+          <declname>sbuf</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBuffer.hpp" line="35" column="10" bodyfile="CastorUtils/Stream/StreamPrefixBuffer.hpp" bodystart="35" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dfc/a09543_1a834d8bd01b2837275a557738ebce012d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::streambuf *</type>
+        <definition>std::streambuf * castor::format::BasicPrefixBuffer&lt; prefix_type, char_type, traits &gt;::sbuf</definition>
+        <argsstring>() const</argsstring>
+        <name>sbuf</name>
+        <qualifiedname>castor::format::BasicPrefixBuffer::sbuf</qualifiedname>
+        <briefdescription>
+<para>Récupère le tampon du flux. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le tampon </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBuffer.hpp" line="48" column="17" bodyfile="CastorUtils/Stream/StreamPrefixBuffer.hpp" bodystart="48" bodyend="51"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d7/dfc/a09543_1a1aac8a5a63d668fca2b63507acd689b3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::format::BasicPrefixBuffer&lt; prefix_type, char_type, traits &gt;::BasicPrefixBuffer</definition>
+        <argsstring>(const BasicPrefixBuffer&lt; prefix_type, char_type, traits &gt; &amp;)=delete</argsstring>
+        <name>BasicPrefixBuffer</name>
+        <qualifiedname>castor::format::BasicPrefixBuffer::BasicPrefixBuffer</qualifiedname>
+        <param>
+          <type>const <ref refid="d7/dfc/a09543" kindref="compound">BasicPrefixBuffer</ref>&lt; prefix_type, char_type, traits &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBuffer.hpp" line="54" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dfc/a09543_1ad17860c03ee7d9031013c126b7c22ab0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d7/dfc/a09543" kindref="compound">BasicPrefixBuffer</ref>&lt; prefix_type, char_type, traits &gt; &amp;</type>
+        <definition>BasicPrefixBuffer&lt; prefix_type, char_type, traits &gt; &amp; castor::format::BasicPrefixBuffer&lt; prefix_type, char_type, traits &gt;::operator=</definition>
+        <argsstring>(const BasicPrefixBuffer&lt; prefix_type, char_type, traits &gt; &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::format::BasicPrefixBuffer::operator=</qualifiedname>
+        <param>
+          <type>const <ref refid="d7/dfc/a09543" kindref="compound">BasicPrefixBuffer</ref>&lt; prefix_type, char_type, traits &gt; &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBuffer.hpp" line="55" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/dfc/a09543_1a9928f59bb483e54000572491f25bf0e4" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d7/dfc/a09543_1ae88f560827222ff1a9e8c236823e876d" kindref="member">int_type</ref></type>
+        <definition>virtual int_type castor::format::BasicPrefixBuffer&lt; prefix_type, char_type, traits &gt;::overflow</definition>
+        <argsstring>(int_type c=traits::eof())</argsstring>
+        <name>overflow</name>
+        <qualifiedname>castor::format::BasicPrefixBuffer::overflow</qualifiedname>
+        <param>
+          <type><ref refid="d7/dfc/a09543_1ae88f560827222ff1a9e8c236823e876d" kindref="member">int_type</ref></type>
+          <declname>c</declname>
+          <defval>traits::eof()</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBuffer.hpp" line="58" column="18" bodyfile="CastorUtils/Stream/StreamPrefixBuffer.hpp" bodystart="58" bodyend="83"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Tampon de flux utilisé pour indenter les lignes. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::format::BasicPrefixBuffer&lt; prefix_type, char_type, traits &gt;</label>
+        <link refid="d7/dfc/a09543"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>prefix_type</label>
+      </node>
+      <node id="2">
+        <label>std::basic_streambuf&lt; char_type, traits &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::format::BasicPrefixBuffer&lt; prefix_type, char_type, traits &gt;</label>
+        <link refid="d7/dfc/a09543"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>prefix_type</label>
+      </node>
+      <node id="2">
+        <label>std::basic_streambuf&lt; char_type, traits &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Stream/StreamPrefixBuffer.hpp" line="19" column="1" bodyfile="CastorUtils/Stream/StreamPrefixBuffer.hpp" bodystart="22" bodyend="90"/>
+    <listofallmembers>
+      <member refid="d7/dfc/a09543_1a72cbb14f85d5be858ea50cecff680226" prot="public" virt="non-virtual"><scope>castor::format::BasicPrefixBuffer</scope><name>BasicPrefixBuffer</name></member>
+      <member refid="d7/dfc/a09543_1a1aac8a5a63d668fca2b63507acd689b3" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBuffer</scope><name>BasicPrefixBuffer</name></member>
+      <member refid="d7/dfc/a09543_1ae88f560827222ff1a9e8c236823e876d" prot="public" virt="non-virtual"><scope>castor::format::BasicPrefixBuffer</scope><name>int_type</name></member>
+      <member refid="d7/dfc/a09543_1a8791685ce7b33dfff0a9d8c85bbd20a7" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBuffer</scope><name>m_sbuf</name></member>
+      <member refid="d7/dfc/a09543_1a53fd2df20a2d7398dde446f0fd6b995c" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBuffer</scope><name>m_set</name></member>
+      <member refid="d7/dfc/a09543_1a2872539344cab9e9e02283531f597365" prot="public" virt="non-virtual"><scope>castor::format::BasicPrefixBuffer</scope><name>off_type</name></member>
+      <member refid="d7/dfc/a09543_1ad17860c03ee7d9031013c126b7c22ab0" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBuffer</scope><name>operator=</name></member>
+      <member refid="d7/dfc/a09543_1a9928f59bb483e54000572491f25bf0e4" prot="private" virt="virtual"><scope>castor::format::BasicPrefixBuffer</scope><name>overflow</name></member>
+      <member refid="d7/dfc/a09543_1abf0214d8a1efa5625b7763975a2c4776" prot="public" virt="non-virtual"><scope>castor::format::BasicPrefixBuffer</scope><name>pos_type</name></member>
+      <member refid="d7/dfc/a09543_1a834d8bd01b2837275a557738ebce012d" prot="public" virt="non-virtual"><scope>castor::format::BasicPrefixBuffer</scope><name>sbuf</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

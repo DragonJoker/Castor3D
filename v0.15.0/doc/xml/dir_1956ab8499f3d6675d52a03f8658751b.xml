@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dir_1956ab8499f3d6675d52a03f8658751b" kind="dir">
+    <compoundname>Material/Pass</compoundname>
+    <innerdir refid="dir_eccd3726f38e033a60ddecbeceab6fea">Material/Pass/Component</innerdir>
+    <innerdir refid="dir_e5ecbe85d23e123dae10724f109a9f87">Material/Pass/Shaders</innerdir>
+    <innerfile refid="d4/dc4/a00617">Pass.hpp</innerfile>
+    <innerfile refid="dc/d4d/a00620">PassFactory.hpp</innerfile>
+    <innerfile refid="df/d6f/a00623">PassModule.hpp</innerfile>
+    <innerfile refid="d6/dfa/a00626">PassVisitor.hpp</innerfile>
+    <innerfile refid="da/dd1/a00629">PbrPass.hpp</innerfile>
+    <innerfile refid="d4/d2a/a00632">PhongPass.hpp</innerfile>
+    <innerfile refid="db/d3a/a00641">SubsurfaceScattering.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/"/>
+  </compounddef>
+</doxygen>

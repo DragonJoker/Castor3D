@@ -1,0 +1,331 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/df4/a08275" kind="class" language="C++" prot="public">
+    <compoundname>castor::TSConnectionT</compoundname>
+    <basecompoundref refid="da/d36/a08315" prot="public" virt="non-virtual">castor::NonCopyable</basecompoundref>
+    <includes local="no">ThreadSafeSignal.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename <ref refid="dc/d79/a08267" kindref="compound">SignalT</ref></type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d2/df4/a08275_1ad58e852cb19a70f5a189e1872c5cb716" prot="private" static="no">
+        <type><ref refid="dc/d79/a08267" kindref="compound">SignalT</ref></type>
+        <definition>using castor::TSConnectionT&lt; SignalT &gt;::my_signal =  SignalT</definition>
+        <argsstring></argsstring>
+        <name>my_signal</name>
+        <qualifiedname>castor::TSConnectionT::my_signal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ThreadSafeSignal.hpp" line="28" column="1" bodyfile="CastorUtils/Design/ThreadSafeSignal.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/df4/a08275_1af709642e7d76934ed1f3441899253f2f" prot="private" static="no">
+        <type><ref refid="dc/d79/a08267" kindref="compound">my_signal</ref> *</type>
+        <definition>using castor::TSConnectionT&lt; SignalT &gt;::my_signal_ptr =  my_signal *</definition>
+        <argsstring></argsstring>
+        <name>my_signal_ptr</name>
+        <qualifiedname>castor::TSConnectionT::my_signal_ptr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ThreadSafeSignal.hpp" line="29" column="1" bodyfile="CastorUtils/Design/ThreadSafeSignal.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/df4/a08275_1a9ac3fe835f3380ba5d467ae148ddabc1" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::TSConnectionT&lt; SignalT &gt;::m_connection</definition>
+        <argsstring></argsstring>
+        <name>m_connection</name>
+        <qualifiedname>castor::TSConnectionT::m_connection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>L&apos;identifiant de la connection. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ThreadSafeSignal.hpp" line="229" column="10" bodyfile="CastorUtils/Design/ThreadSafeSignal.hpp" bodystart="229" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/df4/a08275_1a0bc8be01659acbaef105a2bbaf3cf28c" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d79/a08267" kindref="compound">my_signal_ptr</ref></type>
+        <definition>my_signal_ptr castor::TSConnectionT&lt; SignalT &gt;::m_signal</definition>
+        <argsstring></argsstring>
+        <name>m_signal</name>
+        <qualifiedname>castor::TSConnectionT::m_signal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le signal. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ThreadSafeSignal.hpp" line="232" column="15" bodyfile="CastorUtils/Design/ThreadSafeSignal.hpp" bodystart="232" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/df4/a08275_1a1f741e23d4704c853907436e1fb37d22" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>String castor::TSConnectionT&lt; SignalT &gt;::m_stack</definition>
+        <argsstring></argsstring>
+        <name>m_stack</name>
+        <qualifiedname>castor::TSConnectionT::m_stack</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La pile d&apos;appels de la création. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ThreadSafeSignal.hpp" line="238" column="8" bodyfile="CastorUtils/Design/ThreadSafeSignal.hpp" bodystart="238" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/df4/a08275_1a1229c7056b994390f6c9178f0e3abbd8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::TSConnectionT&lt; SignalT &gt;::TSConnectionT</definition>
+        <argsstring>()</argsstring>
+        <name>TSConnectionT</name>
+        <qualifiedname>castor::TSConnectionT::TSConnectionT</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ThreadSafeSignal.hpp" line="38" column="1" bodyfile="CastorUtils/Design/ThreadSafeSignal.hpp" bodystart="38" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/df4/a08275_1a5136cd1e55e53e66d851b0db40dcdacd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::TSConnectionT&lt; SignalT &gt;::TSConnectionT</definition>
+        <argsstring>(uint32_t connection, my_signal &amp;signal)</argsstring>
+        <name>TSConnectionT</name>
+        <qualifiedname>castor::TSConnectionT::TSConnectionT</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>connection</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d79/a08267" kindref="compound">my_signal</ref> &amp;</type>
+          <declname>signal</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">connection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La connexion au signal. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">signal</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le signal. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ThreadSafeSignal.hpp" line="53" column="1" bodyfile="CastorUtils/Design/ThreadSafeSignal.hpp" bodystart="53" bodyend="66"/>
+        <references refid="d2/dd2/a02279_1af41ea5b34edb8c4103f57937867ea4d6" compoundref="d5/d12/a01799" startline="197" endline="200">castor::makeStringStream</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/df4/a08275_1ac50cb6eb4f88058d8c08dba32d38de4a" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::TSConnectionT&lt; SignalT &gt;::TSConnectionT</definition>
+        <argsstring>(TSConnectionT&lt; my_signal &gt; &amp;&amp;rhs) noexcept</argsstring>
+        <name>TSConnectionT</name>
+        <qualifiedname>castor::TSConnectionT::TSConnectionT</qualifiedname>
+        <param>
+          <type><ref refid="d2/df4/a08275" kindref="compound">TSConnectionT</ref>&lt; <ref refid="dc/d79/a08267" kindref="compound">my_signal</ref> &gt; &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à déplacer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ThreadSafeSignal.hpp" line="75" column="1" bodyfile="CastorUtils/Design/ThreadSafeSignal.hpp" bodystart="75" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/df4/a08275_1a9cb04767a3bdceccdf93f65339d6294c" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/df4/a08275" kindref="compound">TSConnectionT</ref> &amp;</type>
+        <definition>TSConnectionT &amp; castor::TSConnectionT&lt; SignalT &gt;::operator=</definition>
+        <argsstring>(TSConnectionT&lt; my_signal &gt; &amp;&amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::TSConnectionT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d2/df4/a08275" kindref="compound">TSConnectionT</ref>&lt; <ref refid="dc/d79/a08267" kindref="compound">my_signal</ref> &gt; &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à déplacer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ThreadSafeSignal.hpp" line="99" column="16" bodyfile="CastorUtils/Design/ThreadSafeSignal.hpp" bodystart="99" bodyend="156"/>
+        <references refid="d2/df4/a08275_1a66e9e50876cb8511c633554ba32a7224" compoundref="de/da9/a01934" startline="183" endline="197">castor::TSConnectionT&lt; SignalT &gt;::disconnect</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/df4/a08275_1aa917d6fb0b5a2615294c594e08848f9a" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::TSConnectionT&lt; SignalT &gt;::~TSConnectionT</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~TSConnectionT</name>
+        <qualifiedname>castor::TSConnectionT::~TSConnectionT</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Déconnecte la fonction du signal. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ThreadSafeSignal.hpp" line="165" column="1" bodyfile="CastorUtils/Design/ThreadSafeSignal.hpp" bodystart="165" bodyend="176"/>
+        <references refid="d2/df4/a08275_1a66e9e50876cb8511c633554ba32a7224" compoundref="de/da9/a01934" startline="183" endline="197">castor::TSConnectionT&lt; SignalT &gt;::disconnect</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/df4/a08275_1a66e9e50876cb8511c633554ba32a7224" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::TSConnectionT&lt; SignalT &gt;::disconnect</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>disconnect</name>
+        <qualifiedname>castor::TSConnectionT::disconnect</qualifiedname>
+        <briefdescription>
+<para>Déconnecte la fonction du signal. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ThreadSafeSignal.hpp" line="183" column="6" bodyfile="CastorUtils/Design/ThreadSafeSignal.hpp" bodystart="183" bodyend="197"/>
+        <referencedby refid="d2/df4/a08275_1a9cb04767a3bdceccdf93f65339d6294c" compoundref="de/da9/a01934" startline="99" endline="156">castor::TSConnectionT&lt; SignalT &gt;::operator=</referencedby>
+        <referencedby refid="d2/df4/a08275_1aa917d6fb0b5a2615294c594e08848f9a" compoundref="de/da9/a01934" startline="165" endline="176">castor::TSConnectionT&lt; SignalT &gt;::~TSConnectionT</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/df4/a08275_1a8b101487ebd96f9f6a0ef6eb20f9300a" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::TSConnectionT&lt; SignalT &gt;::operator bool</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>operator bool</name>
+        <qualifiedname>castor::TSConnectionT::operator bool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ThreadSafeSignal.hpp" line="199" column="1" bodyfile="CastorUtils/Design/ThreadSafeSignal.hpp" bodystart="199" bodyend="202"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/df4/a08275_1aed7581942341765b55344643d1298667" prot="private" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::TSConnectionT&lt; SignalT &gt;::swap</definition>
+        <argsstring>(TSConnectionT &amp;lhs, TSConnectionT &amp;rhs) const noexcept</argsstring>
+        <name>swap</name>
+        <qualifiedname>castor::TSConnectionT::swap</qualifiedname>
+        <param>
+          <type><ref refid="d2/df4/a08275" kindref="compound">TSConnectionT</ref> &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df4/a08275" kindref="compound">TSConnectionT</ref> &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Echange deux connexions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ThreadSafeSignal.hpp" line="211" column="6" bodyfile="CastorUtils/Design/ThreadSafeSignal.hpp" bodystart="211" bodyend="224"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Représente une connexion à un signal thread safe. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="1">
+        <label>castor::TSConnectionT&lt; SignalT &gt;</label>
+        <link refid="d2/df4/a08275"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="1">
+        <label>castor::TSConnectionT&lt; SignalT &gt;</label>
+        <link refid="d2/df4/a08275"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Design/ThreadSafeSignal.hpp" line="24" column="1" bodyfile="CastorUtils/Design/ThreadSafeSignal.hpp" bodystart="26" bodyend="241"/>
+    <listofallmembers>
+      <member refid="d2/df4/a08275_1a66e9e50876cb8511c633554ba32a7224" prot="public" virt="non-virtual"><scope>castor::TSConnectionT</scope><name>disconnect</name></member>
+      <member refid="d2/df4/a08275_1a9ac3fe835f3380ba5d467ae148ddabc1" prot="private" virt="non-virtual"><scope>castor::TSConnectionT</scope><name>m_connection</name></member>
+      <member refid="d2/df4/a08275_1a0bc8be01659acbaef105a2bbaf3cf28c" prot="private" virt="non-virtual"><scope>castor::TSConnectionT</scope><name>m_signal</name></member>
+      <member refid="d2/df4/a08275_1a1f741e23d4704c853907436e1fb37d22" prot="private" virt="non-virtual"><scope>castor::TSConnectionT</scope><name>m_stack</name></member>
+      <member refid="d2/df4/a08275_1ad58e852cb19a70f5a189e1872c5cb716" prot="private" virt="non-virtual"><scope>castor::TSConnectionT</scope><name>my_signal</name></member>
+      <member refid="d2/df4/a08275_1af709642e7d76934ed1f3441899253f2f" prot="private" virt="non-virtual"><scope>castor::TSConnectionT</scope><name>my_signal_ptr</name></member>
+      <member refid="da/d36/a08315_1af371ca9e56bb5b114989ad58eebac673" prot="protected" virt="non-virtual"><scope>castor::TSConnectionT</scope><name>NonCopyable</name></member>
+      <member refid="d2/df4/a08275_1a8b101487ebd96f9f6a0ef6eb20f9300a" prot="public" virt="non-virtual"><scope>castor::TSConnectionT</scope><name>operator bool</name></member>
+      <member refid="d2/df4/a08275_1a9cb04767a3bdceccdf93f65339d6294c" prot="public" virt="non-virtual"><scope>castor::TSConnectionT</scope><name>operator=</name></member>
+      <member refid="d2/df4/a08275_1aed7581942341765b55344643d1298667" prot="private" virt="non-virtual"><scope>castor::TSConnectionT</scope><name>swap</name></member>
+      <member refid="d2/df4/a08275_1a1229c7056b994390f6c9178f0e3abbd8" prot="public" virt="non-virtual"><scope>castor::TSConnectionT</scope><name>TSConnectionT</name></member>
+      <member refid="d2/df4/a08275_1a5136cd1e55e53e66d851b0db40dcdacd" prot="public" virt="non-virtual"><scope>castor::TSConnectionT</scope><name>TSConnectionT</name></member>
+      <member refid="d2/df4/a08275_1ac50cb6eb4f88058d8c08dba32d38de4a" prot="public" virt="non-virtual"><scope>castor::TSConnectionT</scope><name>TSConnectionT</name></member>
+      <member refid="da/d36/a08315_1a9eaacdfe711925eea3bb79a74b941684" prot="protected" virt="non-virtual"><scope>castor::TSConnectionT</scope><name>~NonCopyable</name></member>
+      <member refid="d2/df4/a08275_1aa917d6fb0b5a2615294c594e08848f9a" prot="public" virt="non-virtual"><scope>castor::TSConnectionT</scope><name>~TSConnectionT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

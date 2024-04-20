@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d14/a03479" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::GeometryBuffers</compoundname>
+    <includes local="no">GeometryBuffers.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/d14/a03479_1a72565dbc5f6009604abe45e3a8bbf59c" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/d08/a03519" kindref="compound">ObjectBufferOffset::GpuBufferChunk</ref></type>
+        <definition>ObjectBufferOffset::GpuBufferChunk castor3d::GeometryBuffers::indexOffset</definition>
+        <argsstring></argsstring>
+        <name>indexOffset</name>
+        <qualifiedname>castor3d::GeometryBuffers::indexOffset</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GeometryBuffers.hpp" line="25" column="36" bodyfile="Castor3D/Buffer/GeometryBuffers.hpp" bodystart="25" bodyend="25"/>
+        <referencedby refid="dc/d14/a03479_1af7d31a110e640ff07c8c79a19967bd6c" compoundref="db/dd9/a00179" startline="15" endline="24">GeometryBuffers</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d14/a03479_1a7e1abaeead2a3e07f63ad782eaf689c3" prot="public" static="no" mutable="no">
+        <type>ashes::BufferCRefArray</type>
+        <definition>ashes::BufferCRefArray castor3d::GeometryBuffers::buffers</definition>
+        <argsstring></argsstring>
+        <name>buffers</name>
+        <qualifiedname>castor3d::GeometryBuffers::buffers</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GeometryBuffers.hpp" line="26" column="24" bodyfile="Castor3D/Buffer/GeometryBuffers.hpp" bodystart="26" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d14/a03479_1a4cb7922655c13d0fe7221b6021ad7cb2" prot="public" static="no" mutable="no">
+        <type>ashes::UInt64Array</type>
+        <definition>ashes::UInt64Array castor3d::GeometryBuffers::offsets</definition>
+        <argsstring></argsstring>
+        <name>offsets</name>
+        <qualifiedname>castor3d::GeometryBuffers::offsets</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GeometryBuffers.hpp" line="27" column="20" bodyfile="Castor3D/Buffer/GeometryBuffers.hpp" bodystart="27" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d14/a03479_1a583de52184171db53da8256e4bd7a353" prot="public" static="no" mutable="no">
+        <type>ashes::PipelineVertexInputStateCreateInfoCRefArray</type>
+        <definition>ashes::PipelineVertexInputStateCreateInfoCRefArray castor3d::GeometryBuffers::layouts</definition>
+        <argsstring></argsstring>
+        <name>layouts</name>
+        <qualifiedname>castor3d::GeometryBuffers::layouts</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GeometryBuffers.hpp" line="28" column="52" bodyfile="Castor3D/Buffer/GeometryBuffers.hpp" bodystart="28" bodyend="28"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d14/a03479_1a22c3ff8c332867cff92da147d5f32238" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GeometryBuffers::GeometryBuffers</definition>
+        <argsstring>()=default</argsstring>
+        <name>GeometryBuffers</name>
+        <qualifiedname>castor3d::GeometryBuffers::GeometryBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GeometryBuffers.hpp" line="14" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d14/a03479_1af7d31a110e640ff07c8c79a19967bd6c" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::GeometryBuffers::GeometryBuffers</definition>
+        <argsstring>(ObjectBufferOffset::GpuBufferChunk indexOffset, ashes::BufferCRefArray buffers, ashes::UInt64Array offsets, ashes::PipelineVertexInputStateCreateInfoCRefArray layouts) noexcept</argsstring>
+        <name>GeometryBuffers</name>
+        <qualifiedname>castor3d::GeometryBuffers::GeometryBuffers</qualifiedname>
+        <param>
+          <type><ref refid="d0/d08/a03519" kindref="compound">ObjectBufferOffset::GpuBufferChunk</ref></type>
+          <declname>indexOffset</declname>
+        </param>
+        <param>
+          <type>ashes::BufferCRefArray</type>
+          <declname>buffers</declname>
+        </param>
+        <param>
+          <type>ashes::UInt64Array</type>
+          <declname>offsets</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineVertexInputStateCreateInfoCRefArray</type>
+          <declname>layouts</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GeometryBuffers.hpp" line="15" column="1" bodyfile="Castor3D/Buffer/GeometryBuffers.hpp" bodystart="15" bodyend="24"/>
+        <references refid="dc/d14/a03479_1a72565dbc5f6009604abe45e3a8bbf59c" compoundref="db/dd9/a00179" startline="25" endline="25">indexOffset</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::GeometryBuffers</label>
+        <link refid="dc/d14/a03479"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>indexOffset</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::GpuBaseBufferT&lt; AllocatorT &gt;</label>
+        <link refid="db/d47/a03447"/>
+      </node>
+      <node id="4">
+        <label>castor3d::MemChunk</label>
+        <link refid="db/db8/a03471"/>
+      </node>
+      <node id="2">
+        <label>castor3d::ObjectBufferOffset::GpuBufferChunk</label>
+        <link refid="d0/d08/a03519"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Buffer/GeometryBuffers.hpp" line="12" column="1" bodyfile="Castor3D/Buffer/GeometryBuffers.hpp" bodystart="13" bodyend="29"/>
+    <listofallmembers>
+      <member refid="dc/d14/a03479_1a7e1abaeead2a3e07f63ad782eaf689c3" prot="public" virt="non-virtual"><scope>castor3d::GeometryBuffers</scope><name>buffers</name></member>
+      <member refid="dc/d14/a03479_1a22c3ff8c332867cff92da147d5f32238" prot="public" virt="non-virtual"><scope>castor3d::GeometryBuffers</scope><name>GeometryBuffers</name></member>
+      <member refid="dc/d14/a03479_1af7d31a110e640ff07c8c79a19967bd6c" prot="public" virt="non-virtual"><scope>castor3d::GeometryBuffers</scope><name>GeometryBuffers</name></member>
+      <member refid="dc/d14/a03479_1a72565dbc5f6009604abe45e3a8bbf59c" prot="public" virt="non-virtual"><scope>castor3d::GeometryBuffers</scope><name>indexOffset</name></member>
+      <member refid="dc/d14/a03479_1a583de52184171db53da8256e4bd7a353" prot="public" virt="non-virtual"><scope>castor3d::GeometryBuffers</scope><name>layouts</name></member>
+      <member refid="dc/d14/a03479_1a4cb7922655c13d0fe7221b6021ad7cb2" prot="public" virt="non-virtual"><scope>castor3d::GeometryBuffers</scope><name>offsets</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

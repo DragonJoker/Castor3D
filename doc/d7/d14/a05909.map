@@ -1,6 +1,13 @@
-<map id="castor3d::SkyboxBackground" name="castor3d::SkyboxBackground">
-<area shape="rect" id="node1" title=" " alt="" coords="87,152,281,177"/>
-<area shape="rect" id="node2" href="$dc/df8/a05882.html" title=" " alt="" coords="91,79,277,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,31"/>
-<area shape="rect" id="node4" title=" " alt="" coords="216,5,323,31"/>
+<map id="castor3d::ClustersConfig" name="castor3d::ClustersConfig">
+<area shape="rect" id="Node000001" title=" " alt="" coords="813,171,977,197"/>
+<area shape="rect" id="Node000002" href="$d2/d4c/a08211.html" title=" " alt="" coords="388,100,579,140"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="593,132,790,161,830,169,829,174,789,167,592,137"/>
+<area shape="rect" id="Node000003" href="$d2/d4c/a08211.html" title="Templated class that provide std::array style buffer view." alt="" coords="5,164,196,204"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="209,163,220,161,387,133,388,138,220,167,210,168"/>
+<area shape="rect" id="Node000004" href="$d2/d4c/a08211.html" title=" " alt="" coords="388,164,579,204"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="210,181,387,181,387,187,210,187"/>
+<area shape="rect" id="Node000005" href="$d2/d4c/a08211.html" title=" " alt="" coords="388,228,579,268"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="210,200,220,201,388,230,387,235,220,207,209,205"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="593,181,813,181,813,187,593,187"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="592,231,789,201,829,194,830,199,790,207,593,236"/>
 </map>

@@ -1,0 +1,17 @@
+<map id="castor::ResourceCacheBaseT::reportNull" name="castor::ResourceCacheBaseT::reportNull">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,69,193,109"/>
+<area shape="rect" id="Node000002" href="$d8/da3/a08255.html#a846eb5869a3b833ce9200edb493a3463" title=" " alt="" coords="241,5,429,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="173,67,247,46,249,51,175,72"/>
+<area shape="rect" id="Node000003" href="$d9/d93/a09063.html#a7fb14049e4aa52e127cb89e73f63a0a3" title="Logs a warning, from a std::basic_string&lt; CharT &gt;" alt="" coords="258,69,413,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="194,87,244,87,244,92,194,92"/>
+<area shape="rect" id="Node000008" href="$d2/dd2/a02279.html#af41ea5b34edb8c4103f57937867ea4d6" title=" " alt="" coords="248,134,423,159"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="183,107,270,128,268,133,182,112"/>
+<area shape="rect" id="Node000004" href="$d9/d93/a09063.html#af8c57bc4b8bfeb532f32493316e157a1" title="Pushes a message into the queue." alt="" coords="477,69,632,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="413,87,464,87,464,92,413,92"/>
+<area shape="rect" id="Node000005" href="$d9/d93/a09063.html#afa966debfbe3f79d0bea9cf2bc4c7889" title=" " alt="" coords="686,12,841,52"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="627,67,676,53,678,58,629,72"/>
+<area shape="rect" id="Node000006" href="$d2/dd2/a02279.html#a58f3178234ce83e643568e48a0ed6a3f" title=" " alt="" coords="680,77,847,102"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="632,87,667,87,667,92,632,92"/>
+<area shape="rect" id="Node000007" href="$d2/dd2/a02279.html#ab0fb14b20a64ca391cfd363dfdf2ea78" title=" " alt="" coords="713,126,813,151"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="633,105,700,121,699,126,632,110"/>
+</map>

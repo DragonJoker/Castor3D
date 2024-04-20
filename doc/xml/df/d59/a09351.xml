@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d59/a09351" kind="struct" language="C++" prot="public">
+    <compoundname>castor::IsSpeedT&lt; SpeedT&lt; ValueT, Microseconds &gt; &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::true_type</basecompoundref>
+    <includes local="no">Speed.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ValueT</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::IsSpeedT&lt; SpeedT&lt; ValueT, Microseconds &gt; &gt;</label>
+        <link refid="df/d59/a09351"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::true_type</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::IsSpeedT&lt; SpeedT&lt; ValueT, Microseconds &gt; &gt;</label>
+        <link refid="df/d59/a09351"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::true_type</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Math/Speed.hpp" line="236" column="1" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="236" bodyend="236"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

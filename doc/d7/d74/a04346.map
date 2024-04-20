@@ -1,0 +1,14 @@
+<map id="castor3d::TransmittanceComponent" name="castor3d::TransmittanceComponent">
+<area shape="rect" id="Node000001" title=" " alt="" coords="17,464,245,489"/>
+<area shape="rect" id="Node000002" href="$df/dc6/a04087.html" title=" " alt="" coords="5,360,256,415"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,428,133,464,128,464,128,428"/>
+<area shape="rect" id="Node000003" href="$db/db4/a04835.html" title=" " alt="" coords="9,168,185,193"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="101,207,109,282,126,359,121,360,104,283,96,208"/>
+<area shape="rect" id="Node000006" href="$df/dc6/a04087.html" title="Pass component holding base pass data." alt="" coords="119,243,353,283"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="131,198,205,240,202,245,128,203"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title=" " alt="" coords="9,93,185,119"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="100,133,100,168,95,168,95,133"/>
+<area shape="rect" id="Node000005" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="6,5,189,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="100,45,100,93,95,93,95,45"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="212,295,155,362,151,358,208,292"/>
+</map>

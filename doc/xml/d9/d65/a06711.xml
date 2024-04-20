@@ -1,0 +1,521 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/d65/a06711" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ColourGradingConfig</compoundname>
+    <includes local="no">ColourGradingConfig.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d65/a06711_1a5aedacb6386ef11eda14b29d15155e82" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::ColourGradingConfig::whiteBalance</definition>
+        <argsstring></argsstring>
+        <name>whiteBalance</name>
+        <qualifiedname>castor3d::ColourGradingConfig::whiteBalance</qualifiedname>
+        <initializer>{ 1.0f, 1.0f, 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="24" column="17" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="24" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1a5a048b18240615497fe7ae39c7b598a6" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ColourGradingConfig::postExposure</definition>
+        <argsstring></argsstring>
+        <name>postExposure</name>
+        <qualifiedname>castor3d::ColourGradingConfig::postExposure</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="25" column="7" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="25" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1a965c11de48c450c76335f5b4325ac51e" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::ColourGradingConfig::colourFilter</definition>
+        <argsstring></argsstring>
+        <name>colourFilter</name>
+        <qualifiedname>castor3d::ColourGradingConfig::colourFilter</qualifiedname>
+        <initializer>{ 1.0f, 1.0f, 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="26" column="17" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="26" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1ad2310c3266f1ff91a2227f74a0809510" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ColourGradingConfig::midGray</definition>
+        <argsstring></argsstring>
+        <name>midGray</name>
+        <qualifiedname>castor3d::ColourGradingConfig::midGray</qualifiedname>
+        <initializer>{ 0.4135884f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="27" column="7" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="27" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1a817cef595140ed72beb8eb72985ca911" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::ColourGradingConfig::splitToningShadows</definition>
+        <argsstring></argsstring>
+        <name>splitToningShadows</name>
+        <qualifiedname>castor3d::ColourGradingConfig::splitToningShadows</qualifiedname>
+        <initializer>{ 0.5f, 0.5f, 0.5f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="28" column="17" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="28" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1abcc85ee96491f66e2ef3a7e957d9306c" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ColourGradingConfig::contrast</definition>
+        <argsstring></argsstring>
+        <name>contrast</name>
+        <qualifiedname>castor3d::ColourGradingConfig::contrast</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="29" column="7" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="29" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1a1f99a2a22cdb742fa5b7aafa6f775992" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::ColourGradingConfig::splitToningHighlights</definition>
+        <argsstring></argsstring>
+        <name>splitToningHighlights</name>
+        <qualifiedname>castor3d::ColourGradingConfig::splitToningHighlights</qualifiedname>
+        <initializer>{ 0.5f, 0.5f, 0.5f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="30" column="17" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="30" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1aa81bacb62d1ff0cca048b0f0d6160bc5" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ColourGradingConfig::splitToningBalance</definition>
+        <argsstring></argsstring>
+        <name>splitToningBalance</name>
+        <qualifiedname>castor3d::ColourGradingConfig::splitToningBalance</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="31" column="7" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="31" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1afc69ac40b84fd0c3d8156db18a0efdb0" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::ColourGradingConfig::channelMixRed</definition>
+        <argsstring></argsstring>
+        <name>channelMixRed</name>
+        <qualifiedname>castor3d::ColourGradingConfig::channelMixRed</qualifiedname>
+        <initializer>{ 1.0f, 0.0f, 0.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="32" column="17" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1a447e9eec19d0a3d2c840a3edc2088c80" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ColourGradingConfig::saturation</definition>
+        <argsstring></argsstring>
+        <name>saturation</name>
+        <qualifiedname>castor3d::ColourGradingConfig::saturation</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="33" column="7" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1af11366f1d9d7dba60e5ad740442db1a4" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::ColourGradingConfig::channelMixGreen</definition>
+        <argsstring></argsstring>
+        <name>channelMixGreen</name>
+        <qualifiedname>castor3d::ColourGradingConfig::channelMixGreen</qualifiedname>
+        <initializer>{ 0.0f, 1.0f, 0.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="34" column="17" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="34" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1a23c9cfc542c2545c4d9230dfe6078491" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ColourGradingConfig::shadowsStart</definition>
+        <argsstring></argsstring>
+        <name>shadowsStart</name>
+        <qualifiedname>castor3d::ColourGradingConfig::shadowsStart</qualifiedname>
+        <initializer>{ 0.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="35" column="7" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1a5c8952f511231e8cdb1a6dc42ff1d5a0" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::ColourGradingConfig::channelMixBlue</definition>
+        <argsstring></argsstring>
+        <name>channelMixBlue</name>
+        <qualifiedname>castor3d::ColourGradingConfig::channelMixBlue</qualifiedname>
+        <initializer>{ 0.0f, 0.0f, 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="36" column="17" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1ad472c0bcf5898590a9914156f38a2a66" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ColourGradingConfig::shadowsEnd</definition>
+        <argsstring></argsstring>
+        <name>shadowsEnd</name>
+        <qualifiedname>castor3d::ColourGradingConfig::shadowsEnd</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="37" column="7" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1a3778d48aeadc9b208a80fb6d1ae0743d" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::ColourGradingConfig::shadows</definition>
+        <argsstring></argsstring>
+        <name>shadows</name>
+        <qualifiedname>castor3d::ColourGradingConfig::shadows</qualifiedname>
+        <initializer>{ 1.0f, 1.0f, 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="38" column="17" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="38" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1ad649df68fc1ef3e864982752fffbd61f" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ColourGradingConfig::highlightsStart</definition>
+        <argsstring></argsstring>
+        <name>highlightsStart</name>
+        <qualifiedname>castor3d::ColourGradingConfig::highlightsStart</qualifiedname>
+        <initializer>{ 0.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="39" column="7" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="39" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1ac218428dca9a7f8fc5503469f31c27f4" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::ColourGradingConfig::midtones</definition>
+        <argsstring></argsstring>
+        <name>midtones</name>
+        <qualifiedname>castor3d::ColourGradingConfig::midtones</qualifiedname>
+        <initializer>{ 1.0f, 1.0f, 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="40" column="17" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1a1e54f8b6325c17cc12f344f5da0398be" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ColourGradingConfig::highlightsEnd</definition>
+        <argsstring></argsstring>
+        <name>highlightsEnd</name>
+        <qualifiedname>castor3d::ColourGradingConfig::highlightsEnd</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="41" column="7" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1a15e3ed022e19022d88aab407e0fd0767" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::ColourGradingConfig::highlights</definition>
+        <argsstring></argsstring>
+        <name>highlights</name>
+        <qualifiedname>castor3d::ColourGradingConfig::highlights</qualifiedname>
+        <initializer>{ 1.0f, 1.0f, 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="42" column="17" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1ad37fcaa8316fa42b749593931d43c4f8" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ColourGradingConfig::hueShift</definition>
+        <argsstring></argsstring>
+        <name>hueShift</name>
+        <qualifiedname>castor3d::ColourGradingConfig::hueShift</qualifiedname>
+        <initializer>{ 0.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="43" column="7" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1aa0885fe1e9b92e0cbef5e29614035ad9" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::ColourGradingConfig::enabled</definition>
+        <argsstring></argsstring>
+        <name>enabled</name>
+        <qualifiedname>castor3d::ColourGradingConfig::enabled</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="44" column="14" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1a0058ec37c81c1e38b61efdc260d6b1de" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::ColourGradingConfig::enableSplitToning</definition>
+        <argsstring></argsstring>
+        <name>enableSplitToning</name>
+        <qualifiedname>castor3d::ColourGradingConfig::enableSplitToning</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="45" column="14" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1a66a940fa25de6370da6f8e6b0b507a3f" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::ColourGradingConfig::enableShadowMidToneHighlight</definition>
+        <argsstring></argsstring>
+        <name>enableShadowMidToneHighlight</name>
+        <qualifiedname>castor3d::ColourGradingConfig::enableShadowMidToneHighlight</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="46" column="14" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="46" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1af1c8e2c7b368a4af6ec06d3c531a5e1e" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::ColourGradingConfig::enableChannelMix</definition>
+        <argsstring></argsstring>
+        <name>enableChannelMix</name>
+        <qualifiedname>castor3d::ColourGradingConfig::enableChannelMix</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="47" column="14" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1a4b8185cd53db2748ebf4557fd61fd647" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::ColourGradingConfig::enableWhiteBalance</definition>
+        <argsstring></argsstring>
+        <name>enableWhiteBalance</name>
+        <qualifiedname>castor3d::ColourGradingConfig::enableWhiteBalance</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="48" column="14" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="48" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1aa667b3e282535525598e472cb645b951" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::ColourGradingConfig::enableHueShift</definition>
+        <argsstring></argsstring>
+        <name>enableHueShift</name>
+        <qualifiedname>castor3d::ColourGradingConfig::enableHueShift</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="49" column="14" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1a2fcf096a78fc5b20c2a2f2411fe47cfe" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::ColourGradingConfig::enableContrast</definition>
+        <argsstring></argsstring>
+        <name>enableContrast</name>
+        <qualifiedname>castor3d::ColourGradingConfig::enableContrast</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="50" column="14" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="50" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d65/a06711_1adb90b271a882408c9986b70c945d167d" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::ColourGradingConfig::pad0</definition>
+        <argsstring></argsstring>
+        <name>pad0</name>
+        <qualifiedname>castor3d::ColourGradingConfig::pad0</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="51" column="14" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="51" bodyend="51"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d65/a06711_1aaca5ae43c352611251d10132c79ac17e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ColourGradingConfig::ColourGradingConfig</definition>
+        <argsstring>()=default</argsstring>
+        <name>ColourGradingConfig</name>
+        <qualifiedname>castor3d::ColourGradingConfig::ColourGradingConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="18" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d65/a06711_1a27bcd978cdbc5c809540c862b3faef34" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ColourGradingConfig::accept</definition>
+        <argsstring>(ConfigurationVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::ColourGradingConfig::accept</qualifiedname>
+        <param>
+          <type><ref refid="db/dc2/a05011" kindref="compound">ConfigurationVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="20" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d9/d65/a06711_1a6ad16d3b20ec21d33343784e978cc7bf" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::ColourGradingConfig::addParsers</definition>
+        <argsstring>(castor::AttributeParsers &amp;result)</argsstring>
+        <name>addParsers</name>
+        <qualifiedname>castor3d::ColourGradingConfig::addParsers</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7138ba41c2c2c4ced36cacefe5eb2c33" kindref="member">castor::AttributeParsers</ref> &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="22" column="21"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" line="16" column="1" bodyfile="Castor3D/Render/ToneMapping/ColourGradingConfig.hpp" bodystart="17" bodyend="52"/>
+    <listofallmembers>
+      <member refid="d9/d65/a06711_1a27bcd978cdbc5c809540c862b3faef34" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>accept</name></member>
+      <member refid="d9/d65/a06711_1a6ad16d3b20ec21d33343784e978cc7bf" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>addParsers</name></member>
+      <member refid="d9/d65/a06711_1a5c8952f511231e8cdb1a6dc42ff1d5a0" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>channelMixBlue</name></member>
+      <member refid="d9/d65/a06711_1af11366f1d9d7dba60e5ad740442db1a4" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>channelMixGreen</name></member>
+      <member refid="d9/d65/a06711_1afc69ac40b84fd0c3d8156db18a0efdb0" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>channelMixRed</name></member>
+      <member refid="d9/d65/a06711_1a965c11de48c450c76335f5b4325ac51e" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>colourFilter</name></member>
+      <member refid="d9/d65/a06711_1aaca5ae43c352611251d10132c79ac17e" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>ColourGradingConfig</name></member>
+      <member refid="d9/d65/a06711_1abcc85ee96491f66e2ef3a7e957d9306c" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>contrast</name></member>
+      <member refid="d9/d65/a06711_1af1c8e2c7b368a4af6ec06d3c531a5e1e" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>enableChannelMix</name></member>
+      <member refid="d9/d65/a06711_1a2fcf096a78fc5b20c2a2f2411fe47cfe" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>enableContrast</name></member>
+      <member refid="d9/d65/a06711_1aa0885fe1e9b92e0cbef5e29614035ad9" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>enabled</name></member>
+      <member refid="d9/d65/a06711_1aa667b3e282535525598e472cb645b951" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>enableHueShift</name></member>
+      <member refid="d9/d65/a06711_1a66a940fa25de6370da6f8e6b0b507a3f" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>enableShadowMidToneHighlight</name></member>
+      <member refid="d9/d65/a06711_1a0058ec37c81c1e38b61efdc260d6b1de" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>enableSplitToning</name></member>
+      <member refid="d9/d65/a06711_1a4b8185cd53db2748ebf4557fd61fd647" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>enableWhiteBalance</name></member>
+      <member refid="d9/d65/a06711_1a15e3ed022e19022d88aab407e0fd0767" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>highlights</name></member>
+      <member refid="d9/d65/a06711_1a1e54f8b6325c17cc12f344f5da0398be" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>highlightsEnd</name></member>
+      <member refid="d9/d65/a06711_1ad649df68fc1ef3e864982752fffbd61f" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>highlightsStart</name></member>
+      <member refid="d9/d65/a06711_1ad37fcaa8316fa42b749593931d43c4f8" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>hueShift</name></member>
+      <member refid="d9/d65/a06711_1ad2310c3266f1ff91a2227f74a0809510" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>midGray</name></member>
+      <member refid="d9/d65/a06711_1ac218428dca9a7f8fc5503469f31c27f4" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>midtones</name></member>
+      <member refid="d9/d65/a06711_1adb90b271a882408c9986b70c945d167d" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>pad0</name></member>
+      <member refid="d9/d65/a06711_1a5a048b18240615497fe7ae39c7b598a6" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>postExposure</name></member>
+      <member refid="d9/d65/a06711_1a447e9eec19d0a3d2c840a3edc2088c80" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>saturation</name></member>
+      <member refid="d9/d65/a06711_1a3778d48aeadc9b208a80fb6d1ae0743d" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>shadows</name></member>
+      <member refid="d9/d65/a06711_1ad472c0bcf5898590a9914156f38a2a66" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>shadowsEnd</name></member>
+      <member refid="d9/d65/a06711_1a23c9cfc542c2545c4d9230dfe6078491" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>shadowsStart</name></member>
+      <member refid="d9/d65/a06711_1aa81bacb62d1ff0cca048b0f0d6160bc5" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>splitToningBalance</name></member>
+      <member refid="d9/d65/a06711_1a1f99a2a22cdb742fa5b7aafa6f775992" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>splitToningHighlights</name></member>
+      <member refid="d9/d65/a06711_1a817cef595140ed72beb8eb72985ca911" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>splitToningShadows</name></member>
+      <member refid="d9/d65/a06711_1a5aedacb6386ef11eda14b29d15155e82" prot="public" virt="non-virtual"><scope>castor3d::ColourGradingConfig</scope><name>whiteBalance</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

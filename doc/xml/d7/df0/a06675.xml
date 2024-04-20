@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/df0/a06675" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::SsaoBlurPass::Program</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/df0/a06675_1a63fc89edf4d5c7d13b83de70d0ec2c8b" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/d2a/a07403" kindref="compound">ProgramModule</ref></type>
+        <definition>ProgramModule castor3d::SsaoBlurPass::Program::shader</definition>
+        <argsstring></argsstring>
+        <name>shader</name>
+        <qualifiedname>castor3d::SsaoBlurPass::Program::shader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoBlurPass.hpp" line="146" column="15" bodyfile="Castor3D/Render/Ssao/SsaoBlurPass.hpp" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/df0/a06675_1aba59ecca6115b5eaa7ba512f2697d11e" prot="public" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::SsaoBlurPass::Program::stages</definition>
+        <argsstring></argsstring>
+        <name>stages</name>
+        <qualifiedname>castor3d::SsaoBlurPass::Program::stages</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoBlurPass.hpp" line="147" column="43" bodyfile="Castor3D/Render/Ssao/SsaoBlurPass.hpp" bodystart="147" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/df0/a06675_1a8a211e535bbd15f38faaf1bf303a2b18" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::SsaoBlurPass::Program::Program</definition>
+        <argsstring>(RenderDevice const &amp;device, bool useNormalsBuffer, castor::String const &amp;prefix)</argsstring>
+        <name>Program</name>
+        <qualifiedname>castor3d::SsaoBlurPass::Program::Program</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>useNormalsBuffer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoBlurPass.hpp" line="142" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ProgramModule</label>
+        <link refid="d8/d2a/a07403"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SsaoBlurPass::Program</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>shader</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/Ssao/SsaoBlurPass.hpp" line="140" column="1" bodyfile="Castor3D/Render/Ssao/SsaoBlurPass.hpp" bodystart="141" bodyend="148"/>
+    <listofallmembers>
+      <member refid="d7/df0/a06675_1a8a211e535bbd15f38faaf1bf303a2b18" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass::Program</scope><name>Program</name></member>
+      <member refid="d7/df0/a06675_1a63fc89edf4d5c7d13b83de70d0ec2c8b" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass::Program</scope><name>shader</name></member>
+      <member refid="d7/df0/a06675_1aba59ecca6115b5eaa7ba512f2697d11e" prot="public" virt="non-virtual"><scope>castor3d::SsaoBlurPass::Program</scope><name>stages</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

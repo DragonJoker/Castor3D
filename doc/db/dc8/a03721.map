@@ -1,5 +1,9 @@
-<map id="castor3d::EmissiveMapComponent::ComponentsShader" name="castor3d::EmissiveMapComponent::ComponentsShader">
-<area shape="rect" id="node1" title=" " alt="" coords="9,167,232,207"/>
-<area shape="rect" id="node2" href="$d7/d1d/a04018.html" title=" " alt="" coords="5,79,236,119"/>
-<area shape="rect" id="node3" href="$d0/dee/a04014.html" title=" " alt="" coords="21,5,220,31"/>
+<map id="castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;" name="castor3d::PtrCacheTraitsT&lt; FrameListener, castor::String &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="617,53,785,107"/>
+<area shape="rect" id="Node000002" href="$d7/d6e/a03615.html" title=" " alt="" coords="364,7,531,62"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="545,49,618,62,617,68,544,55"/>
+<area shape="rect" id="Node000003" href="$d7/d6e/a03615.html" title=" " alt="" coords="5,15,172,55"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="186,32,364,32,364,37,186,37"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="384,87,511,127"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="524,96,617,86,618,91,525,101"/>
 </map>

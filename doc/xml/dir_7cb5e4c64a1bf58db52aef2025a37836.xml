@@ -1,28 +1,29 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_7cb5e4c64a1bf58db52aef2025a37836" kind="dir">
-    <compoundname>Shader/Ubos</compoundname>
-    <innerfile refid="d9/df5/a01673">BillboardUbo.hpp</innerfile>
-    <innerfile refid="de/d3e/a01676">CameraUbo.hpp</innerfile>
-    <innerfile refid="d2/d34/a01679">HdrConfigUbo.hpp</innerfile>
-    <innerfile refid="dd/d08/a01682">LayeredLpvGridConfigUbo.hpp</innerfile>
-    <innerfile refid="de/d96/a01685">LpvGridConfigUbo.hpp</innerfile>
-    <innerfile refid="d6/d53/a01688">LpvLightConfigUbo.hpp</innerfile>
-    <innerfile refid="d0/d54/a01691">ModelDataUbo.hpp</innerfile>
-    <innerfile refid="d4/d8e/a01694">MorphingUbo.hpp</innerfile>
-    <innerfile refid="d6/d15/a01697">ObjectIdsUbo.hpp</innerfile>
-    <innerfile refid="d4/d26/a01700">OverlayUbo.hpp</innerfile>
-    <innerfile refid="df/d12/a01703">RsmConfigUbo.hpp</innerfile>
-    <innerfile refid="db/dbe/a01706">SceneUbo.hpp</innerfile>
-    <innerfile refid="d1/da7/a01709">ShadowMapUbo.hpp</innerfile>
-    <innerfile refid="dc/d3e/a01712">SkinningUbo.hpp</innerfile>
-    <innerfile refid="df/d9a/a01715">SsaoConfigUbo.hpp</innerfile>
-    <innerfile refid="db/d7f/a01718">UbosModule.hpp</innerfile>
-    <innerfile refid="db/d66/a01721">VoxelizerUbo.hpp</innerfile>
+    <compoundname>Castor3D/Shader/Ubos</compoundname>
+    <innerfile refid="db/d7f/a01718">BillboardUbo.hpp</innerfile>
+    <innerfile refid="db/d66/a01721">CameraUbo.hpp</innerfile>
+    <innerfile refid="d3/d4c/a01724">ClustersUbo.hpp</innerfile>
+    <innerfile refid="de/d0f/a01727">ColourGradingUbo.hpp</innerfile>
+    <innerfile refid="de/db5/a01730">HdrConfigUbo.hpp</innerfile>
+    <innerfile refid="d8/d9c/a01733">LayeredLpvGridConfigUbo.hpp</innerfile>
+    <innerfile refid="de/daf/a01736">LpvGridConfigUbo.hpp</innerfile>
+    <innerfile refid="d1/d46/a01739">LpvLightConfigUbo.hpp</innerfile>
+    <innerfile refid="d1/dd5/a01742">ModelDataUbo.hpp</innerfile>
+    <innerfile refid="d0/d78/a01745">MorphingUbo.hpp</innerfile>
+    <innerfile refid="d9/d0d/a01748">ObjectIdsUbo.hpp</innerfile>
+    <innerfile refid="d5/db3/a01751">OverlayUbo.hpp</innerfile>
+    <innerfile refid="d9/d37/a01754">SceneUbo.hpp</innerfile>
+    <innerfile refid="db/dc0/a01757">ShadowMapUbo.hpp</innerfile>
+    <innerfile refid="d0/d9d/a01760">SkinningUbo.hpp</innerfile>
+    <innerfile refid="d9/d27/a01763">SsaoConfigUbo.hpp</innerfile>
+    <innerfile refid="d0/d79/a01766">UbosModule.hpp</innerfile>
+    <innerfile refid="d7/d6d/a01769">VoxelizerUbo.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Shader/Ubos/"/>
+    <location file="Castor3D/Shader/Ubos/"/>
   </compounddef>
 </doxygen>

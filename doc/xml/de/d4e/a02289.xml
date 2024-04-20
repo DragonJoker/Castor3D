@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/d4e/a02289" kind="namespace" language="C++">
+    <compoundname>castor::hashcomb</compoundname>
+    <innerclass refid="df/d9b/a09391" prot="public">castor::hashcomb::HashCombinerT</innerclass>
+    <innerclass refid="d6/dff/a09399" prot="public">castor::hashcomb::HashCombinerT&lt; HashT, std::enable_if_t&lt; !std::is_same_v&lt; HashT, uint32_t &gt; &amp;&amp;sizeof(HashT)==4u &gt; &gt;</innerclass>
+    <innerclass refid="dc/d2b/a09407" prot="public">castor::hashcomb::HashCombinerT&lt; HashT, std::enable_if_t&lt; !std::is_same_v&lt; HashT, uint64_t &gt; &amp;&amp;sizeof(HashT)==8u &gt; &gt;</innerclass>
+    <innerclass refid="dc/d25/a09395" prot="public">castor::hashcomb::HashCombinerT&lt; HashT, std::enable_if_t&lt; std::is_same_v&lt; HashT, uint32_t &gt; &gt; &gt;</innerclass>
+    <innerclass refid="da/de3/a09403" prot="public">castor::hashcomb::HashCombinerT&lt; HashT, std::enable_if_t&lt; std::is_same_v&lt; HashT, uint64_t &gt; &gt; &gt;</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Miscellaneous/Hash.hpp" line="70" column="1"/>
+  </compounddef>
+</doxygen>

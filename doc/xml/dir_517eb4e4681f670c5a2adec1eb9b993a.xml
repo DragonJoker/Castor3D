@@ -1,27 +1,29 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_517eb4e4681f670c5a2adec1eb9b993a" kind="dir">
-    <compoundname>Model/Mesh/Submesh/Component</compoundname>
-    <innerfile refid="da/d96/a00782">BaseDataComponent.hpp</innerfile>
-    <innerfile refid="db/d05/a14830">ComponentModule.hpp</innerfile>
-    <innerfile refid="d3/d00/a00785">Face.hpp</innerfile>
-    <innerfile refid="df/d0c/a00788">FaceIndices.hpp</innerfile>
-    <innerfile refid="d4/d45/a00791">FaceInfos.hpp</innerfile>
-    <innerfile refid="d5/d12/a00794">IndexMapping.hpp</innerfile>
-    <innerfile refid="da/db8/a00797">InstantiationComponent.hpp</innerfile>
-    <innerfile refid="df/d0e/a00800">Line.hpp</innerfile>
-    <innerfile refid="d5/d72/a00803">LineIndices.hpp</innerfile>
-    <innerfile refid="d0/dad/a00806">LinesMapping.hpp</innerfile>
-    <innerfile refid="dd/d7e/a00809">MeshletComponent.hpp</innerfile>
-    <innerfile refid="d8/db7/a00812">MorphComponent.hpp</innerfile>
-    <innerfile refid="d8/d2d/a00815">PassMasksComponent.hpp</innerfile>
-    <innerfile refid="d3/d60/a00818">SkinComponent.hpp</innerfile>
-    <innerfile refid="d6/d8b/a00821">SubmeshComponent.hpp</innerfile>
-    <innerfile refid="d8/d1c/a00824">TriFaceMapping.hpp</innerfile>
+    <compoundname>Castor3D/Model/Mesh/Submesh/Component</compoundname>
+    <innerfile refid="d8/dba/a00773">BaseDataComponent.hpp</innerfile>
+    <innerfile refid="dc/d76/a11678">ComponentModule.hpp</innerfile>
+    <innerfile refid="d9/dd4/a00776">DefaultRenderComponent.hpp</innerfile>
+    <innerfile refid="d3/d95/a00779">Face.hpp</innerfile>
+    <innerfile refid="da/d96/a00782">FaceIndices.hpp</innerfile>
+    <innerfile refid="d3/d00/a00785">FaceInfos.hpp</innerfile>
+    <innerfile refid="df/d0c/a00788">IndexMapping.hpp</innerfile>
+    <innerfile refid="d4/d45/a00791">InstantiationComponent.hpp</innerfile>
+    <innerfile refid="d5/d12/a00794">Line.hpp</innerfile>
+    <innerfile refid="da/db8/a00797">LineIndices.hpp</innerfile>
+    <innerfile refid="df/d0e/a00800">LinesMapping.hpp</innerfile>
+    <innerfile refid="d5/d72/a00803">MeshletComponent.hpp</innerfile>
+    <innerfile refid="d0/dad/a00806">MorphComponent.hpp</innerfile>
+    <innerfile refid="dd/d7e/a00809">PassMasksComponent.hpp</innerfile>
+    <innerfile refid="d8/db7/a00812">SkinComponent.hpp</innerfile>
+    <innerfile refid="d8/d2d/a00815">SubmeshComponent.hpp</innerfile>
+    <innerfile refid="d3/d60/a00818">SubmeshComponentRegister.hpp</innerfile>
+    <innerfile refid="d6/d8b/a00821">TriFaceMapping.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Model/Mesh/Submesh/Component/"/>
+    <location file="Castor3D/Model/Mesh/Submesh/Component/"/>
   </compounddef>
 </doxygen>

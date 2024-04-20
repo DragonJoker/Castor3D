@@ -1,0 +1,383 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/d68/a07491" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::DebugOutput</compoundname>
+    <includes local="no">GlslDebugOutput.hpp</includes>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="d7/d68/a07491_1a6b5a9094d85e7cdd8b78e451fbaf2eef" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class DebugOutputCategory</definition>
+        <argsstring></argsstring>
+        <name>DebugOutputCategory</name>
+        <qualifiedname>castor3d::shader::DebugOutput::DebugOutputCategory</qualifiedname>
+        <param>
+          <type><ref refid="d1/d0c/a07495" kindref="compound">DebugOutputCategory</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="55" column="14" bodyfile="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/d68/a07491_1a5ae0a30871fd7c43dffc078a04a20d87" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/db4/a03695" kindref="compound">DebugConfig</ref> &amp;</type>
+        <definition>DebugConfig&amp; castor3d::shader::DebugOutput::m_config</definition>
+        <argsstring></argsstring>
+        <name>m_config</name>
+        <qualifiedname>castor3d::shader::DebugOutput::m_config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="63" column="14" bodyfile="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d68/a07491_1a9808bc9aca075febbe8f2bb39f0037e8" prot="private" static="no" mutable="no">
+        <type>castor::StringArray</type>
+        <definition>castor::StringArray castor3d::shader::DebugOutput::m_categories</definition>
+        <argsstring></argsstring>
+        <name>m_categories</name>
+        <qualifiedname>castor3d::shader::DebugOutput::m_categories</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="64" column="21" bodyfile="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d68/a07491_1a68590a1ed33821abdee2429102ad37de" prot="private" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::DebugOutput::m_index</definition>
+        <argsstring></argsstring>
+        <name>m_index</name>
+        <qualifiedname>castor3d::shader::DebugOutput::m_index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="65" column="11" bodyfile="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d68/a07491_1aaa9f7df3cabb626d003e859e6e73ec6a" prot="private" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::DebugOutput::m_output</definition>
+        <argsstring></argsstring>
+        <name>m_output</name>
+        <qualifiedname>castor3d::shader::DebugOutput::m_output</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="66" column="11" bodyfile="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d68/a07491_1ad45c99a71f93da1d14e7ebb4b04731d1" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::shader::DebugOutput::m_enable</definition>
+        <argsstring></argsstring>
+        <name>m_enable</name>
+        <qualifiedname>castor3d::shader::DebugOutput::m_enable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="67" column="6" bodyfile="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d68/a07491_1a83c246df47e1b90fb5b3938503a2b7cb" prot="private" static="no" mutable="no">
+        <type>sdw::Vec3Array</type>
+        <definition>sdw::Vec3Array castor3d::shader::DebugOutput::m_values</definition>
+        <argsstring></argsstring>
+        <name>m_values</name>
+        <qualifiedname>castor3d::shader::DebugOutput::m_values</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="68" column="16" bodyfile="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d68/a07491_1a70ed79f5e4fb092abd131fc9830fb92a" prot="private" static="no" mutable="no">
+        <type>sdw::UIntArray</type>
+        <definition>sdw::UIntArray castor3d::shader::DebugOutput::m_indices</definition>
+        <argsstring></argsstring>
+        <name>m_indices</name>
+        <qualifiedname>castor3d::shader::DebugOutput::m_indices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="69" column="16" bodyfile="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" bodystart="69" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d68/a07491_1ab6bddb35cae0399758376c477b83cd16" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::DebugOutput::DebugOutput</definition>
+        <argsstring>(DebugConfig &amp;config, castor::String category, sdw::UInt const index, sdw::Vec4 const output, bool enable)</argsstring>
+        <name>DebugOutput</name>
+        <qualifiedname>castor3d::shader::DebugOutput::DebugOutput</qualifiedname>
+        <param>
+          <type><ref refid="d2/db4/a03695" kindref="compound">DebugConfig</ref> &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const</type>
+          <declname>output</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enable</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="21" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d68/a07491_1a6bc5e533fea1fe6c7e9b3c262085fc93" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::DebugOutput::~DebugOutput</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~DebugOutput</name>
+        <qualifiedname>castor3d::shader::DebugOutput::~DebugOutput</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="26" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d68/a07491_1a8db23d7362bdafa48c14d743001a4917" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::DebugOutput::registerOutput</definition>
+        <argsstring>(castor::String category, castor::String name, sdw::Vec4 const value)</argsstring>
+        <name>registerOutput</name>
+        <qualifiedname>castor3d::shader::DebugOutput::registerOutput</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="28" column="14"/>
+        <referencedby refid="d7/d68/a07491_1ac74b693e991fe5bc42f7364b20afa327" compoundref="d1/d3a/a01622" startline="43" endline="47">registerOutput</referencedby>
+        <referencedby refid="d1/d0c/a07495_1ae7aa15f734d0d0bb6c7e4b81478072ea" compoundref="d1/d3a/a01622" startline="107" endline="111">castor3d::shader::DebugOutputCategory::registerOutput</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d7/d68/a07491_1aca20d1f068cb948bee1913db235220c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::DebugOutput::registerOutput</definition>
+        <argsstring>(castor::String category, castor::String name, sdw::Vec3 const value)</argsstring>
+        <name>registerOutput</name>
+        <qualifiedname>castor3d::shader::DebugOutput::registerOutput</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="31" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d68/a07491_1ade03332d084578e91da232ce9c3c1020" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::DebugOutput::registerOutput</definition>
+        <argsstring>(castor::String category, castor::String name, sdw::Vec2 const value)</argsstring>
+        <name>registerOutput</name>
+        <qualifiedname>castor3d::shader::DebugOutput::registerOutput</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="34" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d68/a07491_1a036d171b5c6a59a380c32eef2383b1e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::DebugOutput::registerOutput</definition>
+        <argsstring>(castor::String category, castor::String name, sdw::Float const value)</argsstring>
+        <name>registerOutput</name>
+        <qualifiedname>castor3d::shader::DebugOutput::registerOutput</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>sdw::Float const</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="37" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d68/a07491_1a74cc81752703600872d8de1cc34d6ae6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/d0c/a07495" kindref="compound">DebugOutputCategory</ref></type>
+        <definition>C3D_API DebugOutputCategory castor3d::shader::DebugOutput::pushBlock</definition>
+        <argsstring>(castor::String category)</argsstring>
+        <name>pushBlock</name>
+        <qualifiedname>castor3d::shader::DebugOutput::pushBlock</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>category</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="40" column="29"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d68/a07491_1ac74b693e991fe5bc42f7364b20afa327" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ValueT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::shader::DebugOutput::registerOutput</definition>
+        <argsstring>(castor::String name, ValueT const value)</argsstring>
+        <name>registerOutput</name>
+        <qualifiedname>castor3d::shader::DebugOutput::registerOutput</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ValueT const</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="43" column="6" bodyfile="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" bodystart="43" bodyend="47"/>
+        <references refid="d7/d68/a07491_1a8db23d7362bdafa48c14d743001a4917">registerOutput</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/d68/a07491_1af996f61f67b58a8dd1a3565eee96d608" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::shader::DebugOutput::isEnabled</definition>
+        <argsstring>() const</argsstring>
+        <name>isEnabled</name>
+        <qualifiedname>castor3d::shader::DebugOutput::isEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="49" column="6" bodyfile="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" bodystart="49" bodyend="52"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d7/d68/a07491_1a8f1e21a0eb8d7ff16e51fbe1827ad442" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::DebugOutput::popBlock</definition>
+        <argsstring>()</argsstring>
+        <name>popBlock</name>
+        <qualifiedname>castor3d::shader::DebugOutput::popBlock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="57" column="6" bodyfile="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" bodystart="57" bodyend="60"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" line="18" column="1" bodyfile="Castor3D/Shader/Shaders/GlslDebugOutput.hpp" bodystart="19" bodyend="70"/>
+    <listofallmembers>
+      <member refid="d7/d68/a07491_1ab6bddb35cae0399758376c477b83cd16" prot="public" virt="non-virtual"><scope>castor3d::shader::DebugOutput</scope><name>DebugOutput</name></member>
+      <member refid="d7/d68/a07491_1a6b5a9094d85e7cdd8b78e451fbaf2eef" prot="private" virt="non-virtual"><scope>castor3d::shader::DebugOutput</scope><name>DebugOutputCategory</name></member>
+      <member refid="d7/d68/a07491_1af996f61f67b58a8dd1a3565eee96d608" prot="public" virt="non-virtual"><scope>castor3d::shader::DebugOutput</scope><name>isEnabled</name></member>
+      <member refid="d7/d68/a07491_1a9808bc9aca075febbe8f2bb39f0037e8" prot="private" virt="non-virtual"><scope>castor3d::shader::DebugOutput</scope><name>m_categories</name></member>
+      <member refid="d7/d68/a07491_1a5ae0a30871fd7c43dffc078a04a20d87" prot="private" virt="non-virtual"><scope>castor3d::shader::DebugOutput</scope><name>m_config</name></member>
+      <member refid="d7/d68/a07491_1ad45c99a71f93da1d14e7ebb4b04731d1" prot="private" virt="non-virtual"><scope>castor3d::shader::DebugOutput</scope><name>m_enable</name></member>
+      <member refid="d7/d68/a07491_1a68590a1ed33821abdee2429102ad37de" prot="private" virt="non-virtual"><scope>castor3d::shader::DebugOutput</scope><name>m_index</name></member>
+      <member refid="d7/d68/a07491_1a70ed79f5e4fb092abd131fc9830fb92a" prot="private" virt="non-virtual"><scope>castor3d::shader::DebugOutput</scope><name>m_indices</name></member>
+      <member refid="d7/d68/a07491_1aaa9f7df3cabb626d003e859e6e73ec6a" prot="private" virt="non-virtual"><scope>castor3d::shader::DebugOutput</scope><name>m_output</name></member>
+      <member refid="d7/d68/a07491_1a83c246df47e1b90fb5b3938503a2b7cb" prot="private" virt="non-virtual"><scope>castor3d::shader::DebugOutput</scope><name>m_values</name></member>
+      <member refid="d7/d68/a07491_1a8f1e21a0eb8d7ff16e51fbe1827ad442" prot="private" virt="non-virtual"><scope>castor3d::shader::DebugOutput</scope><name>popBlock</name></member>
+      <member refid="d7/d68/a07491_1a74cc81752703600872d8de1cc34d6ae6" prot="public" virt="non-virtual"><scope>castor3d::shader::DebugOutput</scope><name>pushBlock</name></member>
+      <member refid="d7/d68/a07491_1a8db23d7362bdafa48c14d743001a4917" prot="public" virt="non-virtual"><scope>castor3d::shader::DebugOutput</scope><name>registerOutput</name></member>
+      <member refid="d7/d68/a07491_1aca20d1f068cb948bee1913db235220c6" prot="public" virt="non-virtual"><scope>castor3d::shader::DebugOutput</scope><name>registerOutput</name></member>
+      <member refid="d7/d68/a07491_1ade03332d084578e91da232ce9c3c1020" prot="public" virt="non-virtual"><scope>castor3d::shader::DebugOutput</scope><name>registerOutput</name></member>
+      <member refid="d7/d68/a07491_1a036d171b5c6a59a380c32eef2383b1e3" prot="public" virt="non-virtual"><scope>castor3d::shader::DebugOutput</scope><name>registerOutput</name></member>
+      <member refid="d7/d68/a07491_1ac74b693e991fe5bc42f7364b20afa327" prot="public" virt="non-virtual"><scope>castor3d::shader::DebugOutput</scope><name>registerOutput</name></member>
+      <member refid="d7/d68/a07491_1a6bc5e533fea1fe6c7e9b3c262085fc93" prot="public" virt="non-virtual"><scope>castor3d::shader::DebugOutput</scope><name>~DebugOutput</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

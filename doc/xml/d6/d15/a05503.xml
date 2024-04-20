@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d15/a05503" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::InstantiationComponent::Data</compoundname>
+    <includes local="no">InstantiationComponent.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d15/a05503_1a2283bed474f3f6c91a4d976d55fbb44c" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::InstantiationComponent::Data::count</definition>
+        <argsstring></argsstring>
+        <name>count</name>
+        <qualifiedname>castor3d::InstantiationComponent::Data::count</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="57" column="10" bodyfile="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d15/a05503_1ae71abaf10a5d2deee81e21d8f73cc048" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/d76/a03451" kindref="compound">GpuBufferOffsetT</ref>&lt; <ref refid="df/d51/a05491" kindref="compound">InstantiationData</ref> &gt;</type>
+        <definition>GpuBufferOffsetT&lt; InstantiationData &gt; castor3d::InstantiationComponent::Data::buffer</definition>
+        <argsstring></argsstring>
+        <name>buffer</name>
+        <qualifiedname>castor3d::InstantiationComponent::Data::buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="58" column="18" bodyfile="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d15/a05503_1a7431f5a36daa3f7d92df5da1400e52eb" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="df/d51/a05491" kindref="compound">InstantiationData</ref> &gt;</type>
+        <definition>castor::Vector&lt; InstantiationData &gt; castor3d::InstantiationComponent::Data::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>castor3d::InstantiationComponent::Data::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="59" column="16" bodyfile="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d15/a05503_1ae314c009ff9bd6cad41245d157cdc926" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::InstantiationComponent::Data::Data</definition>
+        <argsstring>(uint32_t count, GpuBufferOffsetT&lt; InstantiationData &gt; buffer, castor::Vector&lt; InstantiationData &gt; data={})</argsstring>
+        <name>Data</name>
+        <qualifiedname>castor3d::InstantiationComponent::Data::Data</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d76/a03451" kindref="compound">GpuBufferOffsetT</ref>&lt; <ref refid="df/d51/a05491" kindref="compound">InstantiationData</ref> &gt;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="df/d51/a05491" kindref="compound">InstantiationData</ref> &gt;</type>
+          <declname>data</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="49" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="49" bodyend="56"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::GpuBufferOffsetT&lt; castor3d::InstantiationData &gt;</label>
+        <link refid="d7/d76/a03451"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; castor3d::InstantiationData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::GpuBufferBase</label>
+        <link refid="dc/d5c/a03483"/>
+      </node>
+      <node id="5">
+        <label>castor3d::GpuBufferOffsetT&lt; DataT &gt;</label>
+        <link refid="d7/d76/a03451"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::InstantiationComponent::Data</label>
+        <link refid="d6/d15/a05503"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::MemChunk</label>
+        <link refid="db/db8/a03471"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" line="47" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp" bodystart="48" bodyend="60"/>
+    <listofallmembers>
+      <member refid="d6/d15/a05503_1ae71abaf10a5d2deee81e21d8f73cc048" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent::Data</scope><name>buffer</name></member>
+      <member refid="d6/d15/a05503_1a2283bed474f3f6c91a4d976d55fbb44c" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent::Data</scope><name>count</name></member>
+      <member refid="d6/d15/a05503_1a7431f5a36daa3f7d92df5da1400e52eb" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent::Data</scope><name>data</name></member>
+      <member refid="d6/d15/a05503_1ae314c009ff9bd6cad41245d157cdc926" prot="public" virt="non-virtual"><scope>castor3d::InstantiationComponent::Data</scope><name>Data</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

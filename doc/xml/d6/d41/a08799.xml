@@ -1,0 +1,1042 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d41/a08799" kind="class" language="C++" prot="public">
+    <compoundname>castor::Pixel</compoundname>
+    <includes local="no">Pixel.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+        <declname>FT</declname>
+        <defname>FT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="user-defined">
+      <header>Opérateurs arithmétiques membres.</header>
+      <memberdef kind="function" id="d6/d41/a08799_1a9ff9076782de7355a6e52280de8fdcba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+            <declname>FU</declname>
+            <defname>FU</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> &amp;</type>
+        <definition>Pixel &amp; castor::Pixel&lt; FT &gt;::operator+=</definition>
+        <argsstring>(Pixel&lt; FU &gt; const &amp;px)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::Pixel::operator+=</qualifiedname>
+        <param>
+          <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref>&lt; FU &gt; const &amp;</type>
+          <declname>px</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="340" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1aa1d1075efe5ac3143654b375d2599d82" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+            <declname>FU</declname>
+            <defname>FU</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> &amp;</type>
+        <definition>Pixel &amp; castor::Pixel&lt; FT &gt;::operator-=</definition>
+        <argsstring>(Pixel&lt; FU &gt; const &amp;px)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::Pixel::operator-=</qualifiedname>
+        <param>
+          <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref>&lt; FU &gt; const &amp;</type>
+          <declname>px</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="342" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a864a725858fbfa370689c8464f20e99f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+            <declname>FU</declname>
+            <defname>FU</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> &amp;</type>
+        <definition>Pixel &amp; castor::Pixel&lt; FT &gt;::operator*=</definition>
+        <argsstring>(Pixel&lt; FU &gt; const &amp;px)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::Pixel::operator*=</qualifiedname>
+        <param>
+          <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref>&lt; FU &gt; const &amp;</type>
+          <declname>px</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="344" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a234d6daf33d8fd908bf710bd9a3449d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+            <declname>FU</declname>
+            <defname>FU</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> &amp;</type>
+        <definition>Pixel &amp; castor::Pixel&lt; FT &gt;::operator/=</definition>
+        <argsstring>(Pixel&lt; FU &gt; const &amp;px)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::Pixel::operator/=</qualifiedname>
+        <param>
+          <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref>&lt; FU &gt; const &amp;</type>
+          <declname>px</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="346" column="8"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d6/d41/a08799_1ad826336edc1851eecaa248f7a87e776c" prot="public" static="no">
+        <type>uint8_t *</type>
+        <definition>using castor::Pixel&lt; FT &gt;::iterator =  uint8_t *</definition>
+        <argsstring></argsstring>
+        <name>iterator</name>
+        <qualifiedname>castor::Pixel::iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Itérateur sur les données d&apos;un pixel. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="18" column="1" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d6/d41/a08799_1a5037f7e816bb3e9f71a51a8b54e1cc64" prot="public" static="no">
+        <type>uint8_t const *</type>
+        <definition>using castor::Pixel&lt; FT &gt;::const_iterator =  uint8_t const *</definition>
+        <argsstring></argsstring>
+        <name>const_iterator</name>
+        <qualifiedname>castor::Pixel::const_iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Itérateur constant sur les données d&apos;un pixel. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="21" column="1" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-type">
+      <memberdef kind="typedef" id="d6/d41/a08799_1a909e97d6c3910a95bdfe1255bbac97db" prot="protected" static="no">
+        <type>uint8_t *</type>
+        <definition>using castor::Pixel&lt; FT &gt;::component_ptr =  uint8_t *</definition>
+        <argsstring></argsstring>
+        <name>component_ptr</name>
+        <qualifiedname>castor::Pixel::component_ptr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="24" column="1" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d6/d41/a08799_1ab37fcd023130b270d01e4b3a78e31654" prot="protected" static="no">
+        <type>uint8_t const *</type>
+        <definition>using castor::Pixel&lt; FT &gt;::component_const_ptr =  uint8_t const *</definition>
+        <argsstring></argsstring>
+        <name>component_const_ptr</name>
+        <qualifiedname>castor::Pixel::component_const_ptr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="25" column="1" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d6/d41/a08799_1a407e79fce8381cc939f5a1bbae8549db" prot="protected" static="no">
+        <type>uint8_t &amp;</type>
+        <definition>using castor::Pixel&lt; FT &gt;::component_ref =  uint8_t &amp;</definition>
+        <argsstring></argsstring>
+        <name>component_ref</name>
+        <qualifiedname>castor::Pixel::component_ref</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="26" column="1" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d6/d41/a08799_1a0c2cea15e2491f95151f0147b88218a6" prot="protected" static="no">
+        <type>uint8_t const &amp;</type>
+        <definition>using castor::Pixel&lt; FT &gt;::component_const_ref =  uint8_t const &amp;</definition>
+        <argsstring></argsstring>
+        <name>component_const_ref</name>
+        <qualifiedname>castor::Pixel::component_const_ref</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="27" column="1" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/d41/a08799_1aeed39b66193088b7e6ee42b47743cb65" prot="private" static="no" mutable="no">
+        <type>uint8_t *</type>
+        <definition>uint8_t* castor::Pixel&lt; FT &gt;::m_components</definition>
+        <argsstring></argsstring>
+        <name>m_components</name>
+        <qualifiedname>castor::Pixel::m_components</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="350" column="10" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="350" bodyend="350"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d41/a08799_1a3f0e875f1462805909dc2eb63dcb7e29" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor::Pixel&lt; FT &gt;::m_delete</definition>
+        <argsstring></argsstring>
+        <name>m_delete</name>
+        <qualifiedname>castor::Pixel::m_delete</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="351" column="6" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="351" bodyend="351"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d41/a08799_1a3f3348beecc85efe4fa72a6a430b5671" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::Pixel&lt; FT &gt;::Pixel</definition>
+        <argsstring>(bool init=false)</argsstring>
+        <name>Pixel</name>
+        <qualifiedname>castor::Pixel::Pixel</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>init</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">init</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si on initialise les données </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="38" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a956d711dea63cf04f45e8a7ec38c9329" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::Pixel&lt; FT &gt;::Pixel</definition>
+        <argsstring>(uint8_t *components)</argsstring>
+        <name>Pixel</name>
+        <qualifiedname>castor::Pixel::Pixel</qualifiedname>
+        <param>
+          <type>uint8_t *</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Le <ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> ne gère pas ses données </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Initialise les données à celles-ci </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="49" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1aa574987b1e5e861b23563dd968675624" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::Pixel&lt; FT &gt;::Pixel</definition>
+        <argsstring>(Pixel const &amp;pxl)</argsstring>
+        <name>Pixel</name>
+        <qualifiedname>castor::Pixel::Pixel</qualifiedname>
+        <param>
+          <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> const &amp;</type>
+          <declname>pxl</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par copie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pxl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet <ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> à copier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="58" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1af8af53429a948f2bddb45e084ff91354" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Pixel&lt; FT &gt;::Pixel</definition>
+        <argsstring>(Pixel &amp;&amp;pxl) noexcept</argsstring>
+        <name>Pixel</name>
+        <qualifiedname>castor::Pixel::Pixel</qualifiedname>
+        <param>
+          <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> &amp;&amp;</type>
+          <declname>pxl</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pxl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet <ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> à déplacer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="67" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1aa92f9815f4b9b4efd825e5458ca50577" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+            <declname>FU</declname>
+            <defname>FU</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::Pixel&lt; FT &gt;::Pixel</definition>
+        <argsstring>(Array&lt; uint8_t, PixelDefinitionsT&lt; FU &gt;::Size &gt; const &amp;components)</argsstring>
+        <name>Pixel</name>
+        <qualifiedname>castor::Pixel::Pixel</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">Array</ref>&lt; uint8_t, <ref refid="d1/dea/a08819" kindref="compound">PixelDefinitionsT</ref>&lt; FU &gt;::Size &gt; const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Le <ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> gère ses données </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Initialise les données à celles-ci </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="79" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a490dc9adb8d94a73f966f7aca6d0f5ba" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+            <declname>FU</declname>
+            <defname>FU</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::Pixel&lt; FT &gt;::Pixel</definition>
+        <argsstring>(Pixel&lt; FU &gt; const &amp;pxl)</argsstring>
+        <name>Pixel</name>
+        <qualifiedname>castor::Pixel::Pixel</qualifiedname>
+        <param>
+          <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref>&lt; FU &gt; const &amp;</type>
+          <declname>pxl</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pxl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet <ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> à copier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="89" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a6be5bcd8bdffc371c6db30ffa0a7451d" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Pixel&lt; FT &gt;::~Pixel</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~Pixel</name>
+        <qualifiedname>castor::Pixel::~Pixel</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="96" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a9cf2df0393db132795dc6510622da8da" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> &amp;</type>
+        <definition>Pixel &amp; castor::Pixel&lt; FT &gt;::operator=</definition>
+        <argsstring>(Pixel &amp;&amp;pxl) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Pixel::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> &amp;&amp;</type>
+          <declname>pxl</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par copie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pxl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet <ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> à copier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet <ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="107" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1adf14c9abdb14bf6fdca8e96b0f268a10" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> &amp;</type>
+        <definition>Pixel &amp; castor::Pixel&lt; FT &gt;::operator=</definition>
+        <argsstring>(Pixel const &amp;pxl)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Pixel::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> const &amp;</type>
+          <declname>pxl</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pxl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet <ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> à déplacer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet <ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="118" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a736b8fe86db41615cccb39e567883bd5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+            <declname>FU</declname>
+            <defname>FU</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> &amp;</type>
+        <definition>Pixel &amp; castor::Pixel&lt; FT &gt;::operator=</definition>
+        <argsstring>(Pixel&lt; FU &gt; const &amp;pxl)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Pixel::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref>&lt; FU &gt; const &amp;</type>
+          <declname>pxl</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par copie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pxl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet <ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> à copier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet <ref refid="d6/d41/a08799" kindref="compound">Pixel</ref> </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="130" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1ab926241586edd88be9160a413623b6e6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::Pixel&lt; FT &gt;::sum</definition>
+        <argsstring>(U &amp;result) const</argsstring>
+        <name>sum</name>
+        <qualifiedname>castor::Pixel::sum</qualifiedname>
+        <param>
+          <type>U &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la somme de toutes les composantes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">result</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la somme </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="140" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a1e873f48a3ec58c6853a258159638e4e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+            <declname>FU</declname>
+            <defname>FU</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref>&lt; FU &gt;</type>
+        <definition>Pixel&lt; FU &gt; castor::Pixel&lt; FT &gt;::mul</definition>
+        <argsstring>(Pixel&lt; FU &gt; const &amp;px) const</argsstring>
+        <name>mul</name>
+        <qualifiedname>castor::Pixel::mul</qualifiedname>
+        <param>
+          <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref>&lt; FU &gt; const &amp;</type>
+          <declname>px</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de multiplication. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">px</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le pixel à multiplier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le résultat de la multiplication </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="152" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a1495d248d38d2ccae2795d3c76b458c6" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Pixel&lt; FT &gt;::clear</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>clear</name>
+        <qualifiedname>castor::Pixel::clear</qualifiedname>
+        <briefdescription>
+<para>Désalloue les composantes de ce pixel. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="159" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a20803410686d34d3dc7de1792149f7f5" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Pixel&lt; FT &gt;::link</definition>
+        <argsstring>(uint8_t *components) noexcept</argsstring>
+        <name>link</name>
+        <qualifiedname>castor::Pixel::link</qualifiedname>
+        <param>
+          <type>uint8_t *</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+<para>Lie les données de ce pixel à celles données en paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Le pixel perd la responsabilité de ses données </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="168" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1aeb380b1d31655d6f820a9149b13b88d8" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Pixel&lt; FT &gt;::unlink</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>unlink</name>
+        <qualifiedname>castor::Pixel::unlink</qualifiedname>
+        <briefdescription>
+<para>Délie les données de ce pixel de celles données précédemment. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Le pixel regagne la responsabilité de ses données </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="177" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a672967120072b56dd1009a45115d7d2b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+            <declname>FU</declname>
+            <defname>FU</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::Pixel&lt; FT &gt;::set</definition>
+        <argsstring>(Array&lt; uint8_t, PixelDefinitionsT&lt; FU &gt;::Size &gt; const &amp;components)</argsstring>
+        <name>set</name>
+        <qualifiedname>castor::Pixel::set</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">Array</ref>&lt; uint8_t, <ref refid="d1/dea/a08819" kindref="compound">PixelDefinitionsT</ref>&lt; FU &gt;::Size &gt; const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+<para>Convertit les données et les copie dans les composantes de ce pixel. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données à convertir </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="187" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1af28a1c5da942a2cdfe6ae0b2c6839d50" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+            <declname>FU</declname>
+            <defname>FU</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::Pixel&lt; FT &gt;::set</definition>
+        <argsstring>(uint8_t const *components)</argsstring>
+        <name>set</name>
+        <qualifiedname>castor::Pixel::set</qualifiedname>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+<para>Convertit les données et les copie dans les composantes de ce pixel. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données à convertir </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="197" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a6f8e82d78178a32e8602a4188f846759" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+            <declname>FU</declname>
+            <defname>FU</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::Pixel&lt; FT &gt;::set</definition>
+        <argsstring>(Pixel&lt; FU &gt; const &amp;px)</argsstring>
+        <name>set</name>
+        <qualifiedname>castor::Pixel::set</qualifiedname>
+        <param>
+          <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref>&lt; FU &gt; const &amp;</type>
+          <declname>px</declname>
+        </param>
+        <briefdescription>
+<para>Convertit le pixel et le copie dans les composantes de ce pixel. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">px</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le pixel à convertir </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="207" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a64f6abe5b2823912c8b247782e19cc53" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/d41/a08799_1a407e79fce8381cc939f5a1bbae8549db" kindref="member">component_ref</ref></type>
+        <definition>component_ref castor::Pixel&lt; FT &gt;::operator[]</definition>
+        <argsstring>(uint8_t index)</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::Pixel::operator[]</qualifiedname>
+        <param>
+          <type>uint8_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la donnée à l&apos;index donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Aucun check n&apos;est fait, s&apos;il y a une erreur d&apos;index, attendez-vous à un crash </para>
+</simplesect>
+<simplesect kind="return"><para>Une référence sur la donnée à l&apos;index voulu </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="218" column="22" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="218" bodyend="221"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a23f922196964c356dccc8d03c33e5d12" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/d41/a08799_1a0c2cea15e2491f95151f0147b88218a6" kindref="member">component_const_ref</ref></type>
+        <definition>component_const_ref castor::Pixel&lt; FT &gt;::operator[]</definition>
+        <argsstring>(uint8_t index) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::Pixel::operator[]</qualifiedname>
+        <param>
+          <type>uint8_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la donnée à l&apos;index donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Aucun check n&apos;est fait, s&apos;il y a une erreur d&apos;index, attendez-vous à un crash </para>
+</simplesect>
+<simplesect kind="return"><para>Une référence constante sur la donnée à l&apos;index voulu </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="232" column="28" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="232" bodyend="235"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a9006a865076535f048d8712b731e90dd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/d41/a08799_1ab37fcd023130b270d01e4b3a78e31654" kindref="member">component_const_ptr</ref></type>
+        <definition>component_const_ptr castor::Pixel&lt; FT &gt;::constPtr</definition>
+        <argsstring>() const</argsstring>
+        <name>constPtr</name>
+        <qualifiedname>castor::Pixel::constPtr</qualifiedname>
+        <briefdescription>
+<para>Récupère le pointeur sur les données constantes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Les données </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="244" column="28" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="244" bodyend="247"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1afc3e610edf4fc567ad8d604a0d25787d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/d41/a08799_1a909e97d6c3910a95bdfe1255bbac97db" kindref="member">component_ptr</ref></type>
+        <definition>component_ptr castor::Pixel&lt; FT &gt;::ptr</definition>
+        <argsstring>()</argsstring>
+        <name>ptr</name>
+        <qualifiedname>castor::Pixel::ptr</qualifiedname>
+        <briefdescription>
+<para>Récupère le pointeur sur les données. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Les données </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="256" column="22" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="256" bodyend="259"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a59ca2fe9cf7da43d744c8ad486cd57c7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/d41/a08799_1ad826336edc1851eecaa248f7a87e776c" kindref="member">iterator</ref></type>
+        <definition>iterator castor::Pixel&lt; FT &gt;::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::Pixel::begin</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur sur le premier élément. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="268" column="17" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="268" bodyend="271"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a8fd23f32c46140d1edb3def5c68c02be" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/d41/a08799_1a5037f7e816bb3e9f71a51a8b54e1cc64" kindref="member">const_iterator</ref></type>
+        <definition>const_iterator castor::Pixel&lt; FT &gt;::begin</definition>
+        <argsstring>() const</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::Pixel::begin</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur constant sur le premier élément. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="280" column="23" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="280" bodyend="283"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a92055e98a615e3873af37b28f6925a37" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/d41/a08799_1ad826336edc1851eecaa248f7a87e776c" kindref="member">iterator</ref></type>
+        <definition>iterator castor::Pixel&lt; FT &gt;::end</definition>
+        <argsstring>()</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::Pixel::end</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur sur le dernier élément. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="292" column="17" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="292" bodyend="295"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a2f713df190db720bc3399c332421e226" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/d41/a08799_1a5037f7e816bb3e9f71a51a8b54e1cc64" kindref="member">const_iterator</ref></type>
+        <definition>const_iterator castor::Pixel&lt; FT &gt;::end</definition>
+        <argsstring>() const</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::Pixel::end</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur constant sur le dernier élément. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="304" column="23" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="304" bodyend="307"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d6/d41/a08799_1a829eb50eefc5c6d8379197ce13f2569c" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+        <definition>static PixelFormat castor::Pixel&lt; FT &gt;::getFormat</definition>
+        <argsstring>()</argsstring>
+        <name>getFormat</name>
+        <qualifiedname>castor::Pixel::getFormat</qualifiedname>
+        <briefdescription>
+<para>Récupère le format du pixel. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le format du pixel </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="316" column="20" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="316" bodyend="319"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d41/a08799_1a7d5be41d65ea2eddb12469bae8a84849" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>static uint32_t castor::Pixel&lt; FT &gt;::getSize</definition>
+        <argsstring>()</argsstring>
+        <name>getSize</name>
+        <qualifiedname>castor::Pixel::getSize</qualifiedname>
+        <briefdescription>
+<para>Récupère la taille du pixel. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La taille </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Pixel.hpp" line="328" column="17" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="328" bodyend="331"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Définition d&apos;un pixel. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>L&apos;argument template PixelFormat sert a déterminer la taille et le format du pixel. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::Pixel&lt; PF &gt;</label>
+        <link refid="d6/d41/a08799"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; PF &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::Pixel&lt; FT &gt;</label>
+        <link refid="d6/d41/a08799"/>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/Graphics/Pixel.hpp" line="13" column="1" bodyfile="CastorUtils/Graphics/Pixel.hpp" bodystart="14" bodyend="352"/>
+    <listofallmembers>
+      <member refid="d6/d41/a08799_1a59ca2fe9cf7da43d744c8ad486cd57c7" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>begin</name></member>
+      <member refid="d6/d41/a08799_1a8fd23f32c46140d1edb3def5c68c02be" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>begin</name></member>
+      <member refid="d6/d41/a08799_1a1495d248d38d2ccae2795d3c76b458c6" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>clear</name></member>
+      <member refid="d6/d41/a08799_1ab37fcd023130b270d01e4b3a78e31654" prot="protected" virt="non-virtual"><scope>castor::Pixel</scope><name>component_const_ptr</name></member>
+      <member refid="d6/d41/a08799_1a0c2cea15e2491f95151f0147b88218a6" prot="protected" virt="non-virtual"><scope>castor::Pixel</scope><name>component_const_ref</name></member>
+      <member refid="d6/d41/a08799_1a909e97d6c3910a95bdfe1255bbac97db" prot="protected" virt="non-virtual"><scope>castor::Pixel</scope><name>component_ptr</name></member>
+      <member refid="d6/d41/a08799_1a407e79fce8381cc939f5a1bbae8549db" prot="protected" virt="non-virtual"><scope>castor::Pixel</scope><name>component_ref</name></member>
+      <member refid="d6/d41/a08799_1a5037f7e816bb3e9f71a51a8b54e1cc64" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>const_iterator</name></member>
+      <member refid="d6/d41/a08799_1a9006a865076535f048d8712b731e90dd" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>constPtr</name></member>
+      <member refid="d6/d41/a08799_1a92055e98a615e3873af37b28f6925a37" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>end</name></member>
+      <member refid="d6/d41/a08799_1a2f713df190db720bc3399c332421e226" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>end</name></member>
+      <member refid="d6/d41/a08799_1a829eb50eefc5c6d8379197ce13f2569c" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>getFormat</name></member>
+      <member refid="d6/d41/a08799_1a7d5be41d65ea2eddb12469bae8a84849" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>getSize</name></member>
+      <member refid="d6/d41/a08799_1ad826336edc1851eecaa248f7a87e776c" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>iterator</name></member>
+      <member refid="d6/d41/a08799_1a20803410686d34d3dc7de1792149f7f5" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>link</name></member>
+      <member refid="d6/d41/a08799_1aeed39b66193088b7e6ee42b47743cb65" prot="private" virt="non-virtual"><scope>castor::Pixel</scope><name>m_components</name></member>
+      <member refid="d6/d41/a08799_1a3f0e875f1462805909dc2eb63dcb7e29" prot="private" virt="non-virtual"><scope>castor::Pixel</scope><name>m_delete</name></member>
+      <member refid="d6/d41/a08799_1a1e873f48a3ec58c6853a258159638e4e" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>mul</name></member>
+      <member refid="d6/d41/a08799_1a864a725858fbfa370689c8464f20e99f" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>operator*=</name></member>
+      <member refid="d6/d41/a08799_1a9ff9076782de7355a6e52280de8fdcba" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>operator+=</name></member>
+      <member refid="d6/d41/a08799_1aa1d1075efe5ac3143654b375d2599d82" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>operator-=</name></member>
+      <member refid="d6/d41/a08799_1a234d6daf33d8fd908bf710bd9a3449d0" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>operator/=</name></member>
+      <member refid="d6/d41/a08799_1a9cf2df0393db132795dc6510622da8da" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>operator=</name></member>
+      <member refid="d6/d41/a08799_1adf14c9abdb14bf6fdca8e96b0f268a10" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>operator=</name></member>
+      <member refid="d6/d41/a08799_1a736b8fe86db41615cccb39e567883bd5" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>operator=</name></member>
+      <member refid="d6/d41/a08799_1a64f6abe5b2823912c8b247782e19cc53" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>operator[]</name></member>
+      <member refid="d6/d41/a08799_1a23f922196964c356dccc8d03c33e5d12" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>operator[]</name></member>
+      <member refid="d6/d41/a08799_1a3f3348beecc85efe4fa72a6a430b5671" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>Pixel</name></member>
+      <member refid="d6/d41/a08799_1a956d711dea63cf04f45e8a7ec38c9329" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>Pixel</name></member>
+      <member refid="d6/d41/a08799_1aa574987b1e5e861b23563dd968675624" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>Pixel</name></member>
+      <member refid="d6/d41/a08799_1af8af53429a948f2bddb45e084ff91354" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>Pixel</name></member>
+      <member refid="d6/d41/a08799_1aa92f9815f4b9b4efd825e5458ca50577" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>Pixel</name></member>
+      <member refid="d6/d41/a08799_1a490dc9adb8d94a73f966f7aca6d0f5ba" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>Pixel</name></member>
+      <member refid="d6/d41/a08799_1afc3e610edf4fc567ad8d604a0d25787d" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>ptr</name></member>
+      <member refid="d6/d41/a08799_1a672967120072b56dd1009a45115d7d2b" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>set</name></member>
+      <member refid="d6/d41/a08799_1af28a1c5da942a2cdfe6ae0b2c6839d50" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>set</name></member>
+      <member refid="d6/d41/a08799_1a6f8e82d78178a32e8602a4188f846759" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>set</name></member>
+      <member refid="d6/d41/a08799_1ab926241586edd88be9160a413623b6e6" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>sum</name></member>
+      <member refid="d6/d41/a08799_1aeb380b1d31655d6f820a9149b13b88d8" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>unlink</name></member>
+      <member refid="d6/d41/a08799_1a6be5bcd8bdffc371c6db30ffa0a7451d" prot="public" virt="non-virtual"><scope>castor::Pixel</scope><name>~Pixel</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

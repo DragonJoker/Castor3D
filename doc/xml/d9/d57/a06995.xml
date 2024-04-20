@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/d57/a06995" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserEnumTraits&lt; castor3d::LightType &gt;</compoundname>
+    <includes local="no">Light.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d9/d57/a06995_1a45ed932138a136c67f389bf50b6d6804" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a98169622bc976df3189194c2b35fbf60" kindref="member">xchar</ref> const  *const</type>
+        <definition>xchar const* const castor::ParserEnumTraits&lt; castor3d::LightType &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::LightType &gt;::Name</qualifiedname>
+        <initializer>= <ref refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" kindref="member">cuT</ref>( &quot;LightType&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Light/Light.hpp" line="465" column="34" bodyfile="Castor3D/Scene/Light/Light.hpp" bodystart="465" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d57/a06995_1aeb6e4c219e3cdcf26b91aa5649e10dfc" prot="public" static="yes" mutable="no">
+        <type>UInt32StrMap const</type>
+        <definition>UInt32StrMap const castor::ParserEnumTraits&lt; castor3d::LightType &gt;::Values</definition>
+        <argsstring></argsstring>
+        <name>Values</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::LightType &gt;::Values</qualifiedname>
+        <initializer>= []()
+			{
+				UInt32StrMap result;
+				result = <ref refid="d9/dba/a02278_1a89ee8e4edb4c883ef7c66b8dc60cc430" kindref="member">castor3d::getEnumMapT</ref>&lt; <ref refid="d9/dba/a02278_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">castor3d::LightType</ref> &gt;();
+				return result;
+			}( )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Light/Light.hpp" line="466" column="34" bodyfile="Castor3D/Scene/Light/Light.hpp" bodystart="466" bodyend="471"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserEnumTraits&lt; castor3d::LightType &gt;</label>
+        <link refid="d9/d57/a06995"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>Values</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>UInt32StrMap</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/Light/Light.hpp" line="463" column="1" bodyfile="Castor3D/Scene/Light/Light.hpp" bodystart="464" bodyend="472"/>
+    <listofallmembers>
+      <member refid="d9/d57/a06995_1a45ed932138a136c67f389bf50b6d6804" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::LightType &gt;</scope><name>Name</name></member>
+      <member refid="d9/d57/a06995_1aeb6e4c219e3cdcf26b91aa5649e10dfc" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::LightType &gt;</scope><name>Values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

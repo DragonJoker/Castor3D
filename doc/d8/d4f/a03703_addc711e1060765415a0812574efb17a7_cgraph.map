@@ -1,0 +1,37 @@
+<map id="castor3d::Engine::removeFont" name="castor3d::Engine::removeFont">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,70,200,95"/>
+<area shape="rect" id="Node000002" href="$d8/d4f/a03703.html#a22e67669ad2954a42ce97e3d62c7f299" title="Cleanup function, destroys everything created from the beginning." alt="" coords="255,13,429,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="156,67,274,39,276,44,157,73"/>
+<area shape="rect" id="Node000003" href="$d8/d4f/a03703.html#a3e8c055c4faafee3fea08412919f39a9" title=" " alt="" coords="256,63,428,103"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="200,80,242,80,242,85,200,85"/>
+<area shape="rect" id="Node000004" href="$d8/da3/a08255.html#a21d0ef274f434e61b1d0c336a8c7253a" title="Logging version of tryRemove." alt="" coords="248,127,436,167"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="152,93,254,120,253,126,151,98"/>
+<area shape="rect" id="Node000005" href="$d8/da3/a08255.html#a7b9ac51df57e111ec2af31f89a97cbac" title="Sets all the elements to be cleaned up." alt="" coords="720,63,908,103"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="413,124,434,113,449,98,457,83,466,68,483,55,516,43,550,36,620,33,687,42,746,56,744,61,686,47,620,38,551,41,517,48,485,60,470,71,461,86,453,101,438,117,416,129"/>
+<area shape="rect" id="Node000007" href="$d8/da3/a08255.html#a16408750c3e49683268744e1f35761df" title=" " alt="" coords="956,120,1144,160"/>
+<area shape="poly" id="edge10_Node000004_Node000007" title=" " alt="" coords="436,143,942,138,942,144,436,148"/>
+<area shape="rect" id="Node000008" href="$d2/dd2/a02279.html#a58f3178234ce83e643568e48a0ed6a3f" title=" " alt="" coords="1192,185,1359,210"/>
+<area shape="poly" id="edge11_Node000004_Node000008" title=" " alt="" coords="437,149,1178,189,1178,195,436,154"/>
+<area shape="rect" id="Node000009" href="$d8/da3/a08255.html#a74a35e486aa159b89451ccfb86e2dbd9" title=" " alt="" coords="484,69,672,109"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="424,124,481,110,483,115,426,129"/>
+<area shape="rect" id="Node000010" href="$d8/da3/a08255.html#a6537032eaeeadaffea633743e3218e53" title=" " alt="" coords="484,267,672,307"/>
+<area shape="poly" id="edge12_Node000004_Node000010" title=" " alt="" coords="378,164,533,257,530,262,375,169"/>
+<area shape="rect" id="Node000006" href="$d8/da3/a08255.html#a9623d8ca68e009f78e842011a9caceb4" title=" " alt="" coords="956,5,1144,45"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="896,60,953,46,955,51,898,65"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="898,100,955,114,953,119,896,105"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="908,74,963,75,1023,79,1085,89,1145,105,1176,119,1205,137,1252,173,1249,178,1202,141,1173,124,1143,111,1084,94,1023,85,963,80,908,80"/>
+<area shape="poly" id="edge9_Node000009_Node000005" title=" " alt="" coords="672,84,706,83,706,88,672,89"/>
+<area shape="rect" id="Node000011" href="$d8/da3/a08255.html#a846eb5869a3b833ce9200edb493a3463" title=" " alt="" coords="720,235,908,275"/>
+<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="672,271,706,267,707,272,673,277"/>
+<area shape="rect" id="Node000012" href="$d9/d93/a09063.html#a7fb14049e4aa52e127cb89e73f63a0a3" title="Logs a warning, from a std::basic_string&lt; CharT &gt;" alt="" coords="737,299,891,339"/>
+<area shape="poly" id="edge14_Node000010_Node000012" title=" " alt="" coords="673,297,724,304,723,309,672,302"/>
+<area shape="rect" id="Node000016" href="$d2/dd2/a02279.html#af41ea5b34edb8c4103f57937867ea4d6" title=" " alt="" coords="727,363,901,389"/>
+<area shape="poly" id="edge19_Node000010_Node000016" title=" " alt="" coords="620,304,721,348,748,357,746,362,719,353,618,309"/>
+<area shape="rect" id="Node000013" href="$d9/d93/a09063.html#af8c57bc4b8bfeb532f32493316e157a1" title="Pushes a message into the queue." alt="" coords="973,281,1127,321"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="892,310,959,305,959,311,892,316"/>
+<area shape="poly" id="edge17_Node000013_Node000008" title=" " alt="" coords="1093,279,1233,214,1235,218,1095,284"/>
+<area shape="rect" id="Node000014" href="$d9/d93/a09063.html#afa966debfbe3f79d0bea9cf2bc4c7889" title=" " alt="" coords="1198,252,1353,292"/>
+<area shape="poly" id="edge16_Node000013_Node000014" title=" " alt="" coords="1127,289,1184,281,1185,286,1128,294"/>
+<area shape="rect" id="Node000015" href="$d2/dd2/a02279.html#ab0fb14b20a64ca391cfd363dfdf2ea78" title=" " alt="" coords="1225,317,1325,342"/>
+<area shape="poly" id="edge18_Node000013_Node000015" title=" " alt="" coords="1128,308,1212,319,1211,324,1127,314"/>
+</map>

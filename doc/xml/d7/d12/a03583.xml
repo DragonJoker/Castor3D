@@ -1,0 +1,844 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/d12/a03583" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::UploadData</compoundname>
+    <derivedcompoundref refid="d1/def/a03475" prot="public" virt="non-virtual">castor3d::DirectUploadData</derivedcompoundref>
+    <derivedcompoundref refid="d3/d1c/a03551" prot="public" virt="non-virtual">castor3d::StagedUploadData</derivedcompoundref>
+    <includes local="no">UploadData.hpp</includes>
+    <innerclass refid="d1/dd1/a03591" prot="protected">castor3d::UploadData::BufferDataRange</innerclass>
+    <innerclass refid="d2/db0/a03595" prot="protected">castor3d::UploadData::ImageDataRange</innerclass>
+    <innerclass refid="df/d38/a03587" prot="public">castor3d::UploadData::SemaphoreUsed</innerclass>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d7/d12/a03583_1a8694a94c6cc36d03cc4302e4370d534d" prot="protected" static="no" mutable="no">
+        <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::UploadData::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::UploadData::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="162" column="21" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="162" bodyend="-1"/>
+        <referencedby refid="d7/d12/a03583_1a9beb7dbe51db3350f5898d507945662d" compoundref="d9/d01/a00227" startline="115" endline="118">getDevice</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d12/a03583_1a759027762b8c86e6635978f0a13a0001" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::UploadData::m_debugName</definition>
+        <argsstring></argsstring>
+        <name>m_debugName</name>
+        <qualifiedname>castor3d::UploadData::m_debugName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="163" column="16" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="163" bodyend="-1"/>
+        <referencedby refid="d7/d12/a03583_1a3a4d974ee93c78456cec1a80f3ddbe2f" compoundref="d9/d01/a00227" startline="120" endline="123">getName</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d12/a03583_1a5011b4b7b9942916ddbf4cab177c1700" prot="protected" static="no" mutable="no">
+        <type>ashes::CommandBuffer const  *</type>
+        <definition>ashes::CommandBuffer const* castor3d::UploadData::m_commandBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_commandBuffer</name>
+        <qualifiedname>castor3d::UploadData::m_commandBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="164" column="29" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="164" bodyend="-1"/>
+        <referencedby refid="d7/d12/a03583_1a81951fb371b5784f075c2e035694b17e" compoundref="d9/d01/a00227" startline="110" endline="113">getCommandBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d12/a03583_1ae56bc7c19c635ee4506b463cef221809" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d1/dd1/a03591" kindref="compound">BufferDataRange</ref> &gt;</type>
+        <definition>castor::Vector&lt; BufferDataRange &gt; castor3d::UploadData::m_pendingBuffers</definition>
+        <argsstring></argsstring>
+        <name>m_pendingBuffers</name>
+        <qualifiedname>castor3d::UploadData::m_pendingBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="165" column="16" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d12/a03583_1ad3c4398bcfaff9e44bf7a45202b8f42e" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d2/db0/a03595" kindref="compound">ImageDataRange</ref> &gt;</type>
+        <definition>castor::Vector&lt; ImageDataRange &gt; castor3d::UploadData::m_pendingImages</definition>
+        <argsstring></argsstring>
+        <name>m_pendingImages</name>
+        <qualifiedname>castor3d::UploadData::m_pendingImages</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="166" column="16" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d12/a03583_1ab40296897ee1e35cd8829a3209191ad9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::UploadData::UploadData</definition>
+        <argsstring>(UploadData const &amp;)=delete</argsstring>
+        <name>UploadData</name>
+        <qualifiedname>castor3d::UploadData::UploadData</qualifiedname>
+        <param>
+          <type><ref refid="d7/d12/a03583" kindref="compound">UploadData</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="25" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1ad0d0512983442ca61a5facb8aa6ddfd5" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::UploadData::UploadData</definition>
+        <argsstring>(UploadData &amp;&amp;) noexcept=delete</argsstring>
+        <name>UploadData</name>
+        <qualifiedname>castor3d::UploadData::UploadData</qualifiedname>
+        <param>
+          <type><ref refid="d7/d12/a03583" kindref="compound">UploadData</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="26" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1a7853e1d0c795246023731dc638abfa42" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d7/d12/a03583" kindref="compound">UploadData</ref> &amp;</type>
+        <definition>UploadData &amp; castor3d::UploadData::operator=</definition>
+        <argsstring>(UploadData const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::UploadData::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/d12/a03583" kindref="compound">UploadData</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="27" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1ab1f052fb97be3fd560a72cc3860d3f77" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d7/d12/a03583" kindref="compound">UploadData</ref> &amp;</type>
+        <definition>UploadData &amp; castor3d::UploadData::operator=</definition>
+        <argsstring>(UploadData &amp;&amp;) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::UploadData::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/d12/a03583" kindref="compound">UploadData</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="28" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1ab497295895553f3e7c1ed868801b2ab4" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::UploadData::~UploadData</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~UploadData</name>
+        <qualifiedname>castor3d::UploadData::~UploadData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="29" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1ada13fa011737375b3c65a5a9d7bcb509" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UploadData::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::UploadData::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="31" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1a8fa864671ae7dd28863787c504a757b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UploadData::pushUpload</definition>
+        <argsstring>(void const *srcData, VkDeviceSize srcSize, ashes::BufferBase const &amp;dstBuffer, VkDeviceSize dstOffset, VkAccessFlags dstAccessFlags, VkPipelineStageFlags dstPipelineFlags)</argsstring>
+        <name>pushUpload</name>
+        <qualifiedname>castor3d::UploadData::pushUpload</qualifiedname>
+        <param>
+          <type>void const *</type>
+          <declname>srcData</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>srcSize</declname>
+        </param>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>dstBuffer</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>dstOffset</declname>
+        </param>
+        <param>
+          <type>VkAccessFlags</type>
+          <declname>dstAccessFlags</declname>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>dstPipelineFlags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="32" column="14"/>
+        <referencedby refid="d7/d12/a03583_1a1cf95b9c5ad123d1f1cb390e6df74770" compoundref="d9/d01/a00227" startline="50" endline="62">pushUpload</referencedby>
+        <referencedby refid="d7/d12/a03583_1a9cf933bce34d1758b583a41707d5a524" compoundref="d9/d01/a00227" startline="64" endline="78">pushUpload</referencedby>
+        <referencedby refid="d7/d12/a03583_1a59ca6e8aced50e70feac109042b9adb6" compoundref="d9/d01/a00227" startline="80" endline="92">pushUpload</referencedby>
+        <referencedby refid="d7/d12/a03583_1a00f87e2e00d112299e44b89082fc6e4d" compoundref="d9/d01/a00227" startline="94" endline="108">pushUpload</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1ad15efbed98d72ca1ead30b05a258fae5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UploadData::pushUpload</definition>
+        <argsstring>(void const *srcData, VkDeviceSize srcSize, ashes::Image const &amp;dstImage, castor::ImageLayout dstLayout, VkImageSubresourceRange dstRange, VkImageLayout dstImageLayout, VkPipelineStageFlags dstPipelineFlags)</argsstring>
+        <name>pushUpload</name>
+        <qualifiedname>castor3d::UploadData::pushUpload</qualifiedname>
+        <param>
+          <type>void const *</type>
+          <declname>srcData</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>srcSize</declname>
+        </param>
+        <param>
+          <type>ashes::Image const &amp;</type>
+          <declname>dstImage</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d6e/a08955" kindref="compound">castor::ImageLayout</ref></type>
+          <declname>dstLayout</declname>
+        </param>
+        <param>
+          <type>VkImageSubresourceRange</type>
+          <declname>dstRange</declname>
+        </param>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>dstImageLayout</declname>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>dstPipelineFlags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="38" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1a71946f5b8920bec702c4e8f9b33aecc7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UploadData::process</definition>
+        <argsstring>()</argsstring>
+        <name>process</name>
+        <qualifiedname>castor3d::UploadData::process</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="45" column="14"/>
+        <referencedby refid="d7/db0/a03467_1a8b48c93732068d6b794d9c8905b27666" compoundref="d3/db1/a00200" startline="30" endline="37">castor3d::InstantUploadDataT&lt; UploaderT &gt;::~InstantUploadDataT</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1aaf99041fb33234d4dfdb5c3894ebcd88" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="df/d38/a03587" kindref="compound">SemaphoreUsed</ref></type>
+        <definition>C3D_API SemaphoreUsed castor3d::UploadData::end</definition>
+        <argsstring>(ashes::Queue const &amp;queue, ashes::Fence const *fence=nullptr, castor::Milliseconds timeout=castor::Milliseconds{ ashes::MaxTimeout })</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::UploadData::end</qualifiedname>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>ashes::Fence const *</type>
+          <declname>fence</declname>
+          <defval>nullptr</defval>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a9bbae2d5d564fa58ccbb16ec1d0ed7a1" kindref="member">castor::Milliseconds</ref></type>
+          <declname>timeout</declname>
+          <defval><ref refid="d2/dd2/a02279_1a9bbae2d5d564fa58ccbb16ec1d0ed7a1" kindref="member">castor::Milliseconds</ref>{ ashes::MaxTimeout }</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="46" column="23"/>
+        <referencedby refid="d7/db0/a03467_1a8b48c93732068d6b794d9c8905b27666" compoundref="d3/db1/a00200" startline="30" endline="37">castor3d::InstantUploadDataT&lt; UploaderT &gt;::~InstantUploadDataT</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1a1cf95b9c5ad123d1f1cb390e6df74770" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::UploadData::pushUpload</definition>
+        <argsstring>(castor::ByteArray const &amp;srcData, ashes::BufferBase const &amp;dstBuffer, VkDeviceSize dstOffset, VkAccessFlags dstAccessFlags, VkPipelineStageFlags dstPipelineFlags)</argsstring>
+        <name>pushUpload</name>
+        <qualifiedname>castor3d::UploadData::pushUpload</qualifiedname>
+        <param>
+          <type>castor::ByteArray const &amp;</type>
+          <declname>srcData</declname>
+        </param>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>dstBuffer</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>dstOffset</declname>
+        </param>
+        <param>
+          <type>VkAccessFlags</type>
+          <declname>dstAccessFlags</declname>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>dstPipelineFlags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="50" column="6" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="50" bodyend="62"/>
+        <references refid="d7/d12/a03583_1a8fa864671ae7dd28863787c504a757b1">pushUpload</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1a9cf933bce34d1758b583a41707d5a524" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::UploadData::pushUpload</definition>
+        <argsstring>(castor::ByteArray const &amp;srcData, ashes::Image const &amp;dstImage, castor::ImageLayout dstLayout, VkImageSubresourceRange dstRange, VkImageLayout dstImageLayout, VkPipelineStageFlags dstPipelineFlags)</argsstring>
+        <name>pushUpload</name>
+        <qualifiedname>castor3d::UploadData::pushUpload</qualifiedname>
+        <param>
+          <type>castor::ByteArray const &amp;</type>
+          <declname>srcData</declname>
+        </param>
+        <param>
+          <type>ashes::Image const &amp;</type>
+          <declname>dstImage</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d6e/a08955" kindref="compound">castor::ImageLayout</ref></type>
+          <declname>dstLayout</declname>
+        </param>
+        <param>
+          <type>VkImageSubresourceRange</type>
+          <declname>dstRange</declname>
+        </param>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>dstImageLayout</declname>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>dstPipelineFlags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="64" column="6" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="64" bodyend="78"/>
+        <references refid="d7/d12/a03583_1a8fa864671ae7dd28863787c504a757b1">pushUpload</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1a59ca6e8aced50e70feac109042b9adb6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::UploadData::pushUpload</definition>
+        <argsstring>(castor::ByteArrayView const &amp;srcData, ashes::BufferBase const &amp;dstBuffer, VkDeviceSize dstOffset, VkAccessFlags dstAccessFlags, VkPipelineStageFlags dstPipelineFlags)</argsstring>
+        <name>pushUpload</name>
+        <qualifiedname>castor3d::UploadData::pushUpload</qualifiedname>
+        <param>
+          <type>castor::ByteArrayView const &amp;</type>
+          <declname>srcData</declname>
+        </param>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>dstBuffer</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>dstOffset</declname>
+        </param>
+        <param>
+          <type>VkAccessFlags</type>
+          <declname>dstAccessFlags</declname>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>dstPipelineFlags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="80" column="6" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="80" bodyend="92"/>
+        <references refid="d7/d12/a03583_1a8fa864671ae7dd28863787c504a757b1">pushUpload</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1a00f87e2e00d112299e44b89082fc6e4d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::UploadData::pushUpload</definition>
+        <argsstring>(castor::ByteArrayView const &amp;srcData, ashes::Image const &amp;dstImage, castor::ImageLayout dstLayout, VkImageSubresourceRange dstRange, VkImageLayout dstImageLayout, VkPipelineStageFlags dstPipelineFlags)</argsstring>
+        <name>pushUpload</name>
+        <qualifiedname>castor3d::UploadData::pushUpload</qualifiedname>
+        <param>
+          <type>castor::ByteArrayView const &amp;</type>
+          <declname>srcData</declname>
+        </param>
+        <param>
+          <type>ashes::Image const &amp;</type>
+          <declname>dstImage</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d6e/a08955" kindref="compound">castor::ImageLayout</ref></type>
+          <declname>dstLayout</declname>
+        </param>
+        <param>
+          <type>VkImageSubresourceRange</type>
+          <declname>dstRange</declname>
+        </param>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>dstImageLayout</declname>
+        </param>
+        <param>
+          <type>VkPipelineStageFlags</type>
+          <declname>dstPipelineFlags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="94" column="6" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="94" bodyend="108"/>
+        <references refid="d7/d12/a03583_1a8fa864671ae7dd28863787c504a757b1">pushUpload</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1a81951fb371b5784f075c2e035694b17e" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::CommandBuffer const &amp;</type>
+        <definition>ashes::CommandBuffer const  &amp; castor3d::UploadData::getCommandBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getCommandBuffer</name>
+        <qualifiedname>castor3d::UploadData::getCommandBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="110" column="29" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="110" bodyend="113"/>
+        <references refid="d7/d12/a03583_1a5011b4b7b9942916ddbf4cab177c1700" compoundref="d9/d01/a00227" startline="164">m_commandBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1a9beb7dbe51db3350f5898d507945662d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+        <definition>RenderDevice const  &amp; castor3d::UploadData::getDevice</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getDevice</name>
+        <qualifiedname>castor3d::UploadData::getDevice</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="115" column="21" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="115" bodyend="118"/>
+        <references refid="d7/d12/a03583_1a8694a94c6cc36d03cc4302e4370d534d" compoundref="d9/d01/a00227" startline="162">m_device</references>
+        <referencedby refid="d7/db0/a03467_1a8b48c93732068d6b794d9c8905b27666" compoundref="d3/db1/a00200" startline="30" endline="37">castor3d::InstantUploadDataT&lt; UploaderT &gt;::~InstantUploadDataT</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1a3a4d974ee93c78456cec1a80f3ddbe2f" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+        <definition>castor::String const  &amp; castor3d::UploadData::getName</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getName</name>
+        <qualifiedname>castor3d::UploadData::getName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="120" column="23" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="120" bodyend="123"/>
+        <references refid="d7/d12/a03583_1a759027762b8c86e6635978f0a13a0001" compoundref="d9/d01/a00227" startline="163">m_debugName</references>
+        <referencedby refid="d7/db0/a03467_1a8b48c93732068d6b794d9c8905b27666" compoundref="d3/db1/a00200" startline="30" endline="37">castor3d::InstantUploadDataT&lt; UploaderT &gt;::~InstantUploadDataT</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d7/d12/a03583_1a06072251d0492aa411f74500082d1b69" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::UploadData::UploadData</definition>
+        <argsstring>(RenderDevice const &amp;device, castor::String debugName, ashes::CommandBuffer const *commandBuffer)</argsstring>
+        <name>UploadData</name>
+        <qualifiedname>castor3d::UploadData::UploadData</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>debugName</declname>
+        </param>
+        <param>
+          <type>ashes::CommandBuffer const *</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="147" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1ade325eb70d1106305c8610e651e571bf" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::UploadData::doCopyData</definition>
+        <argsstring>(void const *srcData, VkDeviceSize size, ashes::BufferBase const &amp;dstBuffer, VkDeviceSize dstOffset) const</argsstring>
+        <name>doCopyData</name>
+        <qualifiedname>castor3d::UploadData::doCopyData</qualifiedname>
+        <param>
+          <type>void const *</type>
+          <declname>srcData</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>dstBuffer</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>dstOffset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="151" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1a766f67254869bed6d5d94dcd0caa9d59" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UploadData::doUploadBuffer</definition>
+        <argsstring>(BufferDataRange const &amp;data, ashes::BufferBase const *srcBuffer, VkDeviceSize srcOffset) const</argsstring>
+        <name>doUploadBuffer</name>
+        <qualifiedname>castor3d::UploadData::doUploadBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d1/dd1/a03591" kindref="compound">BufferDataRange</ref> const &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>ashes::BufferBase const *</type>
+          <declname>srcBuffer</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>srcOffset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="155" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1a8d995aa3f03f793f65201bf8ff74f335" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UploadData::doUploadImage</definition>
+        <argsstring>(ImageDataRange &amp;data, ashes::BufferBase const &amp;srcBuffer, VkDeviceSize srcOffset) const</argsstring>
+        <name>doUploadImage</name>
+        <qualifiedname>castor3d::UploadData::doUploadImage</qualifiedname>
+        <param>
+          <type><ref refid="d2/db0/a03595" kindref="compound">ImageDataRange</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>srcBuffer</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>srcOffset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="158" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d7/d12/a03583_1a58f2f40c9d14f9f36624de9699997552" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>VkDeviceSize</type>
+        <definition>virtual VkDeviceSize castor3d::UploadData::doUpload</definition>
+        <argsstring>(BufferDataRange &amp;data)=0</argsstring>
+        <name>doUpload</name>
+        <qualifiedname>castor3d::UploadData::doUpload</qualifiedname>
+        <reimplementedby refid="d1/def/a03475_1ad48d4c6b1a440cd2153d9bbd212e156b">doUpload</reimplementedby>
+        <reimplementedby refid="d3/d1c/a03551_1a75cfc94e2fc81c58e01b7c22524d4cc8">doUpload</reimplementedby>
+        <param>
+          <type><ref refid="d1/dd1/a03591" kindref="compound">BufferDataRange</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="169" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1a44820abdb3083afe79bfda3a1e8c41c1" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>VkDeviceSize</type>
+        <definition>virtual VkDeviceSize castor3d::UploadData::doUpload</definition>
+        <argsstring>(ImageDataRange &amp;data)=0</argsstring>
+        <name>doUpload</name>
+        <qualifiedname>castor3d::UploadData::doUpload</qualifiedname>
+        <reimplementedby refid="d1/def/a03475_1a46f1f3e1715d548950fa54026fc8cd10">doUpload</reimplementedby>
+        <reimplementedby refid="d3/d1c/a03551_1ac231cf4101e4f103ad4cf60ea0aa9da8">doUpload</reimplementedby>
+        <param>
+          <type><ref refid="d2/db0/a03595" kindref="compound">ImageDataRange</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="170" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1a33afbcb7bcb30955b6ac6be534d41fb7" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::UploadData::doBegin</definition>
+        <argsstring>()</argsstring>
+        <name>doBegin</name>
+        <qualifiedname>castor3d::UploadData::doBegin</qualifiedname>
+        <reimplementedby refid="d1/def/a03475_1ad44e878a04c4a886aa8c299532c6d1e7">doBegin</reimplementedby>
+        <reimplementedby refid="d3/d1c/a03551_1a8fcda624f48111e0bc339d6da8a1b9f5">doBegin</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="171" column="14" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="171" bodyend="173"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1ac1479a2981ec5ecbd63eac48fc86ce51" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="df/d38/a03587" kindref="compound">SemaphoreUsed</ref></type>
+        <definition>virtual SemaphoreUsed castor3d::UploadData::doEnd</definition>
+        <argsstring>(ashes::Queue const &amp;queue, ashes::Fence const *fence, castor::Milliseconds timeout)</argsstring>
+        <name>doEnd</name>
+        <qualifiedname>castor3d::UploadData::doEnd</qualifiedname>
+        <reimplementedby refid="d1/def/a03475_1a78132818b4a088a649daaefced765e1e">doEnd</reimplementedby>
+        <reimplementedby refid="d3/d1c/a03551_1a9d8f3c546b36ef8a28626a2fa3477477">doEnd</reimplementedby>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>ashes::Fence const *</type>
+          <declname>fence</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a9bbae2d5d564fa58ccbb16ec1d0ed7a1" kindref="member">castor::Milliseconds</ref></type>
+          <declname>timeout</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="175" column="23" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="175" bodyend="180"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1a13717174743f0dc5cd23b9cf9dc86e61" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::UploadData::doPreprocess</definition>
+        <argsstring>(castor::Vector&lt; BufferDataRange &gt; *&amp;pendingBuffers, castor::Vector&lt; ImageDataRange &gt; *&amp;pendingImages)</argsstring>
+        <name>doPreprocess</name>
+        <qualifiedname>castor3d::UploadData::doPreprocess</qualifiedname>
+        <reimplementedby refid="d3/d1c/a03551_1ab34a840dbb5f51601cc0d82c7a6192b3">doPreprocess</reimplementedby>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d1/dd1/a03591" kindref="compound">BufferDataRange</ref> &gt; *&amp;</type>
+          <declname>pendingBuffers</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d2/db0/a03595" kindref="compound">ImageDataRange</ref> &gt; *&amp;</type>
+          <declname>pendingImages</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="182" column="14" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="182" bodyend="187"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d12/a03583_1a8828896b9f42715fc7408cc6baad678e" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::UploadData::doPostprocess</definition>
+        <argsstring>()</argsstring>
+        <name>doPostprocess</name>
+        <qualifiedname>castor3d::UploadData::doPostprocess</qualifiedname>
+        <reimplementedby refid="d3/d1c/a03551_1a3a5cb2a7682a48ae3462a8414abcb8af">doPostprocess</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="189" column="14" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="189" bodyend="191"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::DirectUploadData</label>
+        <link refid="d1/def/a03475"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::StagedUploadData</label>
+        <link refid="d3/d1c/a03551"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::UploadData</label>
+        <link refid="d7/d12/a03583"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::RenderDevice</label>
+        <link refid="dc/d32/a06415"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d5/d4e/a06559"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::UploadData</label>
+        <link refid="d7/d12/a03583"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_debugName</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="7">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Buffer/UploadData.hpp" line="14" column="1" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="15" bodyend="192"/>
+    <listofallmembers>
+      <member refid="d7/d12/a03583_1ada13fa011737375b3c65a5a9d7bcb509" prot="public" virt="non-virtual"><scope>castor3d::UploadData</scope><name>begin</name></member>
+      <member refid="d7/d12/a03583_1a33afbcb7bcb30955b6ac6be534d41fb7" prot="private" virt="virtual"><scope>castor3d::UploadData</scope><name>doBegin</name></member>
+      <member refid="d7/d12/a03583_1ade325eb70d1106305c8610e651e571bf" prot="protected" virt="non-virtual"><scope>castor3d::UploadData</scope><name>doCopyData</name></member>
+      <member refid="d7/d12/a03583_1ac1479a2981ec5ecbd63eac48fc86ce51" prot="private" virt="virtual"><scope>castor3d::UploadData</scope><name>doEnd</name></member>
+      <member refid="d7/d12/a03583_1a8828896b9f42715fc7408cc6baad678e" prot="private" virt="virtual"><scope>castor3d::UploadData</scope><name>doPostprocess</name></member>
+      <member refid="d7/d12/a03583_1a13717174743f0dc5cd23b9cf9dc86e61" prot="private" virt="virtual"><scope>castor3d::UploadData</scope><name>doPreprocess</name></member>
+      <member refid="d7/d12/a03583_1a58f2f40c9d14f9f36624de9699997552" prot="private" virt="pure-virtual"><scope>castor3d::UploadData</scope><name>doUpload</name></member>
+      <member refid="d7/d12/a03583_1a44820abdb3083afe79bfda3a1e8c41c1" prot="private" virt="pure-virtual"><scope>castor3d::UploadData</scope><name>doUpload</name></member>
+      <member refid="d7/d12/a03583_1a766f67254869bed6d5d94dcd0caa9d59" prot="protected" virt="non-virtual"><scope>castor3d::UploadData</scope><name>doUploadBuffer</name></member>
+      <member refid="d7/d12/a03583_1a8d995aa3f03f793f65201bf8ff74f335" prot="protected" virt="non-virtual"><scope>castor3d::UploadData</scope><name>doUploadImage</name></member>
+      <member refid="d7/d12/a03583_1aaf99041fb33234d4dfdb5c3894ebcd88" prot="public" virt="non-virtual"><scope>castor3d::UploadData</scope><name>end</name></member>
+      <member refid="d7/d12/a03583_1a81951fb371b5784f075c2e035694b17e" prot="public" virt="non-virtual"><scope>castor3d::UploadData</scope><name>getCommandBuffer</name></member>
+      <member refid="d7/d12/a03583_1a9beb7dbe51db3350f5898d507945662d" prot="public" virt="non-virtual"><scope>castor3d::UploadData</scope><name>getDevice</name></member>
+      <member refid="d7/d12/a03583_1a3a4d974ee93c78456cec1a80f3ddbe2f" prot="public" virt="non-virtual"><scope>castor3d::UploadData</scope><name>getName</name></member>
+      <member refid="d7/d12/a03583_1a5011b4b7b9942916ddbf4cab177c1700" prot="protected" virt="non-virtual"><scope>castor3d::UploadData</scope><name>m_commandBuffer</name></member>
+      <member refid="d7/d12/a03583_1a759027762b8c86e6635978f0a13a0001" prot="protected" virt="non-virtual"><scope>castor3d::UploadData</scope><name>m_debugName</name></member>
+      <member refid="d7/d12/a03583_1a8694a94c6cc36d03cc4302e4370d534d" prot="protected" virt="non-virtual"><scope>castor3d::UploadData</scope><name>m_device</name></member>
+      <member refid="d7/d12/a03583_1ae56bc7c19c635ee4506b463cef221809" prot="protected" virt="non-virtual"><scope>castor3d::UploadData</scope><name>m_pendingBuffers</name></member>
+      <member refid="d7/d12/a03583_1ad3c4398bcfaff9e44bf7a45202b8f42e" prot="protected" virt="non-virtual"><scope>castor3d::UploadData</scope><name>m_pendingImages</name></member>
+      <member refid="d7/d12/a03583_1a7853e1d0c795246023731dc638abfa42" prot="public" virt="non-virtual"><scope>castor3d::UploadData</scope><name>operator=</name></member>
+      <member refid="d7/d12/a03583_1ab1f052fb97be3fd560a72cc3860d3f77" prot="public" virt="non-virtual"><scope>castor3d::UploadData</scope><name>operator=</name></member>
+      <member refid="d7/d12/a03583_1a71946f5b8920bec702c4e8f9b33aecc7" prot="public" virt="non-virtual"><scope>castor3d::UploadData</scope><name>process</name></member>
+      <member refid="d7/d12/a03583_1a8fa864671ae7dd28863787c504a757b1" prot="public" virt="non-virtual"><scope>castor3d::UploadData</scope><name>pushUpload</name></member>
+      <member refid="d7/d12/a03583_1ad15efbed98d72ca1ead30b05a258fae5" prot="public" virt="non-virtual"><scope>castor3d::UploadData</scope><name>pushUpload</name></member>
+      <member refid="d7/d12/a03583_1a1cf95b9c5ad123d1f1cb390e6df74770" prot="public" virt="non-virtual"><scope>castor3d::UploadData</scope><name>pushUpload</name></member>
+      <member refid="d7/d12/a03583_1a9cf933bce34d1758b583a41707d5a524" prot="public" virt="non-virtual"><scope>castor3d::UploadData</scope><name>pushUpload</name></member>
+      <member refid="d7/d12/a03583_1a59ca6e8aced50e70feac109042b9adb6" prot="public" virt="non-virtual"><scope>castor3d::UploadData</scope><name>pushUpload</name></member>
+      <member refid="d7/d12/a03583_1a00f87e2e00d112299e44b89082fc6e4d" prot="public" virt="non-virtual"><scope>castor3d::UploadData</scope><name>pushUpload</name></member>
+      <member refid="d7/d12/a03583_1ab40296897ee1e35cd8829a3209191ad9" prot="public" virt="non-virtual"><scope>castor3d::UploadData</scope><name>UploadData</name></member>
+      <member refid="d7/d12/a03583_1ad0d0512983442ca61a5facb8aa6ddfd5" prot="public" virt="non-virtual"><scope>castor3d::UploadData</scope><name>UploadData</name></member>
+      <member refid="d7/d12/a03583_1a06072251d0492aa411f74500082d1b69" prot="protected" virt="non-virtual"><scope>castor3d::UploadData</scope><name>UploadData</name></member>
+      <member refid="d7/d12/a03583_1ab497295895553f3e7c1ed868801b2ab4" prot="public" virt="virtual"><scope>castor3d::UploadData</scope><name>~UploadData</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

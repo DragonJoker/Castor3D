@@ -1,0 +1,581 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/d5f/a06579" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RenderTechniquePassDesc</compoundname>
+    <includes local="no">RenderTechniquePass.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d5f/a06579_1af8974e03625b3608004c4af61936facc" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/daa/a06683" kindref="compound">SsaoConfig</ref> const  *</type>
+        <definition>SsaoConfig const* castor3d::RenderTechniquePassDesc::m_ssaoConfig</definition>
+        <argsstring></argsstring>
+        <name>m_ssaoConfig</name>
+        <qualifiedname>castor3d::RenderTechniquePassDesc::m_ssaoConfig</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTechniquePass.hpp" line="115" column="19" bodyfile="Castor3D/Render/RenderTechniquePass.hpp" bodystart="115" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d5f/a06579_1a4831fdfbf565ad7abb3cfc88d5597d2f" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const  *</type>
+        <definition>Texture const* castor3d::RenderTechniquePassDesc::m_ssao</definition>
+        <argsstring></argsstring>
+        <name>m_ssao</name>
+        <qualifiedname>castor3d::RenderTechniquePassDesc::m_ssao</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTechniquePass.hpp" line="116" column="16" bodyfile="Castor3D/Render/RenderTechniquePass.hpp" bodystart="116" bodyend="116"/>
+        <referencedby refid="de/d5f/a06579_1af38289434202da8c272b30d1de010373" compoundref="d8/ddf/a01238" startline="46" endline="50">ssao</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="de/d5f/a06579_1a7ea5ad75efd41a02d276b2bb6497bba6" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/d3d/a05967" kindref="compound">IndirectLightingData</ref></type>
+        <definition>IndirectLightingData castor3d::RenderTechniquePassDesc::m_indirectLighting</definition>
+        <argsstring></argsstring>
+        <name>m_indirectLighting</name>
+        <qualifiedname>castor3d::RenderTechniquePassDesc::m_indirectLighting</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTechniquePass.hpp" line="117" column="22" bodyfile="Castor3D/Render/RenderTechniquePass.hpp" bodystart="117" bodyend="-1"/>
+        <referencedby refid="de/d5f/a06579_1a84b1aa4adbfc08d505ac15ae2b06d8e1" compoundref="d8/ddf/a01238" startline="35" endline="39">indirect</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="de/d5f/a06579_1a2dc18189844f04de252e9c86025edabd" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1ab570f77ed4b8ad316f3ea34ae87476dd" kindref="member">ShaderFlags</ref></type>
+        <definition>ShaderFlags castor3d::RenderTechniquePassDesc::m_shaderFlags</definition>
+        <argsstring></argsstring>
+        <name>m_shaderFlags</name>
+        <qualifiedname>castor3d::RenderTechniquePassDesc::m_shaderFlags</qualifiedname>
+        <initializer>{ <ref refid="d9/dba/a02278_1af2b45637ae87ee95eb6b6641d9415d45ad2b5722680c0d6238d583746bb8b698d" kindref="member">ShaderFlag::eWorldSpace</ref>
+			| <ref refid="d9/dba/a02278_1af2b45637ae87ee95eb6b6641d9415d45a347c31380f35ea049138b555e6e0d8a8" kindref="member">ShaderFlag::eViewSpace</ref>
+			| <ref refid="d9/dba/a02278_1af2b45637ae87ee95eb6b6641d9415d45a86b9748dc9ef62c95bc512169ea28e42" kindref="member">ShaderFlag::eTangentSpace</ref>
+			| <ref refid="d9/dba/a02278_1af2b45637ae87ee95eb6b6641d9415d45aeb97df2a505ca2b5140ffd98519fe19b" kindref="member">ShaderFlag::eLighting</ref>
+			| <ref refid="d9/dba/a02278_1af2b45637ae87ee95eb6b6641d9415d45aa3a957357b758bcbb55d221bf975b545" kindref="member">ShaderFlag::eOpacity</ref>
+			| <ref refid="d9/dba/a02278_1af2b45637ae87ee95eb6b6641d9415d45a933e146a34d99e16a319642574089a34" kindref="member">ShaderFlag::eColour</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTechniquePass.hpp" line="118" column="13" bodyfile="Castor3D/Render/RenderTechniquePass.hpp" bodystart="118" bodyend="123"/>
+        <referencedby refid="de/d5f/a06579_1ac1c409e665b8f15aaefdae5981ea43bf" compoundref="d8/ddf/a01238" startline="76" endline="80">addShaderFlag</referencedby>
+        <referencedby refid="de/d5f/a06579_1a43e61adafe45a87d9344ee24d6bc8e04" compoundref="d8/ddf/a01238" startline="57" endline="69">hasVelocity</referencedby>
+        <referencedby refid="de/d5f/a06579_1a1a0e6e1789e4b9ee4d3f10a5b38fc6ad" compoundref="d8/ddf/a01238" startline="20" endline="28">RenderTechniquePassDesc</referencedby>
+        <referencedby refid="de/d5f/a06579_1a254746a411b286fc1ed105aa85669ae7" compoundref="d8/ddf/a01238" startline="87" endline="91">shaderFlags</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="de/d5f/a06579_1af23acd09a468a9a144c9b92b7c7f2afe" prot="public" static="no" mutable="no">
+        <type><ref refid="db/da7/a05911" kindref="compound">ClustersConfig</ref> const  *</type>
+        <definition>ClustersConfig const* castor3d::RenderTechniquePassDesc::m_clustersConfig</definition>
+        <argsstring></argsstring>
+        <name>m_clustersConfig</name>
+        <qualifiedname>castor3d::RenderTechniquePassDesc::m_clustersConfig</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTechniquePass.hpp" line="124" column="23" bodyfile="Castor3D/Render/RenderTechniquePass.hpp" bodystart="124" bodyend="124"/>
+        <referencedby refid="de/d5f/a06579_1acd09a25b85d31d89f017c6da2fbda902" compoundref="d8/ddf/a01238" startline="98" endline="102">clustersConfig</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="de/d5f/a06579_1a8adf6f2529fbcc76b5bf0df1176e1493" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderTechniquePassDesc::m_outputScattering</definition>
+        <argsstring></argsstring>
+        <name>m_outputScattering</name>
+        <qualifiedname>castor3d::RenderTechniquePassDesc::m_outputScattering</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTechniquePass.hpp" line="125" column="6" bodyfile="Castor3D/Render/RenderTechniquePass.hpp" bodystart="125" bodyend="125"/>
+        <referencedby refid="de/d5f/a06579_1a9c7839c1c2d05ab5e5993707929ef3bf" compoundref="d8/ddf/a01238" startline="109" endline="113">outputScattering</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d5f/a06579_1a1a0e6e1789e4b9ee4d3f10a5b38fc6ad" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderTechniquePassDesc::RenderTechniquePassDesc</definition>
+        <argsstring>(bool environment, SsaoConfig const &amp;ssaoConfig)</argsstring>
+        <name>RenderTechniquePassDesc</name>
+        <qualifiedname>castor3d::RenderTechniquePassDesc::RenderTechniquePassDesc</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>environment</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/daa/a06683" kindref="compound">SsaoConfig</ref> const &amp;</type>
+          <declname>ssaoConfig</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTechniquePass.hpp" line="20" column="1" bodyfile="Castor3D/Render/RenderTechniquePass.hpp" bodystart="20" bodyend="28"/>
+        <references refid="d9/dba/a02278_1af2b45637ae87ee95eb6b6641d9415d45abe4173784548d4708cd1322d33bf6a26">castor3d::eEnvironmentMapping</references>
+        <references refid="de/d5f/a06579_1a2dc18189844f04de252e9c86025edabd" compoundref="d8/ddf/a01238" startline="118" endline="123">m_shaderFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d5f/a06579_1a84b1aa4adbfc08d505ac15ae2b06d8e1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d5f/a06579" kindref="compound">RenderTechniquePassDesc</ref> &amp;</type>
+        <definition>RenderTechniquePassDesc &amp; castor3d::RenderTechniquePassDesc::indirect</definition>
+        <argsstring>(IndirectLightingData value)</argsstring>
+        <name>indirect</name>
+        <qualifiedname>castor3d::RenderTechniquePassDesc::indirect</qualifiedname>
+        <param>
+          <type><ref refid="dd/d3d/a05967" kindref="compound">IndirectLightingData</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La configuration des LPV. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTechniquePass.hpp" line="35" column="26" bodyfile="Castor3D/Render/RenderTechniquePass.hpp" bodystart="35" bodyend="39"/>
+        <references refid="de/d5f/a06579_1a7ea5ad75efd41a02d276b2bb6497bba6" compoundref="d8/ddf/a01238" startline="117">m_indirectLighting</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d5f/a06579_1af38289434202da8c272b30d1de010373" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d5f/a06579" kindref="compound">RenderTechniquePassDesc</ref> &amp;</type>
+        <definition>RenderTechniquePassDesc &amp; castor3d::RenderTechniquePassDesc::ssao</definition>
+        <argsstring>(Texture const &amp;value)</argsstring>
+        <name>ssao</name>
+        <qualifiedname>castor3d::RenderTechniquePassDesc::ssao</qualifiedname>
+        <param>
+          <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le résultat du LPV. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTechniquePass.hpp" line="46" column="26" bodyfile="Castor3D/Render/RenderTechniquePass.hpp" bodystart="46" bodyend="50"/>
+        <references refid="de/d5f/a06579_1a4831fdfbf565ad7abb3cfc88d5597d2f" compoundref="d8/ddf/a01238" startline="116" endline="116">m_ssao</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d5f/a06579_1a43e61adafe45a87d9344ee24d6bc8e04" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d5f/a06579" kindref="compound">RenderTechniquePassDesc</ref> &amp;</type>
+        <definition>RenderTechniquePassDesc &amp; castor3d::RenderTechniquePassDesc::hasVelocity</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>hasVelocity</name>
+        <qualifiedname>castor3d::RenderTechniquePassDesc::hasVelocity</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> si la passe écrit dans la texture de vélocité. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTechniquePass.hpp" line="57" column="26" bodyfile="Castor3D/Render/RenderTechniquePass.hpp" bodystart="57" bodyend="69"/>
+        <references refid="d9/dba/a02278_1af2b45637ae87ee95eb6b6641d9415d45ab2c25b5cef640a0733b40b4ded88d091">castor3d::eVelocity</references>
+        <references refid="de/d5f/a06579_1a2dc18189844f04de252e9c86025edabd" compoundref="d8/ddf/a01238" startline="118" endline="123">m_shaderFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d5f/a06579_1ac1c409e665b8f15aaefdae5981ea43bf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d5f/a06579" kindref="compound">RenderTechniquePassDesc</ref> &amp;</type>
+        <definition>RenderTechniquePassDesc &amp; castor3d::RenderTechniquePassDesc::addShaderFlag</definition>
+        <argsstring>(ShaderFlags value)</argsstring>
+        <name>addShaderFlag</name>
+        <qualifiedname>castor3d::RenderTechniquePassDesc::addShaderFlag</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1ab570f77ed4b8ad316f3ea34ae87476dd" kindref="member">ShaderFlags</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> si la passe écrit dans la texture de vélocité. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTechniquePass.hpp" line="76" column="26" bodyfile="Castor3D/Render/RenderTechniquePass.hpp" bodystart="76" bodyend="80"/>
+        <references refid="de/d5f/a06579_1a2dc18189844f04de252e9c86025edabd" compoundref="d8/ddf/a01238" startline="118" endline="123">m_shaderFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d5f/a06579_1a254746a411b286fc1ed105aa85669ae7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d5f/a06579" kindref="compound">RenderTechniquePassDesc</ref> &amp;</type>
+        <definition>RenderTechniquePassDesc &amp; castor3d::RenderTechniquePassDesc::shaderFlags</definition>
+        <argsstring>(ShaderFlags value)</argsstring>
+        <name>shaderFlags</name>
+        <qualifiedname>castor3d::RenderTechniquePassDesc::shaderFlags</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1ab570f77ed4b8ad316f3ea34ae87476dd" kindref="member">ShaderFlags</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> si la passe écrit dans la texture de vélocité. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTechniquePass.hpp" line="87" column="26" bodyfile="Castor3D/Render/RenderTechniquePass.hpp" bodystart="87" bodyend="91"/>
+        <references refid="de/d5f/a06579_1a2dc18189844f04de252e9c86025edabd" compoundref="d8/ddf/a01238" startline="118" endline="123">m_shaderFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d5f/a06579_1acd09a25b85d31d89f017c6da2fbda902" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d5f/a06579" kindref="compound">RenderTechniquePassDesc</ref> &amp;</type>
+        <definition>RenderTechniquePassDesc &amp; castor3d::RenderTechniquePassDesc::clustersConfig</definition>
+        <argsstring>(ClustersConfig const *value)</argsstring>
+        <name>clustersConfig</name>
+        <qualifiedname>castor3d::RenderTechniquePassDesc::clustersConfig</qualifiedname>
+        <param>
+          <type><ref refid="db/da7/a05911" kindref="compound">ClustersConfig</ref> const *</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La configuration des clusters. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTechniquePass.hpp" line="98" column="26" bodyfile="Castor3D/Render/RenderTechniquePass.hpp" bodystart="98" bodyend="102"/>
+        <references refid="de/d5f/a06579_1af23acd09a468a9a144c9b92b7c7f2afe" compoundref="d8/ddf/a01238" startline="124" endline="124">m_clustersConfig</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d5f/a06579_1a9c7839c1c2d05ab5e5993707929ef3bf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/d5f/a06579" kindref="compound">RenderTechniquePassDesc</ref> &amp;</type>
+        <definition>RenderTechniquePassDesc &amp; castor3d::RenderTechniquePassDesc::outputScattering</definition>
+        <argsstring>(bool value=true)</argsstring>
+        <name>outputScattering</name>
+        <qualifiedname>castor3d::RenderTechniquePassDesc::outputScattering</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> pour écrire le light scattering. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderTechniquePass.hpp" line="109" column="26" bodyfile="Castor3D/Render/RenderTechniquePass.hpp" bodystart="109" bodyend="113"/>
+        <references refid="de/d5f/a06579_1a8adf6f2529fbcc76b5bf0df1176e1493" compoundref="d8/ddf/a01238" startline="125" endline="125">m_outputScattering</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="5">
+        <label>castor::ChangeTrackedT&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</label>
+        <link refid="d2/def/a08159"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor::FlagCombination&lt; ShaderFlag &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="23" relation="template-instance">
+          <edgelabel>&lt; ShaderFlag &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::GBufferT&lt; LpvTexture &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="19" relation="private-inheritance">
+        </childnode>
+        <childnode refid="21" relation="template-instance">
+          <edgelabel>&lt; LpvTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor::GroupChangeTrackedT&lt; ClusterSplitScheme &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="26" relation="template-instance">
+          <edgelabel>&lt; ClusterSplitScheme &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor::GroupChangeTrackedT&lt; bool &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="26" relation="template-instance">
+          <edgelabel>&lt; bool &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="28">
+        <label>castor::GroupChangeTrackedT&lt; float &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="26" relation="template-instance">
+          <edgelabel>&lt; float &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::RangedValue&lt; int32_t &gt;</label>
+        <link refid="d8/de9/a09211"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; int32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::RangedValue&lt; uint32_t &gt;</label>
+        <link refid="d8/de9/a09211"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; uint32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor3d::ClustersConfig</label>
+        <link refid="db/da7/a05911"/>
+        <childnode refid="25" relation="usage">
+          <edgelabel>enableBVHWarpOptimisation</edgelabel>
+          <edgelabel>enablePostAssignSort</edgelabel>
+          <edgelabel>enableReduceWarpOptimisation</edgelabel>
+          <edgelabel>limitClustersToLightsAABB</edgelabel>
+          <edgelabel>parseDepthBuffer</edgelabel>
+          <edgelabel>sortLights</edgelabel>
+          <edgelabel>useLightsBVH</edgelabel>
+          <edgelabel>useSpotBoundingCone</edgelabel>
+          <edgelabel>useSpotTightBoundingBox</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="usage">
+          <edgelabel>splitScheme</edgelabel>
+        </childnode>
+        <childnode refid="28" relation="usage">
+          <edgelabel>bias</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d8/d33/a05959"/>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="19" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::IndirectLightingData</label>
+        <link refid="dd/d3d/a05967"/>
+        <childnode refid="14" relation="usage">
+          <edgelabel>lpvConfigUbo</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>llpvConfigUbo</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>vctConfigUbo</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>lpvResult</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>vctFirstBounce</edgelabel>
+          <edgelabel>vctSecondaryBounce</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::LayeredLpvGridConfigUbo</label>
+        <link refid="d6/d47/a07775"/>
+      </node>
+      <node id="17">
+        <label>castor3d::LightVolumePassResult</label>
+        <link refid="dc/d72/a06019"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::LpvGridConfigUbo</label>
+        <link refid="da/dff/a07783"/>
+      </node>
+      <node id="9">
+        <label>castor3d::RenderDevice</label>
+        <link refid="dc/d32/a06415"/>
+        <childnode refid="10" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d5/d4e/a06559"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderTechniquePassDesc</label>
+        <link refid="de/d5f/a06579"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_ssaoConfig</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_ssao</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_indirectLighting</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_shaderFlags</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>m_clustersConfig</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SsaoConfig</label>
+        <link refid="dd/daa/a06683"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>logMaxOffset</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>blurRadius</edgelabel>
+          <edgelabel>blurStepSize</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>bendStepCount</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::Texture</label>
+        <link refid="d1/d95/a06703"/>
+        <childnode refid="9" relation="usage">
+          <edgelabel>device</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::VoxelizerUbo</label>
+        <link refid="d0/d63/a07931"/>
+      </node>
+      <node id="6">
+        <label>castor::ChangeTrackedT&lt; ValueT, ControlT &gt;</label>
+        <link refid="d2/def/a08159"/>
+      </node>
+      <node id="23">
+        <label>castor::FlagCombination&lt; FlagType &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+      </node>
+      <node id="26">
+        <label>castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+      </node>
+      <node id="20">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="12">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="4">
+        <label>castor::RangedValue&lt; T &gt;</label>
+        <link refid="d8/de9/a09211"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/RenderTechniquePass.hpp" line="18" column="1" bodyfile="Castor3D/Render/RenderTechniquePass.hpp" bodystart="19" bodyend="126"/>
+    <listofallmembers>
+      <member refid="de/d5f/a06579_1ac1c409e665b8f15aaefdae5981ea43bf" prot="public" virt="non-virtual"><scope>castor3d::RenderTechniquePassDesc</scope><name>addShaderFlag</name></member>
+      <member refid="de/d5f/a06579_1acd09a25b85d31d89f017c6da2fbda902" prot="public" virt="non-virtual"><scope>castor3d::RenderTechniquePassDesc</scope><name>clustersConfig</name></member>
+      <member refid="de/d5f/a06579_1a43e61adafe45a87d9344ee24d6bc8e04" prot="public" virt="non-virtual"><scope>castor3d::RenderTechniquePassDesc</scope><name>hasVelocity</name></member>
+      <member refid="de/d5f/a06579_1a84b1aa4adbfc08d505ac15ae2b06d8e1" prot="public" virt="non-virtual"><scope>castor3d::RenderTechniquePassDesc</scope><name>indirect</name></member>
+      <member refid="de/d5f/a06579_1af23acd09a468a9a144c9b92b7c7f2afe" prot="public" virt="non-virtual"><scope>castor3d::RenderTechniquePassDesc</scope><name>m_clustersConfig</name></member>
+      <member refid="de/d5f/a06579_1a7ea5ad75efd41a02d276b2bb6497bba6" prot="public" virt="non-virtual"><scope>castor3d::RenderTechniquePassDesc</scope><name>m_indirectLighting</name></member>
+      <member refid="de/d5f/a06579_1a8adf6f2529fbcc76b5bf0df1176e1493" prot="public" virt="non-virtual"><scope>castor3d::RenderTechniquePassDesc</scope><name>m_outputScattering</name></member>
+      <member refid="de/d5f/a06579_1a2dc18189844f04de252e9c86025edabd" prot="public" virt="non-virtual"><scope>castor3d::RenderTechniquePassDesc</scope><name>m_shaderFlags</name></member>
+      <member refid="de/d5f/a06579_1a4831fdfbf565ad7abb3cfc88d5597d2f" prot="public" virt="non-virtual"><scope>castor3d::RenderTechniquePassDesc</scope><name>m_ssao</name></member>
+      <member refid="de/d5f/a06579_1af8974e03625b3608004c4af61936facc" prot="public" virt="non-virtual"><scope>castor3d::RenderTechniquePassDesc</scope><name>m_ssaoConfig</name></member>
+      <member refid="de/d5f/a06579_1a9c7839c1c2d05ab5e5993707929ef3bf" prot="public" virt="non-virtual"><scope>castor3d::RenderTechniquePassDesc</scope><name>outputScattering</name></member>
+      <member refid="de/d5f/a06579_1a1a0e6e1789e4b9ee4d3f10a5b38fc6ad" prot="public" virt="non-virtual"><scope>castor3d::RenderTechniquePassDesc</scope><name>RenderTechniquePassDesc</name></member>
+      <member refid="de/d5f/a06579_1a254746a411b286fc1ed105aa85669ae7" prot="public" virt="non-virtual"><scope>castor3d::RenderTechniquePassDesc</scope><name>shaderFlags</name></member>
+      <member refid="de/d5f/a06579_1af38289434202da8c272b30d1de010373" prot="public" virt="non-virtual"><scope>castor3d::RenderTechniquePassDesc</scope><name>ssao</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,307 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/db0/a05447" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SubmeshComponentCombine</compoundname>
+    <includes local="no">ComponentModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/db0/a05447_1a0535bb546864a11579d3ed1eae887914" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a731b7f9025f4319c2fd92648979ea5bf" kindref="member">SubmeshComponentCombineID</ref></type>
+        <definition>SubmeshComponentCombineID castor3d::SubmeshComponentCombine::baseId</definition>
+        <argsstring></argsstring>
+        <name>baseId</name>
+        <qualifiedname>castor3d::SubmeshComponentCombine::baseId</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="31" column="27" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="31" bodyend="31"/>
+        <referencedby refid="d5/d31/a06931_1aa0c927267213004b72012d69814ae87b" compoundref="dd/d08/a01448" startline="146" endline="149">castor3d::BillboardBase::getComponentCombineID</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/db0/a05447_1abe659103ab0a4926f10d5fcfa28e8341" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a01d94364d4a2279ee68fd69e786b6ad8" kindref="member">SubmeshComponentFlagsSet</ref></type>
+        <definition>SubmeshComponentFlagsSet castor3d::SubmeshComponentCombine::flags</definition>
+        <argsstring></argsstring>
+        <name>flags</name>
+        <qualifiedname>castor3d::SubmeshComponentCombine::flags</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="32" column="26" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/db0/a05447_1a006102a349ddea3234cdc09abad7c791" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SubmeshComponentCombine::hasLineIndexFlag</definition>
+        <argsstring></argsstring>
+        <name>hasLineIndexFlag</name>
+        <qualifiedname>castor3d::SubmeshComponentCombine::hasLineIndexFlag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="34" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="34" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/db0/a05447_1a8640bc90907068e884091cdd7e57cd88" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SubmeshComponentCombine::hasTriangleIndexFlag</definition>
+        <argsstring></argsstring>
+        <name>hasTriangleIndexFlag</name>
+        <qualifiedname>castor3d::SubmeshComponentCombine::hasTriangleIndexFlag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="35" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/db0/a05447_1adaa51d0251cbe3c73dd551addf7947b2" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SubmeshComponentCombine::hasPositionFlag</definition>
+        <argsstring></argsstring>
+        <name>hasPositionFlag</name>
+        <qualifiedname>castor3d::SubmeshComponentCombine::hasPositionFlag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="36" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/db0/a05447_1a7cdcca4ed0a44ac77aab8e77fb6f0866" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SubmeshComponentCombine::hasNormalFlag</definition>
+        <argsstring></argsstring>
+        <name>hasNormalFlag</name>
+        <qualifiedname>castor3d::SubmeshComponentCombine::hasNormalFlag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="37" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/db0/a05447_1a04256726dd3b30f9a29b6c78cf35f1c4" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SubmeshComponentCombine::hasTangentFlag</definition>
+        <argsstring></argsstring>
+        <name>hasTangentFlag</name>
+        <qualifiedname>castor3d::SubmeshComponentCombine::hasTangentFlag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="38" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="38" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/db0/a05447_1a9eeef88f2e856fed473cf1df87a87dd6" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SubmeshComponentCombine::hasBitangentFlag</definition>
+        <argsstring></argsstring>
+        <name>hasBitangentFlag</name>
+        <qualifiedname>castor3d::SubmeshComponentCombine::hasBitangentFlag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="39" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="39" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/db0/a05447_1a4c93713299ab69eed4eaa6c5d275ac22" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SubmeshComponentCombine::hasTexcoord0Flag</definition>
+        <argsstring></argsstring>
+        <name>hasTexcoord0Flag</name>
+        <qualifiedname>castor3d::SubmeshComponentCombine::hasTexcoord0Flag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="40" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/db0/a05447_1a4832c1988c1fce9bf427728267221bf8" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SubmeshComponentCombine::hasTexcoord1Flag</definition>
+        <argsstring></argsstring>
+        <name>hasTexcoord1Flag</name>
+        <qualifiedname>castor3d::SubmeshComponentCombine::hasTexcoord1Flag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="41" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/db0/a05447_1af020c2cfc9f03f036d0ce264fb15cfda" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SubmeshComponentCombine::hasTexcoord2Flag</definition>
+        <argsstring></argsstring>
+        <name>hasTexcoord2Flag</name>
+        <qualifiedname>castor3d::SubmeshComponentCombine::hasTexcoord2Flag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="42" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/db0/a05447_1a687f4f6e2017824e6bfa00115acc736f" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SubmeshComponentCombine::hasTexcoord3Flag</definition>
+        <argsstring></argsstring>
+        <name>hasTexcoord3Flag</name>
+        <qualifiedname>castor3d::SubmeshComponentCombine::hasTexcoord3Flag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="43" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/db0/a05447_1a5c193ba3977d797795ad0d275c1eac5c" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SubmeshComponentCombine::hasColourFlag</definition>
+        <argsstring></argsstring>
+        <name>hasColourFlag</name>
+        <qualifiedname>castor3d::SubmeshComponentCombine::hasColourFlag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="44" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/db0/a05447_1a8b178de5f82de1382874d19a47ec5f4d" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SubmeshComponentCombine::hasSkinFlag</definition>
+        <argsstring></argsstring>
+        <name>hasSkinFlag</name>
+        <qualifiedname>castor3d::SubmeshComponentCombine::hasSkinFlag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="45" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="45" bodyend="45"/>
+        <referencedby refid="d9/da0/a06359_1ad782262d636f0af682770975eb5cebbf" compoundref="d7/daf/a01169" startline="318" endline="321">castor3d::PipelineFlags::hasSkinData</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/db0/a05447_1a07ee7d78cee1da35f4c3f78d319b5890" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SubmeshComponentCombine::hasMorphFlag</definition>
+        <argsstring></argsstring>
+        <name>hasMorphFlag</name>
+        <qualifiedname>castor3d::SubmeshComponentCombine::hasMorphFlag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="46" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="46" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/db0/a05447_1a34a41c12af26b4488380fbfc1b8ddb45" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SubmeshComponentCombine::hasPassMaskFlag</definition>
+        <argsstring></argsstring>
+        <name>hasPassMaskFlag</name>
+        <qualifiedname>castor3d::SubmeshComponentCombine::hasPassMaskFlag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="47" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/db0/a05447_1a8483b849e6becb88b2bb6005ae88b97b" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SubmeshComponentCombine::hasVelocityFlag</definition>
+        <argsstring></argsstring>
+        <name>hasVelocityFlag</name>
+        <qualifiedname>castor3d::SubmeshComponentCombine::hasVelocityFlag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="48" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="48" bodyend="48"/>
+        <referencedby refid="d9/da0/a06359_1a63e4392acf581c0972fa6ccb6c80eaf4" compoundref="d7/daf/a01169" startline="313" endline="316">castor3d::PipelineFlags::hasWorldPosInputs</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/db0/a05447_1a120df3ba59dc005dc8b13346fce64854" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SubmeshComponentCombine::hasRenderFlag</definition>
+        <argsstring></argsstring>
+        <name>hasRenderFlag</name>
+        <qualifiedname>castor3d::SubmeshComponentCombine::hasRenderFlag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="49" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="49" bodyend="49"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="29" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="30" bodyend="50"/>
+    <listofallmembers>
+      <member refid="d1/db0/a05447_1a0535bb546864a11579d3ed1eae887914" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentCombine</scope><name>baseId</name></member>
+      <member refid="d1/db0/a05447_1abe659103ab0a4926f10d5fcfa28e8341" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentCombine</scope><name>flags</name></member>
+      <member refid="d1/db0/a05447_1a9eeef88f2e856fed473cf1df87a87dd6" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentCombine</scope><name>hasBitangentFlag</name></member>
+      <member refid="d1/db0/a05447_1a5c193ba3977d797795ad0d275c1eac5c" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentCombine</scope><name>hasColourFlag</name></member>
+      <member refid="d1/db0/a05447_1a006102a349ddea3234cdc09abad7c791" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentCombine</scope><name>hasLineIndexFlag</name></member>
+      <member refid="d1/db0/a05447_1a07ee7d78cee1da35f4c3f78d319b5890" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentCombine</scope><name>hasMorphFlag</name></member>
+      <member refid="d1/db0/a05447_1a7cdcca4ed0a44ac77aab8e77fb6f0866" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentCombine</scope><name>hasNormalFlag</name></member>
+      <member refid="d1/db0/a05447_1a34a41c12af26b4488380fbfc1b8ddb45" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentCombine</scope><name>hasPassMaskFlag</name></member>
+      <member refid="d1/db0/a05447_1adaa51d0251cbe3c73dd551addf7947b2" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentCombine</scope><name>hasPositionFlag</name></member>
+      <member refid="d1/db0/a05447_1a120df3ba59dc005dc8b13346fce64854" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentCombine</scope><name>hasRenderFlag</name></member>
+      <member refid="d1/db0/a05447_1a8b178de5f82de1382874d19a47ec5f4d" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentCombine</scope><name>hasSkinFlag</name></member>
+      <member refid="d1/db0/a05447_1a04256726dd3b30f9a29b6c78cf35f1c4" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentCombine</scope><name>hasTangentFlag</name></member>
+      <member refid="d1/db0/a05447_1a4c93713299ab69eed4eaa6c5d275ac22" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentCombine</scope><name>hasTexcoord0Flag</name></member>
+      <member refid="d1/db0/a05447_1a4832c1988c1fce9bf427728267221bf8" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentCombine</scope><name>hasTexcoord1Flag</name></member>
+      <member refid="d1/db0/a05447_1af020c2cfc9f03f036d0ce264fb15cfda" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentCombine</scope><name>hasTexcoord2Flag</name></member>
+      <member refid="d1/db0/a05447_1a687f4f6e2017824e6bfa00115acc736f" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentCombine</scope><name>hasTexcoord3Flag</name></member>
+      <member refid="d1/db0/a05447_1a8640bc90907068e884091cdd7e57cd88" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentCombine</scope><name>hasTriangleIndexFlag</name></member>
+      <member refid="d1/db0/a05447_1a8483b849e6becb88b2bb6005ae88b97b" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentCombine</scope><name>hasVelocityFlag</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,9 @@
+<map id="castor3d::SceneNodeAnimationInstance" name="castor3d::SceneNodeAnimationInstance">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,257,211,297"/>
+<area shape="rect" id="Node000002" href="$d3/d30/a06839.html" title=" " alt="" coords="15,183,201,208"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,222,111,257,105,257,105,222"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="13,93,203,133"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="111,147,111,182,105,182,105,147"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="17,5,199,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="111,44,111,93,105,93,105,44"/>
+</map>

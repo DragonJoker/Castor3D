@@ -1,0 +1,11 @@
+<map id="castor3d::PassMasksComponent" name="castor3d::PassMasksComponent">
+<area shape="rect" id="Node000001" title=" " alt="" coords="139,271,353,296"/>
+<area shape="rect" id="Node000002" href="$d6/df6/a05611.html" title=" " alt="" coords="5,175,207,201"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,206,230,268,227,273,133,210"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="5,93,207,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="109,132,109,175,103,175,103,132"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="15,5,197,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="109,45,109,93,103,93,103,45"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="231,168,357,208"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="280,222,254,272,250,269,276,219"/>
+</map>

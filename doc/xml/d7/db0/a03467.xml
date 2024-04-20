@@ -1,0 +1,208 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/db0/a03467" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::InstantUploadDataT</compoundname>
+    <includes local="no">InstantUploadData.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>UploadDataT</type>
+        <declname>UploaderT</declname>
+        <defname>UploaderT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/db0/a03467_1a119c62402526c75b7d8b32715468cb87" prot="private" static="no" mutable="no">
+        <type>UploaderT</type>
+        <definition>UploaderT castor3d::InstantUploadDataT&lt; UploaderT &gt;::m_upload</definition>
+        <argsstring></argsstring>
+        <name>m_upload</name>
+        <qualifiedname>castor3d::InstantUploadDataT::m_upload</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/InstantUploadData.hpp" line="50" column="11" bodyfile="Castor3D/Buffer/InstantUploadData.hpp" bodystart="50" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/db0/a03467_1a6e222f3a147da59a26948b9edf72e3fa" prot="private" static="no" mutable="no">
+        <type>ashes::Queue const  &amp;</type>
+        <definition>ashes::Queue const&amp; castor3d::InstantUploadDataT&lt; UploaderT &gt;::m_queue</definition>
+        <argsstring></argsstring>
+        <name>m_queue</name>
+        <qualifiedname>castor3d::InstantUploadDataT::m_queue</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/InstantUploadData.hpp" line="51" column="21" bodyfile="Castor3D/Buffer/InstantUploadData.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/db0/a03467_1aa23519f8d901491783d052e2fe0a3a6c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::InstantUploadDataT&lt; UploaderT &gt;::InstantUploadDataT</definition>
+        <argsstring>(InstantUploadDataT const &amp;)=delete</argsstring>
+        <name>InstantUploadDataT</name>
+        <qualifiedname>castor3d::InstantUploadDataT::InstantUploadDataT</qualifiedname>
+        <param>
+          <type><ref refid="d7/db0/a03467" kindref="compound">InstantUploadDataT</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/InstantUploadData.hpp" line="17" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/db0/a03467_1af9eda8850c884efaaef8bd65b186d74e" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::InstantUploadDataT&lt; UploaderT &gt;::InstantUploadDataT</definition>
+        <argsstring>(InstantUploadDataT &amp;&amp;) noexcept=delete</argsstring>
+        <name>InstantUploadDataT</name>
+        <qualifiedname>castor3d::InstantUploadDataT::InstantUploadDataT</qualifiedname>
+        <param>
+          <type><ref refid="d7/db0/a03467" kindref="compound">InstantUploadDataT</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/InstantUploadData.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/db0/a03467_1a8b14b306af14615941a7375eb7b6a279" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d7/db0/a03467" kindref="compound">InstantUploadDataT</ref> &amp;</type>
+        <definition>InstantUploadDataT &amp; castor3d::InstantUploadDataT&lt; UploaderT &gt;::operator=</definition>
+        <argsstring>(InstantUploadDataT const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::InstantUploadDataT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/db0/a03467" kindref="compound">InstantUploadDataT</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/InstantUploadData.hpp" line="19" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/db0/a03467_1a04d9aab88122b7dcf126c27a9203b992" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d7/db0/a03467" kindref="compound">InstantUploadDataT</ref> &amp;</type>
+        <definition>InstantUploadDataT &amp; castor3d::InstantUploadDataT&lt; UploaderT &gt;::operator=</definition>
+        <argsstring>(InstantUploadDataT &amp;&amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::InstantUploadDataT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/db0/a03467" kindref="compound">InstantUploadDataT</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/InstantUploadData.hpp" line="20" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/db0/a03467_1ab10badc1508c8e4f0a4546230750808b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParamsT</declname>
+            <defname>ParamsT</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor3d::InstantUploadDataT&lt; UploaderT &gt;::InstantUploadDataT</definition>
+        <argsstring>(ashes::Queue const &amp;queue, ParamsT &amp;&amp;... params)</argsstring>
+        <name>InstantUploadDataT</name>
+        <qualifiedname>castor3d::InstantUploadDataT::InstantUploadDataT</qualifiedname>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>ParamsT &amp;&amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/InstantUploadData.hpp" line="22" column="1" bodyfile="Castor3D/Buffer/InstantUploadData.hpp" bodystart="22" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/db0/a03467_1a8b48c93732068d6b794d9c8905b27666" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::InstantUploadDataT&lt; UploaderT &gt;::~InstantUploadDataT</definition>
+        <argsstring>()</argsstring>
+        <name>~InstantUploadDataT</name>
+        <qualifiedname>castor3d::InstantUploadDataT::~InstantUploadDataT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/InstantUploadData.hpp" line="30" column="1" bodyfile="Castor3D/Buffer/InstantUploadData.hpp" bodystart="30" bodyend="37"/>
+        <references refid="d7/d12/a03583_1aaf99041fb33234d4dfdb5c3894ebcd88">castor3d::UploadData::end</references>
+        <references refid="d7/d12/a03583_1a9beb7dbe51db3350f5898d507945662d" compoundref="d9/d01/a00227" startline="115" endline="118">castor3d::UploadData::getDevice</references>
+        <references refid="d7/d12/a03583_1a3a4d974ee93c78456cec1a80f3ddbe2f" compoundref="d9/d01/a00227" startline="120" endline="123">castor3d::UploadData::getName</references>
+        <references refid="d7/d12/a03583_1a71946f5b8920bec702c4e8f9b33aecc7">castor3d::UploadData::process</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/db0/a03467_1a85147a72edb475f71a6f6b67a084aa31" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::InstantUploadDataT&lt; UploaderT &gt;::operator UploaderT &amp;</definition>
+        <argsstring>()</argsstring>
+        <name>operator UploaderT &amp;</name>
+        <qualifiedname>castor3d::InstantUploadDataT::operator UploaderT &amp;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/InstantUploadData.hpp" line="39" column="1" bodyfile="Castor3D/Buffer/InstantUploadData.hpp" bodystart="39" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/db0/a03467_1a6e43bf847d2b5873508f0081587e3b00" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>UploaderT *</type>
+        <definition>UploaderT * castor3d::InstantUploadDataT&lt; UploaderT &gt;::operator-&gt;</definition>
+        <argsstring>()</argsstring>
+        <name>operator-&gt;</name>
+        <qualifiedname>castor3d::InstantUploadDataT::operator-&gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/InstantUploadData.hpp" line="44" column="12" bodyfile="Castor3D/Buffer/InstantUploadData.hpp" bodystart="44" bodyend="47"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Buffer/InstantUploadData.hpp" line="14" column="1" bodyfile="Castor3D/Buffer/InstantUploadData.hpp" bodystart="15" bodyend="52"/>
+    <listofallmembers>
+      <member refid="d7/db0/a03467_1aa23519f8d901491783d052e2fe0a3a6c" prot="public" virt="non-virtual"><scope>castor3d::InstantUploadDataT</scope><name>InstantUploadDataT</name></member>
+      <member refid="d7/db0/a03467_1af9eda8850c884efaaef8bd65b186d74e" prot="public" virt="non-virtual"><scope>castor3d::InstantUploadDataT</scope><name>InstantUploadDataT</name></member>
+      <member refid="d7/db0/a03467_1ab10badc1508c8e4f0a4546230750808b" prot="public" virt="non-virtual"><scope>castor3d::InstantUploadDataT</scope><name>InstantUploadDataT</name></member>
+      <member refid="d7/db0/a03467_1a6e222f3a147da59a26948b9edf72e3fa" prot="private" virt="non-virtual"><scope>castor3d::InstantUploadDataT</scope><name>m_queue</name></member>
+      <member refid="d7/db0/a03467_1a119c62402526c75b7d8b32715468cb87" prot="private" virt="non-virtual"><scope>castor3d::InstantUploadDataT</scope><name>m_upload</name></member>
+      <member refid="d7/db0/a03467_1a85147a72edb475f71a6f6b67a084aa31" prot="public" virt="non-virtual"><scope>castor3d::InstantUploadDataT</scope><name>operator UploaderT &amp;</name></member>
+      <member refid="d7/db0/a03467_1a6e43bf847d2b5873508f0081587e3b00" prot="public" virt="non-virtual"><scope>castor3d::InstantUploadDataT</scope><name>operator-&gt;</name></member>
+      <member refid="d7/db0/a03467_1a8b14b306af14615941a7375eb7b6a279" prot="public" virt="non-virtual"><scope>castor3d::InstantUploadDataT</scope><name>operator=</name></member>
+      <member refid="d7/db0/a03467_1a04d9aab88122b7dcf126c27a9203b992" prot="public" virt="non-virtual"><scope>castor3d::InstantUploadDataT</scope><name>operator=</name></member>
+      <member refid="d7/db0/a03467_1a8b48c93732068d6b794d9c8905b27666" prot="public" virt="non-virtual"><scope>castor3d::InstantUploadDataT</scope><name>~InstantUploadDataT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

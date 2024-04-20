@@ -1,0 +1,956 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/dbd/a08755" kind="class" language="C++" prot="public">
+    <compoundname>castor::Font</compoundname>
+    <basecompoundref refid="d5/d3c/a08223" prot="public" virt="non-virtual">castor::NamedBaseT&lt; String &gt;</basecompoundref>
+    <includes local="no">Font.hpp</includes>
+    <innerclass refid="d1/dfc/a08759" prot="public">castor::Font::BinaryLoader</innerclass>
+    <innerclass refid="dd/d1e/a08763" prot="public">castor::Font::SFontImpl</innerclass>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/dbd/a08755_1a91bfccb32108cf8f4492687705c26cd0" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::Font::m_height</definition>
+        <argsstring></argsstring>
+        <name>m_height</name>
+        <qualifiedname>castor::Font::m_height</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La hauteur de la police. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="476" column="10" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="476" bodyend="476"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dbd/a08755_1ad333d55194540ab6639dcef32da7bd47" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref></type>
+        <definition>Path castor::Font::m_pathFile</definition>
+        <argsstring></argsstring>
+        <name>m_pathFile</name>
+        <qualifiedname>castor::Font::m_pathFile</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le chemin du fichier de la police. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="479" column="6" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="479" bodyend="479"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dbd/a08755_1af89cfac3f1978258d6db00adcfd24943" prot="private" static="no" mutable="no">
+        <type>GlyphArray</type>
+        <definition>GlyphArray castor::Font::m_loadedGlyphs</definition>
+        <argsstring></argsstring>
+        <name>m_loadedGlyphs</name>
+        <qualifiedname>castor::Font::m_loadedGlyphs</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le tableau de glyphes chargées. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="482" column="12" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="482" bodyend="482"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dbd/a08755_1a3ba7db999c22dbd74e212f288a4d1b13" prot="private" static="no" mutable="no">
+        <type>Point2i</type>
+        <definition>Point2i castor::Font::m_maxSize</definition>
+        <argsstring></argsstring>
+        <name>m_maxSize</name>
+        <qualifiedname>castor::Font::m_maxSize</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La dimension maximale des glyphes. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="485" column="9" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="485" bodyend="485"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dbd/a08755_1ae923c25a0451ad5a6b75320bce1b1854" prot="private" static="no" mutable="no">
+        <type>Point2i</type>
+        <definition>Point2i castor::Font::m_maxRange</definition>
+        <argsstring></argsstring>
+        <name>m_maxRange</name>
+        <qualifiedname>castor::Font::m_maxRange</qualifiedname>
+        <initializer>{ 100, 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>L&apos;intervalle maximal de bearing des glyphes. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="488" column="9" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="488" bodyend="488"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dbd/a08755_1af49a83d008236033eb8c5059362d2786" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>String castor::Font::m_faceName</definition>
+        <argsstring></argsstring>
+        <name>m_faceName</name>
+        <qualifiedname>castor::Font::m_faceName</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le nom de la police. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="491" column="8" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="491" bodyend="491"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dbd/a08755_1a3ca0b4e645192a3667c58108202e6232" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; <ref refid="dd/d1e/a08763" kindref="compound">SFontImpl</ref> &gt;</type>
+        <definition>castor::RawUniquePtr&lt; SFontImpl &gt; castor::Font::m_glyphLoader</definition>
+        <argsstring></argsstring>
+        <name>m_glyphLoader</name>
+        <qualifiedname>castor::Font::m_glyphLoader</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le chargeur de glyphes. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="494" column="22" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="494" bodyend="494"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dbd/a08755_1a6b684922ceba1ce4fb8373600c44e8d0" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor::Font::m_serialisable</definition>
+        <argsstring></argsstring>
+        <name>m_serialisable</name>
+        <qualifiedname>castor::Font::m_serialisable</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="495" column="6" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="495" bodyend="495"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/dbd/a08755_1a57c66d577df3169bc39c053da9f287c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::Font::CU_DeclareVector</definition>
+        <argsstring>(Glyph, Glyph)</argsstring>
+        <name>CU_DeclareVector</name>
+        <qualifiedname>castor::Font::CU_DeclareVector</qualifiedname>
+        <param>
+          <type><ref refid="d0/db3/a08783" kindref="compound">Glyph</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d0/db3/a08783" kindref="compound">Glyph</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="100" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1a0cf33a126de6dff34e9e69cb8671be0f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Font::Font</definition>
+        <argsstring>(String const &amp;name, uint32_t height)</argsstring>
+        <name>Font</name>
+        <qualifiedname>castor::Font::Font</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>height</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de la police </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">height</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La hauteur des caractères de la police </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="113" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1ab04b6809c813d0a3e297b0b24d797344" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Font::Font</definition>
+        <argsstring>(String const &amp;name, uint32_t height, Path const &amp;path)</argsstring>
+        <name>Font</name>
+        <qualifiedname>castor::Font::Font</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>height</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin d&apos;accès au fichier contenant la police </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de la police </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">height</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La hauteur des caractères de la police </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="126" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1aa21ecec64f34b94ebbade1567a5e4db4" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>virtual CU_API castor::Font::~Font</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~Font</name>
+        <qualifiedname>castor::Font::~Font</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Virtual pour permettre l&apos;utilisation en tant que <ref refid="d0/d37/a08231" kindref="compound">ResourceT</ref>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="135" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1aa6f1b69320526b8415694fad1eacd8ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::Font::loadGlyph</definition>
+        <argsstring>(char32_t c)</argsstring>
+        <name>loadGlyph</name>
+        <qualifiedname>castor::Font::loadGlyph</qualifiedname>
+        <param>
+          <type>char32_t</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+<para>Charge le glyphe voulu. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le caractère. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="144" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1a7ae03c73679fac93e312be9f35c34174" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/d72/a08795" kindref="compound">TextMetrics</ref></type>
+        <definition>CU_API TextMetrics castor::Font::getTextMetrics</definition>
+        <argsstring>(std::u32string const &amp;v, uint32_t maxWidth, bool splitLines) const</argsstring>
+        <name>getTextMetrics</name>
+        <qualifiedname>castor::Font::getTextMetrics</qualifiedname>
+        <param>
+          <type>std::u32string const &amp;</type>
+          <declname>v</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>maxWidth</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>splitLines</declname>
+        </param>
+        <briefdescription>
+<para>Récupère les métriques du texte donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">v</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le texte. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">maxWidth</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La largeur maximale, si <computeroutput>splitLines</computeroutput> vaut <computeroutput>true</computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">splitLines</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> pour découper les lignes en fonction de <computeroutput>maxWidth</computeroutput>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="157" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1ab9156179ac776cedc681ad3c8af3b88b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::Font::hasGlyphAt</definition>
+        <argsstring>(char32_t c) const</argsstring>
+        <name>hasGlyphAt</name>
+        <qualifiedname>castor::Font::hasGlyphAt</qualifiedname>
+        <param>
+          <type>char32_t</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+<para>Dit si la police a déjà chargé la glyphe voulue. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le caractère. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>false si elle n&apos;est pas chargée. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="170" column="6" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="170" bodyend="178"/>
+        <referencedby refid="d0/dbd/a08755_1a04b79409c9f1406225b05d5545520ac9" compoundref="d4/dae/a01994" startline="262" endline="272">operator[]</referencedby>
+        <referencedby refid="d0/dbd/a08755_1a51ba9c2bc9d9bb621c41e1f7a8a84959" compoundref="d4/dae/a01994" startline="241" endline="251">operator[]</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1aa6ddb9cf1f4c15ea2356a7c5a7175538" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/db3/a08783" kindref="compound">Glyph</ref> const &amp;</type>
+        <definition>Glyph const  &amp; castor::Font::getGlyphAt</definition>
+        <argsstring>(char32_t c) const</argsstring>
+        <name>getGlyphAt</name>
+        <qualifiedname>castor::Font::getGlyphAt</qualifiedname>
+        <param>
+          <type>char32_t</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la glyphe du caractère voulu. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le caractère voulu </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence constante sur la glyphe </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="189" column="14" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="189" bodyend="204"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1af549d3fe4fc06d2a3888bcd9a719b7bb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/db3/a08783" kindref="compound">Glyph</ref> &amp;</type>
+        <definition>Glyph &amp; castor::Font::getGlyphAt</definition>
+        <argsstring>(char32_t c)</argsstring>
+        <name>getGlyphAt</name>
+        <qualifiedname>castor::Font::getGlyphAt</qualifiedname>
+        <param>
+          <type>char32_t</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la glyphe du caractère voulu. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le caractère voulu </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur la glyphe </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="215" column="8" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="215" bodyend="230"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1a51ba9c2bc9d9bb621c41e1f7a8a84959" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/db3/a08783" kindref="compound">Glyph</ref> const &amp;</type>
+        <definition>Glyph const  &amp; castor::Font::operator[]</definition>
+        <argsstring>(char32_t c) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::Font::operator[]</qualifiedname>
+        <param>
+          <type>char32_t</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la glyphe du caractère voulu. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le caractère voulu </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur la glyphe </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="241" column="14" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="241" bodyend="251"/>
+        <references refid="df/dd8/a01943_1acbf7cd5915c9441a96a798fef2adcd95" compoundref="df/dd8/a01943" startline="52">CU_Ensure</references>
+        <references refid="d0/dbd/a08755_1ab9156179ac776cedc681ad3c8af3b88b" compoundref="d4/dae/a01994" startline="170" endline="178">hasGlyphAt</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1a04b79409c9f1406225b05d5545520ac9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/db3/a08783" kindref="compound">Glyph</ref> &amp;</type>
+        <definition>Glyph &amp; castor::Font::operator[]</definition>
+        <argsstring>(char32_t c)</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::Font::operator[]</qualifiedname>
+        <param>
+          <type>char32_t</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la glyphe du caractère voulu. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le caractère voulu </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur la glyphe </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="262" column="8" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="262" bodyend="272"/>
+        <references refid="df/dd8/a01943_1acbf7cd5915c9441a96a798fef2adcd95" compoundref="df/dd8/a01943" startline="52">CU_Ensure</references>
+        <references refid="d0/dbd/a08755_1ab9156179ac776cedc681ad3c8af3b88b" compoundref="d4/dae/a01994" startline="170" endline="178">hasGlyphAt</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1a95720226dfe62b670c149bc324a25a12" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::Font::getHeight</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getHeight</name>
+        <qualifiedname>castor::Font::getHeight</qualifiedname>
+        <briefdescription>
+<para>Récupère la hauteur de la police. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La hauteur de la police </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="281" column="10" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="281" bodyend="284"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1af25f7934d0a82c301d740c5352853046" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::Font::getMaxHeight</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getMaxHeight</name>
+        <qualifiedname>castor::Font::getMaxHeight</qualifiedname>
+        <briefdescription>
+<para>Récupère la hauteur maximale des glyphes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La hauteur maximale des glyphes </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="293" column="10" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="293" bodyend="296"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1a856fda54f7a135d81bb8e95d58ad8cde" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>Point2i</type>
+        <definition>Point2i castor::Font::getMaxRange</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getMaxRange</name>
+        <qualifiedname>castor::Font::getMaxRange</qualifiedname>
+        <briefdescription>
+<para>Récupère la hauteur maximale des glyphes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La hauteur maximale des glyphes </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="305" column="9" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="305" bodyend="308"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1a301ebe60d388909e4724baa23e3f7754" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::Font::getMaxWidth</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getMaxWidth</name>
+        <qualifiedname>castor::Font::getMaxWidth</qualifiedname>
+        <briefdescription>
+<para>Récupère la largeur maximale des glyphes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La largeur maximale des glyphes </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="317" column="10" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="317" bodyend="320"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1a7aa3ef2efe9e0d6a888ee9daf4604e33" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Font::setGlyphLoader</definition>
+        <argsstring>(castor::RawUniquePtr&lt; SFontImpl &gt; loader) noexcept</argsstring>
+        <name>setGlyphLoader</name>
+        <qualifiedname>castor::Font::setGlyphLoader</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; <ref refid="dd/d1e/a08763" kindref="compound">SFontImpl</ref> &gt;</type>
+          <declname>loader</declname>
+        </param>
+        <briefdescription>
+<para>Définit le chargeur de glyphes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">loader</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="329" column="6" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="329" bodyend="332"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1ab6250bf66526692212011ae19529c001" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::Font::hasGlyphLoader</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>hasGlyphLoader</name>
+        <qualifiedname>castor::Font::hasGlyphLoader</qualifiedname>
+        <briefdescription>
+<para>Dit si la police a un loader de glyphes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le statut </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="341" column="6" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="341" bodyend="344"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1ae9d13708b17124e91c421ebf600af2d0" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="dd/d1e/a08763" kindref="compound">SFontImpl</ref> &amp;</type>
+        <definition>SFontImpl &amp; castor::Font::getGlyphLoader</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getGlyphLoader</name>
+        <qualifiedname>castor::Font::getGlyphLoader</qualifiedname>
+        <briefdescription>
+<para>Définit le loader de glyphes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le loader </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="353" column="12" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="353" bodyend="356"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1aba389ad911fb6ccb7080fe837e954381" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor::Font::begin</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::Font::begin</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur sur la première glyphe. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="365" column="6" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="365" bodyend="368"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1a1686ec03a4c1c052ee901fdefcc6e03e" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor::Font::begin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::Font::begin</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur sur la première glyphe. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="377" column="6" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="377" bodyend="380"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1a06db080436a343c4a70b736ebea7c041" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor::Font::end</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::Font::end</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur sur la fin du tableau de glyphes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="389" column="6" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="389" bodyend="392"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1a0109ba70e7285b93999709e871ffd106" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor::Font::end</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::Font::end</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur sur la fin du tableau de glyphes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="401" column="6" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="401" bodyend="404"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1a98e5e90ab24719808bcd922b3638b1c3" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Font::setFaceName</definition>
+        <argsstring>(String name) noexcept</argsstring>
+        <name>setFaceName</name>
+        <qualifiedname>castor::Font::setFaceName</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Définit le nom de la police. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="413" column="6" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="413" bodyend="416"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1a7b96d305acbb8cbf38190b93a0a4116e" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+        <definition>String const  &amp; castor::Font::getFaceName</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getFaceName</name>
+        <qualifiedname>castor::Font::getFaceName</qualifiedname>
+        <briefdescription>
+<para>Récupère le nom de la police. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="425" column="15" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="425" bodyend="428"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1a0eaf3ccf2f17869a0f162abc164da8c5" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+        <definition>Path const  &amp; castor::Font::getFilePath</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getFilePath</name>
+        <qualifiedname>castor::Font::getFilePath</qualifiedname>
+        <briefdescription>
+<para>Récupère le chemin du fichier de la police. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="437" column="13" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="437" bodyend="440"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1a3f31c2e97eade35c8e6224cbab65275d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Font::initialise</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor::Font::initialise</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="442" column="6" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="442" bodyend="444"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1ab3322a892885aa3979aee8dadc9a7139" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Font::cleanup</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor::Font::cleanup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="446" column="6" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="446" bodyend="448"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1ae6afc3d2a6b2f4dd0dd81d6cf3ff8a28" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::Font::isSerialisable</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isSerialisable</name>
+        <qualifiedname>castor::Font::isSerialisable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="450" column="6" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="450" bodyend="453"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dbd/a08755_1ab52d6cbcb854c558f21563986fd4e943" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Font::setSerialisable</definition>
+        <argsstring>(bool v) noexcept</argsstring>
+        <name>setSerialisable</name>
+        <qualifiedname>castor::Font::setSerialisable</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="455" column="6" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="455" bodyend="458"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d0/dbd/a08755_1ab123c799de748581369a028abf8af3b2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d0/db3/a08783" kindref="compound">Glyph</ref> const &amp;</type>
+        <definition>Glyph const  &amp; castor::Font::doLoadGlyph</definition>
+        <argsstring>(char32_t c)</argsstring>
+        <name>doLoadGlyph</name>
+        <qualifiedname>castor::Font::doLoadGlyph</qualifiedname>
+        <param>
+          <type>char32_t</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+<para>Charge le glyphe voulu. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le caractère. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le glyphe. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="471" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="1">
+        <label>castor::Font</label>
+        <link refid="d0/dbd/a08755"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="1">
+        <label>castor::Font</label>
+        <link refid="d0/dbd/a08755"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/Font.hpp" line="15" column="1" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="17" bodyend="496"/>
+    <listofallmembers>
+      <member refid="d0/dbd/a08755_1aba389ad911fb6ccb7080fe837e954381" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>begin</name></member>
+      <member refid="d0/dbd/a08755_1a1686ec03a4c1c052ee901fdefcc6e03e" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>begin</name></member>
+      <member refid="d0/dbd/a08755_1ab3322a892885aa3979aee8dadc9a7139" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>cleanup</name></member>
+      <member refid="d0/dbd/a08755_1a57c66d577df3169bc39c053da9f287c2" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>CU_DeclareVector</name></member>
+      <member refid="d0/dbd/a08755_1ab123c799de748581369a028abf8af3b2" prot="private" virt="non-virtual"><scope>castor::Font</scope><name>doLoadGlyph</name></member>
+      <member refid="d0/dbd/a08755_1a06db080436a343c4a70b736ebea7c041" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>end</name></member>
+      <member refid="d0/dbd/a08755_1a0109ba70e7285b93999709e871ffd106" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>end</name></member>
+      <member refid="d0/dbd/a08755_1a0cf33a126de6dff34e9e69cb8671be0f" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>Font</name></member>
+      <member refid="d0/dbd/a08755_1ab04b6809c813d0a3e297b0b24d797344" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>Font</name></member>
+      <member refid="d0/dbd/a08755_1a7b96d305acbb8cbf38190b93a0a4116e" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>getFaceName</name></member>
+      <member refid="d0/dbd/a08755_1a0eaf3ccf2f17869a0f162abc164da8c5" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>getFilePath</name></member>
+      <member refid="d0/dbd/a08755_1aa6ddb9cf1f4c15ea2356a7c5a7175538" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>getGlyphAt</name></member>
+      <member refid="d0/dbd/a08755_1af549d3fe4fc06d2a3888bcd9a719b7bb" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>getGlyphAt</name></member>
+      <member refid="d0/dbd/a08755_1ae9d13708b17124e91c421ebf600af2d0" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>getGlyphLoader</name></member>
+      <member refid="d0/dbd/a08755_1a95720226dfe62b670c149bc324a25a12" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>getHeight</name></member>
+      <member refid="d0/dbd/a08755_1af25f7934d0a82c301d740c5352853046" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>getMaxHeight</name></member>
+      <member refid="d0/dbd/a08755_1a856fda54f7a135d81bb8e95d58ad8cde" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>getMaxRange</name></member>
+      <member refid="d0/dbd/a08755_1a301ebe60d388909e4724baa23e3f7754" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>getMaxWidth</name></member>
+      <member refid="d5/d3c/a08223_1abc1fa9ec1a50d2023373baa4d4c79519" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>getName</name></member>
+      <member refid="d0/dbd/a08755_1a7ae03c73679fac93e312be9f35c34174" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>getTextMetrics</name></member>
+      <member refid="d0/dbd/a08755_1ab9156179ac776cedc681ad3c8af3b88b" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>hasGlyphAt</name></member>
+      <member refid="d0/dbd/a08755_1ab6250bf66526692212011ae19529c001" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>hasGlyphLoader</name></member>
+      <member refid="d0/dbd/a08755_1a3f31c2e97eade35c8e6224cbab65275d" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>initialise</name></member>
+      <member refid="d0/dbd/a08755_1ae6afc3d2a6b2f4dd0dd81d6cf3ff8a28" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>isSerialisable</name></member>
+      <member refid="d0/dbd/a08755_1aa6f1b69320526b8415694fad1eacd8ae" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>loadGlyph</name></member>
+      <member refid="d0/dbd/a08755_1af49a83d008236033eb8c5059362d2786" prot="private" virt="non-virtual"><scope>castor::Font</scope><name>m_faceName</name></member>
+      <member refid="d0/dbd/a08755_1a3ca0b4e645192a3667c58108202e6232" prot="private" virt="non-virtual"><scope>castor::Font</scope><name>m_glyphLoader</name></member>
+      <member refid="d0/dbd/a08755_1a91bfccb32108cf8f4492687705c26cd0" prot="private" virt="non-virtual"><scope>castor::Font</scope><name>m_height</name></member>
+      <member refid="d0/dbd/a08755_1af89cfac3f1978258d6db00adcfd24943" prot="private" virt="non-virtual"><scope>castor::Font</scope><name>m_loadedGlyphs</name></member>
+      <member refid="d0/dbd/a08755_1ae923c25a0451ad5a6b75320bce1b1854" prot="private" virt="non-virtual"><scope>castor::Font</scope><name>m_maxRange</name></member>
+      <member refid="d0/dbd/a08755_1a3ba7db999c22dbd74e212f288a4d1b13" prot="private" virt="non-virtual"><scope>castor::Font</scope><name>m_maxSize</name></member>
+      <member refid="d5/d3c/a08223_1a869b429a7190ecf614d8221b270e6dca" prot="protected" virt="non-virtual"><scope>castor::Font</scope><name>m_name</name></member>
+      <member refid="d0/dbd/a08755_1ad333d55194540ab6639dcef32da7bd47" prot="private" virt="non-virtual"><scope>castor::Font</scope><name>m_pathFile</name></member>
+      <member refid="d0/dbd/a08755_1a6b684922ceba1ce4fb8373600c44e8d0" prot="private" virt="non-virtual"><scope>castor::Font</scope><name>m_serialisable</name></member>
+      <member refid="d5/d3c/a08223_1a4a6e4748603541685b04f95fb91efb26" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>NamedBaseT</name></member>
+      <member refid="d0/dbd/a08755_1a51ba9c2bc9d9bb621c41e1f7a8a84959" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>operator[]</name></member>
+      <member refid="d0/dbd/a08755_1a04b79409c9f1406225b05d5545520ac9" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>operator[]</name></member>
+      <member refid="d5/d3c/a08223_1a2d62ce1925efead03c4e0842c06b3e11" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>rename</name></member>
+      <member refid="d0/dbd/a08755_1a98e5e90ab24719808bcd922b3638b1c3" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>setFaceName</name></member>
+      <member refid="d0/dbd/a08755_1a7aa3ef2efe9e0d6a888ee9daf4604e33" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>setGlyphLoader</name></member>
+      <member refid="d0/dbd/a08755_1ab52d6cbcb854c558f21563986fd4e943" prot="public" virt="non-virtual"><scope>castor::Font</scope><name>setSerialisable</name></member>
+      <member refid="d0/dbd/a08755_1aa21ecec64f34b94ebbade1567a5e4db4" prot="public" virt="virtual"><scope>castor::Font</scope><name>~Font</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

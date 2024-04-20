@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d24/a06495" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ShadowMapLightIds</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/d24/a06495_1a64328c60edc4750439882219eb67dc81" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aaac20e91bd22921708388c09abb51422" kindref="member">castor::ReferenceWrapper</ref>&lt; <ref refid="dc/d4f/a06619" kindref="compound">ShadowMap</ref> &gt;</type>
+        <definition>castor::ReferenceWrapper&lt; ShadowMap &gt; castor3d::ShadowMapLightIds::shadowMap</definition>
+        <argsstring></argsstring>
+        <name>shadowMap</name>
+        <qualifiedname>castor3d::ShadowMapLightIds::shadowMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="829" column="26" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="829" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d24/a06495_1a0cb3178cf64569ec52a1d2ddddb26e06" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a0a770197197878dc4b6c7b0764d6083f" kindref="member">LightIdArray</ref></type>
+        <definition>LightIdArray castor3d::ShadowMapLightIds::ids</definition>
+        <argsstring></argsstring>
+        <name>ids</name>
+        <qualifiedname>castor3d::ShadowMapLightIds::ids</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="830" column="14" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="830" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d24/a06495_1af92fe7c1d48b9ba96e367b43c60ee06d" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ShadowMapLightIds::ShadowMapLightIds</definition>
+        <argsstring>(castor::ReferenceWrapper&lt; ShadowMap &gt; shadowMap, LightIdArray ids={})</argsstring>
+        <name>ShadowMapLightIds</name>
+        <qualifiedname>castor3d::ShadowMapLightIds::ShadowMapLightIds</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aaac20e91bd22921708388c09abb51422" kindref="member">castor::ReferenceWrapper</ref>&lt; <ref refid="dc/d4f/a06619" kindref="compound">ShadowMap</ref> &gt;</type>
+          <declname>shadowMap</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a0a770197197878dc4b6c7b0764d6083f" kindref="member">LightIdArray</ref></type>
+          <declname>ids</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="822" column="10" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="822" bodyend="827"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/RenderModule.hpp" line="820" column="1" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="821" bodyend="831"/>
+    <listofallmembers>
+      <member refid="df/d24/a06495_1a0cb3178cf64569ec52a1d2ddddb26e06" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapLightIds</scope><name>ids</name></member>
+      <member refid="df/d24/a06495_1a64328c60edc4750439882219eb67dc81" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapLightIds</scope><name>shadowMap</name></member>
+      <member refid="df/d24/a06495_1af92fe7c1d48b9ba96e367b43c60ee06d" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapLightIds</scope><name>ShadowMapLightIds</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,221 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d29/a08947" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ResourceCacheTraitsT&lt; Image, String &gt;</compoundname>
+    <basecompoundref refid="dc/df8/a08263" prot="public" virt="non-virtual">castor::ResourceCacheTraitsBaseT&lt; Image, String, ResourceCacheTraitsT&lt; Image, String &gt; &gt;</basecompoundref>
+    <includes local="no">ImageCache.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d6/d29/a08947_1a24d7ead5348e788f284b825582091a67" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>using castor::ResourceCacheTraitsT&lt; Image, String &gt;::KeyT =  String</definition>
+        <argsstring></argsstring>
+        <name>KeyT</name>
+        <qualifiedname>castor::ResourceCacheTraitsT&lt; Image, String &gt;::KeyT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="82" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d6/d29/a08947_1a1dcdd9c9c03d2f5afd4881e2a08d37fb" prot="public" static="no">
+        <type><ref refid="dc/df8/a08263" kindref="compound">ResourceCacheTraitsBaseT</ref>&lt; <ref refid="d6/d3e/a08939" kindref="compound">Image</ref>, <ref refid="d6/d29/a08947_1a24d7ead5348e788f284b825582091a67" kindref="member">KeyT</ref>, <ref refid="d8/d73/a08235" kindref="compound">ResourceCacheTraitsT</ref>&lt; <ref refid="d6/d3e/a08939" kindref="compound">Image</ref>, <ref refid="d6/d29/a08947_1a24d7ead5348e788f284b825582091a67" kindref="member">KeyT</ref> &gt; &gt;</type>
+        <definition>using castor::ResourceCacheTraitsT&lt; Image, String &gt;::Base =  ResourceCacheTraitsBaseT&lt; Image, KeyT, ResourceCacheTraitsT&lt; Image, KeyT &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>Base</name>
+        <qualifiedname>castor::ResourceCacheTraitsT&lt; Image, String &gt;::Base</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="83" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d6/d29/a08947_1a20d6ab1eaaa0f978ae24f470362dc794" prot="public" static="no">
+        <type>typename <ref refid="dc/df8/a08263_1a231ab2525ba113e97b1d37e32376a3a2" kindref="member">Base::ElementT</ref></type>
+        <definition>using castor::ResourceCacheTraitsT&lt; Image, String &gt;::ElementT =  typename Base::ElementT</definition>
+        <argsstring></argsstring>
+        <name>ElementT</name>
+        <qualifiedname>castor::ResourceCacheTraitsT&lt; Image, String &gt;::ElementT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="84" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d6/d29/a08947_1a94cd82717221167efab398eb2d024a90" prot="public" static="no">
+        <type>typename <ref refid="dc/df8/a08263_1ab2082c7e9b7724717fd0af285a92e1a2" kindref="member">Base::ElementPtrT</ref></type>
+        <definition>using castor::ResourceCacheTraitsT&lt; Image, String &gt;::ElementPtrT =  typename Base::ElementPtrT</definition>
+        <argsstring></argsstring>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor::ResourceCacheTraitsT&lt; Image, String &gt;::ElementPtrT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="85" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d6/d29/a08947_1aeaca4cbb0e492623425ca5c529f6c3ed" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> const <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>CU_API const String castor::ResourceCacheTraitsT&lt; Image, String &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor::ResourceCacheTraitsT&lt; Image, String &gt;::Name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="87" column="28" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d6/d29/a08947_1a89d51dfaeaa45842359c3d2617eb6968" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/d29/a08947_1a94cd82717221167efab398eb2d024a90" kindref="member">ElementPtrT</ref></type>
+        <definition>static CU_API ElementPtrT castor::ResourceCacheTraitsT&lt; Image, String &gt;::makeElement</definition>
+        <argsstring>(ResourceCacheBaseT&lt; ElementT, KeyT, ResourceCacheTraitsT&lt; ElementT, KeyT &gt; &gt; const &amp;cache, KeyT const &amp;name, ImageCreateParams const &amp;params)</argsstring>
+        <name>makeElement</name>
+        <qualifiedname>castor::ResourceCacheTraitsT&lt; Image, String &gt;::makeElement</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255" kindref="compound">ResourceCacheBaseT</ref>&lt; <ref refid="d6/d29/a08947_1a20d6ab1eaaa0f978ae24f470362dc794" kindref="member">ElementT</ref>, <ref refid="d6/d29/a08947_1a24d7ead5348e788f284b825582091a67" kindref="member">KeyT</ref>, <ref refid="d8/d73/a08235" kindref="compound">ResourceCacheTraitsT</ref>&lt; <ref refid="d6/d29/a08947_1a20d6ab1eaaa0f978ae24f470362dc794" kindref="member">ElementT</ref>, <ref refid="d6/d29/a08947_1a24d7ead5348e788f284b825582091a67" kindref="member">KeyT</ref> &gt; &gt; const &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d29/a08947_1a24d7ead5348e788f284b825582091a67" kindref="member">KeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/da4/a08943" kindref="compound">ImageCreateParams</ref> const &amp;</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="89" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d29/a08947_1ae0a0ee86da5117d48058833e7ea4bc0f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/d29/a08947_1a94cd82717221167efab398eb2d024a90" kindref="member">ElementPtrT</ref></type>
+        <definition>static CU_API ElementPtrT castor::ResourceCacheTraitsT&lt; Image, String &gt;::makeElement</definition>
+        <argsstring>(ResourceCacheBaseT&lt; ElementT, KeyT, ResourceCacheTraitsT&lt; ElementT, KeyT &gt; &gt; const &amp;cache, KeyT const &amp;name, Path const &amp;path, ImageLayout layout, PxBufferBaseUPtr buffer)</argsstring>
+        <name>makeElement</name>
+        <qualifiedname>castor::ResourceCacheTraitsT&lt; Image, String &gt;::makeElement</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255" kindref="compound">ResourceCacheBaseT</ref>&lt; <ref refid="d6/d29/a08947_1a20d6ab1eaaa0f978ae24f470362dc794" kindref="member">ElementT</ref>, <ref refid="d6/d29/a08947_1a24d7ead5348e788f284b825582091a67" kindref="member">KeyT</ref>, <ref refid="d8/d73/a08235" kindref="compound">ResourceCacheTraitsT</ref>&lt; <ref refid="d6/d29/a08947_1a20d6ab1eaaa0f978ae24f470362dc794" kindref="member">ElementT</ref>, <ref refid="d6/d29/a08947_1a24d7ead5348e788f284b825582091a67" kindref="member">KeyT</ref> &gt; &gt; const &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d29/a08947_1a24d7ead5348e788f284b825582091a67" kindref="member">KeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d6e/a08955" kindref="compound">ImageLayout</ref></type>
+          <declname>layout</declname>
+        </param>
+        <param>
+          <type>PxBufferBaseUPtr</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="92" column="27"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Structure permettant de spécialiser le comportement d&apos;un cache. <simplesect kind="remark"><para>Spécialisation pour <ref refid="d6/d3e/a08939" kindref="compound">castor::Image</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::ResourceCacheTraitsBaseT&lt; Image, String, ResourceCacheTraitsT&lt; Image, String &gt; &gt;</label>
+        <link refid="dc/df8/a08263"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Image, String, ResourceCacheTraitsT&lt; Image, String &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::ResourceCacheTraitsBaseT&lt; ResT, KeyT, TraitsT &gt;</label>
+        <link refid="dc/df8/a08263"/>
+      </node>
+      <node id="1">
+        <label>castor::ResourceCacheTraitsT&lt; Image, String &gt;</label>
+        <link refid="d6/d29/a08947"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::ResourceCacheTraitsBaseT&lt; Image, String, ResourceCacheTraitsT&lt; Image, String &gt; &gt;</label>
+        <link refid="dc/df8/a08263"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Image, String, ResourceCacheTraitsT&lt; Image, String &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::ResourceCacheTraitsBaseT&lt; ResT, KeyT, TraitsT &gt;</label>
+        <link refid="dc/df8/a08263"/>
+      </node>
+      <node id="1">
+        <label>castor::ResourceCacheTraitsT&lt; Image, String &gt;</label>
+        <link refid="d6/d29/a08947"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>Name</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/ImageCache.hpp" line="79" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="81" bodyend="97"/>
+    <listofallmembers>
+      <member refid="dc/df8/a08263_1af868f35698e50edefa1b1e9a6ca04bdf" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="dc/df8/a08263_1aa669017b4acbf658468d658960ba8058" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="dc/df8/a08263_1ac76c9e5df897812792e44e7762993663" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="dc/df8/a08263_1ae18f144bc84d03572ef94037a11c9f5a" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>areElementsEqual</name></member>
+      <member refid="d6/d29/a08947_1a1dcdd9c9c03d2f5afd4881e2a08d37fb" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>Base</name></member>
+      <member refid="dc/df8/a08263_1a1ee6b0144b9bd9fd6947474dfc017a95" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>ElementCacheT</name></member>
+      <member refid="dc/df8/a08263_1a2635226f031af6f10fc47292df92dc0b" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>ElementCleanerT</name></member>
+      <member refid="dc/df8/a08263_1a14b39c9c07fccd01b240e033d936d5cb" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>ElementContT</name></member>
+      <member refid="dc/df8/a08263_1af2a42f5ada216a5e69c2b43c923ee074" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>ElementInitialiserT</name></member>
+      <member refid="dc/df8/a08263_1aa9a6854b537f46b6926c360e0d5de6ff" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>ElementKeyT</name></member>
+      <member refid="dc/df8/a08263_1aae4f7d8417807ebf8d81467ffd501733" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>ElementMergerT</name></member>
+      <member refid="dc/df8/a08263_1ab778cd9b7ca70fc3d8db4a6e49465034" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>ElementObsT</name></member>
+      <member refid="d6/d29/a08947_1a94cd82717221167efab398eb2d024a90" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>ElementPtrT</name></member>
+      <member refid="d6/d29/a08947_1a20d6ab1eaaa0f978ae24f470362dc794" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>ElementT</name></member>
+      <member refid="dc/df8/a08263_1a4fd2aef2eb71b9984057056ecf83e7d1" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>isElementObsNull</name></member>
+      <member refid="d6/d29/a08947_1a24d7ead5348e788f284b825582091a67" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>KeyT</name></member>
+      <member refid="d6/d29/a08947_1a89d51dfaeaa45842359c3d2617eb6968" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>makeElement</name></member>
+      <member refid="d6/d29/a08947_1ae0a0ee86da5117d48058833e7ea4bc0f" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>makeElement</name></member>
+      <member refid="dc/df8/a08263_1a09b38ad47906bdb0cf106bfd61926f97" prot="public" virt="non-virtual" ambiguityscope="ResourceCacheTraitsBaseT&lt; Image, String, ResourceCacheTraitsT&lt; Image, String &gt; &gt;::"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>makeElement</name></member>
+      <member refid="dc/df8/a08263_1a9fcdf2cf7db7722a6c8b84e2cfa52ca4" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>makeElementObs</name></member>
+      <member refid="d6/d29/a08947_1aeaca4cbb0e492623425ca5c529f6c3ed" prot="public" virt="non-virtual"><scope>castor::ResourceCacheTraitsT&lt; Image, String &gt;</scope><name>Name</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

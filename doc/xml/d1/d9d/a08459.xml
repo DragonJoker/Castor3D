@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d9d/a08459" kind="struct" language="C++" prot="public">
+    <compoundname>castor::RegexFormat&lt; uint16_t &gt;</compoundname>
+    <includes local="no">ParserParameterHelpers.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d1/d9d/a08459_1ac62e6b72abe679f7feb84d837527db96" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a98169622bc976df3189194c2b35fbf60" kindref="member">xchar</ref> const  *const</type>
+        <definition>CU_API xchar const* const castor::RegexFormat&lt; uint16_t &gt;::Value</definition>
+        <argsstring></argsstring>
+        <name>Value</name>
+        <qualifiedname>castor::RegexFormat&lt; uint16_t &gt;::Value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="42" column="34" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Spécialisation de <ref refid="d7/dd6/a08395" kindref="compound">RegexFormat</ref> pour uint16_t. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="40" column="1" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="41" bodyend="43"/>
+    <listofallmembers>
+      <member refid="d1/d9d/a08459_1ac62e6b72abe679f7feb84d837527db96" prot="public" virt="non-virtual"><scope>castor::RegexFormat&lt; uint16_t &gt;</scope><name>Value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

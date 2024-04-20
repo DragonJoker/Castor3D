@@ -1,0 +1,392 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/daa/a06683" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SsaoConfig</compoundname>
+    <includes local="no">SsaoConfig.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/daa/a06683_1a6e7398a8f5b1db7a06abccc148a2ed37" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SsaoConfig::enabled</definition>
+        <argsstring></argsstring>
+        <name>enabled</name>
+        <qualifiedname>castor3d::SsaoConfig::enabled</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le statut d&apos;activation de l&apos;effet. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="25" column="6" bodyfile="Castor3D/Render/Ssao/SsaoConfig.hpp" bodystart="25" bodyend="25"/>
+        <referencedby refid="d1/d10/a06147_1a56922f8d3db5bd9bbaad43dccb9dbc9f" compoundref="d3/dbd/a01100" startline="133" endline="136">castor3d::VisibilityResolvePass::hasSsao</referencedby>
+        <referencedby refid="df/d90/a06587_1a2102e35d08111ec0ab9e012315008a91" compoundref="d8/ddf/a01238" startline="385" endline="388">castor3d::RenderTechniqueNodesPass::hasSsao</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/daa/a06683_1a7fd733973f8fa2f36b123df0b7a3cad8" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/de9/a09211" kindref="compound">castor::RangedValue</ref>&lt; int32_t &gt;</type>
+        <definition>castor::RangedValue&lt; int32_t &gt; castor3d::SsaoConfig::logMaxOffset</definition>
+        <argsstring></argsstring>
+        <name>logMaxOffset</name>
+        <qualifiedname>castor3d::SsaoConfig::logMaxOffset</qualifiedname>
+        <initializer>{ 3u, <ref refid="d2/dd2/a02279_1adb20060264652dae04682f6046d32776" kindref="member">castor::makeRange</ref>( 2, 6 ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le log de l&apos;offset maximum pour un pixel. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="28" column="21" bodyfile="Castor3D/Render/Ssao/SsaoConfig.hpp" bodystart="28" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/daa/a06683_1a7ae9a14ac80dfb8a2a42013fdfc63398" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::SsaoConfig::maxMipLevel</definition>
+        <argsstring></argsstring>
+        <name>maxMipLevel</name>
+        <qualifiedname>castor3d::SsaoConfig::maxMipLevel</qualifiedname>
+        <initializer>{ 5 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="29" column="9" bodyfile="Castor3D/Render/Ssao/SsaoConfig.hpp" bodystart="29" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/daa/a06683_1a5c00f100857f71a46adb1dfbc8905ca5" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SsaoConfig::minRadius</definition>
+        <argsstring></argsstring>
+        <name>minRadius</name>
+        <qualifiedname>castor3d::SsaoConfig::minRadius</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Rayon minimal d&apos;échantillonnage pour calculer l&apos;AO. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="32" column="7" bodyfile="Castor3D/Render/Ssao/SsaoConfig.hpp" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/daa/a06683_1ab6c094a6537836b1f6e58497e26bcfd8" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::SsaoConfig::variation</definition>
+        <argsstring></argsstring>
+        <name>variation</name>
+        <qualifiedname>castor3d::SsaoConfig::variation</qualifiedname>
+        <initializer>{ 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="33" column="9" bodyfile="Castor3D/Render/Ssao/SsaoConfig.hpp" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/daa/a06683_1af06d7cc7c149df11f4281b7a7bacc9d0" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SsaoConfig::highQuality</definition>
+        <argsstring></argsstring>
+        <name>highQuality</name>
+        <qualifiedname>castor3d::SsaoConfig::highQuality</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le statut d&apos;activation de haute qualité. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="36" column="6" bodyfile="Castor3D/Render/Ssao/SsaoConfig.hpp" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/daa/a06683_1a593d6b80cbeef54b968771f32965b3a8" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SsaoConfig::useNormalsBuffer</definition>
+        <argsstring></argsstring>
+        <name>useNormalsBuffer</name>
+        <qualifiedname>castor3d::SsaoConfig::useNormalsBuffer</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le statut d&apos;utilisation du tampon de normales. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="39" column="6" bodyfile="Castor3D/Render/Ssao/SsaoConfig.hpp" bodystart="39" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/daa/a06683_1a9c6a7dd2205dc53dda3e935c7b923c85" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SsaoConfig::radius</definition>
+        <argsstring></argsstring>
+        <name>radius</name>
+        <qualifiedname>castor3d::SsaoConfig::radius</qualifiedname>
+        <initializer>{ 0.5f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le rayon de l&apos;effet. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="42" column="7" bodyfile="Castor3D/Render/Ssao/SsaoConfig.hpp" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/daa/a06683_1a10c74f27ce7ead70ea43df6cc0a2baa4" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SsaoConfig::bias</definition>
+        <argsstring></argsstring>
+        <name>bias</name>
+        <qualifiedname>castor3d::SsaoConfig::bias</qualifiedname>
+        <initializer>{ 0.025f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le bias de l&apos;effet. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="45" column="7" bodyfile="Castor3D/Render/Ssao/SsaoConfig.hpp" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/daa/a06683_1a551820443946351a8b2c35d631ff4e44" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SsaoConfig::intensity</definition>
+        <argsstring></argsstring>
+        <name>intensity</name>
+        <qualifiedname>castor3d::SsaoConfig::intensity</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>L&apos;intensité de l&apos;effet. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="48" column="7" bodyfile="Castor3D/Render/Ssao/SsaoConfig.hpp" bodystart="48" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/daa/a06683_1a94c88bfe04532417ccedf6a24b658856" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::SsaoConfig::numSamples</definition>
+        <argsstring></argsstring>
+        <name>numSamples</name>
+        <qualifiedname>castor3d::SsaoConfig::numSamples</qualifiedname>
+        <initializer>{ 19u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le nombre d&apos;échantillons par pixel. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="51" column="10" bodyfile="Castor3D/Render/Ssao/SsaoConfig.hpp" bodystart="51" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/daa/a06683_1a656080a608965d5cc362b2d1dbdaa71d" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SsaoConfig::edgeSharpness</definition>
+        <argsstring></argsstring>
+        <name>edgeSharpness</name>
+        <qualifiedname>castor3d::SsaoConfig::edgeSharpness</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La précision des bords, augmenter pour rendre les borodures plus précises, diminuer pour réduire le scintillement. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="54" column="7" bodyfile="Castor3D/Render/Ssao/SsaoConfig.hpp" bodystart="54" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/daa/a06683_1a90b5f5c6fdaa124ae3a68d6e2621d5af" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SsaoConfig::blurHighQuality</definition>
+        <argsstring></argsstring>
+        <name>blurHighQuality</name>
+        <qualifiedname>castor3d::SsaoConfig::blurHighQuality</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le statut d&apos;activation de haute qualité pour le flou. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="57" column="6" bodyfile="Castor3D/Render/Ssao/SsaoConfig.hpp" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/daa/a06683_1afae83535e7ed32b2e830ac5f1b8ea070" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ae9d3fa7fcdf1d831572a45f9c1f131a9" kindref="member">castor::ChangeTracked</ref>&lt; <ref refid="d8/de9/a09211" kindref="compound">castor::RangedValue</ref>&lt; uint32_t &gt; &gt;</type>
+        <definition>castor::ChangeTracked&lt; castor::RangedValue&lt; uint32_t &gt; &gt; castor3d::SsaoConfig::blurStepSize</definition>
+        <argsstring></argsstring>
+        <name>blurStepSize</name>
+        <qualifiedname>castor3d::SsaoConfig::blurStepSize</qualifiedname>
+        <initializer>{ { 2u, <ref refid="d2/dd2/a02279_1adb20060264652dae04682f6046d32776" kindref="member">castor::makeRange</ref>( 1u, 60u ) } }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Etape en intervalles de 2 pixels, un flou a déjà été appliqué, vis à vis des voisins, dans la première passe d&apos;AO. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="60" column="23" bodyfile="Castor3D/Render/Ssao/SsaoConfig.hpp" bodystart="60" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/daa/a06683_1a990ab36b00c35fbc8f3c9b509be8b1de" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ae9d3fa7fcdf1d831572a45f9c1f131a9" kindref="member">castor::ChangeTracked</ref>&lt; <ref refid="d8/de9/a09211" kindref="compound">castor::RangedValue</ref>&lt; uint32_t &gt; &gt;</type>
+        <definition>castor::ChangeTracked&lt; castor::RangedValue&lt; uint32_t &gt; &gt; castor3d::SsaoConfig::blurRadius</definition>
+        <argsstring></argsstring>
+        <name>blurRadius</name>
+        <qualifiedname>castor3d::SsaoConfig::blurRadius</qualifiedname>
+        <initializer>{ { 4u, <ref refid="d2/dd2/a02279_1adb20060264652dae04682f6046d32776" kindref="member">castor::makeRange</ref>( 1u, 6u ) } }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Rayon du filtre en pixels. Sera multiplié par m_blurStepSize. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="63" column="23" bodyfile="Castor3D/Render/Ssao/SsaoConfig.hpp" bodystart="63" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/daa/a06683_1a1e75f647ed4cde02a2bb2cb9704e3608" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/de9/a09211" kindref="compound">castor::RangedValue</ref>&lt; uint32_t &gt;</type>
+        <definition>castor::RangedValue&lt; uint32_t &gt; castor3d::SsaoConfig::bendStepCount</definition>
+        <argsstring></argsstring>
+        <name>bendStepCount</name>
+        <qualifiedname>castor3d::SsaoConfig::bendStepCount</qualifiedname>
+        <initializer>{ 4u, <ref refid="d2/dd2/a02279_1adb20060264652dae04682f6046d32776" kindref="member">castor::makeRange</ref>( 1u, 60u ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le nombre de pas de ray marching pour les bent normals. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="66" column="21" bodyfile="Castor3D/Render/Ssao/SsaoConfig.hpp" bodystart="66" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/daa/a06683_1ad65ee5938729989a3b95a870b21d360f" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SsaoConfig::bendStepSize</definition>
+        <argsstring></argsstring>
+        <name>bendStepSize</name>
+        <qualifiedname>castor3d::SsaoConfig::bendStepSize</qualifiedname>
+        <initializer>{ 0.5f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La taille d&apos;un pas de ray marching pour les bent normals. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="69" column="7" bodyfile="Castor3D/Render/Ssao/SsaoConfig.hpp" bodystart="69" bodyend="69"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/daa/a06683_1a4739977b5a4469e9e7d431803ee41c03" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SsaoConfig::accept</definition>
+        <argsstring>(ConfigurationVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::SsaoConfig::accept</qualifiedname>
+        <param>
+          <type><ref refid="db/dc2/a05011" kindref="compound">ConfigurationVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="19" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dd/daa/a06683_1a04981d04ac82479d85f764884f13e6b6" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::SsaoConfig::addParsers</definition>
+        <argsstring>(castor::AttributeParsers &amp;result)</argsstring>
+        <name>addParsers</name>
+        <qualifiedname>castor3d::SsaoConfig::addParsers</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7138ba41c2c2c4ced36cacefe5eb2c33" kindref="member">castor::AttributeParsers</ref> &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="21" column="21"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>castor::ChangeTrackedT&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</label>
+        <link refid="d2/def/a08159"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::RangedValue&lt; int32_t &gt;</label>
+        <link refid="d8/de9/a09211"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; int32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::RangedValue&lt; uint32_t &gt;</label>
+        <link refid="d8/de9/a09211"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; uint32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SsaoConfig</label>
+        <link refid="dd/daa/a06683"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>logMaxOffset</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>blurRadius</edgelabel>
+          <edgelabel>blurStepSize</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>bendStepCount</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::ChangeTrackedT&lt; ValueT, ControlT &gt;</label>
+        <link refid="d2/def/a08159"/>
+      </node>
+      <node id="3">
+        <label>castor::RangedValue&lt; T &gt;</label>
+        <link refid="d8/de9/a09211"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/Ssao/SsaoConfig.hpp" line="17" column="1" bodyfile="Castor3D/Render/Ssao/SsaoConfig.hpp" bodystart="18" bodyend="70"/>
+    <listofallmembers>
+      <member refid="dd/daa/a06683_1a4739977b5a4469e9e7d431803ee41c03" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>accept</name></member>
+      <member refid="dd/daa/a06683_1a04981d04ac82479d85f764884f13e6b6" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>addParsers</name></member>
+      <member refid="dd/daa/a06683_1a1e75f647ed4cde02a2bb2cb9704e3608" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>bendStepCount</name></member>
+      <member refid="dd/daa/a06683_1ad65ee5938729989a3b95a870b21d360f" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>bendStepSize</name></member>
+      <member refid="dd/daa/a06683_1a10c74f27ce7ead70ea43df6cc0a2baa4" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>bias</name></member>
+      <member refid="dd/daa/a06683_1a90b5f5c6fdaa124ae3a68d6e2621d5af" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>blurHighQuality</name></member>
+      <member refid="dd/daa/a06683_1a990ab36b00c35fbc8f3c9b509be8b1de" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>blurRadius</name></member>
+      <member refid="dd/daa/a06683_1afae83535e7ed32b2e830ac5f1b8ea070" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>blurStepSize</name></member>
+      <member refid="dd/daa/a06683_1a656080a608965d5cc362b2d1dbdaa71d" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>edgeSharpness</name></member>
+      <member refid="dd/daa/a06683_1a6e7398a8f5b1db7a06abccc148a2ed37" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>enabled</name></member>
+      <member refid="dd/daa/a06683_1af06d7cc7c149df11f4281b7a7bacc9d0" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>highQuality</name></member>
+      <member refid="dd/daa/a06683_1a551820443946351a8b2c35d631ff4e44" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>intensity</name></member>
+      <member refid="dd/daa/a06683_1a7fd733973f8fa2f36b123df0b7a3cad8" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>logMaxOffset</name></member>
+      <member refid="dd/daa/a06683_1a7ae9a14ac80dfb8a2a42013fdfc63398" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>maxMipLevel</name></member>
+      <member refid="dd/daa/a06683_1a5c00f100857f71a46adb1dfbc8905ca5" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>minRadius</name></member>
+      <member refid="dd/daa/a06683_1a94c88bfe04532417ccedf6a24b658856" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>numSamples</name></member>
+      <member refid="dd/daa/a06683_1a9c6a7dd2205dc53dda3e935c7b923c85" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>radius</name></member>
+      <member refid="dd/daa/a06683_1a593d6b80cbeef54b968771f32965b3a8" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>useNormalsBuffer</name></member>
+      <member refid="dd/daa/a06683_1ab6c094a6537836b1f6e58497e26bcfd8" prot="public" virt="non-virtual"><scope>castor3d::SsaoConfig</scope><name>variation</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d49/a09219" kind="class" language="C++" prot="public">
+    <compoundname>castor::RangeSequenceT</compoundname>
+    <basecompoundref refid="d9/da8/a09207" prot="public" virt="non-virtual">castor::Range&lt; T &gt;</basecompoundref>
+    <includes local="no">RangeSequence.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="da/d49/a09219_1a5dc15af7b78532958dc70df7f7ac9cd6" prot="public" static="no">
+        <type><ref refid="d5/d0b/a09215" kindref="compound">IndexedRangeT</ref>&lt; T &gt;</type>
+        <definition>using castor::RangeSequenceT&lt; T &gt;::RangeType =  IndexedRangeT&lt; T &gt;</definition>
+        <argsstring></argsstring>
+        <name>RangeType</name>
+        <qualifiedname>castor::RangeSequenceT::RangeType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangeSequence.hpp" line="39" column="1" bodyfile="CastorUtils/Math/RangeSequence.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="da/d49/a09219_1a3b9c67c32b23e509f6b5300b01ed2f64" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; <ref refid="da/d49/a09219_1a5dc15af7b78532958dc70df7f7ac9cd6" kindref="member">RangeType</ref> &gt;</type>
+        <definition>using castor::RangeSequenceT&lt; T &gt;::SequenceType =  Vector&lt; RangeType &gt;</definition>
+        <argsstring></argsstring>
+        <name>SequenceType</name>
+        <qualifiedname>castor::RangeSequenceT::SequenceType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangeSequence.hpp" line="40" column="1" bodyfile="CastorUtils/Math/RangeSequence.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="da/d49/a09219_1a97930c969948f748f3e2cd860d05ed97" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d49/a09219_1a3b9c67c32b23e509f6b5300b01ed2f64" kindref="member">SequenceType</ref></type>
+        <definition>SequenceType castor::RangeSequenceT&lt; T &gt;::m_sequence</definition>
+        <argsstring></argsstring>
+        <name>m_sequence</name>
+        <qualifiedname>castor::RangeSequenceT::m_sequence</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangeSequence.hpp" line="89" column="14" bodyfile="CastorUtils/Math/RangeSequence.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d49/a09219_1abb075776995f2f81c50b46b34d825801" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::RangeSequenceT&lt; T &gt;::RangeSequenceT</definition>
+        <argsstring>(Vector&lt; T &gt; const &amp;sequence)</argsstring>
+        <name>RangeSequenceT</name>
+        <qualifiedname>castor::RangeSequenceT::RangeSequenceT</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; T &gt; const &amp;</type>
+          <declname>sequence</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangeSequence.hpp" line="43" column="10" bodyfile="CastorUtils/Math/RangeSequence.hpp" bodystart="43" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d49/a09219_1af828ed71d93407cfc1cbe242046cd235" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d49/a09219_1a5dc15af7b78532958dc70df7f7ac9cd6" kindref="member">RangeType</ref> const &amp;</type>
+        <definition>RangeType const  &amp; castor::RangeSequenceT&lt; T &gt;::getRange</definition>
+        <argsstring>(T const &amp;value) const</argsstring>
+        <name>getRange</name>
+        <qualifiedname>castor::RangeSequenceT::getRange</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangeSequence.hpp" line="49" column="18" bodyfile="CastorUtils/Math/RangeSequence.hpp" bodystart="49" bodyend="63"/>
+        <references refid="d9/da8/a09207_1a068135b0cd55ff059544f0b4f467ebe7" compoundref="d4/d9b/a02159" startline="132" endline="135">castor::Range&lt; T &gt;::value</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="da/d49/a09219_1a6949b04d647b5e4d750c3a8466bd6eca" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d49/a09219_1a3b9c67c32b23e509f6b5300b01ed2f64" kindref="member">SequenceType</ref></type>
+        <definition>SequenceType castor::RangeSequenceT&lt; T &gt;::convert</definition>
+        <argsstring>(Vector&lt; T &gt; const &amp;sequence)</argsstring>
+        <name>convert</name>
+        <qualifiedname>castor::RangeSequenceT::convert</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; T &gt; const &amp;</type>
+          <declname>sequence</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangeSequence.hpp" line="66" column="14" bodyfile="CastorUtils/Math/RangeSequence.hpp" bodystart="66" bodyend="86"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Une séquence continue d&apos;intervalles. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::Range&lt; T &gt;</label>
+        <link refid="d9/da8/a09207"/>
+      </node>
+      <node id="1">
+        <label>castor::RangeSequenceT&lt; T &gt;</label>
+        <link refid="da/d49/a09219"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::Range&lt; T &gt;</label>
+        <link refid="d9/da8/a09207"/>
+      </node>
+      <node id="1">
+        <label>castor::RangeSequenceT&lt; T &gt;</label>
+        <link refid="da/d49/a09219"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Math/RangeSequence.hpp" line="35" column="1" bodyfile="CastorUtils/Math/RangeSequence.hpp" bodystart="37" bodyend="90"/>
+    <listofallmembers>
+      <member refid="d9/da8/a09207_1a1905ba672068865603e55a41343cf17d" prot="public" virt="non-virtual"><scope>castor::RangeSequenceT</scope><name>clamp</name></member>
+      <member refid="da/d49/a09219_1a6949b04d647b5e4d750c3a8466bd6eca" prot="private" virt="non-virtual"><scope>castor::RangeSequenceT</scope><name>convert</name></member>
+      <member refid="d9/da8/a09207_1a124df373e8f199d56b9bb21351e577f7" prot="public" virt="non-virtual"><scope>castor::RangeSequenceT</scope><name>getMax</name></member>
+      <member refid="d9/da8/a09207_1a0f0e99c4817d3689253818d82a8afc8d" prot="public" virt="non-virtual"><scope>castor::RangeSequenceT</scope><name>getMin</name></member>
+      <member refid="da/d49/a09219_1af828ed71d93407cfc1cbe242046cd235" prot="public" virt="non-virtual"><scope>castor::RangeSequenceT</scope><name>getRange</name></member>
+      <member refid="d9/da8/a09207_1af957dbebdd5330f15a76cc855eb03652" prot="public" virt="non-virtual"><scope>castor::RangeSequenceT</scope><name>has</name></member>
+      <member refid="d9/da8/a09207_1a3ba21b7ce4847f2b9f9557289c36bd36" prot="public" virt="non-virtual"><scope>castor::RangeSequenceT</scope><name>invPercent</name></member>
+      <member refid="d9/da8/a09207_1ae4789643a936b9eda9dcfc1328a54b7f" prot="public" virt="non-virtual"><scope>castor::RangeSequenceT</scope><name>invValue</name></member>
+      <member refid="da/d49/a09219_1a97930c969948f748f3e2cd860d05ed97" prot="private" virt="non-virtual"><scope>castor::RangeSequenceT</scope><name>m_sequence</name></member>
+      <member refid="d9/da8/a09207_1a18a23ae9545aca1b31a8e13fbeede614" prot="public" virt="non-virtual"><scope>castor::RangeSequenceT</scope><name>percent</name></member>
+      <member refid="d9/da8/a09207_1a5f7acbd7dcb3c70e63e24272421e08e3" prot="public" virt="non-virtual"><scope>castor::RangeSequenceT</scope><name>Range</name></member>
+      <member refid="da/d49/a09219_1abb075776995f2f81c50b46b34d825801" prot="public" virt="non-virtual"><scope>castor::RangeSequenceT</scope><name>RangeSequenceT</name></member>
+      <member refid="da/d49/a09219_1a5dc15af7b78532958dc70df7f7ac9cd6" prot="public" virt="non-virtual"><scope>castor::RangeSequenceT</scope><name>RangeType</name></member>
+      <member refid="da/d49/a09219_1a3b9c67c32b23e509f6b5300b01ed2f64" prot="public" virt="non-virtual"><scope>castor::RangeSequenceT</scope><name>SequenceType</name></member>
+      <member refid="d9/da8/a09207_1a068135b0cd55ff059544f0b4f467ebe7" prot="public" virt="non-virtual"><scope>castor::RangeSequenceT</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

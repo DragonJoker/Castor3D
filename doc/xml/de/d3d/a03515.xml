@@ -1,0 +1,567 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/d3d/a03515" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ObjectBufferOffset</compoundname>
+    <includes local="no">ObjectBufferOffset.hpp</includes>
+    <innerclass refid="d0/d08/a03519" prot="public">castor3d::ObjectBufferOffset::GpuBufferChunk</innerclass>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d3d/a03515_1a16dfa0135433128b00bcbbaa0b0b036a" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t castor3d::ObjectBufferOffset::hash</definition>
+        <argsstring></argsstring>
+        <name>hash</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::hash</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="146" column="8" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="146" bodyend="146"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d3d/a03515_1a508af76536c7bffd3b743fc90ee9a943" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; <ref refid="d0/d08/a03519" kindref="compound">GpuBufferChunk</ref>, size_t(<ref refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0ae558bb69fadec037d9eae46601a4df8e" kindref="member">SubmeshData::eCount</ref>) &gt;</type>
+        <definition>castor::Array&lt; GpuBufferChunk, size_t( SubmeshData::eCount ) &gt; castor3d::ObjectBufferOffset::buffers</definition>
+        <argsstring></argsstring>
+        <name>buffers</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::buffers</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="147" column="15" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="147" bodyend="147"/>
+        <referencedby refid="de/d3d/a03515_1a1790b48f190bdc308263122a2a909cca" compoundref="de/d79/a00203" startline="155" endline="158">getBufferChunk</referencedby>
+        <referencedby refid="de/d3d/a03515_1af799b403aa67d3e548d2bdee03f7877a" compoundref="de/d79/a00203" startline="160" endline="163">getBufferChunk</referencedby>
+        <referencedby refid="de/d3d/a03515_1aa09d7ffcca8e35cdbf005594b1a68117" compoundref="de/d79/a00203" startline="170" endline="176">reset</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="de/d3d/a03515_1a507a95fd2c5816563b6c7a8a433cbd2d" prot="public" static="no" mutable="no">
+        <type>uint16_t</type>
+        <definition>uint16_t castor3d::ObjectBufferOffset::id</definition>
+        <argsstring></argsstring>
+        <name>id</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::id</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="148" column="10" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="148" bodyend="148"/>
+        <referencedby refid="de/d3d/a03515_1a79859abaa955453d6db75c769ba85782" compoundref="de/d79/a00203" startline="165" endline="168">getID</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d3d/a03515_1ad53e3c73f5227430d8673778e559701c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ObjectBufferOffset::ObjectBufferOffset</definition>
+        <argsstring>()=default</argsstring>
+        <name>ObjectBufferOffset</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::ObjectBufferOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="139" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1a594e5b14ec8b83376367a5f8b2012302" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ObjectBufferOffset::ObjectBufferOffset</definition>
+        <argsstring>(size_t hash)</argsstring>
+        <name>ObjectBufferOffset</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::ObjectBufferOffset</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>hash</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="141" column="10" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="141" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1a4abab85ee83943b53c1c3ff3bb6c04ac" prot="public" static="no" const="yes" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ObjectBufferOffset::operator bool</definition>
+        <argsstring>() const</argsstring>
+        <name>operator bool</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::operator bool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="150" column="10" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="150" bodyend="153"/>
+        <references refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0a86054f7db6bf2e232beaeb45c577adc0">castor3d::ePositions</references>
+        <references refid="de/d3d/a03515_1a1feaf2b1c14d772fca87b4c6d3a130f9" compoundref="de/d79/a00203" startline="183" endline="186">hasData</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1a1790b48f190bdc308263122a2a909cca" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/d08/a03519" kindref="compound">GpuBufferChunk</ref> &amp;</type>
+        <definition>GpuBufferChunk &amp; castor3d::ObjectBufferOffset::getBufferChunk</definition>
+        <argsstring>(SubmeshData data)</argsstring>
+        <name>getBufferChunk</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getBufferChunk</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0" kindref="member">SubmeshData</ref></type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="155" column="17" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="155" bodyend="158"/>
+        <references refid="de/d3d/a03515_1a508af76536c7bffd3b743fc90ee9a943" compoundref="de/d79/a00203" startline="147" endline="147">buffers</references>
+        <referencedby refid="de/d3d/a03515_1a9714f22fb459657a1cbf0c5c5dd81677" compoundref="de/d79/a00203" startline="242" endline="250">createInOutStoragePassBinding</referencedby>
+        <referencedby refid="de/d3d/a03515_1a4cd50d597e35eab2676f16492e044235" compoundref="de/d79/a00203" startline="232" endline="240">createInputStoragePassBinding</referencedby>
+        <referencedby refid="de/d3d/a03515_1a1f1c87475c76dcd71f429a276e0e1ddf" compoundref="de/d79/a00203" startline="252" endline="260">createOutputStoragePassBinding</referencedby>
+        <referencedby refid="de/d3d/a03515_1a520e2def66992e5e7e260b4e2f24f73a" compoundref="de/d79/a00203" startline="222" endline="230">createUniformPassBinding</referencedby>
+        <referencedby refid="de/d3d/a03515_1a9b7ff7a878edaeb31b5e54e3732e46b5" compoundref="de/d79/a00203" startline="188" endline="191">getAskedSize</referencedby>
+        <referencedby refid="de/d3d/a03515_1a4d73ea8865acdf6b6981793a8d87c344" compoundref="de/d79/a00203" startline="178" endline="181">getBuffer</referencedby>
+        <referencedby refid="de/d3d/a03515_1a9ab4d9e3ea3a4d18f77f0df4c6715bb5" compoundref="de/d79/a00203" startline="194" endline="197">getCount</referencedby>
+        <referencedby refid="de/d3d/a03515_1a30c2f3a9e9e59af1261a448aec356760" compoundref="de/d79/a00203" startline="205" endline="208">getFirst</referencedby>
+        <referencedby refid="de/d3d/a03515_1a1bd1df9eb70ccc063ee5345fcd82beaf" compoundref="de/d79/a00203" startline="199" endline="202">getOffset</referencedby>
+        <referencedby refid="de/d3d/a03515_1aa7a2665263913ab33532acf686f600fd" compoundref="de/d79/a00203" startline="268" endline="272">getStorageBinding</referencedby>
+        <referencedby refid="de/d3d/a03515_1a99bcdb9f6dae14ccd01752c85a2e4f9c" compoundref="de/d79/a00203" startline="262" endline="266">getUniformBinding</referencedby>
+        <referencedby refid="de/d3d/a03515_1a1feaf2b1c14d772fca87b4c6d3a130f9" compoundref="de/d79/a00203" startline="183" endline="186">hasData</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1af799b403aa67d3e548d2bdee03f7877a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/d08/a03519" kindref="compound">GpuBufferChunk</ref> const &amp;</type>
+        <definition>GpuBufferChunk const  &amp; castor3d::ObjectBufferOffset::getBufferChunk</definition>
+        <argsstring>(SubmeshData data) const</argsstring>
+        <name>getBufferChunk</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getBufferChunk</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0" kindref="member">SubmeshData</ref></type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="160" column="23" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="160" bodyend="163"/>
+        <references refid="de/d3d/a03515_1a508af76536c7bffd3b743fc90ee9a943" compoundref="de/d79/a00203" startline="147" endline="147">buffers</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1a79859abaa955453d6db75c769ba85782" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint16_t</type>
+        <definition>uint16_t castor3d::ObjectBufferOffset::getID</definition>
+        <argsstring>() const</argsstring>
+        <name>getID</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getID</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="165" column="10" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="165" bodyend="168"/>
+        <references refid="de/d3d/a03515_1a507a95fd2c5816563b6c7a8a433cbd2d" compoundref="de/d79/a00203" startline="148" endline="148">id</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1aa09d7ffcca8e35cdbf005594b1a68117" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ObjectBufferOffset::reset</definition>
+        <argsstring>()</argsstring>
+        <name>reset</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::reset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="170" column="6" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="170" bodyend="176"/>
+        <references refid="de/d3d/a03515_1a508af76536c7bffd3b743fc90ee9a943" compoundref="de/d79/a00203" startline="147" endline="147">buffers</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1a4d73ea8865acdf6b6981793a8d87c344" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::BufferBase const &amp;</type>
+        <definition>ashes::BufferBase const  &amp; castor3d::ObjectBufferOffset::getBuffer</definition>
+        <argsstring>(SubmeshData data) const</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0" kindref="member">SubmeshData</ref></type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="178" column="26" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="178" bodyend="181"/>
+        <references refid="d0/d08/a03519_1ac8e2cc4cf9e8a4531300987d3bd38c07" compoundref="de/d79/a00203" startline="25" endline="28">castor3d::ObjectBufferOffset::GpuBufferChunk::getBuffer</references>
+        <references refid="de/d3d/a03515_1a1790b48f190bdc308263122a2a909cca" compoundref="de/d79/a00203" startline="155" endline="158">getBufferChunk</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1a1feaf2b1c14d772fca87b4c6d3a130f9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ObjectBufferOffset::hasData</definition>
+        <argsstring>(SubmeshData data) const</argsstring>
+        <name>hasData</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::hasData</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0" kindref="member">SubmeshData</ref></type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="183" column="6" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="183" bodyend="186"/>
+        <references refid="de/d3d/a03515_1a1790b48f190bdc308263122a2a909cca" compoundref="de/d79/a00203" startline="155" endline="158">getBufferChunk</references>
+        <references refid="d0/d08/a03519_1a762dcb2c50ab97281160fe95bb42be35" compoundref="de/d79/a00203" startline="30" endline="33">castor3d::ObjectBufferOffset::GpuBufferChunk::hasData</references>
+        <referencedby refid="de/d3d/a03515_1a4abab85ee83943b53c1c3ff3bb6c04ac" compoundref="de/d79/a00203" startline="150" endline="153">operator bool</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1a9b7ff7a878edaeb31b5e54e3732e46b5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getAskedSize</definition>
+        <argsstring>(SubmeshData data) const</argsstring>
+        <name>getAskedSize</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getAskedSize</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0" kindref="member">SubmeshData</ref></type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="188" column="10" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="188" bodyend="191"/>
+        <references refid="d0/d08/a03519_1afa823053371a11b3b62e258bdd1bde54" compoundref="de/d79/a00203" startline="35" endline="38">castor3d::ObjectBufferOffset::GpuBufferChunk::getAskedSize</references>
+        <references refid="de/d3d/a03515_1a1790b48f190bdc308263122a2a909cca" compoundref="de/d79/a00203" startline="155" endline="158">getBufferChunk</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1a9ab4d9e3ea3a4d18f77f0df4c6715bb5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataT</type>
+          </param>
+        </templateparamlist>
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getCount</definition>
+        <argsstring>(SubmeshData data) const</argsstring>
+        <name>getCount</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getCount</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0" kindref="member">SubmeshData</ref></type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="194" column="10" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="194" bodyend="197"/>
+        <references refid="de/d3d/a03515_1a1790b48f190bdc308263122a2a909cca" compoundref="de/d79/a00203" startline="155" endline="158">getBufferChunk</references>
+        <references refid="d0/d08/a03519_1abad57b3b5ff69bccbc447e06cf34a419" compoundref="de/d79/a00203" startline="46" endline="49">castor3d::ObjectBufferOffset::GpuBufferChunk::getCount</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1a1bd1df9eb70ccc063ee5345fcd82beaf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::ObjectBufferOffset::getOffset</definition>
+        <argsstring>(SubmeshData data) const</argsstring>
+        <name>getOffset</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getOffset</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0" kindref="member">SubmeshData</ref></type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="199" column="14" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="199" bodyend="202"/>
+        <references refid="de/d3d/a03515_1a1790b48f190bdc308263122a2a909cca" compoundref="de/d79/a00203" startline="155" endline="158">getBufferChunk</references>
+        <references refid="d0/d08/a03519_1ac401c87d432b109d1d4328c80275c82c" compoundref="de/d79/a00203" startline="51" endline="54">castor3d::ObjectBufferOffset::GpuBufferChunk::getOffset</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1a30c2f3a9e9e59af1261a448aec356760" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataT</type>
+          </param>
+        </templateparamlist>
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getFirst</definition>
+        <argsstring>(SubmeshData data) const</argsstring>
+        <name>getFirst</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getFirst</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0" kindref="member">SubmeshData</ref></type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="205" column="10" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="205" bodyend="208"/>
+        <references refid="de/d3d/a03515_1a1790b48f190bdc308263122a2a909cca" compoundref="de/d79/a00203" startline="155" endline="158">getBufferChunk</references>
+        <references refid="d0/d08/a03519_1a8cdb5108fbc9bf69678245f581abf49a" compoundref="de/d79/a00203" startline="57" endline="60">castor3d::ObjectBufferOffset::GpuBufferChunk::getFirst</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1aabca7d22b6c01b428d1986913162b9cd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename IndexT</type>
+          </param>
+        </templateparamlist>
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getFirstIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>getFirstIndex</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getFirstIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="211" column="10" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="211" bodyend="214"/>
+        <references refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0ae208cdff5827a0e8177419adff46b168">castor3d::eIndex</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1aa589c47a2d6f7559de3f806209dc8094" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename PositionT</type>
+          </param>
+        </templateparamlist>
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectBufferOffset::getFirstVertex</definition>
+        <argsstring>() const</argsstring>
+        <name>getFirstVertex</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getFirstVertex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="217" column="10" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="217" bodyend="220"/>
+        <references refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0a86054f7db6bf2e232beaeb45c577adc0">castor3d::ePositions</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1a520e2def66992e5e7e260b4e2f24f73a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ObjectBufferOffset::createUniformPassBinding</definition>
+        <argsstring>(SubmeshData data, crg::FramePass &amp;pass, uint32_t binding, castor::String const &amp;name) const</argsstring>
+        <name>createUniformPassBinding</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::createUniformPassBinding</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0" kindref="member">SubmeshData</ref></type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="222" column="6" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="222" bodyend="230"/>
+        <references refid="d0/d08/a03519_1a9e01a24d97d88ce3c93b4dfb277399f4" compoundref="de/d79/a00203" startline="70" endline="80">castor3d::ObjectBufferOffset::GpuBufferChunk::createUniformPassBinding</references>
+        <references refid="de/d3d/a03515_1a1790b48f190bdc308263122a2a909cca" compoundref="de/d79/a00203" startline="155" endline="158">getBufferChunk</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1a4cd50d597e35eab2676f16492e044235" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ObjectBufferOffset::createInputStoragePassBinding</definition>
+        <argsstring>(SubmeshData data, crg::FramePass &amp;pass, uint32_t binding, castor::String const &amp;name) const</argsstring>
+        <name>createInputStoragePassBinding</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::createInputStoragePassBinding</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0" kindref="member">SubmeshData</ref></type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="232" column="6" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="232" bodyend="240"/>
+        <references refid="d0/d08/a03519_1a2a3cd89175e98a7e85c2efd44a7d3079" compoundref="de/d79/a00203" startline="82" endline="92">castor3d::ObjectBufferOffset::GpuBufferChunk::createInputStoragePassBinding</references>
+        <references refid="de/d3d/a03515_1a1790b48f190bdc308263122a2a909cca" compoundref="de/d79/a00203" startline="155" endline="158">getBufferChunk</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1a9714f22fb459657a1cbf0c5c5dd81677" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ObjectBufferOffset::createInOutStoragePassBinding</definition>
+        <argsstring>(SubmeshData data, crg::FramePass &amp;pass, uint32_t binding, castor::String const &amp;name) const</argsstring>
+        <name>createInOutStoragePassBinding</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::createInOutStoragePassBinding</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0" kindref="member">SubmeshData</ref></type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="242" column="6" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="242" bodyend="250"/>
+        <references refid="d0/d08/a03519_1a601947305dcf227dd59e3a778b7d0ffb" compoundref="de/d79/a00203" startline="94" endline="104">castor3d::ObjectBufferOffset::GpuBufferChunk::createInOutStoragePassBinding</references>
+        <references refid="de/d3d/a03515_1a1790b48f190bdc308263122a2a909cca" compoundref="de/d79/a00203" startline="155" endline="158">getBufferChunk</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1a1f1c87475c76dcd71f429a276e0e1ddf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ObjectBufferOffset::createOutputStoragePassBinding</definition>
+        <argsstring>(SubmeshData data, crg::FramePass &amp;pass, uint32_t binding, castor::String const &amp;name) const</argsstring>
+        <name>createOutputStoragePassBinding</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::createOutputStoragePassBinding</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0" kindref="member">SubmeshData</ref></type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="252" column="6" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="252" bodyend="260"/>
+        <references refid="d0/d08/a03519_1af53313636647cb9db5a0491fc52842f4" compoundref="de/d79/a00203" startline="106" endline="116">castor3d::ObjectBufferOffset::GpuBufferChunk::createOutputStoragePassBinding</references>
+        <references refid="de/d3d/a03515_1a1790b48f190bdc308263122a2a909cca" compoundref="de/d79/a00203" startline="155" endline="158">getBufferChunk</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1a99bcdb9f6dae14ccd01752c85a2e4f9c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>ashes::WriteDescriptorSet castor3d::ObjectBufferOffset::getUniformBinding</definition>
+        <argsstring>(SubmeshData data, uint32_t binding) const</argsstring>
+        <name>getUniformBinding</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getUniformBinding</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0" kindref="member">SubmeshData</ref></type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="262" column="27" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="262" bodyend="266"/>
+        <references refid="de/d3d/a03515_1a1790b48f190bdc308263122a2a909cca" compoundref="de/d79/a00203" startline="155" endline="158">getBufferChunk</references>
+        <references refid="d0/d08/a03519_1a1d92fdc959a8f887830b553a29237eb3" compoundref="de/d79/a00203" startline="118" endline="126">castor3d::ObjectBufferOffset::GpuBufferChunk::getUniformBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d3d/a03515_1aa7a2665263913ab33532acf686f600fd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>ashes::WriteDescriptorSet castor3d::ObjectBufferOffset::getStorageBinding</definition>
+        <argsstring>(SubmeshData data, uint32_t binding) const</argsstring>
+        <name>getStorageBinding</name>
+        <qualifiedname>castor3d::ObjectBufferOffset::getStorageBinding</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0" kindref="member">SubmeshData</ref></type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="268" column="27" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="268" bodyend="272"/>
+        <references refid="de/d3d/a03515_1a1790b48f190bdc308263122a2a909cca" compoundref="de/d79/a00203" startline="155" endline="158">getBufferChunk</references>
+        <references refid="d0/d08/a03519_1a89c8c237e0ce90a0fc34f885ae2e6c2e" compoundref="de/d79/a00203" startline="128" endline="136">castor3d::ObjectBufferOffset::GpuBufferChunk::getStorageBinding</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Buffer/ObjectBufferOffset.hpp" line="17" column="1" bodyfile="Castor3D/Buffer/ObjectBufferOffset.hpp" bodystart="18" bodyend="273"/>
+    <listofallmembers>
+      <member refid="de/d3d/a03515_1a508af76536c7bffd3b743fc90ee9a943" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>buffers</name></member>
+      <member refid="de/d3d/a03515_1a9714f22fb459657a1cbf0c5c5dd81677" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>createInOutStoragePassBinding</name></member>
+      <member refid="de/d3d/a03515_1a4cd50d597e35eab2676f16492e044235" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>createInputStoragePassBinding</name></member>
+      <member refid="de/d3d/a03515_1a1f1c87475c76dcd71f429a276e0e1ddf" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>createOutputStoragePassBinding</name></member>
+      <member refid="de/d3d/a03515_1a520e2def66992e5e7e260b4e2f24f73a" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>createUniformPassBinding</name></member>
+      <member refid="de/d3d/a03515_1a9b7ff7a878edaeb31b5e54e3732e46b5" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getAskedSize</name></member>
+      <member refid="de/d3d/a03515_1a4d73ea8865acdf6b6981793a8d87c344" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getBuffer</name></member>
+      <member refid="de/d3d/a03515_1a1790b48f190bdc308263122a2a909cca" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getBufferChunk</name></member>
+      <member refid="de/d3d/a03515_1af799b403aa67d3e548d2bdee03f7877a" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getBufferChunk</name></member>
+      <member refid="de/d3d/a03515_1a9ab4d9e3ea3a4d18f77f0df4c6715bb5" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getCount</name></member>
+      <member refid="de/d3d/a03515_1a30c2f3a9e9e59af1261a448aec356760" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getFirst</name></member>
+      <member refid="de/d3d/a03515_1aabca7d22b6c01b428d1986913162b9cd" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getFirstIndex</name></member>
+      <member refid="de/d3d/a03515_1aa589c47a2d6f7559de3f806209dc8094" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getFirstVertex</name></member>
+      <member refid="de/d3d/a03515_1a79859abaa955453d6db75c769ba85782" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getID</name></member>
+      <member refid="de/d3d/a03515_1a1bd1df9eb70ccc063ee5345fcd82beaf" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getOffset</name></member>
+      <member refid="de/d3d/a03515_1aa7a2665263913ab33532acf686f600fd" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getStorageBinding</name></member>
+      <member refid="de/d3d/a03515_1a99bcdb9f6dae14ccd01752c85a2e4f9c" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>getUniformBinding</name></member>
+      <member refid="de/d3d/a03515_1a1feaf2b1c14d772fca87b4c6d3a130f9" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>hasData</name></member>
+      <member refid="de/d3d/a03515_1a16dfa0135433128b00bcbbaa0b0b036a" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>hash</name></member>
+      <member refid="de/d3d/a03515_1a507a95fd2c5816563b6c7a8a433cbd2d" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>id</name></member>
+      <member refid="de/d3d/a03515_1ad53e3c73f5227430d8673778e559701c" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>ObjectBufferOffset</name></member>
+      <member refid="de/d3d/a03515_1a594e5b14ec8b83376367a5f8b2012302" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>ObjectBufferOffset</name></member>
+      <member refid="de/d3d/a03515_1a4abab85ee83943b53c1c3ff3bb6c04ac" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>operator bool</name></member>
+      <member refid="de/d3d/a03515_1aa09d7ffcca8e35cdbf005594b1a68117" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferOffset</scope><name>reset</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

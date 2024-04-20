@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dir_da50365d3005a046df1afb863a866179" kind="dir">
+    <compoundname>CastorUtils/Exception</compoundname>
+    <innerfile refid="df/dd8/a01943">Assertion.hpp</innerfile>
+    <innerfile refid="d0/dce/a01946">Exception.hpp</innerfile>
+    <innerfile refid="dd/d2e/a01949">ExceptionModule.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Exception/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,22 @@
+<map id="castor3d::Scene" name="castor3d::Scene">
+<area shape="rect" id="Node000001" title=" " alt="" coords="952,114,1069,139"/>
+<area shape="rect" id="Node000002" href="$d6/da8/a08227.html" title=" " alt="" coords="607,7,794,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="788,33,858,50,929,75,964,93,993,111,990,116,961,97,927,80,856,55,787,38"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="197,7,380,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="394,17,607,17,607,23,394,23"/>
+<area shape="rect" id="Node000004" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="647,57,754,82"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="768,76,929,104,961,111,960,117,927,109,767,81"/>
+<area shape="rect" id="Node000005" href="$dc/d79/a08267.html" title=" " alt="" coords="613,107,788,147"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="802,124,952,124,952,129,802,129"/>
+<area shape="rect" id="Node000006" href="$da/d36/a08315.html" title=" " alt="" coords="5,151,148,177"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="148,146,197,137,304,123,389,116,473,115,581,117,613,119,613,124,581,123,473,120,389,121,305,128,198,143,149,151"/>
+<area shape="rect" id="Node000007" href="$dc/d79/a08267.html" title="Basic signal class." alt="" coords="197,151,380,177"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="162,161,197,161,197,167,162,167"/>
+<area shape="rect" id="Node000008" href="$dc/d79/a08267.html" title=" " alt="" coords="605,171,796,211"/>
+<area shape="poly" id="edge9_Node000008_Node000006" title=" " alt="" coords="141,177,198,187,307,195,416,198,605,194,605,199,416,204,306,201,197,192,141,182"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="393,152,613,132,613,137,394,157"/>
+<area shape="poly" id="edge10_Node000008_Node000007" title=" " alt="" coords="387,176,404,177,605,187,605,192,404,183,387,181"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="809,168,927,144,958,137,960,142,929,149,810,173"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="637,235,764,275"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="778,252,852,242,891,231,927,215,950,198,971,177,1000,138,1004,141,975,181,954,202,929,220,893,236,854,247,778,257"/>
+</map>

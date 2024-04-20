@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d7c/a08079" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextLoaderT</compoundname>
+    <basecompoundref refid="d3/d77/a07999" prot="public" virt="non-virtual">castor::Loader&lt; T, FileType::eText &gt;</basecompoundref>
+    <includes local="no">TextLoader.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="protected-type">
+      <memberdef kind="typedef" id="dc/d7c/a08079_1a9af1e0b27b6bccbcb74f46fed47c8df8" prot="protected" static="no">
+        <type>typename <ref refid="d3/d77/a07999" kindref="compound">Loader</ref>&lt; T, <ref refid="d2/dd2/a02279_1ac4972a01abb873aee032c3071b56cbe4a8c15e6038102a3065760b26043b9c162" kindref="member">FileType::eText</ref> &gt;::Type</type>
+        <definition>using castor::TextLoaderT&lt; T &gt;::Type =  typename Loader&lt; T, FileType::eText &gt;::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor::TextLoaderT::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextLoader.hpp" line="19" column="1" bodyfile="CastorUtils/Data/TextLoader.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d7c/a08079_1a8d2255756ca5ddf9309f7767b90eaee3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::TextLoaderT&lt; T &gt;::TextLoaderT</definition>
+        <argsstring>()=default</argsstring>
+        <name>TextLoaderT</name>
+        <qualifiedname>castor::TextLoaderT::TextLoaderT</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextLoader.hpp" line="28" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d7c/a08079_1a1a139ec724a3dbf2fe9d5620afa8f30b" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type></type>
+        <definition>virtual castor::TextLoaderT&lt; T &gt;::~TextLoaderT</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~TextLoaderT</name>
+        <qualifiedname>castor::TextLoaderT::~TextLoaderT</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextLoader.hpp" line="35" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::Loader&lt; T, FileType::eText &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; T, FileType::eText &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Loader&lt; T, FT &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="1">
+        <label>castor::TextLoaderT&lt; T &gt;</label>
+        <link refid="dc/d7c/a08079"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::Loader&lt; T, FileType::eText &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; T, FileType::eText &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Loader&lt; T, FT &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="1">
+        <label>castor::TextLoaderT&lt; T &gt;</label>
+        <link refid="dc/d7c/a08079"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Data/TextLoader.hpp" line="15" column="1" bodyfile="CastorUtils/Data/TextLoader.hpp" bodystart="17" bodyend="36"/>
+    <listofallmembers>
+      <member refid="d3/d77/a07999_1a533c9398afec6cb4bcd884d38ff4ec57" prot="public" virt="non-virtual"><scope>castor::TextLoaderT</scope><name>Loader</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::TextLoaderT</scope><name>NonMovable</name></member>
+      <member refid="d3/d77/a07999_1aa06599d499d4c8d0248565cfd912252f" prot="public" virt="virtual"><scope>castor::TextLoaderT</scope><name>operator()</name></member>
+      <member refid="dc/d7c/a08079_1a8d2255756ca5ddf9309f7767b90eaee3" prot="public" virt="non-virtual"><scope>castor::TextLoaderT</scope><name>TextLoaderT</name></member>
+      <member refid="dc/d7c/a08079_1a9af1e0b27b6bccbcb74f46fed47c8df8" prot="protected" virt="non-virtual"><scope>castor::TextLoaderT</scope><name>Type</name></member>
+      <member refid="d3/d77/a07999_1a7d9fe6e26c86cc1301619e8c76223124" prot="public" virt="virtual"><scope>castor::TextLoaderT</scope><name>~Loader</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::TextLoaderT</scope><name>~NonMovable</name></member>
+      <member refid="dc/d7c/a08079_1a1a139ec724a3dbf2fe9d5620afa8f30b" prot="public" virt="virtual"><scope>castor::TextLoaderT</scope><name>~TextLoaderT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

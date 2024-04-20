@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/d4d/a07199" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserEnumTraits&lt; VkCompareOp &gt;</compoundname>
+    <includes local="no">SceneFileParserData.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d7/d4d/a07199_1a300941cbdbdeed1e4167333392ccc791" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a98169622bc976df3189194c2b35fbf60" kindref="member">xchar</ref> const  *const</type>
+        <definition>xchar const* const castor::ParserEnumTraits&lt; VkCompareOp &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; VkCompareOp &gt;::Name</qualifiedname>
+        <initializer>= <ref refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" kindref="member">cuT</ref>( &quot;CompareFunc&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneFileParserData.hpp" line="315" column="34" bodyfile="Castor3D/Scene/SceneFileParserData.hpp" bodystart="315" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4d/a07199_1aac4d60b18c4a0d94fc6f9c0b2f79f226" prot="public" static="yes" mutable="no">
+        <type>UInt32StrMap const</type>
+        <definition>UInt32StrMap const castor::ParserEnumTraits&lt; VkCompareOp &gt;::Values</definition>
+        <argsstring></argsstring>
+        <name>Values</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; VkCompareOp &gt;::Values</qualifiedname>
+        <initializer>= []()
+			{
+				UInt32StrMap result;
+				result = <ref refid="d9/dba/a02278_1a89ee8e4edb4c883ef7c66b8dc60cc430" kindref="member">castor3d::getEnumMapT</ref>( VK_COMPARE_OP_NEVER, VK_COMPARE_OP_ALWAYS );
+				return result;
+			}( )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneFileParserData.hpp" line="316" column="34" bodyfile="Castor3D/Scene/SceneFileParserData.hpp" bodystart="316" bodyend="321"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserEnumTraits&lt; VkCompareOp &gt;</label>
+        <link refid="d7/d4d/a07199"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>Values</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>UInt32StrMap</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/SceneFileParserData.hpp" line="313" column="1" bodyfile="Castor3D/Scene/SceneFileParserData.hpp" bodystart="314" bodyend="322"/>
+    <listofallmembers>
+      <member refid="d7/d4d/a07199_1a300941cbdbdeed1e4167333392ccc791" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; VkCompareOp &gt;</scope><name>Name</name></member>
+      <member refid="d7/d4d/a07199_1aac4d60b18c4a0d94fc6f9c0b2f79f226" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; VkCompareOp &gt;</scope><name>Values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

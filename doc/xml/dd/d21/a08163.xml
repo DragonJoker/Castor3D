@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d21/a08163" kind="struct" language="C++" prot="public">
+    <compoundname>castor::IsChangeTrackedT&lt; ChangeTrackedT&lt; ValueT, ControlT &gt; &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::true_type</basecompoundref>
+    <includes local="no">ChangeTracked.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ValueT</type>
+      </param>
+      <param>
+        <type>typename ControlT</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::IsChangeTrackedT&lt; ChangeTrackedT&lt; ValueT, ControlT &gt; &gt;</label>
+        <link refid="dd/d21/a08163"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::true_type</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::IsChangeTrackedT&lt; ChangeTrackedT&lt; ValueT, ControlT &gt; &gt;</label>
+        <link refid="dd/d21/a08163"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::true_type</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Design/ChangeTracked.hpp" line="221" column="1" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="221" bodyend="221"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,843 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d65/a09371" kind="class" language="C++" prot="public">
+    <compoundname>castor::CpuInformations</compoundname>
+    <includes local="no">CpuInformations.hpp</includes>
+    <innerclass refid="d0/deb/a09375" prot="private">castor::CpuInformations::CpuInformationsInternal</innerclass>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="dc/d65/a09371_1a6dfd478f52a5390427b7dc16987e1c4d" prot="private" static="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> CpuInformationsInternal const</type>
+        <definition>CU_API CpuInformationsInternal const castor::CpuInformations::m_internal</definition>
+        <argsstring></argsstring>
+        <name>m_internal</name>
+        <qualifiedname>castor::CpuInformations::m_internal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="487" column="45" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="487" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d65/a09371_1a006506212d6d7a122c1f3c36c7c99eaf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::CpuInformations::CpuInformations</definition>
+        <argsstring>()=default</argsstring>
+        <name>CpuInformations</name>
+        <qualifiedname>castor::CpuInformations::CpuInformations</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="44" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a61cc94ebe488ed1420730604b050ac36" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::CpuInformations::getCoreCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getCoreCount</name>
+        <qualifiedname>castor::CpuInformations::getCoreCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le nombre de coeurs (Physiques + Virtuels). </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="51" column="10" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="51" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a2ad472f80c1af2b33badc09ed78a9792" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>String castor::CpuInformations::getVendor</definition>
+        <argsstring>() const</argsstring>
+        <name>getVendor</name>
+        <qualifiedname>castor::CpuInformations::getVendor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le vendeur du CPU. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="61" column="8" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="61" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1ad3010898039884206f06ff2732973182" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>String castor::CpuInformations::getModel</definition>
+        <argsstring>() const</argsstring>
+        <name>getModel</name>
+        <qualifiedname>castor::CpuInformations::getModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le modèle du CPU. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="71" column="8" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="71" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a9d68aee0364fff7064fc4a2de577ccb7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::SSE3</definition>
+        <argsstring>() const</argsstring>
+        <name>SSE3</name>
+        <qualifiedname>castor::CpuInformations::SSE3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions SSE3. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="81" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="81" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a54efbc229635c43015220268c8a49004" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::PCLMULQDQ</definition>
+        <argsstring>() const</argsstring>
+        <name>PCLMULQDQ</name>
+        <qualifiedname>castor::CpuInformations::PCLMULQDQ</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions PCLMULQDQ. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="91" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="91" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1aabe419e1a627ff0b83cf7b79f9d9c99c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::MONITOR</definition>
+        <argsstring>() const</argsstring>
+        <name>MONITOR</name>
+        <qualifiedname>castor::CpuInformations::MONITOR</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions MONITOR. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="101" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="101" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a92bd4dcde503a8bd87c8939cd4192c8f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::SSSE3</definition>
+        <argsstring>() const</argsstring>
+        <name>SSSE3</name>
+        <qualifiedname>castor::CpuInformations::SSSE3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions SSSE3. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="111" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="111" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a1e98f4e376d8fb951d07827fba47a06f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::FMA</definition>
+        <argsstring>() const</argsstring>
+        <name>FMA</name>
+        <qualifiedname>castor::CpuInformations::FMA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions FMA. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="121" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="121" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a4bb92c6e5b273f801f47e0f26b03e961" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::CMPXCHG16B</definition>
+        <argsstring>() const</argsstring>
+        <name>CMPXCHG16B</name>
+        <qualifiedname>castor::CpuInformations::CMPXCHG16B</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions CMPXCHG16B. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="131" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="131" bodyend="134"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1aa8ffecd2c478ebdce454c3686de88ee3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::SSE41</definition>
+        <argsstring>() const</argsstring>
+        <name>SSE41</name>
+        <qualifiedname>castor::CpuInformations::SSE41</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions SSE4.1. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="141" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="141" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1ab8adffdbd9d74ef3631980255ed00f03" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::SSE42</definition>
+        <argsstring>() const</argsstring>
+        <name>SSE42</name>
+        <qualifiedname>castor::CpuInformations::SSE42</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions SSE4.2. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="151" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="151" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a8b14782ef38090980882d292f024a6b1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::MOVBE</definition>
+        <argsstring>() const</argsstring>
+        <name>MOVBE</name>
+        <qualifiedname>castor::CpuInformations::MOVBE</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions MOVBE. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="161" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="161" bodyend="164"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a75a4d757518b76f9cd74ab51a6b3959d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::POPCNT</definition>
+        <argsstring>() const</argsstring>
+        <name>POPCNT</name>
+        <qualifiedname>castor::CpuInformations::POPCNT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions POPCNT. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="171" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="171" bodyend="174"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a5b290b47aba9e91b0dc3c0c6e4ad51ed" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::AES</definition>
+        <argsstring>() const</argsstring>
+        <name>AES</name>
+        <qualifiedname>castor::CpuInformations::AES</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions AES. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="181" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="181" bodyend="184"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1abba1e78345708b54f8667d2073d2d874" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::XSAVE</definition>
+        <argsstring>() const</argsstring>
+        <name>XSAVE</name>
+        <qualifiedname>castor::CpuInformations::XSAVE</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions XSAVE. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="191" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="191" bodyend="194"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a36bcc5c39036b5904119ed5b48d6907e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::OSXSAVE</definition>
+        <argsstring>() const</argsstring>
+        <name>OSXSAVE</name>
+        <qualifiedname>castor::CpuInformations::OSXSAVE</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions OSXSAVE. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="201" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="201" bodyend="204"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a522ed362d446e8d8902711988c12f890" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::AVX</definition>
+        <argsstring>() const</argsstring>
+        <name>AVX</name>
+        <qualifiedname>castor::CpuInformations::AVX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions AVX. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="211" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="211" bodyend="214"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1aa274e741727ddbada851c1b744b68102" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::F16C</definition>
+        <argsstring>() const</argsstring>
+        <name>F16C</name>
+        <qualifiedname>castor::CpuInformations::F16C</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions F16C. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="221" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="221" bodyend="224"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a3d882ff2f4e691f451c41f40b192572c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::RDRAND</definition>
+        <argsstring>() const</argsstring>
+        <name>RDRAND</name>
+        <qualifiedname>castor::CpuInformations::RDRAND</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions RDRAND. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="231" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="231" bodyend="234"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a95057aa93879f60231c783cf2b20cc5a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::MSR</definition>
+        <argsstring>() const</argsstring>
+        <name>MSR</name>
+        <qualifiedname>castor::CpuInformations::MSR</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions MSR. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="241" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="241" bodyend="244"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a88fc22d3a7c6cf9ad32085cfda8682c1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::CX8</definition>
+        <argsstring>() const</argsstring>
+        <name>CX8</name>
+        <qualifiedname>castor::CpuInformations::CX8</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions CX8. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="251" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="251" bodyend="254"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a9a01a77528300509332bd83fc2466b60" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::SEP</definition>
+        <argsstring>() const</argsstring>
+        <name>SEP</name>
+        <qualifiedname>castor::CpuInformations::SEP</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions SEP. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="261" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="261" bodyend="264"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a6ee5f5b093096b445a5f53b6c485c176" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::CMOV</definition>
+        <argsstring>() const</argsstring>
+        <name>CMOV</name>
+        <qualifiedname>castor::CpuInformations::CMOV</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions CMOV. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="271" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="271" bodyend="274"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a0e8259af728d99a8941ddb6f34549b14" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::CLFSH</definition>
+        <argsstring>() const</argsstring>
+        <name>CLFSH</name>
+        <qualifiedname>castor::CpuInformations::CLFSH</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions CLFSH. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="281" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="281" bodyend="284"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a6f50ef359987fd51dbe5457e26e773fa" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::MMX</definition>
+        <argsstring>() const</argsstring>
+        <name>MMX</name>
+        <qualifiedname>castor::CpuInformations::MMX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions MMX. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="291" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="291" bodyend="294"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a16e9bcb3836e2253806bac74c0a9f8b1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::FXSR</definition>
+        <argsstring>() const</argsstring>
+        <name>FXSR</name>
+        <qualifiedname>castor::CpuInformations::FXSR</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions FXSR. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="301" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="301" bodyend="304"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a188516dda79d6f7c9015613c6c9f95c4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::SSE</definition>
+        <argsstring>() const</argsstring>
+        <name>SSE</name>
+        <qualifiedname>castor::CpuInformations::SSE</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions SSE. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="311" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="311" bodyend="314"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a3e67d3041b7dbe429e2383075833503b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::SSE2</definition>
+        <argsstring>() const</argsstring>
+        <name>SSE2</name>
+        <qualifiedname>castor::CpuInformations::SSE2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions SSE2. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="321" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="321" bodyend="324"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1ac5b33178096836704dd22dea2785cc76" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::FSGSBASE</definition>
+        <argsstring>() const</argsstring>
+        <name>FSGSBASE</name>
+        <qualifiedname>castor::CpuInformations::FSGSBASE</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions FSGSBASE. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="331" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="331" bodyend="334"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1aefbbd4d165ef7d8c0f243b8794efc1ee" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::BMI1</definition>
+        <argsstring>() const</argsstring>
+        <name>BMI1</name>
+        <qualifiedname>castor::CpuInformations::BMI1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions BMI1. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="341" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="341" bodyend="344"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a5893e8a0d477270bb376f2835032a3f6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::HLE</definition>
+        <argsstring>() const</argsstring>
+        <name>HLE</name>
+        <qualifiedname>castor::CpuInformations::HLE</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions HLE. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="351" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="351" bodyend="354"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1aa47c53270a6184e7fed0d7f0a9a33286" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::AVX2</definition>
+        <argsstring>() const</argsstring>
+        <name>AVX2</name>
+        <qualifiedname>castor::CpuInformations::AVX2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions AVX2. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="361" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="361" bodyend="364"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a1adc73b987120d42d3c31f31deeb0f23" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::BMI2</definition>
+        <argsstring>() const</argsstring>
+        <name>BMI2</name>
+        <qualifiedname>castor::CpuInformations::BMI2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions BMI2. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="371" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="371" bodyend="374"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a6c78d8ff0f43695edf5793f1c0578692" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::ERMS</definition>
+        <argsstring>() const</argsstring>
+        <name>ERMS</name>
+        <qualifiedname>castor::CpuInformations::ERMS</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions ERMS. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="381" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="381" bodyend="384"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a170408fab790db774f3d8846fc400e28" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::INVPCID</definition>
+        <argsstring>() const</argsstring>
+        <name>INVPCID</name>
+        <qualifiedname>castor::CpuInformations::INVPCID</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions INVPCID. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="391" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="391" bodyend="394"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1ae2cdceb68555885f7fb2f0b97e7be90c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::RTM</definition>
+        <argsstring>() const</argsstring>
+        <name>RTM</name>
+        <qualifiedname>castor::CpuInformations::RTM</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions RTM. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="401" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="401" bodyend="404"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1aaaff18c02c8b6fae2bbc292edaae00c7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::AVX512F</definition>
+        <argsstring>() const</argsstring>
+        <name>AVX512F</name>
+        <qualifiedname>castor::CpuInformations::AVX512F</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions AVX512F. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="411" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="411" bodyend="414"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a907391b055c2775e106ac85af52ad61c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::RDSEED</definition>
+        <argsstring>() const</argsstring>
+        <name>RDSEED</name>
+        <qualifiedname>castor::CpuInformations::RDSEED</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions RDSEED. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="421" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="421" bodyend="424"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a83d433a6001521ab2102ed906a997776" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::ADX</definition>
+        <argsstring>() const</argsstring>
+        <name>ADX</name>
+        <qualifiedname>castor::CpuInformations::ADX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions ADX. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="431" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="431" bodyend="434"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a6f8d50d91818150d4c20c64a5f6d746e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::AVX512PF</definition>
+        <argsstring>() const</argsstring>
+        <name>AVX512PF</name>
+        <qualifiedname>castor::CpuInformations::AVX512PF</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions AVX512PF. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="441" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="441" bodyend="444"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1abd0b6198b63102c6e55cc3653c6d4e8b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::AVX512ER</definition>
+        <argsstring>() const</argsstring>
+        <name>AVX512ER</name>
+        <qualifiedname>castor::CpuInformations::AVX512ER</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions AVX512ER. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="451" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="451" bodyend="454"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1afb628b1e88e9588fdcd27b8b8478f289" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::AVX512CD</definition>
+        <argsstring>() const</argsstring>
+        <name>AVX512CD</name>
+        <qualifiedname>castor::CpuInformations::AVX512CD</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions AVX512CD. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="461" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="461" bodyend="464"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1a85f1a109d8e4a331be262a6c97041990" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::SHA</definition>
+        <argsstring>() const</argsstring>
+        <name>SHA</name>
+        <qualifiedname>castor::CpuInformations::SHA</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions SHA. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="471" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="471" bodyend="474"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d65/a09371_1acd5b2c4362240511fbe7228f5c3e3cec" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CpuInformations::PREFETCHWT1</definition>
+        <argsstring>() const</argsstring>
+        <name>PREFETCHWT1</name>
+        <qualifiedname>castor::CpuInformations::PREFETCHWT1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le support des instructions PREFETCHWT1. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="481" column="6" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="481" bodyend="484"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Récupère les informations sur le CPU. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Miscellaneous/CpuInformations.hpp" line="19" column="1" bodyfile="CastorUtils/Miscellaneous/CpuInformations.hpp" bodystart="20" bodyend="488"/>
+    <listofallmembers>
+      <member refid="dc/d65/a09371_1a83d433a6001521ab2102ed906a997776" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>ADX</name></member>
+      <member refid="dc/d65/a09371_1a5b290b47aba9e91b0dc3c0c6e4ad51ed" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>AES</name></member>
+      <member refid="dc/d65/a09371_1a522ed362d446e8d8902711988c12f890" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>AVX</name></member>
+      <member refid="dc/d65/a09371_1aa47c53270a6184e7fed0d7f0a9a33286" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>AVX2</name></member>
+      <member refid="dc/d65/a09371_1afb628b1e88e9588fdcd27b8b8478f289" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>AVX512CD</name></member>
+      <member refid="dc/d65/a09371_1abd0b6198b63102c6e55cc3653c6d4e8b" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>AVX512ER</name></member>
+      <member refid="dc/d65/a09371_1aaaff18c02c8b6fae2bbc292edaae00c7" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>AVX512F</name></member>
+      <member refid="dc/d65/a09371_1a6f8d50d91818150d4c20c64a5f6d746e" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>AVX512PF</name></member>
+      <member refid="dc/d65/a09371_1aefbbd4d165ef7d8c0f243b8794efc1ee" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>BMI1</name></member>
+      <member refid="dc/d65/a09371_1a1adc73b987120d42d3c31f31deeb0f23" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>BMI2</name></member>
+      <member refid="dc/d65/a09371_1a0e8259af728d99a8941ddb6f34549b14" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>CLFSH</name></member>
+      <member refid="dc/d65/a09371_1a6ee5f5b093096b445a5f53b6c485c176" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>CMOV</name></member>
+      <member refid="dc/d65/a09371_1a4bb92c6e5b273f801f47e0f26b03e961" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>CMPXCHG16B</name></member>
+      <member refid="dc/d65/a09371_1a006506212d6d7a122c1f3c36c7c99eaf" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>CpuInformations</name></member>
+      <member refid="dc/d65/a09371_1a88fc22d3a7c6cf9ad32085cfda8682c1" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>CX8</name></member>
+      <member refid="dc/d65/a09371_1a6c78d8ff0f43695edf5793f1c0578692" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>ERMS</name></member>
+      <member refid="dc/d65/a09371_1aa274e741727ddbada851c1b744b68102" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>F16C</name></member>
+      <member refid="dc/d65/a09371_1a1e98f4e376d8fb951d07827fba47a06f" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>FMA</name></member>
+      <member refid="dc/d65/a09371_1ac5b33178096836704dd22dea2785cc76" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>FSGSBASE</name></member>
+      <member refid="dc/d65/a09371_1a16e9bcb3836e2253806bac74c0a9f8b1" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>FXSR</name></member>
+      <member refid="dc/d65/a09371_1a61cc94ebe488ed1420730604b050ac36" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>getCoreCount</name></member>
+      <member refid="dc/d65/a09371_1ad3010898039884206f06ff2732973182" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>getModel</name></member>
+      <member refid="dc/d65/a09371_1a2ad472f80c1af2b33badc09ed78a9792" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>getVendor</name></member>
+      <member refid="dc/d65/a09371_1a5893e8a0d477270bb376f2835032a3f6" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>HLE</name></member>
+      <member refid="dc/d65/a09371_1a170408fab790db774f3d8846fc400e28" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>INVPCID</name></member>
+      <member refid="dc/d65/a09371_1a6dfd478f52a5390427b7dc16987e1c4d" prot="private" virt="non-virtual"><scope>castor::CpuInformations</scope><name>m_internal</name></member>
+      <member refid="dc/d65/a09371_1a6f50ef359987fd51dbe5457e26e773fa" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>MMX</name></member>
+      <member refid="dc/d65/a09371_1aabe419e1a627ff0b83cf7b79f9d9c99c" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>MONITOR</name></member>
+      <member refid="dc/d65/a09371_1a8b14782ef38090980882d292f024a6b1" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>MOVBE</name></member>
+      <member refid="dc/d65/a09371_1a95057aa93879f60231c783cf2b20cc5a" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>MSR</name></member>
+      <member refid="dc/d65/a09371_1a36bcc5c39036b5904119ed5b48d6907e" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>OSXSAVE</name></member>
+      <member refid="dc/d65/a09371_1a54efbc229635c43015220268c8a49004" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>PCLMULQDQ</name></member>
+      <member refid="dc/d65/a09371_1a75a4d757518b76f9cd74ab51a6b3959d" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>POPCNT</name></member>
+      <member refid="dc/d65/a09371_1acd5b2c4362240511fbe7228f5c3e3cec" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>PREFETCHWT1</name></member>
+      <member refid="dc/d65/a09371_1a3d882ff2f4e691f451c41f40b192572c" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>RDRAND</name></member>
+      <member refid="dc/d65/a09371_1a907391b055c2775e106ac85af52ad61c" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>RDSEED</name></member>
+      <member refid="dc/d65/a09371_1ae2cdceb68555885f7fb2f0b97e7be90c" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>RTM</name></member>
+      <member refid="dc/d65/a09371_1a9a01a77528300509332bd83fc2466b60" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>SEP</name></member>
+      <member refid="dc/d65/a09371_1a85f1a109d8e4a331be262a6c97041990" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>SHA</name></member>
+      <member refid="dc/d65/a09371_1a188516dda79d6f7c9015613c6c9f95c4" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>SSE</name></member>
+      <member refid="dc/d65/a09371_1a3e67d3041b7dbe429e2383075833503b" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>SSE2</name></member>
+      <member refid="dc/d65/a09371_1a9d68aee0364fff7064fc4a2de577ccb7" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>SSE3</name></member>
+      <member refid="dc/d65/a09371_1aa8ffecd2c478ebdce454c3686de88ee3" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>SSE41</name></member>
+      <member refid="dc/d65/a09371_1ab8adffdbd9d74ef3631980255ed00f03" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>SSE42</name></member>
+      <member refid="dc/d65/a09371_1a92bd4dcde503a8bd87c8939cd4192c8f" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>SSSE3</name></member>
+      <member refid="dc/d65/a09371_1abba1e78345708b54f8667d2073d2d874" prot="public" virt="non-virtual"><scope>castor::CpuInformations</scope><name>XSAVE</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

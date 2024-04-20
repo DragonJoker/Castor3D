@@ -1,20 +1,21 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_73b4ff1c0d48677e07219a6e5cbe5dfd" kind="dir">
-    <compoundname>Shader</compoundname>
-    <innerdir refid="dir_8ecc8570da425ca0c18525339547a1ce">Shader/ShaderBuffers</innerdir>
-    <innerdir refid="dir_2b63c8c8a8bc0f17541f0115e68db690">Shader/Shaders</innerdir>
-    <innerdir refid="dir_7cb5e4c64a1bf58db52aef2025a37836">Shader/Ubos</innerdir>
-    <innerfile refid="d6/d83/a01544">GlslToSpv.hpp</innerfile>
-    <innerfile refid="da/ded/a01547">LightingModelFactory.hpp</innerfile>
-    <innerfile refid="d8/daf/a01550">Program.hpp</innerfile>
-    <innerfile refid="de/d2c/a01553">ShaderBuffer.hpp</innerfile>
-    <innerfile refid="d3/daa/a01577">ShaderModule.hpp</innerfile>
-    <innerfile refid="de/df6/a01670">StructuredShaderBuffer.hpp</innerfile>
+    <compoundname>Castor3D/Shader</compoundname>
+    <innerdir refid="dir_8ecc8570da425ca0c18525339547a1ce">Castor3D/Shader/ShaderBuffers</innerdir>
+    <innerdir refid="dir_2b63c8c8a8bc0f17541f0115e68db690">Castor3D/Shader/Shaders</innerdir>
+    <innerdir refid="dir_7cb5e4c64a1bf58db52aef2025a37836">Castor3D/Shader/Ubos</innerdir>
+    <innerfile refid="d8/daf/a01550">GlslToSpv.hpp</innerfile>
+    <innerfile refid="de/d2c/a01553">LightingModelFactory.hpp</innerfile>
+    <innerfile refid="d7/db6/a01556">Program.hpp</innerfile>
+    <innerfile refid="de/d1a/a01559">ShaderAppendBuffer.hpp</innerfile>
+    <innerfile refid="d2/dc1/a01562">ShaderBuffer.hpp</innerfile>
+    <innerfile refid="d7/d29/a01589">ShaderModule.hpp</innerfile>
+    <innerfile refid="df/d9a/a01715">StructuredShaderBuffer.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Shader/"/>
+    <location file="Castor3D/Shader/"/>
   </compounddef>
 </doxygen>

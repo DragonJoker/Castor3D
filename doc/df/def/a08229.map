@@ -1,0 +1,12 @@
+<map id="castor::ResourceT&lt; ResT, KeyT &gt;" name="castor::ResourceT&lt; ResT, KeyT &gt;">
+<area shape="rect" id="Node000001" title="External resource representation." alt="" coords="10,315,146,355"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,175,57,201"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="42,213,74,313,69,315,37,215"/>
+<area shape="rect" id="Node000003" href="$dc/d79/a08267.html" title=" " alt="" coords="81,168,275,208"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="159,221,93,316,89,313,155,218"/>
+<area shape="rect" id="Node000004" href="$da/d36/a08315.html" title=" " alt="" coords="81,5,224,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="147,44,141,74,142,105,153,138,168,166,164,169,149,140,137,106,135,73,141,43"/>
+<area shape="rect" id="Node000005" href="$dc/d79/a08267.html" title="Basic signal class." alt="" coords="151,80,333,105"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="179,37,229,77,226,82,176,42"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="229,118,193,169,189,166,224,115"/>
+</map>

@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/db2/a08403" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserParameterHelper</compoundname>
+    <templateparamlist>
+      <param>
+        <type><ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222" kindref="member">ParameterType</ref></type>
+        <declname>Type</declname>
+        <defname>Type</defname>
+      </param>
+      <param>
+        <type>typename ParserValueHelperT</type>
+        <defval>void</defval>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Structure d&apos;aide pour les paramètres de parseur. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/FileParser/FileParserModule.hpp" line="262" column="1" bodyfile="CastorUtils/FileParser/FileParserModule.hpp" bodystart="262" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

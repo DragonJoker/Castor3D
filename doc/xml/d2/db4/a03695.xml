@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/db4/a03695" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::DebugConfig</compoundname>
+    <includes local="no">Castor3DModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/db4/a03695_1a560bf0f46b35c430d4c0c86cea60ec99" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::DebugConfig::intermediateShaderValueIndex</definition>
+        <argsstring></argsstring>
+        <name>intermediateShaderValueIndex</name>
+        <qualifiedname>castor3d::DebugConfig::intermediateShaderValueIndex</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Castor3DModule.hpp" line="486" column="10" bodyfile="Castor3D/Castor3DModule.hpp" bodystart="486" bodyend="486"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/db4/a03695_1a56430d398726ee40f9240a68b7fdaf94" prot="private" static="no" mutable="no">
+        <type>castor::StringArray</type>
+        <definition>castor::StringArray castor3d::DebugConfig::m_intermediateValueNames</definition>
+        <argsstring></argsstring>
+        <name>m_intermediateValueNames</name>
+        <qualifiedname>castor3d::DebugConfig::m_intermediateValueNames</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Castor3DModule.hpp" line="516" column="21" bodyfile="Castor3D/Castor3DModule.hpp" bodystart="516" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/db4/a03695_1aa38d7dc46e26d7448905557429ec0731" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::DebugConfig::DebugConfig</definition>
+        <argsstring>()</argsstring>
+        <name>DebugConfig</name>
+        <qualifiedname>castor3d::DebugConfig::DebugConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Castor3DModule.hpp" line="488" column="1" bodyfile="Castor3D/Castor3DModule.hpp" bodystart="488" bodyend="491"/>
+        <references refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" compoundref="d5/d12/a01799" startline="51">cuT</references>
+        <references refid="d2/db4/a03695_1ada39f60ee0dcbde0664b818e58c97da2" compoundref="d3/d5e/a00275" startline="493" endline="508">registerValue</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/db4/a03695_1ada39f60ee0dcbde0664b818e58c97da2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::DebugConfig::registerValue</definition>
+        <argsstring>(castor::String const &amp;category, castor::String const &amp;name)</argsstring>
+        <name>registerValue</name>
+        <qualifiedname>castor3d::DebugConfig::registerValue</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Castor3DModule.hpp" line="493" column="10" bodyfile="Castor3D/Castor3DModule.hpp" bodystart="493" bodyend="508"/>
+        <references refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" compoundref="d5/d12/a01799" startline="51">cuT</references>
+        <referencedby refid="d2/db4/a03695_1aa38d7dc46e26d7448905557429ec0731" compoundref="d3/d5e/a00275" startline="488" endline="491">DebugConfig</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/db4/a03695_1aba6a1c7c6af70d853a3eabc38e6fbbc8" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>castor::StringArray const &amp;</type>
+        <definition>castor::StringArray const  &amp; castor3d::DebugConfig::getIntermediateValues</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getIntermediateValues</name>
+        <qualifiedname>castor3d::DebugConfig::getIntermediateValues</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Castor3DModule.hpp" line="510" column="28" bodyfile="Castor3D/Castor3DModule.hpp" bodystart="510" bodyend="513"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Castor3DModule.hpp" line="484" column="1" bodyfile="Castor3D/Castor3DModule.hpp" bodystart="485" bodyend="517"/>
+    <listofallmembers>
+      <member refid="d2/db4/a03695_1aa38d7dc46e26d7448905557429ec0731" prot="public" virt="non-virtual"><scope>castor3d::DebugConfig</scope><name>DebugConfig</name></member>
+      <member refid="d2/db4/a03695_1aba6a1c7c6af70d853a3eabc38e6fbbc8" prot="public" virt="non-virtual"><scope>castor3d::DebugConfig</scope><name>getIntermediateValues</name></member>
+      <member refid="d2/db4/a03695_1a560bf0f46b35c430d4c0c86cea60ec99" prot="public" virt="non-virtual"><scope>castor3d::DebugConfig</scope><name>intermediateShaderValueIndex</name></member>
+      <member refid="d2/db4/a03695_1a56430d398726ee40f9240a68b7fdaf94" prot="private" virt="non-virtual"><scope>castor3d::DebugConfig</scope><name>m_intermediateValueNames</name></member>
+      <member refid="d2/db4/a03695_1ada39f60ee0dcbde0664b818e58c97da2" prot="public" virt="non-virtual"><scope>castor3d::DebugConfig</scope><name>registerValue</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

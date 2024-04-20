@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/d55/a07443" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::PositionT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">PositionStructT&lt; PosTypeT, FlagT &gt;</basecompoundref>
+    <includes local="no">GlslBaseIO.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename PosTypeT</type>
+      </param>
+      <param>
+        <type>sdw::var::Flag</type>
+        <declname>FlagT</declname>
+        <defname>FlagT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d55/a07443_1a7f4a09735029c1d2d52dd7268dfcb075" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::PositionT&lt; PosTypeT, FlagT &gt;::PositionT</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>PositionT</name>
+        <qualifiedname>castor3d::shader::PositionT::PositionT</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslBaseIO.hpp" line="50" column="1" bodyfile="Castor3D/Shader/Shaders/GlslBaseIO.hpp" bodystart="50" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d55/a07443_1ad6518aee3293175412a8453185b47b2d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::PositionT&lt; PosTypeT, FlagT &gt;::position</definition>
+        <argsstring>() const</argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::shader::PositionT::position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslBaseIO.hpp" line="57" column="6" bodyfile="Castor3D/Shader/Shaders/GlslBaseIO.hpp" bodystart="57" bodyend="57"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>PositionStructT&lt; PosTypeT, FlagT &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::PositionT&lt; PosTypeT, FlagT &gt;</label>
+        <link refid="de/d55/a07443"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>PositionStructT&lt; PosTypeT, FlagT &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::PositionT&lt; PosTypeT, FlagT &gt;</label>
+        <link refid="de/d55/a07443"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslBaseIO.hpp" line="47" column="1" bodyfile="Castor3D/Shader/Shaders/GlslBaseIO.hpp" bodystart="49" bodyend="58"/>
+    <listofallmembers>
+      <member refid="de/d55/a07443_1ad6518aee3293175412a8453185b47b2d" prot="public" virt="non-virtual"><scope>castor3d::shader::PositionT</scope><name>position</name></member>
+      <member refid="de/d55/a07443_1a7f4a09735029c1d2d52dd7268dfcb075" prot="public" virt="non-virtual"><scope>castor3d::shader::PositionT</scope><name>PositionT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

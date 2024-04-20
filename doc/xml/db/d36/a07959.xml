@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d36/a07959" kind="struct" language="C++" prot="public">
+    <compoundname>castor::CheckedMutexT</compoundname>
+    <includes local="no">MultiThreadConfig.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename MutexT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/d36/a07959_1a9848b2ac7fb718d6fc7709024da4e4c9" prot="private" static="no" mutable="yes">
+        <type>std::map&lt; std::thread::id, bool &gt;</type>
+        <definition>std::map&lt; std::thread::id, bool &gt; castor::CheckedMutexT&lt; MutexT &gt;::m_locked</definition>
+        <argsstring></argsstring>
+        <name>m_locked</name>
+        <qualifiedname>castor::CheckedMutexT::m_locked</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Config/MultiThreadConfig.hpp" line="67" column="18" bodyfile="CastorUtils/Config/MultiThreadConfig.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d36/a07959_1a4c0ec7c5c58e262bfa20cf0aa968c7a9" prot="private" static="no" mutable="yes">
+        <type>MutexT</type>
+        <definition>MutexT castor::CheckedMutexT&lt; MutexT &gt;::m_lockedMtx</definition>
+        <argsstring></argsstring>
+        <name>m_lockedMtx</name>
+        <qualifiedname>castor::CheckedMutexT::m_lockedMtx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Config/MultiThreadConfig.hpp" line="68" column="16" bodyfile="CastorUtils/Config/MultiThreadConfig.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d36/a07959_1aa275234f0244be8de4f56b9145304943" prot="private" static="no" mutable="yes">
+        <type>MutexT</type>
+        <definition>MutexT castor::CheckedMutexT&lt; MutexT &gt;::m_mutex</definition>
+        <argsstring></argsstring>
+        <name>m_mutex</name>
+        <qualifiedname>castor::CheckedMutexT::m_mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Config/MultiThreadConfig.hpp" line="69" column="16" bodyfile="CastorUtils/Config/MultiThreadConfig.hpp" bodystart="69" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d36/a07959_1a84db2ce7b7ecc64d4bbbb242643673f9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::CheckedMutexT&lt; MutexT &gt;::lock</definition>
+        <argsstring>() const</argsstring>
+        <name>lock</name>
+        <qualifiedname>castor::CheckedMutexT::lock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Config/MultiThreadConfig.hpp" line="34" column="6" bodyfile="CastorUtils/Config/MultiThreadConfig.hpp" bodystart="34" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d36/a07959_1aa1c8e889bc8672099c13fa27264f86e9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::CheckedMutexT&lt; MutexT &gt;::unlock</definition>
+        <argsstring>() const</argsstring>
+        <name>unlock</name>
+        <qualifiedname>castor::CheckedMutexT::unlock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Config/MultiThreadConfig.hpp" line="40" column="6" bodyfile="CastorUtils/Config/MultiThreadConfig.hpp" bodystart="40" bodyend="44"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="db/d36/a07959_1a354d172dfa0e87c0bd8c5195b63a5e34" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CheckedMutexT&lt; MutexT &gt;::doCheckUnlocked</definition>
+        <argsstring>() const</argsstring>
+        <name>doCheckUnlocked</name>
+        <qualifiedname>castor::CheckedMutexT::doCheckUnlocked</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Config/MultiThreadConfig.hpp" line="47" column="6" bodyfile="CastorUtils/Config/MultiThreadConfig.hpp" bodystart="47" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d36/a07959_1a1c25cf204cec92f3428105e12b5e0f91" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::CheckedMutexT&lt; MutexT &gt;::doCheckLocked</definition>
+        <argsstring>() const</argsstring>
+        <name>doCheckLocked</name>
+        <qualifiedname>castor::CheckedMutexT::doCheckLocked</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Config/MultiThreadConfig.hpp" line="56" column="6" bodyfile="CastorUtils/Config/MultiThreadConfig.hpp" bodystart="56" bodyend="64"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Config/MultiThreadConfig.hpp" line="32" column="1" bodyfile="CastorUtils/Config/MultiThreadConfig.hpp" bodystart="33" bodyend="70"/>
+    <listofallmembers>
+      <member refid="db/d36/a07959_1a1c25cf204cec92f3428105e12b5e0f91" prot="private" virt="non-virtual"><scope>castor::CheckedMutexT</scope><name>doCheckLocked</name></member>
+      <member refid="db/d36/a07959_1a354d172dfa0e87c0bd8c5195b63a5e34" prot="private" virt="non-virtual"><scope>castor::CheckedMutexT</scope><name>doCheckUnlocked</name></member>
+      <member refid="db/d36/a07959_1a84db2ce7b7ecc64d4bbbb242643673f9" prot="public" virt="non-virtual"><scope>castor::CheckedMutexT</scope><name>lock</name></member>
+      <member refid="db/d36/a07959_1a9848b2ac7fb718d6fc7709024da4e4c9" prot="private" virt="non-virtual"><scope>castor::CheckedMutexT</scope><name>m_locked</name></member>
+      <member refid="db/d36/a07959_1a4c0ec7c5c58e262bfa20cf0aa968c7a9" prot="private" virt="non-virtual"><scope>castor::CheckedMutexT</scope><name>m_lockedMtx</name></member>
+      <member refid="db/d36/a07959_1aa275234f0244be8de4f56b9145304943" prot="private" virt="non-virtual"><scope>castor::CheckedMutexT</scope><name>m_mutex</name></member>
+      <member refid="db/d36/a07959_1aa1c8e889bc8672099c13fa27264f86e9" prot="public" virt="non-virtual"><scope>castor::CheckedMutexT</scope><name>unlock</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

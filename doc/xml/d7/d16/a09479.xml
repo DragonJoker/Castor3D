@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/d16/a09479" kind="class" language="C++" prot="public">
+    <compoundname>castor::WhiteNoise</compoundname>
+    <includes local="no">WhiteNoise.hpp</includes>
+    <innerclass refid="d5/dae/a09483" prot="private">castor::WhiteNoise::Color</innerclass>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d7/d16/a09479_1afc9d343ba6bbccb3989081c3c8a4962d" prot="private" static="no">
+        <type>Color *</type>
+        <definition>using castor::WhiteNoise::ColorPtr =  Color *</definition>
+        <argsstring></argsstring>
+        <name>ColorPtr</name>
+        <qualifiedname>castor::WhiteNoise::ColorPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/WhiteNoise.hpp" line="24" column="1" bodyfile="CastorUtils/Noise/WhiteNoise.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d7/d16/a09479_1aece0aa64744fbe074707f2028c022a95" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>PxBufferBaseUPtr</type>
+        <definition>static PxBufferBaseUPtr castor::WhiteNoise::generate</definition>
+        <argsstring>(uint32_t imgSize)</argsstring>
+        <name>generate</name>
+        <qualifiedname>castor::WhiteNoise::generate</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>imgSize</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Noise/WhiteNoise.hpp" line="27" column="25" bodyfile="CastorUtils/Noise/WhiteNoise.hpp" bodystart="27" bodyend="54"/>
+        <references refid="dd/df9/a08987_1a6cac5cb051ac8092cc1219a2cf88d9eb">castor::PxBufferBase::create</references>
+        <references refid="d2/dd2/a02279_1a9cc308126f25c5592e9678ea18f440eb" compoundref="d7/d38/a02054" startline="34" endline="37">castor::getBytesPerPixel</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Noise/WhiteNoise.hpp" line="14" column="1" bodyfile="CastorUtils/Noise/WhiteNoise.hpp" bodystart="15" bodyend="55"/>
+    <listofallmembers>
+      <member refid="d7/d16/a09479_1afc9d343ba6bbccb3989081c3c8a4962d" prot="private" virt="non-virtual"><scope>castor::WhiteNoise</scope><name>ColorPtr</name></member>
+      <member refid="d7/d16/a09479_1aece0aa64744fbe074707f2028c022a95" prot="public" virt="non-virtual"><scope>castor::WhiteNoise</scope><name>generate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

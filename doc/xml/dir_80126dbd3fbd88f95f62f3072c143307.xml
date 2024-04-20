@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dir_80126dbd3fbd88f95f62f3072c143307" kind="dir">
+    <compoundname>CastorUtils/Data</compoundname>
+    <innerdir refid="dir_6df497888ec5ad3f942d586622050415">CastorUtils/Data/Text</innerdir>
+    <innerfile refid="d4/d29/a01817">BinaryFile.hpp</innerfile>
+    <innerfile refid="d5/dd6/a01820">BinaryLoader.hpp</innerfile>
+    <innerfile refid="df/d85/a11672">BinaryWriter.hpp</innerfile>
+    <innerfile refid="d9/d88/a01823">DataModule.hpp</innerfile>
+    <innerfile refid="d2/d45/a01826">Endianness.hpp</innerfile>
+    <innerfile refid="d6/dbd/a01829">File.hpp</innerfile>
+    <innerfile refid="dc/d06/a01832">Loader.hpp</innerfile>
+    <innerfile refid="da/dcd/a01835">LoaderException.hpp</innerfile>
+    <innerfile refid="db/d09/a01838">Path.hpp</innerfile>
+    <innerfile refid="d5/da8/a01865">TextFile.hpp</innerfile>
+    <innerfile refid="dd/de7/a01868">TextLoader.hpp</innerfile>
+    <innerfile refid="da/d8b/a01871">TextWriter.hpp</innerfile>
+    <innerfile refid="de/dfb/a01874">Writer.hpp</innerfile>
+    <innerfile refid="d9/d63/a01877">ZipArchive.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Data/"/>
+  </compounddef>
+</doxygen>

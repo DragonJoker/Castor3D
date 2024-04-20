@@ -1,0 +1,569 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/dd6/a09023" kind="class" language="C++" prot="public">
+    <compoundname>castor::Size</compoundname>
+    <basecompoundref refid="da/d50/a08167" prot="private" virt="non-virtual">castor::DataHolderT&lt; SizeData &gt;</basecompoundref>
+    <basecompoundref refid="d9/d6a/a09103" prot="public" virt="non-virtual">castor::Coords&lt; uint32_t, 2 &gt;</basecompoundref>
+    <includes local="no">Size.hpp</includes>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d4/dd6/a09023_1a8cf9e93b18f7342dd41fab11c37cee5f" prot="private" static="no">
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; uint32_t, 2 &gt;</type>
+        <definition>using castor::Size::BaseType =  Coords&lt; uint32_t, 2 &gt;</definition>
+        <argsstring></argsstring>
+        <name>BaseType</name>
+        <qualifiedname>castor::Size::BaseType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="30" column="1" bodyfile="CastorUtils/Graphics/Size.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/dd6/a09023_1a1048c774190e15792b27369edc42675b" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Size::Size</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>Size</name>
+        <qualifiedname>castor::Size::Size</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="39" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd6/a09023_1a4d1bf02fa9f46e06f0ef4173033c0f49" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Size::Size</definition>
+        <argsstring>(uint32_t width, uint32_t height) noexcept</argsstring>
+        <name>Size</name>
+        <qualifiedname>castor::Size::Size</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>width</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>height</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">width</parametername>
+<parametername direction="in">height</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les dimensions </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="48" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd6/a09023_1a2581ab7f01c315de40692b2a391a137a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Size::Size</definition>
+        <argsstring>(Size const &amp;obj)</argsstring>
+        <name>Size</name>
+        <qualifiedname>castor::Size::Size</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par copie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à copier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="57" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd6/a09023_1ae4320e9ee8a244c4a7521e955d67ccbd" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Size::Size</definition>
+        <argsstring>(Size &amp;&amp;obj) noexcept</argsstring>
+        <name>Size</name>
+        <qualifiedname>castor::Size::Size</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> &amp;&amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à déplacer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="66" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd6/a09023_1a5d20c3e681b9b0b4ef3f41026b1a5ff5" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Size::~Size</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~Size</name>
+        <qualifiedname>castor::Size::~Size</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="73" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd6/a09023_1a52b21ba0d09aa20ba410b9b4ad322d43" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d4/dd6/a09023" kindref="compound">Size</ref> &amp;</type>
+        <definition>CU_API Size &amp; castor::Size::operator=</definition>
+        <argsstring>(Size const &amp;obj) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Size::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par copie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à copier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="84" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd6/a09023_1ac5fbcd07608b46f0e727bf3ee23d9c8d" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d4/dd6/a09023" kindref="compound">Size</ref> &amp;</type>
+        <definition>CU_API Size &amp; castor::Size::operator=</definition>
+        <argsstring>(Size &amp;&amp;obj) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Size::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> &amp;&amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à déplacer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="95" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd6/a09023_1a307c0f4b9e7f50ef3d3f749663ad5962" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::Size::set</definition>
+        <argsstring>(uint32_t width, uint32_t height) noexcept</argsstring>
+        <name>set</name>
+        <qualifiedname>castor::Size::set</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>width</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>height</declname>
+        </param>
+        <briefdescription>
+<para>Définit la taille. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">width</parametername>
+<parametername direction="in">height</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les dimensions </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="104" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd6/a09023_1a3cef6d7fb9e7e9e4e373f689b2b23b0c" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::Size::getWidth</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getWidth</name>
+        <qualifiedname>castor::Size::getWidth</qualifiedname>
+        <briefdescription>
+<para>Récupère la largeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La largeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="113" column="10" bodyfile="CastorUtils/Graphics/Size.hpp" bodystart="113" bodyend="116"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; SizeData &gt;::getData</references>
+        <references refid="dc/dad/a09015_1a5c5b6d69ed80e44690795efe17f28516" compoundref="d9/d95/a02075" startline="21">castor::SizeData::size</references>
+        <references refid="d2/db4/a09019_1acdfc25fed4a56c578945c56e5e772635" compoundref="d9/d95/a02075" startline="18">castor::SizeData::Mbr::x</references>
+        <referencedby refid="d8/d33/a05959_1a1a6d1ad79947101aea2f2396789bbd93" compoundref="de/def/a01016" startline="81" endline="117">castor3d::GBufferBase::doCreateTextures</referencedby>
+        <referencedby refid="dd/df9/a08987_1a027e7feff5936185517a08ca11581288" compoundref="d7/d13/a02045" startline="355" endline="358">castor::PxBufferBase::getTileWidth</referencedby>
+        <referencedby refid="dd/df9/a08987_1a73620ef43aee567accf951b50d23957b" compoundref="d7/d13/a02045" startline="335" endline="338">castor::PxBufferBase::getWidth</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd6/a09023_1a2c95f66f6dcf8f063e8ff619c9e0de51" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t &amp;</type>
+        <definition>uint32_t &amp; castor::Size::getWidth</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>getWidth</name>
+        <qualifiedname>castor::Size::getWidth</qualifiedname>
+        <briefdescription>
+<para>Récupère la largeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La largeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="125" column="11" bodyfile="CastorUtils/Graphics/Size.hpp" bodystart="125" bodyend="128"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; SizeData &gt;::getData</references>
+        <references refid="dc/dad/a09015_1a5c5b6d69ed80e44690795efe17f28516" compoundref="d9/d95/a02075" startline="21">castor::SizeData::size</references>
+        <references refid="d2/db4/a09019_1acdfc25fed4a56c578945c56e5e772635" compoundref="d9/d95/a02075" startline="18">castor::SizeData::Mbr::x</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd6/a09023_1ab8e3c320eefc853f8fb36db35939844c" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::Size::getHeight</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getHeight</name>
+        <qualifiedname>castor::Size::getHeight</qualifiedname>
+        <briefdescription>
+<para>Récupère la hauteur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La hauteur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="137" column="10" bodyfile="CastorUtils/Graphics/Size.hpp" bodystart="137" bodyend="140"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; SizeData &gt;::getData</references>
+        <references refid="dc/dad/a09015_1a5c5b6d69ed80e44690795efe17f28516" compoundref="d9/d95/a02075" startline="21">castor::SizeData::size</references>
+        <references refid="d2/db4/a09019_1a6daac478fab839b883f99e600ee6528f" compoundref="d9/d95/a02075" startline="19">castor::SizeData::Mbr::y</references>
+        <referencedby refid="d8/d33/a05959_1a1a6d1ad79947101aea2f2396789bbd93" compoundref="de/def/a01016" startline="81" endline="117">castor3d::GBufferBase::doCreateTextures</referencedby>
+        <referencedby refid="dd/df9/a08987_1a914ac0ada101f2aa932884e18a37a250" compoundref="d7/d13/a02045" startline="340" endline="343">castor::PxBufferBase::getHeight</referencedby>
+        <referencedby refid="dd/df9/a08987_1ad304432fd9cfa3330576661bbba71f34" compoundref="d7/d13/a02045" startline="360" endline="363">castor::PxBufferBase::getTileHeight</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd6/a09023_1a62edd788d8db8fa9418ee0d207ae4bb6" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t &amp;</type>
+        <definition>uint32_t &amp; castor::Size::getHeight</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>getHeight</name>
+        <qualifiedname>castor::Size::getHeight</qualifiedname>
+        <briefdescription>
+<para>Récupère la hauteur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La hauteur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="149" column="11" bodyfile="CastorUtils/Graphics/Size.hpp" bodystart="149" bodyend="152"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; SizeData &gt;::getData</references>
+        <references refid="dc/dad/a09015_1a5c5b6d69ed80e44690795efe17f28516" compoundref="d9/d95/a02075" startline="21">castor::SizeData::size</references>
+        <references refid="d2/db4/a09019_1a6daac478fab839b883f99e600ee6528f" compoundref="d9/d95/a02075" startline="19">castor::SizeData::Mbr::y</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd6/a09023_1ae444e6498d6d57442a4375fe038cb3e0" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::Size::grow</definition>
+        <argsstring>(int32_t cx, int32_t cy) noexcept</argsstring>
+        <name>grow</name>
+        <qualifiedname>castor::Size::grow</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>cx</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>cy</declname>
+        </param>
+        <briefdescription>
+<para>Modifie la taille. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Si width+cx &lt; 0 (ou height+cy &lt; 0) alors width=0 (respectivement height=0) </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">cx</parametername>
+<parametername direction="in">cy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs de modification </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="163" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd6/a09023_1af416f9c4a66c127781c438ba9f94ee9a" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> &amp;</type>
+        <definition>Size &amp; castor::Size::operator&lt;&lt;=</definition>
+        <argsstring>(uint32_t rhs) noexcept</argsstring>
+        <name>operator&lt;&lt;=</name>
+        <qualifiedname>castor::Size::operator&lt;&lt;=</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="165" column="1" bodyfile="CastorUtils/Graphics/Size.hpp" bodystart="165" bodyend="170"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; SizeData &gt;::getData</references>
+        <references refid="dc/dad/a09015_1a5c5b6d69ed80e44690795efe17f28516" compoundref="d9/d95/a02075" startline="21">castor::SizeData::size</references>
+        <references refid="d2/db4/a09019_1acdfc25fed4a56c578945c56e5e772635" compoundref="d9/d95/a02075" startline="18">castor::SizeData::Mbr::x</references>
+        <references refid="d2/db4/a09019_1a6daac478fab839b883f99e600ee6528f" compoundref="d9/d95/a02075" startline="19">castor::SizeData::Mbr::y</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd6/a09023_1a6b1efd897f1f9b8c6be31241ee5620a8" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> &amp;</type>
+        <definition>Size &amp; castor::Size::operator&gt;&gt;=</definition>
+        <argsstring>(uint32_t rhs) noexcept</argsstring>
+        <name>operator&gt;&gt;=</name>
+        <qualifiedname>castor::Size::operator&gt;&gt;=</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="172" column="7" bodyfile="CastorUtils/Graphics/Size.hpp" bodystart="172" bodyend="177"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; SizeData &gt;::getData</references>
+        <references refid="dc/dad/a09015_1a5c5b6d69ed80e44690795efe17f28516" compoundref="d9/d95/a02075" startline="21">castor::SizeData::size</references>
+        <references refid="d2/db4/a09019_1acdfc25fed4a56c578945c56e5e772635" compoundref="d9/d95/a02075" startline="18">castor::SizeData::Mbr::x</references>
+        <references refid="d2/db4/a09019_1a6daac478fab839b883f99e600ee6528f" compoundref="d9/d95/a02075" startline="19">castor::SizeData::Mbr::y</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd6/a09023_1a5449c6a1e3763d6c644a12291c540ba0" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor::Size::operator-&gt;</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>operator-&gt;</name>
+        <qualifiedname>castor::Size::operator-&gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="179" column="6" bodyfile="CastorUtils/Graphics/Size.hpp" bodystart="179" bodyend="182"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; SizeData &gt;::getData</references>
+        <references refid="dc/dad/a09015_1a5c5b6d69ed80e44690795efe17f28516" compoundref="d9/d95/a02075" startline="21">castor::SizeData::size</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd6/a09023_1a1450a5dbb1e4678a5b9d4a0a282f4e5f" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor::Size::operator-&gt;</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>operator-&gt;</name>
+        <qualifiedname>castor::Size::operator-&gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Size.hpp" line="184" column="6" bodyfile="CastorUtils/Graphics/Size.hpp" bodystart="184" bodyend="187"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; SizeData &gt;::getData</references>
+        <references refid="dc/dad/a09015_1a5c5b6d69ed80e44690795efe17f28516" compoundref="d9/d95/a02075" startline="21">castor::SizeData::size</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>castor::Coords&lt; uint32_t, 2 &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::DataHolderT&lt; SizeData &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; SizeData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Coords&lt; T, Count &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+      </node>
+      <node id="3">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="1">
+        <label>castor::Size</label>
+        <link refid="d4/dd6/a09023"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>castor::Coords&lt; uint32_t, 2 &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::DataHolderT&lt; SizeData &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; SizeData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Coords&lt; T, Count &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+      </node>
+      <node id="3">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="1">
+        <label>castor::Size</label>
+        <link refid="d4/dd6/a09023"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/Size.hpp" line="25" column="1" bodyfile="CastorUtils/Graphics/Size.hpp" bodystart="28" bodyend="191"/>
+    <listofallmembers>
+      <member refid="d4/dd6/a09023_1a8cf9e93b18f7342dd41fab11c37cee5f" prot="private" virt="non-virtual"><scope>castor::Size</scope><name>BaseType</name></member>
+      <member refid="d9/d6a/a09103_1ae423ba2d6fbbe19b93f8337364d43740" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>begin</name></member>
+      <member refid="d9/d6a/a09103_1aa4a1173ea64fb7733962086448597fae" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>begin</name></member>
+      <member refid="d9/d6a/a09103_1a94573d926b28fd774cb7b1460bd646f6" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>const_iterator</name></member>
+      <member refid="d9/d6a/a09103_1accb88b430d4e2c3c193c907c097fabd0" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>constPtr</name></member>
+      <member refid="d9/d6a/a09103_1a75f4771f2e46024d2c1c46140a8f596c" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>Coords</name></member>
+      <member refid="d9/d6a/a09103_1a9aa8b07b52a81f1756eb5089e65a1ad0" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>Coords</name></member>
+      <member refid="d9/d6a/a09103_1ad6b0a1b4c2ec75857e6102aa56722d7d" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>Coords</name></member>
+      <member refid="d9/d6a/a09103_1aeb03d143ddb1a26fdfde00b2c3212dac" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>end</name></member>
+      <member refid="d9/d6a/a09103_1a98451ff98028153f07b5467630e3f5b3" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>end</name></member>
+      <member refid="d4/dd6/a09023_1ab8e3c320eefc853f8fb36db35939844c" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>getHeight</name></member>
+      <member refid="d4/dd6/a09023_1a62edd788d8db8fa9418ee0d207ae4bb6" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>getHeight</name></member>
+      <member refid="d4/dd6/a09023_1a3cef6d7fb9e7e9e4e373f689b2b23b0c" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>getWidth</name></member>
+      <member refid="d4/dd6/a09023_1a2c95f66f6dcf8f063e8ff619c9e0de51" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>getWidth</name></member>
+      <member refid="d4/dd6/a09023_1ae444e6498d6d57442a4375fe038cb3e0" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>grow</name></member>
+      <member refid="d9/d6a/a09103_1adb214212d158c4c347af9c7c0f973a2a" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>iterator</name></member>
+      <member refid="d9/d6a/a09103_1a4e758ceaf0230ca03133bf172fdc6552" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator*=</name></member>
+      <member refid="d9/d6a/a09103_1a902c19f1decbff33fc3ba6b14908f26f" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator*=</name></member>
+      <member refid="d9/d6a/a09103_1a16d100bc980825cc9ac58a3db6329339" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator*=</name></member>
+      <member refid="d9/d6a/a09103_1a87111886288381baa244151cac8398fa" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator*=</name></member>
+      <member refid="d9/d6a/a09103_1a98290333f21625932bc49bd7feb3aa2c" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator+=</name></member>
+      <member refid="d9/d6a/a09103_1aa6c9f261457444316555aff7f1948948" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator+=</name></member>
+      <member refid="d9/d6a/a09103_1a926b1e77b13b51c34e5f956aaead85c7" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator+=</name></member>
+      <member refid="d9/d6a/a09103_1a79dfffffae1cc234cb606f1c8838837d" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator+=</name></member>
+      <member refid="d9/d6a/a09103_1ab0fd249c7148489f4e9d0d68c0739a34" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator-=</name></member>
+      <member refid="d9/d6a/a09103_1ada307fda3dc9a8efaa12f607a35ea60b" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator-=</name></member>
+      <member refid="d9/d6a/a09103_1ab29316eb508e7f012713b94511e377ba" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator-=</name></member>
+      <member refid="d9/d6a/a09103_1ac3547dcdd54a4d457577976b0da43295" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator-=</name></member>
+      <member refid="d4/dd6/a09023_1a5449c6a1e3763d6c644a12291c540ba0" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator-&gt;</name></member>
+      <member refid="d4/dd6/a09023_1a1450a5dbb1e4678a5b9d4a0a282f4e5f" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator-&gt;</name></member>
+      <member refid="d9/d6a/a09103_1a422c73e91d94d36a65926478003bca39" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator/=</name></member>
+      <member refid="d9/d6a/a09103_1a4b08c2cfb99ea8c3db51115c7b4fb2bb" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator/=</name></member>
+      <member refid="d9/d6a/a09103_1ab4b4bb9bd0e1689046aebb7adc3fd51c" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator/=</name></member>
+      <member refid="d9/d6a/a09103_1a57d38ef518880ed02803805ac5fd6011" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator/=</name></member>
+      <member refid="d4/dd6/a09023_1af416f9c4a66c127781c438ba9f94ee9a" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator&lt;&lt;=</name></member>
+      <member refid="d4/dd6/a09023_1a52b21ba0d09aa20ba410b9b4ad322d43" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator=</name></member>
+      <member refid="d4/dd6/a09023_1ac5fbcd07608b46f0e727bf3ee23d9c8d" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator=</name></member>
+      <member refid="d9/d6a/a09103_1ab03428e4e41572fb3b165b4e9819d120" prot="public" virt="non-virtual" ambiguityscope="Coords&lt; uint32_t, 2 &gt;::"><scope>castor::Size</scope><name>operator=</name></member>
+      <member refid="d9/d6a/a09103_1a8254f9513693b90533c62f2650242daa" prot="public" virt="non-virtual" ambiguityscope="Coords&lt; uint32_t, 2 &gt;::"><scope>castor::Size</scope><name>operator=</name></member>
+      <member refid="d4/dd6/a09023_1a6b1efd897f1f9b8c6be31241ee5620a8" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator&gt;&gt;=</name></member>
+      <member refid="d9/d6a/a09103_1ab34eef90cc275e4140b0a671b1b43729" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator[]</name></member>
+      <member refid="d9/d6a/a09103_1aa1069c59af90a81bed8ec20744c40976" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>operator[]</name></member>
+      <member refid="d9/d6a/a09103_1a4fd6d2393fd35f33dde94c7c9153360f" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>ptr</name></member>
+      <member refid="d4/dd6/a09023_1a307c0f4b9e7f50ef3d3f749663ad5962" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>set</name></member>
+      <member refid="d4/dd6/a09023_1a1048c774190e15792b27369edc42675b" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>Size</name></member>
+      <member refid="d4/dd6/a09023_1a4d1bf02fa9f46e06f0ef4173033c0f49" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>Size</name></member>
+      <member refid="d4/dd6/a09023_1a2581ab7f01c315de40692b2a391a137a" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>Size</name></member>
+      <member refid="d4/dd6/a09023_1ae4320e9ee8a244c4a7521e955d67ccbd" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>Size</name></member>
+      <member refid="d9/d6a/a09103_1ae52ce3eafd7305bb76a9a825998b3794" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>size</name></member>
+      <member refid="d9/d6a/a09103_1a31059aab49b93880080ec996ec252811" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>swap</name></member>
+      <member refid="d4/dd6/a09023_1a5d20c3e681b9b0b4ef3f41026b1a5ff5" prot="public" virt="non-virtual"><scope>castor::Size</scope><name>~Size</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,442 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d36/a08315" kind="class" language="C++" prot="public">
+    <compoundname>castor::NonCopyable</compoundname>
+    <derivedcompoundref refid="d4/ddb/a08183" prot="public" virt="non-virtual">castor::ConnectionT&lt; SceneCullerSubmeshSignal &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d4/ddb/a08183" prot="public" virt="non-virtual">castor::ConnectionT&lt; SceneCullerBillboardSignal &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d4/ddb/a08183" prot="public" virt="non-virtual">castor::ConnectionT&lt; SceneCullerSignal &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d4/ddb/a08183" prot="public" virt="non-virtual">castor::ConnectionT&lt; RenderNodesPassChangeSignal &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; OnChangedFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; OnAnimatedSkeletonChangeFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; OnAnimatedMeshChangeFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; OnAnimatedTextureChangeFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; OnAnimatedSceneNodeChangeFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; OnCameraChangedFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; OnControlChangedFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; EnableFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; ClustersBuffersChangedFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; OnLightChangedFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; OnMaterialChangedFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; OnEmitFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; OnPassChangedFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; RenderNodesPassChangeSignalFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; OnInitialisedFunc &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; OnSceneUpdateFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; BackgroundChangedFunc &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; SceneCullerSignalFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; SceneCullerSubmeshSignalFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; SceneCullerBillboardSignalFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; OnSceneNodeReparentFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; OnScrollContentFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; Changed &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; SssProfileChangedFunc &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; OnTextureUnitChangedFunction &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; ActionFunc &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; OnResourceFunc &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; castor::Function&lt; void(WorkerThread const &amp;) &gt; &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d4/ddb/a08183" prot="public" virt="non-virtual">castor::ConnectionT&lt; MySignalT &gt;</derivedcompoundref>
+    <derivedcompoundref refid="dc/d79/a08267" prot="public" virt="non-virtual">castor::SignalT&lt; Function &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d2/df4/a08275" prot="public" virt="non-virtual">castor::TSConnectionT&lt; SignalT &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d87/a08279" prot="public" virt="non-virtual">castor::TSSignalT&lt; Function &gt;</derivedcompoundref>
+    <includes local="no">NonCopyable.hpp</includes>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="da/d36/a08315_1af371ca9e56bb5b114989ad58eebac673" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::NonCopyable::NonCopyable</definition>
+        <argsstring>()=default</argsstring>
+        <name>NonCopyable</name>
+        <qualifiedname>castor::NonCopyable::NonCopyable</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/NonCopyable.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d36/a08315_1a9eaacdfe711925eea3bb79a74b941684" prot="protected" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::NonCopyable::~NonCopyable</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~NonCopyable</name>
+        <qualifiedname>castor::NonCopyable::~NonCopyable</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/NonCopyable.hpp" line="25" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="da/d36/a08315_1a1e8f8e480e7e6255980bec050290c945" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::NonCopyable::NonCopyable</definition>
+        <argsstring>(NonCopyable const &amp;)=delete</argsstring>
+        <name>NonCopyable</name>
+        <qualifiedname>castor::NonCopyable::NonCopyable</qualifiedname>
+        <param>
+          <type><ref refid="da/d36/a08315" kindref="compound">NonCopyable</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+<para>Constructeur par copie privé, afin d&apos;en interdire la possiblité </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/NonCopyable.hpp" line="34" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d36/a08315_1a8996c3054c0df9a3e807c34728c9763f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="da/d36/a08315" kindref="compound">NonCopyable</ref> &amp;</type>
+        <definition>NonCopyable &amp; castor::NonCopyable::operator=</definition>
+        <argsstring>(NonCopyable const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::NonCopyable::operator=</qualifiedname>
+        <param>
+          <type><ref refid="da/d36/a08315" kindref="compound">NonCopyable</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+<para>Operateur d&apos;affectation par copie privé, afin d&apos;en interdire la possibilité </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/NonCopyable.hpp" line="41" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5">
+        <label>castor::ConnectionT&lt; RenderNodesPassChangeSignal &gt;</label>
+        <link refid="d4/ddb/a08183"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="34" relation="template-instance">
+          <edgelabel>&lt; RenderNodesPassChangeSignal &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::ConnectionT&lt; SceneCullerBillboardSignal &gt;</label>
+        <link refid="d4/ddb/a08183"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="34" relation="template-instance">
+          <edgelabel>&lt; SceneCullerBillboardSignal &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::ConnectionT&lt; SceneCullerSignal &gt;</label>
+        <link refid="d4/ddb/a08183"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="34" relation="template-instance">
+          <edgelabel>&lt; SceneCullerSignal &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::ConnectionT&lt; SceneCullerSubmeshSignal &gt;</label>
+        <link refid="d4/ddb/a08183"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="34" relation="template-instance">
+          <edgelabel>&lt; SceneCullerSubmeshSignal &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="31">
+        <label>castor::SignalT&lt; ActionFunc &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; ActionFunc &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor::SignalT&lt; BackgroundChangedFunc &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; BackgroundChangedFunc &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="28">
+        <label>castor::SignalT&lt; Changed &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; Changed &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor::SignalT&lt; ClustersBuffersChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; ClustersBuffersChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor::SignalT&lt; EnableFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; EnableFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::SignalT&lt; OnAnimatedMeshChangeFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; OnAnimatedMeshChangeFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor::SignalT&lt; OnAnimatedSceneNodeChangeFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; OnAnimatedSceneNodeChangeFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::SignalT&lt; OnAnimatedSkeletonChangeFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; OnAnimatedSkeletonChangeFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor::SignalT&lt; OnAnimatedTextureChangeFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; OnAnimatedTextureChangeFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::SignalT&lt; OnCameraChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; OnCameraChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::SignalT&lt; OnChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; OnChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor::SignalT&lt; OnControlChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; OnControlChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor::SignalT&lt; OnEmitFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; OnEmitFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor::SignalT&lt; OnInitialisedFunc &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; OnInitialisedFunc &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor::SignalT&lt; OnLightChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; OnLightChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor::SignalT&lt; OnMaterialChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; OnMaterialChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor::SignalT&lt; OnPassChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; OnPassChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="32">
+        <label>castor::SignalT&lt; OnResourceFunc &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; OnResourceFunc &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor::SignalT&lt; OnSceneNodeReparentFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; OnSceneNodeReparentFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor::SignalT&lt; OnSceneUpdateFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; OnSceneUpdateFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor::SignalT&lt; OnScrollContentFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; OnScrollContentFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="30">
+        <label>castor::SignalT&lt; OnTextureUnitChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; OnTextureUnitChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor::SignalT&lt; RenderNodesPassChangeSignalFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; RenderNodesPassChangeSignalFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor::SignalT&lt; SceneCullerBillboardSignalFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; SceneCullerBillboardSignalFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor::SignalT&lt; SceneCullerSignalFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; SceneCullerSignalFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor::SignalT&lt; SceneCullerSubmeshSignalFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; SceneCullerSubmeshSignalFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor::SignalT&lt; SssProfileChangedFunc &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; SssProfileChangedFunc &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="33">
+        <label>castor::SignalT&lt; castor::Function&lt; void(WorkerThread const &amp;) &gt; &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="35" relation="template-instance">
+          <edgelabel>&lt; castor::Function&lt; void(WorkerThread const &amp;) &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="34">
+        <label>castor::ConnectionT&lt; MySignalT &gt;</label>
+        <link refid="d4/ddb/a08183"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="35">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>castor::TSConnectionT&lt; SignalT &gt;</label>
+        <link refid="d2/df4/a08275"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="37">
+        <label>castor::TSSignalT&lt; Function &gt;</label>
+        <link refid="de/d87/a08279"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/Design/NonCopyable.hpp" line="9" column="1" bodyfile="CastorUtils/Design/NonCopyable.hpp" bodystart="10" bodyend="42"/>
+    <listofallmembers>
+      <member refid="da/d36/a08315_1af371ca9e56bb5b114989ad58eebac673" prot="protected" virt="non-virtual"><scope>castor::NonCopyable</scope><name>NonCopyable</name></member>
+      <member refid="da/d36/a08315_1a1e8f8e480e7e6255980bec050290c945" prot="private" virt="non-virtual"><scope>castor::NonCopyable</scope><name>NonCopyable</name></member>
+      <member refid="da/d36/a08315_1a8996c3054c0df9a3e807c34728c9763f" prot="private" virt="non-virtual"><scope>castor::NonCopyable</scope><name>operator=</name></member>
+      <member refid="da/d36/a08315_1a9eaacdfe711925eea3bb79a74b941684" prot="protected" virt="non-virtual"><scope>castor::NonCopyable</scope><name>~NonCopyable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

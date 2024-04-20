@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d46/a06183" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlayRenderer::FontTextureDescriptorConnection</compoundname>
+    <includes local="no">OverlayRenderer.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/d46/a06183_1af6780d0c1d690f3a255534abf807e4a9" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::OverlayRenderer::FontTextureDescriptorConnection::descriptorSet</definition>
+        <argsstring></argsstring>
+        <name>descriptorSet</name>
+        <qualifiedname>castor3d::OverlayRenderer::FontTextureDescriptorConnection::descriptorSet</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlayRenderer.hpp" line="171" column="25" bodyfile="Castor3D/Render/Overlays/OverlayRenderer.hpp" bodystart="171" bodyend="171"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d46/a06183_1afc2405159f190262a335b759340619d6" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d79/a08267_1aea6d41678f91c9fb0fb2334009626e4d" kindref="member">FontTexture::OnChanged::connection</ref></type>
+        <definition>FontTexture::OnChanged::connection castor3d::OverlayRenderer::FontTextureDescriptorConnection::connection</definition>
+        <argsstring></argsstring>
+        <name>connection</name>
+        <qualifiedname>castor3d::OverlayRenderer::FontTextureDescriptorConnection::connection</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlayRenderer.hpp" line="172" column="36" bodyfile="Castor3D/Render/Overlays/OverlayRenderer.hpp" bodystart="172" bodyend="172"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d46/a06183_1a228a6923d012ea39132da7780228f8b4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::OverlayRenderer::FontTextureDescriptorConnection::FontTextureDescriptorConnection</definition>
+        <argsstring>()=default</argsstring>
+        <name>FontTextureDescriptorConnection</name>
+        <qualifiedname>castor3d::OverlayRenderer::FontTextureDescriptorConnection::FontTextureDescriptorConnection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlayRenderer.hpp" line="170" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/Overlays/OverlayRenderer.hpp" line="168" column="1" bodyfile="Castor3D/Render/Overlays/OverlayRenderer.hpp" bodystart="169" bodyend="173"/>
+    <listofallmembers>
+      <member refid="df/d46/a06183_1afc2405159f190262a335b759340619d6" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::FontTextureDescriptorConnection</scope><name>connection</name></member>
+      <member refid="df/d46/a06183_1af6780d0c1d690f3a255534abf807e4a9" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::FontTextureDescriptorConnection</scope><name>descriptorSet</name></member>
+      <member refid="df/d46/a06183_1a228a6923d012ea39132da7780228f8b4" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::FontTextureDescriptorConnection</scope><name>FontTextureDescriptorConnection</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

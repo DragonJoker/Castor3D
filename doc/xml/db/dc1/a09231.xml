@@ -1,0 +1,1015 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/dc1/a09231" kind="class" language="C++" prot="public">
+    <compoundname>castor::SquareMatrix</compoundname>
+    <basecompoundref refid="d2/d61/a09183" prot="public" virt="non-virtual">castor::Matrix&lt; T, Count, Count &gt;</basecompoundref>
+    <includes local="no">SquareMatrix.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+      <param>
+        <type>uint32_t</type>
+        <declname>Count</declname>
+        <defname>Count</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="db/dc1/a09231_1a3856983766abfffe0b3d084c6e62a2eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::SquareMatrix&lt; T, Count &gt;::SquareMatrix</definition>
+        <argsstring>()</argsstring>
+        <name>SquareMatrix</name>
+        <qualifiedname>castor::SquareMatrix::SquareMatrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Construction / Destruction. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="46" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1adc6bbb68be57c4f5d37797f2c026fb7d" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::SquareMatrix&lt; T, Count &gt;::SquareMatrix</definition>
+        <argsstring>(NoInit const &amp;)</argsstring>
+        <name>SquareMatrix</name>
+        <qualifiedname>castor::SquareMatrix::SquareMatrix</qualifiedname>
+        <param>
+          <type><ref refid="da/d68/a07951" kindref="compound">NoInit</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="47" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a8e547095558974ff9f97abe2851f487e" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::SquareMatrix&lt; T, Count &gt;::SquareMatrix</definition>
+        <argsstring>(T const &amp;rhs)</argsstring>
+        <name>SquareMatrix</name>
+        <qualifiedname>castor::SquareMatrix::SquareMatrix</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="48" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1ab98687462cc99f7555189c40373bf279" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::SquareMatrix&lt; T, Count &gt;::SquareMatrix</definition>
+        <argsstring>(SquareMatrix const &amp;rhs)</argsstring>
+        <name>SquareMatrix</name>
+        <qualifiedname>castor::SquareMatrix::SquareMatrix</qualifiedname>
+        <param>
+          <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="49" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a1aade08116d2fa817f63cc86b6815777" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::SquareMatrix&lt; T, Count &gt;::SquareMatrix</definition>
+        <argsstring>(SquareMatrix &amp;&amp;rhs) noexcept</argsstring>
+        <name>SquareMatrix</name>
+        <qualifiedname>castor::SquareMatrix::SquareMatrix</qualifiedname>
+        <param>
+          <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="50" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1aa84244c60ab3582469f32566e0000e53" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>CountU</declname>
+            <defname>CountU</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::SquareMatrix&lt; T, Count &gt;::SquareMatrix</definition>
+        <argsstring>(SquareMatrix&lt; T, CountU &gt; const &amp;rhs)</argsstring>
+        <name>SquareMatrix</name>
+        <qualifiedname>castor::SquareMatrix::SquareMatrix</qualifiedname>
+        <param>
+          <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, CountU &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="52" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1ac537900e671ee2d311c558a6b0873b7d" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::SquareMatrix&lt; T, Count &gt;::SquareMatrix</definition>
+        <argsstring>(SquareMatrix&lt; Type, Count &gt; const &amp;rhs)</argsstring>
+        <name>SquareMatrix</name>
+        <qualifiedname>castor::SquareMatrix::SquareMatrix</qualifiedname>
+        <param>
+          <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; Type, Count &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="54" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1ad251ca514875793f06664d3044cc0af9" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::SquareMatrix&lt; T, Count &gt;::SquareMatrix</definition>
+        <argsstring>(Matrix&lt; Type, Count, Count &gt; const &amp;rhs)</argsstring>
+        <name>SquareMatrix</name>
+        <qualifiedname>castor::SquareMatrix::SquareMatrix</qualifiedname>
+        <param>
+          <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; Type, Count, Count &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="56" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a1dfc7965e8d9a353c7d14ad06207b5eb" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::SquareMatrix&lt; T, Count &gt;::SquareMatrix</definition>
+        <argsstring>(Array&lt; Type, Count *Count &gt; const &amp;rhs)</argsstring>
+        <name>SquareMatrix</name>
+        <qualifiedname>castor::SquareMatrix::SquareMatrix</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">Array</ref>&lt; Type, Count *Count &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="58" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a7391bf9974b0e5f70cf8b988f89f2620" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::SquareMatrix&lt; T, Count &gt;::SquareMatrix</definition>
+        <argsstring>(Type const *rhs)</argsstring>
+        <name>SquareMatrix</name>
+        <qualifiedname>castor::SquareMatrix::SquareMatrix</qualifiedname>
+        <param>
+          <type>Type const *</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="60" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a62c83ff4eb424981f6dd6907f5ab1952" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::SquareMatrix&lt; T, Count &gt;::SquareMatrix</definition>
+        <argsstring>(std::initializer_list&lt; T &gt; rhs)</argsstring>
+        <name>SquareMatrix</name>
+        <qualifiedname>castor::SquareMatrix::SquareMatrix</qualifiedname>
+        <param>
+          <type>std::initializer_list&lt; T &gt;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="61" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a77125389270e3d92ce4d680a37f0404e" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>Types</declname>
+            <defname>Types</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::SquareMatrix&lt; T, Count &gt;::SquareMatrix</definition>
+        <argsstring>(Types &amp;&amp;... inits)</argsstring>
+        <name>SquareMatrix</name>
+        <qualifiedname>castor::SquareMatrix::SquareMatrix</qualifiedname>
+        <param>
+          <type>Types &amp;&amp;...</type>
+          <declname>inits</declname>
+        </param>
+    <requiresclause>isRightSize&lt; Types... &gt;    </requiresclause>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="64" column="10" bodyfile="CastorUtils/Math/SquareMatrix.hpp" bodystart="64" bodyend="67"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="db/dc1/a09231_1a1cb0765bb59e5366d3595346867e95a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt; &amp;</type>
+        <definition>SquareMatrix&lt; T, Count &gt; &amp; castor::SquareMatrix&lt; T, Count &gt;::operator=</definition>
+        <argsstring>(Matrix&lt; Type, Count, Count &gt; const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::SquareMatrix::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; Type, Count, Count &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Opérateurs d&apos;affectation. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="171" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a4879dd35078950d3a08622ebe0991ad2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt; &amp;</type>
+        <definition>SquareMatrix&lt; T, Count &gt; &amp; castor::SquareMatrix&lt; T, Count &gt;::operator=</definition>
+        <argsstring>(SquareMatrix&lt; T, Count &gt; const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::SquareMatrix::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="172" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a1225ecd3131a157af00fc93a339deac0" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt; &amp;</type>
+        <definition>SquareMatrix&lt; T, Count &gt; &amp; castor::SquareMatrix&lt; T, Count &gt;::operator=</definition>
+        <argsstring>(SquareMatrix&lt; T, Count &gt; &amp;&amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::SquareMatrix::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt; &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="173" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1afc3087c2e2cf71985f120c6149da660f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt; &amp;</type>
+        <definition>SquareMatrix&lt; T, Count &gt; &amp; castor::SquareMatrix&lt; T, Count &gt;::operator=</definition>
+        <argsstring>(SquareMatrix&lt; Type, Count &gt; const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::SquareMatrix::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; Type, Count &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="175" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a8e195d24af77442aa32f2330e6addf32" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt; &amp;</type>
+        <definition>SquareMatrix&lt; T, Count &gt; &amp; castor::SquareMatrix&lt; T, Count &gt;::operator=</definition>
+        <argsstring>(Type const *rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::SquareMatrix::operator=</qualifiedname>
+        <param>
+          <type>Type const *</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="177" column="15"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="db/dc1/a09231_1af3c97a55c97d7c8e4b1a44bff4c1ba72" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt; &amp;</type>
+        <definition>SquareMatrix&lt; T, Count &gt; &amp; castor::SquareMatrix&lt; T, Count &gt;::operator+=</definition>
+        <argsstring>(SquareMatrix&lt; Type, Count &gt; const &amp;rhs)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::SquareMatrix::operator+=</qualifiedname>
+        <param>
+          <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; Type, Count &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Opérateurs arithmétiques. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="187" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a78a6e75e6d1d21453f7b22de576fe34e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt; &amp;</type>
+        <definition>SquareMatrix&lt; T, Count &gt; &amp; castor::SquareMatrix&lt; T, Count &gt;::operator-=</definition>
+        <argsstring>(SquareMatrix&lt; Type, Count &gt; const &amp;rhs)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::SquareMatrix::operator-=</qualifiedname>
+        <param>
+          <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; Type, Count &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="189" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1ace0bdbe02d8c5bf39dd4b312fbdb2ba0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt; &amp;</type>
+        <definition>SquareMatrix&lt; T, Count &gt; &amp; castor::SquareMatrix&lt; T, Count &gt;::operator*=</definition>
+        <argsstring>(SquareMatrix&lt; Type, Count &gt; const &amp;rhs)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::SquareMatrix::operator*=</qualifiedname>
+        <param>
+          <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; Type, Count &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="191" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1ab18ee11e9fbd3ac574e5eeef5ea726d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt; &amp;</type>
+        <definition>SquareMatrix&lt; T, Count &gt; &amp; castor::SquareMatrix&lt; T, Count &gt;::operator+=</definition>
+        <argsstring>(Type const *rhs)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::SquareMatrix::operator+=</qualifiedname>
+        <param>
+          <type>Type const *</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="193" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a73515c66b2792f973234ebb8b9f60da4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt; &amp;</type>
+        <definition>SquareMatrix&lt; T, Count &gt; &amp; castor::SquareMatrix&lt; T, Count &gt;::operator-=</definition>
+        <argsstring>(Type const *rhs)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::SquareMatrix::operator-=</qualifiedname>
+        <param>
+          <type>Type const *</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="195" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a794e79a2c7d625c15d732f3decce3adf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Type</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt; &amp;</type>
+        <definition>SquareMatrix&lt; T, Count &gt; &amp; castor::SquareMatrix&lt; T, Count &gt;::operator*=</definition>
+        <argsstring>(Type const *rhs)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::SquareMatrix::operator*=</qualifiedname>
+        <param>
+          <type>Type const *</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="197" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a3ee69e96e03370a3d9208cea3305baf7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt; &amp;</type>
+        <definition>SquareMatrix&lt; T, Count &gt; &amp; castor::SquareMatrix&lt; T, Count &gt;::operator+=</definition>
+        <argsstring>(T const &amp;rhs)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::SquareMatrix::operator+=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="198" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a914a24f35e28c140fb95ddbcfdd7c538" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt; &amp;</type>
+        <definition>SquareMatrix&lt; T, Count &gt; &amp; castor::SquareMatrix&lt; T, Count &gt;::operator-=</definition>
+        <argsstring>(T const &amp;rhs)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::SquareMatrix::operator-=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="199" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a2f3fd63c6a98afa59d84cff5edbab1dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt; &amp;</type>
+        <definition>SquareMatrix&lt; T, Count &gt; &amp; castor::SquareMatrix&lt; T, Count &gt;::operator*=</definition>
+        <argsstring>(T const &amp;rhs)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::SquareMatrix::operator*=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="200" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a32945ba845589f6b403e13b536f694de" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt; &amp;</type>
+        <definition>SquareMatrix&lt; T, Count &gt; &amp; castor::SquareMatrix&lt; T, Count &gt;::operator/=</definition>
+        <argsstring>(T const &amp;rhs)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::SquareMatrix::operator/=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="201" column="15"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="db/dc1/a09231_1a3aa64d800cb61c6ff0cb8158e6973cb2" prot="public" static="no">
+        <type><ref refid="d2/d61/a09183" kindref="compound">Matrix</ref>&lt; T, Count, Count &gt;</type>
+        <definition>using castor::SquareMatrix&lt; T, Count &gt;::matrix_type =  Matrix&lt; T, Count, Count &gt;</definition>
+        <argsstring></argsstring>
+        <name>matrix_type</name>
+        <qualifiedname>castor::SquareMatrix::matrix_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le type de cette matrice </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="30" column="1" bodyfile="CastorUtils/Math/SquareMatrix.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/dc1/a09231_1a8899c5b4206d9386632c81b3e12d0774" prot="public" static="no">
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt;</type>
+        <definition>using castor::SquareMatrix&lt; T, Count &gt;::square_type =  SquareMatrix&lt; T, Count &gt;</definition>
+        <argsstring></argsstring>
+        <name>square_type</name>
+        <qualifiedname>castor::SquareMatrix::square_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le type de cette matrice </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="33" column="1" bodyfile="CastorUtils/Math/SquareMatrix.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/dc1/a09231_1a5ab1f0a53fd25ff3b71ff588bb9199d0" prot="public" static="no">
+        <type><ref refid="db/dc1/a09231_1a8899c5b4206d9386632c81b3e12d0774" kindref="member">square_type</ref></type>
+        <definition>using castor::SquareMatrix&lt; T, Count &gt;::transpose_type =  square_type</definition>
+        <argsstring></argsstring>
+        <name>transpose_type</name>
+        <qualifiedname>castor::SquareMatrix::transpose_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le type de matrice transposée </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="36" column="1" bodyfile="CastorUtils/Math/SquareMatrix.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="db/dc1/a09231_1ad8390cc36edbe80d5df1f3ba0b8f1b73" prot="public" static="yes" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>Types</declname>
+            <defname>Types</defname>
+          </param>
+        </templateparamlist>
+        <type>bool constexpr</type>
+        <definition>bool constexpr castor::SquareMatrix&lt; T, Count &gt;::isRightSize</definition>
+        <argsstring></argsstring>
+        <name>isRightSize</name>
+        <qualifiedname>castor::SquareMatrix::isRightSize</qualifiedname>
+        <initializer>= sizeof...( Types ) == Count * Count</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="26" column="23" bodyfile="CastorUtils/Math/SquareMatrix.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/dc1/a09231_1abe198b57c6bde97192c3d588a0c5b6ed" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count - 1 &gt;</type>
+        <definition>SquareMatrix&lt; T, Count - 1 &gt; castor::SquareMatrix&lt; T, Count &gt;::getMinor</definition>
+        <argsstring>(uint32_t x, uint32_t y) const</argsstring>
+        <name>getMinor</name>
+        <qualifiedname>castor::SquareMatrix::getMinor</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+<para>Récupère une matrice mineure, en ignorant la ligne et la colonne données. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne et la colonne ignorées </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La matrice mineure </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="79" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a70f14639a47e1fd9f3f824e91e718923" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref></type>
+        <definition>value_type castor::SquareMatrix&lt; T, Count &gt;::getCofactor</definition>
+        <argsstring>(uint32_t column, uint32_t row) const</argsstring>
+        <name>getCofactor</name>
+        <qualifiedname>castor::SquareMatrix::getCofactor</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>column</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>row</declname>
+        </param>
+        <briefdescription>
+<para>Calcule le cofacteur à la ligne et la colonne données. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">row</parametername>
+<parametername direction="in">column</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne et la colonne </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le cofacteur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="90" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a6960afed2ac8ae270642809717ef1066" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" kindref="member">value_type</ref></type>
+        <definition>value_type castor::SquareMatrix&lt; T, Count &gt;::getDeterminant</definition>
+        <argsstring>() const</argsstring>
+        <name>getDeterminant</name>
+        <qualifiedname>castor::SquareMatrix::getDeterminant</qualifiedname>
+        <briefdescription>
+<para>Calcule le déterminant de cette matrice. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le déterminant </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="99" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a0e75fc6e2cd27b6b3deb66b0d6f88473" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc1/a09231_1a5ab1f0a53fd25ff3b71ff588bb9199d0" kindref="member">transpose_type</ref></type>
+        <definition>transpose_type castor::SquareMatrix&lt; T, Count &gt;::getTransposed</definition>
+        <argsstring>() const</argsstring>
+        <name>getTransposed</name>
+        <qualifiedname>castor::SquareMatrix::getTransposed</qualifiedname>
+        <briefdescription>
+<para>Calcule et renvoie la transposée de cette matrice. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La transposée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="108" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a45c264f31b3aca6a92000468ca18540f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc1/a09231_1a8899c5b4206d9386632c81b3e12d0774" kindref="member">square_type</ref> &amp;</type>
+        <definition>square_type &amp; castor::SquareMatrix&lt; T, Count &gt;::transpose</definition>
+        <argsstring>()</argsstring>
+        <name>transpose</name>
+        <qualifiedname>castor::SquareMatrix::transpose</qualifiedname>
+        <briefdescription>
+<para>Transpose cette matrice. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Cette matrice. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="117" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a11df423de94ae3063d74eb7ab00d7bc7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::SquareMatrix&lt; T, Count &gt;::isOrthogonal</definition>
+        <argsstring>() const</argsstring>
+        <name>isOrthogonal</name>
+        <qualifiedname>castor::SquareMatrix::isOrthogonal</qualifiedname>
+        <briefdescription>
+<para>Dit si la matrice est orthogonale. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> si elle est orthogonale </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="126" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a22205bed428ddd0652420526d08aa3ad" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::SquareMatrix&lt; T, Count &gt;::isSymmetrical</definition>
+        <argsstring>() const</argsstring>
+        <name>isSymmetrical</name>
+        <qualifiedname>castor::SquareMatrix::isSymmetrical</qualifiedname>
+        <briefdescription>
+<para>Dit si la matrice est symétrique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> si la matrice est symétrique </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="135" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1afcf9d556269894ec38b4b016401fd889" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::SquareMatrix&lt; T, Count &gt;::isAntiSymmetrical</definition>
+        <argsstring>() const</argsstring>
+        <name>isAntiSymmetrical</name>
+        <qualifiedname>castor::SquareMatrix::isAntiSymmetrical</qualifiedname>
+        <briefdescription>
+<para>Dit si la matrice est anti-symétrique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> si la matrice est anti-symétrique </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="144" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a5994ee3f3e8efb6b7594a9a57c5c1f12" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt;</type>
+        <definition>SquareMatrix&lt; T, Count &gt; castor::SquareMatrix&lt; T, Count &gt;::getInverse</definition>
+        <argsstring>() const</argsstring>
+        <name>getInverse</name>
+        <qualifiedname>castor::SquareMatrix::getInverse</qualifiedname>
+        <briefdescription>
+<para>Récupère la matrice inverse de cette matrice. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La matrice inverse </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="153" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc1/a09231_1a1b923d04a371274379684a6563dd94c3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc1/a09231" kindref="compound">SquareMatrix</ref>&lt; T, Count &gt; &amp;</type>
+        <definition>SquareMatrix&lt; T, Count &gt; &amp; castor::SquareMatrix&lt; T, Count &gt;::invert</definition>
+        <argsstring>()</argsstring>
+        <name>invert</name>
+        <qualifiedname>castor::SquareMatrix::invert</qualifiedname>
+        <briefdescription>
+<para>Inverse cette matrice. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Une référence sur cette matrice </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SquareMatrix.hpp" line="162" column="15"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Représentation d&apos;une matrice carrée column major. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::Matrix&lt; T, Count, Count &gt;</label>
+        <link refid="d2/d61/a09183"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; T, Count, Count &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Matrix&lt; T, Columns, Rows &gt;</label>
+        <link refid="d2/d61/a09183"/>
+      </node>
+      <node id="1">
+        <label>castor::SquareMatrix&lt; T, Count &gt;</label>
+        <link refid="db/dc1/a09231"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::Matrix&lt; T, Count, Count &gt;</label>
+        <link refid="d2/d61/a09183"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; T, Count, Count &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Matrix&lt; T, Columns, Rows &gt;</label>
+        <link refid="d2/d61/a09183"/>
+      </node>
+      <node id="1">
+        <label>castor::SquareMatrix&lt; T, Count &gt;</label>
+        <link refid="db/dc1/a09231"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Math/SquareMatrix.hpp" line="18" column="1" bodyfile="CastorUtils/Math/SquareMatrix.hpp" bodystart="20" bodyend="203"/>
+    <listofallmembers>
+      <member refid="d2/d61/a09183_1ae08ffc30c95f713a1cfacb0090af7348" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>col_type</name></member>
+      <member refid="d2/d61/a09183_1ad85da1280cccde8b1d27f49b8bf86a1b" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>constPtr</name></member>
+      <member refid="d2/d61/a09183_1a01f754f200028a40a87b9f582a613ce9" prot="protected" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>count</name></member>
+      <member refid="db/dc1/a09231_1a70f14639a47e1fd9f3f824e91e718923" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>getCofactor</name></member>
+      <member refid="d2/d61/a09183_1ae3bc54767d01d58c04220b70c50016a8" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>getColumn</name></member>
+      <member refid="d2/d61/a09183_1a473a3859a5a9b537d305072498558e19" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>getColumn</name></member>
+      <member refid="d2/d61/a09183_1ab67a98dad40b13a44a87d0da5c87cd41" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>getColumn</name></member>
+      <member refid="d2/d61/a09183_1af3147776ae87f0cfa0edf59d2a544125" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>getColumn</name></member>
+      <member refid="db/dc1/a09231_1a6960afed2ac8ae270642809717ef1066" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>getDeterminant</name></member>
+      <member refid="d2/d61/a09183_1af2b6b5383fbec6e5bab14c731fbdff9d" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>getIdentity</name></member>
+      <member refid="db/dc1/a09231_1a5994ee3f3e8efb6b7594a9a57c5c1f12" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>getInverse</name></member>
+      <member refid="db/dc1/a09231_1abe198b57c6bde97192c3d588a0c5b6ed" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>getMinor</name></member>
+      <member refid="d2/d61/a09183_1ac32db600c8f6b22ac1db8ccdedcef1d3" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>getRow</name></member>
+      <member refid="d2/d61/a09183_1afbe064ee57f689a46d8bc378fb1df657" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>getRow</name></member>
+      <member refid="d2/d61/a09183_1ad16f62fc49696eb8fb1b2b36a34052a7" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>getTrace</name></member>
+      <member refid="db/dc1/a09231_1a0e75fc6e2cd27b6b3deb66b0d6f88473" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>getTransposed</name></member>
+      <member refid="d2/d61/a09183_1ad59bbd072813d6f836a5dd50ef8b8b96" prot="public" virt="non-virtual" ambiguityscope="Matrix&lt; T, Count, Count &gt;::"><scope>castor::SquareMatrix</scope><name>getTransposed</name></member>
+      <member refid="d2/d61/a09183_1af6f6a962525ac9e54bc6355f60b9ebaa" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>initialise</name></member>
+      <member refid="d2/d61/a09183_1a788e68897b10e9ecff63a28915499f3e" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>initialise</name></member>
+      <member refid="db/dc1/a09231_1a1b923d04a371274379684a6563dd94c3" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>invert</name></member>
+      <member refid="db/dc1/a09231_1afcf9d556269894ec38b4b016401fd889" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>isAntiSymmetrical</name></member>
+      <member refid="db/dc1/a09231_1a11df423de94ae3063d74eb7ab00d7bc7" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>isOrthogonal</name></member>
+      <member refid="db/dc1/a09231_1ad8390cc36edbe80d5df1f3ba0b8f1b73" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>isRightSize</name></member>
+      <member refid="db/dc1/a09231_1a22205bed428ddd0652420526d08aa3ad" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>isSymmetrical</name></member>
+      <member refid="d2/d61/a09183_1a852990177a387d8921c8bf84bd632b90" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>m_columns</name></member>
+      <member refid="d2/d61/a09183_1a1060e9caf4f859dc6f435fe9fe51bd58" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>m_data</name></member>
+      <member refid="d2/d61/a09183_1a4a5f770810536074563aaeb11ecd5a60" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a08bcff990e8c2153fffb07985ae2752f" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1adea208526a48b94dcc93d8a2468c5cd0" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a0cf01f6755ecdc2cd4ddbcfc9dd6d769" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a774cefa6ee3e4a9c027dba92cb19be64" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a639939819c4467657867456b83a4fe91" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a1d697ce39ed017198f172b25a3ba2606" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a6d93001cca91f9394cf074dcfd641f00" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a64a928385b6aff4c7635134a5d61b822" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a004b30e4e1a508fb1743fa2871fb2f6c" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>Matrix</name></member>
+      <member refid="d2/d61/a09183_1a88c23e7523846255e1cf10a225f6fbf9" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>Matrix</name></member>
+      <member refid="db/dc1/a09231_1a3aa64d800cb61c6ff0cb8158e6973cb2" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>matrix_type</name></member>
+      <member refid="d2/d61/a09183_1a0997a6828d57728df3f7b3c15e2980f8" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>my_type</name></member>
+      <member refid="d2/d61/a09183_1a8831d1bc852817c928cfe6ecd7211e8f" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator()</name></member>
+      <member refid="d2/d61/a09183_1a14a909880307bc19db8a248e9f63e6a0" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator()</name></member>
+      <member refid="db/dc1/a09231_1ace0bdbe02d8c5bf39dd4b312fbdb2ba0" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator*=</name></member>
+      <member refid="db/dc1/a09231_1a794e79a2c7d625c15d732f3decce3adf" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator*=</name></member>
+      <member refid="db/dc1/a09231_1a2f3fd63c6a98afa59d84cff5edbab1dd" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator*=</name></member>
+      <member refid="db/dc1/a09231_1af3c97a55c97d7c8e4b1a44bff4c1ba72" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator+=</name></member>
+      <member refid="db/dc1/a09231_1ab18ee11e9fbd3ac574e5eeef5ea726d1" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator+=</name></member>
+      <member refid="db/dc1/a09231_1a3ee69e96e03370a3d9208cea3305baf7" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator+=</name></member>
+      <member refid="d2/d61/a09183_1aa90d96eac0ad37c4b76784b09824c9ff" prot="public" virt="non-virtual" ambiguityscope="Matrix&lt; T, Count, Count &gt;::"><scope>castor::SquareMatrix</scope><name>operator+=</name></member>
+      <member refid="db/dc1/a09231_1a78a6e75e6d1d21453f7b22de576fe34e" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator-=</name></member>
+      <member refid="db/dc1/a09231_1a73515c66b2792f973234ebb8b9f60da4" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator-=</name></member>
+      <member refid="db/dc1/a09231_1a914a24f35e28c140fb95ddbcfdd7c538" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator-=</name></member>
+      <member refid="d2/d61/a09183_1ad637c8b15ecb43c36291974f14531607" prot="public" virt="non-virtual" ambiguityscope="Matrix&lt; T, Count, Count &gt;::"><scope>castor::SquareMatrix</scope><name>operator-=</name></member>
+      <member refid="db/dc1/a09231_1a32945ba845589f6b403e13b536f694de" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator/=</name></member>
+      <member refid="db/dc1/a09231_1a1cb0765bb59e5366d3595346867e95a3" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator=</name></member>
+      <member refid="db/dc1/a09231_1a4879dd35078950d3a08622ebe0991ad2" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator=</name></member>
+      <member refid="db/dc1/a09231_1a1225ecd3131a157af00fc93a339deac0" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator=</name></member>
+      <member refid="db/dc1/a09231_1afc3087c2e2cf71985f120c6149da660f" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator=</name></member>
+      <member refid="db/dc1/a09231_1a8e195d24af77442aa32f2330e6addf32" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator=</name></member>
+      <member refid="d2/d61/a09183_1a6323ca192ffced7b717b95481c94eec6" prot="public" virt="non-virtual" ambiguityscope="Matrix&lt; T, Count, Count &gt;::"><scope>castor::SquareMatrix</scope><name>operator=</name></member>
+      <member refid="d2/d61/a09183_1a41763b71612f2e32d410171d0af1863e" prot="public" virt="non-virtual" ambiguityscope="Matrix&lt; T, Count, Count &gt;::"><scope>castor::SquareMatrix</scope><name>operator=</name></member>
+      <member refid="d2/d61/a09183_1aa1c5c7fe285e907ebdc6903df9a16a18" prot="public" virt="non-virtual" ambiguityscope="Matrix&lt; T, Count, Count &gt;::"><scope>castor::SquareMatrix</scope><name>operator=</name></member>
+      <member refid="d2/d61/a09183_1a31d6e976a67970f37de9426a419f6d52" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator[]</name></member>
+      <member refid="d2/d61/a09183_1a6814feed9a5bf5e666862e048ffa1bf8" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>operator[]</name></member>
+      <member refid="d2/d61/a09183_1a52ab2cd790370344db3ab43cb560e22d" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>ptr</name></member>
+      <member refid="d2/d61/a09183_1a93eb794c51f15982fd00d38107d1cacd" prot="protected" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>recGetMinor</name></member>
+      <member refid="d2/d61/a09183_1a5332589a7bef98deb54cb32a5a32c515" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>row_type</name></member>
+      <member refid="d2/d61/a09183_1a76dc0db7d98c434bc27431776f12ac28" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>setColumn</name></member>
+      <member refid="d2/d61/a09183_1a636efc5e5585742625ed84ea656c5f4b" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>setColumn</name></member>
+      <member refid="d2/d61/a09183_1ad25ff8ea36abc24703df5aa383f06251" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>setColumn</name></member>
+      <member refid="d2/d61/a09183_1a146d69adb7e74b4e2c3e7e4f871a11de" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>setColumn</name></member>
+      <member refid="d2/d61/a09183_1a0e958d0a71833013a559b4e4d7b659df" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>setIdentity</name></member>
+      <member refid="d2/d61/a09183_1ad3cfceda825d351a5e86c513bc6df4eb" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>setRow</name></member>
+      <member refid="d2/d61/a09183_1a56f461ab9ad58cac2a75fb703ece177f" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>setRow</name></member>
+      <member refid="d2/d61/a09183_1a988205740a49e35ac36fed51c5ee329e" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>setRow</name></member>
+      <member refid="d2/d61/a09183_1a5d1cf60f437412f38ddc417d967055aa" prot="protected" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>size</name></member>
+      <member refid="db/dc1/a09231_1a8899c5b4206d9386632c81b3e12d0774" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>square_type</name></member>
+      <member refid="db/dc1/a09231_1a3856983766abfffe0b3d084c6e62a2eb" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>SquareMatrix</name></member>
+      <member refid="db/dc1/a09231_1adc6bbb68be57c4f5d37797f2c026fb7d" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>SquareMatrix</name></member>
+      <member refid="db/dc1/a09231_1a8e547095558974ff9f97abe2851f487e" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>SquareMatrix</name></member>
+      <member refid="db/dc1/a09231_1ab98687462cc99f7555189c40373bf279" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>SquareMatrix</name></member>
+      <member refid="db/dc1/a09231_1a1aade08116d2fa817f63cc86b6815777" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>SquareMatrix</name></member>
+      <member refid="db/dc1/a09231_1aa84244c60ab3582469f32566e0000e53" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>SquareMatrix</name></member>
+      <member refid="db/dc1/a09231_1ac537900e671ee2d311c558a6b0873b7d" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>SquareMatrix</name></member>
+      <member refid="db/dc1/a09231_1ad251ca514875793f06664d3044cc0af9" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>SquareMatrix</name></member>
+      <member refid="db/dc1/a09231_1a1dfc7965e8d9a353c7d14ad06207b5eb" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>SquareMatrix</name></member>
+      <member refid="db/dc1/a09231_1a7391bf9974b0e5f70cf8b988f89f2620" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>SquareMatrix</name></member>
+      <member refid="db/dc1/a09231_1a62c83ff4eb424981f6dd6907f5ab1952" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>SquareMatrix</name></member>
+      <member refid="db/dc1/a09231_1a77125389270e3d92ce4d680a37f0404e" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>SquareMatrix</name></member>
+      <member refid="db/dc1/a09231_1a45c264f31b3aca6a92000468ca18540f" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>transpose</name></member>
+      <member refid="db/dc1/a09231_1a5ab1f0a53fd25ff3b71ff588bb9199d0" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>transpose_type</name></member>
+      <member refid="d2/d61/a09183_1afd29eaf20b740726166f9ee27e808b5d" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>value_type</name></member>
+      <member refid="d2/d61/a09183_1aaa253f9efe52eeb65324707246f634ba" prot="public" virt="non-virtual"><scope>castor::SquareMatrix</scope><name>~Matrix</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

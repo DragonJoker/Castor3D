@@ -1,0 +1,511 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d37/a08231" kind="class" language="C++" prot="public">
+    <compoundname>castor::ResourceT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">ResT</basecompoundref>
+    <includes local="no">Resource.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ResT</type>
+      </param>
+      <param>
+        <type>typename KeyT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="user-defined">
+      <memberdef kind="typedef" id="d0/d37/a08231_1a8818b442952a145fbfc5b0f20ef54007" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void(<ref refid="d0/d37/a08231_1ad9dcf988105357459f970d52683150e9" kindref="member">ElementT</ref> const &amp;) &gt;</type>
+        <definition>using castor::ResourceT&lt; ResT, KeyT &gt;::OnResourceFunc =  castor::Function&lt; void( ElementT const &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnResourceFunc</name>
+        <qualifiedname>castor::ResourceT::OnResourceFunc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Signal. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="87" column="1" bodyfile="CastorUtils/Design/Resource.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d37/a08231_1ac022858b78ebe9b355f1c47d2ad3b7f7" prot="public" static="no">
+        <type><ref refid="dc/d79/a08267" kindref="compound">SignalT</ref>&lt; <ref refid="d0/d37/a08231_1a8818b442952a145fbfc5b0f20ef54007" kindref="member">OnResourceFunc</ref> &gt;</type>
+        <definition>using castor::ResourceT&lt; ResT, KeyT &gt;::OnResourceEvent =  SignalT&lt; OnResourceFunc &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnResourceEvent</name>
+        <qualifiedname>castor::ResourceT::OnResourceEvent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="88" column="1" bodyfile="CastorUtils/Design/Resource.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d37/a08231_1a135ae503b6f529dad51f3bc63bab40d4" prot="public" static="no">
+        <type><ref refid="d4/ddb/a08183" kindref="compound">ConnectionT</ref>&lt; <ref refid="d0/d37/a08231_1ac022858b78ebe9b355f1c47d2ad3b7f7" kindref="member">OnResourceEvent</ref> &gt;</type>
+        <definition>using castor::ResourceT&lt; ResT, KeyT &gt;::Connection =  ConnectionT&lt; OnResourceEvent &gt;</definition>
+        <argsstring></argsstring>
+        <name>Connection</name>
+        <qualifiedname>castor::ResourceT::Connection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="89" column="1" bodyfile="CastorUtils/Design/Resource.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d37/a08231_1a8d68c56262e04d314784c28112d91a81" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/d37/a08231_1ac022858b78ebe9b355f1c47d2ad3b7f7" kindref="member">OnResourceEvent</ref></type>
+        <definition>OnResourceEvent castor::ResourceT&lt; ResT, KeyT &gt;::onInitialising</definition>
+        <argsstring></argsstring>
+        <name>onInitialising</name>
+        <qualifiedname>castor::ResourceT::onInitialising</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="91" column="17" bodyfile="CastorUtils/Design/Resource.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d37/a08231_1a787b4fb47300e8b487ea73808c9ebdcd" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/d37/a08231_1ac022858b78ebe9b355f1c47d2ad3b7f7" kindref="member">OnResourceEvent</ref></type>
+        <definition>OnResourceEvent castor::ResourceT&lt; ResT, KeyT &gt;::onInitialised</definition>
+        <argsstring></argsstring>
+        <name>onInitialised</name>
+        <qualifiedname>castor::ResourceT::onInitialised</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="92" column="17" bodyfile="CastorUtils/Design/Resource.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d37/a08231_1a471d13e2789a00e0f94dbab1729d9876" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/d37/a08231_1ac022858b78ebe9b355f1c47d2ad3b7f7" kindref="member">OnResourceEvent</ref></type>
+        <definition>OnResourceEvent castor::ResourceT&lt; ResT, KeyT &gt;::onCleaning</definition>
+        <argsstring></argsstring>
+        <name>onCleaning</name>
+        <qualifiedname>castor::ResourceT::onCleaning</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="93" column="17" bodyfile="CastorUtils/Design/Resource.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d37/a08231_1abeefa52ade0bf1bbae246aed8f186872" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/d37/a08231_1ac022858b78ebe9b355f1c47d2ad3b7f7" kindref="member">OnResourceEvent</ref></type>
+        <definition>OnResourceEvent castor::ResourceT&lt; ResT, KeyT &gt;::onCleaned</definition>
+        <argsstring></argsstring>
+        <name>onCleaned</name>
+        <qualifiedname>castor::ResourceT::onCleaned</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="94" column="17" bodyfile="CastorUtils/Design/Resource.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d0/d37/a08231_1ab2df6d1d892188b87e26f3b263952761" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ResourceT&lt; ResT, KeyT &gt;::ResourceT</definition>
+        <argsstring>(ResourceT &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>ResourceT</name>
+        <qualifiedname>castor::ResourceT::ResourceT</qualifiedname>
+        <param>
+          <type><ref refid="d0/d37/a08231" kindref="compound">ResourceT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Construction/Desctruction. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d37/a08231_1a7d2679a7d1d529a6617b47f5b06b0799" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::ResourceT&lt; ResT, KeyT &gt;::ResourceT</definition>
+        <argsstring>(ResourceT const &amp;)=delete</argsstring>
+        <name>ResourceT</name>
+        <qualifiedname>castor::ResourceT::ResourceT</qualifiedname>
+        <param>
+          <type><ref refid="d0/d37/a08231" kindref="compound">ResourceT</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="36" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d37/a08231_1a9654a146c6c0b2864d1fa366de78f358" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d0/d37/a08231" kindref="compound">ResourceT</ref> &amp;</type>
+        <definition>ResourceT &amp; castor::ResourceT&lt; ResT, KeyT &gt;::operator=</definition>
+        <argsstring>(ResourceT &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ResourceT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d0/d37/a08231" kindref="compound">ResourceT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="37" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d37/a08231_1a3c019157029e9f9c67350d257ea9e6aa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d0/d37/a08231" kindref="compound">ResourceT</ref> &amp;</type>
+        <definition>ResourceT &amp; castor::ResourceT&lt; ResT, KeyT &gt;::operator=</definition>
+        <argsstring>(ResourceT const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ResourceT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d0/d37/a08231" kindref="compound">ResourceT</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="38" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d37/a08231_1a29cd2ce457ec1e0bc3504a64850c412c" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ResourceT&lt; ResT, KeyT &gt;::~ResourceT</definition>
+        <argsstring>() noexcept override=default</argsstring>
+        <name>~ResourceT</name>
+        <qualifiedname>castor::ResourceT::~ResourceT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="39" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d37/a08231_1abf2c0ee9c38414d676beec257687186f" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParametersT</declname>
+            <defname>ParametersT</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::ResourceT&lt; ResT, KeyT &gt;::ResourceT</definition>
+        <argsstring>(ParametersT &amp;&amp;... params)</argsstring>
+        <name>ResourceT</name>
+        <qualifiedname>castor::ResourceT::ResourceT</qualifiedname>
+        <param>
+          <type>ParametersT &amp;&amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="42" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d37/a08231_1a08f801e48394e4c1107c72a463bb3ff9" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::ResourceT&lt; ResT, KeyT &gt;::ResourceT</definition>
+        <argsstring>(ElementT &amp;&amp;rhs)</argsstring>
+        <name>ResourceT</name>
+        <qualifiedname>castor::ResourceT::ResourceT</qualifiedname>
+        <param>
+          <type><ref refid="d0/d37/a08231_1ad9dcf988105357459f970d52683150e9" kindref="member">ElementT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="43" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d37/a08231_1aeafad697191ee32529ce8cd1e761c19b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d0/d37/a08231" kindref="compound">ResourceT</ref> &amp;</type>
+        <definition>ResourceT &amp; castor::ResourceT&lt; ResT, KeyT &gt;::operator=</definition>
+        <argsstring>(ElementT &amp;&amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ResourceT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d0/d37/a08231_1ad9dcf988105357459f970d52683150e9" kindref="member">ElementT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="44" column="12"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d0/d37/a08231_1a71afd16c2327bac9118212be83979916" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParametersT</declname>
+            <defname>ParametersT</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::ResourceT&lt; ResT, KeyT &gt;::initialise</definition>
+        <argsstring>(ParametersT &amp;&amp;... params)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor::ResourceT::initialise</qualifiedname>
+        <param>
+          <type>ParametersT &amp;&amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Initialisation/Nettoyage. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="56" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d37/a08231_1a09ebae60260a4ad950f83035a700dab1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParametersT</declname>
+            <defname>ParametersT</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::ResourceT&lt; ResT, KeyT &gt;::cleanup</definition>
+        <argsstring>(ParametersT &amp;&amp;... params)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor::ResourceT::cleanup</qualifiedname>
+        <param>
+          <type>ParametersT &amp;&amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="58" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d37/a08231_1a625ac0e9068a10f83202fc3f69affe51" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParametersT</declname>
+            <defname>ParametersT</defname>
+          </param>
+          <param>
+            <type>typename ...</type>
+            <declname>ParametersU</declname>
+            <defname>ParametersU</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::ResourceT&lt; ResT, KeyT &gt;::reinitialise</definition>
+        <argsstring>(ParametersT &amp;&amp;... paramsT, ParametersU &amp;&amp;... paramsU)</argsstring>
+        <name>reinitialise</name>
+        <qualifiedname>castor::ResourceT::reinitialise</qualifiedname>
+        <param>
+          <type>ParametersT &amp;&amp;...</type>
+          <declname>paramsT</declname>
+        </param>
+        <param>
+          <type>ParametersU &amp;&amp;...</type>
+          <declname>paramsU</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="60" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d0/d37/a08231_1aa418ae8774871012a1c1368b7a68c22d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::ResourceT&lt; ResT, KeyT &gt;::isInitialised</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isInitialised</name>
+        <qualifiedname>castor::ResourceT::isInitialised</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Accesseurs. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="72" column="6" bodyfile="CastorUtils/Design/Resource.hpp" bodystart="72" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d37/a08231_1a93424da38b4dc5cf974d1f29a7ac9e69" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d0/d37/a08231_1ad9dcf988105357459f970d52683150e9" kindref="member">ElementT</ref> &amp;</type>
+        <definition>ElementT &amp; castor::ResourceT&lt; ResT, KeyT &gt;::operator*</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>operator*</name>
+        <qualifiedname>castor::ResourceT::operator*</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="77" column="11" bodyfile="CastorUtils/Design/Resource.hpp" bodystart="77" bodyend="80"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d0/d37/a08231_1ad9dcf988105357459f970d52683150e9" prot="public" static="no">
+        <type>ResT</type>
+        <definition>using castor::ResourceT&lt; ResT, KeyT &gt;::ElementT =  ResT</definition>
+        <argsstring></argsstring>
+        <name>ElementT</name>
+        <qualifiedname>castor::ResourceT::ElementT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="26" column="1" bodyfile="CastorUtils/Design/Resource.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d37/a08231_1ac4c40cebf8adf2bd5c96f594af1a9b6f" prot="public" static="no">
+        <type>KeyT</type>
+        <definition>using castor::ResourceT&lt; ResT, KeyT &gt;::ElementKeyT =  KeyT</definition>
+        <argsstring></argsstring>
+        <name>ElementKeyT</name>
+        <qualifiedname>castor::ResourceT::ElementKeyT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="27" column="1" bodyfile="CastorUtils/Design/Resource.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d37/a08231_1a833a89ffe284be74e2857198c7daa8cf" prot="private" static="no" mutable="no">
+        <type>std::atomic_bool</type>
+        <definition>std::atomic_bool castor::ResourceT&lt; ResT, KeyT &gt;::m_initialised</definition>
+        <argsstring></argsstring>
+        <name>m_initialised</name>
+        <qualifiedname>castor::ResourceT::m_initialised</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Resource.hpp" line="98" column="18" bodyfile="CastorUtils/Design/Resource.hpp" bodystart="98" bodyend="98"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Représentation d&apos;une ressource externe. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Elles sont faites pour être chargées de manière asynchrone. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>ResT</label>
+      </node>
+      <node id="1">
+        <label>castor::ResourceT&lt; ResT, KeyT &gt;</label>
+        <link refid="d0/d37/a08231"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>ResT</label>
+      </node>
+      <node id="3">
+        <label>castor::SignalT&lt; OnResourceFunc &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; OnResourceFunc &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="1">
+        <label>castor::ResourceT&lt; ResT, KeyT &gt;</label>
+        <link refid="d0/d37/a08231"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>onCleaned</edgelabel>
+          <edgelabel>onCleaning</edgelabel>
+          <edgelabel>onInitialised</edgelabel>
+          <edgelabel>onInitialising</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Design/Resource.hpp" line="22" column="1" bodyfile="CastorUtils/Design/Resource.hpp" bodystart="24" bodyend="99"/>
+    <listofallmembers>
+      <member refid="d0/d37/a08231_1a09ebae60260a4ad950f83035a700dab1" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>cleanup</name></member>
+      <member refid="d0/d37/a08231_1a135ae503b6f529dad51f3bc63bab40d4" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>Connection</name></member>
+      <member refid="d0/d37/a08231_1ac4c40cebf8adf2bd5c96f594af1a9b6f" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>ElementKeyT</name></member>
+      <member refid="d0/d37/a08231_1ad9dcf988105357459f970d52683150e9" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>ElementT</name></member>
+      <member refid="d0/d37/a08231_1a71afd16c2327bac9118212be83979916" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>initialise</name></member>
+      <member refid="d0/d37/a08231_1aa418ae8774871012a1c1368b7a68c22d" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>isInitialised</name></member>
+      <member refid="d0/d37/a08231_1a833a89ffe284be74e2857198c7daa8cf" prot="private" virt="non-virtual"><scope>castor::ResourceT</scope><name>m_initialised</name></member>
+      <member refid="d0/d37/a08231_1abeefa52ade0bf1bbae246aed8f186872" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>onCleaned</name></member>
+      <member refid="d0/d37/a08231_1a471d13e2789a00e0f94dbab1729d9876" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>onCleaning</name></member>
+      <member refid="d0/d37/a08231_1a787b4fb47300e8b487ea73808c9ebdcd" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>onInitialised</name></member>
+      <member refid="d0/d37/a08231_1a8d68c56262e04d314784c28112d91a81" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>onInitialising</name></member>
+      <member refid="d0/d37/a08231_1ac022858b78ebe9b355f1c47d2ad3b7f7" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>OnResourceEvent</name></member>
+      <member refid="d0/d37/a08231_1a8818b442952a145fbfc5b0f20ef54007" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>OnResourceFunc</name></member>
+      <member refid="d0/d37/a08231_1a93424da38b4dc5cf974d1f29a7ac9e69" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>operator*</name></member>
+      <member refid="d0/d37/a08231_1a9654a146c6c0b2864d1fa366de78f358" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>operator=</name></member>
+      <member refid="d0/d37/a08231_1a3c019157029e9f9c67350d257ea9e6aa" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>operator=</name></member>
+      <member refid="d0/d37/a08231_1aeafad697191ee32529ce8cd1e761c19b" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>operator=</name></member>
+      <member refid="d0/d37/a08231_1a625ac0e9068a10f83202fc3f69affe51" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>reinitialise</name></member>
+      <member refid="d0/d37/a08231_1ab2df6d1d892188b87e26f3b263952761" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>ResourceT</name></member>
+      <member refid="d0/d37/a08231_1a7d2679a7d1d529a6617b47f5b06b0799" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>ResourceT</name></member>
+      <member refid="d0/d37/a08231_1abf2c0ee9c38414d676beec257687186f" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>ResourceT</name></member>
+      <member refid="d0/d37/a08231_1a08f801e48394e4c1107c72a463bb3ff9" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>ResourceT</name></member>
+      <member refid="d0/d37/a08231_1a29cd2ce457ec1e0bc3504a64850c412c" prot="public" virt="non-virtual"><scope>castor::ResourceT</scope><name>~ResourceT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

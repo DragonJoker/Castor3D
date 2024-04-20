@@ -1,0 +1,458 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d3b/a02291" kind="namespace" language="C++">
+    <compoundname>castor::string::utf8</compoundname>
+    <innerclass refid="d9/d37/a09415" prot="public">castor::string::utf8::const_iterator</innerclass>
+    <innerclass refid="de/d73/a09411" prot="public">castor::string::utf8::iterator</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="dd/d3b/a02291_1a79190950f0c4818aba5d1fafbfe33a15" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename IteratorType</type>
+          </param>
+        </templateparamlist>
+        <type>char32_t</type>
+        <definition>char32_t castor::string::utf8::toUtf8</definition>
+        <argsstring>(IteratorType first, IteratorType end)</argsstring>
+        <name>toUtf8</name>
+        <qualifiedname>castor::string::utf8::toUtf8</qualifiedname>
+        <param>
+          <type>IteratorType</type>
+          <declname>first</declname>
+        </param>
+        <param>
+          <type>IteratorType</type>
+          <declname>end</declname>
+        </param>
+        <briefdescription>
+<para>Récupère un char32_t encodé en UTF-8 à partir d&apos;un itérateur sur une chaîne. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">first</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;itérateur sur la chaîne. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">end</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;itérateur sur la fin de la chaîne. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le caractère char32_t en UTF-8. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="914" column="17" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="914" declcolumn="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a02291_1a0a9683189b148fc10023ab046f8ee6c2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+          <param>
+            <type>typename StringT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref>&lt; CharT, StringT &gt;</type>
+        <definition>iterator&lt; CharT, StringT &gt; castor::string::utf8::operator+</definition>
+        <argsstring>(iterator&lt; CharT, StringT &gt; it, size_t offset)</argsstring>
+        <name>operator+</name>
+        <qualifiedname>castor::string::utf8::operator+</qualifiedname>
+        <param>
+          <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref>&lt; CharT, StringT &gt;</type>
+          <declname>it</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+<para>Addition operator. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">it</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The iterator. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The offset to add. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A reference to this object. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1087" column="17" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="1087" declcolumn="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a02291_1adf982e20d21fb0744bffc0a350927e06" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+          <param>
+            <type>typename StringT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref>&lt; CharT, StringT &gt;</type>
+        <definition>iterator&lt; CharT, StringT &gt; castor::string::utf8::operator-</definition>
+        <argsstring>(iterator&lt; CharT, StringT &gt; it, size_t offset)</argsstring>
+        <name>operator-</name>
+        <qualifiedname>castor::string::utf8::operator-</qualifiedname>
+        <param>
+          <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref>&lt; CharT, StringT &gt;</type>
+          <declname>it</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+<para>Subtraction operator. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">it</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The iterator. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The offset to subtract. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A reference to this object. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1101" column="17" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="1101" declcolumn="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a02291_1a0b3bdd9b241e4c11530caf7fce5af2f6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref>&lt; CharT, std::basic_string&lt; CharT &gt; &gt;</type>
+        <definition>iterator&lt; CharT, std::basic_string&lt; CharT &gt; &gt; castor::string::utf8::begin</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; const &amp;str)</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::string::utf8::begin</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1104" column="17" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="1104" bodyend="1107"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a02291_1a3ad77ed1aa848273826c608b47a55552" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref>&lt; CharT, std::basic_string_view&lt; CharT &gt; &gt;</type>
+        <definition>iterator&lt; CharT, std::basic_string_view&lt; CharT &gt; &gt; castor::string::utf8::begin</definition>
+        <argsstring>(std::basic_string_view&lt; CharT &gt; const &amp;str)</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::string::utf8::begin</qualifiedname>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt; const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1110" column="17" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="1110" bodyend="1113"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a02291_1ad0c011c4774dfd2804876b500cd9a2f1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref>&lt; CharT, std::basic_string&lt; CharT &gt; &gt;</type>
+        <definition>iterator&lt; CharT, std::basic_string&lt; CharT &gt; &gt; castor::string::utf8::end</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; const &amp;str)</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::string::utf8::end</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1116" column="17" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="1116" bodyend="1119"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a02291_1a5e688181fdd51ffac411c2a294844b48" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="de/d73/a09411" kindref="compound">iterator</ref>&lt; CharT, std::basic_string_view&lt; CharT &gt; &gt;</type>
+        <definition>iterator&lt; CharT, std::basic_string_view&lt; CharT &gt; &gt; castor::string::utf8::end</definition>
+        <argsstring>(std::basic_string_view&lt; CharT &gt; const &amp;str)</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::string::utf8::end</qualifiedname>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt; const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1122" column="17" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="1122" bodyend="1125"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a02291_1a89b0b9bab61b2d0502ea6bc2482a48c9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+          <param>
+            <type>typename StringT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d37/a09415" kindref="compound">const_iterator</ref>&lt; CharT, StringT &gt;</type>
+        <definition>const_iterator&lt; CharT, StringT &gt; castor::string::utf8::operator+</definition>
+        <argsstring>(const_iterator&lt; CharT, StringT &gt; it, size_t offset)</argsstring>
+        <name>operator+</name>
+        <qualifiedname>castor::string::utf8::operator+</qualifiedname>
+        <param>
+          <type><ref refid="d9/d37/a09415" kindref="compound">const_iterator</ref>&lt; CharT, StringT &gt;</type>
+          <declname>it</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+<para>Addition operator. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">it</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The iterator. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The offset to add. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A reference to this object. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1298" column="23" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="1298" declcolumn="23"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a02291_1aad5352c2d07955352f08c842cccdbb51" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+          <param>
+            <type>typename StringT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d37/a09415" kindref="compound">const_iterator</ref>&lt; CharT, StringT &gt;</type>
+        <definition>const_iterator&lt; CharT, StringT &gt; castor::string::utf8::operator-</definition>
+        <argsstring>(const_iterator&lt; CharT, StringT &gt; it, size_t offset)</argsstring>
+        <name>operator-</name>
+        <qualifiedname>castor::string::utf8::operator-</qualifiedname>
+        <param>
+          <type><ref refid="d9/d37/a09415" kindref="compound">const_iterator</ref>&lt; CharT, StringT &gt;</type>
+          <declname>it</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+<para>Subtraction operator. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">it</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The iterator. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The offset to subtract. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>A reference to this object. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1312" column="23" declfile="CastorUtils/Miscellaneous/StringUtils.hpp" declline="1312" declcolumn="23"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a02291_1a18c9eee03c70fc800e092500fb9b7cb9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d37/a09415" kindref="compound">const_iterator</ref>&lt; CharT, std::basic_string&lt; CharT &gt; &gt;</type>
+        <definition>const_iterator&lt; CharT, std::basic_string&lt; CharT &gt; &gt; castor::string::utf8::cbegin</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; const &amp;str)</argsstring>
+        <name>cbegin</name>
+        <qualifiedname>castor::string::utf8::cbegin</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1315" column="23" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="1315" bodyend="1318"/>
+        <referencedby refid="dd/d3b/a02291_1a48dbb9eaed2aca911e83b0f7b78de7e9" compoundref="dd/d6f/a02207" startline="1321" endline="1324">cbegin</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a02291_1a48dbb9eaed2aca911e83b0f7b78de7e9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d37/a09415" kindref="compound">const_iterator</ref>&lt; CharT, std::basic_string_view&lt; CharT &gt; &gt;</type>
+        <definition>const_iterator&lt; CharT, std::basic_string_view&lt; CharT &gt; &gt; castor::string::utf8::cbegin</definition>
+        <argsstring>(std::basic_string_view&lt; CharT &gt; const &amp;str)</argsstring>
+        <name>cbegin</name>
+        <qualifiedname>castor::string::utf8::cbegin</qualifiedname>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt; const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1321" column="23" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="1321" bodyend="1324"/>
+        <references refid="dd/d3b/a02291_1a18c9eee03c70fc800e092500fb9b7cb9" compoundref="dd/d6f/a02207" startline="1315" endline="1318">cbegin</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a02291_1a268573a0d61817ae393842c3b42b5f4a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d37/a09415" kindref="compound">const_iterator</ref>&lt; CharT, std::basic_string&lt; CharT &gt; &gt;</type>
+        <definition>const_iterator&lt; CharT, std::basic_string&lt; CharT &gt; &gt; castor::string::utf8::cend</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; const &amp;str)</argsstring>
+        <name>cend</name>
+        <qualifiedname>castor::string::utf8::cend</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1327" column="23" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="1327" bodyend="1330"/>
+        <references refid="dd/d3b/a02291_1a268573a0d61817ae393842c3b42b5f4a" compoundref="dd/d6f/a02207" startline="1327" endline="1330">cend</references>
+        <referencedby refid="dd/d3b/a02291_1a268573a0d61817ae393842c3b42b5f4a" compoundref="dd/d6f/a02207" startline="1327" endline="1330">cend</referencedby>
+        <referencedby refid="dd/d3b/a02291_1ab3dbd0dde80dea52fb75b0d06e2943c3" compoundref="dd/d6f/a02207" startline="1333" endline="1336">cend</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/d3b/a02291_1ab3dbd0dde80dea52fb75b0d06e2943c3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d37/a09415" kindref="compound">const_iterator</ref>&lt; CharT, std::basic_string_view&lt; CharT &gt; &gt;</type>
+        <definition>const_iterator&lt; CharT, std::basic_string_view&lt; CharT &gt; &gt; castor::string::utf8::cend</definition>
+        <argsstring>(std::basic_string_view&lt; CharT &gt; const &amp;str)</argsstring>
+        <name>cend</name>
+        <qualifiedname>castor::string::utf8::cend</qualifiedname>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt; const &amp;</type>
+          <declname>str</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="1333" column="23" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="1333" bodyend="1336"/>
+        <references refid="dd/d3b/a02291_1a268573a0d61817ae393842c3b42b5f4a" compoundref="dd/d6f/a02207" startline="1327" endline="1330">cend</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Espace de nom regroupant des fonctions sur les chaînes de caractères en UTF-8. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Miscellaneous/MiscellaneousModule.hpp" line="72" column="1"/>
+  </compounddef>
+</doxygen>

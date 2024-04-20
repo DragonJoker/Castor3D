@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/dbd/a03563" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::StagedUploadData::BufferRange</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/dbd/a03563_1aae392b5456e058abeda736bf02d01494" prot="public" static="no" mutable="no">
+        <type>byte *</type>
+        <definition>byte* castor3d::StagedUploadData::BufferRange::mapped</definition>
+        <argsstring></argsstring>
+        <name>mapped</name>
+        <qualifiedname>castor3d::StagedUploadData::BufferRange::mapped</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="91" column="7" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="91" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dbd/a03563_1a39c565dd6b2016054a8b0ce2f1fdc80a" prot="public" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::StagedUploadData::BufferRange::offset</definition>
+        <argsstring></argsstring>
+        <name>offset</name>
+        <qualifiedname>castor3d::StagedUploadData::BufferRange::offset</qualifiedname>
+        <initializer>{ ~0ULL }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="92" column="14" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="92" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dbd/a03563_1af5ec3efbd98e154f3123b47cde7e093f" prot="public" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::StagedUploadData::BufferRange::range</definition>
+        <argsstring></argsstring>
+        <name>range</name>
+        <qualifiedname>castor3d::StagedUploadData::BufferRange::range</qualifiedname>
+        <initializer>{ 0ULL }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="93" column="14" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="93" bodyend="93"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::StagedUploadData::BufferRange</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>mapped</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>byte</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Buffer/StagedUploadData.hpp" line="89" column="1" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="90" bodyend="94"/>
+    <listofallmembers>
+      <member refid="d4/dbd/a03563_1aae392b5456e058abeda736bf02d01494" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData::BufferRange</scope><name>mapped</name></member>
+      <member refid="d4/dbd/a03563_1a39c565dd6b2016054a8b0ce2f1fdc80a" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData::BufferRange</scope><name>offset</name></member>
+      <member refid="d4/dbd/a03563_1af5ec3efbd98e154f3123b47cde7e093f" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData::BufferRange</scope><name>range</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

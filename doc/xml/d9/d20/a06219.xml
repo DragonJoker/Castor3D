@@ -1,0 +1,238 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/d20/a06219" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlayTextBufferIndex</compoundname>
+    <includes local="no">OverlaysModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d20/a06219_1a5bb0f0c510e8e925e8ec9e4f4a56bff5" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/d85/a06231" kindref="compound">OverlayTextBuffer</ref> *</type>
+        <definition>OverlayTextBuffer* castor3d::OverlayTextBufferIndex::pool</definition>
+        <argsstring></argsstring>
+        <name>pool</name>
+        <qualifiedname>castor3d::OverlayTextBufferIndex::pool</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlaysModule.hpp" line="158" column="20" bodyfile="Castor3D/Render/Overlays/OverlaysModule.hpp" bodystart="158" bodyend="158"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d20/a06219_1a7ba09f6e8771e06b76b12ead6ff23394" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlayTextBufferIndex::word</definition>
+        <argsstring></argsstring>
+        <name>word</name>
+        <qualifiedname>castor3d::OverlayTextBufferIndex::word</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlaysModule.hpp" line="159" column="10" bodyfile="Castor3D/Render/Overlays/OverlaysModule.hpp" bodystart="159" bodyend="159"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d20/a06219_1a29350d0d64f87d1e2510f2fe53c92998" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlayTextBufferIndex::line</definition>
+        <argsstring></argsstring>
+        <name>line</name>
+        <qualifiedname>castor3d::OverlayTextBufferIndex::line</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlaysModule.hpp" line="160" column="10" bodyfile="Castor3D/Render/Overlays/OverlaysModule.hpp" bodystart="160" bodyend="160"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d20/a06219_1aff731a917163c99fe563b0258c9818c4" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::OverlayTextBufferIndex::top</definition>
+        <argsstring></argsstring>
+        <name>top</name>
+        <qualifiedname>castor3d::OverlayTextBufferIndex::top</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlaysModule.hpp" line="161" column="7" bodyfile="Castor3D/Render/Overlays/OverlaysModule.hpp" bodystart="161" bodyend="161"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="17">
+        <label>castor::ArrayView&lt; DataT &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; DataT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor::ArrayView&lt; castor3d::TextChar &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; castor3d::TextChar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor::ArrayView&lt; castor3d::TextLine &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; castor3d::TextLine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor::ArrayView&lt; castor3d::TextWord &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; castor3d::TextWord &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::OverlayTextBuffer::DataBufferT&lt; castor3d::TextChar &gt;</label>
+        <link refid="da/d36/a06235"/>
+        <childnode refid="14" relation="usage">
+          <edgelabel>data</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="template-instance">
+          <edgelabel>&lt; castor3d::TextChar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor3d::OverlayTextBuffer::DataBufferT&lt; castor3d::TextLine &gt;</label>
+        <link refid="da/d36/a06235"/>
+        <childnode refid="21" relation="usage">
+          <edgelabel>data</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="template-instance">
+          <edgelabel>&lt; castor3d::TextLine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::OverlayTextBuffer::DataBufferT&lt; castor3d::TextWord &gt;</label>
+        <link refid="da/d36/a06235"/>
+        <childnode refid="19" relation="usage">
+          <edgelabel>data</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="template-instance">
+          <edgelabel>&lt; castor3d::TextWord &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="5" relation="private-inheritance">
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::OverlayTextBuffer</label>
+        <link refid="dd/d85/a06231"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>engine</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>device</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>charsBuffer</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>wordsBuffer</edgelabel>
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>linesBuffer</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::OverlayTextBuffer::DataBufferT&lt; DataT &gt;</label>
+        <link refid="da/d36/a06235"/>
+        <childnode refid="17" relation="usage">
+          <edgelabel>data</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::OverlayTextBufferIndex</label>
+        <link refid="d9/d20/a06219"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>pool</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::RenderDevice</label>
+        <link refid="dc/d32/a06415"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d5/d4e/a06559"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor::ArrayView&lt; ValueT, IteratorTraitsT &gt;</label>
+        <link refid="d4/dcc/a08151"/>
+      </node>
+      <node id="5">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="10">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="6">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="5" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/Overlays/OverlaysModule.hpp" line="156" column="1" bodyfile="Castor3D/Render/Overlays/OverlaysModule.hpp" bodystart="157" bodyend="162"/>
+    <listofallmembers>
+      <member refid="d9/d20/a06219_1a29350d0d64f87d1e2510f2fe53c92998" prot="public" virt="non-virtual"><scope>castor3d::OverlayTextBufferIndex</scope><name>line</name></member>
+      <member refid="d9/d20/a06219_1a5bb0f0c510e8e925e8ec9e4f4a56bff5" prot="public" virt="non-virtual"><scope>castor3d::OverlayTextBufferIndex</scope><name>pool</name></member>
+      <member refid="d9/d20/a06219_1aff731a917163c99fe563b0258c9818c4" prot="public" virt="non-virtual"><scope>castor3d::OverlayTextBufferIndex</scope><name>top</name></member>
+      <member refid="d9/d20/a06219_1a7ba09f6e8771e06b76b12ead6ff23394" prot="public" virt="non-virtual"><scope>castor3d::OverlayTextBufferIndex</scope><name>word</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

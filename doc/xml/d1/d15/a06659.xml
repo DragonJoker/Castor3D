@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d15/a06659" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ShadowMapResult</compoundname>
+    <basecompoundref refid="d0/d22/a05963" prot="public" virt="non-virtual">castor3d::GBufferT&lt; SmTexture &gt;</basecompoundref>
+    <includes local="no">ShadowMapResult.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d15/a06659_1a3686e60c967cafc719fbc9352e6eea1a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShadowMapResult::ShadowMapResult</definition>
+        <argsstring>(crg::ResourcesCache &amp;resources, RenderDevice const &amp;device, castor::String const &amp;prefix, VkImageCreateFlags createFlags, castor::Size const &amp;size, uint32_t layerCount)</argsstring>
+        <name>ShadowMapResult</name>
+        <qualifiedname>castor3d::ShadowMapResult::ShadowMapResult</qualifiedname>
+        <param>
+          <type>crg::ResourcesCache &amp;</type>
+          <declname>resources</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type>VkImageCreateFlags</type>
+          <declname>createFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">castor::Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>layerCount</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ShadowMap/ShadowMapResult.hpp" line="17" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::GBufferT&lt; SmTexture &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; SmTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d8/d33/a05959"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ShadowMapResult</label>
+        <link refid="d1/d15/a06659"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::GBufferT&lt; SmTexture &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; SmTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d8/d33/a05959"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="3" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::RenderDevice</label>
+        <link refid="dc/d32/a06415"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d5/d4e/a06559"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ShadowMapResult</label>
+        <link refid="d1/d15/a06659"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="8">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/ShadowMap/ShadowMapResult.hpp" line="13" column="1" bodyfile="Castor3D/Render/ShadowMap/ShadowMapResult.hpp" bodystart="15" bodyend="23"/>
+    <listofallmembers>
+      <member refid="d0/d22/a05963_1a76ab93fa783e158cbd87969362aaf014" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>begin</name></member>
+      <member refid="d0/d22/a05963_1a97b372e1c56f60a5750c4d86ee3a48e9" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>begin</name></member>
+      <member refid="d0/d22/a05963_1abfd121ee454a83d537ec36c8988b6a74" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>cbegin</name></member>
+      <member refid="d0/d22/a05963_1a2fd7a7a9c4e200d4107582bd610526bf" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>cend</name></member>
+      <member refid="d0/d22/a05963_1a0309aa085d6e4ad81c24f2c3edc948ae" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>create</name></member>
+      <member refid="d0/d22/a05963_1a98c25599ea005c88bf160caeb560590e" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>end</name></member>
+      <member refid="d0/d22/a05963_1a8a8b5cd4d8f264dc1765fe67be726552" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>end</name></member>
+      <member refid="d0/d22/a05963_1a67a677fc6cbdb36e74fa6b74a65c5015" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>GBufferT</name></member>
+      <member refid="d0/d22/a05963_1a24ab1f217e50f8de9ef5fea0d48785c3" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>GBufferT</name></member>
+      <member refid="d0/d22/a05963_1a5e071c7723d6b58c0a4c24ed4e9bfe09" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>GBufferT</name></member>
+      <member refid="d0/d22/a05963_1ad3fed57d2e9159966bf67250c6af1724" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>GBufferT</name></member>
+      <member refid="d0/d22/a05963_1a85d98036f6e7d2020583590ed62009bd" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>m_owned</name></member>
+      <member refid="d0/d22/a05963_1aa428fdaab826631c58704a8621113548" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>m_result</name></member>
+      <member refid="d0/d22/a05963_1aa803d666fd91abf546fa7bb32507b038" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>operator=</name></member>
+      <member refid="d0/d22/a05963_1aad8744d0eae473ca52441c6c8e66cd89" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>operator=</name></member>
+      <member refid="d0/d22/a05963_1ac434ba32755901d63f09f94e664901df" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>operator[]</name></member>
+      <member refid="d1/d15/a06659_1a3686e60c967cafc719fbc9352e6eea1a" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>ShadowMapResult</name></member>
+      <member refid="d0/d22/a05963_1a4dbad74f793174a41d2fdbf012e3a0d2" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>size</name></member>
+      <member refid="d0/d22/a05963_1a65abf0cecbe8b0cf7ad8ce2aff436a7b" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapResult</scope><name>~GBufferT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

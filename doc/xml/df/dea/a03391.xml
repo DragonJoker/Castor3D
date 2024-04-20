@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/dea/a03391" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::InterleavedVertexNoMikk</compoundname>
+    <includes local="no">ChunkData.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/dea/a03391_1aaedb9dd5d4d3ea57c8e5af08adb6a97b" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::InterleavedVertexNoMikk::pos</definition>
+        <argsstring></argsstring>
+        <name>pos</name>
+        <qualifiedname>castor3d::InterleavedVertexNoMikk::pos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/ChunkData.hpp" line="39" column="17" bodyfile="Castor3D/Binary/ChunkData.hpp" bodystart="39" bodyend="-1"/>
+        <referencedby refid="d9/dba/a02278_1aaae8a1f030b081e1f156530f10e17b4b" compoundref="d6/d7d/a00161" startline="1193" endline="1207">castor3d::prepareChunkData</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/dea/a03391_1a461441df7efeae4fe3e630bd4816376c" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::InterleavedVertexNoMikk::nml</definition>
+        <argsstring></argsstring>
+        <name>nml</name>
+        <qualifiedname>castor3d::InterleavedVertexNoMikk::nml</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/ChunkData.hpp" line="40" column="17" bodyfile="Castor3D/Binary/ChunkData.hpp" bodystart="40" bodyend="-1"/>
+        <referencedby refid="d9/dba/a02278_1aaae8a1f030b081e1f156530f10e17b4b" compoundref="d6/d7d/a00161" startline="1193" endline="1207">castor3d::prepareChunkData</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/dea/a03391_1a8367e8120844da20cefb5abf0fe9dbf8" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::InterleavedVertexNoMikk::tan</definition>
+        <argsstring></argsstring>
+        <name>tan</name>
+        <qualifiedname>castor3d::InterleavedVertexNoMikk::tan</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/ChunkData.hpp" line="41" column="17" bodyfile="Castor3D/Binary/ChunkData.hpp" bodystart="41" bodyend="-1"/>
+        <referencedby refid="d9/dba/a02278_1aaae8a1f030b081e1f156530f10e17b4b" compoundref="d6/d7d/a00161" startline="1193" endline="1207">castor3d::prepareChunkData</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/dea/a03391_1ac2fe1183d93ae988fa0c248aee7d38cd" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::InterleavedVertexNoMikk::tex</definition>
+        <argsstring></argsstring>
+        <name>tex</name>
+        <qualifiedname>castor3d::InterleavedVertexNoMikk::tex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/ChunkData.hpp" line="42" column="17" bodyfile="Castor3D/Binary/ChunkData.hpp" bodystart="42" bodyend="-1"/>
+        <referencedby refid="d9/dba/a02278_1aaae8a1f030b081e1f156530f10e17b4b" compoundref="d6/d7d/a00161" startline="1193" endline="1207">castor3d::prepareChunkData</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Binary/ChunkData.hpp" line="37" column="1" bodyfile="Castor3D/Binary/ChunkData.hpp" bodystart="38" bodyend="43"/>
+    <listofallmembers>
+      <member refid="df/dea/a03391_1a461441df7efeae4fe3e630bd4816376c" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertexNoMikk</scope><name>nml</name></member>
+      <member refid="df/dea/a03391_1aaedb9dd5d4d3ea57c8e5af08adb6a97b" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertexNoMikk</scope><name>pos</name></member>
+      <member refid="df/dea/a03391_1a8367e8120844da20cefb5abf0fe9dbf8" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertexNoMikk</scope><name>tan</name></member>
+      <member refid="df/dea/a03391_1ac2fe1183d93ae988fa0c248aee7d38cd" prot="public" virt="non-virtual"><scope>castor3d::InterleavedVertexNoMikk</scope><name>tex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

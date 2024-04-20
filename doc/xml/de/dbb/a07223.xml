@@ -1,0 +1,343 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/dbb/a07223" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SceneImportContext</compoundname>
+    <includes local="no">SceneImporter.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/dbb/a07223_1aa6a3892fc1c866f1f3130a56c1440b75" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/db2/a07139" kindref="compound">SceneContext</ref> *</type>
+        <definition>SceneContext* castor3d::SceneImportContext::scene</definition>
+        <argsstring></argsstring>
+        <name>scene</name>
+        <qualifiedname>castor3d::SceneImportContext::scene</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="162" column="15" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="162" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a07223_1aa8c7d89339ebd044311490310624d964" prot="public" static="no" mutable="no">
+        <type>castor::PathArray</type>
+        <definition>castor::PathArray castor3d::SceneImportContext::files</definition>
+        <argsstring></argsstring>
+        <name>files</name>
+        <qualifiedname>castor3d::SceneImportContext::files</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="163" column="19" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="163" bodyend="163"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a07223_1ae3650b698658c52446736dd5f8b995e9" prot="public" static="no" mutable="no">
+        <type>castor::PathArray</type>
+        <definition>castor::PathArray castor3d::SceneImportContext::animFiles</definition>
+        <argsstring></argsstring>
+        <name>animFiles</name>
+        <qualifiedname>castor3d::SceneImportContext::animFiles</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="164" column="19" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="164" bodyend="164"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a07223_1a60ecb8e1ac700696b9bacc398fe9fade" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::SceneImportContext::prefix</definition>
+        <argsstring></argsstring>
+        <name>prefix</name>
+        <qualifiedname>castor3d::SceneImportContext::prefix</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="165" column="16" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="165" bodyend="165"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a07223_1a6c566ef048338d6aee0fcecdb768a879" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a93b53452a3c421817a14b649ccec1fb7" kindref="member">castor::Map</ref>&lt; <ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref>, <ref refid="d5/dc1/a04943" kindref="compound">TextureConfiguration</ref> &gt;</type>
+        <definition>castor::Map&lt; PassComponentTextureFlag, TextureConfiguration &gt; castor3d::SceneImportContext::textureRemaps</definition>
+        <argsstring></argsstring>
+        <name>textureRemaps</name>
+        <qualifiedname>castor3d::SceneImportContext::textureRemaps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="166" column="13" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a07223_1ad16d1dca55001e2a9976ce724c63a3b1" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SceneImportContext::rescale</definition>
+        <argsstring></argsstring>
+        <name>rescale</name>
+        <qualifiedname>castor3d::SceneImportContext::rescale</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="167" column="7" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="167" bodyend="167"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a07223_1ad6f995aaf751df0e4d78c03deeb4df04" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SceneImportContext::pitch</definition>
+        <argsstring></argsstring>
+        <name>pitch</name>
+        <qualifiedname>castor3d::SceneImportContext::pitch</qualifiedname>
+        <initializer>{ 0.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="168" column="7" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="168" bodyend="168"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a07223_1a773e4768063c042d6cd29ead1cbc0b31" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SceneImportContext::yaw</definition>
+        <argsstring></argsstring>
+        <name>yaw</name>
+        <qualifiedname>castor3d::SceneImportContext::yaw</qualifiedname>
+        <initializer>{ 0.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="169" column="7" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="169" bodyend="169"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a07223_1a3f6240483f65c41da3f9beba49175a3a" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SceneImportContext::roll</definition>
+        <argsstring></argsstring>
+        <name>roll</name>
+        <qualifiedname>castor3d::SceneImportContext::roll</qualifiedname>
+        <initializer>{ 0.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="170" column="7" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="170" bodyend="170"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a07223_1a119b5a840b34eee90f68655a1b75c6e3" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneImportContext::noOptimisations</definition>
+        <argsstring></argsstring>
+        <name>noOptimisations</name>
+        <qualifiedname>castor3d::SceneImportContext::noOptimisations</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="171" column="6" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="171" bodyend="171"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a07223_1aed03d2a84f9fd5e6fbc4aed0577d7391" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneImportContext::ignoreVertexColour</definition>
+        <argsstring></argsstring>
+        <name>ignoreVertexColour</name>
+        <qualifiedname>castor3d::SceneImportContext::ignoreVertexColour</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="172" column="6" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="172" bodyend="172"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a07223_1a02954007119dc6b305b2f7ed2a05113d" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SceneImportContext::emissiveMult</definition>
+        <argsstring></argsstring>
+        <name>emissiveMult</name>
+        <qualifiedname>castor3d::SceneImportContext::emissiveMult</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="173" column="7" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="173" bodyend="173"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a07223_1a5cdec119813d53dddc8880f9f6a693dd" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a93b53452a3c421817a14b649ccec1fb7" kindref="member">castor::Map</ref>&lt; <ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref>, <ref refid="d5/dc1/a04943" kindref="compound">TextureConfiguration</ref> &gt;::iterator</type>
+        <definition>castor::Map&lt;PassComponentTextureFlag,TextureConfiguration&gt;::iterator castor3d::SceneImportContext::textureRemapIt</definition>
+        <argsstring></argsstring>
+        <name>textureRemapIt</name>
+        <qualifiedname>castor3d::SceneImportContext::textureRemapIt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="174" column="24" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a07223_1afeccd2be4e7a80ed8aecac702ec76c16" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::SceneImportContext::centerCamera</definition>
+        <argsstring></argsstring>
+        <name>centerCamera</name>
+        <qualifiedname>castor3d::SceneImportContext::centerCamera</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="175" column="16" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="175" bodyend="175"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dbb/a07223_1af3b9e13e25831723a7ecb0b252dd128a" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::SceneImportContext::preferredImporter</definition>
+        <argsstring></argsstring>
+        <name>preferredImporter</name>
+        <qualifiedname>castor3d::SceneImportContext::preferredImporter</qualifiedname>
+        <initializer>{ <ref refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" kindref="member">cuT</ref>( &quot;any&quot; ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="176" column="16" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="176" bodyend="176"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="5">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="6" relation="private-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::ProgressBar</label>
+        <link refid="d6/daf/a05323"/>
+      </node>
+      <node id="8">
+        <label>castor3d::RenderWindowDesc</label>
+        <link refid="de/d75/a06503"/>
+        <childnode refid="9" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RootContext</label>
+        <link refid="de/dd6/a07151"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>engine</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>window</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>logger</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>progress</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SceneContext</label>
+        <link refid="d3/db2/a07139"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>fontName</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SceneImportContext</label>
+        <link refid="de/dbb/a07223"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>scene</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>centerCamera</edgelabel>
+          <edgelabel>preferredImporter</edgelabel>
+          <edgelabel>prefix</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::LoggerInstance</label>
+        <link refid="d9/d93/a09063"/>
+      </node>
+      <node id="6">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="7">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="6" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/SceneImporter.hpp" line="160" column="1" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="161" bodyend="177"/>
+    <listofallmembers>
+      <member refid="de/dbb/a07223_1ae3650b698658c52446736dd5f8b995e9" prot="public" virt="non-virtual"><scope>castor3d::SceneImportContext</scope><name>animFiles</name></member>
+      <member refid="de/dbb/a07223_1afeccd2be4e7a80ed8aecac702ec76c16" prot="public" virt="non-virtual"><scope>castor3d::SceneImportContext</scope><name>centerCamera</name></member>
+      <member refid="de/dbb/a07223_1a02954007119dc6b305b2f7ed2a05113d" prot="public" virt="non-virtual"><scope>castor3d::SceneImportContext</scope><name>emissiveMult</name></member>
+      <member refid="de/dbb/a07223_1aa8c7d89339ebd044311490310624d964" prot="public" virt="non-virtual"><scope>castor3d::SceneImportContext</scope><name>files</name></member>
+      <member refid="de/dbb/a07223_1aed03d2a84f9fd5e6fbc4aed0577d7391" prot="public" virt="non-virtual"><scope>castor3d::SceneImportContext</scope><name>ignoreVertexColour</name></member>
+      <member refid="de/dbb/a07223_1a119b5a840b34eee90f68655a1b75c6e3" prot="public" virt="non-virtual"><scope>castor3d::SceneImportContext</scope><name>noOptimisations</name></member>
+      <member refid="de/dbb/a07223_1ad6f995aaf751df0e4d78c03deeb4df04" prot="public" virt="non-virtual"><scope>castor3d::SceneImportContext</scope><name>pitch</name></member>
+      <member refid="de/dbb/a07223_1af3b9e13e25831723a7ecb0b252dd128a" prot="public" virt="non-virtual"><scope>castor3d::SceneImportContext</scope><name>preferredImporter</name></member>
+      <member refid="de/dbb/a07223_1a60ecb8e1ac700696b9bacc398fe9fade" prot="public" virt="non-virtual"><scope>castor3d::SceneImportContext</scope><name>prefix</name></member>
+      <member refid="de/dbb/a07223_1ad16d1dca55001e2a9976ce724c63a3b1" prot="public" virt="non-virtual"><scope>castor3d::SceneImportContext</scope><name>rescale</name></member>
+      <member refid="de/dbb/a07223_1a3f6240483f65c41da3f9beba49175a3a" prot="public" virt="non-virtual"><scope>castor3d::SceneImportContext</scope><name>roll</name></member>
+      <member refid="de/dbb/a07223_1aa6a3892fc1c866f1f3130a56c1440b75" prot="public" virt="non-virtual"><scope>castor3d::SceneImportContext</scope><name>scene</name></member>
+      <member refid="de/dbb/a07223_1a5cdec119813d53dddc8880f9f6a693dd" prot="public" virt="non-virtual"><scope>castor3d::SceneImportContext</scope><name>textureRemapIt</name></member>
+      <member refid="de/dbb/a07223_1a6c566ef048338d6aee0fcecdb768a879" prot="public" virt="non-virtual"><scope>castor3d::SceneImportContext</scope><name>textureRemaps</name></member>
+      <member refid="de/dbb/a07223_1a773e4768063c042d6cd29ead1cbc0b31" prot="public" virt="non-virtual"><scope>castor3d::SceneImportContext</scope><name>yaw</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

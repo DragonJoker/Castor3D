@@ -1,0 +1,751 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d3a/a07991" kind="class" language="C++" prot="public">
+    <compoundname>castor::Writer</compoundname>
+    <basecompoundref refid="da/d87/a08319" prot="public" virt="non-virtual">castor::NonMovable</basecompoundref>
+    <derivedcompoundref refid="db/d9d/a07995" prot="public" virt="non-virtual">castor::FileWriter&lt; T, FileType::eBinary &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; Coords&lt; ValueT, 1u &gt; &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; Coords&lt; ValueT, 2u &gt; &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; Coords&lt; ValueT, 3u &gt; &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; Coords&lt; ValueT, 4u &gt; &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; Font &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; Point&lt; ValueT, 1u &gt; &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; Point&lt; ValueT, 2u &gt; &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; Point&lt; ValueT, 3u &gt; &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; Point&lt; ValueT, 4u &gt; &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; Position &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; QuaternionT&lt; ValueT &gt; &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; RgbColourT&lt; ComponentT &gt; &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; RgbaColourT&lt; ComponentT &gt; &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; Size &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; String &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; double &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; float &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; int16_t &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; int32_t &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; int64_t &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; int8_t &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; uint16_t &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; uint32_t &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; uint64_t &gt;</derivedcompoundref>
+    <derivedcompoundref refid="de/d30/a07987" prot="public" virt="non-virtual">castor::TextWriterT&lt; uint8_t &gt;</derivedcompoundref>
+    <includes local="no">Writer.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class DataT</type>
+      </param>
+      <param>
+        <type>typename StreamT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="protected-type">
+      <memberdef kind="typedef" id="dc/d3a/a07991_1a05f388eebe839f4313ef3e88c4383432" prot="protected" static="no">
+        <type>StreamT</type>
+        <definition>using castor::Writer&lt; DataT, StreamT &gt;::Type =  StreamT</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor::Writer::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Writer.hpp" line="20" column="1" bodyfile="CastorUtils/Data/Writer.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d3a/a07991_1a0a52e8b5ddf994f9832bf0a600342999" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type></type>
+        <definition>virtual castor::Writer&lt; DataT, StreamT &gt;::~Writer</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~Writer</name>
+        <qualifiedname>castor::Writer::~Writer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Writer.hpp" line="23" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d3a/a07991_1acce0e94bd93e1dd12b330034532ff036" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>bool</type>
+        <definition>virtual bool castor::Writer&lt; DataT, StreamT &gt;::operator()</definition>
+        <argsstring>(DataT const &amp;object, Type &amp;file)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::Writer::operator()</qualifiedname>
+        <param>
+          <type>DataT const &amp;</type>
+          <declname>object</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d3a/a07991_1a05f388eebe839f4313ef3e88c4383432" kindref="member">Type</ref> &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+<para>Ecrit une ressource dans un fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">object</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à écrire. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le fichier où écrire l&apos;objet. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Writer.hpp" line="34" column="14" bodyfile="CastorUtils/Data/Writer.hpp" bodystart="34" bodyend="38"/>
+        <references refid="da/dcd/a01835_1a0c7816fdaee978d5a9f398e0d45381c4" compoundref="da/dcd/a01835" startline="30">CU_LoaderError</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe de base pour les writers de ressource. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::FileWriter&lt; T, FileType::eBinary &gt;</label>
+        <link refid="db/d9d/a07995"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="57" relation="template-instance">
+          <edgelabel>&lt; T, FileType::eBinary &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::TextWriterT&lt; Coords&lt; ValueT, 1u &gt; &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; Coords&lt; ValueT, 1u &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::TextWriterT&lt; Coords&lt; ValueT, 2u &gt; &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; Coords&lt; ValueT, 2u &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor::TextWriterT&lt; Coords&lt; ValueT, 3u &gt; &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; Coords&lt; ValueT, 3u &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::TextWriterT&lt; Coords&lt; ValueT, 4u &gt; &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; Coords&lt; ValueT, 4u &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor::TextWriterT&lt; Font &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; Font &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor::TextWriterT&lt; Point&lt; ValueT, 1u &gt; &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; Point&lt; ValueT, 1u &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor::TextWriterT&lt; Point&lt; ValueT, 2u &gt; &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; Point&lt; ValueT, 2u &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor::TextWriterT&lt; Point&lt; ValueT, 3u &gt; &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; Point&lt; ValueT, 3u &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor::TextWriterT&lt; Point&lt; ValueT, 4u &gt; &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; Point&lt; ValueT, 4u &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor::TextWriterT&lt; Position &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; Position &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor::TextWriterT&lt; QuaternionT&lt; ValueT &gt; &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; QuaternionT&lt; ValueT &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor::TextWriterT&lt; RgbColourT&lt; ComponentT &gt; &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; RgbColourT&lt; ComponentT &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor::TextWriterT&lt; RgbaColourT&lt; ComponentT &gt; &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; RgbaColourT&lt; ComponentT &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="31">
+        <label>castor::TextWriterT&lt; Size &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; Size &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="33">
+        <label>castor::TextWriterT&lt; String &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="35">
+        <label>castor::TextWriterT&lt; double &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; double &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="37">
+        <label>castor::TextWriterT&lt; float &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; float &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="39">
+        <label>castor::TextWriterT&lt; int16_t &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; int16_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="41">
+        <label>castor::TextWriterT&lt; int32_t &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; int32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="43">
+        <label>castor::TextWriterT&lt; int64_t &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; int64_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="45">
+        <label>castor::TextWriterT&lt; int8_t &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; int8_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="47">
+        <label>castor::TextWriterT&lt; uint16_t &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; uint16_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="49">
+        <label>castor::TextWriterT&lt; uint32_t &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; uint32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="51">
+        <label>castor::TextWriterT&lt; uint64_t &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; uint64_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="53">
+        <label>castor::TextWriterT&lt; uint8_t &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="84" relation="template-instance">
+          <edgelabel>&lt; uint8_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="58">
+        <label>castor::Writer&lt; Coords&lt; ValueT, 1u &gt;, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Coords&lt; ValueT, 1u &gt;, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="59">
+        <label>castor::Writer&lt; Coords&lt; ValueT, 2u &gt;, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Coords&lt; ValueT, 2u &gt;, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="60">
+        <label>castor::Writer&lt; Coords&lt; ValueT, 3u &gt;, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Coords&lt; ValueT, 3u &gt;, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="61">
+        <label>castor::Writer&lt; Coords&lt; ValueT, 4u &gt;, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Coords&lt; ValueT, 4u &gt;, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="56">
+        <label>castor::Writer&lt; DataT, FileTyper&lt; FileTypeT &gt;::Type &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; DataT, FileTyper&lt; FileTypeT &gt;::Type &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="62">
+        <label>castor::Writer&lt; Font, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Font, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="63">
+        <label>castor::Writer&lt; Point&lt; ValueT, 1u &gt;, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Point&lt; ValueT, 1u &gt;, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="64">
+        <label>castor::Writer&lt; Point&lt; ValueT, 2u &gt;, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Point&lt; ValueT, 2u &gt;, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="65">
+        <label>castor::Writer&lt; Point&lt; ValueT, 3u &gt;, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Point&lt; ValueT, 3u &gt;, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="66">
+        <label>castor::Writer&lt; Point&lt; ValueT, 4u &gt;, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Point&lt; ValueT, 4u &gt;, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="67">
+        <label>castor::Writer&lt; Position, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Position, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="68">
+        <label>castor::Writer&lt; QuaternionT&lt; ValueT &gt;, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; QuaternionT&lt; ValueT &gt;, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="69">
+        <label>castor::Writer&lt; RgbColourT&lt; ComponentT &gt;, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; RgbColourT&lt; ComponentT &gt;, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="70">
+        <label>castor::Writer&lt; RgbaColourT&lt; ComponentT &gt;, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; RgbaColourT&lt; ComponentT &gt;, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="71">
+        <label>castor::Writer&lt; Size, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Size, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="72">
+        <label>castor::Writer&lt; String, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; String, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="55">
+        <label>castor::Writer&lt; T, FileTyper&lt; FileTypeT &gt;::Type &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; T, FileTyper&lt; FileTypeT &gt;::Type &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="83">
+        <label>castor::Writer&lt; T, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; T, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="73">
+        <label>castor::Writer&lt; double, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; double, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="74">
+        <label>castor::Writer&lt; float, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; float, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="75">
+        <label>castor::Writer&lt; int16_t, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; int16_t, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="76">
+        <label>castor::Writer&lt; int32_t, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; int32_t, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="77">
+        <label>castor::Writer&lt; int64_t, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; int64_t, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="78">
+        <label>castor::Writer&lt; int8_t, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; int8_t, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="79">
+        <label>castor::Writer&lt; uint16_t, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; uint16_t, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="80">
+        <label>castor::Writer&lt; uint32_t, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; uint32_t, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="81">
+        <label>castor::Writer&lt; uint64_t, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; uint64_t, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="82">
+        <label>castor::Writer&lt; uint8_t, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; uint8_t, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::BinaryWriter&lt; T &gt;</label>
+        <link refid="d5/ddf/a07979"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="57">
+        <label>castor::FileWriter&lt; DataT, FileTypeT &gt;</label>
+        <link refid="db/d9d/a07995"/>
+        <childnode refid="56" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="6">
+        <label>castor::TextWriter&lt; Coords&lt; ValueT, 1u &gt; &gt;</label>
+        <link refid="d3/d21/a08015"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::TextWriter&lt; Coords&lt; ValueT, 2u &gt; &gt;</label>
+        <link refid="d3/de2/a08019"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor::TextWriter&lt; Coords&lt; ValueT, 3u &gt; &gt;</label>
+        <link refid="d9/d9e/a08023"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor::TextWriter&lt; Coords&lt; ValueT, 4u &gt; &gt;</label>
+        <link refid="de/d63/a08027"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor::TextWriter&lt; Font &gt;</label>
+        <link refid="d3/d83/a08031"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor::TextWriter&lt; Point&lt; ValueT, 1u &gt; &gt;</label>
+        <link refid="dd/dfa/a08035"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor::TextWriter&lt; Point&lt; ValueT, 2u &gt; &gt;</label>
+        <link refid="dc/dbf/a08039"/>
+        <childnode refid="17" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor::TextWriter&lt; Point&lt; ValueT, 3u &gt; &gt;</label>
+        <link refid="d3/d30/a08043"/>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor::TextWriter&lt; Point&lt; ValueT, 4u &gt; &gt;</label>
+        <link refid="df/dbd/a08047"/>
+        <childnode refid="21" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor::TextWriter&lt; Position &gt;</label>
+        <link refid="d1/d5e/a08051"/>
+        <childnode refid="23" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor::TextWriter&lt; QuaternionT&lt; ValueT &gt; &gt;</label>
+        <link refid="d7/d34/a08055"/>
+        <childnode refid="25" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>castor::TextWriter&lt; RgbColourT&lt; ComponentT &gt; &gt;</label>
+        <link refid="d6/dad/a08063"/>
+        <childnode refid="27" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>castor::TextWriter&lt; RgbaColourT&lt; ComponentT &gt; &gt;</label>
+        <link refid="d9/d0e/a08059"/>
+        <childnode refid="29" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>castor::TextWriter&lt; Size &gt;</label>
+        <link refid="d1/d76/a08067"/>
+        <childnode refid="31" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>castor::TextWriter&lt; String &gt;</label>
+        <link refid="da/d59/a08135"/>
+        <childnode refid="33" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>castor::TextWriter&lt; double &gt;</label>
+        <link refid="d3/d76/a08131"/>
+        <childnode refid="35" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>castor::TextWriter&lt; float &gt;</label>
+        <link refid="d9/d7a/a08127"/>
+        <childnode refid="37" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="40">
+        <label>castor::TextWriter&lt; int16_t &gt;</label>
+        <link refid="db/d47/a08103"/>
+        <childnode refid="39" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>castor::TextWriter&lt; int32_t &gt;</label>
+        <link refid="d9/d69/a08111"/>
+        <childnode refid="41" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>castor::TextWriter&lt; int64_t &gt;</label>
+        <link refid="db/de1/a08119"/>
+        <childnode refid="43" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>castor::TextWriter&lt; int8_t &gt;</label>
+        <link refid="d2/dae/a08095"/>
+        <childnode refid="45" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>castor::TextWriter&lt; uint16_t &gt;</label>
+        <link refid="da/d9e/a08107"/>
+        <childnode refid="47" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>castor::TextWriter&lt; uint32_t &gt;</label>
+        <link refid="d6/d96/a08115"/>
+        <childnode refid="49" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>castor::TextWriter&lt; uint64_t &gt;</label>
+        <link refid="de/d7d/a08123"/>
+        <childnode refid="51" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="54">
+        <label>castor::TextWriter&lt; uint8_t &gt;</label>
+        <link refid="dc/dc3/a08099"/>
+        <childnode refid="53" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="84">
+        <label>castor::TextWriterT&lt; T &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="83" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::Writer&lt; DataT, StreamT &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="1">
+        <label>castor::Writer&lt; DataT, StreamT &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Data/Writer.hpp" line="16" column="1" bodyfile="CastorUtils/Data/Writer.hpp" bodystart="18" bodyend="39"/>
+    <listofallmembers>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::Writer</scope><name>NonMovable</name></member>
+      <member refid="dc/d3a/a07991_1acce0e94bd93e1dd12b330034532ff036" prot="public" virt="virtual"><scope>castor::Writer</scope><name>operator()</name></member>
+      <member refid="dc/d3a/a07991_1a05f388eebe839f4313ef3e88c4383432" prot="protected" virt="non-virtual"><scope>castor::Writer</scope><name>Type</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::Writer</scope><name>~NonMovable</name></member>
+      <member refid="dc/d3a/a07991_1a0a52e8b5ddf994f9832bf0a600342999" prot="public" virt="virtual"><scope>castor::Writer</scope><name>~Writer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

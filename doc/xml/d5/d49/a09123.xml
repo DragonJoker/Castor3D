@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/d49/a09123" kind="struct" language="C++" prot="public">
+    <compoundname>castor::Fact&lt; T, 0 &gt;</compoundname>
+    <includes local="no">Math.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d49/a09123_1a43b54b37aa39779a9ea66ca392cab7ca" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>T</type>
+        <definition>T castor::Fact&lt; T, 0 &gt;::operator()</definition>
+        <argsstring>() const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::Fact&lt; T, 0 &gt;::operator()</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Math.hpp" line="31" column="10" bodyfile="CastorUtils/Math/Math.hpp" bodystart="31" bodyend="34"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Cas d&apos;arrêt pour Factorielle. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/Math.hpp" line="29" column="13" bodyfile="CastorUtils/Math/Math.hpp" bodystart="30" bodyend="35"/>
+    <listofallmembers>
+      <member refid="d5/d49/a09123_1a43b54b37aa39779a9ea66ca392cab7ca" prot="public" virt="non-virtual"><scope>castor::Fact&lt; T, 0 &gt;</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

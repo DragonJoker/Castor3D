@@ -1,5 +1,9 @@
-<map id="castor3d::ClearcoatComponent::MaterialShader" name="castor3d::ClearcoatComponent::MaterialShader">
-<area shape="rect" id="node1" title=" " alt="" coords="6,167,207,207"/>
-<area shape="rect" id="node2" href="$dc/d86/a04022.html" title=" " alt="" coords="5,79,208,119"/>
-<area shape="rect" id="node3" href="$d0/dee/a04014.html" title=" " alt="" coords="7,5,206,31"/>
+<map id="castor3d::GeometryBuffers" name="castor3d::GeometryBuffers">
+<area shape="rect" id="Node000001" title=" " alt="" coords="96,211,273,236"/>
+<area shape="rect" id="Node000002" href="$d0/d08/a03519.html" title=" " alt="" coords="92,108,277,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="187,162,187,210,182,210,182,162"/>
+<area shape="rect" id="Node000003" href="$db/d47/a03447.html" title="A GPU buffer pool, that uses an allocator to allocate sub&#45;buffers." alt="" coords="5,5,180,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="121,54,169,106,165,110,117,57"/>
+<area shape="rect" id="Node000004" href="$db/db8/a03471.html" title="A memory range, in bytes." alt="" coords="205,13,351,38"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="260,50,204,110,200,106,256,46"/>
 </map>

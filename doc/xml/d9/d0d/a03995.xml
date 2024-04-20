@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/d0d/a03995" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TextureCombine</compoundname>
+    <includes local="no">MaterialModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d0d/a03995_1a125f3f6cfb8ce689e8e7dbce1e5cfc82" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a45bc048346b1eb09d5d30d9f8cd0b921" kindref="member">TextureCombineID</ref></type>
+        <definition>TextureCombineID castor3d::TextureCombine::baseId</definition>
+        <argsstring></argsstring>
+        <name>baseId</name>
+        <qualifiedname>castor3d::TextureCombine::baseId</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialModule.hpp" line="178" column="18" bodyfile="Castor3D/Material/MaterialModule.hpp" bodystart="178" bodyend="178"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d0d/a03995_1a8a41a8dbcd14d11a64aedcac27ecaf52" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureCombine::configCount</definition>
+        <argsstring></argsstring>
+        <name>configCount</name>
+        <qualifiedname>castor3d::TextureCombine::configCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialModule.hpp" line="179" column="10" bodyfile="Castor3D/Material/MaterialModule.hpp" bodystart="179" bodyend="179"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d0d/a03995_1a6468938b2c6db32a476972426c50027a" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a142963886dc44463d10b25ecb8a0baee" kindref="member">TextureFlagsSet</ref></type>
+        <definition>TextureFlagsSet castor3d::TextureCombine::flags</definition>
+        <argsstring></argsstring>
+        <name>flags</name>
+        <qualifiedname>castor3d::TextureCombine::flags</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialModule.hpp" line="180" column="17" bodyfile="Castor3D/Material/MaterialModule.hpp" bodystart="180" bodyend="180"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Material/MaterialModule.hpp" line="176" column="1" bodyfile="Castor3D/Material/MaterialModule.hpp" bodystart="177" bodyend="181"/>
+    <listofallmembers>
+      <member refid="d9/d0d/a03995_1a125f3f6cfb8ce689e8e7dbce1e5cfc82" prot="public" virt="non-virtual"><scope>castor3d::TextureCombine</scope><name>baseId</name></member>
+      <member refid="d9/d0d/a03995_1a8a41a8dbcd14d11a64aedcac27ecaf52" prot="public" virt="non-virtual"><scope>castor3d::TextureCombine</scope><name>configCount</name></member>
+      <member refid="d9/d0d/a03995_1a6468938b2c6db32a476972426c50027a" prot="public" virt="non-virtual"><scope>castor3d::TextureCombine</scope><name>flags</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

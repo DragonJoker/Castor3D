@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dir_62db7674277421a905f12338c3157d52" kind="dir">
+    <compoundname>Castor3D/Render/Debug</compoundname>
+    <innerfile refid="d9/d9a/a00998">DebugDrawer.hpp</innerfile>
+    <innerfile refid="df/d59/a01001">DebugModule.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/Debug/"/>
+  </compounddef>
+</doxygen>

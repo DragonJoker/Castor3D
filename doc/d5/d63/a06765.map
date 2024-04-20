@@ -1,0 +1,17 @@
+<map id="castor3d::BoundsTransformPipeline" name="castor3d::BoundsTransformPipeline">
+<area shape="rect" id="Node000001" title=" " alt="" coords="66,412,247,452"/>
+<area shape="rect" id="Node000002" href="$db/d46/a07399.html" title="A non compiled shader module, with its source." alt="" coords="75,324,238,349"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,363,159,412,154,412,154,363"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,172,132,212"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="78,224,92,260,118,295,145,322,141,325,114,298,88,263,73,226"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="52,5,179,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="84,57,75,70,67,97,65,124,68,171,62,172,59,124,62,96,70,68,79,54"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="105,108,232,148"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="134,56,161,107,156,109,129,59"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="169,162,160,324,155,324,164,162"/>
+<area shape="rect" id="Node000006" href="$d1/d27/a07395.html" title="A SPIR&#45;V shader module, with SPIR&#45;V binary and debug text source." alt="" coords="225,236,379,261"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="202,155,291,234,287,238,199,159"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="272,271,178,326,175,321,269,266"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="257,115,347,141"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="305,155,305,236,299,236,299,155"/>
+</map>

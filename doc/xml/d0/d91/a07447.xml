@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d91/a07447" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::PosUvT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">PosUvStructT&lt; PosTypeT, FlagT &gt;</basecompoundref>
+    <includes local="no">GlslBaseIO.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename PosTypeT</type>
+      </param>
+      <param>
+        <type>sdw::var::Flag</type>
+        <declname>FlagT</declname>
+        <defname>FlagT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d91/a07447_1aaad7e2354ff9286cb1f2ed89995a1d46" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::PosUvT&lt; PosTypeT, FlagT &gt;::PosUvT</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>PosUvT</name>
+        <qualifiedname>castor3d::shader::PosUvT::PosUvT</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslBaseIO.hpp" line="64" column="1" bodyfile="Castor3D/Shader/Shaders/GlslBaseIO.hpp" bodystart="64" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d91/a07447_1a34fb0bd7116d97238f000e3f6fc9013b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::PosUvT&lt; PosTypeT, FlagT &gt;::position</definition>
+        <argsstring>() const</argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::shader::PosUvT::position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslBaseIO.hpp" line="71" column="6" bodyfile="Castor3D/Shader/Shaders/GlslBaseIO.hpp" bodystart="71" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d91/a07447_1a34daa585e6d1fb475b0939d5b80f6b05" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::PosUvT&lt; PosTypeT, FlagT &gt;::uv</definition>
+        <argsstring>() const</argsstring>
+        <name>uv</name>
+        <qualifiedname>castor3d::shader::PosUvT::uv</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslBaseIO.hpp" line="72" column="6" bodyfile="Castor3D/Shader/Shaders/GlslBaseIO.hpp" bodystart="72" bodyend="72"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>PosUvStructT&lt; PosTypeT, FlagT &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::PosUvT&lt; PosTypeT, FlagT &gt;</label>
+        <link refid="d0/d91/a07447"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>PosUvStructT&lt; PosTypeT, FlagT &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::PosUvT&lt; PosTypeT, FlagT &gt;</label>
+        <link refid="d0/d91/a07447"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslBaseIO.hpp" line="61" column="1" bodyfile="Castor3D/Shader/Shaders/GlslBaseIO.hpp" bodystart="63" bodyend="73"/>
+    <listofallmembers>
+      <member refid="d0/d91/a07447_1a34fb0bd7116d97238f000e3f6fc9013b" prot="public" virt="non-virtual"><scope>castor3d::shader::PosUvT</scope><name>position</name></member>
+      <member refid="d0/d91/a07447_1aaad7e2354ff9286cb1f2ed89995a1d46" prot="public" virt="non-virtual"><scope>castor3d::shader::PosUvT</scope><name>PosUvT</name></member>
+      <member refid="d0/d91/a07447_1a34daa585e6d1fb475b0939d5b80f6b05" prot="public" virt="non-virtual"><scope>castor3d::shader::PosUvT</scope><name>uv</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

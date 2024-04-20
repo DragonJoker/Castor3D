@@ -1,0 +1,282 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/d5e/a04363" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::AttenuationMapComponent</compoundname>
+    <basecompoundref refid="da/d9f/a04859" prot="public" virt="non-virtual">castor3d::PassMapComponent</basecompoundref>
+    <includes local="no">AttenuationMapComponent.hpp</includes>
+    <innerclass refid="dd/d06/a04371" prot="public">castor3d::AttenuationMapComponent::ComponentsShader</innerclass>
+    <innerclass refid="dd/db4/a04367" prot="public">castor3d::AttenuationMapComponent::MaterialShader</innerclass>
+    <innerclass refid="de/d2b/a04375" prot="public">castor3d::AttenuationMapComponent::Plugin</innerclass>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d2/d5e/a04363_1abb4a2eda571197177d368d081ae5bca4" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr <ref refid="d9/dba/a02278_1a0ab3a08edb07cc34b4574bc3799960d6" kindref="member">TextureFlag</ref></type>
+        <definition>constexpr TextureFlag castor3d::AttenuationMapComponent::Attenuation</definition>
+        <argsstring></argsstring>
+        <name>Attenuation</name>
+        <qualifiedname>castor3d::AttenuationMapComponent::Attenuation</qualifiedname>
+        <initializer>= <ref refid="d9/dba/a02278_1a0ab3a08edb07cc34b4574bc3799960d6" kindref="member">TextureFlag</ref>( 0x01u )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp" line="18" column="30" bodyfile="Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp" bodystart="18" bodyend="-1"/>
+        <referencedby refid="dd/d06/a04371_1a1fa1d6c3f0a09ab0d66f6c6c0aead093" compoundref="d7/def/a00521" startline="42" endline="45">castor3d::AttenuationMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="de/d2b/a04375_1aedd084ba8051d638200203111fd0b7ee" compoundref="d7/def/a00521" startline="91" endline="94">castor3d::AttenuationMapComponent::Plugin::getTextureFlags</referencedby>
+        <referencedby refid="de/d2b/a04375_1a06014b43d2f15929682eb2f902b83af8" compoundref="d7/def/a00521" startline="103" endline="109">castor3d::AttenuationMapComponent::Plugin::getTextureFlagsName</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d5e/a04363_1a81ee3af7e3fd41bb14bb49d86acbc70e" prot="public" static="yes" mutable="no">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const</type>
+        <definition>C3D_API castor::String const castor3d::AttenuationMapComponent::TypeName</definition>
+        <argsstring></argsstring>
+        <name>TypeName</name>
+        <qualifiedname>castor3d::AttenuationMapComponent::TypeName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp" line="125" column="37" bodyfile="Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d2/d5e/a04363_1a20c763facbe861e730ec4fb48886ada9" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>PassComponentPluginUPtr</type>
+        <definition>static PassComponentPluginUPtr castor3d::AttenuationMapComponent::createPlugin</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponent)</argsstring>
+        <name>createPlugin</name>
+        <qualifiedname>castor3d::AttenuationMapComponent::createPlugin</qualifiedname>
+        <param>
+          <type><ref refid="d4/d10/a04839" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp" line="118" column="32" bodyfile="Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp" bodystart="118" bodyend="121"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d5e/a04363_1a5f9135f6051d9afafb342fdc215d2dc2" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AttenuationMapComponent::AttenuationMapComponent</definition>
+        <argsstring>(Pass &amp;pass)</argsstring>
+        <name>AttenuationMapComponent</name>
+        <qualifiedname>castor3d::AttenuationMapComponent::AttenuationMapComponent</qualifiedname>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp" line="123" column="18"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/d5e/a04363_1a0837f9e1336ce8181483bd875bd2605d" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>PassComponentUPtr</type>
+        <definition>PassComponentUPtr castor3d::AttenuationMapComponent::doClone</definition>
+        <argsstring>(Pass &amp;pass) const override</argsstring>
+        <name>doClone</name>
+        <qualifiedname>castor3d::AttenuationMapComponent::doClone</qualifiedname>
+        <reimplements refid="db/db4/a04835_1ad87fbb1539bb6c5004cbcb02ddfcd46f">doClone</reimplements>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Clone ce composant dans la passe donnée. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit le composant cloné. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp" line="128" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d5e/a04363_1a1397ccc8f4c85b151fd78378df6caeb4" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::AttenuationMapComponent::doFillConfig</definition>
+        <argsstring>(TextureConfiguration &amp;configuration, ConfigurationVisitorBase &amp;vis) const override</argsstring>
+        <name>doFillConfig</name>
+        <qualifiedname>castor3d::AttenuationMapComponent::doFillConfig</qualifiedname>
+        <reimplements refid="da/d9f/a04859_1a4190f41aad5ae99f3358bd8d591cc178">doFillConfig</reimplements>
+        <param>
+          <type><ref refid="d5/dc1/a04943" kindref="compound">TextureConfiguration</ref> &amp;</type>
+          <declname>configuration</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dc2/a05011" kindref="compound">ConfigurationVisitorBase</ref> &amp;</type>
+          <declname>vis</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp" line="129" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Pass &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::AttenuationMapComponent</label>
+        <link refid="d2/d5e/a04363"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="db/db4/a04835"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PassMapComponent</label>
+        <link refid="da/d9f/a04859"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Pass &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::AttenuationMapComponent</label>
+        <link refid="d2/d5e/a04363"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>TypeName</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="db/db4/a04835"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_type</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_plugin</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_materialShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="d2/d2e/a04831"/>
+      </node>
+      <node id="2">
+        <label>castor3d::PassMapComponent</label>
+        <link refid="da/d9f/a04859"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="d6/da6/a04827"/>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="7">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp" line="15" column="1" bodyfile="Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp" bodystart="17" bodyend="131"/>
+    <listofallmembers>
+      <member refid="db/db4/a04835_1a0a937d88f0f9cf4d9b725850764c3cd6" prot="public" virt="virtual"><scope>castor3d::AttenuationMapComponent</scope><name>accept</name></member>
+      <member refid="d2/d5e/a04363_1abb4a2eda571197177d368d081ae5bca4" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>Attenuation</name></member>
+      <member refid="d2/d5e/a04363_1a5f9135f6051d9afafb342fdc215d2dc2" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>AttenuationMapComponent</name></member>
+      <member refid="db/db4/a04835_1ae7c88041d1aae747532e537b23e41d24" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>clone</name></member>
+      <member refid="d2/d5e/a04363_1a20c763facbe861e730ec4fb48886ada9" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>createPlugin</name></member>
+      <member refid="d2/d5e/a04363_1a0837f9e1336ce8181483bd875bd2605d" prot="private" virt="virtual"><scope>castor3d::AttenuationMapComponent</scope><name>doClone</name></member>
+      <member refid="d2/d5e/a04363_1a1397ccc8f4c85b151fd78378df6caeb4" prot="private" virt="virtual"><scope>castor3d::AttenuationMapComponent</scope><name>doFillConfig</name></member>
+      <member refid="db/db4/a04835_1a8f6b8c698164310e2052be733834224a" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>fillBuffer</name></member>
+      <member refid="db/db4/a04835_1aeb5762d7de650b40a394f2e8bf8f5c21" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>fillChannel</name></member>
+      <member refid="da/d9f/a04859_1a262e295a016c8768e87c87d42aa1d3e7" prot="public" virt="virtual"><scope>castor3d::AttenuationMapComponent</scope><name>fillConfig</name></member>
+      <member refid="db/db4/a04835_1a89e385760304300908e5b308b2f1da4e" prot="public" virt="virtual"><scope>castor3d::AttenuationMapComponent</scope><name>getColour</name></member>
+      <member refid="db/db4/a04835_1a32748929920ba651a4c5a1d5af435e77" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>getDependencies</name></member>
+      <member refid="db/db4/a04835_1a625adfcb001824768e8a99a3c03dcbb1" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>getId</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>getOwner</name></member>
+      <member refid="db/db4/a04835_1af015484800f32c718d067a80b76709e9" prot="public" virt="virtual"><scope>castor3d::AttenuationMapComponent</scope><name>getPassFlags</name></member>
+      <member refid="db/db4/a04835_1a5da51664f6736be0199d66266779b395" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>getPlugin</name></member>
+      <member refid="da/d9f/a04859_1ac98f2807737ea6c3cf305ffb914e7eff" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>getTextureFlags</name></member>
+      <member refid="db/db4/a04835_1a6aae2659952d2e9a76caabf56d69fba5" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>getType</name></member>
+      <member refid="db/db4/a04835_1a5af951f374ee82fd61e57f96e6193f1c" prot="public" virt="virtual"><scope>castor3d::AttenuationMapComponent</scope><name>hasColour</name></member>
+      <member refid="db/db4/a04835_1a7c90ef14fa9721b433d361c8492c3112" prot="protected" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>m_dependencies</name></member>
+      <member refid="db/db4/a04835_1a01ecec7d563666b63d7d888061e84ab1" prot="protected" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>m_dirty</name></member>
+      <member refid="db/db4/a04835_1a3d2b1319d92ba70ff8450c7873492b67" prot="protected" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>m_id</name></member>
+      <member refid="db/db4/a04835_1abc188311e9251e933a838a256802c4c6" prot="protected" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>m_materialShader</name></member>
+      <member refid="db/db4/a04835_1ae62babd07d3faf3014f1d0af1ab03357" prot="protected" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>m_plugin</name></member>
+      <member refid="db/db4/a04835_1ae5775b9cf42c79c375cbd4a033e6629f" prot="protected" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>m_type</name></member>
+      <member refid="db/db4/a04835_1a8f7373eec3c7769cdcd84908523d797f" prot="public" virt="virtual"><scope>castor3d::AttenuationMapComponent</scope><name>onAddToPass</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>OwnedBy</name></member>
+      <member refid="db/db4/a04835_1a68b747d970c85a2799fb63b6825b0fc4" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>PassComponent</name></member>
+      <member refid="da/d9f/a04859_1a0a24dbd2464fe207df6d1033924dc50e" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>PassMapComponent</name></member>
+      <member refid="db/db4/a04835_1a2541aa58a662bd8566c602335387cb98" prot="public" virt="virtual"><scope>castor3d::AttenuationMapComponent</scope><name>setColour</name></member>
+      <member refid="db/db4/a04835_1ab6a5bf94fc25210c03c9bed7ddf1ae31" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>setColour</name></member>
+      <member refid="db/db4/a04835_1a61fa7c8562281c049a874b1ebc2635e4" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>setColour</name></member>
+      <member refid="db/db4/a04835_1a2256e542753e1f85e6812de7e6fdc261" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>setColour</name></member>
+      <member refid="d2/d5e/a04363_1a81ee3af7e3fd41bb14bb49d86acbc70e" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>TypeName</name></member>
+      <member refid="db/db4/a04835_1acfedf31a75536a40a891b3308083d738" prot="public" virt="virtual"><scope>castor3d::AttenuationMapComponent</scope><name>update</name></member>
+      <member refid="db/db4/a04835_1a967ba1259e24663e4a89352251acf841" prot="public" virt="non-virtual"><scope>castor3d::AttenuationMapComponent</scope><name>writeText</name></member>
+      <member refid="db/db4/a04835_1a6a3e343b81806ff616280b4eca87140b" prot="public" virt="virtual"><scope>castor3d::AttenuationMapComponent</scope><name>~PassComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

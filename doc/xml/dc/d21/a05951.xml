@@ -1,0 +1,730 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d21/a05951" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::EnvironmentMapPass</compoundname>
+    <basecompoundref refid="d6/da8/a08227" prot="public" virt="non-virtual">castor::OwnedBy&lt; EnvironmentMap &gt;</basecompoundref>
+    <basecompoundref refid="d5/d3c/a08223" prot="public" virt="non-virtual">castor::NamedBaseT&lt; String &gt;</basecompoundref>
+    <includes local="no">EnvironmentMapPass.hpp</includes>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="dc/d21/a05951_1aec6cbef0e391ac51c269d9ce44818424" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::EnvironmentMapPass::getLastPass</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getLastPass</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::getLastPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Accesseurs. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="119" column="23" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="119" bodyend="122"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/d21/a05951_1a55dca8f9130fb5250a9bba8766f5a8ea" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::EnvironmentMapPass::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="131" column="21" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1abe129695fbec8acb8b2cba524ab2471d" prot="private" static="no" mutable="no">
+        <type>crg::FrameGraph</type>
+        <definition>crg::FrameGraph castor3d::EnvironmentMapPass::m_graph</definition>
+        <argsstring></argsstring>
+        <name>m_graph</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_graph</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="132" column="17" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1ae951fb3d5cdbee555af0f767c619c726" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d2c/a06895" kindref="compound">SceneBackground</ref> &amp;</type>
+        <definition>SceneBackground&amp; castor3d::EnvironmentMapPass::m_background</definition>
+        <argsstring></argsstring>
+        <name>m_background</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_background</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="133" column="18" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="133" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1aed6209c7a35edc3fbf7e1e0955bef0a4" prot="private" static="no" mutable="no">
+        <type>SceneNodeUPtr</type>
+        <definition>SceneNodeUPtr castor3d::EnvironmentMapPass::m_node</definition>
+        <argsstring></argsstring>
+        <name>m_node</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_node</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="134" column="15" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1ae9baaf59be9a6f52f99e014087b43f21" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::EnvironmentMapPass::m_index</definition>
+        <argsstring></argsstring>
+        <name>m_index</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="135" column="10" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1aed946da7261e3d0f97dbd6c1ac066856" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
+        <definition>CubeMapFace castor3d::EnvironmentMapPass::m_face</definition>
+        <argsstring></argsstring>
+        <name>m_face</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_face</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="136" column="13" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1a901f006451277bc7bf3283ab4b3cd62c" prot="private" static="no" mutable="no">
+        <type>CameraUPtr</type>
+        <definition>CameraUPtr castor3d::EnvironmentMapPass::m_camera</definition>
+        <argsstring></argsstring>
+        <name>m_camera</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_camera</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="137" column="12" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1a600905a446453f78d7f8af7771a20510" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> const  *</type>
+        <definition>SceneNode const* castor3d::EnvironmentMapPass::m_currentNode</definition>
+        <argsstring></argsstring>
+        <name>m_currentNode</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_currentNode</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="138" column="18" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="138" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1a63d01ac7769cbe0e8fdcd1049b99716a" prot="private" static="no" mutable="no">
+        <type>SceneCullerUPtr</type>
+        <definition>SceneCullerUPtr castor3d::EnvironmentMapPass::m_culler</definition>
+        <argsstring></argsstring>
+        <name>m_culler</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_culler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="139" column="17" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1ab558a6e7d9953b5fc8f80ceaa8671617" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/ddf/a07743" kindref="compound">CameraUbo</ref></type>
+        <definition>CameraUbo castor3d::EnvironmentMapPass::m_cameraUbo</definition>
+        <argsstring></argsstring>
+        <name>m_cameraUbo</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_cameraUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="140" column="11" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1a7b9ebc731df1a088997c589f04f4f834" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d72/a07767" kindref="compound">HdrConfigUbo</ref></type>
+        <definition>HdrConfigUbo castor3d::EnvironmentMapPass::m_hdrConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>m_hdrConfigUbo</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_hdrConfigUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="141" column="14" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1a34e990e98db3cfa0fcfd88037171a770" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/de1/a07827" kindref="compound">SceneUbo</ref></type>
+        <definition>SceneUbo castor3d::EnvironmentMapPass::m_sceneUbo</definition>
+        <argsstring></argsstring>
+        <name>m_sceneUbo</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_sceneUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="142" column="10" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1ab855da0c97f7d937c2d510406fc33cf1" prot="private" static="no" mutable="no">
+        <type>crg::ImageViewId</type>
+        <definition>crg::ImageViewId castor3d::EnvironmentMapPass::m_colourRenderView</definition>
+        <argsstring></argsstring>
+        <name>m_colourRenderView</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_colourRenderView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="143" column="18" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1a7744706b802316538ebc615c41fa74ef" prot="private" static="no" mutable="no">
+        <type>crg::ImageViewId</type>
+        <definition>crg::ImageViewId castor3d::EnvironmentMapPass::m_colourResultView</definition>
+        <argsstring></argsstring>
+        <name>m_colourResultView</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_colourResultView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="144" column="18" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1afcd81c617b0ff947da7a9da271e5383a" prot="private" static="no" mutable="no">
+        <type>crg::ImageViewId</type>
+        <definition>crg::ImageViewId castor3d::EnvironmentMapPass::m_depthView</definition>
+        <argsstring></argsstring>
+        <name>m_depthView</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_depthView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="145" column="18" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1a6e2dc0ea22274ffe4f1ff12d64f33f03" prot="private" static="no" mutable="no">
+        <type>BackgroundRendererUPtr</type>
+        <definition>BackgroundRendererUPtr castor3d::EnvironmentMapPass::m_backgroundRenderer</definition>
+        <argsstring></argsstring>
+        <name>m_backgroundRenderer</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_backgroundRenderer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="146" column="24" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1ac59a9681cc595cf3ee894187e8b8a380" prot="private" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::EnvironmentMapPass::m_opaquePassDesc</definition>
+        <argsstring></argsstring>
+        <name>m_opaquePassDesc</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_opaquePassDesc</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="147" column="17" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="147" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1a3c53071ec11aa54c7ffb2ee2117f565a" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d90/a06587" kindref="compound">RenderTechniqueNodesPass</ref> *</type>
+        <definition>RenderTechniqueNodesPass* castor3d::EnvironmentMapPass::m_opaquePass</definition>
+        <argsstring></argsstring>
+        <name>m_opaquePass</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_opaquePass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="148" column="27" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="148" bodyend="148"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1a2608930c5154839474581345a6e46668" prot="private" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::EnvironmentMapPass::m_transparentPassDesc</definition>
+        <argsstring></argsstring>
+        <name>m_transparentPassDesc</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_transparentPassDesc</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="149" column="17" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="149" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1aac7d6e5ef42399c03c05ac271ca3b42c" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d90/a06587" kindref="compound">RenderTechniqueNodesPass</ref> *</type>
+        <definition>RenderTechniqueNodesPass* castor3d::EnvironmentMapPass::m_transparentPass</definition>
+        <argsstring></argsstring>
+        <name>m_transparentPass</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_transparentPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="150" column="27" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="150" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d21/a05951_1aa98025a53454507d013f6c27b006b4c6" prot="private" static="no" mutable="no">
+        <type>crg::RunnableGraphPtr</type>
+        <definition>crg::RunnableGraphPtr castor3d::EnvironmentMapPass::m_runnable</definition>
+        <argsstring></argsstring>
+        <name>m_runnable</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::m_runnable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="151" column="23" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="151" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d21/a05951_1ac83b37513cadf3625eb1544c8a67d87e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::EnvironmentMapPass::EnvironmentMapPass</definition>
+        <argsstring>(RenderDevice const &amp;device, EnvironmentMap &amp;environmentMap, SceneNodeUPtr faceNode, uint32_t index, CubeMapFace face, SceneBackground &amp;background)</argsstring>
+        <name>EnvironmentMapPass</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::EnvironmentMapPass</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d1f/a05947" kindref="compound">EnvironmentMap</ref> &amp;</type>
+          <declname>environmentMap</declname>
+        </param>
+        <param>
+          <type>SceneNodeUPtr</type>
+          <declname>faceNode</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a13e6b0c4ce255c1deb4c525562111e5b" kindref="member">CubeMapFace</ref></type>
+          <declname>face</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d2c/a06895" kindref="compound">SceneBackground</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le device GPU. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">environmentMap</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le reflection map parente. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">faceNode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le noeud depuis lequel on crée la caméra. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;index du cube que cette passe dessine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">face</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La face du cube que cette passe dessine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">background</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le fond de la scène. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="53" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d21/a05951_1acb4bac7d6c1a0302924f2f10c66f248c" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::EnvironmentMapPass::~EnvironmentMapPass</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~EnvironmentMapPass</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::~EnvironmentMapPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="59" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d21/a05951_1aa4a97a5fdddb9b1498e9f36c09b04f2c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::EnvironmentMapPass::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::update</qualifiedname>
+        <param>
+          <type><ref refid="dc/d23/a06511" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour la passe de rendu, au niveau CPU. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données d&apos;update. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="68" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d21/a05951_1aca48cad9e2c99338e974a16759edd688" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::EnvironmentMapPass::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::update</qualifiedname>
+        <param>
+          <type><ref refid="d9/d4b/a06519" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour la passe de rendu, au niveau GPU. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données d&apos;update. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="77" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d21/a05951_1a7b0bde8646653a729677a46881292608" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::EnvironmentMapPass::record</definition>
+        <argsstring>()</argsstring>
+        <name>record</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::record</qualifiedname>
+        <briefdescription>
+<para>Enregistre les commandes de la passe. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="84" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d21/a05951_1aaa5c9fb1f680dee1ef9a9193252c549f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::SemaphoreWaitArray</type>
+        <definition>C3D_API crg::SemaphoreWaitArray castor3d::EnvironmentMapPass::render</definition>
+        <argsstring>(crg::SemaphoreWaitArray const &amp;toWait, ashes::Queue const &amp;queue)</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::render</qualifiedname>
+        <param>
+          <type>crg::SemaphoreWaitArray const &amp;</type>
+          <declname>toWait</declname>
+        </param>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <briefdescription>
+<para>Dessine la texture d&apos;environnement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">toWait</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les sémaphores à attendre. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue recevant les commandes de dessin. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Les sémaphores signalés par ce dessin. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="97" column="33"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d21/a05951_1aa86d80b4f9930f9ca8ff36d4c7149b50" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::EnvironmentMapPass::attachTo</definition>
+        <argsstring>(SceneNode &amp;node)</argsstring>
+        <name>attachTo</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::attachTo</qualifiedname>
+        <param>
+          <type><ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para>Attache cette passe au noeud donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Définit le noeud ignoré pour les render passes internes. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le noeud. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="109" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="dc/d21/a05951_1aeca52de8dee209d79930868e6ef75cef" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::EnvironmentMapPass::doCreateOpaquePass</definition>
+        <argsstring>(crg::FramePass const *previousPass)</argsstring>
+        <name>doCreateOpaquePass</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::doCreateOpaquePass</qualifiedname>
+        <param>
+          <type>crg::FramePass const *</type>
+          <declname>previousPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="126" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d21/a05951_1a7e8094eacf883f1c35c2af8cd356dfb7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::EnvironmentMapPass::doCreateTransparentPass</definition>
+        <argsstring>(crg::FramePass const *previousPass)</argsstring>
+        <name>doCreateTransparentPass</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::doCreateTransparentPass</qualifiedname>
+        <param>
+          <type>crg::FramePass const *</type>
+          <declname>previousPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="127" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d21/a05951_1a2dae6d1aa18ae8230fd86289dbab63c5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EnvironmentMapPass::doCreateGenMipmapsPass</definition>
+        <argsstring>(crg::FramePass const *previousPass)</argsstring>
+        <name>doCreateGenMipmapsPass</name>
+        <qualifiedname>castor3d::EnvironmentMapPass::doCreateGenMipmapsPass</qualifiedname>
+        <param>
+          <type>crg::FramePass const *</type>
+          <declname>previousPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="128" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; EnvironmentMap &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; EnvironmentMap &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::EnvironmentMapPass</label>
+        <link refid="dc/d21/a05951"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; EnvironmentMap &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; EnvironmentMap &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::EnvironmentMapPass</label>
+        <link refid="dc/d21/a05951"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" line="30" column="1" bodyfile="Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp" bodystart="33" bodyend="152"/>
+    <listofallmembers>
+      <member refid="dc/d21/a05951_1aa86d80b4f9930f9ca8ff36d4c7149b50" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>attachTo</name></member>
+      <member refid="dc/d21/a05951_1a2dae6d1aa18ae8230fd86289dbab63c5" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>doCreateGenMipmapsPass</name></member>
+      <member refid="dc/d21/a05951_1aeca52de8dee209d79930868e6ef75cef" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>doCreateOpaquePass</name></member>
+      <member refid="dc/d21/a05951_1a7e8094eacf883f1c35c2af8cd356dfb7" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>doCreateTransparentPass</name></member>
+      <member refid="dc/d21/a05951_1ac83b37513cadf3625eb1544c8a67d87e" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>EnvironmentMapPass</name></member>
+      <member refid="dc/d21/a05951_1aec6cbef0e391ac51c269d9ce44818424" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>getLastPass</name></member>
+      <member refid="d5/d3c/a08223_1abc1fa9ec1a50d2023373baa4d4c79519" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>getName</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>getOwner</name></member>
+      <member refid="dc/d21/a05951_1ae951fb3d5cdbee555af0f767c619c726" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_background</name></member>
+      <member refid="dc/d21/a05951_1a6e2dc0ea22274ffe4f1ff12d64f33f03" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_backgroundRenderer</name></member>
+      <member refid="dc/d21/a05951_1a901f006451277bc7bf3283ab4b3cd62c" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_camera</name></member>
+      <member refid="dc/d21/a05951_1ab558a6e7d9953b5fc8f80ceaa8671617" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_cameraUbo</name></member>
+      <member refid="dc/d21/a05951_1ab855da0c97f7d937c2d510406fc33cf1" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_colourRenderView</name></member>
+      <member refid="dc/d21/a05951_1a7744706b802316538ebc615c41fa74ef" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_colourResultView</name></member>
+      <member refid="dc/d21/a05951_1a63d01ac7769cbe0e8fdcd1049b99716a" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_culler</name></member>
+      <member refid="dc/d21/a05951_1a600905a446453f78d7f8af7771a20510" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_currentNode</name></member>
+      <member refid="dc/d21/a05951_1afcd81c617b0ff947da7a9da271e5383a" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_depthView</name></member>
+      <member refid="dc/d21/a05951_1a55dca8f9130fb5250a9bba8766f5a8ea" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_device</name></member>
+      <member refid="dc/d21/a05951_1aed946da7261e3d0f97dbd6c1ac066856" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_face</name></member>
+      <member refid="dc/d21/a05951_1abe129695fbec8acb8b2cba524ab2471d" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_graph</name></member>
+      <member refid="dc/d21/a05951_1a7b9ebc731df1a088997c589f04f4f834" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_hdrConfigUbo</name></member>
+      <member refid="dc/d21/a05951_1ae9baaf59be9a6f52f99e014087b43f21" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_index</name></member>
+      <member refid="d5/d3c/a08223_1a869b429a7190ecf614d8221b270e6dca" prot="protected" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_name</name></member>
+      <member refid="dc/d21/a05951_1aed6209c7a35edc3fbf7e1e0955bef0a4" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_node</name></member>
+      <member refid="dc/d21/a05951_1a3c53071ec11aa54c7ffb2ee2117f565a" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_opaquePass</name></member>
+      <member refid="dc/d21/a05951_1ac59a9681cc595cf3ee894187e8b8a380" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_opaquePassDesc</name></member>
+      <member refid="dc/d21/a05951_1aa98025a53454507d013f6c27b006b4c6" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_runnable</name></member>
+      <member refid="dc/d21/a05951_1a34e990e98db3cfa0fcfd88037171a770" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_sceneUbo</name></member>
+      <member refid="dc/d21/a05951_1aac7d6e5ef42399c03c05ac271ca3b42c" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_transparentPass</name></member>
+      <member refid="dc/d21/a05951_1a2608930c5154839474581345a6e46668" prot="private" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>m_transparentPassDesc</name></member>
+      <member refid="d5/d3c/a08223_1a4a6e4748603541685b04f95fb91efb26" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>NamedBaseT</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>OwnedBy</name></member>
+      <member refid="dc/d21/a05951_1a7b0bde8646653a729677a46881292608" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>record</name></member>
+      <member refid="d5/d3c/a08223_1a2d62ce1925efead03c4e0842c06b3e11" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>rename</name></member>
+      <member refid="dc/d21/a05951_1aaa5c9fb1f680dee1ef9a9193252c549f" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>render</name></member>
+      <member refid="dc/d21/a05951_1aa4a97a5fdddb9b1498e9f36c09b04f2c" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>update</name></member>
+      <member refid="dc/d21/a05951_1aca48cad9e2c99338e974a16759edd688" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>update</name></member>
+      <member refid="dc/d21/a05951_1acb4bac7d6c1a0302924f2f10c66f248c" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentMapPass</scope><name>~EnvironmentMapPass</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

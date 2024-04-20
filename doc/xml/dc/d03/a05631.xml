@@ -1,0 +1,216 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d03/a05631" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::TriFaceMapping::Plugin</compoundname>
+    <basecompoundref refid="db/de6/a05607" prot="public" virt="non-virtual">castor3d::SubmeshComponentPlugin</basecompoundref>
+    <includes local="no">TriFaceMapping.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d03/a05631_1a5100e6a372379ec860978a695aa170b2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>SubmeshComponentUPtr</type>
+        <definition>SubmeshComponentUPtr castor3d::TriFaceMapping::Plugin::createComponent</definition>
+        <argsstring>(Submesh &amp;submesh) const override</argsstring>
+        <name>createComponent</name>
+        <qualifiedname>castor3d::TriFaceMapping::Plugin::createComponent</qualifiedname>
+        <reimplements refid="db/de6/a05607_1a7f8d72918ca4c01509c4980d57efb787">createComponent</reimplements>
+        <param>
+          <type><ref refid="dd/df1/a05635" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+<para>Crée un composant pour le submesh donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;ajoute pas le composant au submesh. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le submesh. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="182" column="22" bodyfile="Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="182" bodyend="185"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d03/a05631_1a5bf9cb9f544d9a18fb707e3e5a6f425d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="virtual">
+        <type><ref refid="d9/dba/a02278_1af0f2b6cb91a8d84eb40f3d6d11c054d4" kindref="member">SubmeshComponentFlag</ref></type>
+        <definition>SubmeshComponentFlag castor3d::TriFaceMapping::Plugin::getTriangleIndexFlag</definition>
+        <argsstring>() const noexcept override</argsstring>
+        <name>getTriangleIndexFlag</name>
+        <qualifiedname>castor3d::TriFaceMapping::Plugin::getTriangleIndexFlag</qualifiedname>
+        <reimplements refid="db/de6/a05607_1a69ba33e59aa8ef40d05a2e9d69a7ffad">getTriangleIndexFlag</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="187" column="22" bodyfile="Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="187" bodyend="190"/>
+        <references refid="db/de6/a05607_1ae2d8bf546001401b29ccd5c8b8441395" compoundref="d8/d2d/a00815" startline="405" endline="408">castor3d::SubmeshComponentPlugin::getComponentFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d03/a05631_1a532d133956826cfad3c2ee678915a8a4" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="virtual">
+        <type><ref refid="d9/dba/a02278_1af0f2b6cb91a8d84eb40f3d6d11c054d4" kindref="member">SubmeshComponentFlag</ref></type>
+        <definition>SubmeshComponentFlag castor3d::TriFaceMapping::Plugin::getIndexFlag</definition>
+        <argsstring>() const noexcept override</argsstring>
+        <name>getIndexFlag</name>
+        <qualifiedname>castor3d::TriFaceMapping::Plugin::getIndexFlag</qualifiedname>
+        <reimplements refid="db/de6/a05607_1a7d22936c56f121a721f78be9bd8e56f9">getIndexFlag</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="192" column="22" bodyfile="Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="192" bodyend="195"/>
+        <references refid="db/de6/a05607_1ae2d8bf546001401b29ccd5c8b8441395" compoundref="d8/d2d/a00815" startline="405" endline="408">castor3d::SubmeshComponentPlugin::getComponentFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d03/a05631_1af2ec2605680c93e74f196fa7b2f533b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::SubmeshComponentPlugin::SubmeshComponentPlugin</definition>
+        <argsstring>(SubmeshComponentPlugin const &amp;)=delete</argsstring>
+        <name>SubmeshComponentPlugin</name>
+        <qualifiedname>castor3d::TriFaceMapping::Plugin::SubmeshComponentPlugin</qualifiedname>
+        <param>
+          <type><ref refid="db/de6/a05607" kindref="compound">SubmeshComponentPlugin</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="180" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d03/a05631_1a0f55311906cf1ea0d395e519da82b919" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SubmeshComponentPlugin::SubmeshComponentPlugin</definition>
+        <argsstring>(SubmeshComponentPlugin &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>SubmeshComponentPlugin</name>
+        <qualifiedname>castor3d::TriFaceMapping::Plugin::SubmeshComponentPlugin</qualifiedname>
+        <param>
+          <type><ref refid="db/de6/a05607" kindref="compound">SubmeshComponentPlugin</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="180" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d03/a05631_1aa45bed165ac9d162fcee04ffee25736e" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SubmeshComponentPlugin::SubmeshComponentPlugin</definition>
+        <argsstring>(SubmeshComponentRegister const &amp;submeshComponents, castor::UserContextCreator const &amp;pcreateParserContext={})</argsstring>
+        <name>SubmeshComponentPlugin</name>
+        <qualifiedname>castor3d::TriFaceMapping::Plugin::SubmeshComponentPlugin</qualifiedname>
+        <param>
+          <type><ref refid="da/d5c/a05615" kindref="compound">SubmeshComponentRegister</ref> const &amp;</type>
+          <declname>submeshComponents</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a60b7ae265f5b3f1c88303e2abbbc80ed" kindref="member">castor::UserContextCreator</ref> const &amp;</type>
+          <declname>pcreateParserContext</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submeshComponents</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le registre de composants. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pcreateParserContext</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La fonction de création d&apos;un contexte défini par l&apos;utilisateur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="180" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp" bodystart="346" bodyend="351"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::SubmeshComponentPlugin</label>
+        <link refid="db/de6/a05607"/>
+      </node>
+      <node id="1">
+        <label>castor3d::TriFaceMapping::Plugin</label>
+        <link refid="dc/d03/a05631"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::SubmeshComponentPlugin</label>
+        <link refid="db/de6/a05607"/>
+      </node>
+      <node id="1">
+        <label>castor3d::TriFaceMapping::Plugin</label>
+        <link refid="dc/d03/a05631"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="176" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="178" bodyend="196"/>
+    <listofallmembers>
+      <member refid="dc/d03/a05631_1a5100e6a372379ec860978a695aa170b2" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>createComponent</name></member>
+      <member refid="db/de6/a05607_1ada1194785aa645ce4fd8cbd8e9ccedd7" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>createParserContext</name></member>
+      <member refid="db/de6/a05607_1a683338ec632eb0b70e8d8276fed1055b" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>createParsers</name></member>
+      <member refid="db/de6/a05607_1ad2ff1ab3ab8bf2cf2e020491042eb23f" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>createRasterSurfaceShader</name></member>
+      <member refid="db/de6/a05607_1a9af9ff2d30814a3b6d4271480f135e17" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>createRenderShader</name></member>
+      <member refid="db/de6/a05607_1a4ab892f8600a579ba7a112e20c5cae41" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>createSections</name></member>
+      <member refid="db/de6/a05607_1a353a30b6e4686f507eb1e7855831fb9b" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>createVertexSurfaceShader</name></member>
+      <member refid="db/de6/a05607_1ae160238b188152471ee00d7c53990642" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getBitangentFlag</name></member>
+      <member refid="db/de6/a05607_1af76d5bb3d874e9d21caa50079a8d3593" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getColourFlag</name></member>
+      <member refid="db/de6/a05607_1ae2d8bf546001401b29ccd5c8b8441395" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getComponentFlags</name></member>
+      <member refid="db/de6/a05607_1a4c5e33b84f3db3768e765660e4459a88" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getId</name></member>
+      <member refid="dc/d03/a05631_1a532d133956826cfad3c2ee678915a8a4" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getIndexFlag</name></member>
+      <member refid="db/de6/a05607_1a5dd80501a7de76b68c65ba5d81c0df7d" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getInstantiationFlag</name></member>
+      <member refid="db/de6/a05607_1ac8d883306a8a7bddfcecaab94f696407" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getLineIndexFlag</name></member>
+      <member refid="db/de6/a05607_1ab8c260af62e905b9fd46752196e44686" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getMeshletFlag</name></member>
+      <member refid="db/de6/a05607_1ab20316a816bb7926d8b21845f5cd1dff" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getMorphFlag</name></member>
+      <member refid="db/de6/a05607_1aa343bd5d57e629be87426b9edb270212" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getNormalFlag</name></member>
+      <member refid="db/de6/a05607_1a1a7e6ccebb44326bd5a5e5faaf682e59" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getPassMaskFlag</name></member>
+      <member refid="db/de6/a05607_1a947607bc8d72daf824574b468a28edb1" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getPositionFlag</name></member>
+      <member refid="db/de6/a05607_1ae84db74e8449d7618fe976b88e11ae9b" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getRegister</name></member>
+      <member refid="db/de6/a05607_1a17611007595d29a0ca01ac93013839f1" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getRenderFlag</name></member>
+      <member refid="db/de6/a05607_1a80e5805632f4b674e3f052d8a822fcf4" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getSkinFlag</name></member>
+      <member refid="db/de6/a05607_1adf8b51246f96bf65433d2cf03e848765" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getTangentFlag</name></member>
+      <member refid="db/de6/a05607_1aea31484558dba08bf299d953876a366a" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getTexcoord0Flag</name></member>
+      <member refid="db/de6/a05607_1ad3f3cf527e54b502f0f395dc43014ed7" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getTexcoord1Flag</name></member>
+      <member refid="db/de6/a05607_1ad0d305353a1ad742dc1b3caa6a13dd34" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getTexcoord2Flag</name></member>
+      <member refid="db/de6/a05607_1a0d38e0331724898614d924f7e161e353" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getTexcoord3Flag</name></member>
+      <member refid="dc/d03/a05631_1a5bf9cb9f544d9a18fb707e3e5a6f425d" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getTriangleIndexFlag</name></member>
+      <member refid="db/de6/a05607_1a65abd3814de668ce176486b410810877" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>getVelocityFlag</name></member>
+      <member refid="db/de6/a05607_1a9d4eaa2af8d022fc9c1e3559b3a01b3d" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>operator=</name></member>
+      <member refid="db/de6/a05607_1a24aabe68a4b81751a6e12ab3497aabee" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>operator=</name></member>
+      <member refid="dc/d03/a05631_1af2ec2605680c93e74f196fa7b2f533b5" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>SubmeshComponentPlugin</name></member>
+      <member refid="dc/d03/a05631_1a0f55311906cf1ea0d395e519da82b919" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>SubmeshComponentPlugin</name></member>
+      <member refid="dc/d03/a05631_1aa45bed165ac9d162fcee04ffee25736e" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>SubmeshComponentPlugin</name></member>
+      <member refid="db/de6/a05607_1a5bf299fb88212a5fccb81465954a0e75" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping::Plugin</scope><name>~SubmeshComponentPlugin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

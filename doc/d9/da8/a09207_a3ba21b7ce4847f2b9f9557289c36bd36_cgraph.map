@@ -1,0 +1,12 @@
+<map id="castor::Range::invPercent" name="castor::Range::invPercent">
+<area shape="rect" id="Node000001" title="Gives the percentage matching the given value." alt="" coords="5,100,176,125"/>
+<area shape="rect" id="Node000002" href="$d9/da8/a09207.html#a18a23ae9545aca1b31a8e13fbeede614" title="Gives the percentage matching the given value." alt="" coords="224,68,379,93"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="174,97,210,92,211,97,175,103"/>
+<area shape="rect" id="Node000004" href="$d9/da8/a09207.html#a068135b0cd55ff059544f0b4f467ebe7" title="Gives the value matching the given percentage." alt="" coords="621,68,761,93"/>
+<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="176,109,379,103,607,86,608,91,379,109,176,115"/>
+<area shape="rect" id="Node000003" href="$d9/da8/a09207.html#a1905ba672068865603e55a41343cf17d" title="Puts a value in the range." alt="" coords="427,5,573,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="342,65,445,32,447,37,343,71"/>
+<area shape="poly" id="edge5_Node000002_Node000004" title=" " alt="" coords="379,85,608,86,608,91,379,91"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="540,28,639,61,638,66,539,33"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="621,76,392,76,392,70,621,71"/>
+</map>

@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/dc0/a06211" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlayPipelineData::DescriptorSets</compoundname>
+    <includes local="no">OverlaysModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/dc0/a06211_1abb64df65289b68a21dedae5325b81006" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::OverlayPipelineData::DescriptorSets::draw</definition>
+        <argsstring></argsstring>
+        <name>draw</name>
+        <qualifiedname>castor3d::OverlayPipelineData::DescriptorSets::draw</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlaysModule.hpp" line="108" column="25" bodyfile="Castor3D/Render/Overlays/OverlaysModule.hpp" bodystart="108" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dc0/a06211_1a5352f08a9795a9cd7c07e7089a761b30" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetCRefArray</type>
+        <definition>ashes::DescriptorSetCRefArray castor3d::OverlayPipelineData::DescriptorSets::all</definition>
+        <argsstring></argsstring>
+        <name>all</name>
+        <qualifiedname>castor3d::OverlayPipelineData::DescriptorSets::all</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlaysModule.hpp" line="109" column="31" bodyfile="Castor3D/Render/Overlays/OverlaysModule.hpp" bodystart="109" bodyend="109"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/Overlays/OverlaysModule.hpp" line="106" column="1" bodyfile="Castor3D/Render/Overlays/OverlaysModule.hpp" bodystart="107" bodyend="110"/>
+    <listofallmembers>
+      <member refid="d3/dc0/a06211_1a5352f08a9795a9cd7c07e7089a761b30" prot="public" virt="non-virtual"><scope>castor3d::OverlayPipelineData::DescriptorSets</scope><name>all</name></member>
+      <member refid="d3/dc0/a06211_1abb64df65289b68a21dedae5325b81006" prot="public" virt="non-virtual"><scope>castor3d::OverlayPipelineData::DescriptorSets</scope><name>draw</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

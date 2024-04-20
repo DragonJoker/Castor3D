@@ -1,0 +1,14 @@
+<map id="castor3d::UniformBufferOffsetT::getAlignedSize" name="castor3d::UniformBufferOffsetT::getAlignedSize">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,59,196,99"/>
+<area shape="rect" id="Node000002" href="$dd/d6d/a03547.html#ab84bd8c5cd37e5b572e44d1cc27470ff" title="Retrieves the aligned size for an element." alt="" coords="244,59,427,99"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,76,231,76,231,81,196,81"/>
+<area shape="rect" id="Node000003" href="$dd/d6d/a03547.html#a3fbdc644f7df40009fe27ea5e2aac221" title=" " alt="" coords="475,29,657,69"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="426,64,461,60,461,65,427,70"/>
+<area shape="rect" id="Node000005" href="$dd/d6d/a03547.html#aef1ea7312b5f180989b18ef8a5503012" title=" " alt="" coords="936,59,1119,99"/>
+<area shape="poly" id="edge7_Node000002_Node000005" title=" " alt="" coords="427,78,475,79,888,79,922,78,922,84,888,84,475,84,427,83"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="523,30,521,20,527,10,543,5,566,3,593,6,607,13,605,18,591,11,566,8,544,10,531,15,526,21,528,28"/>
+<area shape="rect" id="Node000004" href="$dd/d6d/a03547.html#a50320576743162bb269b8d7e5874293d" title=" " alt="" coords="705,29,888,69"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="657,47,692,47,692,52,657,52"/>
+<area shape="poly" id="edge6_Node000004_Node000004" title=" " alt="" coords="754,30,751,20,758,10,773,5,797,3,823,6,838,13,836,18,822,11,797,8,775,10,761,15,756,21,759,28"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="888,58,923,63,922,68,888,64"/>
+</map>

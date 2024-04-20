@@ -1,0 +1,23 @@
+<map id="castor3d::SubmeshComponentData" name="castor3d::SubmeshComponentData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="277,220,505,245"/>
+<area shape="rect" id="Node000003" href="$d6/d39/a05439.html" title=" " alt="" coords="560,5,763,60"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="409,207,468,140,508,103,552,70,575,58,577,62,555,75,512,107,472,144,413,211"/>
+<area shape="rect" id="Node000004" href="$d6/ddb/a05487.html" title=" " alt="" coords="581,85,741,125"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="421,210,480,172,552,134,584,122,586,127,554,139,483,177,423,214"/>
+<area shape="rect" id="Node000007" href="$d0/d2f/a05507.html" title=" " alt="" coords="553,149,769,189"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="459,214,575,186,577,191,460,219"/>
+<area shape="rect" id="Node000008" href="$d7/dbb/a05535.html" title=" " alt="" coords="565,213,757,253"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="519,230,565,230,565,235,519,235"/>
+<area shape="rect" id="Node000009" href="$da/dfb/a05547.html" title=" " alt="" coords="570,277,753,317"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="460,246,577,274,575,279,459,251"/>
+<area shape="rect" id="Node000010" href="$d5/d7e/a05563.html" title=" " alt="" coords="554,341,769,381"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="423,251,483,289,554,326,586,338,584,343,552,331,480,293,421,255"/>
+<area shape="rect" id="Node000011" href="$d5/da0/a05575.html" title=" " alt="" coords="575,405,747,445"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="412,255,471,322,511,359,555,390,579,402,577,407,552,395,507,363,467,326,408,258"/>
+<area shape="rect" id="Node000002" href="$d0/d52/a05583.html" title=" " alt="" coords="5,220,229,245"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="243,230,277,230,277,235,243,235"/>
+<area shape="rect" id="Node000005" href="$d9/d91/a05523.html" title=" " alt="" coords="823,53,983,93"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="755,90,823,81,823,86,756,95"/>
+<area shape="rect" id="Node000006" href="$da/da1/a05627.html" title=" " alt="" coords="817,117,989,157"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="755,114,818,123,817,128,755,120"/>
+</map>

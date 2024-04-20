@@ -1,0 +1,759 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/d28/a07755" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::ColourGradingData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_ColourGradingConfig&quot;, sdw::type::MemoryLayout::eStd140, sdw::Vec3Field&lt; &quot;whiteBalance&quot; &gt;, sdw::FloatField&lt; &quot;postExposure&quot; &gt;, sdw::Vec3Field&lt; &quot;colourFilter&quot; &gt;, sdw::FloatField&lt; &quot;midGray&quot; &gt;, sdw::Vec3Field&lt; &quot;splitToningShadows&quot; &gt;, sdw::FloatField&lt; &quot;contrast&quot; &gt;, sdw::Vec3Field&lt; &quot;splitToningHighlights&quot; &gt;, sdw::FloatField&lt; &quot;splitToningBalance&quot; &gt;, sdw::Vec3Field&lt; &quot;channelMixRed&quot; &gt;, sdw::FloatField&lt; &quot;saturation&quot; &gt;, sdw::Vec3Field&lt; &quot;channelMixGreen&quot; &gt;, sdw::FloatField&lt; &quot;shadowsStart&quot; &gt;, sdw::Vec3Field&lt; &quot;channelMixBlue&quot; &gt;, sdw::FloatField&lt; &quot;shadowsEnd&quot; &gt;, sdw::Vec3Field&lt; &quot;shadows&quot; &gt;, sdw::FloatField&lt; &quot;highlightsStart&quot; &gt;, sdw::Vec3Field&lt; &quot;midtones&quot; &gt;, sdw::FloatField&lt; &quot;highlightsEnd&quot; &gt;, sdw::Vec3Field&lt; &quot;highlights&quot; &gt;, sdw::FloatField&lt; &quot;hueShift&quot; &gt;, sdw::UIntField&lt; &quot;enabled&quot; &gt;, sdw::UIntField&lt; &quot;enableSplitToning&quot; &gt;, sdw::UIntField&lt; &quot;enableShadowMidToneHighlight&quot; &gt;, sdw::UIntField&lt; &quot;enableChannelMix&quot; &gt;, sdw::UIntField&lt; &quot;enableWhiteBalance&quot; &gt;, sdw::UIntField&lt; &quot;enableHueShift&quot; &gt;, sdw::UIntField&lt; &quot;enableContrast&quot; &gt;, sdw::UIntField&lt; &quot;pad0&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">ColourGradingUbo.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/d28/a07755_1ac2f8c8c746ae22c5fa1b339e4b96404e" prot="private" static="no" mutable="no">
+        <type>sdw::FloatArray</type>
+        <definition>sdw::FloatArray castor3d::shader::ColourGradingData::m_paramsLogC</definition>
+        <argsstring></argsstring>
+        <name>m_paramsLogC</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::m_paramsLogC</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="97" column="17" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d28/a07755_1a4b78a6ae62f6cf9fc9250dea45eaf41a" prot="private" static="no" mutable="no">
+        <type>sdw::Mat3x3</type>
+        <definition>sdw::Mat3x3 castor3d::shader::ColourGradingData::m_linearToLms</definition>
+        <argsstring></argsstring>
+        <name>m_linearToLms</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::m_linearToLms</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="98" column="13" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d28/a07755_1a411d1cb1da92d50fd9aacc31eb9abc71" prot="private" static="no" mutable="no">
+        <type>sdw::Mat3x3</type>
+        <definition>sdw::Mat3x3 castor3d::shader::ColourGradingData::m_lmsToLinear</definition>
+        <argsstring></argsstring>
+        <name>m_lmsToLinear</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::m_lmsToLinear</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="99" column="13" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d28/a07755_1a39bceca4808bf430bea31fb808700b9d" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3, sdw::InVec3 &gt; castor3d::shader::ColourGradingData::m_rgbToHsv</definition>
+        <argsstring></argsstring>
+        <name>m_rgbToHsv</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::m_rgbToHsv</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="100" column="15" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d28/a07755_1ac1ef9b70850a4f214f6df1c934f9152d" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3, sdw::InVec3 &gt; castor3d::shader::ColourGradingData::m_hsvToRgb</definition>
+        <argsstring></argsstring>
+        <name>m_hsvToRgb</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::m_hsvToRgb</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="101" column="15" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d28/a07755_1a8464dcabab2316da1a15dbaa27ecb465" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3, sdw::InVec3 &gt; castor3d::shader::ColourGradingData::m_splitToning</definition>
+        <argsstring></argsstring>
+        <name>m_splitToning</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::m_splitToning</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="102" column="15" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d28/a07755_1a5e41e280c6218851772ad01b848e4f8d" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3, sdw::InVec3 &gt; castor3d::shader::ColourGradingData::m_shadowsMidtoneHighlight</definition>
+        <argsstring></argsstring>
+        <name>m_shadowsMidtoneHighlight</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::m_shadowsMidtoneHighlight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="103" column="15" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d28/a07755_1a7bfed1008be083d44438a843f2424a41" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3, sdw::InVec3 &gt; castor3d::shader::ColourGradingData::m_colourGrade</definition>
+        <argsstring></argsstring>
+        <name>m_colourGrade</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::m_colourGrade</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="104" column="15" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d28/a07755_1aa14f17f0ebfb0064a1e84df28e06abad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::ColourGradingData::ColourGradingData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>ColourGradingData</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::ColourGradingData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="53" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a1117976ca095f3f6526e5b1569b194ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::ColourGradingData::colourGrade</definition>
+        <argsstring>(sdw::Vec3 const hdrColour)</argsstring>
+        <name>colourGrade</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::colourGrade</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>hdrColour</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="57" column="19"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/d28/a07755_1a9246f6215bb485c65e88b05133339577" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::enabled</definition>
+        <argsstring>() const</argsstring>
+        <name>enabled</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::enabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="60" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="60" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a2e7f092997a08a7da43619271dc94b1b" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::enableSplitToning</definition>
+        <argsstring>() const</argsstring>
+        <name>enableSplitToning</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::enableSplitToning</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="61" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="61" bodyend="61"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a4c1c7096c1479d28028fc1ab372d76ac" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::enableShadowMidToneHighlight</definition>
+        <argsstring>() const</argsstring>
+        <name>enableShadowMidToneHighlight</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::enableShadowMidToneHighlight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="62" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="62" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a2a9c8f45fc3ceadb9add3b45b7e99658" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::enableChannelMix</definition>
+        <argsstring>() const</argsstring>
+        <name>enableChannelMix</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::enableChannelMix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="63" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="63" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a0528d569fa6455457b7948eb06d41cc1" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::enableWhiteBalance</definition>
+        <argsstring>() const</argsstring>
+        <name>enableWhiteBalance</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::enableWhiteBalance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="64" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="64" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1adfb6fac85747bf913198badea3bc34c1" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::enableHueShift</definition>
+        <argsstring>() const</argsstring>
+        <name>enableHueShift</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::enableHueShift</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="65" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="65" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a5c70c15c2967303b60797f0de97fc416" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::enableContrast</definition>
+        <argsstring>() const</argsstring>
+        <name>enableContrast</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::enableContrast</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="66" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="66" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1aed510d5758d04ddc5c333601cbc11b04" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::whiteBalance</definition>
+        <argsstring>() const</argsstring>
+        <name>whiteBalance</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::whiteBalance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="67" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="67" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a390dde3aa002593759c388148bb98390" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::postExposure</definition>
+        <argsstring>() const</argsstring>
+        <name>postExposure</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::postExposure</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="68" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="68" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1ae20bb2db2132908f403c6b8fdabac797" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::colourFilter</definition>
+        <argsstring>() const</argsstring>
+        <name>colourFilter</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::colourFilter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="69" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="69" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a9d923e95cc1bd9663a49712455ea536c" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::midGray</definition>
+        <argsstring>() const</argsstring>
+        <name>midGray</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::midGray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="70" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="70" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1add9d460d1d3aaf0db148b249ffc90b5d" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::splitToningShadows</definition>
+        <argsstring>() const</argsstring>
+        <name>splitToningShadows</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::splitToningShadows</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="71" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="71" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a161181508c8c4611ac1ee1d3d30a7596" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::splitToningBalance</definition>
+        <argsstring>() const</argsstring>
+        <name>splitToningBalance</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::splitToningBalance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="72" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="72" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a487ae9b191da64d63cdd79c4098da446" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::splitToningHighlights</definition>
+        <argsstring>() const</argsstring>
+        <name>splitToningHighlights</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::splitToningHighlights</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="73" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="73" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a5bad2cdbaf52bd601d065ecd1d412071" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::contrast</definition>
+        <argsstring>() const</argsstring>
+        <name>contrast</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::contrast</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="74" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="74" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a2e5a8a9c39389b75b92d903c7e87b570" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::hueShift</definition>
+        <argsstring>() const</argsstring>
+        <name>hueShift</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::hueShift</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="75" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="75" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1aef9677aadda44cba96f397fd59387b81" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::saturation</definition>
+        <argsstring>() const</argsstring>
+        <name>saturation</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::saturation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="76" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="76" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a3fce16d62e25a3e69da2d16830111eff" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::channelMixRed</definition>
+        <argsstring>() const</argsstring>
+        <name>channelMixRed</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::channelMixRed</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="77" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="77" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a734343e9c7a36d070b77da5c3a041d18" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::channelMixGreen</definition>
+        <argsstring>() const</argsstring>
+        <name>channelMixGreen</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::channelMixGreen</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="78" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="78" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a177566db7210e2697ecbec8dd3194b8b" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::channelMixBlue</definition>
+        <argsstring>() const</argsstring>
+        <name>channelMixBlue</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::channelMixBlue</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="79" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="79" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1aa62525ea1e714a190de23e4477227d94" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::shadows</definition>
+        <argsstring>() const</argsstring>
+        <name>shadows</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::shadows</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="80" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="80" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1ad1ba1ec76d9afe5a7d3a92cad418d810" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::midtones</definition>
+        <argsstring>() const</argsstring>
+        <name>midtones</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::midtones</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="81" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="81" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1af165306ea6cb3942c9d870741f1e95a5" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::highlights</definition>
+        <argsstring>() const</argsstring>
+        <name>highlights</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::highlights</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="82" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="82" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a1b50719497b16cd88c63a5c93df3f2cc" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::shadowsStart</definition>
+        <argsstring>() const</argsstring>
+        <name>shadowsStart</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::shadowsStart</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="83" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="83" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1ae046668a1740f47fefd1055ad3610fd4" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::shadowsEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>shadowsEnd</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::shadowsEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="84" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="84" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a49b83480397b37937fb301f244ee446e" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::highlightsStart</definition>
+        <argsstring>() const</argsstring>
+        <name>highlightsStart</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::highlightsStart</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="85" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="85" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a19867e250ec814e6e689e05e2c8fc609" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ColourGradingData::highlightsEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>highlightsEnd</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::highlightsEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="86" column="6" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="86" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a164d7eca8992cf50bfd173e8752091c0" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::ColourGradingData::getLuminance</definition>
+        <argsstring>(sdw::Vec3 const &amp;colour) const</argsstring>
+        <name>getLuminance</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::getLuminance</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="88" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a25e869c9d3ea4b18ad970dfbf8048371" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::ColourGradingData::linearToLogC</definition>
+        <argsstring>(sdw::Vec3 const &amp;colour) const</argsstring>
+        <name>linearToLogC</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::linearToLogC</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="89" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1afc44ac1ae2dff5f76e13596d20ecfee7" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::ColourGradingData::logCToLinear</definition>
+        <argsstring>(sdw::Vec3 const &amp;colour) const</argsstring>
+        <name>logCToLinear</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::logCToLinear</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="90" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1ac81c8c182be0fddfdf59ff6866f52e0c" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::ColourGradingData::rotateHue</definition>
+        <argsstring>(sdw::Float const &amp;value, sdw::Float const &amp;low, sdw::Float const &amp;hi) const</argsstring>
+        <name>rotateHue</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::rotateHue</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>low</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>hi</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="91" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1ae83e57261551cb2d4a12911d0ac5b97a" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::ColourGradingData::linearToLms</definition>
+        <argsstring>(sdw::Vec3 const &amp;colour) const</argsstring>
+        <name>linearToLms</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::linearToLms</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="92" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a683b70cbf7ab2c836a3171d3c72ef82e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::ColourGradingData::lmsToLinear</definition>
+        <argsstring>(sdw::Vec3 const &amp;colour) const</argsstring>
+        <name>lmsToLinear</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::lmsToLinear</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="93" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d28/a07755_1a2093962471ca96966f4271527d5786f6" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::ColourGradingData::softLight</definition>
+        <argsstring>(sdw::Vec3 const &amp;base, sdw::Vec3 const &amp;blend) const</argsstring>
+        <name>softLight</name>
+        <qualifiedname>castor3d::shader::ColourGradingData::softLight</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>base</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>blend</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="94" column="11"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::ColourGradingData</label>
+        <link refid="d2/d28/a07755"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_ColourGradingConfig&quot;, sdw::type::MemoryLayout::eStd140, sdw::Vec3Field&lt; &quot;whiteBalance&quot; &gt;, sdw::FloatField&lt; &quot;postExposure&quot; &gt;, sdw::Vec3Field&lt; &quot;colourFilter&quot; &gt;, sdw::FloatField&lt; &quot;midGray&quot; &gt;, sdw::Vec3Field&lt; &quot;splitToningShadows&quot; &gt;, sdw::FloatField&lt; &quot;contrast&quot; &gt;, sdw::Vec3Field&lt; &quot;splitToningHighlights&quot; &gt;, sdw::FloatField&lt; &quot;splitToningBalance&quot; &gt;, sdw::Vec3Field&lt; &quot;channelMixRed&quot; &gt;, sdw::FloatField&lt; &quot;saturation&quot; &gt;, sdw::Vec3Field&lt; &quot;channelMixGreen&quot; &gt;, sdw::FloatField&lt; &quot;shadowsStart&quot; &gt;, sdw::Vec3Field&lt; &quot;channelMixBlue&quot; &gt;, sdw::FloatField&lt; &quot;shadowsEnd&quot; &gt;, sdw::Vec3Field&lt; &quot;shadows&quot; &gt;, sdw::FloatField&lt; &quot;highlightsStart&quot; &gt;, sdw::Vec3Field&lt; &quot;midtones&quot; &gt;, sdw::FloatField&lt; &quot;highlightsEnd&quot; &gt;, sdw::Vec3Field&lt; &quot;highlights&quot; &gt;, sdw::FloatField&lt; &quot;hueShift&quot; &gt;, sdw::UIntField&lt; &quot;enabled&quot; &gt;, sdw::UIntField&lt; &quot;enableSplitToning&quot; &gt;, sdw::UIntField&lt; &quot;enableShadowMidToneHighlight&quot; &gt;, sdw::UIntField&lt; &quot;enableChannelMix&quot; &gt;, sdw::UIntField&lt; &quot;enableWhiteBalance&quot; &gt;, sdw::UIntField&lt; &quot;enableHueShift&quot; &gt;, sdw::UIntField&lt; &quot;enableContrast&quot; &gt;, sdw::UIntField&lt; &quot;pad0&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::ColourGradingData</label>
+        <link refid="d2/d28/a07755"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_ColourGradingConfig&quot;, sdw::type::MemoryLayout::eStd140, sdw::Vec3Field&lt; &quot;whiteBalance&quot; &gt;, sdw::FloatField&lt; &quot;postExposure&quot; &gt;, sdw::Vec3Field&lt; &quot;colourFilter&quot; &gt;, sdw::FloatField&lt; &quot;midGray&quot; &gt;, sdw::Vec3Field&lt; &quot;splitToningShadows&quot; &gt;, sdw::FloatField&lt; &quot;contrast&quot; &gt;, sdw::Vec3Field&lt; &quot;splitToningHighlights&quot; &gt;, sdw::FloatField&lt; &quot;splitToningBalance&quot; &gt;, sdw::Vec3Field&lt; &quot;channelMixRed&quot; &gt;, sdw::FloatField&lt; &quot;saturation&quot; &gt;, sdw::Vec3Field&lt; &quot;channelMixGreen&quot; &gt;, sdw::FloatField&lt; &quot;shadowsStart&quot; &gt;, sdw::Vec3Field&lt; &quot;channelMixBlue&quot; &gt;, sdw::FloatField&lt; &quot;shadowsEnd&quot; &gt;, sdw::Vec3Field&lt; &quot;shadows&quot; &gt;, sdw::FloatField&lt; &quot;highlightsStart&quot; &gt;, sdw::Vec3Field&lt; &quot;midtones&quot; &gt;, sdw::FloatField&lt; &quot;highlightsEnd&quot; &gt;, sdw::Vec3Field&lt; &quot;highlights&quot; &gt;, sdw::FloatField&lt; &quot;hueShift&quot; &gt;, sdw::UIntField&lt; &quot;enabled&quot; &gt;, sdw::UIntField&lt; &quot;enableSplitToning&quot; &gt;, sdw::UIntField&lt; &quot;enableShadowMidToneHighlight&quot; &gt;, sdw::UIntField&lt; &quot;enableChannelMix&quot; &gt;, sdw::UIntField&lt; &quot;enableWhiteBalance&quot; &gt;, sdw::UIntField&lt; &quot;enableHueShift&quot; &gt;, sdw::UIntField&lt; &quot;enableContrast&quot; &gt;, sdw::UIntField&lt; &quot;pad0&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" line="21" column="1" bodyfile="Castor3D/Shader/Ubos/ColourGradingUbo.hpp" bodystart="52" bodyend="105"/>
+    <listofallmembers>
+      <member refid="d2/d28/a07755_1a177566db7210e2697ecbec8dd3194b8b" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>channelMixBlue</name></member>
+      <member refid="d2/d28/a07755_1a734343e9c7a36d070b77da5c3a041d18" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>channelMixGreen</name></member>
+      <member refid="d2/d28/a07755_1a3fce16d62e25a3e69da2d16830111eff" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>channelMixRed</name></member>
+      <member refid="d2/d28/a07755_1ae20bb2db2132908f403c6b8fdabac797" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>colourFilter</name></member>
+      <member refid="d2/d28/a07755_1a1117976ca095f3f6526e5b1569b194ae" prot="public" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>colourGrade</name></member>
+      <member refid="d2/d28/a07755_1aa14f17f0ebfb0064a1e84df28e06abad" prot="public" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>ColourGradingData</name></member>
+      <member refid="d2/d28/a07755_1a5bad2cdbaf52bd601d065ecd1d412071" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>contrast</name></member>
+      <member refid="d2/d28/a07755_1a2a9c8f45fc3ceadb9add3b45b7e99658" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>enableChannelMix</name></member>
+      <member refid="d2/d28/a07755_1a5c70c15c2967303b60797f0de97fc416" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>enableContrast</name></member>
+      <member refid="d2/d28/a07755_1a9246f6215bb485c65e88b05133339577" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>enabled</name></member>
+      <member refid="d2/d28/a07755_1adfb6fac85747bf913198badea3bc34c1" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>enableHueShift</name></member>
+      <member refid="d2/d28/a07755_1a4c1c7096c1479d28028fc1ab372d76ac" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>enableShadowMidToneHighlight</name></member>
+      <member refid="d2/d28/a07755_1a2e7f092997a08a7da43619271dc94b1b" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>enableSplitToning</name></member>
+      <member refid="d2/d28/a07755_1a0528d569fa6455457b7948eb06d41cc1" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>enableWhiteBalance</name></member>
+      <member refid="d2/d28/a07755_1a164d7eca8992cf50bfd173e8752091c0" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>getLuminance</name></member>
+      <member refid="d2/d28/a07755_1af165306ea6cb3942c9d870741f1e95a5" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>highlights</name></member>
+      <member refid="d2/d28/a07755_1a19867e250ec814e6e689e05e2c8fc609" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>highlightsEnd</name></member>
+      <member refid="d2/d28/a07755_1a49b83480397b37937fb301f244ee446e" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>highlightsStart</name></member>
+      <member refid="d2/d28/a07755_1a2e5a8a9c39389b75b92d903c7e87b570" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>hueShift</name></member>
+      <member refid="d2/d28/a07755_1ae83e57261551cb2d4a12911d0ac5b97a" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>linearToLms</name></member>
+      <member refid="d2/d28/a07755_1a25e869c9d3ea4b18ad970dfbf8048371" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>linearToLogC</name></member>
+      <member refid="d2/d28/a07755_1a683b70cbf7ab2c836a3171d3c72ef82e" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>lmsToLinear</name></member>
+      <member refid="d2/d28/a07755_1afc44ac1ae2dff5f76e13596d20ecfee7" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>logCToLinear</name></member>
+      <member refid="d2/d28/a07755_1a7bfed1008be083d44438a843f2424a41" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>m_colourGrade</name></member>
+      <member refid="d2/d28/a07755_1ac1ef9b70850a4f214f6df1c934f9152d" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>m_hsvToRgb</name></member>
+      <member refid="d2/d28/a07755_1a4b78a6ae62f6cf9fc9250dea45eaf41a" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>m_linearToLms</name></member>
+      <member refid="d2/d28/a07755_1a411d1cb1da92d50fd9aacc31eb9abc71" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>m_lmsToLinear</name></member>
+      <member refid="d2/d28/a07755_1ac2f8c8c746ae22c5fa1b339e4b96404e" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>m_paramsLogC</name></member>
+      <member refid="d2/d28/a07755_1a39bceca4808bf430bea31fb808700b9d" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>m_rgbToHsv</name></member>
+      <member refid="d2/d28/a07755_1a5e41e280c6218851772ad01b848e4f8d" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>m_shadowsMidtoneHighlight</name></member>
+      <member refid="d2/d28/a07755_1a8464dcabab2316da1a15dbaa27ecb465" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>m_splitToning</name></member>
+      <member refid="d2/d28/a07755_1a9d923e95cc1bd9663a49712455ea536c" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>midGray</name></member>
+      <member refid="d2/d28/a07755_1ad1ba1ec76d9afe5a7d3a92cad418d810" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>midtones</name></member>
+      <member refid="d2/d28/a07755_1a390dde3aa002593759c388148bb98390" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>postExposure</name></member>
+      <member refid="d2/d28/a07755_1ac81c8c182be0fddfdf59ff6866f52e0c" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>rotateHue</name></member>
+      <member refid="d2/d28/a07755_1aef9677aadda44cba96f397fd59387b81" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>saturation</name></member>
+      <member refid="d2/d28/a07755_1aa62525ea1e714a190de23e4477227d94" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>shadows</name></member>
+      <member refid="d2/d28/a07755_1ae046668a1740f47fefd1055ad3610fd4" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>shadowsEnd</name></member>
+      <member refid="d2/d28/a07755_1a1b50719497b16cd88c63a5c93df3f2cc" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>shadowsStart</name></member>
+      <member refid="d2/d28/a07755_1a2093962471ca96966f4271527d5786f6" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>softLight</name></member>
+      <member refid="d2/d28/a07755_1a161181508c8c4611ac1ee1d3d30a7596" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>splitToningBalance</name></member>
+      <member refid="d2/d28/a07755_1a487ae9b191da64d63cdd79c4098da446" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>splitToningHighlights</name></member>
+      <member refid="d2/d28/a07755_1add9d460d1d3aaf0db148b249ffc90b5d" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>splitToningShadows</name></member>
+      <member refid="d2/d28/a07755_1aed510d5758d04ddc5c333601cbc11b04" prot="private" virt="non-virtual"><scope>castor3d::shader::ColourGradingData</scope><name>whiteBalance</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

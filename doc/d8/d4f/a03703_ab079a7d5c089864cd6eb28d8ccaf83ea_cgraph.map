@@ -1,0 +1,15 @@
+<map id="castor3d::Engine::tryAddImage" name="castor3d::Engine::tryAddImage">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,63,172,103"/>
+<area shape="rect" id="Node000002" href="$d8/d4f/a03703.html#a8c9229e35e7c50a5f2d1eecb3954ee58" title=" " alt="" coords="223,5,405,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,60,221,46,222,51,169,65"/>
+<area shape="rect" id="Node000003" href="$d8/d4f/a03703.html#af2f096aad3600390dec50bbe37e8e3b2" title="Initialisation function, Sets the wanted frame rate." alt="" coords="227,70,401,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="172,80,213,80,213,85,172,85"/>
+<area shape="rect" id="Node000004" href="$d8/da3/a08255.html#adfe23feed932e13cb6d29207a1ccc51a" title="Adds an element." alt="" coords="220,120,408,160"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="169,100,222,114,221,119,167,105"/>
+<area shape="rect" id="Node000005" href="$d8/da3/a08255.html#a6e4ca586f9ab38ecc32ba59585435d0e" title=" " alt="" coords="456,56,644,96"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="388,117,462,97,464,102,389,122"/>
+<area shape="rect" id="Node000006" href="$d8/da3/a08255.html#a16408750c3e49683268744e1f35761df" title=" " alt="" coords="456,120,644,160"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="408,137,442,137,442,143,408,143"/>
+<area shape="rect" id="Node000007" href="$d2/dd2/a02279.html#a58f3178234ce83e643568e48a0ed6a3f" title=" " alt="" coords="467,185,633,210"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="398,157,484,179,483,184,396,163"/>
+</map>

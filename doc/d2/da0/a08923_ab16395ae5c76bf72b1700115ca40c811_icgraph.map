@@ -1,0 +1,19 @@
+<map id="castor::RgbColourT::get" name="castor::RgbColourT::get">
+<area shape="rect" id="Node000001" title="Retrieves the asked component value." alt="" coords="411,173,569,198"/>
+<area shape="rect" id="Node000002" href="$d2/da0/a08923.html#a1e133d02735e7b297387fda7de2f2f8f" title="Retrieves the blue component value." alt="" coords="217,5,350,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="468,163,423,112,393,84,361,60,340,48,343,43,364,55,397,80,426,108,472,160"/>
+<area shape="rect" id="Node000004" href="$d2/da0/a08923.html#a70d68cff846eb42f8673dbeaedb21707" title="Retrieves the blue component value." alt="" coords="217,69,350,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="452,169,362,124,334,112,336,107,364,119,454,164"/>
+<area shape="rect" id="Node000005" href="$d2/da0/a08923.html#a046308466d170b20e74cd36c8b449ad4" title="Retrieves the green component value." alt="" coords="217,133,350,173"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="396,174,350,166,351,161,397,168"/>
+<area shape="rect" id="Node000006" href="$d2/da0/a08923.html#a85d21104f812a8fc345b6eaca18a3d2c" title="Retrieves the green component value." alt="" coords="217,197,350,237"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="397,202,351,210,350,204,396,197"/>
+<area shape="rect" id="Node000007" href="$d2/da0/a08923.html#af14ff16a26be4cf583c31e90d9903b55" title="Retrieves the red component value." alt="" coords="204,262,363,287"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="455,207,364,252,329,264,327,259,362,247,453,202"/>
+<area shape="rect" id="Node000008" href="$d2/da0/a08923.html#a7663a901f2906068d9a34f34324c5bf7" title="Retrieves the red component value." alt="" coords="204,311,363,337"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="471,210,425,256,395,280,364,301,336,314,334,309,361,296,392,276,421,252,467,206"/>
+<area shape="rect" id="Node000003" href="$d0/d33/a03899.html#a064762eaae9407ceea58131d50a350f9" title=" " alt="" coords="5,133,156,173"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="216,54,205,60,150,98,105,135,102,131,147,94,203,55,214,49"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="203,156,156,156,156,151,203,151"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="220,260,203,252,146,214,101,176,105,172,149,210,205,247,222,255"/>
+</map>

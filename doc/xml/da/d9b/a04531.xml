@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d9b/a04531" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::MetalnessMapComponent::ComponentsShader</compoundname>
+    <basecompoundref refid="dd/d3b/a04851" prot="public" virt="non-virtual">castor3d::shader::PassMapComponentsShader</basecompoundref>
+    <includes local="no">MetalnessMapComponent.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d9b/a04531_1aea15a7740ee1c0defeeca4d838babbe5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MetalnessMapComponent::ComponentsShader::applyTexture</definition>
+        <argsstring>(shader::PassShaders const &amp;passShaders, shader::TextureConfigurations const &amp;textureConfigs, shader::TextureAnimations const &amp;textureAnims, sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;maps, shader::Material const &amp;material, shader::BlendComponents &amp;components, shader::SampleTexture const &amp;sampleTexture) const override</argsstring>
+        <name>applyTexture</name>
+        <qualifiedname>castor3d::MetalnessMapComponent::ComponentsShader::applyTexture</qualifiedname>
+        <reimplements refid="dd/d3b/a04851_1a0e3cb39349c75af1ea908627043db043">applyTexture</reimplements>
+        <param>
+          <type><ref refid="d5/d49/a07611" kindref="compound">shader::PassShaders</ref> const &amp;</type>
+          <declname>passShaders</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d7c/a07707" kindref="compound">shader::TextureConfigurations</ref> const &amp;</type>
+          <declname>textureConfigs</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d61/a07699" kindref="compound">shader::TextureAnimations</ref> const &amp;</type>
+          <declname>textureAnims</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;</type>
+          <declname>maps</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d98/a07551" kindref="compound">shader::Material</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">shader::BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d68/a02280_1a319512df016d306e059167be0bb1400c" kindref="member">shader::SampleTexture</ref> const &amp;</type>
+          <declname>sampleTexture</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/MetalnessMapComponent.hpp" line="33" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d9b/a04531_1a555dbbb62949564e3e2f79a9064ed75d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref></type>
+        <definition>PassComponentTextureFlag castor3d::MetalnessMapComponent::ComponentsShader::getTextureFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>getTextureFlags</name>
+        <qualifiedname>castor3d::MetalnessMapComponent::ComponentsShader::getTextureFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Map/MetalnessMapComponent.hpp" line="41" column="26" bodyfile="Castor3D/Material/Pass/Component/Map/MetalnessMapComponent.hpp" bodystart="41" bodyend="44"/>
+        <references refid="d6/d6f/a04819_1a846afb362f8cdb6bd2dc1a3f98db9f64">castor3d::shader::PassComponentsShader::getId</references>
+        <references refid="d9/dba/a02278_1a813eb0a53ad6b3f96433a39acae9f59b" compoundref="d0/dc4/a00443" startline="41" endline="46">castor3d::makeTextureFlag</references>
+        <references refid="d7/ddc/a04523_1a060a684e31205d61ed5cffca837d8aef" compoundref="d9/d87/a00551" startline="17">castor3d::MetalnessMapComponent::Metalness</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::MetalnessMapComponent::ComponentsShader</label>
+        <link refid="da/d9b/a04531"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PassComponentsShader</label>
+        <link refid="d6/d6f/a04819"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassMapComponentsShader</label>
+        <link refid="dd/d3b/a04851"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::MetalnessMapComponent::ComponentsShader</label>
+        <link refid="da/d9b/a04531"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PassComponentsShader</label>
+        <link refid="d6/d6f/a04819"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassMapComponentsShader</label>
+        <link refid="dd/d3b/a04851"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Component/Map/MetalnessMapComponent.hpp" line="28" column="1" bodyfile="Castor3D/Material/Pass/Component/Map/MetalnessMapComponent.hpp" bodystart="30" bodyend="45"/>
+    <listofallmembers>
+      <member refid="d6/d6f/a04819_1a9628851e6c3e74b22df1548301832513" prot="public" virt="virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>applyComponents</name></member>
+      <member refid="d6/d6f/a04819_1a77e66ffa1eac33d82efbe4ce59236f38" prot="protected" virt="non-virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>applyFloatComponent</name></member>
+      <member refid="d6/d6f/a04819_1a02ae79221e5a0e986858c9c383fdaed0" prot="protected" virt="non-virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>applyFloatComponent</name></member>
+      <member refid="da/d9b/a04531_1aea15a7740ee1c0defeeca4d838babbe5" prot="public" virt="virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>applyTexture</name></member>
+      <member refid="d6/d6f/a04819_1a3243f2f9fffc4e75f91e927600a6271d" prot="protected" virt="non-virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>applyVec3Component</name></member>
+      <member refid="d6/d6f/a04819_1aed9f9d27b59abd38f5b5c19d5f45a2af" prot="protected" virt="non-virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>applyVec3Component</name></member>
+      <member refid="d6/d6f/a04819_1a277de8d6d8fa8c0e3d50edb51fe2157c" prot="public" virt="virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>blendComponents</name></member>
+      <member refid="d6/d6f/a04819_1ac2cfaa34f675787b0b0140eb9e2eb7d3" prot="public" virt="virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>fillComponents</name></member>
+      <member refid="d6/d6f/a04819_1a80a16a96d3e5d71cb6b631a77c73217f" prot="public" virt="virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>fillComponentsInits</name></member>
+      <member refid="d6/d6f/a04819_1a846afb362f8cdb6bd2dc1a3f98db9f64" prot="public" virt="non-virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>getId</name></member>
+      <member refid="d6/d6f/a04819_1a1727bca64233903f00c27aacd146429b" prot="public" virt="non-virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>getPlugin</name></member>
+      <member refid="da/d9b/a04531_1a555dbbb62949564e3e2f79a9064ed75d" prot="public" virt="non-virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>getTextureFlags</name></member>
+      <member refid="d6/d6f/a04819_1ae6acbd6edb3df14dcecccd2598bed038" prot="public" virt="virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>isMapSampling</name></member>
+      <member refid="d2/d04/a04815_1a06fad613f64fa717de3e8032393fdbd7" prot="public" virt="non-virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>operator=</name></member>
+      <member refid="d2/d04/a04815_1a0e5c7fea4f6928009d6da51c4d78a9df" prot="public" virt="non-virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>operator=</name></member>
+      <member refid="dd/d3b/a04851_1af7ade94522557fd93269087ee3703612" prot="public" virt="non-virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>PassComponentsShader</name></member>
+      <member refid="d2/d04/a04815_1ab439edbbb2da660939e0209d9bfba3b0" prot="public" virt="non-virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>PassShader</name></member>
+      <member refid="d2/d04/a04815_1ae0263dc410ae3d05ddea8cc9ad7eac73" prot="public" virt="non-virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>PassShader</name></member>
+      <member refid="d2/d04/a04815_1aee18e0dfda227ed54fb966d7d75a1ea5" prot="public" virt="non-virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>PassShader</name></member>
+      <member refid="d6/d6f/a04819_1adae1f04a5d2866590f4f3204b233dd99" prot="public" virt="virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>sampleMap</name></member>
+      <member refid="d6/d6f/a04819_1a226e2c05d6cff43678f171ef5f413887" prot="public" virt="virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>sampleMap</name></member>
+      <member refid="d6/d6f/a04819_1ab47e2f5bc209511aa30f917e09636eb9" prot="public" virt="virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>updateComponent</name></member>
+      <member refid="d2/d04/a04815_1a56338db0aed5f44427291aa6c631872b" prot="public" virt="virtual"><scope>castor3d::MetalnessMapComponent::ComponentsShader</scope><name>~PassShader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

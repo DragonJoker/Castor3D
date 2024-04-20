@@ -1,5 +1,34 @@
-<map id="castor3d::BoneNode" name="castor3d::BoneNode">
-<area shape="rect" id="node1" title=" " alt="" coords="16,152,156,177"/>
-<area shape="rect" id="node2" href="$de/d18/a04722.html" title=" " alt="" coords="5,79,167,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="33,5,139,31"/>
+<map id="castor3d::AlphaTestComponent" name="castor3d::AlphaTestComponent">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1696,57,1900,82"/>
+<area shape="rect" id="Node000002" href="$df/dc6/a04087.html" title=" " alt="" coords="1413,137,1647,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1604,130,1757,80,1759,85,1606,135"/>
+<area shape="rect" id="Node000003" href="$db/db4/a04835.html" title=" " alt="" coords="694,214,870,239"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="884,212,901,211,1413,164,1413,169,902,216,884,218"/>
+<area shape="rect" id="Node000015" href="$df/dc6/a04087.html" title="Pass component holding base pass data." alt="" coords="1019,219,1252,259"/>
+<area shape="poly" id="edge16_Node000015_Node000003" title=" " alt="" coords="884,227,1019,232,1018,237,883,233"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title=" " alt="" coords="331,186,507,211"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="521,204,694,217,693,223,521,209"/>
+<area shape="rect" id="Node000005" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="13,186,196,211"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="210,196,331,196,331,201,210,201"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="356,121,483,161"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="497,157,663,196,728,211,727,217,662,201,495,162"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="41,61,168,101"/>
+<area shape="poly" id="edge17_Node000001_Node000007" title=" " alt="" coords="180,56,292,30,355,21,418,17,1531,17,1593,21,1654,30,1755,54,1754,59,1653,35,1592,26,1531,23,418,23,355,26,293,35,182,61"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="182,93,356,127,355,132,181,98"/>
+<area shape="rect" id="Node000008" href="$d2/d2e/a04831.html" title=" " alt="" coords="313,301,525,326"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="506,296,662,261,743,237,745,242,663,267,507,301"/>
+<area shape="rect" id="Node000009" href="$d6/da6/a04827.html" title=" " alt="" coords="318,236,521,276"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="534,244,694,231,694,236,535,249"/>
+<area shape="rect" id="Node000010" href="$d2/d04/a04815.html" title=" " alt="" coords="5,243,204,269"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="218,253,318,253,318,259,218,259"/>
+<area shape="rect" id="Node000011" href="$df/d5e/a04699.html" title=" " alt="" coords="1053,118,1218,143"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="1232,134,1413,147,1413,152,1232,140"/>
+<area shape="rect" id="Node000012" href="$d2/d4c/a08211.html" title=" " alt="" coords="687,57,877,97"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="891,89,995,104,1063,115,1062,121,994,109,891,94"/>
+<area shape="rect" id="Node000013" href="$d2/d4c/a08211.html" title="Templated class that provide std::array style buffer view." alt="" coords="324,57,515,97"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="529,75,686,75,686,80,529,80"/>
+<area shape="rect" id="Node000014" href="$d2/d4c/a08211.html" title=" " alt="" coords="687,121,877,161"/>
+<area shape="poly" id="edge14_Node000014_Node000013" title=" " alt="" coords="529,94,687,122,686,127,528,99"/>
+<area shape="poly" id="edge13_Node000011_Node000014" title=" " alt="" coords="891,136,995,133,1052,131,1053,137,995,139,891,142"/>
+<area shape="poly" id="edge15_Node000002_Node000015" title=" " alt="" coords="1265,231,1327,224,1389,212,1441,195,1488,175,1490,180,1443,200,1390,217,1328,229,1266,236"/>
 </map>

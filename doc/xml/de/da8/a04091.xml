@@ -1,0 +1,298 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/da8/a04091" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::DerivativeValueT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">DerivativeValueHelperT&lt; ValueT, StructNameT &gt;</basecompoundref>
+    <includes local="no">GlslDerivativeValue.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ValueT</type>
+      </param>
+      <param>
+        <type>sdw::StringLiteralT</type>
+        <declname>StructNameT</declname>
+        <defname>StructNameT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/da8/a04091_1af74e8c17cbf405f41550752533a4640b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt;::DerivativeValueT</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>DerivativeValueT</name>
+        <qualifiedname>castor3d::shader::DerivativeValueT::DerivativeValueT</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="27" column="1" bodyfile="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" bodystart="27" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="de/da8/a04091_1aebe10b195d1356f343b49a70f733fe02" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt;::DerivativeValueT</definition>
+        <argsstring>(ValueT const &amp;pvalue, ValueT const &amp;pdPdx, ValueT const &amp;pdPdy)</argsstring>
+        <name>DerivativeValueT</name>
+        <qualifiedname>castor3d::shader::DerivativeValueT::DerivativeValueT</qualifiedname>
+        <param>
+          <type>ValueT const &amp;</type>
+          <declname>pvalue</declname>
+        </param>
+        <param>
+          <type>ValueT const &amp;</type>
+          <declname>pdPdx</declname>
+        </param>
+        <param>
+          <type>ValueT const &amp;</type>
+          <declname>pdPdy</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="34" column="1" bodyfile="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" bodystart="34" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="de/da8/a04091_1a421d76979a7b81d79450ccd53d3b175a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt;::value</definition>
+        <argsstring>() const</argsstring>
+        <name>value</name>
+        <qualifiedname>castor3d::shader::DerivativeValueT::value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="51" column="6" bodyfile="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" bodystart="51" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="de/da8/a04091_1a99a9ccb4f4ae5f7392493230dae23402" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt;::dPdx</definition>
+        <argsstring>() const</argsstring>
+        <name>dPdx</name>
+        <qualifiedname>castor3d::shader::DerivativeValueT::dPdx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="52" column="6" bodyfile="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" bodystart="52" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="de/da8/a04091_1affb008734a8f94896cbd042488b6f9b0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt;::dPdy</definition>
+        <argsstring>() const</argsstring>
+        <name>dPdy</name>
+        <qualifiedname>castor3d::shader::DerivativeValueT::dPdy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="53" column="6" bodyfile="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" bodystart="53" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="de/da8/a04091_1aa9975d228d2b6159e54a1f77b4980bc5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="de/da8/a04091" kindref="compound">DerivativeValueT</ref></type>
+        <definition>DerivativeValueT castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt;::operator-</definition>
+        <argsstring>() const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>castor3d::shader::DerivativeValueT::operator-</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="55" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="de/da8/a04091_1a54749f6d14eaaed801d771f76c3049fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="de/da8/a04091" kindref="compound">DerivativeValueT</ref> &amp;</type>
+        <definition>DerivativeValueT &amp; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt;::operator+=</definition>
+        <argsstring>(DerivativeValueT const &amp;rhs)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor3d::shader::DerivativeValueT::operator+=</qualifiedname>
+        <param>
+          <type><ref refid="de/da8/a04091" kindref="compound">DerivativeValueT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="56" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="de/da8/a04091_1ac0e5175d48bb1f696dc67c4eb4c54e32" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="de/da8/a04091" kindref="compound">DerivativeValueT</ref> &amp;</type>
+        <definition>DerivativeValueT &amp; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt;::operator-=</definition>
+        <argsstring>(DerivativeValueT const &amp;rhs)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor3d::shader::DerivativeValueT::operator-=</qualifiedname>
+        <param>
+          <type><ref refid="de/da8/a04091" kindref="compound">DerivativeValueT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="57" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="de/da8/a04091_1addd0ad2c281b4a9893d8bc367477d382" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="de/da8/a04091" kindref="compound">DerivativeValueT</ref> &amp;</type>
+        <definition>DerivativeValueT &amp; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt;::operator*=</definition>
+        <argsstring>(DerivativeValueT const &amp;rhs)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor3d::shader::DerivativeValueT::operator*=</qualifiedname>
+        <param>
+          <type><ref refid="de/da8/a04091" kindref="compound">DerivativeValueT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="58" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="de/da8/a04091_1a4b8ac2b10e15f19a93c657977d81aa15" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="de/da8/a04091" kindref="compound">DerivativeValueT</ref> &amp;</type>
+        <definition>DerivativeValueT &amp; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt;::operator+=</definition>
+        <argsstring>(ValueT const &amp;rhs)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor3d::shader::DerivativeValueT::operator+=</qualifiedname>
+        <param>
+          <type>ValueT const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="59" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="de/da8/a04091_1a3fd6c7b23b4404cdf451466a86f1c2c3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="de/da8/a04091" kindref="compound">DerivativeValueT</ref> &amp;</type>
+        <definition>DerivativeValueT &amp; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt;::operator-=</definition>
+        <argsstring>(ValueT const &amp;rhs)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor3d::shader::DerivativeValueT::operator-=</qualifiedname>
+        <param>
+          <type>ValueT const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="60" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="de/da8/a04091_1aaec68dcb6c4b7567ca52a26706ad3b2e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="de/da8/a04091" kindref="compound">DerivativeValueT</ref> &amp;</type>
+        <definition>DerivativeValueT &amp; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt;::operator*=</definition>
+        <argsstring>(ValueT const &amp;rhs)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor3d::shader::DerivativeValueT::operator*=</qualifiedname>
+        <param>
+          <type>ValueT const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="61" column="19"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>DerivativeValueHelperT&lt; ValueT, StructNameT &gt;</label>
+      </node>
+      <node id="5">
+        <label>castor3d::shader::DerivativeValueT&lt; sdw::Float, &quot;C3D_DerivFloat&quot; &gt;</label>
+        <link refid="de/da8/a04091"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; sdw::Float, &quot;C3D_DerivFloat&quot; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::shader::DerivativeValueT&lt; sdw::Vec3, &quot;C3D_DerivVec3&quot; &gt;</label>
+        <link refid="de/da8/a04091"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; sdw::Vec3, &quot;C3D_DerivVec3&quot; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::DerivativeValueT&lt; sdw::Vec4, &quot;C3D_DerivVec4&quot; &gt;</label>
+        <link refid="de/da8/a04091"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; sdw::Vec4, &quot;C3D_DerivVec4&quot; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt;</label>
+        <link refid="de/da8/a04091"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>DerivativeValueHelperT&lt; ValueT, StructNameT &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt;</label>
+        <link refid="de/da8/a04091"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="24" column="1" bodyfile="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" bodystart="26" bodyend="62"/>
+    <listofallmembers>
+      <member refid="de/da8/a04091_1af74e8c17cbf405f41550752533a4640b" prot="public" virt="non-virtual"><scope>castor3d::shader::DerivativeValueT</scope><name>DerivativeValueT</name></member>
+      <member refid="de/da8/a04091_1aebe10b195d1356f343b49a70f733fe02" prot="public" virt="non-virtual"><scope>castor3d::shader::DerivativeValueT</scope><name>DerivativeValueT</name></member>
+      <member refid="de/da8/a04091_1a99a9ccb4f4ae5f7392493230dae23402" prot="public" virt="non-virtual"><scope>castor3d::shader::DerivativeValueT</scope><name>dPdx</name></member>
+      <member refid="de/da8/a04091_1affb008734a8f94896cbd042488b6f9b0" prot="public" virt="non-virtual"><scope>castor3d::shader::DerivativeValueT</scope><name>dPdy</name></member>
+      <member refid="de/da8/a04091_1addd0ad2c281b4a9893d8bc367477d382" prot="public" virt="non-virtual"><scope>castor3d::shader::DerivativeValueT</scope><name>operator*=</name></member>
+      <member refid="de/da8/a04091_1aaec68dcb6c4b7567ca52a26706ad3b2e" prot="public" virt="non-virtual"><scope>castor3d::shader::DerivativeValueT</scope><name>operator*=</name></member>
+      <member refid="de/da8/a04091_1a54749f6d14eaaed801d771f76c3049fc" prot="public" virt="non-virtual"><scope>castor3d::shader::DerivativeValueT</scope><name>operator+=</name></member>
+      <member refid="de/da8/a04091_1a4b8ac2b10e15f19a93c657977d81aa15" prot="public" virt="non-virtual"><scope>castor3d::shader::DerivativeValueT</scope><name>operator+=</name></member>
+      <member refid="de/da8/a04091_1aa9975d228d2b6159e54a1f77b4980bc5" prot="public" virt="non-virtual"><scope>castor3d::shader::DerivativeValueT</scope><name>operator-</name></member>
+      <member refid="de/da8/a04091_1ac0e5175d48bb1f696dc67c4eb4c54e32" prot="public" virt="non-virtual"><scope>castor3d::shader::DerivativeValueT</scope><name>operator-=</name></member>
+      <member refid="de/da8/a04091_1a3fd6c7b23b4404cdf451466a86f1c2c3" prot="public" virt="non-virtual"><scope>castor3d::shader::DerivativeValueT</scope><name>operator-=</name></member>
+      <member refid="de/da8/a04091_1a421d76979a7b81d79450ccd53d3b175a" prot="public" virt="non-virtual"><scope>castor3d::shader::DerivativeValueT</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

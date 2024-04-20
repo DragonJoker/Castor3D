@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d80/a07207" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserEnumTraits&lt; castor3d::LimitedType&lt; VkCompareOp &gt; &gt;</compoundname>
+    <includes local="no">SceneFileParserData.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="da/d80/a07207_1ab6393af8c3a10124062ac11af74d2b7b" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a98169622bc976df3189194c2b35fbf60" kindref="member">xchar</ref> const  *const</type>
+        <definition>xchar const* const castor::ParserEnumTraits&lt; castor3d::LimitedType&lt; VkCompareOp &gt; &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::LimitedType&lt; VkCompareOp &gt; &gt;::Name</qualifiedname>
+        <initializer>= <ref refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" kindref="member">cuT</ref>( &quot;CompareOp&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneFileParserData.hpp" line="339" column="34" bodyfile="Castor3D/Scene/SceneFileParserData.hpp" bodystart="339" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d80/a07207_1a0cb1db13fd4e74d3a91b1b20c4039da1" prot="public" static="yes" mutable="no">
+        <type>UInt32StrMap const</type>
+        <definition>UInt32StrMap const castor::ParserEnumTraits&lt; castor3d::LimitedType&lt; VkCompareOp &gt; &gt;::Values</definition>
+        <argsstring></argsstring>
+        <name>Values</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::LimitedType&lt; VkCompareOp &gt; &gt;::Values</qualifiedname>
+        <initializer>= []()
+			{
+				UInt32StrMap result;
+				result[<ref refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" kindref="member">cuT</ref>( &quot;none&quot; )] = uint32_t( false );
+				result[<ref refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" kindref="member">cuT</ref>( &quot;ref_to_texture&quot; )] = uint32_t( true );
+				return result;
+			}( )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneFileParserData.hpp" line="340" column="34" bodyfile="Castor3D/Scene/SceneFileParserData.hpp" bodystart="340" bodyend="346"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserEnumTraits&lt; castor3d::LimitedType&lt; VkCompareOp &gt; &gt;</label>
+        <link refid="da/d80/a07207"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>Values</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>UInt32StrMap</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/SceneFileParserData.hpp" line="337" column="1" bodyfile="Castor3D/Scene/SceneFileParserData.hpp" bodystart="338" bodyend="347"/>
+    <listofallmembers>
+      <member refid="da/d80/a07207_1ab6393af8c3a10124062ac11af74d2b7b" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::LimitedType&lt; VkCompareOp &gt; &gt;</scope><name>Name</name></member>
+      <member refid="da/d80/a07207_1a0cb1db13fd4e74d3a91b1b20c4039da1" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::LimitedType&lt; VkCompareOp &gt; &gt;</scope><name>Values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

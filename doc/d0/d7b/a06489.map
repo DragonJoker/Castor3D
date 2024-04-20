@@ -1,0 +1,9 @@
+<map id="castor3d::PipelineAndID" name="castor3d::PipelineAndID">
+<area shape="rect" id="Node000001" title=" " alt="" coords="31,271,192,296"/>
+<area shape="rect" id="Node000002" href="$d3/deb/a06543.html" title=" " alt="" coords="28,183,195,208"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,222,114,270,109,270,109,222"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="5,93,217,133"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="114,147,114,182,109,182,109,147"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="20,5,203,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="114,44,114,93,109,93,109,44"/>
+</map>

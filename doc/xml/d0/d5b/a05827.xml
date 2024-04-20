@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d5b/a05827" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::OverlayFactory</compoundname>
+    <basecompoundref refid="d4/da7/a08195" prot="public" virt="non-virtual">castor::Factory&lt; OverlayCategory, OverlayType, OverlayCategoryUPtr &gt;</basecompoundref>
+    <includes local="no">OverlayFactory.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d5b/a05827_1aa44bc6e7bb3bff7b7ea4f7a0477da430" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::OverlayFactory::OverlayFactory</definition>
+        <argsstring>()</argsstring>
+        <name>OverlayFactory</name>
+        <qualifiedname>castor3d::OverlayFactory::OverlayFactory</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/OverlayFactory.hpp" line="25" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::Factory&lt; OverlayCategory, OverlayType, OverlayCategoryUPtr &gt;</label>
+        <link refid="d4/da7/a08195"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; OverlayCategory, OverlayType, OverlayCategoryUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::OverlayFactory</label>
+        <link refid="d0/d5b/a05827"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;</label>
+        <link refid="d4/da7/a08195"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::Factory&lt; OverlayCategory, OverlayType, OverlayCategoryUPtr &gt;</label>
+        <link refid="d4/da7/a08195"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; OverlayCategory, OverlayType, OverlayCategoryUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::OverlayFactory</label>
+        <link refid="d0/d5b/a05827"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Factory&lt; ObjT, KeyT, PtrTypeT, CreatorT, IdT, EntryT &gt;</label>
+        <link refid="d4/da7/a08195"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Overlay/OverlayFactory.hpp" line="13" column="1" bodyfile="Castor3D/Overlay/OverlayFactory.hpp" bodystart="17" bodyend="26"/>
+    <listofallmembers>
+      <member refid="d4/da7/a08195_1a443ae4447b1ff6df0becc9b882158959" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>create</name></member>
+      <member refid="d4/da7/a08195_1af5dea170ce7af25c096994b45bdb4c56" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>Creator</name></member>
+      <member refid="d4/da7/a08195_1ab926e6c629e5550c60e370ea2381a61d" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>Entry</name></member>
+      <member refid="d4/da7/a08195_1ade2ee53ed8b99733ca39df7ddd687b8d" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>getIdType</name></member>
+      <member refid="d4/da7/a08195_1a387a55894cadf4e94272939e9da31bd0" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>getTypeId</name></member>
+      <member refid="d4/da7/a08195_1a8fa33309b519663c41778ad50caba812" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>Id</name></member>
+      <member refid="d4/da7/a08195_1a5b21b9247dc45aab8d4f214e4d65652c" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>isTypeRegistered</name></member>
+      <member refid="d4/da7/a08195_1ad68d86c0a36cadf0eab243047fe5041d" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>Key</name></member>
+      <member refid="d4/da7/a08195_1a02dd19a527ffd8ac7f6f347ba6ac08ae" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>listRegisteredTypes</name></member>
+      <member refid="d4/da7/a08195_1a2f9367b1b8d49a5a90145f542fc80790" prot="protected" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>m_currentId</name></member>
+      <member refid="d4/da7/a08195_1a10ceed9e0910376462403feec81e49d3" prot="protected" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>m_registered</name></member>
+      <member refid="d4/da7/a08195_1aa69ed70d226eb769e2264edf00fc6eb8" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>Obj</name></member>
+      <member refid="d4/da7/a08195_1a027f6d42631eb31470595c14899367d8" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>ObjCont</name></member>
+      <member refid="d4/da7/a08195_1af9545737d43ee6f59e0f46ba6d22395d" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>ObjPtr</name></member>
+      <member refid="d0/d5b/a05827_1aa44bc6e7bb3bff7b7ea4f7a0477da430" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>OverlayFactory</name></member>
+      <member refid="d4/da7/a08195_1a5524de00459c711db20c964e6db9aeed" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>PtrType</name></member>
+      <member refid="d4/da7/a08195_1ad781781092f77194bf1638cda3cf9074" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>registerType</name></member>
+      <member refid="d4/da7/a08195_1a1e6593c4baea1a1a8cf715bf6138e50c" prot="public" virt="non-virtual"><scope>castor3d::OverlayFactory</scope><name>unregisterType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

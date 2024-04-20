@@ -1,0 +1,2145 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d17/a03783" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::UserInputListener</compoundname>
+    <basecompoundref refid="d6/da8/a08227" prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <derivedcompoundref refid="d4/d16/a03859" prot="public" virt="non-virtual">castor3d::ControlsManager</derivedcompoundref>
+    <derivedcompoundref refid="dc/d81/a06611" prot="public" virt="non-virtual">castor3d::RenderWindow::InputListener</derivedcompoundref>
+    <includes local="no">UserInputListener.hpp</includes>
+    <sectiondef kind="user-defined">
+      <header>Keyboard input events</header>
+      <memberdef kind="variable" id="dc/d17/a03783_1a20e13c34858ffef83b2db1aa91265c4a" prot="protected" static="no" mutable="yes">
+        <type><ref refid="d2/dd2/a02279_1aac3763b795438810958473f0b84908fb" kindref="member">castor::Mutex</ref></type>
+        <definition>castor::Mutex castor3d::UserInputListener::m_mutexHandlers</definition>
+        <argsstring></argsstring>
+        <name>m_mutexHandlers</name>
+        <qualifiedname>castor3d::UserInputListener::m_mutexHandlers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le mutex de protection du tableau de gestionnaires. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="601" column="23" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="601" bodyend="-1"/>
+        <referencedby refid="dc/d17/a03783_1afcc4620692918ecabebe183a086df13e" compoundref="de/d55/a00323" startline="521" endline="533">doAddHandler</referencedby>
+        <referencedby refid="dc/d17/a03783_1af943899d0b999059f4c27e152a1cd2ce" compoundref="de/d55/a00323" startline="488" endline="499">doGetHandlers</referencedby>
+        <referencedby refid="dc/d17/a03783_1a3b2f2515b1c768ab6c5fa88b8ff0109d" compoundref="de/d55/a00323" startline="506" endline="510">doHasHandlers</referencedby>
+        <referencedby refid="dc/d17/a03783_1aa60cd82b80e2e3ad1251efe5a4714645" compoundref="de/d55/a00323" startline="565" endline="569">doRemoveHandler</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a03783_1a5ba7d4f9ab6caf0ef7f1adc88b56a855" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; EventHandlerUPtr &gt;</type>
+        <definition>castor::Vector&lt; EventHandlerUPtr &gt; castor3d::UserInputListener::m_handlers</definition>
+        <argsstring></argsstring>
+        <name>m_handlers</name>
+        <qualifiedname>castor3d::UserInputListener::m_handlers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le tableau de gestionnaires. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="604" column="16" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="604" bodyend="-1"/>
+        <referencedby refid="dc/d17/a03783_1afcc4620692918ecabebe183a086df13e" compoundref="de/d55/a00323" startline="521" endline="533">doAddHandler</referencedby>
+        <referencedby refid="dc/d17/a03783_1af943899d0b999059f4c27e152a1cd2ce" compoundref="de/d55/a00323" startline="488" endline="499">doGetHandlers</referencedby>
+        <referencedby refid="dc/d17/a03783_1a3b2f2515b1c768ab6c5fa88b8ff0109d" compoundref="de/d55/a00323" startline="506" endline="510">doHasHandlers</referencedby>
+        <referencedby refid="dc/d17/a03783_1a46e27a9771c43474cffca043d60b9fd9" compoundref="de/d55/a00323" startline="542" endline="556">doRemoveHandlerNL</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a03783_1a364f3a6fa9ccb20ed3a5ae2bba260ee1" prot="protected" static="no" mutable="no">
+        <type>FrameListenerRPtr</type>
+        <definition>FrameListenerRPtr castor3d::UserInputListener::m_frameListener</definition>
+        <argsstring></argsstring>
+        <name>m_frameListener</name>
+        <qualifiedname>castor3d::UserInputListener::m_frameListener</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le frame listener associé. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="607" column="19" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="607" bodyend="-1"/>
+        <referencedby refid="dc/d17/a03783_1a4517c0ab3bb1374636ff75229f632fe8" compoundref="de/d55/a00323" startline="93" endline="96">getFrameListener</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a03783_1a2214124379a932a9770d357cad0ac8ba" prot="private" static="no" mutable="no">
+        <type><ref refid="db/d07/a03779" kindref="compound">MouseState</ref></type>
+        <definition>MouseState castor3d::UserInputListener::m_mouse</definition>
+        <argsstring></argsstring>
+        <name>m_mouse</name>
+        <qualifiedname>castor3d::UserInputListener::m_mouse</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="610" column="12" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="610" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a03783_1a7ade36a32fa7227bab796782e08f9b4b" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/dfb/a03775" kindref="compound">KeyboardState</ref></type>
+        <definition>KeyboardState castor3d::UserInputListener::m_keyboard</definition>
+        <argsstring></argsstring>
+        <name>m_keyboard</name>
+        <qualifiedname>castor3d::UserInputListener::m_keyboard</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="611" column="15" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="611" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a03783_1a8aae7fabed5b23aafd0a6ac090dab9a8" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::UserInputListener::m_enabled</definition>
+        <argsstring></argsstring>
+        <name>m_enabled</name>
+        <qualifiedname>castor3d::UserInputListener::m_enabled</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="612" column="6" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="612" bodyend="612"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a03783_1a7f5b39c982f299cb687d092e582fd340" prot="private" static="no" mutable="no">
+        <type>EventHandlerRPtr</type>
+        <definition>EventHandlerRPtr castor3d::UserInputListener::m_activeHandler</definition>
+        <argsstring></argsstring>
+        <name>m_activeHandler</name>
+        <qualifiedname>castor3d::UserInputListener::m_activeHandler</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="613" column="18" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="613" bodyend="613"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a03783_1a25b03059db000b0ef8fca0c5cd3740b2" prot="private" static="no" mutable="no">
+        <type>EventHandlerRPtr</type>
+        <definition>EventHandlerRPtr castor3d::UserInputListener::m_lastMouseTarget</definition>
+        <argsstring></argsstring>
+        <name>m_lastMouseTarget</name>
+        <qualifiedname>castor3d::UserInputListener::m_lastMouseTarget</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="614" column="18" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="614" bodyend="614"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a03783_1a90eb321abf7febf92aa0c3b0aeb8d0e4" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af776079ca1d2ee2d1b993f2d34011159" kindref="member">castor::StringMap</ref>&lt; <ref refid="dc/d17/a03783_1a600a2c2dac4da186f132ffb09e247013" kindref="member">OnMouseMoveActionFunction</ref> &gt;</type>
+        <definition>castor::StringMap&lt; OnMouseMoveActionFunction &gt; castor3d::UserInputListener::m_onMouseMoveActions</definition>
+        <argsstring></argsstring>
+        <name>m_onMouseMoveActions</name>
+        <qualifiedname>castor3d::UserInputListener::m_onMouseMoveActions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="615" column="19" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="615" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a03783_1a98ce5d4a814844b88d6e8f316b17b1df" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af776079ca1d2ee2d1b993f2d34011159" kindref="member">castor::StringMap</ref>&lt; <ref refid="dc/d17/a03783_1a12e441e80444c165be52c64d131a332c" kindref="member">OnClickActionFunction</ref> &gt;</type>
+        <definition>castor::StringMap&lt; OnClickActionFunction &gt; castor3d::UserInputListener::m_onClickActions</definition>
+        <argsstring></argsstring>
+        <name>m_onClickActions</name>
+        <qualifiedname>castor3d::UserInputListener::m_onClickActions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="616" column="19" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="616" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a03783_1af3dcff9d30b37efb452474cf20a25ac2" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af776079ca1d2ee2d1b993f2d34011159" kindref="member">castor::StringMap</ref>&lt; <ref refid="dc/d17/a03783_1afcce74fbf7a67731d55977e36f2765b4" kindref="member">OnSelectActionFunction</ref> &gt;</type>
+        <definition>castor::StringMap&lt; OnSelectActionFunction &gt; castor3d::UserInputListener::m_onSelectActions</definition>
+        <argsstring></argsstring>
+        <name>m_onSelectActions</name>
+        <qualifiedname>castor3d::UserInputListener::m_onSelectActions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="617" column="19" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="617" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a03783_1a022ddb28aaa738f1787f43dda089e38e" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af776079ca1d2ee2d1b993f2d34011159" kindref="member">castor::StringMap</ref>&lt; <ref refid="dc/d17/a03783_1a3567c68e7fa214881ede1aa050005dd1" kindref="member">OnTextActionFunction</ref> &gt;</type>
+        <definition>castor::StringMap&lt; OnTextActionFunction &gt; castor3d::UserInputListener::m_onTextActions</definition>
+        <argsstring></argsstring>
+        <name>m_onTextActions</name>
+        <qualifiedname>castor3d::UserInputListener::m_onTextActions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="618" column="19" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="618" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a03783_1a826b3c9bd1babf3b983245aef4fb0b8a" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af776079ca1d2ee2d1b993f2d34011159" kindref="member">castor::StringMap</ref>&lt; <ref refid="dc/d17/a03783_1aaed03bfcf87b4f8b82c3590a6f6514b4" kindref="member">OnExpandActionFunction</ref> &gt;</type>
+        <definition>castor::StringMap&lt; OnExpandActionFunction &gt; castor3d::UserInputListener::m_onExpandActions</definition>
+        <argsstring></argsstring>
+        <name>m_onExpandActions</name>
+        <qualifiedname>castor3d::UserInputListener::m_onExpandActions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="619" column="19" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="619" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a03783_1ad3eb6361f00a07a2af7366973b3584a4" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d17/a03783_1a84a6a035227a6983c7987734155aa4d0" kindref="member">OnCursorActionFunction</ref></type>
+        <definition>OnCursorActionFunction castor3d::UserInputListener::m_onCursorAction</definition>
+        <argsstring></argsstring>
+        <name>m_onCursorAction</name>
+        <qualifiedname>castor3d::UserInputListener::m_onCursorAction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="620" column="24" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="620" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a03783_1a2aba09ee16df1ff24eb8cd47a4d54bb7" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d17/a03783_1a11b82baf9b43d7687211d6be6fc1dfa6" kindref="member">OnClipboardTextActionFunction</ref></type>
+        <definition>OnClipboardTextActionFunction castor3d::UserInputListener::m_onClipboardTextAction</definition>
+        <argsstring></argsstring>
+        <name>m_onClipboardTextAction</name>
+        <qualifiedname>castor3d::UserInputListener::m_onClipboardTextAction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="621" column="31" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="621" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a89850c36d4d11cce55f6fda961889f65" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::UserInputListener::fireKeydown</definition>
+        <argsstring>(KeyboardKey key, bool ctrl, bool alt, bool shift)</argsstring>
+        <name>fireKeydown</name>
+        <qualifiedname>castor3d::UserInputListener::fireKeydown</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1ad372dd0cc65f28ad7f558f07c78becb7" kindref="member">KeyboardKey</ref></type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>ctrl</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>alt</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>shift</declname>
+        </param>
+        <briefdescription>
+<para>Lance un évènement de touche de clavier appuyée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le code de la touche. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ctrl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la touche Ctrl est enfoncée. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">alt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la touche Alt est enfoncée. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">shift</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la touche Shift est enfoncée. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si l&apos;évènement est traité par un gestionnaire. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="440" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a5134c0c3c4ec8f16a38f3688e51b56f5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::UserInputListener::fireKeyUp</definition>
+        <argsstring>(KeyboardKey key, bool ctrl, bool alt, bool shift)</argsstring>
+        <name>fireKeyUp</name>
+        <qualifiedname>castor3d::UserInputListener::fireKeyUp</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1ad372dd0cc65f28ad7f558f07c78becb7" kindref="member">KeyboardKey</ref></type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>ctrl</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>alt</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>shift</declname>
+        </param>
+        <briefdescription>
+<para>Lance un évènement de touche de clavier relâchée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le code de la touche. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ctrl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la touche Ctrl est enfoncée. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">alt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la touche Alt est enfoncée. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">shift</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la touche Shift est enfoncée. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si l&apos;évènement est traité par un gestionnaire. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="460" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a679c1de2c60f8d2ecda306283a58844e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::UserInputListener::fireChar</definition>
+        <argsstring>(KeyboardKey key, castor::String const &amp;c)</argsstring>
+        <name>fireChar</name>
+        <qualifiedname>castor3d::UserInputListener::fireChar</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1ad372dd0cc65f28ad7f558f07c78becb7" kindref="member">KeyboardKey</ref></type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+<para>Lance un évènement de caractère imprimable. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le code de la touche. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le caractère correspondant à la touche, affichable tel quel. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si l&apos;évènement est traité par un gestionnaire. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="476" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1af943899d0b999059f4c27e152a1cd2ce" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; EventHandlerRPtr &gt;</type>
+        <definition>castor::Vector&lt; EventHandlerRPtr &gt; castor3d::UserInputListener::doGetHandlers</definition>
+        <argsstring>() const</argsstring>
+        <name>doGetHandlers</name>
+        <qualifiedname>castor3d::UserInputListener::doGetHandlers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Les gestionnaires, de manière thread-safe. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="488" column="23" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="488" bodyend="499"/>
+        <references refid="dc/d17/a03783_1a5ba7d4f9ab6caf0ef7f1adc88b56a855" compoundref="de/d55/a00323" startline="604">m_handlers</references>
+        <references refid="dc/d17/a03783_1a20e13c34858ffef83b2db1aa91265c4a" compoundref="de/d55/a00323" startline="601">m_mutexHandlers</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a3b2f2515b1c768ab6c5fa88b8ff0109d" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::UserInputListener::doHasHandlers</definition>
+        <argsstring>() const</argsstring>
+        <name>doHasHandlers</name>
+        <qualifiedname>castor3d::UserInputListener::doHasHandlers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> s&apos;il y a des gestionnaires. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="506" column="13" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="506" bodyend="510"/>
+        <references refid="dc/d17/a03783_1a5ba7d4f9ab6caf0ef7f1adc88b56a855" compoundref="de/d55/a00323" startline="604">m_handlers</references>
+        <references refid="dc/d17/a03783_1a20e13c34858ffef83b2db1aa91265c4a" compoundref="de/d55/a00323" startline="601">m_mutexHandlers</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1afcc4620692918ecabebe183a086df13e" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>EventHandlerRPtr</type>
+        <definition>EventHandlerRPtr castor3d::UserInputListener::doAddHandler</definition>
+        <argsstring>(EventHandlerUPtr handler)</argsstring>
+        <name>doAddHandler</name>
+        <qualifiedname>castor3d::UserInputListener::doAddHandler</qualifiedname>
+        <param>
+          <type>EventHandlerUPtr</type>
+          <declname>handler</declname>
+        </param>
+        <briefdescription>
+<para>Supprime un gestionnaire. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Vous <emphasis>DEVEZ</emphasis> appeler cette fonction lors de l&apos;ajout d&apos;un gestionnaire dans vos listes, si vous voulez qu&apos;il soit mis à jour. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le gestionnaire. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="521" column="25" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="521" bodyend="533"/>
+        <references refid="d0/dce/a01946_1ab9410fa9a6a0a8fa4bce2bebc9d2edaf" compoundref="d0/dce/a01946" startline="203" endline="204">CU_Exception</references>
+        <references refid="dc/d17/a03783_1a5ba7d4f9ab6caf0ef7f1adc88b56a855" compoundref="de/d55/a00323" startline="604">m_handlers</references>
+        <references refid="dc/d17/a03783_1a20e13c34858ffef83b2db1aa91265c4a" compoundref="de/d55/a00323" startline="601">m_mutexHandlers</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a46e27a9771c43474cffca043d60b9fd9" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::UserInputListener::doRemoveHandlerNL</definition>
+        <argsstring>(EventHandler const &amp;handler)</argsstring>
+        <name>doRemoveHandlerNL</name>
+        <qualifiedname>castor3d::UserInputListener::doRemoveHandlerNL</qualifiedname>
+        <param>
+          <type><ref refid="da/db0/a03747" kindref="compound">EventHandler</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <briefdescription>
+<para>Supprime un gestionnaire. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le gestionnaire. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="542" column="13" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="542" bodyend="556"/>
+        <references refid="dc/d17/a03783_1a5ba7d4f9ab6caf0ef7f1adc88b56a855" compoundref="de/d55/a00323" startline="604">m_handlers</references>
+        <referencedby refid="dc/d17/a03783_1aa60cd82b80e2e3ad1251efe5a4714645" compoundref="de/d55/a00323" startline="565" endline="569">doRemoveHandler</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1aa60cd82b80e2e3ad1251efe5a4714645" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::UserInputListener::doRemoveHandler</definition>
+        <argsstring>(EventHandler const &amp;handler)</argsstring>
+        <name>doRemoveHandler</name>
+        <qualifiedname>castor3d::UserInputListener::doRemoveHandler</qualifiedname>
+        <param>
+          <type><ref refid="da/db0/a03747" kindref="compound">EventHandler</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <briefdescription>
+<para>Supprime un gestionnaire. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le gestionnaire. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="565" column="13" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="565" bodyend="569"/>
+        <references refid="dc/d17/a03783_1a46e27a9771c43474cffca043d60b9fd9" compoundref="de/d55/a00323" startline="542" endline="556">doRemoveHandlerNL</references>
+        <references refid="dc/d17/a03783_1a20e13c34858ffef83b2db1aa91265c4a" compoundref="de/d55/a00323" startline="601">m_mutexHandlers</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a9e692a2ce162598cd0032696a3c1dea2" prot="private" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type>EventHandlerRPtr</type>
+        <definition>virtual EventHandlerRPtr castor3d::UserInputListener::doGetMouseTargetableHandler</definition>
+        <argsstring>(castor::Position const &amp;position) const =0</argsstring>
+        <name>doGetMouseTargetableHandler</name>
+        <qualifiedname>castor3d::UserInputListener::doGetMouseTargetableHandler</qualifiedname>
+        <reimplementedby refid="d4/d16/a03859_1a178de58ab239a4c4836644b8accb586a">doGetMouseTargetableHandler</reimplementedby>
+        <reimplementedby refid="dc/d81/a06611_1ab89c21bee6215a5320081449d2dfc0b0">doGetMouseTargetableHandler</reimplementedby>
+        <param>
+          <type><ref refid="df/dba/a08999" kindref="compound">castor::Position</ref> const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <briefdescription>
+<para>Récupère le premier gestionnaire pouvant être ciblé par la souris. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>la position de la souris. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le gestionnaire, <computeroutput>nullptr</computeroutput> si aucun. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="582" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1ad47ff3d8f735dcf53e177e76d7cad86d" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>bool</type>
+        <definition>virtual bool castor3d::UserInputListener::doInitialise</definition>
+        <argsstring>()=0</argsstring>
+        <name>doInitialise</name>
+        <qualifiedname>castor3d::UserInputListener::doInitialise</qualifiedname>
+        <reimplementedby refid="d4/d16/a03859_1a660b2cfbae64148295542edf2004c810">doInitialise</reimplementedby>
+        <reimplementedby refid="dc/d81/a06611_1abbbb75d95950160cd0440bc9ef3b7b71">doInitialise</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>copydoc castor3d::UserInputListener::Initialise </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="586" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1ac28f2aef08706e57039f700830e1ecbe" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::UserInputListener::doCleanup</definition>
+        <argsstring>()=0</argsstring>
+        <name>doCleanup</name>
+        <qualifiedname>castor3d::UserInputListener::doCleanup</qualifiedname>
+        <reimplementedby refid="d4/d16/a03859_1ac142caee9537eff64d6c423f084b8261">doCleanup</reimplementedby>
+        <reimplementedby refid="dc/d81/a06611_1a2f8b0433b4927cc103cdd9a1216fc8b7">doCleanup</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>copydoc castor3d::UserInputListener::Cleanup </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="590" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1aab59e29357698ac565da93a02708df36" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::UserInputListener::doUpdateCommandKeys</definition>
+        <argsstring>(bool ctrl, bool alt, bool shift)</argsstring>
+        <name>doUpdateCommandKeys</name>
+        <qualifiedname>castor3d::UserInputListener::doUpdateCommandKeys</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>ctrl</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>alt</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>shift</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>brief Updates keyboard command keys </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="594" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <header>General</header>
+      <memberdef kind="function" id="dc/d17/a03783_1a474a3d2025559d3751c384bc7d50c971" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::UserInputListener::UserInputListener</definition>
+        <argsstring>(UserInputListener const &amp;)=delete</argsstring>
+        <name>UserInputListener</name>
+        <qualifiedname>castor3d::UserInputListener::UserInputListener</qualifiedname>
+        <param>
+          <type><ref refid="dc/d17/a03783" kindref="compound">UserInputListener</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="27" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1afeb2dafd12e6b3915cb717650051b6f7" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::UserInputListener::UserInputListener</definition>
+        <argsstring>(UserInputListener &amp;&amp;) noexcept=delete</argsstring>
+        <name>UserInputListener</name>
+        <qualifiedname>castor3d::UserInputListener::UserInputListener</qualifiedname>
+        <param>
+          <type><ref refid="dc/d17/a03783" kindref="compound">UserInputListener</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="28" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1aa480584873eba07c271876d8a5140380" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/d17/a03783" kindref="compound">UserInputListener</ref> &amp;</type>
+        <definition>UserInputListener &amp; castor3d::UserInputListener::operator=</definition>
+        <argsstring>(UserInputListener const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::UserInputListener::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dc/d17/a03783" kindref="compound">UserInputListener</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="29" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1ad3154a80ab7ed549f394937ff56193fa" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="dc/d17/a03783" kindref="compound">UserInputListener</ref> &amp;</type>
+        <definition>UserInputListener &amp; castor3d::UserInputListener::operator=</definition>
+        <argsstring>(UserInputListener &amp;&amp;) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::UserInputListener::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dc/d17/a03783" kindref="compound">UserInputListener</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="30" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a2e599855c97483e2a2bb2dfd920bcd38" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::UserInputListener::UserInputListener</definition>
+        <argsstring>(Engine &amp;engine, castor::String const &amp;name)</argsstring>
+        <name>UserInputListener</name>
+        <qualifiedname>castor3d::UserInputListener::UserInputListener</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du listener. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="41" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a0c361cf810a089f7f13e7ab4bd50bcf8" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::UserInputListener::~UserInputListener</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~UserInputListener</name>
+        <qualifiedname>castor3d::UserInputListener::~UserInputListener</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="49" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a2c91f11f8c5c099e6a1c4bff1f548dfa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::UserInputListener::initialise</definition>
+        <argsstring>()</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::UserInputListener::initialise</qualifiedname>
+        <briefdescription>
+<para>Initialise le listener. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>true, espérons :P. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="58" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1aa8ce17bc77eb834003cced1abea4e322" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::UserInputListener::cleanup</qualifiedname>
+        <briefdescription>
+<para>Nettoie le listener. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="65" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a379f777bd2ac75e703449c874388f46e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::processEvents</definition>
+        <argsstring>()</argsstring>
+        <name>processEvents</name>
+        <qualifiedname>castor3d::UserInputListener::processEvents</qualifiedname>
+        <briefdescription>
+<para>Traite tous les évènements. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="72" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <header>Getters</header>
+      <memberdef kind="function" id="dc/d17/a03783_1ab0a77767ad1a4a323264c7896a80eaf6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="df/dba/a08999" kindref="compound">castor::Position</ref> const &amp;</type>
+        <definition>castor::Position const  &amp; castor3d::UserInputListener::getMousePosition</definition>
+        <argsstring>() const</argsstring>
+        <name>getMousePosition</name>
+        <qualifiedname>castor3d::UserInputListener::getMousePosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="78" column="25" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="78" bodyend="81"/>
+        <references refid="db/d07/a03779_1adbdf5d0b354c06a50c13d2d4528828ef" compoundref="dd/de2/a00320" startline="326">castor3d::MouseState::position</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a96d690e3dec41ea6fd10e70a21b75035" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>EventHandlerRPtr</type>
+        <definition>EventHandlerRPtr castor3d::UserInputListener::getActiveControl</definition>
+        <argsstring>() const</argsstring>
+        <name>getActiveControl</name>
+        <qualifiedname>castor3d::UserInputListener::getActiveControl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="83" column="25" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="83" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a15ba485c4269abb41f0be20f7e309aa9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>EventHandlerRPtr</type>
+        <definition>EventHandlerRPtr castor3d::UserInputListener::getFocusedControl</definition>
+        <argsstring>() const</argsstring>
+        <name>getFocusedControl</name>
+        <qualifiedname>castor3d::UserInputListener::getFocusedControl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="88" column="25" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="88" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a4517c0ab3bb1374636ff75229f632fe8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/d3c/a03735" kindref="compound">FrameListener</ref> &amp;</type>
+        <definition>FrameListener &amp; castor3d::UserInputListener::getFrameListener</definition>
+        <argsstring>() const</argsstring>
+        <name>getFrameListener</name>
+        <qualifiedname>castor3d::UserInputListener::getFrameListener</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="93" column="23" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="93" bodyend="96"/>
+        <references refid="dc/d17/a03783_1a364f3a6fa9ccb20ed3a5ae2bba260ee1" compoundref="de/d55/a00323" startline="607">m_frameListener</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <header>Output events</header>
+      <memberdef kind="function" id="dc/d17/a03783_1a3d8e41ec70a24b238be398712012e036" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::registerMouseMoveAction</definition>
+        <argsstring>(castor::String const &amp;handler, OnMouseMoveActionFunction function)</argsstring>
+        <name>registerMouseMoveAction</name>
+        <qualifiedname>castor3d::UserInputListener::registerMouseMoveAction</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d17/a03783_1a600a2c2dac4da186f132ffb09e247013" kindref="member">OnMouseMoveActionFunction</ref></type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+<para>Enregistre une fonction à appeler lorsqu&apos;un évènement de déplacement de souris est lancé par le handler donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le handler. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La fonction. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="112" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1adbbdf0b7d4e151079b73152f007416f2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::registerClickAction</definition>
+        <argsstring>(castor::String const &amp;handler, OnClickActionFunction function)</argsstring>
+        <name>registerClickAction</name>
+        <qualifiedname>castor3d::UserInputListener::registerClickAction</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d17/a03783_1a12e441e80444c165be52c64d131a332c" kindref="member">OnClickActionFunction</ref></type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+<para>Enregistre une fonction à appeler lorsqu&apos;un évènement de clic de souris est lancé par le handler donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le handler cliqué. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La fonction. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="124" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a7eef9892848ee17099bca6e3da6c22d5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::registerSelectAction</definition>
+        <argsstring>(castor::String const &amp;handler, OnSelectActionFunction function)</argsstring>
+        <name>registerSelectAction</name>
+        <qualifiedname>castor3d::UserInputListener::registerSelectAction</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d17/a03783_1afcce74fbf7a67731d55977e36f2765b4" kindref="member">OnSelectActionFunction</ref></type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+<para>Enregistre une fonction à appeler lorsqu&apos;un évènement de sélection est lancé par le handler donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le handler. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La fonction. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="136" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a89b3c690479c7ecfd64cbaf0a08af8f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::registerTextAction</definition>
+        <argsstring>(castor::String const &amp;handler, OnTextActionFunction function)</argsstring>
+        <name>registerTextAction</name>
+        <qualifiedname>castor3d::UserInputListener::registerTextAction</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d17/a03783_1a3567c68e7fa214881ede1aa050005dd1" kindref="member">OnTextActionFunction</ref></type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+<para>Enregistre une fonction à appeler lorsqu&apos;un évènement de texte est lancé par le handler donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le handler. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La fonction. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="148" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a8a3c651b8da1b7d9cd94ea3bd83e705e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::registerExpandAction</definition>
+        <argsstring>(castor::String const &amp;handler, OnExpandActionFunction function)</argsstring>
+        <name>registerExpandAction</name>
+        <qualifiedname>castor3d::UserInputListener::registerExpandAction</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d17/a03783_1aaed03bfcf87b4f8b82c3590a6f6514b4" kindref="member">OnExpandActionFunction</ref></type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+<para>Enregistre une fonction à appeler lorsqu&apos;un évènement d&apos;expansion est lancé par le handler donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le handler. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La fonction. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="160" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a885df18c3a9be1cac219f00981953188" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::registerCursorAction</definition>
+        <argsstring>(OnCursorActionFunction function)</argsstring>
+        <name>registerCursorAction</name>
+        <qualifiedname>castor3d::UserInputListener::registerCursorAction</qualifiedname>
+        <param>
+          <type><ref refid="dc/d17/a03783_1a84a6a035227a6983c7987734155aa4d0" kindref="member">OnCursorActionFunction</ref></type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+<para>Enregistre une fonction à appeler lorsqu&apos;un évènement de curseur de souris est lancé par le handler donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La fonction. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="170" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a9264f508484cbfaed4a286550a8064d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::registerClipboardTextAction</definition>
+        <argsstring>(OnClipboardTextActionFunction function)</argsstring>
+        <name>registerClipboardTextAction</name>
+        <qualifiedname>castor3d::UserInputListener::registerClipboardTextAction</qualifiedname>
+        <param>
+          <type><ref refid="dc/d17/a03783_1a11b82baf9b43d7687211d6be6fc1dfa6" kindref="member">OnClipboardTextActionFunction</ref></type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+<para>Enregistre une fonction à appeler lorsqu&apos;un évènement de presse-papier est lancé par le handler donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La fonction. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="179" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1ae5529141ea9f1ab6c7966572a7aa3de5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::unregisterMouseMoveAction</definition>
+        <argsstring>(castor::String const &amp;handler)</argsstring>
+        <name>unregisterMouseMoveAction</name>
+        <qualifiedname>castor3d::UserInputListener::unregisterMouseMoveAction</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <briefdescription>
+<para>Désenregistre la fonction à appeler lorsqu&apos;un évènement de déplacement de souris est lancé par le handler donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le handler. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="188" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a99ba659903d1199e03b8e8323c1381dc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::unregisterClickAction</definition>
+        <argsstring>(castor::String const &amp;handler)</argsstring>
+        <name>unregisterClickAction</name>
+        <qualifiedname>castor3d::UserInputListener::unregisterClickAction</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <briefdescription>
+<para>Désenregistre la fonction à appeler lorsqu&apos;un évènement de clic de souris est lancé par le handler donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le handler cliqué. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="197" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a827e0cee29d7653f69a5e55e572f7cb6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::unregisterSelectAction</definition>
+        <argsstring>(castor::String const &amp;handler)</argsstring>
+        <name>unregisterSelectAction</name>
+        <qualifiedname>castor3d::UserInputListener::unregisterSelectAction</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <briefdescription>
+<para>Désenregistre la fonction à appeler lorsqu&apos;un évènement de sélection est lancé par le handler donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le handler. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="206" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a30252abfab5f2d0de99b28c030a4c029" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::unregisterTextAction</definition>
+        <argsstring>(castor::String const &amp;handler)</argsstring>
+        <name>unregisterTextAction</name>
+        <qualifiedname>castor3d::UserInputListener::unregisterTextAction</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <briefdescription>
+<para>Désenregistre la fonction à appeler lorsqu&apos;un évènement de texte est lancé par le handler donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le handler. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="215" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1ab27f78782b6b0ec5e8de3902669856fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::unregisterExpandAction</definition>
+        <argsstring>(castor::String const &amp;handler)</argsstring>
+        <name>unregisterExpandAction</name>
+        <qualifiedname>castor3d::UserInputListener::unregisterExpandAction</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <briefdescription>
+<para>Désenregistre la fonction à appeler lorsqu&apos;un évènement d&apos;expansion est lancé par le handler donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le handler. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="224" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a6243ebf57d360f6c57ab7932b040988d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::unregisterCursorAction</definition>
+        <argsstring>()</argsstring>
+        <name>unregisterCursorAction</name>
+        <qualifiedname>castor3d::UserInputListener::unregisterCursorAction</qualifiedname>
+        <briefdescription>
+<para>Désenregistre la fonction à appeler lorsqu&apos;un évènement de curseur de souris est lancé par le handler donné. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="231" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1af50b76860cfd9dacf7e24046c9c31b98" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::unregisterClipboardTextAction</definition>
+        <argsstring>()</argsstring>
+        <name>unregisterClipboardTextAction</name>
+        <qualifiedname>castor3d::UserInputListener::unregisterClipboardTextAction</qualifiedname>
+        <briefdescription>
+<para>Désenregistre la fonction à appeler lorsqu&apos;un évènement de presse-papier est lancé par le handler donné. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="238" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a4372079d1bd9816786165c66becd5ab2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::onMouseMoveAction</definition>
+        <argsstring>(castor::String const &amp;handler) const</argsstring>
+        <name>onMouseMoveAction</name>
+        <qualifiedname>castor3d::UserInputListener::onMouseMoveAction</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <briefdescription>
+<para>Evènement lancé par le handler si la souris est déplacée au dessus de sa surface. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le handler. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="247" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a3a7d2d9c6c8dfa4b7bfa610243e74c0b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::onClickAction</definition>
+        <argsstring>(castor::String const &amp;handler) const</argsstring>
+        <name>onClickAction</name>
+        <qualifiedname>castor3d::UserInputListener::onClickAction</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <briefdescription>
+<para>Evènement lancé par le handler s&apos;il est cliqué et qu&apos;il le supporte. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le handler cliqué. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="256" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a09164a9f7143e23a6a7cd580f6578516" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::onSelectAction</definition>
+        <argsstring>(castor::String const &amp;handler, int index) const</argsstring>
+        <name>onSelectAction</name>
+        <qualifiedname>castor3d::UserInputListener::onSelectAction</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Evènement lancé par le handler lorsqu&apos;un de ses sous éléments est sélectionné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le handler. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;indice de la sélection. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="267" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a5fec21a23ecbbbb721740438a181aa62" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::onTextAction</definition>
+        <argsstring>(castor::String const &amp;handler, castor::U32String const &amp;text) const</argsstring>
+        <name>onTextAction</name>
+        <qualifiedname>castor3d::UserInputListener::onTextAction</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a711230db9a0d01b63d4a842b71cf1f95" kindref="member">castor::U32String</ref> const &amp;</type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+<para>Evènement lancé par le handler lorsque son texte a changé. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le handler. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">text</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nouveau texte. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="279" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1ac9bbaa8d2126f78b2679cd8630e95607" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::onExpandAction</definition>
+        <argsstring>(castor::String const &amp;handler, bool expand) const</argsstring>
+        <name>onExpandAction</name>
+        <qualifiedname>castor3d::UserInputListener::onExpandAction</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>expand</declname>
+        </param>
+        <briefdescription>
+<para>Evènement lancé par le handler lorsque son expansion est changée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le handler. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">expand</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La nouvelle valeur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="291" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a35859aa494eed7ebefc2ff8e84f398d7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::onCursorAction</definition>
+        <argsstring>(MouseCursor cursor) const</argsstring>
+        <name>onCursorAction</name>
+        <qualifiedname>castor3d::UserInputListener::onCursorAction</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a69d555baf449470c341997e225df3551" kindref="member">MouseCursor</ref></type>
+          <declname>cursor</declname>
+        </param>
+        <briefdescription>
+<para>Evènement lorsque le cureur de souris est changé. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">cursor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le curseur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="301" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a3c15cb48e133d7095ec46b1a8dac4b94" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1a711230db9a0d01b63d4a842b71cf1f95" kindref="member">castor::U32String</ref></type>
+        <definition>C3D_API castor::U32String castor3d::UserInputListener::onClipboardTextAction</definition>
+        <argsstring>(bool set, castor::U32String text) const</argsstring>
+        <name>onClipboardTextAction</name>
+        <qualifiedname>castor3d::UserInputListener::onClipboardTextAction</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a711230db9a0d01b63d4a842b71cf1f95" kindref="member">castor::U32String</ref></type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+<para>Evènement lancé lorsqu&apos;une interaction avec le presse-papier est demandée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">set</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> pour définir le texte du presse-papier, <computeroutput>false</computeroutput> pour le récupérer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">text</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur pour le presse-papier. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le texte du presse-papier. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="314" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a338f678848be9b6c5fc98fee4b1b3e56" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::enableHandler</definition>
+        <argsstring>(castor::String const &amp;handler)</argsstring>
+        <name>enableHandler</name>
+        <qualifiedname>castor3d::UserInputListener::enableHandler</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <briefdescription>
+<para>Active un handler. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le handler. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="324" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1aa12ab8a7cc0fbf101eec5895b35cd7ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UserInputListener::disableHandler</definition>
+        <argsstring>(castor::String const &amp;handler)</argsstring>
+        <name>disableHandler</name>
+        <qualifiedname>castor3d::UserInputListener::disableHandler</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>handler</declname>
+        </param>
+        <briefdescription>
+<para>Désactive un handler. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">handler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le handler. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="333" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <header>Mouse input events</header>
+      <memberdef kind="function" id="dc/d17/a03783_1a0761a28f7d5bb9822aabc89de5d43497" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::UserInputListener::fireMouseMove</definition>
+        <argsstring>(castor::Position const &amp;position, bool ctrl, bool alt, bool shift)</argsstring>
+        <name>fireMouseMove</name>
+        <qualifiedname>castor3d::UserInputListener::fireMouseMove</qualifiedname>
+        <param>
+          <type><ref refid="df/dba/a08999" kindref="compound">castor::Position</ref> const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>ctrl</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>alt</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>shift</declname>
+        </param>
+        <briefdescription>
+<para>Lance un évènement de déplacement de souris. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La position de la souris. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ctrl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la touche Ctrl est enfoncée. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">alt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la touche Alt est enfoncée. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">shift</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la touche Shift est enfoncée. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si l&apos;évènement est traité par un gestionnaire. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="355" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1a7732c49b0745f38521852e237cbf4155" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::UserInputListener::fireMouseButtonPushed</definition>
+        <argsstring>(MouseButton button, bool ctrl, bool alt, bool shift)</argsstring>
+        <name>fireMouseButtonPushed</name>
+        <qualifiedname>castor3d::UserInputListener::fireMouseButtonPushed</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a087f824502cd45431879fc5c96607682" kindref="member">MouseButton</ref></type>
+          <declname>button</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>ctrl</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>alt</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>shift</declname>
+        </param>
+        <briefdescription>
+<para>Lance un évènement de bouton de souris appuyé. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">button</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le bouton de la souris. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ctrl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la touche Ctrl est enfoncée. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">alt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la touche Alt est enfoncée. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">shift</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la touche Shift est enfoncée. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si l&apos;évènement est traité par un gestionnaire. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="375" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1abee1d2ddc56119a2612bf9de71eeba61" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::UserInputListener::fireMouseButtonReleased</definition>
+        <argsstring>(MouseButton button, bool ctrl, bool alt, bool shift)</argsstring>
+        <name>fireMouseButtonReleased</name>
+        <qualifiedname>castor3d::UserInputListener::fireMouseButtonReleased</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a087f824502cd45431879fc5c96607682" kindref="member">MouseButton</ref></type>
+          <declname>button</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>ctrl</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>alt</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>shift</declname>
+        </param>
+        <briefdescription>
+<para>Lance un évènement de bouton de souris relâché. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">button</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le bouton de la souris. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ctrl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la touche Ctrl est enfoncée. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">alt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la touche Alt est enfoncée. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">shift</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la touche Shift est enfoncée. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si l&apos;évènement est traité par un gestionnaire. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="395" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a03783_1aa41f03b2578fd37f5aeb65b9d0d2708f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::UserInputListener::fireMouseWheel</definition>
+        <argsstring>(castor::Position const &amp;offsets, bool ctrl, bool alt, bool shift)</argsstring>
+        <name>fireMouseWheel</name>
+        <qualifiedname>castor3d::UserInputListener::fireMouseWheel</qualifiedname>
+        <param>
+          <type><ref refid="df/dba/a08999" kindref="compound">castor::Position</ref> const &amp;</type>
+          <declname>offsets</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>ctrl</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>alt</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>shift</declname>
+        </param>
+        <briefdescription>
+<para>Lance un évènement de molette de souris. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">offsets</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les déplacements de la molette (x et y). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ctrl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la touche Ctrl est enfoncée. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">alt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la touche Alt est enfoncée. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">shift</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si la touche Shift est enfoncée. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si l&apos;évènement est traité par un gestionnaire. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="415" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dc/d17/a03783_1a12e441e80444c165be52c64d131a332c" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void() &gt;</type>
+        <definition>using castor3d::UserInputListener::OnClickActionFunction =  castor::Function&lt; void() &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnClickActionFunction</name>
+        <qualifiedname>castor3d::UserInputListener::OnClickActionFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="16" column="1" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d17/a03783_1a600a2c2dac4da186f132ffb09e247013" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void(<ref refid="df/dba/a08999" kindref="compound">castor::Position</ref> const &amp;) &gt;</type>
+        <definition>using castor3d::UserInputListener::OnMouseMoveActionFunction =  castor::Function&lt; void( castor::Position const &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnMouseMoveActionFunction</name>
+        <qualifiedname>castor3d::UserInputListener::OnMouseMoveActionFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="17" column="1" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d17/a03783_1afcce74fbf7a67731d55977e36f2765b4" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void(int) &gt;</type>
+        <definition>using castor3d::UserInputListener::OnSelectActionFunction =  castor::Function&lt; void( int ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnSelectActionFunction</name>
+        <qualifiedname>castor3d::UserInputListener::OnSelectActionFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="18" column="1" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d17/a03783_1a3567c68e7fa214881ede1aa050005dd1" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void(<ref refid="d2/dd2/a02279_1a711230db9a0d01b63d4a842b71cf1f95" kindref="member">castor::U32String</ref> const &amp;) &gt;</type>
+        <definition>using castor3d::UserInputListener::OnTextActionFunction =  castor::Function&lt; void( castor::U32String const &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnTextActionFunction</name>
+        <qualifiedname>castor3d::UserInputListener::OnTextActionFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="19" column="1" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d17/a03783_1aaed03bfcf87b4f8b82c3590a6f6514b4" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void(bool) &gt;</type>
+        <definition>using castor3d::UserInputListener::OnExpandActionFunction =  castor::Function&lt; void( bool ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnExpandActionFunction</name>
+        <qualifiedname>castor3d::UserInputListener::OnExpandActionFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="20" column="1" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d17/a03783_1a11b82baf9b43d7687211d6be6fc1dfa6" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; <ref refid="d2/dd2/a02279_1a711230db9a0d01b63d4a842b71cf1f95" kindref="member">castor::U32String</ref>(bool, <ref refid="d2/dd2/a02279_1a711230db9a0d01b63d4a842b71cf1f95" kindref="member">castor::U32String</ref>) &gt;</type>
+        <definition>using castor3d::UserInputListener::OnClipboardTextActionFunction =  castor::Function&lt; castor::U32String( bool, castor::U32String ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnClipboardTextActionFunction</name>
+        <qualifiedname>castor3d::UserInputListener::OnClipboardTextActionFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="21" column="1" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d17/a03783_1a84a6a035227a6983c7987734155aa4d0" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void(<ref refid="d9/dba/a02278_1a69d555baf449470c341997e225df3551" kindref="member">MouseCursor</ref>) &gt;</type>
+        <definition>using castor3d::UserInputListener::OnCursorActionFunction =  castor::Function&lt; void( MouseCursor ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnCursorActionFunction</name>
+        <qualifiedname>castor3d::UserInputListener::OnCursorActionFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="22" column="1" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::ControlsManager</label>
+        <link refid="d4/d16/a03859"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::RenderWindow::InputListener</label>
+        <link refid="dc/d81/a06611"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::UserInputListener</label>
+        <link refid="dc/d17/a03783"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::UserInputListener</label>
+        <link refid="dc/d17/a03783"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_mutexHandlers</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="4">
+        <label>std::mutex</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Event/UserInput/UserInputListener.hpp" line="12" column="1" bodyfile="Castor3D/Event/UserInput/UserInputListener.hpp" bodystart="14" bodyend="622"/>
+    <listofallmembers>
+      <member refid="dc/d17/a03783_1aa8ce17bc77eb834003cced1abea4e322" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>cleanup</name></member>
+      <member refid="dc/d17/a03783_1aa12ab8a7cc0fbf101eec5895b35cd7ef" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>disableHandler</name></member>
+      <member refid="dc/d17/a03783_1afcc4620692918ecabebe183a086df13e" prot="protected" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>doAddHandler</name></member>
+      <member refid="dc/d17/a03783_1ac28f2aef08706e57039f700830e1ecbe" prot="private" virt="pure-virtual"><scope>castor3d::UserInputListener</scope><name>doCleanup</name></member>
+      <member refid="dc/d17/a03783_1af943899d0b999059f4c27e152a1cd2ce" prot="protected" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>doGetHandlers</name></member>
+      <member refid="dc/d17/a03783_1a9e692a2ce162598cd0032696a3c1dea2" prot="private" virt="pure-virtual"><scope>castor3d::UserInputListener</scope><name>doGetMouseTargetableHandler</name></member>
+      <member refid="dc/d17/a03783_1a3b2f2515b1c768ab6c5fa88b8ff0109d" prot="protected" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>doHasHandlers</name></member>
+      <member refid="dc/d17/a03783_1ad47ff3d8f735dcf53e177e76d7cad86d" prot="private" virt="pure-virtual"><scope>castor3d::UserInputListener</scope><name>doInitialise</name></member>
+      <member refid="dc/d17/a03783_1aa60cd82b80e2e3ad1251efe5a4714645" prot="protected" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>doRemoveHandler</name></member>
+      <member refid="dc/d17/a03783_1a46e27a9771c43474cffca043d60b9fd9" prot="protected" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>doRemoveHandlerNL</name></member>
+      <member refid="dc/d17/a03783_1aab59e29357698ac565da93a02708df36" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>doUpdateCommandKeys</name></member>
+      <member refid="dc/d17/a03783_1a338f678848be9b6c5fc98fee4b1b3e56" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>enableHandler</name></member>
+      <member refid="dc/d17/a03783_1a679c1de2c60f8d2ecda306283a58844e" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>fireChar</name></member>
+      <member refid="dc/d17/a03783_1a89850c36d4d11cce55f6fda961889f65" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>fireKeydown</name></member>
+      <member refid="dc/d17/a03783_1a5134c0c3c4ec8f16a38f3688e51b56f5" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>fireKeyUp</name></member>
+      <member refid="dc/d17/a03783_1a7732c49b0745f38521852e237cbf4155" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>fireMouseButtonPushed</name></member>
+      <member refid="dc/d17/a03783_1abee1d2ddc56119a2612bf9de71eeba61" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>fireMouseButtonReleased</name></member>
+      <member refid="dc/d17/a03783_1a0761a28f7d5bb9822aabc89de5d43497" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>fireMouseMove</name></member>
+      <member refid="dc/d17/a03783_1aa41f03b2578fd37f5aeb65b9d0d2708f" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>fireMouseWheel</name></member>
+      <member refid="dc/d17/a03783_1a96d690e3dec41ea6fd10e70a21b75035" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>getActiveControl</name></member>
+      <member refid="dc/d17/a03783_1a15ba485c4269abb41f0be20f7e309aa9" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>getFocusedControl</name></member>
+      <member refid="dc/d17/a03783_1a4517c0ab3bb1374636ff75229f632fe8" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>getFrameListener</name></member>
+      <member refid="dc/d17/a03783_1ab0a77767ad1a4a323264c7896a80eaf6" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>getMousePosition</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>getOwner</name></member>
+      <member refid="dc/d17/a03783_1a2c91f11f8c5c099e6a1c4bff1f548dfa" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>initialise</name></member>
+      <member refid="dc/d17/a03783_1a7f5b39c982f299cb687d092e582fd340" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_activeHandler</name></member>
+      <member refid="dc/d17/a03783_1a8aae7fabed5b23aafd0a6ac090dab9a8" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_enabled</name></member>
+      <member refid="dc/d17/a03783_1a364f3a6fa9ccb20ed3a5ae2bba260ee1" prot="protected" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_frameListener</name></member>
+      <member refid="dc/d17/a03783_1a5ba7d4f9ab6caf0ef7f1adc88b56a855" prot="protected" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_handlers</name></member>
+      <member refid="dc/d17/a03783_1a7ade36a32fa7227bab796782e08f9b4b" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_keyboard</name></member>
+      <member refid="dc/d17/a03783_1a25b03059db000b0ef8fca0c5cd3740b2" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_lastMouseTarget</name></member>
+      <member refid="dc/d17/a03783_1a2214124379a932a9770d357cad0ac8ba" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_mouse</name></member>
+      <member refid="dc/d17/a03783_1a20e13c34858ffef83b2db1aa91265c4a" prot="protected" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_mutexHandlers</name></member>
+      <member refid="dc/d17/a03783_1a98ce5d4a814844b88d6e8f316b17b1df" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_onClickActions</name></member>
+      <member refid="dc/d17/a03783_1a2aba09ee16df1ff24eb8cd47a4d54bb7" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_onClipboardTextAction</name></member>
+      <member refid="dc/d17/a03783_1ad3eb6361f00a07a2af7366973b3584a4" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_onCursorAction</name></member>
+      <member refid="dc/d17/a03783_1a826b3c9bd1babf3b983245aef4fb0b8a" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_onExpandActions</name></member>
+      <member refid="dc/d17/a03783_1a90eb321abf7febf92aa0c3b0aeb8d0e4" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_onMouseMoveActions</name></member>
+      <member refid="dc/d17/a03783_1af3dcff9d30b37efb452474cf20a25ac2" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_onSelectActions</name></member>
+      <member refid="dc/d17/a03783_1a022ddb28aaa738f1787f43dda089e38e" prot="private" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>m_onTextActions</name></member>
+      <member refid="dc/d17/a03783_1a3a7d2d9c6c8dfa4b7bfa610243e74c0b" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>onClickAction</name></member>
+      <member refid="dc/d17/a03783_1a12e441e80444c165be52c64d131a332c" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>OnClickActionFunction</name></member>
+      <member refid="dc/d17/a03783_1a3c15cb48e133d7095ec46b1a8dac4b94" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>onClipboardTextAction</name></member>
+      <member refid="dc/d17/a03783_1a11b82baf9b43d7687211d6be6fc1dfa6" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>OnClipboardTextActionFunction</name></member>
+      <member refid="dc/d17/a03783_1a35859aa494eed7ebefc2ff8e84f398d7" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>onCursorAction</name></member>
+      <member refid="dc/d17/a03783_1a84a6a035227a6983c7987734155aa4d0" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>OnCursorActionFunction</name></member>
+      <member refid="dc/d17/a03783_1ac9bbaa8d2126f78b2679cd8630e95607" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>onExpandAction</name></member>
+      <member refid="dc/d17/a03783_1aaed03bfcf87b4f8b82c3590a6f6514b4" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>OnExpandActionFunction</name></member>
+      <member refid="dc/d17/a03783_1a4372079d1bd9816786165c66becd5ab2" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>onMouseMoveAction</name></member>
+      <member refid="dc/d17/a03783_1a600a2c2dac4da186f132ffb09e247013" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>OnMouseMoveActionFunction</name></member>
+      <member refid="dc/d17/a03783_1a09164a9f7143e23a6a7cd580f6578516" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>onSelectAction</name></member>
+      <member refid="dc/d17/a03783_1afcce74fbf7a67731d55977e36f2765b4" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>OnSelectActionFunction</name></member>
+      <member refid="dc/d17/a03783_1a5fec21a23ecbbbb721740438a181aa62" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>onTextAction</name></member>
+      <member refid="dc/d17/a03783_1a3567c68e7fa214881ede1aa050005dd1" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>OnTextActionFunction</name></member>
+      <member refid="dc/d17/a03783_1aa480584873eba07c271876d8a5140380" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>operator=</name></member>
+      <member refid="dc/d17/a03783_1ad3154a80ab7ed549f394937ff56193fa" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>operator=</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>OwnedBy</name></member>
+      <member refid="dc/d17/a03783_1a379f777bd2ac75e703449c874388f46e" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>processEvents</name></member>
+      <member refid="dc/d17/a03783_1adbbdf0b7d4e151079b73152f007416f2" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>registerClickAction</name></member>
+      <member refid="dc/d17/a03783_1a9264f508484cbfaed4a286550a8064d1" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>registerClipboardTextAction</name></member>
+      <member refid="dc/d17/a03783_1a885df18c3a9be1cac219f00981953188" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>registerCursorAction</name></member>
+      <member refid="dc/d17/a03783_1a8a3c651b8da1b7d9cd94ea3bd83e705e" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>registerExpandAction</name></member>
+      <member refid="dc/d17/a03783_1a3d8e41ec70a24b238be398712012e036" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>registerMouseMoveAction</name></member>
+      <member refid="dc/d17/a03783_1a7eef9892848ee17099bca6e3da6c22d5" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>registerSelectAction</name></member>
+      <member refid="dc/d17/a03783_1a89b3c690479c7ecfd64cbaf0a08af8f0" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>registerTextAction</name></member>
+      <member refid="dc/d17/a03783_1a99ba659903d1199e03b8e8323c1381dc" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>unregisterClickAction</name></member>
+      <member refid="dc/d17/a03783_1af50b76860cfd9dacf7e24046c9c31b98" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>unregisterClipboardTextAction</name></member>
+      <member refid="dc/d17/a03783_1a6243ebf57d360f6c57ab7932b040988d" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>unregisterCursorAction</name></member>
+      <member refid="dc/d17/a03783_1ab27f78782b6b0ec5e8de3902669856fb" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>unregisterExpandAction</name></member>
+      <member refid="dc/d17/a03783_1ae5529141ea9f1ab6c7966572a7aa3de5" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>unregisterMouseMoveAction</name></member>
+      <member refid="dc/d17/a03783_1a827e0cee29d7653f69a5e55e572f7cb6" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>unregisterSelectAction</name></member>
+      <member refid="dc/d17/a03783_1a30252abfab5f2d0de99b28c030a4c029" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>unregisterTextAction</name></member>
+      <member refid="dc/d17/a03783_1a474a3d2025559d3751c384bc7d50c971" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>UserInputListener</name></member>
+      <member refid="dc/d17/a03783_1afeb2dafd12e6b3915cb717650051b6f7" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>UserInputListener</name></member>
+      <member refid="dc/d17/a03783_1a2e599855c97483e2a2bb2dfd920bcd38" prot="public" virt="non-virtual"><scope>castor3d::UserInputListener</scope><name>UserInputListener</name></member>
+      <member refid="dc/d17/a03783_1a0c361cf810a089f7f13e7ab4bd50bcf8" prot="public" virt="virtual"><scope>castor3d::UserInputListener</scope><name>~UserInputListener</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

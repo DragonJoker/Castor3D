@@ -1,0 +1,626 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d55/a09279" kind="class" language="C++" prot="public">
+    <compoundname>castor::PlaneEquation</compoundname>
+    <includes local="no">PlaneEquation.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/d55/a09279_1ae6d9ea0bfdd3f9d63afb5b5c52c5792e" prot="private" static="no" mutable="no">
+        <type>Point3f</type>
+        <definition>Point3f castor::PlaneEquation::m_normal</definition>
+        <argsstring></argsstring>
+        <name>m_normal</name>
+        <qualifiedname>castor::PlaneEquation::m_normal</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PlaneEquation.hpp" line="185" column="9" bodyfile="CastorUtils/Math/PlaneEquation.hpp" bodystart="185" bodyend="185"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d55/a09279_1a80f030729e2d940bbd2f83b84638b384" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor::PlaneEquation::m_d</definition>
+        <argsstring></argsstring>
+        <name>m_d</name>
+        <qualifiedname>castor::PlaneEquation::m_d</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PlaneEquation.hpp" line="186" column="7" bodyfile="CastorUtils/Math/PlaneEquation.hpp" bodystart="186" bodyend="186"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d55/a09279_1aca9a600c1cb8d686cd5fc6a723625075" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::PlaneEquation::PlaneEquation</definition>
+        <argsstring>()=default</argsstring>
+        <name>PlaneEquation</name>
+        <qualifiedname>castor::PlaneEquation::PlaneEquation</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PlaneEquation.hpp" line="21" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a09279_1a20e471b110ece552a2fb345c370625d4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::PlaneEquation::PlaneEquation</definition>
+        <argsstring>(Point3f const &amp;p1, Point3f const &amp;p2, Point3f const &amp;p3)</argsstring>
+        <name>PlaneEquation</name>
+        <qualifiedname>castor::PlaneEquation::PlaneEquation</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>p1</declname>
+        </param>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>p2</declname>
+        </param>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>p3</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">p1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le premier point appartenant au plan. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">p2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le second point appartenant au plan. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">p3</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le troisième point appartenant au plan. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PlaneEquation.hpp" line="34" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a09279_1aabf4edf7830ab45f2bf049f75c8f8c31" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::PlaneEquation::PlaneEquation</definition>
+        <argsstring>(Point3f const &amp;normal, Point3f const &amp;point)</argsstring>
+        <name>PlaneEquation</name>
+        <qualifiedname>castor::PlaneEquation::PlaneEquation</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">normal</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La normale du plan. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Un point appartenant au plan. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PlaneEquation.hpp" line="47" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a09279_1adc63cd0e2b3068047c533ed8f8fc3fa8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::PlaneEquation::PlaneEquation</definition>
+        <argsstring>(Point3f const &amp;normal, float d)</argsstring>
+        <name>PlaneEquation</name>
+        <qualifiedname>castor::PlaneEquation::PlaneEquation</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>d</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">normal</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La normale du plan. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">d</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La distance du plan. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PlaneEquation.hpp" line="59" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a09279_1ace19c523ef364365207d70a65d31a7e4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::PlaneEquation::set</definition>
+        <argsstring>(Point3f const &amp;p1, Point3f const &amp;p2, Point3f const &amp;p3)</argsstring>
+        <name>set</name>
+        <qualifiedname>castor::PlaneEquation::set</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>p1</declname>
+        </param>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>p2</declname>
+        </param>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>p3</declname>
+        </param>
+        <briefdescription>
+<para>Calcule l&apos;équation du plan en fonction de 3 points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">p1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le premier point appartenant au plan. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">p2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le second point appartenant au plan. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">p3</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le troisième point appartenant au plan. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PlaneEquation.hpp" line="73" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a09279_1a3d05e314743749fde70c0f859dd3d57d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::PlaneEquation::set</definition>
+        <argsstring>(Point3f const &amp;normal, Point3f const &amp;point)</argsstring>
+        <name>set</name>
+        <qualifiedname>castor::PlaneEquation::set</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Définit l&apos;équation du plan. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">normal</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La normale du plan. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Un point appartenant au plan. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PlaneEquation.hpp" line="86" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a09279_1ac38317863706cb14ff3c9888914024a4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::PlaneEquation::set</definition>
+        <argsstring>(Point3f const &amp;normal, float d)</argsstring>
+        <name>set</name>
+        <qualifiedname>castor::PlaneEquation::set</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>d</declname>
+        </param>
+        <briefdescription>
+<para>Définit l&apos;équation du plan. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">normal</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La normale du plan. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">d</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La distance du plan. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PlaneEquation.hpp" line="98" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a09279_1a2b0e89149fe766d025bfced1cd37693b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::PlaneEquation::isParallel</definition>
+        <argsstring>(PlaneEquation const &amp;plane) const</argsstring>
+        <name>isParallel</name>
+        <qualifiedname>castor::PlaneEquation::isParallel</qualifiedname>
+        <param>
+          <type><ref refid="dd/d55/a09279" kindref="compound">PlaneEquation</ref> const &amp;</type>
+          <declname>plane</declname>
+        </param>
+        <briefdescription>
+<para>Vérifie si ce plan est parallèle à un autre, id est leurs normales sont parallèles. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">plane</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le plan a tester </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PlaneEquation.hpp" line="108" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a09279_1af2996232d2e24986e613145a28934aa5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> float</type>
+        <definition>CU_API float castor::PlaneEquation::distance</definition>
+        <argsstring>(Point3f const &amp;point) const</argsstring>
+        <name>distance</name>
+        <qualifiedname>castor::PlaneEquation::distance</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la distance entre un point et ce plan. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La distance, positive si le point est du même côté que la normale du plan </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PlaneEquation.hpp" line="119" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a09279_1a97f75b51e04e093a72f3e1e9822816e6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> Point3f</type>
+        <definition>CU_API Point3f castor::PlaneEquation::project</definition>
+        <argsstring>(Point3f const &amp;point) const</argsstring>
+        <name>project</name>
+        <qualifiedname>castor::PlaneEquation::project</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la projection d&apos;un point sur ce plan. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point à projeter </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le résultat de la projection </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PlaneEquation.hpp" line="130" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a09279_1aaabe3f211792971e144664a22a588cb6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::PlaneEquation::intersects</definition>
+        <argsstring>(PlaneEquation const &amp;plane, Line3D&lt; float &gt; &amp;line) const</argsstring>
+        <name>intersects</name>
+        <qualifiedname>castor::PlaneEquation::intersects</qualifiedname>
+        <param>
+          <type><ref refid="dd/d55/a09279" kindref="compound">PlaneEquation</ref> const &amp;</type>
+          <declname>plane</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d28/a09115" kindref="compound">Line3D</ref>&lt; float &gt; &amp;</type>
+          <declname>line</declname>
+        </param>
+        <briefdescription>
+<para>Vérifie si ce plan en croise un autre, donne la ligne d&apos;intersetion si elle existe. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><xrefsect id="d2/d81/a02276_1_todo000001"><xreftitle>A faire</xreftitle><xrefdescription><para>Find origin point</para>
+</xrefdescription></xrefsect><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">plane</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le plan à tester </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">line</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne d&apos;intersection </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> s&apos;il y a une intersection </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PlaneEquation.hpp" line="144" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a09279_1a9695be5bcd25247cac4933736901f104" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::PlaneEquation::intersects</definition>
+        <argsstring>(PlaneEquation const &amp;plane1, PlaneEquation const &amp;plane2, Point3f &amp;intersection) const</argsstring>
+        <name>intersects</name>
+        <qualifiedname>castor::PlaneEquation::intersects</qualifiedname>
+        <param>
+          <type><ref refid="dd/d55/a09279" kindref="compound">PlaneEquation</ref> const &amp;</type>
+          <declname>plane1</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d55/a09279" kindref="compound">PlaneEquation</ref> const &amp;</type>
+          <declname>plane2</declname>
+        </param>
+        <param>
+          <type>Point3f &amp;</type>
+          <declname>intersection</declname>
+        </param>
+        <briefdescription>
+<para>Vérifie si ce plan en croise deux autres, donne le point d&apos;intersetion si il existe. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">plane1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le premier plan à tester </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">plane2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le second plan à tester </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">intersection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point d&apos;intersection </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> s&apos;il y a un point d&apos;intersection entre les 3 plans </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PlaneEquation.hpp" line="160" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a09279_1aacd69122924d667f02aaff32ea7d7687" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Point3f const &amp;</type>
+        <definition>Point3f const  &amp; castor::PlaneEquation::getNormal</definition>
+        <argsstring>() const</argsstring>
+        <name>getNormal</name>
+        <qualifiedname>castor::PlaneEquation::getNormal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La normale du plan. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PlaneEquation.hpp" line="169" column="23" bodyfile="CastorUtils/Math/PlaneEquation.hpp" bodystart="169" bodyend="172"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a09279_1af488686421a522ed0f7745cc1a040bc9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor::PlaneEquation::getDistance</definition>
+        <argsstring>() const</argsstring>
+        <name>getDistance</name>
+        <qualifiedname>castor::PlaneEquation::getDistance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La distance entre le plan et l&apos;origine. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PlaneEquation.hpp" line="179" column="14" bodyfile="CastorUtils/Math/PlaneEquation.hpp" bodystart="179" bodyend="182"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="dd/d55/a09279_1a8e114c24dd181e6d5cf49611316e3997" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool operator==</definition>
+        <argsstring>(PlaneEquation const &amp;, PlaneEquation const &amp;)</argsstring>
+        <name>operator==</name>
+        <qualifiedname>castor::PlaneEquation::operator==</qualifiedname>
+        <param>
+          <type><ref refid="dd/d55/a09279" kindref="compound">PlaneEquation</ref> const &amp;</type>
+          <defname>lhs</defname>
+        </param>
+        <param>
+          <type><ref refid="dd/d55/a09279" kindref="compound">PlaneEquation</ref> const &amp;</type>
+          <defname>rhs</defname>
+        </param>
+        <briefdescription>
+<para>Vérifie si un plan est égal à un autre. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Deux plans sont égaux si ils sont parallèles et si leurs normales et coeff sont égaux </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PlaneEquation.hpp" line="187" column="20"/>
+      </memberdef>
+      <memberdef kind="friend" id="dd/d55/a09279_1adc3764d348029e93a024e0c11d141b5c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool operator!=</definition>
+        <argsstring>(PlaneEquation const &amp;, PlaneEquation const &amp;)</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>castor::PlaneEquation::operator!=</qualifiedname>
+        <param>
+          <type><ref refid="dd/d55/a09279" kindref="compound">PlaneEquation</ref> const &amp;</type>
+          <defname>lhs</defname>
+        </param>
+        <param>
+          <type><ref refid="dd/d55/a09279" kindref="compound">PlaneEquation</ref> const &amp;</type>
+          <defname>rhs</defname>
+        </param>
+        <briefdescription>
+<para>Vérifie si ce plan est différent d&apos;un autre. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/PlaneEquation.hpp" line="188" column="20"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/PlaneEquation.hpp" line="12" column="1" bodyfile="CastorUtils/Math/PlaneEquation.hpp" bodystart="13" bodyend="189"/>
+    <listofallmembers>
+      <member refid="dd/d55/a09279_1af2996232d2e24986e613145a28934aa5" prot="public" virt="non-virtual"><scope>castor::PlaneEquation</scope><name>distance</name></member>
+      <member refid="dd/d55/a09279_1af488686421a522ed0f7745cc1a040bc9" prot="public" virt="non-virtual"><scope>castor::PlaneEquation</scope><name>getDistance</name></member>
+      <member refid="dd/d55/a09279_1aacd69122924d667f02aaff32ea7d7687" prot="public" virt="non-virtual"><scope>castor::PlaneEquation</scope><name>getNormal</name></member>
+      <member refid="dd/d55/a09279_1aaabe3f211792971e144664a22a588cb6" prot="public" virt="non-virtual"><scope>castor::PlaneEquation</scope><name>intersects</name></member>
+      <member refid="dd/d55/a09279_1a9695be5bcd25247cac4933736901f104" prot="public" virt="non-virtual"><scope>castor::PlaneEquation</scope><name>intersects</name></member>
+      <member refid="dd/d55/a09279_1a2b0e89149fe766d025bfced1cd37693b" prot="public" virt="non-virtual"><scope>castor::PlaneEquation</scope><name>isParallel</name></member>
+      <member refid="dd/d55/a09279_1a80f030729e2d940bbd2f83b84638b384" prot="private" virt="non-virtual"><scope>castor::PlaneEquation</scope><name>m_d</name></member>
+      <member refid="dd/d55/a09279_1ae6d9ea0bfdd3f9d63afb5b5c52c5792e" prot="private" virt="non-virtual"><scope>castor::PlaneEquation</scope><name>m_normal</name></member>
+      <member refid="dd/d55/a09279_1adc3764d348029e93a024e0c11d141b5c" prot="private" virt="non-virtual"><scope>castor::PlaneEquation</scope><name>operator!=</name></member>
+      <member refid="dd/d55/a09279_1a8e114c24dd181e6d5cf49611316e3997" prot="private" virt="non-virtual"><scope>castor::PlaneEquation</scope><name>operator==</name></member>
+      <member refid="dd/d55/a09279_1aca9a600c1cb8d686cd5fc6a723625075" prot="public" virt="non-virtual"><scope>castor::PlaneEquation</scope><name>PlaneEquation</name></member>
+      <member refid="dd/d55/a09279_1a20e471b110ece552a2fb345c370625d4" prot="public" virt="non-virtual"><scope>castor::PlaneEquation</scope><name>PlaneEquation</name></member>
+      <member refid="dd/d55/a09279_1aabf4edf7830ab45f2bf049f75c8f8c31" prot="public" virt="non-virtual"><scope>castor::PlaneEquation</scope><name>PlaneEquation</name></member>
+      <member refid="dd/d55/a09279_1adc63cd0e2b3068047c533ed8f8fc3fa8" prot="public" virt="non-virtual"><scope>castor::PlaneEquation</scope><name>PlaneEquation</name></member>
+      <member refid="dd/d55/a09279_1a97f75b51e04e093a72f3e1e9822816e6" prot="public" virt="non-virtual"><scope>castor::PlaneEquation</scope><name>project</name></member>
+      <member refid="dd/d55/a09279_1ace19c523ef364365207d70a65d31a7e4" prot="public" virt="non-virtual"><scope>castor::PlaneEquation</scope><name>set</name></member>
+      <member refid="dd/d55/a09279_1a3d05e314743749fde70c0f859dd3d57d" prot="public" virt="non-virtual"><scope>castor::PlaneEquation</scope><name>set</name></member>
+      <member refid="dd/d55/a09279_1ac38317863706cb14ff3c9888914024a4" prot="public" virt="non-virtual"><scope>castor::PlaneEquation</scope><name>set</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

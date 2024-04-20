@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d31/a09379" kind="struct" language="C++" prot="public">
+    <compoundname>castor::debug::Backtrace</compoundname>
+    <includes local="no">Debug.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d31/a09379_1a68b0d96357154111a8fa19a8cc13eb1e" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int castor::debug::Backtrace::m_toCapture</definition>
+        <argsstring></argsstring>
+        <name>m_toCapture</name>
+        <qualifiedname>castor::debug::Backtrace::m_toCapture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Debug.hpp" line="21" column="5" bodyfile="CastorUtils/Miscellaneous/Debug.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d31/a09379_1a1ef20a13bcc6da84c8d8ba77f5871049" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int castor::debug::Backtrace::m_toSkip</definition>
+        <argsstring></argsstring>
+        <name>m_toSkip</name>
+        <qualifiedname>castor::debug::Backtrace::m_toSkip</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Debug.hpp" line="22" column="5" bodyfile="CastorUtils/Miscellaneous/Debug.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d31/a09379_1a931f1594c70acf4ee6cf7b262c9beee9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::debug::Backtrace::Backtrace</definition>
+        <argsstring>(int toCapture=20, int toSkip=2)</argsstring>
+        <name>Backtrace</name>
+        <qualifiedname>castor::debug::Backtrace::Backtrace</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>toCapture</declname>
+          <defval>20</defval>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>toSkip</declname>
+          <defval>2</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Debug.hpp" line="24" column="1" bodyfile="CastorUtils/Miscellaneous/Debug.hpp" bodystart="24" bodyend="28"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Miscellaneous/Debug.hpp" line="19" column="1" bodyfile="CastorUtils/Miscellaneous/Debug.hpp" bodystart="20" bodyend="29"/>
+    <listofallmembers>
+      <member refid="d6/d31/a09379_1a931f1594c70acf4ee6cf7b262c9beee9" prot="public" virt="non-virtual"><scope>castor::debug::Backtrace</scope><name>Backtrace</name></member>
+      <member refid="d6/d31/a09379_1a68b0d96357154111a8fa19a8cc13eb1e" prot="public" virt="non-virtual"><scope>castor::debug::Backtrace</scope><name>m_toCapture</name></member>
+      <member refid="d6/d31/a09379_1a1ef20a13bcc6da84c8d8ba77f5871049" prot="public" virt="non-virtual"><scope>castor::debug::Backtrace</scope><name>m_toSkip</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

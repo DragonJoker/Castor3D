@@ -1,0 +1,588 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/dfa/a08187" kind="class" language="C++" prot="public">
+    <compoundname>castor::DynamicBitsetT</compoundname>
+    <includes local="no">DynamicBitset.hpp</includes>
+    <innerclass refid="d5/d2a/a08299" prot="public">castor::DynamicBitsetT::Bit</innerclass>
+    <templateparamlist>
+      <param>
+        <type>typename BlockTypeT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d5/dfa/a08187_1a0fc378b4b9d458547a9bec8bf243ff73" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::DynamicBitsetT&lt; BlockTypeT &gt;::DynamicBitsetT</definition>
+        <argsstring>()</argsstring>
+        <name>DynamicBitsetT</name>
+        <qualifiedname>castor::DynamicBitsetT::DynamicBitsetT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Construction/Destruction. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="26" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1a5eddf19d268d2543198fcc1d84c98577" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::DynamicBitsetT&lt; BlockTypeT &gt;::DynamicBitsetT</definition>
+        <argsstring>(size_t size, bool value=false)</argsstring>
+        <name>DynamicBitsetT</name>
+        <qualifiedname>castor::DynamicBitsetT::DynamicBitsetT</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="27" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1a65959b5ecc5cfed9c7561e96ae2bbd0f" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::DynamicBitsetT&lt; BlockTypeT &gt;::DynamicBitsetT</definition>
+        <argsstring>(MbString const &amp;bits)</argsstring>
+        <name>DynamicBitsetT</name>
+        <qualifiedname>castor::DynamicBitsetT::DynamicBitsetT</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref> const &amp;</type>
+          <declname>bits</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="28" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1abbe7f9825ecbbff8c929e484a3cbfe9e" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::DynamicBitsetT&lt; BlockTypeT &gt;::DynamicBitsetT</definition>
+        <argsstring>(char const *bits)</argsstring>
+        <name>DynamicBitsetT</name>
+        <qualifiedname>castor::DynamicBitsetT::DynamicBitsetT</qualifiedname>
+        <param>
+          <type>char const *</type>
+          <declname>bits</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="29" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1a29a8383aa4e8cfd6fdb18bb2808b9c5c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::DynamicBitsetT&lt; BlockTypeT &gt;::DynamicBitsetT</definition>
+        <argsstring>(char const *bits, size_t size)</argsstring>
+        <name>DynamicBitsetT</name>
+        <qualifiedname>castor::DynamicBitsetT::DynamicBitsetT</qualifiedname>
+        <param>
+          <type>char const *</type>
+          <declname>bits</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="30" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d5/dfa/a08187_1a97ce1afdac1260150634a34f13e4a119" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::DynamicBitsetT&lt; BlockTypeT &gt;::set</definition>
+        <argsstring>(size_t bit, bool value=true)</argsstring>
+        <name>set</name>
+        <qualifiedname>castor::DynamicBitsetT::set</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>bit</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Fonctions d&apos;ensemble de bits. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="41" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1a17a1fed801af706327d1a4c0af45ce67" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::DynamicBitsetT&lt; BlockTypeT &gt;::get</definition>
+        <argsstring>(size_t bit) const</argsstring>
+        <name>get</name>
+        <qualifiedname>castor::DynamicBitsetT::get</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>bit</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="42" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1ab3b5b8149868d3ca24a4f6244a07b8ec" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>BlockTypeT</type>
+        <definition>BlockTypeT castor::DynamicBitsetT&lt; BlockTypeT &gt;::getBlock</definition>
+        <argsstring>(size_t index) const</argsstring>
+        <name>getBlock</name>
+        <qualifiedname>castor::DynamicBitsetT::getBlock</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="43" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1a38d037a5650e4c89677278dc73043436" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::DynamicBitsetT&lt; BlockTypeT &gt;::reset</definition>
+        <argsstring>()</argsstring>
+        <name>reset</name>
+        <qualifiedname>castor::DynamicBitsetT::reset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="44" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1a16a3b5bd28d4c7d5ce2e13f7cb86a703" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::DynamicBitsetT&lt; BlockTypeT &gt;::resize</definition>
+        <argsstring>(size_t size, bool value)</argsstring>
+        <name>resize</name>
+        <qualifiedname>castor::DynamicBitsetT::resize</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="45" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1a88cae6514cd4832bbdb86524e691fd44" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor::DynamicBitsetT&lt; BlockTypeT &gt;::getSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getSize</name>
+        <qualifiedname>castor::DynamicBitsetT::getSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="46" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1aeb9b07f06047f53420cf3cf82fa19cfe" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor::DynamicBitsetT&lt; BlockTypeT &gt;::getBlockCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getBlockCount</name>
+        <qualifiedname>castor::DynamicBitsetT::getBlockCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="47" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1a20cb17a0bd74f38b9cdbce549792286d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::DynamicBitsetT&lt; BlockTypeT &gt;::none</definition>
+        <argsstring>() const</argsstring>
+        <name>none</name>
+        <qualifiedname>castor::DynamicBitsetT::none</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="48" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1a48030d2eed40630e91bacea50033a00e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::DynamicBitsetT&lt; BlockTypeT &gt;::any</definition>
+        <argsstring>() const</argsstring>
+        <name>any</name>
+        <qualifiedname>castor::DynamicBitsetT::any</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="49" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1a4f62a7c6957614b1462f1cca8e811621" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::DynamicBitsetT&lt; BlockTypeT &gt;::all</definition>
+        <argsstring>() const</argsstring>
+        <name>all</name>
+        <qualifiedname>castor::DynamicBitsetT::all</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="50" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d5/dfa/a08187_1a9d85cc95b9322d86353aaeedae830f96" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/d2a/a08299" kindref="compound">Bit</ref></type>
+        <definition>Bit castor::DynamicBitsetT&lt; BlockTypeT &gt;::operator[]</definition>
+        <argsstring>(size_t index)</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::DynamicBitsetT::operator[]</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Accès de tableau. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="61" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1a5881494a07dfd2812de6436732f58e38" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::DynamicBitsetT&lt; BlockTypeT &gt;::operator[]</definition>
+        <argsstring>(size_t index) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::DynamicBitsetT::operator[]</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="62" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d5/dfa/a08187_1a2cee22a6d039fed4af5f80a8dc94d5e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/dfa/a08187" kindref="compound">DynamicBitsetT</ref> &amp;</type>
+        <definition>DynamicBitsetT &amp; castor::DynamicBitsetT&lt; BlockTypeT &gt;::operator&lt;&lt;=</definition>
+        <argsstring>(int value)</argsstring>
+        <name>operator&lt;&lt;=</name>
+        <qualifiedname>castor::DynamicBitsetT::operator&lt;&lt;=</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Opérations bit à bit. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="73" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1aa83faa4e31027a222e0676f2441eeea8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/dfa/a08187" kindref="compound">DynamicBitsetT</ref> &amp;</type>
+        <definition>DynamicBitsetT &amp; castor::DynamicBitsetT&lt; BlockTypeT &gt;::operator&gt;&gt;=</definition>
+        <argsstring>(int value)</argsstring>
+        <name>operator&gt;&gt;=</name>
+        <qualifiedname>castor::DynamicBitsetT::operator&gt;&gt;=</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="74" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1abea98257551b9855917a20bf5b7721c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/dfa/a08187" kindref="compound">DynamicBitsetT</ref> &amp;</type>
+        <definition>DynamicBitsetT &amp; castor::DynamicBitsetT&lt; BlockTypeT &gt;::operator&amp;=</definition>
+        <argsstring>(DynamicBitsetT const &amp;value)</argsstring>
+        <name>operator&amp;=</name>
+        <qualifiedname>castor::DynamicBitsetT::operator&amp;=</qualifiedname>
+        <param>
+          <type><ref refid="d5/dfa/a08187" kindref="compound">DynamicBitsetT</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="75" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1a2d6e8aaabe4aa24399e90f7e42fbd228" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/dfa/a08187" kindref="compound">DynamicBitsetT</ref> &amp;</type>
+        <definition>DynamicBitsetT &amp; castor::DynamicBitsetT&lt; BlockTypeT &gt;::operator|=</definition>
+        <argsstring>(DynamicBitsetT const &amp;value)</argsstring>
+        <name>operator|=</name>
+        <qualifiedname>castor::DynamicBitsetT::operator|=</qualifiedname>
+        <param>
+          <type><ref refid="d5/dfa/a08187" kindref="compound">DynamicBitsetT</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="76" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1a7fec6e7ecd5ba48b8d5d7b9e1b8906a7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/dfa/a08187" kindref="compound">DynamicBitsetT</ref> &amp;</type>
+        <definition>DynamicBitsetT &amp; castor::DynamicBitsetT&lt; BlockTypeT &gt;::operator^=</definition>
+        <argsstring>(DynamicBitsetT const &amp;value)</argsstring>
+        <name>operator^=</name>
+        <qualifiedname>castor::DynamicBitsetT::operator^=</qualifiedname>
+        <param>
+          <type><ref refid="d5/dfa/a08187" kindref="compound">DynamicBitsetT</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="77" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1a26b8ee9d235d4c43e0e8f1d4f25ba5d6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/dfa/a08187" kindref="compound">DynamicBitsetT</ref></type>
+        <definition>DynamicBitsetT castor::DynamicBitsetT&lt; BlockTypeT &gt;::operator~</definition>
+        <argsstring>() const</argsstring>
+        <name>operator~</name>
+        <qualifiedname>castor::DynamicBitsetT::operator~</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="78" column="16"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d5/dfa/a08187_1a6a00d185f4e3d60fb5ba692fb2580a56" prot="public" static="no">
+        <type>BlockTypeT</type>
+        <definition>using castor::DynamicBitsetT&lt; BlockTypeT &gt;::BlockType =  BlockTypeT</definition>
+        <argsstring></argsstring>
+        <name>BlockType</name>
+        <qualifiedname>castor::DynamicBitsetT::BlockType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="82" column="1" bodyfile="CastorUtils/Design/DynamicBitset.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d5/dfa/a08187_1a621aeb81c0a0d6b2a5f774effffa8760" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr BlockTypeT</type>
+        <definition>constexpr BlockTypeT castor::DynamicBitsetT&lt; BlockTypeT &gt;::fullBitMask</definition>
+        <argsstring></argsstring>
+        <name>fullBitMask</name>
+        <qualifiedname>castor::DynamicBitsetT::fullBitMask</qualifiedname>
+        <initializer>= std::numeric_limits&lt; BlockTypeT &gt;::max()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="83" column="29" bodyfile="CastorUtils/Design/DynamicBitset.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dfa/a08187_1a93ce56b18568d5a7dc824024047172f3" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr size_t</type>
+        <definition>constexpr size_t castor::DynamicBitsetT&lt; BlockTypeT &gt;::bitsPerBlock</definition>
+        <argsstring></argsstring>
+        <name>bitsPerBlock</name>
+        <qualifiedname>castor::DynamicBitsetT::bitsPerBlock</qualifiedname>
+        <initializer>= sizeof( BlockTypeT ) * 8u</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="84" column="25" bodyfile="CastorUtils/Design/DynamicBitset.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d5/dfa/a08187_1a4e2b5f95d751628089cf25455345cbea" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; BlockTypeT &gt;</type>
+        <definition>Vector&lt; BlockTypeT &gt; castor::DynamicBitsetT&lt; BlockTypeT &gt;::m_blocks</definition>
+        <argsstring></argsstring>
+        <name>m_blocks</name>
+        <qualifiedname>castor::DynamicBitsetT::m_blocks</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="91" column="8" bodyfile="CastorUtils/Design/DynamicBitset.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dfa/a08187_1ac37fdef76661cc99167c1e584da6f07b" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t castor::DynamicBitsetT&lt; BlockTypeT &gt;::m_bitCount</definition>
+        <argsstring></argsstring>
+        <name>m_bitCount</name>
+        <qualifiedname>castor::DynamicBitsetT::m_bitCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="92" column="8" bodyfile="CastorUtils/Design/DynamicBitset.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/dfa/a08187_1ab673e6006222a47979deb74be56dc3c2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>String castor::DynamicBitsetT&lt; BlockTypeT &gt;::toString</definition>
+        <argsstring>() const</argsstring>
+        <name>toString</name>
+        <qualifiedname>castor::DynamicBitsetT::toString</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="80" column="8"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d5/dfa/a08187_1a67ad7b27b5ed403f2d04f74aafb8b4e7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::DynamicBitsetT&lt; BlockTypeT &gt;::doResetExtraBits</definition>
+        <argsstring>()</argsstring>
+        <name>doResetExtraBits</name>
+        <qualifiedname>castor::DynamicBitsetT::doResetExtraBits</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="87" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dfa/a08187_1acfd103e0316c7a1ff9c47c9d452f4872" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>BlockTypeT</type>
+        <definition>BlockTypeT castor::DynamicBitsetT&lt; BlockTypeT &gt;::doGetLastBlockMask</definition>
+        <argsstring>() const</argsstring>
+        <name>doGetLastBlockMask</name>
+        <qualifiedname>castor::DynamicBitsetT::doGetLastBlockMask</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DynamicBitset.hpp" line="88" column="12"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe de bitset dynamique, avec un type de bloc configurable. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Design/DynamicBitset.hpp" line="12" column="1" bodyfile="CastorUtils/Design/DynamicBitset.hpp" bodystart="13" bodyend="93"/>
+    <listofallmembers>
+      <member refid="d5/dfa/a08187_1a4f62a7c6957614b1462f1cca8e811621" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>all</name></member>
+      <member refid="d5/dfa/a08187_1a48030d2eed40630e91bacea50033a00e" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>any</name></member>
+      <member refid="d5/dfa/a08187_1a93ce56b18568d5a7dc824024047172f3" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>bitsPerBlock</name></member>
+      <member refid="d5/dfa/a08187_1a6a00d185f4e3d60fb5ba692fb2580a56" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>BlockType</name></member>
+      <member refid="d5/dfa/a08187_1acfd103e0316c7a1ff9c47c9d452f4872" prot="private" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>doGetLastBlockMask</name></member>
+      <member refid="d5/dfa/a08187_1a67ad7b27b5ed403f2d04f74aafb8b4e7" prot="private" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>doResetExtraBits</name></member>
+      <member refid="d5/dfa/a08187_1a0fc378b4b9d458547a9bec8bf243ff73" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>DynamicBitsetT</name></member>
+      <member refid="d5/dfa/a08187_1a5eddf19d268d2543198fcc1d84c98577" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>DynamicBitsetT</name></member>
+      <member refid="d5/dfa/a08187_1a65959b5ecc5cfed9c7561e96ae2bbd0f" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>DynamicBitsetT</name></member>
+      <member refid="d5/dfa/a08187_1abbe7f9825ecbbff8c929e484a3cbfe9e" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>DynamicBitsetT</name></member>
+      <member refid="d5/dfa/a08187_1a29a8383aa4e8cfd6fdb18bb2808b9c5c" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>DynamicBitsetT</name></member>
+      <member refid="d5/dfa/a08187_1a621aeb81c0a0d6b2a5f774effffa8760" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>fullBitMask</name></member>
+      <member refid="d5/dfa/a08187_1a17a1fed801af706327d1a4c0af45ce67" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>get</name></member>
+      <member refid="d5/dfa/a08187_1ab3b5b8149868d3ca24a4f6244a07b8ec" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>getBlock</name></member>
+      <member refid="d5/dfa/a08187_1aeb9b07f06047f53420cf3cf82fa19cfe" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>getBlockCount</name></member>
+      <member refid="d5/dfa/a08187_1a88cae6514cd4832bbdb86524e691fd44" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>getSize</name></member>
+      <member refid="d5/dfa/a08187_1ac37fdef76661cc99167c1e584da6f07b" prot="private" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>m_bitCount</name></member>
+      <member refid="d5/dfa/a08187_1a4e2b5f95d751628089cf25455345cbea" prot="private" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>m_blocks</name></member>
+      <member refid="d5/dfa/a08187_1a20cb17a0bd74f38b9cdbce549792286d" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>none</name></member>
+      <member refid="d5/dfa/a08187_1abea98257551b9855917a20bf5b7721c6" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>operator&amp;=</name></member>
+      <member refid="d5/dfa/a08187_1a2cee22a6d039fed4af5f80a8dc94d5e3" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>operator&lt;&lt;=</name></member>
+      <member refid="d5/dfa/a08187_1aa83faa4e31027a222e0676f2441eeea8" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>operator&gt;&gt;=</name></member>
+      <member refid="d5/dfa/a08187_1a9d85cc95b9322d86353aaeedae830f96" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>operator[]</name></member>
+      <member refid="d5/dfa/a08187_1a5881494a07dfd2812de6436732f58e38" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>operator[]</name></member>
+      <member refid="d5/dfa/a08187_1a7fec6e7ecd5ba48b8d5d7b9e1b8906a7" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>operator^=</name></member>
+      <member refid="d5/dfa/a08187_1a2d6e8aaabe4aa24399e90f7e42fbd228" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>operator|=</name></member>
+      <member refid="d5/dfa/a08187_1a26b8ee9d235d4c43e0e8f1d4f25ba5d6" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>operator~</name></member>
+      <member refid="d5/dfa/a08187_1a38d037a5650e4c89677278dc73043436" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>reset</name></member>
+      <member refid="d5/dfa/a08187_1a16a3b5bd28d4c7d5ce2e13f7cb86a703" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>resize</name></member>
+      <member refid="d5/dfa/a08187_1a97ce1afdac1260150634a34f13e4a119" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>set</name></member>
+      <member refid="d5/dfa/a08187_1ab673e6006222a47979deb74be56dc3c2" prot="public" virt="non-virtual"><scope>castor::DynamicBitsetT</scope><name>toString</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/dd3/a09035" kind="class" language="C++" prot="public">
+    <compoundname>castor::StbImageWriter</compoundname>
+    <basecompoundref refid="dd/d59/a08967" prot="public" virt="non-virtual">castor::ImageWriterImpl</basecompoundref>
+    <includes local="no">StbImageWriter.hpp</includes>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d1/dd3/a09035_1aaeb225a94ceb115c15a21dd38da96ead" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>static CU_API void castor::StbImageWriter::registerWriter</definition>
+        <argsstring>(ImageWriter &amp;reg)</argsstring>
+        <name>registerWriter</name>
+        <qualifiedname>castor::StbImageWriter::registerWriter</qualifiedname>
+        <param>
+          <type><ref refid="d0/daf/a08971" kindref="compound">ImageWriter</ref> &amp;</type>
+          <declname>reg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/StbImageWriter.hpp" line="15" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dd3/a09035_1a4f5e482912cb6b6390227256cfad6689" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>static CU_API void castor::StbImageWriter::unregisterWriter</definition>
+        <argsstring>(ImageWriter &amp;reg)</argsstring>
+        <name>unregisterWriter</name>
+        <qualifiedname>castor::StbImageWriter::unregisterWriter</qualifiedname>
+        <param>
+          <type><ref refid="d0/daf/a08971" kindref="compound">ImageWriter</ref> &amp;</type>
+          <declname>reg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/StbImageWriter.hpp" line="16" column="20"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/dd3/a09035_1a0791e6ca56c7d8a51df86b7da2f9f3aa" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::StbImageWriter::write</definition>
+        <argsstring>(Path const &amp;path, PxBufferBase const &amp;buffer) const override</argsstring>
+        <name>write</name>
+        <qualifiedname>castor::StbImageWriter::write</qualifiedname>
+        <reimplements refid="dd/d59/a08967_1abdb5fd78904c565960223d25a01d8a45">write</reimplements>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Enregistre les données d&apos;une image dans un fichier.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin d&apos;accès au fichier image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un problème a été rencontré.   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/StbImageWriter.hpp" line="20" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::ImageWriterImpl</label>
+        <link refid="dd/d59/a08967"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="1">
+        <label>castor::StbImageWriter</label>
+        <link refid="d1/dd3/a09035"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::ImageWriterImpl</label>
+        <link refid="dd/d59/a08967"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="1">
+        <label>castor::StbImageWriter</label>
+        <link refid="d1/dd3/a09035"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/StbImageWriter.hpp" line="11" column="1" bodyfile="CastorUtils/Graphics/StbImageWriter.hpp" bodystart="13" bodyend="22"/>
+    <listofallmembers>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::StbImageWriter</scope><name>NonMovable</name></member>
+      <member refid="d1/dd3/a09035_1aaeb225a94ceb115c15a21dd38da96ead" prot="public" virt="non-virtual"><scope>castor::StbImageWriter</scope><name>registerWriter</name></member>
+      <member refid="d1/dd3/a09035_1a4f5e482912cb6b6390227256cfad6689" prot="public" virt="non-virtual"><scope>castor::StbImageWriter</scope><name>unregisterWriter</name></member>
+      <member refid="d1/dd3/a09035_1a0791e6ca56c7d8a51df86b7da2f9f3aa" prot="public" virt="virtual"><scope>castor::StbImageWriter</scope><name>write</name></member>
+      <member refid="dd/d59/a08967_1a0ce7ca86333053d40acdcc4297a8190e" prot="public" virt="virtual"><scope>castor::StbImageWriter</scope><name>~ImageWriterImpl</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::StbImageWriter</scope><name>~NonMovable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

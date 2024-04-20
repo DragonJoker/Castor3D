@@ -1,0 +1,35 @@
+<map id="castor::ColourComponent::value" name="castor::ColourComponent::value">
+<area shape="rect" id="Node000001" title="Retrieves the component value." alt="" coords="240,485,409,525"/>
+<area shape="rect" id="Node000002" href="$da/d5d/a08743.html#a660d157829989dd15053156a72f48c76" title="float conversion operator" alt="" coords="14,5,183,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="321,472,315,389,297,279,281,220,258,162,228,107,190,59,176,48,179,43,194,55,232,105,263,160,286,218,302,278,321,388,326,471"/>
+<area shape="rect" id="Node000003" href="$da/d5d/a08743.html#addffda7db9d54e8824b75ce7b1d970e8" title="float conversion operator" alt="" coords="14,69,183,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="319,472,310,400,289,307,272,257,251,209,224,163,190,123,175,112,178,107,194,119,228,160,256,206,277,256,294,305,315,399,324,471"/>
+<area shape="rect" id="Node000004" href="$da/d5d/a08743.html#a2f39f41559cf2095593e166b888cf48a" title="int16_t conversion operator" alt="" coords="14,133,183,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="316,473,304,412,281,335,264,295,244,256,219,220,190,187,174,176,177,171,194,183,223,216,248,253,269,293,286,334,309,411,321,472"/>
+<area shape="rect" id="Node000005" href="$da/d5d/a08743.html#a08f07861b8312510bf639b8c2b32a730" title="int32_t conversion operator" alt="" coords="14,197,183,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="312,473,297,424,272,364,236,304,215,276,190,251,173,240,176,235,194,247,219,272,241,301,276,362,302,422,317,471"/>
+<area shape="rect" id="Node000006" href="$da/d5d/a08743.html#a54bb03ba0e9b4a2f67a33429b73274aa" title="int64_t conversion operator" alt="" coords="14,261,183,301"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="307,474,288,437,262,395,229,352,190,315,171,304,174,299,194,311,233,349,266,392,292,435,311,471"/>
+<area shape="rect" id="Node000007" href="$da/d5d/a08743.html#a25e886008d6b070caf0553b3f8d691a7" title="int8_t conversion operator" alt="" coords="14,325,183,365"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="297,477,251,427,222,402,191,380,168,368,170,363,193,375,225,398,254,423,301,473"/>
+<area shape="rect" id="Node000008" href="$da/d5d/a08743.html#a99a9e247ec0a30f33c3fcd9daee8ba70" title="float conversion operator" alt="" coords="14,389,183,429"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="272,481,191,444,160,432,162,427,193,439,274,477"/>
+<area shape="rect" id="Node000009" href="$da/d5d/a08743.html#ac303826bd740c71c75ba23b48dad7d6c" title="uint16_t conversion operator" alt="" coords="14,453,183,493"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="226,494,183,488,184,483,226,489"/>
+<area shape="rect" id="Node000010" href="$da/d5d/a08743.html#ac7bae9ebefad524e121a2427d011d096" title="uint32_t conversion operator" alt="" coords="14,517,183,557"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="226,522,184,528,183,523,226,517"/>
+<area shape="rect" id="Node000011" href="$da/d5d/a08743.html#a0d0b665f4812202b079b92984212996b" title="uint64_t conversion operator" alt="" coords="14,581,183,621"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="274,534,193,572,162,584,160,579,191,567,272,529"/>
+<area shape="rect" id="Node000012" href="$da/d5d/a08743.html#ae9417679e9196c62201296995ceb2b36" title="uint8_t conversion operator" alt="" coords="14,645,183,685"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="301,538,254,587,225,613,193,636,170,648,168,643,191,631,222,609,251,583,297,534"/>
+<area shape="rect" id="Node000013" href="$da/d5d/a08743.html#a56a2d44457d770d4d76cd8333df83de8" title="Multiplication assignment operator." alt="" coords="14,709,183,749"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="311,539,292,576,266,619,233,662,194,699,174,711,171,707,190,695,229,659,262,616,288,574,307,537"/>
+<area shape="rect" id="Node000014" href="$da/d5d/a08743.html#a36d69b86077dd8897aecff2ec9a9b4c2" title="Addition assignment operator." alt="" coords="14,773,183,813"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="317,540,302,589,276,649,241,710,219,738,194,763,176,775,173,771,190,759,215,735,236,707,272,646,297,587,312,538"/>
+<area shape="rect" id="Node000015" href="$da/d5d/a08743.html#ab99fc228378b6b640228a62d97fa34a3" title="Substraction assignment operator." alt="" coords="14,837,183,877"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="321,539,309,600,286,677,269,718,248,757,223,794,194,827,177,839,174,835,190,823,219,791,244,754,264,715,281,675,304,599,316,538"/>
+<area shape="rect" id="Node000016" href="$da/d5d/a08743.html#a8532b7d9ef610915880b3cfdc6fddc21" title="Division assignment operator." alt="" coords="14,901,183,941"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="324,539,315,611,294,705,277,755,256,804,228,850,194,891,178,903,175,899,190,887,224,847,251,802,272,753,289,704,310,610,319,539"/>
+<area shape="rect" id="Node000017" href="$d9/dba/a02278.html#a4fc68de12338fd3a4ca4362246f502ba" title="Sets given value to big endian." alt="" coords="5,966,192,991"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="327,539,322,623,316,677,304,735,288,794,265,853,234,907,194,955,176,968,173,964,190,951,229,904,260,850,283,792,299,733,310,676,317,622,321,539"/>
+</map>

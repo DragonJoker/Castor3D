@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/d2d/a05775" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::DoubleBufferedResourceT::Resource</compoundname>
+    <includes local="no">FontTexture.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d2d/a05775_1acc9e8172bc6fe6f0a2ce71c7c1fbaffb" prot="public" static="no" mutable="no">
+        <type><ref refid="de/dc1/a05771_1a1770714a87ef49a80d35acd020c6465b" kindref="member">ResourcePtrT</ref></type>
+        <definition>ResourcePtrT castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::Resource::resource</definition>
+        <argsstring></argsstring>
+        <name>resource</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::Resource::resource</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/FontTexture.hpp" line="37" column="14" bodyfile="Castor3D/Overlay/FontTexture.hpp" bodystart="37" bodyend="-1"/>
+        <referencedby refid="d6/d64/a05779_1aa0fbe332ab4c9592e10cf390a9803e69" compoundref="d7/d92/a00887" startline="247" endline="250">castor3d::FontTexture::getTexture</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d2d/a05775_1a3f5435b436c1b59872a1b20b07b340d9" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::Resource::needsUpload</definition>
+        <argsstring></argsstring>
+        <name>needsUpload</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::Resource::needsUpload</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/FontTexture.hpp" line="38" column="6" bodyfile="Castor3D/Overlay/FontTexture.hpp" bodystart="38" bodyend="38"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Overlay/FontTexture.hpp" line="35" column="1" bodyfile="Castor3D/Overlay/FontTexture.hpp" bodystart="36" bodyend="39"/>
+    <listofallmembers>
+      <member refid="d2/d2d/a05775_1a3f5435b436c1b59872a1b20b07b340d9" prot="public" virt="non-virtual"><scope>castor3d::DoubleBufferedResourceT::Resource</scope><name>needsUpload</name></member>
+      <member refid="d2/d2d/a05775_1acc9e8172bc6fe6f0a2ce71c7c1fbaffb" prot="public" virt="non-virtual"><scope>castor3d::DoubleBufferedResourceT::Resource</scope><name>resource</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

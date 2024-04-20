@@ -1,0 +1,242 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/dc9/a06027" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::VctConfig</compoundname>
+    <includes local="no">VctConfig.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/dc9/a06027_1a602d92ad970808fa68322f43006ac97e" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::VctConfig::enabled</definition>
+        <argsstring></argsstring>
+        <name>enabled</name>
+        <qualifiedname>castor3d::VctConfig::enabled</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" line="22" column="6" bodyfile="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" bodystart="22" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dc9/a06027_1a0a105323e981eda6acc839125ac88a2c" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::VctConfig::enableConservativeRasterization</definition>
+        <argsstring></argsstring>
+        <name>enableConservativeRasterization</name>
+        <qualifiedname>castor3d::VctConfig::enableConservativeRasterization</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" line="23" column="6" bodyfile="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" bodystart="23" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dc9/a06027_1a9b8bd649b47498fe1a132d3abd8e1328" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::VctConfig::enableOcclusion</definition>
+        <argsstring></argsstring>
+        <name>enableOcclusion</name>
+        <qualifiedname>castor3d::VctConfig::enableOcclusion</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" line="24" column="6" bodyfile="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" bodystart="24" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dc9/a06027_1aee95aa350e5062d328e7d59a9f30441d" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::VctConfig::enableSecondaryBounce</definition>
+        <argsstring></argsstring>
+        <name>enableSecondaryBounce</name>
+        <qualifiedname>castor3d::VctConfig::enableSecondaryBounce</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" line="25" column="6" bodyfile="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" bodystart="25" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dc9/a06027_1ae7ad76dfcf280366fb9969f011685655" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::VctConfig::enableTemporalSmoothing</definition>
+        <argsstring></argsstring>
+        <name>enableTemporalSmoothing</name>
+        <qualifiedname>castor3d::VctConfig::enableTemporalSmoothing</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" line="26" column="6" bodyfile="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" bodystart="26" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dc9/a06027_1a5e741e1b6b0989ef05a9ae38a36d6f83" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/de9/a09211" kindref="compound">castor::RangedValue</ref>&lt; uint32_t &gt;</type>
+        <definition>castor::RangedValue&lt; uint32_t &gt; castor3d::VctConfig::gridSize</definition>
+        <argsstring></argsstring>
+        <name>gridSize</name>
+        <qualifiedname>castor3d::VctConfig::gridSize</qualifiedname>
+        <initializer>{ 2u, <ref refid="d2/dd2/a02279_1adb20060264652dae04682f6046d32776" kindref="member">castor::makeRange</ref>( 2u, <ref refid="d9/dba/a02278_1a4b80e05c80989fb63ed13ac03689a872" kindref="member">VctMaxTextureSize</ref> ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" line="27" column="21" bodyfile="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" bodystart="27" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dc9/a06027_1aaacb3c19fbf87deecb9c15f837dfcf95" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::VctConfig::maxDistance</definition>
+        <argsstring></argsstring>
+        <name>maxDistance</name>
+        <qualifiedname>castor3d::VctConfig::maxDistance</qualifiedname>
+        <initializer>{ 20.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La distance maximale pour les cones. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" line="30" column="7" bodyfile="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" bodystart="30" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dc9/a06027_1ae880271e2c325398a80f709856d674ac" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/de9/a09211" kindref="compound">castor::RangedValue</ref>&lt; uint32_t &gt;</type>
+        <definition>castor::RangedValue&lt; uint32_t &gt; castor3d::VctConfig::numCones</definition>
+        <argsstring></argsstring>
+        <name>numCones</name>
+        <qualifiedname>castor3d::VctConfig::numCones</qualifiedname>
+        <initializer>{ 2u, <ref refid="d2/dd2/a02279_1adb20060264652dae04682f6046d32776" kindref="member">castor::makeRange</ref>( 1u, <ref refid="d9/dba/a02278_1a207c3bcb8d5f5c46e990312bfe8f0ea5" kindref="member">VctMaxDiffuseCones</ref> ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le nombre de cones de radiance utilisés dans le voxel cone tracing. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" line="33" column="21" bodyfile="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dc9/a06027_1ac7215bb825deda545c48e7a1ed4317c9" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::VctConfig::rayStepSize</definition>
+        <argsstring></argsstring>
+        <name>rayStepSize</name>
+        <qualifiedname>castor3d::VctConfig::rayStepSize</qualifiedname>
+        <initializer>{ 0.75f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La taille d&apos;un pas de rayon dans le voxel cone tracing. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" line="36" column="7" bodyfile="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dc9/a06027_1af3623058a736a42e797eb486fdd728f3" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::VctConfig::voxelSizeFactor</definition>
+        <argsstring></argsstring>
+        <name>voxelSizeFactor</name>
+        <qualifiedname>castor3d::VctConfig::voxelSizeFactor</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" line="37" column="7" bodyfile="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" bodystart="37" bodyend="37"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/dc9/a06027_1aacbed475d30b4348ea476ece82f47def" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::VctConfig::accept</definition>
+        <argsstring>(ConfigurationVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::VctConfig::accept</qualifiedname>
+        <param>
+          <type><ref refid="db/dc2/a05011" kindref="compound">ConfigurationVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" line="18" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="db/dc9/a06027_1a8ae3360fa1fbd0b4883f936146562b2f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::VctConfig::addParsers</definition>
+        <argsstring>(castor::AttributeParsers &amp;result)</argsstring>
+        <name>addParsers</name>
+        <qualifiedname>castor3d::VctConfig::addParsers</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7138ba41c2c2c4ced36cacefe5eb2c33" kindref="member">castor::AttributeParsers</ref> &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" line="20" column="21"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::RangedValue&lt; uint32_t &gt;</label>
+        <link refid="d8/de9/a09211"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; uint32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::VctConfig</label>
+        <link refid="db/dc9/a06027"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>gridSize</edgelabel>
+          <edgelabel>numCones</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::RangedValue&lt; T &gt;</label>
+        <link refid="d8/de9/a09211"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" line="16" column="1" bodyfile="Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp" bodystart="17" bodyend="38"/>
+    <listofallmembers>
+      <member refid="db/dc9/a06027_1aacbed475d30b4348ea476ece82f47def" prot="public" virt="non-virtual"><scope>castor3d::VctConfig</scope><name>accept</name></member>
+      <member refid="db/dc9/a06027_1a8ae3360fa1fbd0b4883f936146562b2f" prot="public" virt="non-virtual"><scope>castor3d::VctConfig</scope><name>addParsers</name></member>
+      <member refid="db/dc9/a06027_1a0a105323e981eda6acc839125ac88a2c" prot="public" virt="non-virtual"><scope>castor3d::VctConfig</scope><name>enableConservativeRasterization</name></member>
+      <member refid="db/dc9/a06027_1a602d92ad970808fa68322f43006ac97e" prot="public" virt="non-virtual"><scope>castor3d::VctConfig</scope><name>enabled</name></member>
+      <member refid="db/dc9/a06027_1a9b8bd649b47498fe1a132d3abd8e1328" prot="public" virt="non-virtual"><scope>castor3d::VctConfig</scope><name>enableOcclusion</name></member>
+      <member refid="db/dc9/a06027_1aee95aa350e5062d328e7d59a9f30441d" prot="public" virt="non-virtual"><scope>castor3d::VctConfig</scope><name>enableSecondaryBounce</name></member>
+      <member refid="db/dc9/a06027_1ae7ad76dfcf280366fb9969f011685655" prot="public" virt="non-virtual"><scope>castor3d::VctConfig</scope><name>enableTemporalSmoothing</name></member>
+      <member refid="db/dc9/a06027_1a5e741e1b6b0989ef05a9ae38a36d6f83" prot="public" virt="non-virtual"><scope>castor3d::VctConfig</scope><name>gridSize</name></member>
+      <member refid="db/dc9/a06027_1aaacb3c19fbf87deecb9c15f837dfcf95" prot="public" virt="non-virtual"><scope>castor3d::VctConfig</scope><name>maxDistance</name></member>
+      <member refid="db/dc9/a06027_1ae880271e2c325398a80f709856d674ac" prot="public" virt="non-virtual"><scope>castor3d::VctConfig</scope><name>numCones</name></member>
+      <member refid="db/dc9/a06027_1ac7215bb825deda545c48e7a1ed4317c9" prot="public" virt="non-virtual"><scope>castor3d::VctConfig</scope><name>rayStepSize</name></member>
+      <member refid="db/dc9/a06027_1af3623058a736a42e797eb486fdd728f3" prot="public" virt="non-virtual"><scope>castor3d::VctConfig</scope><name>voxelSizeFactor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

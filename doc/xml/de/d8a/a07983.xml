@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/d8a/a07983" kind="struct" language="C++" prot="public">
+    <compoundname>castor::FileTyper</compoundname>
+    <templateparamlist>
+      <param>
+        <type><ref refid="d2/dd2/a02279_1ac4972a01abb873aee032c3071b56cbe4" kindref="member">FileType</ref></type>
+        <declname>FileTypeT</declname>
+        <defname>FileTypeT</defname>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Structure d&apos;aide pour trouver le type de <ref refid="d4/d10/a08003" kindref="compound">File</ref> (<ref refid="dc/d86/a07971" kindref="compound">BinaryFile</ref> ou <ref refid="dc/d82/a08075" kindref="compound">TextFile</ref>) à partir d&apos;un FileType. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Spécialisation pour <ref refid="d2/dd2/a02279_1ac4972a01abb873aee032c3071b56cbe4aef6572f06eb221f3fcc2a3efd4f39c5e" kindref="member">FileType::eBinary</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="CastorUtils/Data/DataModule.hpp" line="38" column="1" bodyfile="CastorUtils/Data/DataModule.hpp" bodystart="38" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

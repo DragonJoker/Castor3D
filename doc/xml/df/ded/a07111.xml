@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/ded/a07111" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ParticleSystemContext</compoundname>
+    <basecompoundref refid="d1/d84/a07063" prot="public" virt="non-virtual">castor3d::MovableContext</basecompoundref>
+    <includes local="no">ParticleSystem.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/ded/a07111_1a4e4d26a85859cd8d732a7a0addeed2a1" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a2d5a7b3dddf135df62427d0e6b755210" kindref="member">MaterialObs</ref></type>
+        <definition>MaterialObs castor3d::ParticleSystemContext::material</definition>
+        <argsstring></argsstring>
+        <name>material</name>
+        <qualifiedname>castor3d::ParticleSystemContext::material</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/ParticleSystem/ParticleSystem.hpp" line="274" column="13" bodyfile="Castor3D/Scene/ParticleSystem/ParticleSystem.hpp" bodystart="274" bodyend="274"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/ded/a07111_1ae6196b77aa8b079484a0af0b49b9b282" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::ParticleSystemContext::dimensions</definition>
+        <argsstring></argsstring>
+        <name>dimensions</name>
+        <qualifiedname>castor3d::ParticleSystemContext::dimensions</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/ParticleSystem/ParticleSystem.hpp" line="275" column="17" bodyfile="Castor3D/Scene/ParticleSystem/ParticleSystem.hpp" bodystart="275" bodyend="275"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/ded/a07111_1afe5a9e38eec28816b78e119324b72a29" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ParticleSystemContext::particleCount</definition>
+        <argsstring></argsstring>
+        <name>particleCount</name>
+        <qualifiedname>castor3d::ParticleSystemContext::particleCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/ParticleSystem/ParticleSystem.hpp" line="276" column="10" bodyfile="Castor3D/Scene/ParticleSystem/ParticleSystem.hpp" bodystart="276" bodyend="276"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/ded/a07111_1a313caa2cf9e49b67511563d3fd43370d" prot="public" static="no" mutable="no">
+        <type>ParticleSystemUPtr</type>
+        <definition>ParticleSystemUPtr castor3d::ParticleSystemContext::ownParticleSystem</definition>
+        <argsstring></argsstring>
+        <name>ownParticleSystem</name>
+        <qualifiedname>castor3d::ParticleSystemContext::ownParticleSystem</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/ParticleSystem/ParticleSystem.hpp" line="277" column="20" bodyfile="Castor3D/Scene/ParticleSystem/ParticleSystem.hpp" bodystart="277" bodyend="277"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/ded/a07111_1ab06404d8fba85f17c3278e250ca88d5c" prot="public" static="no" mutable="no">
+        <type>ParticleSystemRPtr</type>
+        <definition>ParticleSystemRPtr castor3d::ParticleSystemContext::particleSystem</definition>
+        <argsstring></argsstring>
+        <name>particleSystem</name>
+        <qualifiedname>castor3d::ParticleSystemContext::particleSystem</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/ParticleSystem/ParticleSystem.hpp" line="278" column="20" bodyfile="Castor3D/Scene/ParticleSystem/ParticleSystem.hpp" bodystart="278" bodyend="278"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::MovableContext</label>
+        <link refid="d1/d84/a07063"/>
+      </node>
+      <node id="1">
+        <label>castor3d::ParticleSystemContext</label>
+        <link refid="df/ded/a07111"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="6">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="7" relation="private-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MovableContext</label>
+        <link refid="d1/d84/a07063"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>scene</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ParticleSystemContext</label>
+        <link refid="df/ded/a07111"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::ProgressBar</label>
+        <link refid="d6/daf/a05323"/>
+      </node>
+      <node id="9">
+        <label>castor3d::RenderWindowDesc</label>
+        <link refid="de/d75/a06503"/>
+        <childnode refid="10" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RootContext</label>
+        <link refid="de/dd6/a07151"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>engine</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>window</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>logger</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>progress</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::SceneContext</label>
+        <link refid="d3/db2/a07139"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>fontName</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor::LoggerInstance</label>
+        <link refid="d9/d93/a09063"/>
+      </node>
+      <node id="7">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="8">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="7" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/ParticleSystem/ParticleSystem.hpp" line="271" column="1" bodyfile="Castor3D/Scene/ParticleSystem/ParticleSystem.hpp" bodystart="273" bodyend="279"/>
+    <listofallmembers>
+      <member refid="df/ded/a07111_1ae6196b77aa8b079484a0af0b49b9b282" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystemContext</scope><name>dimensions</name></member>
+      <member refid="df/ded/a07111_1a4e4d26a85859cd8d732a7a0addeed2a1" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystemContext</scope><name>material</name></member>
+      <member refid="d1/d84/a07063_1a0299b1de049372b99ef63405a5e9cc26" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystemContext</scope><name>name</name></member>
+      <member refid="df/ded/a07111_1a313caa2cf9e49b67511563d3fd43370d" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystemContext</scope><name>ownParticleSystem</name></member>
+      <member refid="d1/d84/a07063_1a387699fe0f53bb34f7ceb34056d695fa" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystemContext</scope><name>parentNode</name></member>
+      <member refid="df/ded/a07111_1afe5a9e38eec28816b78e119324b72a29" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystemContext</scope><name>particleCount</name></member>
+      <member refid="df/ded/a07111_1ab06404d8fba85f17c3278e250ca88d5c" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystemContext</scope><name>particleSystem</name></member>
+      <member refid="d1/d84/a07063_1ae83b7d5d5a6ef90b08a715d3d844848f" prot="public" virt="non-virtual"><scope>castor3d::ParticleSystemContext</scope><name>scene</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

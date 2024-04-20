@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d5b/a06435" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::NonTexturedQuad</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <innerclass refid="d7/de4/a06439" prot="public">castor3d::NonTexturedQuad::Vertex</innerclass>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d5b/a06435_1ad1fc94fe09fa7dbd3f3c5e0e4ad39a7b" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; <ref refid="d7/de4/a06439" kindref="compound">Vertex</ref>, 6u &gt;</type>
+        <definition>castor::Array&lt; Vertex, 6u &gt; castor3d::NonTexturedQuad::vertex</definition>
+        <argsstring></argsstring>
+        <name>vertex</name>
+        <qualifiedname>castor3d::NonTexturedQuad::vertex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="51" column="15" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Un quad sans UV. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/RenderModule.hpp" line="44" column="1" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="45" bodyend="52"/>
+    <listofallmembers>
+      <member refid="da/d5b/a06435_1ad1fc94fe09fa7dbd3f3c5e0e4ad39a7b" prot="public" virt="non-virtual"><scope>castor3d::NonTexturedQuad</scope><name>vertex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

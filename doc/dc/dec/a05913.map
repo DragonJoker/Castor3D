@@ -1,6 +1,10 @@
-<map id="castor3d::BackgroundVisitor" name="castor3d::BackgroundVisitor">
-<area shape="rect" id="node1" title=" " alt="" coords="9,152,195,177"/>
-<area shape="rect" id="node4" href="$d8/d1d/a05886.html" title=" " alt="" coords="15,225,189,265"/>
-<area shape="rect" id="node2" href="$d7/d2e/a04482.html" title=" " alt="" coords="21,79,183,104"/>
-<area shape="rect" id="node3" href="$dc/d50/a04474.html" title=" " alt="" coords="5,5,199,31"/>
+<map id="castor3d::FrustumClusters" name="castor3d::FrustumClusters">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,285,181,311"/>
+<area shape="rect" id="Node000002" href="$dc/d79/a08267.html" title=" " alt="" coords="6,183,181,223"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,237,96,285,91,285,91,237"/>
+<area shape="rect" id="Node000003" href="$da/d36/a08315.html" title=" " alt="" coords="41,5,183,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="108,44,100,80,96,136,95,182,90,182,90,136,95,80,102,43"/>
+<area shape="rect" id="Node000004" href="$dc/d79/a08267.html" title="Basic signal class." alt="" coords="110,80,293,105"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="139,37,188,77,185,82,135,42"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="182,117,114,184,111,180,178,113"/>
 </map>

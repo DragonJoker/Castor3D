@@ -1,0 +1,9 @@
+<map id="castor3d::IntermediateView" name="castor3d::IntermediateView">
+<area shape="rect" id="Node000001" title=" " alt="" coords="107,211,286,236"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,132,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,154,182,208,179,213,104,158"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,5,132,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="71,59,71,108,66,108,66,59"/>
+<area shape="rect" id="Node000004" href="$d3/dac/a05307.html" title="Factors applied when displaying a debug texture." alt="" coords="156,115,323,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="231,154,204,212,200,209,226,152"/>
+</map>

@@ -1,0 +1,196 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d55/a07595" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::IndirectLighting</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_IndirectLighting&quot;, sdw::type::MemoryLayout::eC, sdw::Vec3Field&lt; &quot;ambient&quot; &gt;, sdw::Vec4Field&lt; &quot;diffuse&quot; &gt;, sdw::Vec3Field&lt; &quot;specular&quot; &gt;, sdw::FloatField&lt; &quot;occlusion&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">GlslOutputComponents.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d55/a07595_1a081b3bd4d690f146d04262be4bc001cc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::IndirectLighting::IndirectLighting</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>IndirectLighting</name>
+        <qualifiedname>castor3d::shader::IndirectLighting::IndirectLighting</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="57" column="1" bodyfile="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" bodystart="57" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a07595_1ad2793e9b2b11be90662f4715e76b30d8" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::IndirectLighting::IndirectLighting</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>IndirectLighting</name>
+        <qualifiedname>castor3d::shader::IndirectLighting::IndirectLighting</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="64" column="10" bodyfile="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" bodystart="64" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a07595_1ab565a017b9b350d72e8d5317d5328d88" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::IndirectLighting::ambient</definition>
+        <argsstring>() const</argsstring>
+        <name>ambient</name>
+        <qualifiedname>castor3d::shader::IndirectLighting::ambient</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="71" column="6" bodyfile="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" bodystart="71" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a07595_1a2d2abce191f479c859c008a59322a0ab" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::IndirectLighting::rawDiffuse</definition>
+        <argsstring>() const</argsstring>
+        <name>rawDiffuse</name>
+        <qualifiedname>castor3d::shader::IndirectLighting::rawDiffuse</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="72" column="6" bodyfile="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" bodystart="72" bodyend="72"/>
+        <referencedby refid="dd/d55/a07595_1ac59706b20d467fb74ee14343ae75b861" compoundref="d9/d79/a01658" startline="76" endline="76">diffuseBlend</referencedby>
+        <referencedby refid="dd/d55/a07595_1a65864f82f910d5cdffce49ec0a1ac5fc" compoundref="d9/d79/a01658" startline="75" endline="75">diffuseColour</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a07595_1a4b2cbcff1546a86c015e1f6b5cbf5efb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::IndirectLighting::specular</definition>
+        <argsstring>() const</argsstring>
+        <name>specular</name>
+        <qualifiedname>castor3d::shader::IndirectLighting::specular</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="73" column="6" bodyfile="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" bodystart="73" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a07595_1afa454b151419e9cab9be96ebbd23a25b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::IndirectLighting::occlusion</definition>
+        <argsstring>() const</argsstring>
+        <name>occlusion</name>
+        <qualifiedname>castor3d::shader::IndirectLighting::occlusion</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="74" column="6" bodyfile="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" bodystart="74" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a07595_1a65864f82f910d5cdffce49ec0a1ac5fc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::IndirectLighting::diffuseColour</definition>
+        <argsstring>() const</argsstring>
+        <name>diffuseColour</name>
+        <qualifiedname>castor3d::shader::IndirectLighting::diffuseColour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="75" column="6" bodyfile="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" bodystart="75" bodyend="75"/>
+        <references refid="dd/d55/a07595_1a2d2abce191f479c859c008a59322a0ab" compoundref="d9/d79/a01658" startline="72" endline="72">rawDiffuse</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d55/a07595_1ac59706b20d467fb74ee14343ae75b861" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::IndirectLighting::diffuseBlend</definition>
+        <argsstring>() const</argsstring>
+        <name>diffuseBlend</name>
+        <qualifiedname>castor3d::shader::IndirectLighting::diffuseBlend</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="76" column="6" bodyfile="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" bodystart="76" bodyend="76"/>
+        <references refid="dd/d55/a07595_1a2d2abce191f479c859c008a59322a0ab" compoundref="d9/d79/a01658" startline="72" endline="72">rawDiffuse</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="dd/d55/a07595_1a73304a863442be41cf50f9db37c79f59" prot="private" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::expr::ExprList</type>
+        <definition>static C3D_API sdw::expr::ExprList castor3d::shader::IndirectLighting::makeZero</definition>
+        <argsstring>()</argsstring>
+        <name>makeZero</name>
+        <qualifiedname>castor3d::shader::IndirectLighting::makeZero</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="79" column="36"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::IndirectLighting</label>
+        <link refid="dd/d55/a07595"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_IndirectLighting&quot;, sdw::type::MemoryLayout::eC, sdw::Vec3Field&lt; &quot;ambient&quot; &gt;, sdw::Vec4Field&lt; &quot;diffuse&quot; &gt;, sdw::Vec3Field&lt; &quot;specular&quot; &gt;, sdw::FloatField&lt; &quot;occlusion&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::IndirectLighting</label>
+        <link refid="dd/d55/a07595"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_IndirectLighting&quot;, sdw::type::MemoryLayout::eC, sdw::Vec3Field&lt; &quot;ambient&quot; &gt;, sdw::Vec4Field&lt; &quot;diffuse&quot; &gt;, sdw::Vec3Field&lt; &quot;specular&quot; &gt;, sdw::FloatField&lt; &quot;occlusion&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" line="49" column="1" bodyfile="Castor3D/Shader/Shaders/GlslOutputComponents.hpp" bodystart="56" bodyend="80"/>
+    <listofallmembers>
+      <member refid="dd/d55/a07595_1ab565a017b9b350d72e8d5317d5328d88" prot="public" virt="non-virtual"><scope>castor3d::shader::IndirectLighting</scope><name>ambient</name></member>
+      <member refid="dd/d55/a07595_1ac59706b20d467fb74ee14343ae75b861" prot="public" virt="non-virtual"><scope>castor3d::shader::IndirectLighting</scope><name>diffuseBlend</name></member>
+      <member refid="dd/d55/a07595_1a65864f82f910d5cdffce49ec0a1ac5fc" prot="public" virt="non-virtual"><scope>castor3d::shader::IndirectLighting</scope><name>diffuseColour</name></member>
+      <member refid="dd/d55/a07595_1a081b3bd4d690f146d04262be4bc001cc" prot="public" virt="non-virtual"><scope>castor3d::shader::IndirectLighting</scope><name>IndirectLighting</name></member>
+      <member refid="dd/d55/a07595_1ad2793e9b2b11be90662f4715e76b30d8" prot="public" virt="non-virtual"><scope>castor3d::shader::IndirectLighting</scope><name>IndirectLighting</name></member>
+      <member refid="dd/d55/a07595_1a73304a863442be41cf50f9db37c79f59" prot="private" virt="non-virtual"><scope>castor3d::shader::IndirectLighting</scope><name>makeZero</name></member>
+      <member refid="dd/d55/a07595_1afa454b151419e9cab9be96ebbd23a25b" prot="public" virt="non-virtual"><scope>castor3d::shader::IndirectLighting</scope><name>occlusion</name></member>
+      <member refid="dd/d55/a07595_1a2d2abce191f479c859c008a59322a0ab" prot="public" virt="non-virtual"><scope>castor3d::shader::IndirectLighting</scope><name>rawDiffuse</name></member>
+      <member refid="dd/d55/a07595_1a4b2cbcff1546a86c015e1f6b5cbf5efb" prot="public" virt="non-virtual"><scope>castor3d::shader::IndirectLighting</scope><name>specular</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

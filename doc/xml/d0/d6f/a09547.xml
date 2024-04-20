@@ -1,0 +1,469 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d6f/a09547" kind="class" language="C++" prot="public">
+    <compoundname>castor::format::BasicPrefixBufferManager</compoundname>
+    <includes local="no">StreamPrefixBufferManager.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename prefix_type</type>
+      </param>
+      <param>
+        <type>typename char_type</type>
+      </param>
+      <param>
+        <type>typename traits</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d0/d6f/a09547_1acd093693eecdff0ef9c12c79411960f5" prot="private" static="no">
+        <type>std::ios_base</type>
+        <definition>using castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::bos =  std::ios_base</definition>
+        <argsstring></argsstring>
+        <name>bos</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::bos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="22" column="1" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d6f/a09547_1a404ca623ffc551ace93e273f35cc9719" prot="private" static="no">
+        <type>std::basic_streambuf&lt; char_type, traits &gt;</type>
+        <definition>using castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::bsb =  std::basic_streambuf&lt; char_type, traits &gt;</definition>
+        <argsstring></argsstring>
+        <name>bsb</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::bsb</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="23" column="1" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d6f/a09547_1a9c67cc14060bd79b6caf8dd5f5b09973" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1a93b53452a3c421817a14b649ccec1fb7" kindref="member">Map</ref>&lt; bos *, bsb * &gt;</type>
+        <definition>using castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::table_type =  Map&lt; bos *, bsb * &gt;</definition>
+        <argsstring></argsstring>
+        <name>table_type</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::table_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="24" column="1" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d6f/a09547_1aafdc55d0a2bffd9334921d9ac6c98e48" prot="private" static="no">
+        <type>typename table_type::value_type</type>
+        <definition>using castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::value_type =  typename table_type::value_type</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="25" column="1" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d6f/a09547_1a271422ef94f797c5944f535be75818b3" prot="private" static="no">
+        <type>typename table_type::iterator</type>
+        <definition>using castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::iterator =  typename table_type::iterator</definition>
+        <argsstring></argsstring>
+        <name>iterator</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="26" column="1" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d6f/a09547_1a21b9108614f1792e523737aaadfb0c66" prot="private" static="no">
+        <type>typename table_type::const_iterator</type>
+        <definition>using castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::const_iterator =  typename table_type::const_iterator</definition>
+        <argsstring></argsstring>
+        <name>const_iterator</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::const_iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="27" column="1" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d6f/a09547_1a3ba785d32802ece8f3dcd85d018718dc" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1a388fd75dcd12a3eb9749946a99143d02" kindref="member">castor::UniqueLock</ref>&lt; <ref refid="d2/dd2/a02279_1aac3763b795438810958473f0b84908fb" kindref="member">castor::Mutex</ref> &gt;</type>
+        <definition>using castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::lock_type =  castor::UniqueLock&lt; castor::Mutex &gt;</definition>
+        <argsstring></argsstring>
+        <name>lock_type</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::lock_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="28" column="1" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="d0/d6f/a09547_1ab7adea9c77d017734ec72b642faec5eb" prot="private" static="yes" mutable="no">
+        <type>std::atomic_int</type>
+        <definition>std::atomic_int castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::sm_instances</definition>
+        <argsstring></argsstring>
+        <name>sm_instances</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::sm_instances</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le compte des instances. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="166" column="24" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d6f/a09547_1a134243c93d2e27e4db78cfa7916afcb7" prot="private" static="no" mutable="no">
+        <type>table_type</type>
+        <definition>table_type castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::m_list</definition>
+        <argsstring></argsstring>
+        <name>m_list</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::m_list</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="169" column="12" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="169" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d6f/a09547_1a53344d2d5e826a9978292ce419d0d016" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aac3763b795438810958473f0b84908fb" kindref="member">castor::Mutex</ref></type>
+        <definition>castor::Mutex castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::m_mutex</definition>
+        <argsstring></argsstring>
+        <name>m_mutex</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::m_mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le mutex protégeant les éléments associés. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="172" column="15" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="172" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d0/d6f/a09547_1a1d36c3d52e3c9394f6522e24a31a239b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::BasicPrefixBufferManager</definition>
+        <argsstring>(BasicPrefixBufferManager const &amp;)=delete</argsstring>
+        <name>BasicPrefixBufferManager</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::BasicPrefixBufferManager</qualifiedname>
+        <param>
+          <type><ref refid="d0/d6f/a09547" kindref="compound">BasicPrefixBufferManager</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="30" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d6f/a09547_1ae186081c878a895c2af23018884917e8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d0/d6f/a09547" kindref="compound">BasicPrefixBufferManager</ref> &amp;</type>
+        <definition>BasicPrefixBufferManager &amp; castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::operator=</definition>
+        <argsstring>(BasicPrefixBufferManager const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d0/d6f/a09547" kindref="compound">BasicPrefixBufferManager</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="31" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d6f/a09547_1adb0599f51ec2f47bca52ede2c108c6d4" prot="private" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::BasicPrefixBufferManager</definition>
+        <argsstring>(BasicPrefixBufferManager &amp;&amp;) noexcept=delete</argsstring>
+        <name>BasicPrefixBufferManager</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::BasicPrefixBufferManager</qualifiedname>
+        <param>
+          <type><ref refid="d0/d6f/a09547" kindref="compound">BasicPrefixBufferManager</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="32" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d6f/a09547_1a37cc9e553f9c61b7e57940d4f8fbe65e" prot="private" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d0/d6f/a09547" kindref="compound">BasicPrefixBufferManager</ref> &amp;</type>
+        <definition>BasicPrefixBufferManager &amp; castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::operator=</definition>
+        <argsstring>(BasicPrefixBufferManager &amp;&amp;) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d0/d6f/a09547" kindref="compound">BasicPrefixBufferManager</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="33" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d6f/a09547_1a73e90e8e2ecb6046cd55d431d51ccced" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::BasicPrefixBufferManager</definition>
+        <argsstring>(BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt; &amp;obj)=delete</argsstring>
+        <name>BasicPrefixBufferManager</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::BasicPrefixBufferManager</qualifiedname>
+        <param>
+          <type><ref refid="d0/d6f/a09547" kindref="compound">BasicPrefixBufferManager</ref>&lt; prefix_type, char_type, traits &gt; &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d6f/a09547_1ace5a6bfd5e1c11cd2ef2019148231ac7" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::BasicPrefixBufferManager</definition>
+        <argsstring>()</argsstring>
+        <name>BasicPrefixBufferManager</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::BasicPrefixBufferManager</qualifiedname>
+        <briefdescription>
+<para>Constructeur par défaut. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Default constructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="45" column="1" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="45" bodyend="48"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d6f/a09547_1af76c1aec7a22527bb5b4ebaba0ae57e8" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::~BasicPrefixBufferManager</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~BasicPrefixBufferManager</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::~BasicPrefixBufferManager</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="57" column="1" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="57" bodyend="66"/>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d6f/a09547_1a597fc50618107dd8c1b34f84b02a98a8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::insert</definition>
+        <argsstring>(bos &amp;o_s, bsb *b_s)</argsstring>
+        <name>insert</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::insert</qualifiedname>
+        <param>
+          <type>bos &amp;</type>
+          <declname>o_s</declname>
+        </param>
+        <param>
+          <type>bsb *</type>
+          <declname>b_s</declname>
+        </param>
+        <briefdescription>
+<para>Insère une association flux/tampon. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">o_s</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le flux </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">b_s</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le tampon </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true si la paire a été correctement insérée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="80" column="6" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="80" bodyend="84"/>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d6f/a09547_1adffeb97e05ecd2dae28896b38295f4fa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::size</definition>
+        <argsstring>()</argsstring>
+        <name>size</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::size</qualifiedname>
+        <briefdescription>
+<para>Récupère le nombre d&apos;éléments. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="94" column="8" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="94" bodyend="98"/>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d6f/a09547_1a41d521ca52d415a7e2ee2e26b68dca02" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bsb *</type>
+        <definition>bsb * castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::getBuffer</definition>
+        <argsstring>(std::ios_base &amp;io_s)</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::getBuffer</qualifiedname>
+        <param>
+          <type>std::ios_base &amp;</type>
+          <declname>io_s</declname>
+        </param>
+        <briefdescription>
+<para>Récupère le tampon associé au flux donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">io_s</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le flux </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="108" column="6" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="108" bodyend="119"/>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+        <referencedby refid="d0/d6f/a09547_1a8f7f99838ef7c0f844d28740716109df" compoundref="d4/de7/a02270" startline="131" endline="136">castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::erase</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/d6f/a09547_1a8f7f99838ef7c0f844d28740716109df" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::erase</definition>
+        <argsstring>(std::ios_base &amp;io_s)</argsstring>
+        <name>erase</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::erase</qualifiedname>
+        <param>
+          <type>std::ios_base &amp;</type>
+          <declname>io_s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="131" column="6" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="131" bodyend="136"/>
+        <references refid="d0/d6f/a09547_1a41d521ca52d415a7e2ee2e26b68dca02" compoundref="d4/de7/a02270" startline="108" endline="119">castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::getBuffer</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d0/d6f/a09547_1a0f7cf0fb32abbfbac0339159f84a31ad" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>static size_t castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::instances</definition>
+        <argsstring>()</argsstring>
+        <name>instances</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::instances</qualifiedname>
+        <briefdescription>
+<para>Récupère le nompbre d&apos;instances. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="146" column="15" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="146" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d6f/a09547_1a714eafb27113eecd4d0e0b1c43ed1664" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/d6f/a09547" kindref="compound">BasicPrefixBufferManager</ref>&lt; prefix_type, char_type, traits &gt; *</type>
+        <definition>static BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt; * castor::format::BasicPrefixBufferManager&lt; prefix_type, char_type, traits &gt;::instance</definition>
+        <argsstring>()</argsstring>
+        <name>instance</name>
+        <qualifiedname>castor::format::BasicPrefixBufferManager::instance</qualifiedname>
+        <briefdescription>
+<para>Récupère une instance du <ref refid="d0/d6f/a09547" kindref="compound">BasicPrefixBufferManager</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="157" column="34" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="157" bodyend="161"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Garde les associations flux/tampon de flux. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Stream/StreamPrefixBufferManager.hpp" line="19" column="1" bodyfile="CastorUtils/Stream/StreamPrefixBufferManager.hpp" bodystart="20" bodyend="173"/>
+    <listofallmembers>
+      <member refid="d0/d6f/a09547_1a1d36c3d52e3c9394f6522e24a31a239b" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>BasicPrefixBufferManager</name></member>
+      <member refid="d0/d6f/a09547_1adb0599f51ec2f47bca52ede2c108c6d4" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>BasicPrefixBufferManager</name></member>
+      <member refid="d0/d6f/a09547_1a73e90e8e2ecb6046cd55d431d51ccced" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>BasicPrefixBufferManager</name></member>
+      <member refid="d0/d6f/a09547_1ace5a6bfd5e1c11cd2ef2019148231ac7" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>BasicPrefixBufferManager</name></member>
+      <member refid="d0/d6f/a09547_1acd093693eecdff0ef9c12c79411960f5" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>bos</name></member>
+      <member refid="d0/d6f/a09547_1a404ca623ffc551ace93e273f35cc9719" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>bsb</name></member>
+      <member refid="d0/d6f/a09547_1a21b9108614f1792e523737aaadfb0c66" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>const_iterator</name></member>
+      <member refid="d0/d6f/a09547_1a8f7f99838ef7c0f844d28740716109df" prot="public" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>erase</name></member>
+      <member refid="d0/d6f/a09547_1a41d521ca52d415a7e2ee2e26b68dca02" prot="public" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>getBuffer</name></member>
+      <member refid="d0/d6f/a09547_1a597fc50618107dd8c1b34f84b02a98a8" prot="public" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>insert</name></member>
+      <member refid="d0/d6f/a09547_1a714eafb27113eecd4d0e0b1c43ed1664" prot="public" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>instance</name></member>
+      <member refid="d0/d6f/a09547_1a0f7cf0fb32abbfbac0339159f84a31ad" prot="public" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>instances</name></member>
+      <member refid="d0/d6f/a09547_1a271422ef94f797c5944f535be75818b3" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>iterator</name></member>
+      <member refid="d0/d6f/a09547_1a3ba785d32802ece8f3dcd85d018718dc" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>lock_type</name></member>
+      <member refid="d0/d6f/a09547_1a134243c93d2e27e4db78cfa7916afcb7" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>m_list</name></member>
+      <member refid="d0/d6f/a09547_1a53344d2d5e826a9978292ce419d0d016" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>m_mutex</name></member>
+      <member refid="d0/d6f/a09547_1ae186081c878a895c2af23018884917e8" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>operator=</name></member>
+      <member refid="d0/d6f/a09547_1a37cc9e553f9c61b7e57940d4f8fbe65e" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>operator=</name></member>
+      <member refid="d0/d6f/a09547_1adffeb97e05ecd2dae28896b38295f4fa" prot="public" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>size</name></member>
+      <member refid="d0/d6f/a09547_1ab7adea9c77d017734ec72b642faec5eb" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>sm_instances</name></member>
+      <member refid="d0/d6f/a09547_1a9c67cc14060bd79b6caf8dd5f5b09973" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>table_type</name></member>
+      <member refid="d0/d6f/a09547_1aafdc55d0a2bffd9334921d9ac6c98e48" prot="private" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>value_type</name></member>
+      <member refid="d0/d6f/a09547_1af76c1aec7a22527bb5b4ebaba0ae57e8" prot="public" virt="non-virtual"><scope>castor::format::BasicPrefixBufferManager</scope><name>~BasicPrefixBufferManager</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

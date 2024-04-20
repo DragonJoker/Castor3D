@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/d1e/a08191" kind="struct" language="C++" prot="public">
+    <compoundname>castor::FactoryEntryT</compoundname>
+    <includes local="no">Factory.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class KeyT</type>
+      </param>
+      <param>
+        <type>typename CreatorT</type>
+      </param>
+      <param>
+        <type>class IdT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d1e/a08191_1a700ae6b7ff924f80c20cf680e4791908" prot="public" static="no" mutable="no">
+        <type>KeyT</type>
+        <definition>KeyT castor::FactoryEntryT&lt; KeyT, CreatorT, IdT &gt;::key</definition>
+        <argsstring></argsstring>
+        <name>key</name>
+        <qualifiedname>castor::FactoryEntryT::key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="24" column="6" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d1e/a08191_1a9fe60d95ad5c7b4cf4bfd86a6577f339" prot="public" static="no" mutable="no">
+        <type>CreatorT</type>
+        <definition>CreatorT castor::FactoryEntryT&lt; KeyT, CreatorT, IdT &gt;::create</definition>
+        <argsstring></argsstring>
+        <name>create</name>
+        <qualifiedname>castor::FactoryEntryT::create</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="25" column="10" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d1e/a08191_1a71557f94a4e1525e1333829d22252599" prot="public" static="no" mutable="no">
+        <type>IdT</type>
+        <definition>IdT castor::FactoryEntryT&lt; KeyT, CreatorT, IdT &gt;::id</definition>
+        <argsstring></argsstring>
+        <name>id</name>
+        <qualifiedname>castor::FactoryEntryT::id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Factory.hpp" line="26" column="5" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Design/Factory.hpp" line="22" column="1" bodyfile="CastorUtils/Design/Factory.hpp" bodystart="23" bodyend="27"/>
+    <listofallmembers>
+      <member refid="d9/d1e/a08191_1a9fe60d95ad5c7b4cf4bfd86a6577f339" prot="public" virt="non-virtual"><scope>castor::FactoryEntryT</scope><name>create</name></member>
+      <member refid="d9/d1e/a08191_1a71557f94a4e1525e1333829d22252599" prot="public" virt="non-virtual"><scope>castor::FactoryEntryT</scope><name>id</name></member>
+      <member refid="d9/d1e/a08191_1a700ae6b7ff924f80c20cf680e4791908" prot="public" virt="non-virtual"><scope>castor::FactoryEntryT</scope><name>key</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

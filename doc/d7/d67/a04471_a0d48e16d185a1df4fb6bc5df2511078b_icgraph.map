@@ -1,0 +1,7 @@
+<map id="castor3d::GlossinessMapComponent::Plugin::getTextureFlags" name="castor3d::GlossinessMapComponent::Plugin::getTextureFlags">
+<area shape="rect" id="Node000001" title=" " alt="" coords="289,37,525,77"/>
+<area shape="rect" id="Node000002" href="$d7/d67/a04471.html#a9c761e1b1b63a6ea4559a50453afb956" title="Fills the texture configuration for use with this component." alt="" coords="5,5,241,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="276,45,241,41,242,36,276,40"/>
+<area shape="rect" id="Node000003" href="$d7/d67/a04471.html#addf4a880a2f53bbeaa42d64595ebe3dc" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="5,69,241,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="276,75,242,79,241,73,276,69"/>
+</map>

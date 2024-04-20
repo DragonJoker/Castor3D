@@ -1,16 +1,16 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_64d6a48201bca8ed49ad7a73b8221ddd" kind="dir">
-    <compoundname>Render/Transparent</compoundname>
-    <innerfile refid="d3/da4/a01343">TransparentModule.hpp</innerfile>
-    <innerfile refid="d9/de4/a01346">TransparentPass.hpp</innerfile>
-    <innerfile refid="de/d6c/a01349">TransparentPassResult.hpp</innerfile>
-    <innerfile refid="d0/d85/a01352">TransparentRendering.hpp</innerfile>
-    <innerfile refid="d8/d4e/a01355">WeightedBlendRendering.hpp</innerfile>
+    <compoundname>Castor3D/Render/Transparent</compoundname>
+    <innerfile refid="d9/de4/a01346">TransparentModule.hpp</innerfile>
+    <innerfile refid="de/d6c/a01349">TransparentPass.hpp</innerfile>
+    <innerfile refid="d0/d85/a01352">TransparentPassResult.hpp</innerfile>
+    <innerfile refid="d8/d4e/a01355">TransparentRendering.hpp</innerfile>
+    <innerfile refid="de/d5c/a01358">WeightedBlendRendering.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Transparent/"/>
+    <location file="Castor3D/Render/Transparent/"/>
   </compounddef>
 </doxygen>

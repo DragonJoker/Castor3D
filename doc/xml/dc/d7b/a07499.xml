@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d7b/a07499" kind="struct" language="C++" prot="public">
+    <compoundname>sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;</compoundname>
+    <includes local="no">GlslDerivativeValue.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ValueT</type>
+      </param>
+      <param>
+        <type>StringLiteralT</type>
+        <declname>StructNameT</declname>
+        <defname>StructNameT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dc/d7b/a07499_1add401e7725212f3d72ee4fc3dfe63cde" prot="public" static="no">
+        <type>typename TypeTraits&lt; StructInstance &gt;::CppType</type>
+        <definition>using sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;::CppType =  typename TypeTraits&lt; StructInstance &gt;::CppType</definition>
+        <argsstring></argsstring>
+        <name>CppType</name>
+        <qualifiedname>sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;::CppType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="72" column="1" bodyfile="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d7b/a07499_1aed156e8e51ea14b56deab3cf298c71a8" prot="public" static="no">
+        <type>typename TypeTraits&lt; StructInstance &gt;::OperandType</type>
+        <definition>using sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;::OperandType =  typename TypeTraits&lt; StructInstance &gt;::OperandType</definition>
+        <argsstring></argsstring>
+        <name>OperandType</name>
+        <qualifiedname>sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;::OperandType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="73" column="1" bodyfile="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d7b/a07499_1a3c952cfd73e7956036a7003e848baaf4" prot="public" static="no">
+        <type>typename TypeTraits&lt; StructInstance &gt;::LargestType</type>
+        <definition>using sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;::LargestType =  typename TypeTraits&lt; StructInstance &gt;::LargestType</definition>
+        <argsstring></argsstring>
+        <name>LargestType</name>
+        <qualifiedname>sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;::LargestType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="74" column="1" bodyfile="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/d7b/a07499_1a65e558cf3a7b1b57608ae24862e90fc3" prot="public" static="no">
+        <type>typename TypeTraits&lt; StructInstance &gt;::ComponentType</type>
+        <definition>using sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;::ComponentType =  typename TypeTraits&lt; StructInstance &gt;::ComponentType</definition>
+        <argsstring></argsstring>
+        <name>ComponentType</name>
+        <qualifiedname>sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;::ComponentType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="75" column="1" bodyfile="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" bodystart="75" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dc/d7b/a07499_1acfc9928fcdd4a1bd93ca087e5bc6ff00" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>ast::type::Kind constexpr</type>
+        <definition>ast::type::Kind constexpr sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;::TypeEnum</definition>
+        <argsstring></argsstring>
+        <name>TypeEnum</name>
+        <qualifiedname>sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;::TypeEnum</qualifiedname>
+        <initializer>= TypeTraits&lt; StructInstance &gt;::TypeEnum</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="70" column="34" bodyfile="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d7b/a07499_1a4dff4e844f87de4ab1cc74bede9c6755" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>bool constexpr</type>
+        <definition>bool constexpr sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;::HasArithmeticOperators</definition>
+        <argsstring></argsstring>
+        <name>HasArithmeticOperators</name>
+        <qualifiedname>sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;::HasArithmeticOperators</qualifiedname>
+        <initializer>= TypeTraits&lt; StructInstance &gt;::HasArithmeticOperators</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="71" column="23" bodyfile="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d7b/a07499_1a8edb528270f2fb602cd3e0becead0c63" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>size_t constexpr</type>
+        <definition>size_t constexpr sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;::Size</definition>
+        <argsstring></argsstring>
+        <name>Size</name>
+        <qualifiedname>sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;::Size</qualifiedname>
+        <initializer>= TypeTraits&lt; StructInstance &gt;::Size</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="76" column="25" bodyfile="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d7b/a07499_1a4709427b03629846fdba0e3dce5c0ca2" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>size_t constexpr</type>
+        <definition>size_t constexpr sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;::ComponentCount</definition>
+        <argsstring></argsstring>
+        <name>ComponentCount</name>
+        <qualifiedname>sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;::ComponentCount</qualifiedname>
+        <initializer>= TypeTraits&lt; StructInstance &gt;::ComponentCount</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="77" column="25" bodyfile="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" line="68" column="1" bodyfile="Castor3D/Shader/Shaders/GlslDerivativeValue.hpp" bodystart="69" bodyend="78"/>
+    <listofallmembers>
+      <member refid="dc/d7b/a07499_1a4709427b03629846fdba0e3dce5c0ca2" prot="public" virt="non-virtual"><scope>sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;</scope><name>ComponentCount</name></member>
+      <member refid="dc/d7b/a07499_1a65e558cf3a7b1b57608ae24862e90fc3" prot="public" virt="non-virtual"><scope>sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;</scope><name>ComponentType</name></member>
+      <member refid="dc/d7b/a07499_1add401e7725212f3d72ee4fc3dfe63cde" prot="public" virt="non-virtual"><scope>sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;</scope><name>CppType</name></member>
+      <member refid="dc/d7b/a07499_1a4dff4e844f87de4ab1cc74bede9c6755" prot="public" virt="non-virtual"><scope>sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;</scope><name>HasArithmeticOperators</name></member>
+      <member refid="dc/d7b/a07499_1a3c952cfd73e7956036a7003e848baaf4" prot="public" virt="non-virtual"><scope>sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;</scope><name>LargestType</name></member>
+      <member refid="dc/d7b/a07499_1aed156e8e51ea14b56deab3cf298c71a8" prot="public" virt="non-virtual"><scope>sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;</scope><name>OperandType</name></member>
+      <member refid="dc/d7b/a07499_1a8edb528270f2fb602cd3e0becead0c63" prot="public" virt="non-virtual"><scope>sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;</scope><name>Size</name></member>
+      <member refid="dc/d7b/a07499_1acfc9928fcdd4a1bd93ca087e5bc6ff00" prot="public" virt="non-virtual"><scope>sdw::TypeTraits&lt; castor3d::shader::DerivativeValueT&lt; ValueT, StructNameT &gt; &gt;</scope><name>TypeEnum</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

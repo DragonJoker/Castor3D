@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d2d/a02286" kind="namespace" language="C++">
+    <compoundname>castor::details</compoundname>
+    <innerclass refid="df/d15/a09299" prot="public">castor::details::Equal</innerclass>
+    <innerclass refid="d5/d71/a09303" prot="public">castor::details::Equal&lt; uint32_t &gt;</innerclass>
+    <innerclass refid="de/d26/a09167" prot="public">castor::details::MaxRecT</innerclass>
+    <innerclass refid="d4/db5/a09175" prot="public">castor::details::MaxRecT&lt; DataT, LhsT, RhsT &gt;</innerclass>
+    <innerclass refid="da/dd4/a09179" prot="public">castor::details::MaxRecT&lt; DataT, LhsT, RhsT, ValuesT... &gt;</innerclass>
+    <innerclass refid="db/d6f/a09171" prot="public">castor::details::MaxRecT&lt; DataT, ValueT &gt;</innerclass>
+    <innerclass refid="d1/dab/a09151" prot="public">castor::details::MinRecT</innerclass>
+    <innerclass refid="dc/da4/a09159" prot="public">castor::details::MinRecT&lt; DataT, LhsT, RhsT &gt;</innerclass>
+    <innerclass refid="d5/d74/a09163" prot="public">castor::details::MinRecT&lt; DataT, LhsT, RhsT, ValuesT... &gt;</innerclass>
+    <innerclass refid="d8/d88/a09155" prot="public">castor::details::MinRecT&lt; DataT, ValueT &gt;</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/Math.hpp" line="125" column="1"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,1844 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/dc3/a09203" kind="class" language="C++" prot="public">
+    <compoundname>castor::QuaternionT</compoundname>
+    <basecompoundref refid="da/d50/a08167" prot="public" virt="non-virtual">castor::DataHolderT&lt; QuaternionDataT&lt; T &gt; &gt;</basecompoundref>
+    <basecompoundref refid="d9/d6a/a09103" prot="public" virt="non-virtual">castor::Coords&lt; T &gt;</basecompoundref>
+    <includes local="no">Quaternion.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="dc/dc3/a09203_1acf2d3f9c68bc922dc5caea9c0e5e21af" prot="private" static="no">
+        <type><ref refid="da/d50/a08167" kindref="compound">DataHolderT</ref>&lt; <ref refid="d2/dd2/a02279_1aab393963225ba8fb4004f8af8ae9c9ff" kindref="member">QuaternionDataT</ref>&lt; T &gt; &gt;</type>
+        <definition>using castor::QuaternionT&lt; T &gt;::DataHolder =  DataHolderT&lt; QuaternionDataT&lt; T &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>DataHolder</name>
+        <qualifiedname>castor::QuaternionT::DataHolder</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="30" column="1" bodyfile="CastorUtils/Math/Quaternion.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/dc3/a09203_1a6f25ecbd42831a371694c3908dc524b2" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1a5a9465c9b2719da11877027346e73a7f" kindref="member">Coords4</ref>&lt; T &gt;</type>
+        <definition>using castor::QuaternionT&lt; T &gt;::BaseType =  Coords4&lt; T &gt;</definition>
+        <argsstring></argsstring>
+        <name>BaseType</name>
+        <qualifiedname>castor::QuaternionT::BaseType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="31" column="1" bodyfile="CastorUtils/Math/Quaternion.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="dc/dc3/a09203_1a1138bcbf3c280573d982639857d3eff3" prot="private" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::QuaternionT&lt; T &gt;::QuaternionT</definition>
+        <argsstring>(NoInit const &amp;)</argsstring>
+        <name>QuaternionT</name>
+        <qualifiedname>castor::QuaternionT::QuaternionT</qualifiedname>
+        <param>
+          <type><ref refid="da/d68/a07951" kindref="compound">NoInit</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="34" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1ada6a140d8e10819ef1c34937cc80f14c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::QuaternionT&lt; T &gt;::QuaternionT</definition>
+        <argsstring>(T x, T y, T z, T w)</argsstring>
+        <name>QuaternionT</name>
+        <qualifiedname>castor::QuaternionT::QuaternionT</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>z</declname>
+        </param>
+        <param>
+          <type>T</type>
+          <declname>w</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="35" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/dc3/a09203_1ab9c135fe85adc5f1f09d9de229b770d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::QuaternionT&lt; T &gt;::QuaternionT</definition>
+        <argsstring>()</argsstring>
+        <name>QuaternionT</name>
+        <qualifiedname>castor::QuaternionT::QuaternionT</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="44" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a9b9e2ce4331fc1b5f5b793eb10c15af4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::QuaternionT&lt; T &gt;::QuaternionT</definition>
+        <argsstring>(QuaternionT const &amp;rhs)</argsstring>
+        <name>QuaternionT</name>
+        <qualifiedname>castor::QuaternionT::QuaternionT</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par copie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet Quaternion à copier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="53" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a3f58a4231e00371454c4a15b2695e5dc" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::QuaternionT&lt; T &gt;::QuaternionT</definition>
+        <argsstring>(QuaternionT &amp;&amp;rhs) noexcept</argsstring>
+        <name>QuaternionT</name>
+        <qualifiedname>castor::QuaternionT::QuaternionT</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet Quaternion à déplacer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="62" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1aca2d0e0a3a0fdcc63c4eeb5d28b57caa" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::QuaternionT&lt; T &gt;::QuaternionT</definition>
+        <argsstring>(double const *values)</argsstring>
+        <name>QuaternionT</name>
+        <qualifiedname>castor::QuaternionT::QuaternionT</qualifiedname>
+        <param>
+          <type>double const *</type>
+          <declname>values</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs du Quaternion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="71" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a04942c23f384f86a5c61a9d68e2de2d0" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::QuaternionT&lt; T &gt;::QuaternionT</definition>
+        <argsstring>(float const *values)</argsstring>
+        <name>QuaternionT</name>
+        <qualifiedname>castor::QuaternionT::QuaternionT</qualifiedname>
+        <param>
+          <type>float const *</type>
+          <declname>values</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs du Quaternion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="80" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a6e3ca875cde72d3eb91ecff4df1f2f84" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::QuaternionT&lt; T &gt;::QuaternionT</definition>
+        <argsstring>(Point4f const &amp;values)</argsstring>
+        <name>QuaternionT</name>
+        <qualifiedname>castor::QuaternionT::QuaternionT</qualifiedname>
+        <param>
+          <type>Point4f const &amp;</type>
+          <declname>values</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs du quaternion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="89" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a08e0004e3e79350e8504c08a2abd3f47" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::QuaternionT&lt; T &gt;::QuaternionT</definition>
+        <argsstring>(Point4d const &amp;values)</argsstring>
+        <name>QuaternionT</name>
+        <qualifiedname>castor::QuaternionT::QuaternionT</qualifiedname>
+        <param>
+          <type>Point4d const &amp;</type>
+          <declname>values</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs du quaternion </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="98" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a404237ac34efb68e90f219171778fad9" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::QuaternionT&lt; T &gt;::~QuaternionT</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~QuaternionT</name>
+        <qualifiedname>castor::QuaternionT::~QuaternionT</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="105" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1ab7c2fb3602810aa497f381f7df74cccf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt; &amp;</type>
+        <definition>QuaternionT&lt; T &gt; &amp; castor::QuaternionT&lt; T &gt;::operator=</definition>
+        <argsstring>(QuaternionT&lt; T &gt; const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::QuaternionT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par copie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet Quaternion à copier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet Quaternion </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="116" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a747acec37c8e6ee3c2387bafc5072e80" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt; &amp;</type>
+        <definition>QuaternionT&lt; T &gt; &amp; castor::QuaternionT&lt; T &gt;::operator=</definition>
+        <argsstring>(QuaternionT&lt; T &gt; &amp;&amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::QuaternionT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt; &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet Quaternion à déplacer </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet Quaternion </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="127" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a3677c3efc866cfffd47c8b8af9539c82" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt; &amp;</type>
+        <definition>QuaternionT&lt; T &gt; &amp; castor::QuaternionT&lt; T &gt;::operator+=</definition>
+        <argsstring>(QuaternionT&lt; T &gt; const &amp;rhs)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::QuaternionT::operator+=</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par addition. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet Quaternion à ajouter </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet Quaternion </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="138" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a13e8680a13536ac8416063f5459522e6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt; &amp;</type>
+        <definition>QuaternionT&lt; T &gt; &amp; castor::QuaternionT&lt; T &gt;::operator-=</definition>
+        <argsstring>(QuaternionT&lt; T &gt; const &amp;rhs)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::QuaternionT::operator-=</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par soustraction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet Quaternion à soustraire </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet Quaternion </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="149" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a46db58140cdf963123256ca026497dc8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt; &amp;</type>
+        <definition>QuaternionT&lt; T &gt; &amp; castor::QuaternionT&lt; T &gt;::operator*=</definition>
+        <argsstring>(QuaternionT&lt; T &gt; const &amp;rhs)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::QuaternionT::operator*=</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par multiplication. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet Quaternion à multiplier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet Quaternion </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="160" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a4c057cab76833d2f2315e2b3890ec7d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt; &amp;</type>
+        <definition>QuaternionT&lt; T &gt; &amp; castor::QuaternionT&lt; T &gt;::operator*=</definition>
+        <argsstring>(double rhs)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::QuaternionT::operator*=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par multiplication. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le scalaire à multiplier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet Quaternion </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="171" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a5222bb4ade6035dc3dfd4f130f1c2156" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt; &amp;</type>
+        <definition>QuaternionT&lt; T &gt; &amp; castor::QuaternionT&lt; T &gt;::operator*=</definition>
+        <argsstring>(float rhs)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::QuaternionT::operator*=</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par multiplication. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le scalaire à multiplier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet objet Quaternion </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="182" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1ae2ba25ef0be968cff5f6b41767b03316" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>Vector3fT</type>
+            <declname>PtT</declname>
+            <defname>PtT</defname>
+          </param>
+        </templateparamlist>
+        <type>PtT &amp;</type>
+        <definition>PtT &amp; castor::QuaternionT&lt; T &gt;::transform</definition>
+        <argsstring>(PtT const &amp;vector, PtT &amp;result) const</argsstring>
+        <name>transform</name>
+        <qualifiedname>castor::QuaternionT::transform</qualifiedname>
+        <param>
+          <type>PtT const &amp;</type>
+          <declname>vector</declname>
+        </param>
+        <param>
+          <type>PtT &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+<para>Transforme un vecteur et donne le résultat. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">vector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le vecteur à transformer </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">result</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit le résultat </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur result </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="290" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1ae2ba25ef0be968cff5f6b41767b03316" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>Vector3dT</type>
+            <declname>PtT</declname>
+            <defname>PtT</defname>
+          </param>
+        </templateparamlist>
+        <type>PtT &amp;</type>
+        <definition>PtT &amp; castor::QuaternionT&lt; T &gt;::transform</definition>
+        <argsstring>(PtT const &amp;vector, PtT &amp;result) const</argsstring>
+        <name>transform</name>
+        <qualifiedname>castor::QuaternionT::transform</qualifiedname>
+        <param>
+          <type>PtT const &amp;</type>
+          <declname>vector</declname>
+        </param>
+        <param>
+          <type>PtT &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+<para>Transforme un vecteur et donne le résultat. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">vector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le vecteur à transformer </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">result</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit le résultat </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur result </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="304" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a4e7d33b8a3fefacdb7def820f9240e4f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::QuaternionT&lt; T &gt;::toMatrix</definition>
+        <argsstring>(float *matrix) const</argsstring>
+        <name>toMatrix</name>
+        <qualifiedname>castor::QuaternionT::toMatrix</qualifiedname>
+        <param>
+          <type>float *</type>
+          <declname>matrix</declname>
+        </param>
+        <briefdescription>
+<para>Remplit une matrice de rotation à partir de ce Quaternion. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice à remplir </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="313" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a7310535db2690b32da70eecb0d6dfdab" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::QuaternionT&lt; T &gt;::toMatrix</definition>
+        <argsstring>(double *matrix) const</argsstring>
+        <name>toMatrix</name>
+        <qualifiedname>castor::QuaternionT::toMatrix</qualifiedname>
+        <param>
+          <type>double *</type>
+          <declname>matrix</declname>
+        </param>
+        <briefdescription>
+<para>Remplit une matrice de rotation à partir de ce Quaternion. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice à remplir </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="322" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a638c0d7972d8937a36d958fbf5287c59" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::QuaternionT&lt; T &gt;::toMatrix</definition>
+        <argsstring>(Matrix4x4f &amp;matrix) const</argsstring>
+        <name>toMatrix</name>
+        <qualifiedname>castor::QuaternionT::toMatrix</qualifiedname>
+        <param>
+          <type>Matrix4x4f &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <briefdescription>
+<para>Remplit une matrice de rotation à partir de ce Quaternion. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice à remplir </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="331" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a7ec26565dc720d3f4e1cc5ad962661ed" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::QuaternionT&lt; T &gt;::toMatrix</definition>
+        <argsstring>(Matrix4x4d &amp;matrix) const</argsstring>
+        <name>toMatrix</name>
+        <qualifiedname>castor::QuaternionT::toMatrix</qualifiedname>
+        <param>
+          <type>Matrix4x4d &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <briefdescription>
+<para>Remplit une matrice de rotation à partir de ce Quaternion. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice à remplir </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="340" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a8b4efc816d012e9404bee3d1009fb741" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::QuaternionT&lt; T &gt;::toAxisAngle</definition>
+        <argsstring>(Point3f &amp;vector, Angle &amp;angle) const</argsstring>
+        <name>toAxisAngle</name>
+        <qualifiedname>castor::QuaternionT::toAxisAngle</qualifiedname>
+        <param>
+          <type>Point3f &amp;</type>
+          <declname>vector</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">Angle</ref> &amp;</type>
+          <declname>angle</declname>
+        </param>
+        <briefdescription>
+<para>Calcule l&apos;axe et l&apos;angle de ce Quaternion. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">vector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit l&apos;axe </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">angle</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit l&apos;angle </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="351" column="6"/>
+        <referencedby refid="d4/dc4/a07255_1a55f4c11837ba24cd0da48dbd5efb6e5f" compoundref="d5/dc8/a01541" startline="285" endline="288">castor3d::SceneNode::getAxisAngle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a3ef0195496586bcf4b943e1862f93c6e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::QuaternionT&lt; T &gt;::toAxisAngle</definition>
+        <argsstring>(Point3d &amp;vector, Angle &amp;angle) const</argsstring>
+        <name>toAxisAngle</name>
+        <qualifiedname>castor::QuaternionT::toAxisAngle</qualifiedname>
+        <param>
+          <type>Point3d &amp;</type>
+          <declname>vector</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">Angle</ref> &amp;</type>
+          <declname>angle</declname>
+        </param>
+        <briefdescription>
+<para>Calcule l&apos;axe et l&apos;angle de ce Quaternion. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">vector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit l&apos;axe </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">angle</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit l&apos;angle </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="362" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1af03c1ad5c9db976cc74ce52cd2fbc251" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::QuaternionT&lt; T &gt;::toAxes</definition>
+        <argsstring>(Point3f &amp;x, Point3f &amp;y, Point3f &amp;z) const</argsstring>
+        <name>toAxes</name>
+        <qualifiedname>castor::QuaternionT::toAxes</qualifiedname>
+        <param>
+          <type>Point3f &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>Point3f &amp;</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>Point3f &amp;</type>
+          <declname>z</declname>
+        </param>
+        <briefdescription>
+<para>Calcule 3 axes à partir de ce quaternion. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">x</parametername>
+<parametername direction="out">y</parametername>
+<parametername direction="out">z</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="371" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1ab3e70dd494cfb75d62d31e2a3e3b0ee0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::QuaternionT&lt; T &gt;::toAxes</definition>
+        <argsstring>(Point3d &amp;x, Point3d &amp;y, Point3d &amp;z) const</argsstring>
+        <name>toAxes</name>
+        <qualifiedname>castor::QuaternionT::toAxes</qualifiedname>
+        <param>
+          <type>Point3d &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>Point3d &amp;</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>Point3d &amp;</type>
+          <declname>z</declname>
+        </param>
+        <briefdescription>
+<para>Calcule 3 axes à partir de ce quaternion. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">x</parametername>
+<parametername direction="out">y</parametername>
+<parametername direction="out">z</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="380" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1afbe6548e77a2012907c14c8450d93d14" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::QuaternionT&lt; T &gt;::conjugate</definition>
+        <argsstring>()</argsstring>
+        <name>conjugate</name>
+        <qualifiedname>castor::QuaternionT::conjugate</qualifiedname>
+        <briefdescription>
+<para>Définit ce Quaternion à son conjugué </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="387" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a9ac8865a071af273b1a92809afaeec42" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::getConjugate</definition>
+        <argsstring>() const</argsstring>
+        <name>getConjugate</name>
+        <qualifiedname>castor::QuaternionT::getConjugate</qualifiedname>
+        <briefdescription>
+<para>Récupère le conjugué de ce Quaternion. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le conjugué </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="396" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1aca973c97b845583188ec6b478812fdd9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double castor::QuaternionT&lt; T &gt;::getMagnitude</definition>
+        <argsstring>() const</argsstring>
+        <name>getMagnitude</name>
+        <qualifiedname>castor::QuaternionT::getMagnitude</qualifiedname>
+        <briefdescription>
+<para>Récupère la magnitude de ce Quaternion. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La magnitude </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="405" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a87e5fe4ca0bf9c75f14fe7c44c672ab9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; T &gt;</type>
+        <definition>AngleT&lt; T &gt; castor::QuaternionT&lt; T &gt;::getPitch</definition>
+        <argsstring>() const</argsstring>
+        <name>getPitch</name>
+        <qualifiedname>castor::QuaternionT::getPitch</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;angle de pitch. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="412" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1ad12befc98ab295caa66d087bf01ac4a1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; T &gt;</type>
+        <definition>AngleT&lt; T &gt; castor::QuaternionT&lt; T &gt;::getYaw</definition>
+        <argsstring>() const</argsstring>
+        <name>getYaw</name>
+        <qualifiedname>castor::QuaternionT::getYaw</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;angle de yaw. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="419" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1add2f2e17f44332b67c0f9ff365cf6a82" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; T &gt;</type>
+        <definition>AngleT&lt; T &gt; castor::QuaternionT&lt; T &gt;::getRoll</definition>
+        <argsstring>() const</argsstring>
+        <name>getRoll</name>
+        <qualifiedname>castor::QuaternionT::getRoll</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;angle de roll. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="426" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1aa606743c0c6e6db04f4ca30e9a54e3b1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::mix</definition>
+        <argsstring>(QuaternionT&lt; T &gt; const &amp;target, double factor) const</argsstring>
+        <name>mix</name>
+        <qualifiedname>castor::QuaternionT::mix</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt; const &amp;</type>
+          <declname>target</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>factor</declname>
+        </param>
+        <briefdescription>
+<para>Interpolation sphérique linéaire de deux quaternions. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>L&apos;interpolation est orientée et le rotation est effectuée à vitesse constante. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">target</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le quaternion cible </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">factor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le facteur d&apos;interpolation. L&apos;interpolation est définie hors de l&apos;intervalle [0, 1]. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le résultat de l&apos;interpolation. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="441" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1afcd7222ef4f73d0b032da315791f13cb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::mix</definition>
+        <argsstring>(QuaternionT&lt; T &gt; const &amp;target, float factor) const</argsstring>
+        <name>mix</name>
+        <qualifiedname>castor::QuaternionT::mix</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt; const &amp;</type>
+          <declname>target</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>factor</declname>
+        </param>
+        <briefdescription>
+<para>Interpolation sphérique linéaire de deux quaternions. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>L&apos;interpolation est orientée et le rotation est effectuée à vitesse constante. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">target</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le quaternion cible </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">factor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le facteur d&apos;interpolation. L&apos;interpolation est définie hors de l&apos;intervalle [0, 1]. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le résultat de l&apos;interpolation. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="456" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a42ee4ee9028be971c7398ffa68357cda" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::lerp</definition>
+        <argsstring>(QuaternionT&lt; T &gt; const &amp;target, double factor) const</argsstring>
+        <name>lerp</name>
+        <qualifiedname>castor::QuaternionT::lerp</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt; const &amp;</type>
+          <declname>target</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>factor</declname>
+        </param>
+        <briefdescription>
+<para>Interpolation linéaire de deux quaternions. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">target</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le quaternion cible </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">factor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le facteur d&apos;interpolation. L&apos;interpolation est définie à l&apos;intérieur de l&apos;intervalle [0, 1]. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le résultat de l&apos;interpolation. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="469" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1af8796c4d830ba09832afea3e7267be70" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::lerp</definition>
+        <argsstring>(QuaternionT&lt; T &gt; const &amp;target, float factor) const</argsstring>
+        <name>lerp</name>
+        <qualifiedname>castor::QuaternionT::lerp</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt; const &amp;</type>
+          <declname>target</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>factor</declname>
+        </param>
+        <briefdescription>
+<para>Interpolation linéaire de deux quaternions. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">target</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le quaternion cible </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">factor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le facteur d&apos;interpolation. L&apos;interpolation est définie à l&apos;intérieur de l&apos;intervalle [0, 1]. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le résultat de l&apos;interpolation. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="482" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a6aa14701afe702d787b2d78b27474951" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::slerp</definition>
+        <argsstring>(QuaternionT&lt; T &gt; const &amp;target, double factor) const</argsstring>
+        <name>slerp</name>
+        <qualifiedname>castor::QuaternionT::slerp</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt; const &amp;</type>
+          <declname>target</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>factor</declname>
+        </param>
+        <briefdescription>
+<para>Interpolation sphérique linéaire de deux quaternions. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>L&apos;interpolation prend toujours le chemin le plus court, et la rotation est effectuée à vitesse constante. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">target</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le quaternion cible </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">factor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le facteur d&apos;interpolation. L&apos;interpolation est définie hors de l&apos;intervalle [0, 1]. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le résultat de l&apos;interpolation. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="497" column="13"/>
+        <referencedby refid="dc/d9b/a03155_1a910141885b8ae03c0ab795586cc9f345" compoundref="d9/d77/a00095" startline="152" endline="172">castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;::interpolate</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a6e3eea3338f9f86f96ad60a1772a6445" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::slerp</definition>
+        <argsstring>(QuaternionT&lt; T &gt; const &amp;target, float factor) const</argsstring>
+        <name>slerp</name>
+        <qualifiedname>castor::QuaternionT::slerp</qualifiedname>
+        <param>
+          <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt; const &amp;</type>
+          <declname>target</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>factor</declname>
+        </param>
+        <briefdescription>
+<para>Interpolation sphérique linéaire de deux quaternions. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>L&apos;interpolation prend toujours le chemin le plus court, et la rotation est effectuée à vitesse constante. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">target</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le quaternion cible </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">factor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le facteur d&apos;interpolation. L&apos;interpolation est définie hors de l&apos;intervalle [0, 1]. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le résultat de l&apos;interpolation. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="512" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1af92425e3041dd7f99588dcd19a90c1fe" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/dc3/a09191" kindref="compound">PointData</ref>&lt; T, 4u &gt; *</type>
+        <definition>PointData&lt; T, 4u &gt; * castor::QuaternionT&lt; T &gt;::operator-&gt;</definition>
+        <argsstring>()</argsstring>
+        <name>operator-&gt;</name>
+        <qualifiedname>castor::QuaternionT::operator-&gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="528" column="12" bodyfile="CastorUtils/Math/Quaternion.hpp" bodystart="528" bodyend="531"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; QuaternionDataT&lt; T &gt; &gt;::getData</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a4b5c294ac12fc3245b0b3ac7abc0b6da" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/dc3/a09191" kindref="compound">PointData</ref>&lt; T, 4u &gt; const *</type>
+        <definition>PointData&lt; T, 4u &gt; const  * castor::QuaternionT&lt; T &gt;::operator-&gt;</definition>
+        <argsstring>() const</argsstring>
+        <name>operator-&gt;</name>
+        <qualifiedname>castor::QuaternionT::operator-&gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="533" column="18" bodyfile="CastorUtils/Math/Quaternion.hpp" bodystart="533" bodyend="536"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; QuaternionDataT&lt; T &gt; &gt;::getData</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dc/dc3/a09203_1a20b2d1065462a4e06adf48fcde6f517b" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>static QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::fromMatrix</definition>
+        <argsstring>(Matrix4x4f const &amp;matrix)</argsstring>
+        <name>fromMatrix</name>
+        <qualifiedname>castor::QuaternionT::fromMatrix</qualifiedname>
+        <param>
+          <type>Matrix4x4f const &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour ce Quaternion à partir d&apos;une matrice de rotation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice de rotation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="191" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a348b786d7ff1b4fcce9d822f1404262a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>static QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::fromMatrix</definition>
+        <argsstring>(Matrix4x4d const &amp;matrix)</argsstring>
+        <name>fromMatrix</name>
+        <qualifiedname>castor::QuaternionT::fromMatrix</qualifiedname>
+        <param>
+          <type>Matrix4x4d const &amp;</type>
+          <declname>matrix</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour ce Quaternion à partir d&apos;une matrice de rotation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice de rotation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="200" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a2c4d63b177cbbfdc1d812bb1c91867b8" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>static QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::fromMatrix</definition>
+        <argsstring>(float const *matrix)</argsstring>
+        <name>fromMatrix</name>
+        <qualifiedname>castor::QuaternionT::fromMatrix</qualifiedname>
+        <param>
+          <type>float const *</type>
+          <declname>matrix</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour ce Quaternion à partir d&apos;une matrice de rotation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice de rotation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="209" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a1f04e2ab7675f5b35badcdd67e51d4ef" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>static QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::fromMatrix</definition>
+        <argsstring>(double const *matrix)</argsstring>
+        <name>fromMatrix</name>
+        <qualifiedname>castor::QuaternionT::fromMatrix</qualifiedname>
+        <param>
+          <type>double const *</type>
+          <declname>matrix</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour ce Quaternion à partir d&apos;une matrice de rotation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice de rotation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="218" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1aa28058277fe660282e58f0e28fbb3baf" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>static QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::fromAxisAngle</definition>
+        <argsstring>(Point3f const &amp;vector, Angle const &amp;angle)</argsstring>
+        <name>fromAxisAngle</name>
+        <qualifiedname>castor::QuaternionT::fromAxisAngle</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>vector</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">Angle</ref> const &amp;</type>
+          <declname>angle</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour ce Quaternion à partir d&apos;un axe et d&apos;un angle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">vector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;axe </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">angle</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;angle </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="229" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1acf90e9168514c8c7f07ff4bd948f1c03" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>static QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::fromAxisAngle</definition>
+        <argsstring>(Point3d const &amp;vector, Angle const &amp;angle)</argsstring>
+        <name>fromAxisAngle</name>
+        <qualifiedname>castor::QuaternionT::fromAxisAngle</qualifiedname>
+        <param>
+          <type>Point3d const &amp;</type>
+          <declname>vector</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">Angle</ref> const &amp;</type>
+          <declname>angle</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour ce Quaternion à partir d&apos;un axe et d&apos;un angle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">vector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;axe </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">angle</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;angle </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="240" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a5c8ae1cfc84b154cc9144e1586074d7a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>static QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::fromAxes</definition>
+        <argsstring>(Point3f const &amp;x, Point3f const &amp;y, Point3f const &amp;z)</argsstring>
+        <name>fromAxes</name>
+        <qualifiedname>castor::QuaternionT::fromAxes</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>z</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour ce Quaternion à partir de 3 axes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+<parametername direction="in">z</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="249" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a4335ba46fb6cc24aebd1f4a24c585f72" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>static QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::fromAxes</definition>
+        <argsstring>(Point3d const &amp;x, Point3d const &amp;y, Point3d const &amp;z)</argsstring>
+        <name>fromAxes</name>
+        <qualifiedname>castor::QuaternionT::fromAxes</qualifiedname>
+        <param>
+          <type>Point3d const &amp;</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>Point3d const &amp;</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>Point3d const &amp;</type>
+          <declname>z</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour ce Quaternion à partir de 3 axes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+<parametername direction="in">z</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les axes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="258" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a5e200adb815382340ff66cb42bc796d5" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>static QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::fromComponents</definition>
+        <argsstring>(float x, float y, float z, float w)</argsstring>
+        <name>fromComponents</name>
+        <qualifiedname>castor::QuaternionT::fromComponents</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>z</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>w</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour ce Quaternion à partir de 4 composantes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+<parametername direction="in">z</parametername>
+<parametername direction="in">w</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="267" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a750b8aa6c71fd95073e0bad2df7316e4" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>static QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::fromComponents</definition>
+        <argsstring>(double x, double y, double z, double w)</argsstring>
+        <name>fromComponents</name>
+        <qualifiedname>castor::QuaternionT::fromComponents</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>z</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>w</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour ce Quaternion à partir de 4 composantes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+<parametername direction="in">z</parametername>
+<parametername direction="in">w</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="276" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1a43771864df402f56ec61328c4791fd7d" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>static QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::identity</definition>
+        <argsstring>()</argsstring>
+        <name>identity</name>
+        <qualifiedname>castor::QuaternionT::identity</qualifiedname>
+        <briefdescription>
+<para>Récupère le Quaternion identité </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="519" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/dc3/a09203_1ac9fb63b6c2ec1e1cf45c9ccfaf87c765" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref>&lt; T &gt;</type>
+        <definition>static QuaternionT&lt; T &gt; castor::QuaternionT&lt; T &gt;::null</definition>
+        <argsstring>()</argsstring>
+        <name>null</name>
+        <qualifiedname>castor::QuaternionT::null</qualifiedname>
+        <briefdescription>
+<para>Récupère le Quaternion nul. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Quaternion.hpp" line="526" column="20"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Représentation d&apos;un quaternion. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Un quaternion peut se voir comme un axe et un angle.</para>
+</simplesect>
+<simplesect kind="remark"><para>Un quaternion se compose d&apos;un axe et d&apos;un angle </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>Coords4&lt; T &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+      </node>
+      <node id="2">
+        <label>castor::DataHolderT&lt; QuaternionDataT&lt; T &gt; &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; QuaternionDataT&lt; T &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="1">
+        <label>castor::QuaternionT&lt; T &gt;</label>
+        <link refid="dc/dc3/a09203"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>Coords4&lt; T &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+      </node>
+      <node id="2">
+        <label>castor::DataHolderT&lt; QuaternionDataT&lt; T &gt; &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; QuaternionDataT&lt; T &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="1">
+        <label>castor::QuaternionT&lt; T &gt;</label>
+        <link refid="dc/dc3/a09203"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Math/Quaternion.hpp" line="25" column="1" bodyfile="CastorUtils/Math/Quaternion.hpp" bodystart="28" bodyend="537"/>
+    <listofallmembers>
+      <member refid="dc/dc3/a09203_1a6f25ecbd42831a371694c3908dc524b2" prot="private" virt="non-virtual"><scope>castor::QuaternionT</scope><name>BaseType</name></member>
+      <member refid="d9/d6a/a09103_1ae423ba2d6fbbe19b93f8337364d43740" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>begin</name></member>
+      <member refid="d9/d6a/a09103_1aa4a1173ea64fb7733962086448597fae" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>begin</name></member>
+      <member refid="dc/dc3/a09203_1afbe6548e77a2012907c14c8450d93d14" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>conjugate</name></member>
+      <member refid="d9/d6a/a09103_1a94573d926b28fd774cb7b1460bd646f6" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>const_iterator</name></member>
+      <member refid="d9/d6a/a09103_1accb88b430d4e2c3c193c907c097fabd0" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>constPtr</name></member>
+      <member refid="d9/d6a/a09103_1a75f4771f2e46024d2c1c46140a8f596c" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>Coords</name></member>
+      <member refid="d9/d6a/a09103_1a9aa8b07b52a81f1756eb5089e65a1ad0" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>Coords</name></member>
+      <member refid="d9/d6a/a09103_1ad6b0a1b4c2ec75857e6102aa56722d7d" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>Coords</name></member>
+      <member refid="dc/dc3/a09203_1acf2d3f9c68bc922dc5caea9c0e5e21af" prot="private" virt="non-virtual"><scope>castor::QuaternionT</scope><name>DataHolder</name></member>
+      <member refid="da/d50/a08167_1a10e2d04d7ff8cdd35fc4a4767374a7ee" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>DataHolderT</name></member>
+      <member refid="da/d50/a08167_1a8c916c15a317fb9496b0f0cd6d2e6631" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>DataHolderT</name></member>
+      <member refid="d9/d6a/a09103_1aeb03d143ddb1a26fdfde00b2c3212dac" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>end</name></member>
+      <member refid="d9/d6a/a09103_1a98451ff98028153f07b5467630e3f5b3" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>end</name></member>
+      <member refid="dc/dc3/a09203_1a5c8ae1cfc84b154cc9144e1586074d7a" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>fromAxes</name></member>
+      <member refid="dc/dc3/a09203_1a4335ba46fb6cc24aebd1f4a24c585f72" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>fromAxes</name></member>
+      <member refid="dc/dc3/a09203_1aa28058277fe660282e58f0e28fbb3baf" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>fromAxisAngle</name></member>
+      <member refid="dc/dc3/a09203_1acf90e9168514c8c7f07ff4bd948f1c03" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>fromAxisAngle</name></member>
+      <member refid="dc/dc3/a09203_1a5e200adb815382340ff66cb42bc796d5" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>fromComponents</name></member>
+      <member refid="dc/dc3/a09203_1a750b8aa6c71fd95073e0bad2df7316e4" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>fromComponents</name></member>
+      <member refid="dc/dc3/a09203_1a20b2d1065462a4e06adf48fcde6f517b" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>fromMatrix</name></member>
+      <member refid="dc/dc3/a09203_1a348b786d7ff1b4fcce9d822f1404262a" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>fromMatrix</name></member>
+      <member refid="dc/dc3/a09203_1a2c4d63b177cbbfdc1d812bb1c91867b8" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>fromMatrix</name></member>
+      <member refid="dc/dc3/a09203_1a1f04e2ab7675f5b35badcdd67e51d4ef" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>fromMatrix</name></member>
+      <member refid="dc/dc3/a09203_1a9ac8865a071af273b1a92809afaeec42" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>getConjugate</name></member>
+      <member refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>getData</name></member>
+      <member refid="da/d50/a08167_1abfb8cb106cf96be2481ab1f88cd2c006" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>getData</name></member>
+      <member refid="dc/dc3/a09203_1aca973c97b845583188ec6b478812fdd9" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>getMagnitude</name></member>
+      <member refid="dc/dc3/a09203_1a87e5fe4ca0bf9c75f14fe7c44c672ab9" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>getPitch</name></member>
+      <member refid="dc/dc3/a09203_1add2f2e17f44332b67c0f9ff365cf6a82" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>getRoll</name></member>
+      <member refid="dc/dc3/a09203_1ad12befc98ab295caa66d087bf01ac4a1" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>getYaw</name></member>
+      <member refid="dc/dc3/a09203_1a43771864df402f56ec61328c4791fd7d" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>identity</name></member>
+      <member refid="d9/d6a/a09103_1adb214212d158c4c347af9c7c0f973a2a" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>iterator</name></member>
+      <member refid="dc/dc3/a09203_1a42ee4ee9028be971c7398ffa68357cda" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>lerp</name></member>
+      <member refid="dc/dc3/a09203_1af8796c4d830ba09832afea3e7267be70" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>lerp</name></member>
+      <member refid="dc/dc3/a09203_1aa606743c0c6e6db04f4ca30e9a54e3b1" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>mix</name></member>
+      <member refid="dc/dc3/a09203_1afcd7222ef4f73d0b032da315791f13cb" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>mix</name></member>
+      <member refid="dc/dc3/a09203_1ac9fb63b6c2ec1e1cf45c9ccfaf87c765" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>null</name></member>
+      <member refid="dc/dc3/a09203_1a46db58140cdf963123256ca026497dc8" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>operator*=</name></member>
+      <member refid="dc/dc3/a09203_1a4c057cab76833d2f2315e2b3890ec7d7" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>operator*=</name></member>
+      <member refid="dc/dc3/a09203_1a5222bb4ade6035dc3dfd4f130f1c2156" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>operator*=</name></member>
+      <member refid="d9/d6a/a09103_1a4e758ceaf0230ca03133bf172fdc6552" prot="public" virt="non-virtual" ambiguityscope="castor::Coords::"><scope>castor::QuaternionT</scope><name>operator*=</name></member>
+      <member refid="d9/d6a/a09103_1a902c19f1decbff33fc3ba6b14908f26f" prot="public" virt="non-virtual" ambiguityscope="castor::Coords::"><scope>castor::QuaternionT</scope><name>operator*=</name></member>
+      <member refid="d9/d6a/a09103_1a16d100bc980825cc9ac58a3db6329339" prot="public" virt="non-virtual" ambiguityscope="castor::Coords::"><scope>castor::QuaternionT</scope><name>operator*=</name></member>
+      <member refid="d9/d6a/a09103_1a87111886288381baa244151cac8398fa" prot="public" virt="non-virtual" ambiguityscope="castor::Coords::"><scope>castor::QuaternionT</scope><name>operator*=</name></member>
+      <member refid="dc/dc3/a09203_1a3677c3efc866cfffd47c8b8af9539c82" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>operator+=</name></member>
+      <member refid="d9/d6a/a09103_1a98290333f21625932bc49bd7feb3aa2c" prot="public" virt="non-virtual" ambiguityscope="castor::Coords::"><scope>castor::QuaternionT</scope><name>operator+=</name></member>
+      <member refid="d9/d6a/a09103_1aa6c9f261457444316555aff7f1948948" prot="public" virt="non-virtual" ambiguityscope="castor::Coords::"><scope>castor::QuaternionT</scope><name>operator+=</name></member>
+      <member refid="d9/d6a/a09103_1a926b1e77b13b51c34e5f956aaead85c7" prot="public" virt="non-virtual" ambiguityscope="castor::Coords::"><scope>castor::QuaternionT</scope><name>operator+=</name></member>
+      <member refid="d9/d6a/a09103_1a79dfffffae1cc234cb606f1c8838837d" prot="public" virt="non-virtual" ambiguityscope="castor::Coords::"><scope>castor::QuaternionT</scope><name>operator+=</name></member>
+      <member refid="dc/dc3/a09203_1a13e8680a13536ac8416063f5459522e6" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>operator-=</name></member>
+      <member refid="d9/d6a/a09103_1ab0fd249c7148489f4e9d0d68c0739a34" prot="public" virt="non-virtual" ambiguityscope="castor::Coords::"><scope>castor::QuaternionT</scope><name>operator-=</name></member>
+      <member refid="d9/d6a/a09103_1ada307fda3dc9a8efaa12f607a35ea60b" prot="public" virt="non-virtual" ambiguityscope="castor::Coords::"><scope>castor::QuaternionT</scope><name>operator-=</name></member>
+      <member refid="d9/d6a/a09103_1ab29316eb508e7f012713b94511e377ba" prot="public" virt="non-virtual" ambiguityscope="castor::Coords::"><scope>castor::QuaternionT</scope><name>operator-=</name></member>
+      <member refid="d9/d6a/a09103_1ac3547dcdd54a4d457577976b0da43295" prot="public" virt="non-virtual" ambiguityscope="castor::Coords::"><scope>castor::QuaternionT</scope><name>operator-=</name></member>
+      <member refid="dc/dc3/a09203_1af92425e3041dd7f99588dcd19a90c1fe" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>operator-&gt;</name></member>
+      <member refid="dc/dc3/a09203_1a4b5c294ac12fc3245b0b3ac7abc0b6da" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>operator-&gt;</name></member>
+      <member refid="d9/d6a/a09103_1a422c73e91d94d36a65926478003bca39" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>operator/=</name></member>
+      <member refid="d9/d6a/a09103_1a4b08c2cfb99ea8c3db51115c7b4fb2bb" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>operator/=</name></member>
+      <member refid="d9/d6a/a09103_1ab4b4bb9bd0e1689046aebb7adc3fd51c" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>operator/=</name></member>
+      <member refid="d9/d6a/a09103_1a57d38ef518880ed02803805ac5fd6011" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>operator/=</name></member>
+      <member refid="dc/dc3/a09203_1ab7c2fb3602810aa497f381f7df74cccf" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>operator=</name></member>
+      <member refid="dc/dc3/a09203_1a747acec37c8e6ee3c2387bafc5072e80" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>operator=</name></member>
+      <member refid="d9/d6a/a09103_1ab03428e4e41572fb3b165b4e9819d120" prot="public" virt="non-virtual" ambiguityscope="castor::Coords::"><scope>castor::QuaternionT</scope><name>operator=</name></member>
+      <member refid="d9/d6a/a09103_1a8254f9513693b90533c62f2650242daa" prot="public" virt="non-virtual" ambiguityscope="castor::Coords::"><scope>castor::QuaternionT</scope><name>operator=</name></member>
+      <member refid="d9/d6a/a09103_1ab34eef90cc275e4140b0a671b1b43729" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>operator[]</name></member>
+      <member refid="d9/d6a/a09103_1aa1069c59af90a81bed8ec20744c40976" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>operator[]</name></member>
+      <member refid="d9/d6a/a09103_1a4fd6d2393fd35f33dde94c7c9153360f" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>ptr</name></member>
+      <member refid="dc/dc3/a09203_1a1138bcbf3c280573d982639857d3eff3" prot="private" virt="non-virtual"><scope>castor::QuaternionT</scope><name>QuaternionT</name></member>
+      <member refid="dc/dc3/a09203_1ada6a140d8e10819ef1c34937cc80f14c" prot="private" virt="non-virtual"><scope>castor::QuaternionT</scope><name>QuaternionT</name></member>
+      <member refid="dc/dc3/a09203_1ab9c135fe85adc5f1f09d9de229b770d1" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>QuaternionT</name></member>
+      <member refid="dc/dc3/a09203_1a9b9e2ce4331fc1b5f5b793eb10c15af4" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>QuaternionT</name></member>
+      <member refid="dc/dc3/a09203_1a3f58a4231e00371454c4a15b2695e5dc" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>QuaternionT</name></member>
+      <member refid="dc/dc3/a09203_1aca2d0e0a3a0fdcc63c4eeb5d28b57caa" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>QuaternionT</name></member>
+      <member refid="dc/dc3/a09203_1a04942c23f384f86a5c61a9d68e2de2d0" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>QuaternionT</name></member>
+      <member refid="dc/dc3/a09203_1a6e3ca875cde72d3eb91ecff4df1f2f84" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>QuaternionT</name></member>
+      <member refid="dc/dc3/a09203_1a08e0004e3e79350e8504c08a2abd3f47" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>QuaternionT</name></member>
+      <member refid="da/d50/a08167_1ab8599478c3a26dfcc9571c920644b562" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>setData</name></member>
+      <member refid="d9/d6a/a09103_1ae52ce3eafd7305bb76a9a825998b3794" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>size</name></member>
+      <member refid="dc/dc3/a09203_1a6aa14701afe702d787b2d78b27474951" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>slerp</name></member>
+      <member refid="dc/dc3/a09203_1a6e3eea3338f9f86f96ad60a1772a6445" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>slerp</name></member>
+      <member refid="d9/d6a/a09103_1a31059aab49b93880080ec996ec252811" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>swap</name></member>
+      <member refid="dc/dc3/a09203_1af03c1ad5c9db976cc74ce52cd2fbc251" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>toAxes</name></member>
+      <member refid="dc/dc3/a09203_1ab3e70dd494cfb75d62d31e2a3e3b0ee0" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>toAxes</name></member>
+      <member refid="dc/dc3/a09203_1a8b4efc816d012e9404bee3d1009fb741" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>toAxisAngle</name></member>
+      <member refid="dc/dc3/a09203_1a3ef0195496586bcf4b943e1862f93c6e" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>toAxisAngle</name></member>
+      <member refid="dc/dc3/a09203_1a4e7d33b8a3fefacdb7def820f9240e4f" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>toMatrix</name></member>
+      <member refid="dc/dc3/a09203_1a7310535db2690b32da70eecb0d6dfdab" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>toMatrix</name></member>
+      <member refid="dc/dc3/a09203_1a638c0d7972d8937a36d958fbf5287c59" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>toMatrix</name></member>
+      <member refid="dc/dc3/a09203_1a7ec26565dc720d3f4e1cc5ad962661ed" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>toMatrix</name></member>
+      <member refid="dc/dc3/a09203_1ae2ba25ef0be968cff5f6b41767b03316" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>transform</name></member>
+      <member refid="dc/dc3/a09203_1ae2ba25ef0be968cff5f6b41767b03316" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>transform</name></member>
+      <member refid="dc/dc3/a09203_1a404237ac34efb68e90f219171778fad9" prot="public" virt="non-virtual"><scope>castor::QuaternionT</scope><name>~QuaternionT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

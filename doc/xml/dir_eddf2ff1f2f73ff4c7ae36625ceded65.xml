@@ -1,21 +1,21 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_eddf2ff1f2f73ff4c7ae36625ceded65" kind="dir">
-    <compoundname>Scene/ParticleSystem</compoundname>
-    <innerfile refid="dc/d47/a01487">ComputeParticleSystem.hpp</innerfile>
-    <innerfile refid="de/d3c/a01490">CpuParticleSystem.hpp</innerfile>
-    <innerfile refid="d2/d41/a01493">Particle.hpp</innerfile>
-    <innerfile refid="d1/dde/a01496">ParticleDeclaration.hpp</innerfile>
-    <innerfile refid="d5/d06/a01499">ParticleElementDeclaration.hpp</innerfile>
-    <innerfile refid="de/dc6/a01502">ParticleEmitter.hpp</innerfile>
-    <innerfile refid="dc/dce/a01505">ParticleModule.hpp</innerfile>
-    <innerfile refid="d0/deb/a01508">ParticleSystem.hpp</innerfile>
-    <innerfile refid="da/d50/a01511">ParticleSystemImpl.hpp</innerfile>
-    <innerfile refid="d7/d22/a01514">ParticleUpdater.hpp</innerfile>
+    <compoundname>Castor3D/Scene/ParticleSystem</compoundname>
+    <innerfile refid="de/d3c/a01490">ComputeParticleSystem.hpp</innerfile>
+    <innerfile refid="d2/d41/a01493">CpuParticleSystem.hpp</innerfile>
+    <innerfile refid="d1/dde/a01496">Particle.hpp</innerfile>
+    <innerfile refid="d5/d06/a01499">ParticleDeclaration.hpp</innerfile>
+    <innerfile refid="de/dc6/a01502">ParticleElementDeclaration.hpp</innerfile>
+    <innerfile refid="dc/dce/a01505">ParticleEmitter.hpp</innerfile>
+    <innerfile refid="d0/deb/a01508">ParticleModule.hpp</innerfile>
+    <innerfile refid="da/d50/a01511">ParticleSystem.hpp</innerfile>
+    <innerfile refid="d7/d22/a01514">ParticleSystemImpl.hpp</innerfile>
+    <innerfile refid="dc/d96/a01517">ParticleUpdater.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Scene/ParticleSystem/"/>
+    <location file="Castor3D/Scene/ParticleSystem/"/>
   </compounddef>
 </doxygen>

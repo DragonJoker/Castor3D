@@ -1,0 +1,14 @@
+<map id="castor::PxBufferBase::getTileSize" name="castor::PxBufferBase::getTileSize">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,37,151,77"/>
+<area shape="rect" id="Node000002" href="$dd/df9/a08987.html#ad304432fd9cfa3330576661bbba71f34" title=" " alt="" coords="199,5,344,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="150,43,184,37,185,42,151,48"/>
+<area shape="rect" id="Node000005" href="$dd/df9/a08987.html#a027e7feff5936185517a08ca11581288" title=" " alt="" coords="199,69,344,109"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="151,67,185,72,184,78,150,72"/>
+<area shape="rect" id="Node000003" href="$d4/dd6/a09023.html#ab8e3c320eefc853f8fb36db35939844c" title="Retrieves the height." alt="" coords="392,17,547,42"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="344,24,379,25,378,30,344,29"/>
+<area shape="rect" id="Node000004" href="$da/d50/a08167.html#aa58614a2095d691f70b9ba3606422208" title=" " alt="" coords="595,36,747,76"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="547,37,581,42,581,47,547,42"/>
+<area shape="rect" id="Node000006" href="$d4/dd6/a09023.html#a3cef6d7fb9e7e9e4e373f689b2b23b0c" title="Retrieves the width." alt="" coords="393,70,545,95"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="344,84,379,83,380,88,344,90"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="545,70,580,65,581,71,546,75"/>
+</map>

@@ -1,0 +1,2275 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/db7/a08919" kind="class" language="C++" prot="public">
+    <compoundname>castor::RgbaColourT</compoundname>
+    <includes local="no">RgbaColour.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ComponentType</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="dd/db7/a08919_1a0e8a365a42741c4cd485b5904244c455" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">Array</ref>&lt; ComponentType, size_t(<ref refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528ae558bb69fadec037d9eae46601a4df8e" kindref="member">RgbaComponent::eCount</ref>) &gt;</type>
+        <definition>using castor::RgbaColourT&lt; ComponentType &gt;::ColourComponentArray =  Array&lt; ComponentType, size_t( RgbaComponent::eCount ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ColourComponentArray</name>
+        <qualifiedname>castor::RgbaColourT::ColourComponentArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="43" column="1" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/db7/a08919_1a49e854265123fd07b8aa87a42bf97df2" prot="private" static="no">
+        <type>typename ColourComponentArray::iterator</type>
+        <definition>using castor::RgbaColourT&lt; ComponentType &gt;::ColourComponentArrayIt =  typename ColourComponentArray::iterator</definition>
+        <argsstring></argsstring>
+        <name>ColourComponentArrayIt</name>
+        <qualifiedname>castor::RgbaColourT::ColourComponentArrayIt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="44" column="1" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/db7/a08919_1ab62bf93c836e2baa882b10ef9739badf" prot="private" static="no">
+        <type>typename ColourComponentArray::reverse_iterator</type>
+        <definition>using castor::RgbaColourT&lt; ComponentType &gt;::ColourComponentArrayRIt =  typename ColourComponentArray::reverse_iterator</definition>
+        <argsstring></argsstring>
+        <name>ColourComponentArrayRIt</name>
+        <qualifiedname>castor::RgbaColourT::ColourComponentArrayRIt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="45" column="1" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/db7/a08919_1ab382b12a0e2ac75fe3dc96272a6de4ba" prot="private" static="no">
+        <type>typename ColourComponentArray::const_iterator</type>
+        <definition>using castor::RgbaColourT&lt; ComponentType &gt;::ColourComponentArrayConstIt =  typename ColourComponentArray::const_iterator</definition>
+        <argsstring></argsstring>
+        <name>ColourComponentArrayConstIt</name>
+        <qualifiedname>castor::RgbaColourT::ColourComponentArrayConstIt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="46" column="1" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/db7/a08919_1a970b7242dbaa78d9d70bf15af7fcd406" prot="private" static="no">
+        <type>typename ColourComponentArray::const_reverse_iterator</type>
+        <definition>using castor::RgbaColourT&lt; ComponentType &gt;::ColourComponentArrayConstRIt =  typename ColourComponentArray::const_reverse_iterator</definition>
+        <argsstring></argsstring>
+        <name>ColourComponentArrayConstRIt</name>
+        <qualifiedname>castor::RgbaColourT::ColourComponentArrayConstRIt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="47" column="1" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/db7/a08919_1a801dd0ad1b1fd7a213c1c78bc3f439cf" prot="private" static="no" mutable="no">
+        <type>ColourComponentArray</type>
+        <definition>ColourComponentArray castor::RgbaColourT&lt; ComponentType &gt;::m_components</definition>
+        <argsstring></argsstring>
+        <name>m_components</name>
+        <qualifiedname>castor::RgbaColourT::m_components</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="851" column="22" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="851" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="dd/db7/a08919_1add194995decac75813ecd967ad4e146f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::RgbaColourT&lt; ComponentType &gt;::CU_DeclareArray</definition>
+        <argsstring>(float, RgbaComponent::eCount, Float4)</argsstring>
+        <name>CU_DeclareArray</name>
+        <qualifiedname>castor::RgbaColourT::CU_DeclareArray</qualifiedname>
+        <param>
+          <type>float</type>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528ae558bb69fadec037d9eae46601a4df8e" kindref="member">RgbaComponent::eCount</ref></type>
+        </param>
+        <param>
+          <type>Float4</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="42" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/db7/a08919_1a6e2962386be75fb5512556013442290d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::RgbaColourT&lt; ComponentType &gt;::RgbaColourT</definition>
+        <argsstring>()=default</argsstring>
+        <name>RgbaColourT</name>
+        <qualifiedname>castor::RgbaColourT::RgbaColourT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="50" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1aafb9fd1757cb280e2b766ef0a4bfbe1e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::RgbaColourT&lt; ComponentType &gt;::RgbaColourT</definition>
+        <argsstring>(RgbaColourT const &amp;rhs)=default</argsstring>
+        <name>RgbaColourT</name>
+        <qualifiedname>castor::RgbaColourT::RgbaColourT</qualifiedname>
+        <param>
+          <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="51" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1afbf5c10ea5379aa0436351d85d1aa7a1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> &amp;</type>
+        <definition>RgbaColourT &amp; castor::RgbaColourT&lt; ComponentType &gt;::operator=</definition>
+        <argsstring>(RgbaColourT const &amp;rhs)=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::RgbaColourT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="52" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a237f11971fac98aa089784417cd0c121" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::RgbaColourT&lt; ComponentType &gt;::RgbaColourT</definition>
+        <argsstring>(RgbaColourT &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>RgbaColourT</name>
+        <qualifiedname>castor::RgbaColourT::RgbaColourT</qualifiedname>
+        <param>
+          <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="53" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1af8f550cfcc028f66c93b69138af75c16" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> &amp;</type>
+        <definition>RgbaColourT &amp; castor::RgbaColourT&lt; ComponentType &gt;::operator=</definition>
+        <argsstring>(RgbaColourT &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::RgbaColourT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="54" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1ac0dc7da183c6f374b1cd2936b5d98235" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::RgbaColourT&lt; ComponentType &gt;::~RgbaColourT</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~RgbaColourT</name>
+        <qualifiedname>castor::RgbaColourT::~RgbaColourT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="55" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a008097fbb422597f5304e6aefe711f5d" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ComponentU</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::RgbaColourT&lt; ComponentType &gt;::RgbaColourT</definition>
+        <argsstring>(RgbaColourT&lt; ComponentU &gt; const &amp;rhs, float gamma=2.2f)</argsstring>
+        <name>RgbaColourT</name>
+        <qualifiedname>castor::RgbaColourT::RgbaColourT</qualifiedname>
+        <param>
+          <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref>&lt; ComponentU &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>gamma</declname>
+          <defval>2.2f</defval>
+        </param>
+        <briefdescription>
+<para>Constructeur depuis un autre type de composante. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la couleur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gamma</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la correction gamma. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="67" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a7ea886e3223c2851380d84509fce2077" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::RgbaColourT&lt; ComponentType &gt;::RgbaColourT</definition>
+        <argsstring>(float r, float g, float b, float a)</argsstring>
+        <name>RgbaColourT</name>
+        <qualifiedname>castor::RgbaColourT::RgbaColourT</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>g</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>a</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur spécifié. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="75" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a864cdfe3b50c651e65a8cf67f4e9e013" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ColourComponentArrayIt</type>
+        <definition>ColourComponentArrayIt castor::RgbaColourT&lt; ComponentType &gt;::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::RgbaColourT::begin</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur sur le premier <ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="459" column="24" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="459" bodyend="462"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a50020337447640f2a41a81b4e553edff" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ColourComponentArrayConstIt</type>
+        <definition>ColourComponentArrayConstIt castor::RgbaColourT&lt; ComponentType &gt;::begin</definition>
+        <argsstring>() const</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::RgbaColourT::begin</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur constant sur le premier <ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="471" column="29" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="471" bodyend="474"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1aa64b087452d2269222e50d85bebe7f74" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ColourComponentArrayIt</type>
+        <definition>ColourComponentArrayIt castor::RgbaColourT&lt; ComponentType &gt;::end</definition>
+        <argsstring>()</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::RgbaColourT::end</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur sur après le dernier <ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="483" column="24" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="483" bodyend="486"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a2ae695d6a3a8cc5d450f61aaffee771a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ColourComponentArrayConstIt</type>
+        <definition>ColourComponentArrayConstIt castor::RgbaColourT&lt; ComponentType &gt;::end</definition>
+        <argsstring>() const</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::RgbaColourT::end</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur constant sur après le dernier <ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="495" column="29" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="495" bodyend="498"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a1a846ef43bca41972b853233d3cd11c4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float const *</type>
+        <definition>float const  * castor::RgbaColourT&lt; ComponentType &gt;::constPtr</definition>
+        <argsstring>() const</argsstring>
+        <name>constPtr</name>
+        <qualifiedname>castor::RgbaColourT::constPtr</qualifiedname>
+        <briefdescription>
+<para>Récupère un pointeur constant sur les valeurs de la couleur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le pointeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="507" column="14" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="507" bodyend="510"/>
+        <referencedby refid="d9/dba/a02278_1ae8419c177c10350cf378695780e6aff9" compoundref="d6/d7d/a00161" startline="718" endline="721">castor3d::getBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a60aa7bc564080779fcc0b7df94f8aad2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>float *</type>
+        <definition>float * castor::RgbaColourT&lt; ComponentType &gt;::ptr</definition>
+        <argsstring>()</argsstring>
+        <name>ptr</name>
+        <qualifiedname>castor::RgbaColourT::ptr</qualifiedname>
+        <briefdescription>
+<para>Récupère un pointeur sur les valeurs de la couleur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le pointeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="519" column="8" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="519" bodyend="522"/>
+        <referencedby refid="d9/dba/a02278_1acf4f4e552a743cac1ac08413ff783366" compoundref="d6/d7d/a00161" startline="732" endline="735">castor3d::getBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a734f3d333e670ac59437916dc4c92d4f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType &amp;</type>
+        <definition>ComponentType &amp; castor::RgbaColourT&lt; ComponentType &gt;::operator[]</definition>
+        <argsstring>(RgbaComponent component)</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::RgbaColourT::operator[]</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528" kindref="member">RgbaComponent</ref></type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur de la composante demandée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La composante demandée </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="533" column="16" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="533" bodyend="536"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a7bc940b5e85777f863e1a426745ac934" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType const &amp;</type>
+        <definition>ComponentType const  &amp; castor::RgbaColourT&lt; ComponentType &gt;::operator[]</definition>
+        <argsstring>(RgbaComponent component) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::RgbaColourT::operator[]</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528" kindref="member">RgbaComponent</ref></type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur de la composante demandée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La composante demandée </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="547" column="22" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="547" bodyend="550"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1afc017cca0c42ef69b7f45454fca42d4e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType &amp;</type>
+        <definition>ComponentType &amp; castor::RgbaColourT&lt; ComponentType &gt;::operator[]</definition>
+        <argsstring>(size_t component)</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::RgbaColourT::operator[]</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur de la composante demandée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La composante demandée </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="561" column="16" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="561" bodyend="564"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a6f623dee8c897c66e1b2884c26c76b2d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType const &amp;</type>
+        <definition>ComponentType const  &amp; castor::RgbaColourT&lt; ComponentType &gt;::operator[]</definition>
+        <argsstring>(size_t component) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::RgbaColourT::operator[]</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur de la composante demandée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La composante demandée </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="575" column="22" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="575" bodyend="578"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1aaf6e20c47fa55a58b30f45f872aee90f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType &amp;</type>
+        <definition>ComponentType &amp; castor::RgbaColourT&lt; ComponentType &gt;::get</definition>
+        <argsstring>(RgbaComponent component)</argsstring>
+        <name>get</name>
+        <qualifiedname>castor::RgbaColourT::get</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528" kindref="member">RgbaComponent</ref></type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur de la composante demandée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La composante demandée </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="589" column="16" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="589" bodyend="592"/>
+        <referencedby refid="dd/db7/a08919_1a4eaf9be6cf52c14f22ca6c2a5ac5f024" compoundref="d3/d48/a02069" startline="687" endline="690">castor::RgbaColourT&lt; ComponentType &gt;::alpha</referencedby>
+        <referencedby refid="dd/db7/a08919_1a2a152374962a9c68248ff5341427563e" compoundref="d3/d48/a02069" startline="699" endline="702">castor::RgbaColourT&lt; ComponentType &gt;::alpha</referencedby>
+        <referencedby refid="dd/db7/a08919_1af2c99bf2b87ef569b94b09bd9ed1f581" compoundref="d3/d48/a02069" startline="663" endline="666">castor::RgbaColourT&lt; ComponentType &gt;::blue</referencedby>
+        <referencedby refid="dd/db7/a08919_1abf27a67075a1d797c71204b2a8c71e8c" compoundref="d3/d48/a02069" startline="675" endline="678">castor::RgbaColourT&lt; ComponentType &gt;::blue</referencedby>
+        <referencedby refid="dd/db7/a08919_1a5619a83a8f9b17a29f7168ba435df15c" compoundref="d3/d48/a02069" startline="639" endline="642">castor::RgbaColourT&lt; ComponentType &gt;::green</referencedby>
+        <referencedby refid="dd/db7/a08919_1a0d5669bc0467b8972dbc356d672d3b79" compoundref="d3/d48/a02069" startline="651" endline="654">castor::RgbaColourT&lt; ComponentType &gt;::green</referencedby>
+        <referencedby refid="dd/db7/a08919_1a76b7554aa64e5c9b7cf1d4c2310c1c82" compoundref="d3/d48/a02069" startline="615" endline="618">castor::RgbaColourT&lt; ComponentType &gt;::red</referencedby>
+        <referencedby refid="dd/db7/a08919_1a74ad6109a08f0f78d9a2d10652075894" compoundref="d3/d48/a02069" startline="627" endline="630">castor::RgbaColourT&lt; ComponentType &gt;::red</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1ae76c226127e8b1bba5a8426677d1d133" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType const &amp;</type>
+        <definition>ComponentType const  &amp; castor::RgbaColourT&lt; ComponentType &gt;::get</definition>
+        <argsstring>(RgbaComponent component) const</argsstring>
+        <name>get</name>
+        <qualifiedname>castor::RgbaColourT::get</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528" kindref="member">RgbaComponent</ref></type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur de la composante demandée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La composante demandée </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="603" column="22" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="603" bodyend="606"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a76b7554aa64e5c9b7cf1d4c2310c1c82" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType &amp;</type>
+        <definition>ComponentType &amp; castor::RgbaColourT&lt; ComponentType &gt;::red</definition>
+        <argsstring>()</argsstring>
+        <name>red</name>
+        <qualifiedname>castor::RgbaColourT::red</qualifiedname>
+        <briefdescription>
+<para>Récupère la valeur de la composante rouge. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="615" column="16" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="615" bodyend="618"/>
+        <references refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528a034da23e289662569a29385fc190f2c9">castor::eRed</references>
+        <references refid="dd/db7/a08919_1aaf6e20c47fa55a58b30f45f872aee90f" compoundref="d3/d48/a02069" startline="589" endline="592">castor::RgbaColourT&lt; ComponentType &gt;::get</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a74ad6109a08f0f78d9a2d10652075894" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType const &amp;</type>
+        <definition>ComponentType const  &amp; castor::RgbaColourT&lt; ComponentType &gt;::red</definition>
+        <argsstring>() const</argsstring>
+        <name>red</name>
+        <qualifiedname>castor::RgbaColourT::red</qualifiedname>
+        <briefdescription>
+<para>Récupère la valeur de la composante rouge. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="627" column="22" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="627" bodyend="630"/>
+        <references refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528a034da23e289662569a29385fc190f2c9">castor::eRed</references>
+        <references refid="dd/db7/a08919_1aaf6e20c47fa55a58b30f45f872aee90f" compoundref="d3/d48/a02069" startline="589" endline="592">castor::RgbaColourT&lt; ComponentType &gt;::get</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a5619a83a8f9b17a29f7168ba435df15c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType &amp;</type>
+        <definition>ComponentType &amp; castor::RgbaColourT&lt; ComponentType &gt;::green</definition>
+        <argsstring>()</argsstring>
+        <name>green</name>
+        <qualifiedname>castor::RgbaColourT::green</qualifiedname>
+        <briefdescription>
+<para>Récupère la valeur de la composante verte. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="639" column="16" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="639" bodyend="642"/>
+        <references refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528a792bf7724ae3b7852ea2a6a5dd6858ed">castor::eGreen</references>
+        <references refid="dd/db7/a08919_1aaf6e20c47fa55a58b30f45f872aee90f" compoundref="d3/d48/a02069" startline="589" endline="592">castor::RgbaColourT&lt; ComponentType &gt;::get</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a0d5669bc0467b8972dbc356d672d3b79" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType const &amp;</type>
+        <definition>ComponentType const  &amp; castor::RgbaColourT&lt; ComponentType &gt;::green</definition>
+        <argsstring>() const</argsstring>
+        <name>green</name>
+        <qualifiedname>castor::RgbaColourT::green</qualifiedname>
+        <briefdescription>
+<para>Récupère la valeur de la composante verte. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="651" column="22" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="651" bodyend="654"/>
+        <references refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528a792bf7724ae3b7852ea2a6a5dd6858ed">castor::eGreen</references>
+        <references refid="dd/db7/a08919_1aaf6e20c47fa55a58b30f45f872aee90f" compoundref="d3/d48/a02069" startline="589" endline="592">castor::RgbaColourT&lt; ComponentType &gt;::get</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1af2c99bf2b87ef569b94b09bd9ed1f581" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType &amp;</type>
+        <definition>ComponentType &amp; castor::RgbaColourT&lt; ComponentType &gt;::blue</definition>
+        <argsstring>()</argsstring>
+        <name>blue</name>
+        <qualifiedname>castor::RgbaColourT::blue</qualifiedname>
+        <briefdescription>
+<para>Récupère la valeur de la composante bleue. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="663" column="16" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="663" bodyend="666"/>
+        <references refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528ae646385008148e606d53eddd2b4038fc">castor::eBlue</references>
+        <references refid="dd/db7/a08919_1aaf6e20c47fa55a58b30f45f872aee90f" compoundref="d3/d48/a02069" startline="589" endline="592">castor::RgbaColourT&lt; ComponentType &gt;::get</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1abf27a67075a1d797c71204b2a8c71e8c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType const &amp;</type>
+        <definition>ComponentType const  &amp; castor::RgbaColourT&lt; ComponentType &gt;::blue</definition>
+        <argsstring>() const</argsstring>
+        <name>blue</name>
+        <qualifiedname>castor::RgbaColourT::blue</qualifiedname>
+        <briefdescription>
+<para>Récupère la valeur de la composante bleue. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="675" column="22" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="675" bodyend="678"/>
+        <references refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528ae646385008148e606d53eddd2b4038fc">castor::eBlue</references>
+        <references refid="dd/db7/a08919_1aaf6e20c47fa55a58b30f45f872aee90f" compoundref="d3/d48/a02069" startline="589" endline="592">castor::RgbaColourT&lt; ComponentType &gt;::get</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a4eaf9be6cf52c14f22ca6c2a5ac5f024" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType &amp;</type>
+        <definition>ComponentType &amp; castor::RgbaColourT&lt; ComponentType &gt;::alpha</definition>
+        <argsstring>()</argsstring>
+        <name>alpha</name>
+        <qualifiedname>castor::RgbaColourT::alpha</qualifiedname>
+        <briefdescription>
+<para>Récupère la valeur de la composante alpha. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="687" column="16" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="687" bodyend="690"/>
+        <references refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528a25c85e1726046df1e2fa32207364b4db">castor::eAlpha</references>
+        <references refid="dd/db7/a08919_1aaf6e20c47fa55a58b30f45f872aee90f" compoundref="d3/d48/a02069" startline="589" endline="592">castor::RgbaColourT&lt; ComponentType &gt;::get</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a2a152374962a9c68248ff5341427563e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ComponentType const &amp;</type>
+        <definition>ComponentType const  &amp; castor::RgbaColourT&lt; ComponentType &gt;::alpha</definition>
+        <argsstring>() const</argsstring>
+        <name>alpha</name>
+        <qualifiedname>castor::RgbaColourT::alpha</qualifiedname>
+        <briefdescription>
+<para>Récupère la valeur de la composante alpha. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de la composante </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="699" column="22" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="699" bodyend="702"/>
+        <references refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528a25c85e1726046df1e2fa32207364b4db">castor::eAlpha</references>
+        <references refid="dd/db7/a08919_1aaf6e20c47fa55a58b30f45f872aee90f" compoundref="d3/d48/a02069" startline="589" endline="592">castor::RgbaColourT&lt; ComponentType &gt;::get</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a119c4bc6783fdf816e7890ec4405c86a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> &amp;</type>
+        <definition>RgbaColourT &amp; castor::RgbaColourT&lt; ComponentType &gt;::operator+=</definition>
+        <argsstring>(RgbaColourT const &amp;rhs)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::RgbaColourT::operator+=</qualifiedname>
+        <param>
+          <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par addition. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les couleurs à ajouter </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this + rhs </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="713" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a6429cadbc1b64803eade0a817767f352" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> &amp;</type>
+        <definition>RgbaColourT &amp; castor::RgbaColourT&lt; ComponentType &gt;::operator-=</definition>
+        <argsstring>(RgbaColourT const &amp;rhs)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::RgbaColourT::operator-=</qualifiedname>
+        <param>
+          <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par soustraction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les couleurs à soustraire </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this - rhs </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="724" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1ac538fae06809a177dcdf1bc41b30206a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> &amp;</type>
+        <definition>RgbaColourT &amp; castor::RgbaColourT&lt; ComponentType &gt;::operator+=</definition>
+        <argsstring>(T scalar)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::RgbaColourT::operator+=</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>scalar</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par addition. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scalar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à ajouter </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this + scalar </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="736" column="14" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="736" bodyend="744"/>
+        <references refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528ae558bb69fadec037d9eae46601a4df8e">castor::eCount</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a1baba9f5bbed3266ed4132d0f3cdb8f6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> &amp;</type>
+        <definition>RgbaColourT &amp; castor::RgbaColourT&lt; ComponentType &gt;::operator-=</definition>
+        <argsstring>(T scalar)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::RgbaColourT::operator-=</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>scalar</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par soustraction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scalar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à soustraire </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this - scalar </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="756" column="14" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="756" bodyend="764"/>
+        <references refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528ae558bb69fadec037d9eae46601a4df8e">castor::eCount</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1ad33a03367b5a77f0fb24eedff7c6a978" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> &amp;</type>
+        <definition>RgbaColourT &amp; castor::RgbaColourT&lt; ComponentType &gt;::operator*=</definition>
+        <argsstring>(T scalar)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::RgbaColourT::operator*=</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>scalar</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par multiplication. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scalar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à multiplier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this * scalar </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="776" column="14" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="776" bodyend="784"/>
+        <references refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528ae558bb69fadec037d9eae46601a4df8e">castor::eCount</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a4e46f59b0adf98e28d2be29b1de7f9c8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> &amp;</type>
+        <definition>RgbaColourT &amp; castor::RgbaColourT&lt; ComponentType &gt;::operator/=</definition>
+        <argsstring>(T scalar)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::RgbaColourT::operator/=</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>scalar</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par division. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scalar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à diviser </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this / scalar </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="796" column="14" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="796" bodyend="804"/>
+        <references refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528ae558bb69fadec037d9eae46601a4df8e">castor::eCount</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a4bfbd655769809f872df1a729b71d376" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> &amp;</type>
+        <definition>RgbaColourT &amp; castor::RgbaColourT&lt; ComponentType &gt;::operator+=</definition>
+        <argsstring>(ComponentType const &amp;component)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::RgbaColourT::operator+=</qualifiedname>
+        <param>
+          <type>ComponentType const &amp;</type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par addition. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à ajouter </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this + component </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="815" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a1251d4f0ee89d8afc6a9281e7a944196" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> &amp;</type>
+        <definition>RgbaColourT &amp; castor::RgbaColourT&lt; ComponentType &gt;::operator-=</definition>
+        <argsstring>(ComponentType const &amp;component)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::RgbaColourT::operator-=</qualifiedname>
+        <param>
+          <type>ComponentType const &amp;</type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par soustraction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à soustraire </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this - component </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="826" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1abfaea738ce971047b8f48dbc7da18714" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> &amp;</type>
+        <definition>RgbaColourT &amp; castor::RgbaColourT&lt; ComponentType &gt;::operator*=</definition>
+        <argsstring>(ComponentType const &amp;component)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::RgbaColourT::operator*=</qualifiedname>
+        <param>
+          <type>ComponentType const &amp;</type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par multiplication. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à multiplier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this * component </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="837" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a884a68cca8cce80e0377bae17c7a4190" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> &amp;</type>
+        <definition>RgbaColourT &amp; castor::RgbaColourT&lt; ComponentType &gt;::operator/=</definition>
+        <argsstring>(ComponentType const &amp;component)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::RgbaColourT::operator/=</qualifiedname>
+        <param>
+          <type>ComponentType const &amp;</type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par division. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à diviser </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this / component </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="848" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dd/db7/a08919_1a9c712df2430de9b1cbc042835317443e" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T1</type>
+          </param>
+          <param>
+            <type>typename T2</type>
+          </param>
+          <param>
+            <type>typename T3</type>
+          </param>
+          <param>
+            <type>typename T4</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromComponents</definition>
+        <argsstring>(T1 const &amp;r, T2 const &amp;g, T3 const &amp;b, T4 const &amp;a)</argsstring>
+        <name>fromComponents</name>
+        <qualifiedname>castor::RgbaColourT::fromComponents</qualifiedname>
+        <param>
+          <type>T1 const &amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>T2 const &amp;</type>
+          <declname>g</declname>
+        </param>
+        <param>
+          <type>T3 const &amp;</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>T4 const &amp;</type>
+          <declname>a</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir des composantes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">r</parametername>
+<parametername direction="in">g</parametername>
+<parametername direction="in">b</parametername>
+<parametername direction="in">a</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les composantes de la couleur </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="87" column="20" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="87" bodyend="95"/>
+        <references refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528a25c85e1726046df1e2fa32207364b4db">castor::eAlpha</references>
+        <references refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528ae646385008148e606d53eddd2b4038fc">castor::eBlue</references>
+        <references refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528a792bf7724ae3b7852ea2a6a5dd6858ed">castor::eGreen</references>
+        <references refid="d2/dd2/a02279_1ac08edd0eba2034b847ce5dae24508528a034da23e289662569a29385fc190f2c9">castor::eRed</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1ad28ebd50a7a0382f717b336e968f235c" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromPredefined</definition>
+        <argsstring>(PredefinedRgbaColour predefined)</argsstring>
+        <name>fromPredefined</name>
+        <qualifiedname>castor::RgbaColourT::fromPredefined</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a9618cb07193e57d78cbe93cdb52926da" kindref="member">PredefinedRgbaColour</ref></type>
+          <declname>predefined</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;une couleur prédéfinie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">predefined</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="106" column="20" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="106" bodyend="109"/>
+        <references refid="dd/db7/a08919_1afa6617022ea31ca6b0f7563d6cc4a6da">castor::RgbaColourT&lt; ComponentType &gt;::fromRGBA</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a28bfa7bdcf802f4fd00b598c0b6d3b25" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromRGB</definition>
+        <argsstring>(Point3ub const &amp;colour)</argsstring>
+        <name>fromRGB</name>
+        <qualifiedname>castor::RgbaColourT::fromRGB</qualifiedname>
+        <param>
+          <type>Point3ub const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes RGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="120" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1afa1136c89e12aff8e66b384d94e633f6" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromBGR</definition>
+        <argsstring>(Point3ub const &amp;colour)</argsstring>
+        <name>fromBGR</name>
+        <qualifiedname>castor::RgbaColourT::fromBGR</qualifiedname>
+        <param>
+          <type>Point3ub const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes BGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="131" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1afa6617022ea31ca6b0f7563d6cc4a6da" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromRGBA</definition>
+        <argsstring>(Point4ub const &amp;colour)</argsstring>
+        <name>fromRGBA</name>
+        <qualifiedname>castor::RgbaColourT::fromRGBA</qualifiedname>
+        <param>
+          <type>Point4ub const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes RGBA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="142" column="20"/>
+        <referencedby refid="dd/db7/a08919_1ad28ebd50a7a0382f717b336e968f235c" compoundref="d3/d48/a02069" startline="106" endline="109">castor::RgbaColourT&lt; ComponentType &gt;::fromPredefined</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a926847ef6e662ff782451e146071dbd1" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromBGRA</definition>
+        <argsstring>(Point4ub const &amp;colour)</argsstring>
+        <name>fromBGRA</name>
+        <qualifiedname>castor::RgbaColourT::fromBGRA</qualifiedname>
+        <param>
+          <type>Point4ub const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes BGRA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="153" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a39808bfb6843fae40c237cbcbc139fa0" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromARGB</definition>
+        <argsstring>(Point4ub const &amp;colour)</argsstring>
+        <name>fromARGB</name>
+        <qualifiedname>castor::RgbaColourT::fromARGB</qualifiedname>
+        <param>
+          <type>Point4ub const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes ARGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="164" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1aba04a7f540e53fe4a67ac7975f43f944" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromABGR</definition>
+        <argsstring>(Point4ub const &amp;colour)</argsstring>
+        <name>fromABGR</name>
+        <qualifiedname>castor::RgbaColourT::fromABGR</qualifiedname>
+        <param>
+          <type>Point4ub const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes ABGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="175" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1ac03bab24fe934673355e0ce412650515" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromRGB</definition>
+        <argsstring>(Point3f const &amp;colour)</argsstring>
+        <name>fromRGB</name>
+        <qualifiedname>castor::RgbaColourT::fromRGB</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes RGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="186" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a1b70ed090e1758e376afd6a38a55e814" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromBGR</definition>
+        <argsstring>(Point3f const &amp;colour)</argsstring>
+        <name>fromBGR</name>
+        <qualifiedname>castor::RgbaColourT::fromBGR</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes BGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="197" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1ac43d7e8a9115ea94140ab8012045aec6" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromRGBA</definition>
+        <argsstring>(Point4f const &amp;colour)</argsstring>
+        <name>fromRGBA</name>
+        <qualifiedname>castor::RgbaColourT::fromRGBA</qualifiedname>
+        <param>
+          <type>Point4f const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes RGBA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="208" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1adafec536a15352ed3c63aca6f6f52c59" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromARGB</definition>
+        <argsstring>(Point4f const &amp;colour)</argsstring>
+        <name>fromARGB</name>
+        <qualifiedname>castor::RgbaColourT::fromARGB</qualifiedname>
+        <param>
+          <type>Point4f const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes ARGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="219" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a3f0409f02fb484a1b9aa47222480a321" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromABGR</definition>
+        <argsstring>(Point4f const &amp;colour)</argsstring>
+        <name>fromABGR</name>
+        <qualifiedname>castor::RgbaColourT::fromABGR</qualifiedname>
+        <param>
+          <type>Point4f const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes ABGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="230" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a89164f0797b18ed2e5abbfb97a96cf6f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromBGRA</definition>
+        <argsstring>(Point4f const &amp;colour)</argsstring>
+        <name>fromBGRA</name>
+        <qualifiedname>castor::RgbaColourT::fromBGRA</qualifiedname>
+        <param>
+          <type>Point4f const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes BGRA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="241" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a90b14575679140fa7acb18b847309ce3" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromRGB</definition>
+        <argsstring>(uint8_t const(&amp;colour)[3])</argsstring>
+        <name>fromRGB</name>
+        <qualifiedname>castor::RgbaColourT::fromRGB</qualifiedname>
+        <param>
+          <type>uint8_t const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[3]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes RGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="252" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a99d530635d63b8913e6a5f3591a82a60" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromBGR</definition>
+        <argsstring>(uint8_t const(&amp;colour)[3])</argsstring>
+        <name>fromBGR</name>
+        <qualifiedname>castor::RgbaColourT::fromBGR</qualifiedname>
+        <param>
+          <type>uint8_t const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[3]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes BGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="263" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a22288f0eef7dcb792b03eac2bb199328" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromRGBA</definition>
+        <argsstring>(uint8_t const(&amp;colour)[4])</argsstring>
+        <name>fromRGBA</name>
+        <qualifiedname>castor::RgbaColourT::fromRGBA</qualifiedname>
+        <param>
+          <type>uint8_t const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[4]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes RGBA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="274" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1ac21868ac34f5493b500fece52a344ac1" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromBGRA</definition>
+        <argsstring>(uint8_t const(&amp;colour)[4])</argsstring>
+        <name>fromBGRA</name>
+        <qualifiedname>castor::RgbaColourT::fromBGRA</qualifiedname>
+        <param>
+          <type>uint8_t const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[4]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes BGRA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="285" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a3895045e8f80b7140ab6e432636e7033" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromARGB</definition>
+        <argsstring>(uint8_t const(&amp;colour)[4])</argsstring>
+        <name>fromARGB</name>
+        <qualifiedname>castor::RgbaColourT::fromARGB</qualifiedname>
+        <param>
+          <type>uint8_t const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[4]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes ARGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="296" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a33fd99224acc356416cd751a7448a609" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromABGR</definition>
+        <argsstring>(uint8_t const(&amp;colour)[4])</argsstring>
+        <name>fromABGR</name>
+        <qualifiedname>castor::RgbaColourT::fromABGR</qualifiedname>
+        <param>
+          <type>uint8_t const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[4]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes ABGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="307" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a1b21cf1dde9fa4e09c0bd28729dca4f9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromRGB</definition>
+        <argsstring>(float const(&amp;colour)[3])</argsstring>
+        <name>fromRGB</name>
+        <qualifiedname>castor::RgbaColourT::fromRGB</qualifiedname>
+        <param>
+          <type>float const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[3]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes RGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="318" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a2090de6be141fd5d6860b25bc746fa69" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromBGR</definition>
+        <argsstring>(float const(&amp;colour)[3])</argsstring>
+        <name>fromBGR</name>
+        <qualifiedname>castor::RgbaColourT::fromBGR</qualifiedname>
+        <param>
+          <type>float const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[3]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes BGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="329" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a49e45f79e3da13eb6c201469143d024c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromRGBA</definition>
+        <argsstring>(float const(&amp;colour)[4])</argsstring>
+        <name>fromRGBA</name>
+        <qualifiedname>castor::RgbaColourT::fromRGBA</qualifiedname>
+        <param>
+          <type>float const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[4]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes RGBA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="340" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a5bdc4afc0c9711d802b73eec4619f692" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromARGB</definition>
+        <argsstring>(float const(&amp;colour)[4])</argsstring>
+        <name>fromARGB</name>
+        <qualifiedname>castor::RgbaColourT::fromARGB</qualifiedname>
+        <param>
+          <type>float const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[4]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes ARGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="351" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a3d463a904e24793b49630616a98fed29" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromABGR</definition>
+        <argsstring>(float const(&amp;colour)[4])</argsstring>
+        <name>fromABGR</name>
+        <qualifiedname>castor::RgbaColourT::fromABGR</qualifiedname>
+        <param>
+          <type>float const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[4]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes ABGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="362" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a1a5f44db05e4455e2c534a3c6131c2a8" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromBGRA</definition>
+        <argsstring>(float const(&amp;colour)[4])</argsstring>
+        <name>fromBGRA</name>
+        <qualifiedname>castor::RgbaColourT::fromBGRA</qualifiedname>
+        <param>
+          <type>float const(&amp;)</type>
+          <declname>colour</declname>
+          <array>[4]</array>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point représentant des composantes BGRA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point contenant les composantes </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="373" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a2d22e10fe830ce624757eb588a7a03d6" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromRGB</definition>
+        <argsstring>(uint32_t colour)</argsstring>
+        <name>fromRGB</name>
+        <qualifiedname>castor::RgbaColourT::fromRGB</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un uint32_t représentant des composantes RGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;uint32_t contenant la couleur (0x00RRGGBB) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="384" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a7dfbf1817fab52f6980adcbc4aa2de00" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromBGR</definition>
+        <argsstring>(uint32_t colour)</argsstring>
+        <name>fromBGR</name>
+        <qualifiedname>castor::RgbaColourT::fromBGR</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un uint32_t représentant des composantes BGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;uint32_t contenant la couleur (0x00BBGGRR) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="395" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a9e3333ee33d7fdc61d202ec1350d325f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromARGB</definition>
+        <argsstring>(uint32_t colour)</argsstring>
+        <name>fromARGB</name>
+        <qualifiedname>castor::RgbaColourT::fromARGB</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un uint32_t représentant des composantes ARGB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;uint32_t contenant la couleur (0xAARRGGBB) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="406" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1ab2341b6f5b111f761d762b3d8722659d" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromRGBA</definition>
+        <argsstring>(uint32_t colour)</argsstring>
+        <name>fromRGBA</name>
+        <qualifiedname>castor::RgbaColourT::fromRGBA</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un uint32_t représentant des composantes RGBA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;uint32_t contenant la couleur (0xRRGGBBAA) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="417" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a7548fa3d51058337842d19e3b354261d" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromABGR</definition>
+        <argsstring>(uint32_t colour)</argsstring>
+        <name>fromABGR</name>
+        <qualifiedname>castor::RgbaColourT::fromABGR</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un uint32_t représentant des composantes ABGR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;uint32_t contenant la couleur (0xAABBGGRR) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="428" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1aaf38ee4bdbfc757c52ebe1d566995595" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromBGRA</definition>
+        <argsstring>(uint32_t colour)</argsstring>
+        <name>fromBGRA</name>
+        <qualifiedname>castor::RgbaColourT::fromBGRA</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un uint32_t représentant des composantes BGRA. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;uint32_t contenant la couleur (0xBBGGRRAA) </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="439" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/db7/a08919_1a45fb9fa4bf6449dc51727f0ca61bcdbd" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref></type>
+        <definition>static RgbaColourT castor::RgbaColourT&lt; ComponentType &gt;::fromHSB</definition>
+        <argsstring>(float hue, float saturation, float brightness)</argsstring>
+        <name>fromHSB</name>
+        <qualifiedname>castor::RgbaColourT::fromHSB</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>hue</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>saturation</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>brightness</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir de composantes HSB. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">hue</parametername>
+<parametername direction="in">saturation</parametername>
+<parametername direction="in">brightness</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les composantes HSB. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La <ref refid="dd/db7/a08919" kindref="compound">RgbaColourT</ref> construite. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/RgbaColour.hpp" line="450" column="20"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Représentation d&apos;une couleur RGBA. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Prédéfinit differentes couleurs <linebreak/>
+Permet la conversion entre différents types de couleurs (RGB, ARGB, BGR, ...) et différents types de données (long, float, char, ...) </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/RgbaColour.hpp" line="39" column="1" bodyfile="CastorUtils/Graphics/RgbaColour.hpp" bodystart="40" bodyend="852"/>
+    <listofallmembers>
+      <member refid="dd/db7/a08919_1a4eaf9be6cf52c14f22ca6c2a5ac5f024" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>alpha</name></member>
+      <member refid="dd/db7/a08919_1a2a152374962a9c68248ff5341427563e" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>alpha</name></member>
+      <member refid="dd/db7/a08919_1a864cdfe3b50c651e65a8cf67f4e9e013" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>begin</name></member>
+      <member refid="dd/db7/a08919_1a50020337447640f2a41a81b4e553edff" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>begin</name></member>
+      <member refid="dd/db7/a08919_1af2c99bf2b87ef569b94b09bd9ed1f581" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>blue</name></member>
+      <member refid="dd/db7/a08919_1abf27a67075a1d797c71204b2a8c71e8c" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>blue</name></member>
+      <member refid="dd/db7/a08919_1a0e8a365a42741c4cd485b5904244c455" prot="private" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>ColourComponentArray</name></member>
+      <member refid="dd/db7/a08919_1ab382b12a0e2ac75fe3dc96272a6de4ba" prot="private" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>ColourComponentArrayConstIt</name></member>
+      <member refid="dd/db7/a08919_1a970b7242dbaa78d9d70bf15af7fcd406" prot="private" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>ColourComponentArrayConstRIt</name></member>
+      <member refid="dd/db7/a08919_1a49e854265123fd07b8aa87a42bf97df2" prot="private" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>ColourComponentArrayIt</name></member>
+      <member refid="dd/db7/a08919_1ab62bf93c836e2baa882b10ef9739badf" prot="private" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>ColourComponentArrayRIt</name></member>
+      <member refid="dd/db7/a08919_1a1a846ef43bca41972b853233d3cd11c4" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>constPtr</name></member>
+      <member refid="dd/db7/a08919_1add194995decac75813ecd967ad4e146f" prot="private" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>CU_DeclareArray</name></member>
+      <member refid="dd/db7/a08919_1aa64b087452d2269222e50d85bebe7f74" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>end</name></member>
+      <member refid="dd/db7/a08919_1a2ae695d6a3a8cc5d450f61aaffee771a" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>end</name></member>
+      <member refid="dd/db7/a08919_1aba04a7f540e53fe4a67ac7975f43f944" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromABGR</name></member>
+      <member refid="dd/db7/a08919_1a3f0409f02fb484a1b9aa47222480a321" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromABGR</name></member>
+      <member refid="dd/db7/a08919_1a33fd99224acc356416cd751a7448a609" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromABGR</name></member>
+      <member refid="dd/db7/a08919_1a3d463a904e24793b49630616a98fed29" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromABGR</name></member>
+      <member refid="dd/db7/a08919_1a7548fa3d51058337842d19e3b354261d" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromABGR</name></member>
+      <member refid="dd/db7/a08919_1a39808bfb6843fae40c237cbcbc139fa0" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromARGB</name></member>
+      <member refid="dd/db7/a08919_1adafec536a15352ed3c63aca6f6f52c59" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromARGB</name></member>
+      <member refid="dd/db7/a08919_1a3895045e8f80b7140ab6e432636e7033" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromARGB</name></member>
+      <member refid="dd/db7/a08919_1a5bdc4afc0c9711d802b73eec4619f692" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromARGB</name></member>
+      <member refid="dd/db7/a08919_1a9e3333ee33d7fdc61d202ec1350d325f" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromARGB</name></member>
+      <member refid="dd/db7/a08919_1afa1136c89e12aff8e66b384d94e633f6" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromBGR</name></member>
+      <member refid="dd/db7/a08919_1a1b70ed090e1758e376afd6a38a55e814" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromBGR</name></member>
+      <member refid="dd/db7/a08919_1a99d530635d63b8913e6a5f3591a82a60" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromBGR</name></member>
+      <member refid="dd/db7/a08919_1a2090de6be141fd5d6860b25bc746fa69" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromBGR</name></member>
+      <member refid="dd/db7/a08919_1a7dfbf1817fab52f6980adcbc4aa2de00" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromBGR</name></member>
+      <member refid="dd/db7/a08919_1a926847ef6e662ff782451e146071dbd1" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromBGRA</name></member>
+      <member refid="dd/db7/a08919_1a89164f0797b18ed2e5abbfb97a96cf6f" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromBGRA</name></member>
+      <member refid="dd/db7/a08919_1ac21868ac34f5493b500fece52a344ac1" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromBGRA</name></member>
+      <member refid="dd/db7/a08919_1a1a5f44db05e4455e2c534a3c6131c2a8" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromBGRA</name></member>
+      <member refid="dd/db7/a08919_1aaf38ee4bdbfc757c52ebe1d566995595" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromBGRA</name></member>
+      <member refid="dd/db7/a08919_1a9c712df2430de9b1cbc042835317443e" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromComponents</name></member>
+      <member refid="dd/db7/a08919_1a45fb9fa4bf6449dc51727f0ca61bcdbd" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromHSB</name></member>
+      <member refid="dd/db7/a08919_1ad28ebd50a7a0382f717b336e968f235c" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromPredefined</name></member>
+      <member refid="dd/db7/a08919_1a28bfa7bdcf802f4fd00b598c0b6d3b25" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromRGB</name></member>
+      <member refid="dd/db7/a08919_1ac03bab24fe934673355e0ce412650515" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromRGB</name></member>
+      <member refid="dd/db7/a08919_1a90b14575679140fa7acb18b847309ce3" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromRGB</name></member>
+      <member refid="dd/db7/a08919_1a1b21cf1dde9fa4e09c0bd28729dca4f9" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromRGB</name></member>
+      <member refid="dd/db7/a08919_1a2d22e10fe830ce624757eb588a7a03d6" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromRGB</name></member>
+      <member refid="dd/db7/a08919_1afa6617022ea31ca6b0f7563d6cc4a6da" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromRGBA</name></member>
+      <member refid="dd/db7/a08919_1ac43d7e8a9115ea94140ab8012045aec6" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromRGBA</name></member>
+      <member refid="dd/db7/a08919_1a22288f0eef7dcb792b03eac2bb199328" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromRGBA</name></member>
+      <member refid="dd/db7/a08919_1a49e45f79e3da13eb6c201469143d024c" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromRGBA</name></member>
+      <member refid="dd/db7/a08919_1ab2341b6f5b111f761d762b3d8722659d" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>fromRGBA</name></member>
+      <member refid="dd/db7/a08919_1aaf6e20c47fa55a58b30f45f872aee90f" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>get</name></member>
+      <member refid="dd/db7/a08919_1ae76c226127e8b1bba5a8426677d1d133" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>get</name></member>
+      <member refid="dd/db7/a08919_1a5619a83a8f9b17a29f7168ba435df15c" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>green</name></member>
+      <member refid="dd/db7/a08919_1a0d5669bc0467b8972dbc356d672d3b79" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>green</name></member>
+      <member refid="dd/db7/a08919_1a801dd0ad1b1fd7a213c1c78bc3f439cf" prot="private" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>m_components</name></member>
+      <member refid="dd/db7/a08919_1ad33a03367b5a77f0fb24eedff7c6a978" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>operator*=</name></member>
+      <member refid="dd/db7/a08919_1abfaea738ce971047b8f48dbc7da18714" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>operator*=</name></member>
+      <member refid="dd/db7/a08919_1a119c4bc6783fdf816e7890ec4405c86a" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>operator+=</name></member>
+      <member refid="dd/db7/a08919_1ac538fae06809a177dcdf1bc41b30206a" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>operator+=</name></member>
+      <member refid="dd/db7/a08919_1a4bfbd655769809f872df1a729b71d376" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>operator+=</name></member>
+      <member refid="dd/db7/a08919_1a6429cadbc1b64803eade0a817767f352" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>operator-=</name></member>
+      <member refid="dd/db7/a08919_1a1baba9f5bbed3266ed4132d0f3cdb8f6" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>operator-=</name></member>
+      <member refid="dd/db7/a08919_1a1251d4f0ee89d8afc6a9281e7a944196" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>operator-=</name></member>
+      <member refid="dd/db7/a08919_1a4e46f59b0adf98e28d2be29b1de7f9c8" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>operator/=</name></member>
+      <member refid="dd/db7/a08919_1a884a68cca8cce80e0377bae17c7a4190" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>operator/=</name></member>
+      <member refid="dd/db7/a08919_1afbf5c10ea5379aa0436351d85d1aa7a1" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>operator=</name></member>
+      <member refid="dd/db7/a08919_1af8f550cfcc028f66c93b69138af75c16" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>operator=</name></member>
+      <member refid="dd/db7/a08919_1a734f3d333e670ac59437916dc4c92d4f" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>operator[]</name></member>
+      <member refid="dd/db7/a08919_1a7bc940b5e85777f863e1a426745ac934" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>operator[]</name></member>
+      <member refid="dd/db7/a08919_1afc017cca0c42ef69b7f45454fca42d4e" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>operator[]</name></member>
+      <member refid="dd/db7/a08919_1a6f623dee8c897c66e1b2884c26c76b2d" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>operator[]</name></member>
+      <member refid="dd/db7/a08919_1a60aa7bc564080779fcc0b7df94f8aad2" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>ptr</name></member>
+      <member refid="dd/db7/a08919_1a76b7554aa64e5c9b7cf1d4c2310c1c82" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>red</name></member>
+      <member refid="dd/db7/a08919_1a74ad6109a08f0f78d9a2d10652075894" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>red</name></member>
+      <member refid="dd/db7/a08919_1a6e2962386be75fb5512556013442290d" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>RgbaColourT</name></member>
+      <member refid="dd/db7/a08919_1aafb9fd1757cb280e2b766ef0a4bfbe1e" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>RgbaColourT</name></member>
+      <member refid="dd/db7/a08919_1a237f11971fac98aa089784417cd0c121" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>RgbaColourT</name></member>
+      <member refid="dd/db7/a08919_1a008097fbb422597f5304e6aefe711f5d" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>RgbaColourT</name></member>
+      <member refid="dd/db7/a08919_1a7ea886e3223c2851380d84509fce2077" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>RgbaColourT</name></member>
+      <member refid="dd/db7/a08919_1ac0dc7da183c6f374b1cd2936b5d98235" prot="public" virt="non-virtual"><scope>castor::RgbaColourT</scope><name>~RgbaColourT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

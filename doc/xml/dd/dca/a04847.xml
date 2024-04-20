@@ -1,0 +1,287 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/dca/a04847" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::PassMapMaterialShader</compoundname>
+    <basecompoundref refid="d6/da6/a04827" prot="public" virt="non-virtual">castor3d::shader::PassMaterialShader</basecompoundref>
+    <derivedcompoundref refid="dd/db4/a04367" prot="public" virt="non-virtual">castor3d::AttenuationMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="d3/dd0/a04383" prot="public" virt="non-virtual">castor3d::ClearcoatMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="d1/d71/a04399" prot="public" virt="non-virtual">castor3d::ClearcoatNormalMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="d0/dc5/a04415" prot="public" virt="non-virtual">castor3d::ClearcoatRoughnessMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="d1/dec/a04431" prot="public" virt="non-virtual">castor3d::ColourMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="d6/df1/a04447" prot="public" virt="non-virtual">castor3d::EmissiveMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="d0/d18/a04463" prot="public" virt="non-virtual">castor3d::GlossinessMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="d7/dd6/a04479" prot="public" virt="non-virtual">castor3d::HeightMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="db/dd8/a04495" prot="public" virt="non-virtual">castor3d::IridescenceMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="d2/d5d/a04511" prot="public" virt="non-virtual">castor3d::IridescenceThicknessMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="df/dd3/a04527" prot="public" virt="non-virtual">castor3d::MetalnessMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="d5/dd2/a04543" prot="public" virt="non-virtual">castor3d::NormalMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="d1/dce/a04559" prot="public" virt="non-virtual">castor3d::OcclusionMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="d1/d48/a04575" prot="public" virt="non-virtual">castor3d::OpacityMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="d7/db9/a04591" prot="public" virt="non-virtual">castor3d::RoughnessMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="de/d76/a04607" prot="public" virt="non-virtual">castor3d::SheenMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="df/d53/a04623" prot="public" virt="non-virtual">castor3d::SheenRoughnessMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="d1/d30/a04639" prot="public" virt="non-virtual">castor3d::SpecularFactorMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="d0/d5e/a04655" prot="public" virt="non-virtual">castor3d::SpecularMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="db/dc1/a04671" prot="public" virt="non-virtual">castor3d::TransmissionMapComponent::MaterialShader</derivedcompoundref>
+    <derivedcompoundref refid="d2/ddb/a04687" prot="public" virt="non-virtual">castor3d::TransmittanceMapComponent::MaterialShader</derivedcompoundref>
+    <includes local="no">PassMapComponent.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/dca/a04847_1a2a68ec41b59b7c1f7c75a127da1e64ee" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">castor::MbString</ref></type>
+        <definition>castor::MbString castor3d::shader::PassMapMaterialShader::m_mapMemberName</definition>
+        <argsstring></argsstring>
+        <name>m_mapMemberName</name>
+        <qualifiedname>castor3d::shader::PassMapMaterialShader::m_mapMemberName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassMapComponent.hpp" line="33" column="18" bodyfile="Castor3D/Material/Pass/Component/PassMapComponent.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/dca/a04847_1a1d5abf4a68514e50bd10f43a19a85268" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::PassMapMaterialShader::PassMapMaterialShader</definition>
+        <argsstring>(castor::String const &amp;mapMemberName)</argsstring>
+        <name>PassMapMaterialShader</name>
+        <qualifiedname>castor3d::shader::PassMapMaterialShader::PassMapMaterialShader</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>mapMemberName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassMapComponent.hpp" line="23" column="18" bodyfile="Castor3D/Material/Pass/Component/PassMapComponent.hpp" bodystart="23" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dca/a04847_1abc3a4606619965d53c860e5221579ac4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PassMapMaterialShader::fillMaterialType</definition>
+        <argsstring>(sdw::type::BaseStruct &amp;type, sdw::expr::ExprList &amp;inits) const override</argsstring>
+        <name>fillMaterialType</name>
+        <qualifiedname>castor3d::shader::PassMapMaterialShader::fillMaterialType</qualifiedname>
+        <reimplements refid="d6/da6/a04827_1a2c3f9d590baea77d2602f7e9e205318f">fillMaterialType</reimplements>
+        <param>
+          <type>sdw::type::BaseStruct &amp;</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprList &amp;</type>
+          <declname>inits</declname>
+        </param>
+        <briefdescription>
+<para>Remplit la structure shader de matériau avec les membres fournis par ce composant, et leurs initialiseurs. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les membres. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">inits</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les initialiseurs des membres. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/PassMapComponent.hpp" line="29" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>castor3d::AttenuationMapComponent::MaterialShader</label>
+        <link refid="dd/db4/a04367"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::ClearcoatMapComponent::MaterialShader</label>
+        <link refid="d3/dd0/a04383"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::ClearcoatNormalMapComponent::MaterialShader</label>
+        <link refid="d1/d71/a04399"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::ClearcoatRoughnessMapComponent::MaterialShader</label>
+        <link refid="d0/dc5/a04415"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::ColourMapComponent::MaterialShader</label>
+        <link refid="d1/dec/a04431"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::EmissiveMapComponent::MaterialShader</label>
+        <link refid="d6/df1/a04447"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::GlossinessMapComponent::MaterialShader</label>
+        <link refid="d0/d18/a04463"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::HeightMapComponent::MaterialShader</label>
+        <link refid="d7/dd6/a04479"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::IridescenceMapComponent::MaterialShader</label>
+        <link refid="db/dd8/a04495"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::IridescenceThicknessMapComponent::MaterialShader</label>
+        <link refid="d2/d5d/a04511"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::MetalnessMapComponent::MaterialShader</label>
+        <link refid="df/dd3/a04527"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::NormalMapComponent::MaterialShader</label>
+        <link refid="d5/dd2/a04543"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::OcclusionMapComponent::MaterialShader</label>
+        <link refid="d1/dce/a04559"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::OpacityMapComponent::MaterialShader</label>
+        <link refid="d1/d48/a04575"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::RoughnessMapComponent::MaterialShader</label>
+        <link refid="d7/db9/a04591"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::SheenMapComponent::MaterialShader</label>
+        <link refid="de/d76/a04607"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor3d::SheenRoughnessMapComponent::MaterialShader</label>
+        <link refid="df/d53/a04623"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor3d::SpecularFactorMapComponent::MaterialShader</label>
+        <link refid="d1/d30/a04639"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor3d::SpecularMapComponent::MaterialShader</label>
+        <link refid="d0/d5e/a04655"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor3d::TransmissionMapComponent::MaterialShader</label>
+        <link refid="db/dc1/a04671"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor3d::TransmittanceMapComponent::MaterialShader</label>
+        <link refid="d2/ddb/a04687"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::PassMapMaterialShader</label>
+        <link refid="dd/dca/a04847"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="d6/da6/a04827"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::PassMapMaterialShader</label>
+        <link refid="dd/dca/a04847"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="d6/da6/a04827"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Component/PassMapComponent.hpp" line="20" column="1" bodyfile="Castor3D/Material/Pass/Component/PassMapComponent.hpp" bodystart="22" bodyend="34"/>
+    <listofallmembers>
+      <member refid="dd/dca/a04847_1abc3a4606619965d53c860e5221579ac4" prot="public" virt="virtual"><scope>castor3d::shader::PassMapMaterialShader</scope><name>fillMaterialType</name></member>
+      <member refid="d6/da6/a04827_1a2730417bcf60c1824af2c13e705a5cc4" prot="public" virt="non-virtual"><scope>castor3d::shader::PassMapMaterialShader</scope><name>getMaterialChunk</name></member>
+      <member refid="dd/dca/a04847_1a2a68ec41b59b7c1f7c75a127da1e64ee" prot="private" virt="non-virtual"><scope>castor3d::shader::PassMapMaterialShader</scope><name>m_mapMemberName</name></member>
+      <member refid="d2/d04/a04815_1a06fad613f64fa717de3e8032393fdbd7" prot="public" virt="non-virtual"><scope>castor3d::shader::PassMapMaterialShader</scope><name>operator=</name></member>
+      <member refid="d2/d04/a04815_1a0e5c7fea4f6928009d6da51c4d78a9df" prot="public" virt="non-virtual"><scope>castor3d::shader::PassMapMaterialShader</scope><name>operator=</name></member>
+      <member refid="dd/dca/a04847_1a1d5abf4a68514e50bd10f43a19a85268" prot="public" virt="non-virtual"><scope>castor3d::shader::PassMapMaterialShader</scope><name>PassMapMaterialShader</name></member>
+      <member refid="d6/da6/a04827_1ae753c888953191f89fe24d9ebc8e9dd6" prot="public" virt="non-virtual"><scope>castor3d::shader::PassMapMaterialShader</scope><name>PassMaterialShader</name></member>
+      <member refid="d2/d04/a04815_1ab439edbbb2da660939e0209d9bfba3b0" prot="public" virt="non-virtual"><scope>castor3d::shader::PassMapMaterialShader</scope><name>PassShader</name></member>
+      <member refid="d2/d04/a04815_1ae0263dc410ae3d05ddea8cc9ad7eac73" prot="public" virt="non-virtual"><scope>castor3d::shader::PassMapMaterialShader</scope><name>PassShader</name></member>
+      <member refid="d2/d04/a04815_1aee18e0dfda227ed54fb966d7d75a1ea5" prot="public" virt="non-virtual"><scope>castor3d::shader::PassMapMaterialShader</scope><name>PassShader</name></member>
+      <member refid="d2/d04/a04815_1a56338db0aed5f44427291aa6c631872b" prot="public" virt="virtual"><scope>castor3d::shader::PassMapMaterialShader</scope><name>~PassShader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,9 @@
+<map id="castor3d::GpuEventInitialiserT::operator()" name="castor3d::GpuEventInitialiserT::operator()">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,37,192,77"/>
+<area shape="rect" id="Node000002" href="$d9/dba/a02278.html#aaf67c7f08e12d5b908a8e9d0d95df55e" title="Helper function to create an initialise event." alt="" coords="240,5,423,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,42,226,37,227,42,193,47"/>
+<area shape="rect" id="Node000004" href="$dd/d3c/a03735.html#a9486aa6c1d707205ca548dab74be0262" title="Puts an event in the corresponding array." alt="" coords="250,69,413,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="193,68,237,74,236,79,192,73"/>
+<area shape="rect" id="Node000003" href="$d9/dba/a02278.html#a82d9cf741aadf04e34b84fb945716863" title="Helper function to create a functor event." alt="" coords="471,5,651,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="423,23,457,23,457,28,423,28"/>
+</map>

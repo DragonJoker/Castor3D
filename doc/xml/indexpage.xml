@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="indexpage" kind="page">
     <compoundname>index</compoundname>
     <title>Castor3D</title>
@@ -7,107 +7,102 @@
     </briefdescription>
     <detaileddescription>
 <para><anchor id="index_1mainpage"/></para>
-<para>Castor3D is a 3D engine written in C++ 20.</para>
-<para>It works on Windows and GNU/Linux.</para>
-<para>It relies on Vulkan as a rendering API.</para>
-<para>The project itself is compilable on supported platforms using CMake and vcpkg (cf. <ref refid="d1/d99/a14816" kindref="compound">build</ref>).</para>
-<sect1 id="index_1autotoc_md209">
-<title>Features</title>
-<para><itemizedlist>
-<listitem><para>Deferred rendering for opaque objects.</para>
-</listitem><listitem><para>Blended Weighted rendering for transparent objects.</para>
-</listitem><listitem><para>Normal mapping.</para>
-</listitem><listitem><para>Shadow Mapping (allowing to choose between Raw, PCF or Variance Shadow Maps).</para>
-</listitem><listitem><para>Parallax Occlusion mapping.</para>
-</listitem><listitem><para>Screen Space Ambient Occlusion (using <ulink url="https://casual-effects.com/research/McGuire2012SAO/index.html">Scalable Ambiant Obscurance</ulink>).</para>
+<para>Castor3D est un moteur 3D multi-plateformes écrit en C++ 20.</para>
+<para>Il fonctionne sur les plateformes GNU/Linux et Windows.</para>
+<para>Il est basé sur l&apos;API de rendu Vulkan.</para>
+<para>Le projet en lui-même est compilable sur les plateformes supportées en utilisant CMake et vcpkg (cf. <ref refid="d7/d8b/a11657" kindref="compound">génération</ref>).</para>
+<sect1 id="index_1autotoc_md122">
+<title>Fonctionnalités</title><para><itemizedlist>
+<listitem><para>Clustered lighting pour le calcul de toutes les sources lumineuses.</para>
+</listitem><listitem><para>Utilisation d&apos;un visibility buffer pour les objets opaques.</para>
+</listitem><listitem><para>Weighted Blended rendering pour les objets transparents.</para>
+</listitem><listitem><para>Normal mapping (avec utilisation du Mikktspace ou spécification explicite des bitangentes).</para>
+</listitem><listitem><para>Shadow Mapping (avec choix entre Raw, PCF ou Variance Shadow Maps).</para>
+</listitem><listitem><para>Parallax Occlusion Mapping.</para>
+</listitem><listitem><para>Screen Space Ambiant Occlusion (en implémentant le <ulink url="https://casual-effects.com/research/McGuire2012SAO/index.html">Scalable Ambiance Obscurance</ulink>).</para>
 </listitem><listitem><para>Reflection/Refraction Mapping.</para>
-</listitem><listitem><para>PBR rendering (Metallic and Specular workflows), and Phong/Blinn-Phong rendering.</para>
-</listitem><listitem><para>HDR rendering with various tone mapping operators.</para>
-</listitem><listitem><para>Screen Space Subsurface Scattering (without backlit transmittance yet).</para>
-</listitem><listitem><para>Volumetric Light Scattering for the directional light source, if it projects shadows.</para>
-</listitem><listitem><para>Cascaded Shadow Maps for the directional light source.</para>
-</listitem><listitem><para>Global Illumination, through Light Propagation Volumes (layered or non layered, with or without geometry injection), or through Voxel Cone Tracing.</para>
+</listitem><listitem><para>Rendu PBR (Metallic/Roughness et Specular/Glossiness) et rendu Phong/Blinn-Phong.</para>
+</listitem><listitem><para>Rendu HDR avec application de divers opérateurs de tone mapping ainsi que divers opérateurs de colour grading.</para>
+</listitem><listitem><para>Screen Space Subsurface Scattering (sans la backlit transmittance pour l&apos;instant).</para>
+</listitem><listitem><para>Volumetric Light Scattering pour la source directionnelle, si elle projette des ombres.</para>
+</listitem><listitem><para>Cascaded Shadow Maps pour la source lumineuse directionelle.</para>
+</listitem><listitem><para>Global Illumination, via les Light Propagation Volumes (layered ou pas) ou le Voxel Cone Tracing.</para>
 </listitem><listitem><para>Frustum culling.</para>
-</listitem><listitem><para>Scene graph.</para>
-</listitem><listitem><para>Render graph.</para>
-</listitem><listitem><para>Modular architecture through plug-ins.</para>
-</listitem><listitem><para>Shaders are generated automatically from pipeline configuration.</para>
-</listitem><listitem><para>Shaders are writable directly from C++ code.</para>
-</listitem><listitem><para>Scenes are described using a text format easily comprehensible and extensible. (<ref refid="dc/d50/a14819" kindref="compound">Scene File</ref>)</para>
-</listitem><listitem><para>Synchronous (user defined) or asynchronous (thread) rendering.</para>
-</listitem><listitem><para>Using Mesh and Task shaders, if available.</para>
+</listitem><listitem><para>Graphe de scène.</para>
+</listitem><listitem><para>Graphe de rendu.</para>
+</listitem><listitem><para>Architecture modulaire, à base de plug-ins.</para>
+</listitem><listitem><para>Génération automatique de shaders, en fonction de la configuration du pipeline.</para>
+</listitem><listitem><para>Ecriture du code du shader directement depuis le code C++.</para>
+</listitem><listitem><para>Scènes décrites dans un format texte facilement compréhensible et extensible. (<ref refid="d8/d1f/a11660" kindref="compound">Scene File</ref>)</para>
+</listitem><listitem><para>Rendu synchrone (timers) ou asynchrone (thread).</para>
+</listitem><listitem><para>Utilisation de Mesh et Task shaders, si disponibles.</para>
 </listitem></itemizedlist>
 </para>
 </sect1>
-<sect1 id="index_1autotoc_md210">
-<title>Implemented Plug-ins</title>
-<sect2 id="index_1autotoc_md211">
-<title>Importers</title>
-<para><itemizedlist>
-<listitem><para>ASSIMP: Multiple format mesh importer.</para>
+<sect1 id="index_1autotoc_md123">
+<title>Plugins implémentés</title><sect2 id="index_1autotoc_md124">
+<title>Importers</title><para><itemizedlist>
+<listitem><para>ASSIMP, utilisant la bibliothèque assimp pour l&apos;import d&apos;une grande variété de formats.</para>
+</listitem><listitem><para>glTF, en utilisant la bibliothèque fastgltf pour un support du glTF 2.0 plus précis que clui fourni via assimp.</para>
 </listitem></itemizedlist>
 </para>
 </sect2>
-<sect2 id="index_1autotoc_md212">
-<title>PostEffects</title>
-<para><itemizedlist>
-<listitem><para>Bloom : HDR Bloom implementation.</para>
-</listitem><listitem><para>PbrBloom : PBR Bloom implementation.</para>
-</listitem><listitem><para>DrawEdges : Detects and renders edges, based on normal, depth, and or object ID.</para>
-</listitem><listitem><para>FilmGrain : To display some grain on the render.</para>
-</listitem><listitem><para>GrayScale.</para>
-</listitem><listitem><para>LightStreaks (using Kawase Light Streaks).</para>
-</listitem><listitem><para>FXAA Antialiasing.</para>
-</listitem><listitem><para>SMAA Antialiasing (1X and T2X so far).</para>
+<sect2 id="index_1autotoc_md125">
+<title>PostEffect</title><para><itemizedlist>
+<listitem><para>Bloom : une implémentation de HDR Bloom.</para>
+</listitem><listitem><para>PbrBloom : une implémentation de PBR Bloom.</para>
+</listitem><listitem><para>DrawEdges : Détecte et dessine les bordures, basé sur les normales, la profondeur, et/ou l&apos;ID d&apos;objet.</para>
+</listitem><listitem><para>FilmGrain : Pour afficher un grain sur le rendu.</para>
+</listitem><listitem><para>GrayScale : Conversion en niveaux de gris.</para>
+</listitem><listitem><para>LightStreaks (utilisant Kawase Light Streaks).</para>
+</listitem><listitem><para>FXAA : un antialiasing rapide de qualité basique.</para>
+</listitem><listitem><para>SMAA : un antialiasing temporel de bonne qualité.</para>
 </listitem><listitem><para>Linear Motion Blur.</para>
+</listitem><listitem><para>DepthOfField : Implémentation du depth of field décrit <ulink url="https://pixelmischiefblog.wordpress.com/2016/11/25/bokeh-depth-of-field/">ici</ulink>.</para>
 </listitem></itemizedlist>
 </para>
 </sect2>
-<sect2 id="index_1autotoc_md213">
-<title>Generators</title>
-<para><itemizedlist>
-<listitem><para>DiamondSquareTerrain : to generate terrains inside Castor3D scenes, using diamond-quare algorithm.</para>
+<sect2 id="index_1autotoc_md126">
+<title>Generators</title><para><itemizedlist>
+<listitem><para>DiamondSquareTerrain : Génération de terrains, utilisant l&apos;algorithme diamond square pour générer des reliefs.</para>
 </listitem></itemizedlist>
 </para>
 </sect2>
-<sect2 id="index_1autotoc_md214">
-<title>Generic</title>
-<para><itemizedlist>
-<listitem><para>CastorGUI: to build GUIs inside Castor3D scenes.</para>
-</listitem><listitem><para>ToonMaterial: A toon material (to be combined with DrawEdges plugin).</para>
-</listitem><listitem><para>FFTOceanRendering: Ocean rendering using FFT generated surfaces.</para>
-</listitem><listitem><para>OceanRendering: Basic ocean rendering, specifying waves attributes.</para>
-</listitem><listitem><para>WaterRendering: Plane water surfaces rendering, using normal maps.</para>
-</listitem><listitem><para>AtmosphereScattering : Sky and atmosphere rendering (using <ulink url="https://sebh.github.io/publications/egsr2020.pdf">Scalable and Production Ready Sky and Atmosphere Rendering Technique</ulink>).</para>
+<sect2 id="index_1autotoc_md127">
+<title>Generic</title><para><itemizedlist>
+<listitem><para>ToonMaterial : Un ensemble de matériaux toon, à combiner avec le plugin DrawEdges.</para>
+</listitem><listitem><para>WaterMaterial: Un matériau de rendu de l&apos;eau, basé sur l&apos;utilisation de plusieurs normal maps.</para>
+</listitem><listitem><para>FFTOceanRendering : Permet le rendu d&apos;océan en se basant sur les transformées de Fourier.</para>
+</listitem><listitem><para>WavesRendering : Rendu de surfaces planes d&apos;eau, basé sur l&apos;utilisation de normal maps.</para>
+</listitem><listitem><para>AtmosphereScattering : Implémentation de rendu de ciel et d&apos;atmosphère (Implémentation de <ulink url="https://sebh.github.io/publications/egsr2020.pdf">Scalable and Production Ready Sky and Atmosphere Rendering Technique</ulink>).</para>
 </listitem></itemizedlist>
 </para>
 </sect2>
-<sect2 id="index_1autotoc_md215">
-<title>ToneMappings</title>
-<para><itemizedlist>
-<listitem><para>Linear.</para>
-</listitem><listitem><para>HaarmPieterDuiker.</para>
-</listitem><listitem><para>HejlBurgessDawson.</para>
+<sect2 id="index_1autotoc_md128">
+<title>ToneMapping</title><para><itemizedlist>
+<listitem><para>None : Un passe plats, utilisé pour le rendu sur écran HDR.</para>
+</listitem><listitem><para>Linear : L&apos;opérateur par défaut.</para>
+</listitem><listitem><para>Haarm Pieter Duiker.</para>
+</listitem><listitem><para>Hejl Burgess Dawson (aussi appelé Filmic).</para>
 </listitem><listitem><para>Reinhard.</para>
-</listitem><listitem><para>Uncharted2.</para>
+</listitem><listitem><para>Uncharted 2.</para>
 </listitem><listitem><para>ACES.</para>
 </listitem></itemizedlist>
 </para>
 </sect2>
 </sect1>
-<sect1 id="index_1autotoc_md216">
-<title>Other applications</title>
-<para><itemizedlist>
-<listitem><para>CastorViewer: A scene viewer based on Castor3D.</para>
-</listitem><listitem><para>CastorMeshConverter: A converter from various mesh files to Castor3D mesh format.</para>
-</listitem><listitem><para>CastorMeshUpgrader: Upgrades from earlier versions of Castor3D mesh format to the latest one.</para>
-</listitem><listitem><para>ImgConverter: Allows you to convert any image file type to XPM or ICO.</para>
+<sect1 id="index_1autotoc_md129">
+<title>Autres applications</title><para><itemizedlist>
+<listitem><para>CastorViewer : Visualiseur de scènes utilisant Castor3D.</para>
+</listitem><listitem><para>CastorMeshConverter : Convertisseur de divers formats de fichier de maillaige vers le format Castor3D.</para>
+</listitem><listitem><para>CastorMeshUpgrader : Met à jour les fichiers de maillage utilisant un format Castor3D antérieur à la dernière version.</para>
+</listitem><listitem><para>HeightMapToNormalMap : Convertit une height map en normal map.</para>
+</listitem><listitem><para>ImgConverter : Projet de conversion de tout type d&apos;images vers XPM ou ICO.</para>
 </listitem></itemizedlist>
 </para>
 </sect1>
-<sect1 id="index_1autotoc_md217">
-<title>Screenshots</title>
-<para><image type="html" name="http://dragonjoker.github.io/Castor3D/img/Sponza-PBR-VCT-Small.png" alt="Sponza, VCT" inline="yes"></image>
+<sect1 id="index_1autotoc_md130">
+<title>Screenshots</title><para><image type="html" name="http://dragonjoker.github.io/Castor3D/img/Sponza-PBR-VCT-Small.png" alt="Sponza, VCT" inline="yes"></image>
  <image type="html" name="http://dragonjoker.github.io/Castor3D/img/Cerberus-PBR-Small.png" alt="Cerberus" inline="yes"></image>
  <image type="html" name="http://dragonjoker.github.io/Castor3D/img/Park-Small.png" alt="Park, Comparison" inline="yes"></image>
  <image type="html" name="http://dragonjoker.github.io/Castor3D/img/Nyra-PBR-MR-Small.png" alt="Nyra, PBR" inline="yes"></image>
@@ -116,9 +111,9 @@
  <image type="html" name="http://dragonjoker.github.io/Castor3D/img/Bistro-PBR-VCT-Small.png" alt="Bistro, PBR, VCT" inline="yes"></image>
  <image type="html" name="http://dragonjoker.github.io/Castor3D/img/FFTOcean-Terrain-Small.png" alt="FFTOcean, Terrain" inline="yes"></image>
 </para>
-<para>See <ref refid="df/d0b/a14817_1md_Z__Projets_C___Castor3D_doc_Castor3D_ChangeLog_English" kindref="member">full changelog</ref> for more details. </para>
+<para>Voir le <ref refid="da/dec/a11658_1md_Z_1_2Projets_2C_09_09_2Castor3D_2doc_2Castor3D_2ChangeLog-French" kindref="member">changelog complet</ref> pour plus de détails. </para>
 </sect1>
     </detaileddescription>
-    <location file="Z:/Projets/C++/Castor3D/doc/Castor3D/DocMainPage-English.md"/>
+    <location file="Z:/Projets/C++/Castor3D/doc/Castor3D/DocMainPage-French.md"/>
   </compounddef>
 </doxygen>

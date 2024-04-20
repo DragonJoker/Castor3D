@@ -1,0 +1,276 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/de5/a04867" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PassContext</compoundname>
+    <includes local="no">Pass.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/de5/a04867_1a7f223414cfebbbe9a872bf4565f67be1" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/de2/a03983" kindref="compound">MaterialContext</ref> *</type>
+        <definition>MaterialContext* castor3d::PassContext::material</definition>
+        <argsstring></argsstring>
+        <name>material</name>
+        <qualifiedname>castor3d::PassContext::material</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Pass.hpp" line="582" column="18" bodyfile="Castor3D/Material/Pass/Pass.hpp" bodystart="582" bodyend="582"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de5/a04867_1a5394ddd3bd878b3c08f74f322089dc2f" prot="public" static="no" mutable="no">
+        <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> *</type>
+        <definition>Pass* castor3d::PassContext::pass</definition>
+        <argsstring></argsstring>
+        <name>pass</name>
+        <qualifiedname>castor3d::PassContext::pass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Pass.hpp" line="583" column="7" bodyfile="Castor3D/Material/Pass/Pass.hpp" bodystart="583" bodyend="583"/>
+        <referencedby refid="d9/dba/a02278_1af3db52d099aaaffaa723c22e8b872f83" compoundref="d7/d80/a00614" startline="592" endline="609">castor3d::getPassComponent</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de5/a04867_1a1e407feaed6129ce8506d7ed71034768" prot="public" static="no" mutable="no">
+        <type><ref refid="db/db4/a04835" kindref="compound">PassComponent</ref> *</type>
+        <definition>PassComponent* castor3d::PassContext::passComponent</definition>
+        <argsstring></argsstring>
+        <name>passComponent</name>
+        <qualifiedname>castor3d::PassContext::passComponent</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Pass.hpp" line="584" column="16" bodyfile="Castor3D/Material/Pass/Pass.hpp" bodystart="584" bodyend="584"/>
+        <referencedby refid="d9/dba/a02278_1af3db52d099aaaffaa723c22e8b872f83" compoundref="d7/d80/a00614" startline="592" endline="609">castor3d::getPassComponent</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de5/a04867_1ac2d2743c9ecac5fc97b54760aca9a53c" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::PassContext::createPass</definition>
+        <argsstring></argsstring>
+        <name>createPass</name>
+        <qualifiedname>castor3d::PassContext::createPass</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Pass.hpp" line="585" column="6" bodyfile="Castor3D/Material/Pass/Pass.hpp" bodystart="585" bodyend="585"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de5/a04867_1a610c45f16faa02de2d20ada8bc0c644b" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::PassContext::unitIndex</definition>
+        <argsstring></argsstring>
+        <name>unitIndex</name>
+        <qualifiedname>castor3d::PassContext::unitIndex</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Pass.hpp" line="586" column="10" bodyfile="Castor3D/Material/Pass/Pass.hpp" bodystart="586" bodyend="586"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="15">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="16" relation="template-instance">
+          <edgelabel>&lt; Material &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="16" relation="template-instance">
+          <edgelabel>&lt; Pass &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor::SignalT&lt; OnPassChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+        <childnode refid="19" relation="template-instance">
+          <edgelabel>&lt; OnPassChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="6" relation="private-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MaterialContext</label>
+        <link refid="d1/de2/a03983"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>scene</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::Pass</label>
+        <link refid="df/d6c/a04863"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>onChanged</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor3d::PassComponent</label>
+        <link refid="db/db4/a04835"/>
+        <childnode refid="21" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_type</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_plugin</edgelabel>
+        </childnode>
+        <childnode refid="23" relation="usage">
+          <edgelabel>m_materialShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="d2/d2e/a04831"/>
+      </node>
+      <node id="1">
+        <label>castor3d::PassContext</label>
+        <link refid="d8/de5/a04867"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>material</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>pass</edgelabel>
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>passComponent</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::ProgressBar</label>
+        <link refid="d6/daf/a05323"/>
+      </node>
+      <node id="8">
+        <label>castor3d::RenderWindowDesc</label>
+        <link refid="de/d75/a06503"/>
+        <childnode refid="9" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RootContext</label>
+        <link refid="de/dd6/a07151"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>engine</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>window</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>logger</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>progress</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::SceneContext</label>
+        <link refid="d3/db2/a07139"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>fontName</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="d6/da6/a04827"/>
+        <childnode refid="24" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+      <node id="11">
+        <label>castor::LoggerInstance</label>
+        <link refid="d9/d93/a09063"/>
+      </node>
+      <node id="18">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="6">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="16">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="19">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="6" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Pass.hpp" line="580" column="1" bodyfile="Castor3D/Material/Pass/Pass.hpp" bodystart="581" bodyend="587"/>
+    <listofallmembers>
+      <member refid="d8/de5/a04867_1ac2d2743c9ecac5fc97b54760aca9a53c" prot="public" virt="non-virtual"><scope>castor3d::PassContext</scope><name>createPass</name></member>
+      <member refid="d8/de5/a04867_1a7f223414cfebbbe9a872bf4565f67be1" prot="public" virt="non-virtual"><scope>castor3d::PassContext</scope><name>material</name></member>
+      <member refid="d8/de5/a04867_1a5394ddd3bd878b3c08f74f322089dc2f" prot="public" virt="non-virtual"><scope>castor3d::PassContext</scope><name>pass</name></member>
+      <member refid="d8/de5/a04867_1a1e407feaed6129ce8506d7ed71034768" prot="public" virt="non-virtual"><scope>castor3d::PassContext</scope><name>passComponent</name></member>
+      <member refid="d8/de5/a04867_1a610c45f16faa02de2d20ada8bc0c644b" prot="public" virt="non-virtual"><scope>castor3d::PassContext</scope><name>unitIndex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

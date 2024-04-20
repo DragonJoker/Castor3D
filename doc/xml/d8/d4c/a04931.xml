@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/d4c/a04931" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SamplerContext</compoundname>
+    <includes local="no">Sampler.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d4c/a04931_1a82e288005abf4cf80caeb41cd79e9563" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1abe0b15c7ba5724eff47db8e94150b201" kindref="member">SamplerObs</ref></type>
+        <definition>SamplerObs castor3d::SamplerContext::sampler</definition>
+        <argsstring></argsstring>
+        <name>sampler</name>
+        <qualifiedname>castor3d::SamplerContext::sampler</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Texture/Sampler.hpp" line="284" column="12" bodyfile="Castor3D/Material/Texture/Sampler.hpp" bodystart="284" bodyend="284"/>
+        <referencedby refid="d9/dba/a02278_1a815bbd5bd368e16e3e61199a70634acf" compoundref="d3/d8e/a00647" startline="288" endline="291">castor3d::getEngine</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d4c/a04931_1acd8ed3199887152fd656de67520ac5eb" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a695fc79b150776024fe2c9adbbe42260" kindref="member">SamplerPtr</ref></type>
+        <definition>SamplerPtr castor3d::SamplerContext::ownSampler</definition>
+        <argsstring></argsstring>
+        <name>ownSampler</name>
+        <qualifiedname>castor3d::SamplerContext::ownSampler</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Texture/Sampler.hpp" line="285" column="12" bodyfile="Castor3D/Material/Texture/Sampler.hpp" bodystart="285" bodyend="285"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Material/Texture/Sampler.hpp" line="282" column="1" bodyfile="Castor3D/Material/Texture/Sampler.hpp" bodystart="283" bodyend="286"/>
+    <listofallmembers>
+      <member refid="d8/d4c/a04931_1acd8ed3199887152fd656de67520ac5eb" prot="public" virt="non-virtual"><scope>castor3d::SamplerContext</scope><name>ownSampler</name></member>
+      <member refid="d8/d4c/a04931_1a82e288005abf4cf80caeb41cd79e9563" prot="public" virt="non-virtual"><scope>castor3d::SamplerContext</scope><name>sampler</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

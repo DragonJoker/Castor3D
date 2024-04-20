@@ -1,0 +1,18 @@
+<map id="castor3d::ToneMapping" name="castor3d::ToneMapping">
+<area shape="rect" id="Node000001" title=" " alt="" coords="901,121,1059,146"/>
+<area shape="rect" id="Node000002" href="$d6/da8/a08227.html" title=" " alt="" coords="541,7,728,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="743,20,811,30,878,51,906,66,931,84,969,119,965,123,928,88,903,70,876,56,810,35,742,25"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="241,7,424,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="438,17,541,17,541,23,438,23"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="269,79,396,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="410,90,448,88,569,85,663,88,757,96,878,111,921,118,921,123,877,116,757,101,663,93,569,91,448,93,410,95"/>
+<area shape="rect" id="Node000008" href="$d8/d2a/a07403.html" title="A non compiled shader module, with its source." alt="" coords="549,121,720,146"/>
+<area shape="poly" id="edge8_Node000008_Node000004" title=" " alt="" coords="410,105,550,121,549,126,409,110"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,79,132,119"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="146,96,269,96,269,101,146,101"/>
+<area shape="rect" id="Node000006" href="$d7/d72/a07767.html" title=" " alt="" coords="555,170,714,195"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="728,170,877,151,918,143,919,149,878,156,728,176"/>
+<area shape="rect" id="Node000007" href="$da/d1e/a07759.html" title=" " alt="" coords="542,219,727,245"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="741,218,809,206,876,187,922,166,959,144,962,148,924,171,878,192,810,211,742,224"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="734,131,901,131,901,136,734,136"/>
+</map>

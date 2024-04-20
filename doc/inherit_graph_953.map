@@ -1,0 +1,53 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,825,108,851"/>
+<area shape="rect" id="Node000001" href="$db/d3b/a08671.html" title="HasBaseParameterType specialisation for ParameterType::eBitwiseOred32BitsCheckedText." alt="" coords="161,5,368,60"/>
+<area shape="poly" id="edge986_Node000000_Node000001" title=" " alt="" coords="55,812,57,661,69,440,81,325,98,219,122,131,137,96,154,70,165,58,169,62,158,73,142,99,127,133,103,220,86,326,74,440,62,661,60,812"/>
+<area shape="rect" id="Node000002" href="$d5/d37/a08675.html" title="HasBaseParameterType specialisation for ParameterType::eBitwiseOred64BitsCheckedText." alt="" coords="161,84,368,139"/>
+<area shape="poly" id="edge987_Node000000_Node000002" title=" " alt="" coords="56,811,60,675,73,477,86,375,103,281,125,203,139,172,154,148,166,137,169,141,158,152,143,175,130,205,108,282,91,376,79,478,65,675,61,812"/>
+<area shape="rect" id="Node000003" href="$d0/df5/a08667.html" title="HasBaseParameterType specialisation for ParameterType::eCheckedText." alt="" coords="157,163,373,217"/>
+<area shape="poly" id="edge988_Node000000_Node000003" title=" " alt="" coords="56,812,62,689,78,515,91,426,107,344,128,276,140,249,154,228,168,215,171,219,158,232,145,252,133,278,112,345,96,427,83,516,68,690,61,812"/>
+<area shape="rect" id="Node000004" href="$d4/d78/a08663.html" title="HasBaseParameterType specialisation for ParameterType::eName." alt="" coords="159,242,370,282"/>
+<area shape="poly" id="edge989_Node000000_Node000004" title=" " alt="" coords="57,811,64,700,81,545,93,465,110,393,130,333,154,292,168,280,171,284,158,296,134,336,115,395,99,466,86,545,69,700,62,811"/>
+<area shape="rect" id="Node000005" href="$db/d05/a08719.html" title="Structure used to tell if a ParameterType is an arithmetic type." alt="" coords="170,306,359,346"/>
+<area shape="poly" id="edge990_Node000000_Node000005" title=" " alt="" coords="57,811,66,712,85,576,98,507,113,444,132,392,154,356,169,344,172,348,158,360,137,394,118,445,103,508,90,577,72,712,63,812"/>
+<area shape="rect" id="Node000006" href="$dd/d58/a08715.html" title="Structure used to tell if a ParameterType is an arithmetic type." alt="" coords="175,370,354,410"/>
+<area shape="poly" id="edge991_Node000000_Node000006" title=" " alt="" coords="58,812,69,724,89,607,117,495,134,451,154,420,173,405,177,410,158,424,139,453,122,496,94,608,74,725,63,812"/>
+<area shape="rect" id="Node000007" href="$dc/d0c/a08687.html" title="Structure used to tell if a ParameterType is an arithmetic type." alt="" coords="176,434,353,474"/>
+<area shape="poly" id="edge992_Node000000_Node000007" title=" " alt="" coords="55,812,57,746,70,659,82,612,100,566,123,522,154,484,174,469,177,474,158,488,128,525,105,568,87,613,75,660,62,747,60,812"/>
+<area shape="rect" id="Node000008" href="$db/d9f/a08691.html" title="Structure used to tell if a ParameterType is an arithmetic type." alt="" coords="176,498,353,538"/>
+<area shape="poly" id="edge993_Node000000_Node000008" title=" " alt="" coords="57,811,63,756,78,686,91,649,107,612,128,578,154,548,174,534,177,538,158,552,133,581,112,615,96,651,83,687,68,757,62,812"/>
+<area shape="rect" id="Node000009" href="$df/dff/a08695.html" title="Structure used to tell if a ParameterType is an arithmetic type." alt="" coords="176,562,353,602"/>
+<area shape="poly" id="edge994_Node000000_Node000009" title=" " alt="" coords="59,811,69,768,87,715,115,660,133,634,154,612,174,599,177,603,158,616,137,638,119,662,92,717,74,770,65,813"/>
+<area shape="rect" id="Node000010" href="$de/d61/a08683.html" title="Structure used to tell if a ParameterType is an arithmetic type." alt="" coords="179,626,350,666"/>
+<area shape="poly" id="edge995_Node000000_Node000010" title=" " alt="" coords="65,811,97,744,123,707,154,676,178,662,180,667,158,680,127,711,102,746,69,813"/>
+<area shape="rect" id="Node000011" href="$d5/d74/a08723.html" title="Structure used to tell if a ParameterType is an arithmetic type." alt="" coords="156,690,373,730"/>
+<area shape="poly" id="edge996_Node000000_Node000011" title=" " alt="" coords="75,812,109,775,155,740,180,728,182,733,157,744,113,779,79,816"/>
+<area shape="rect" id="Node000012" href="$dd/d1a/a08703.html" title="Structure used to tell if a ParameterType is an arithmetic type." alt="" coords="171,754,358,794"/>
+<area shape="poly" id="edge997_Node000000_Node000012" title=" " alt="" coords="108,819,155,803,194,791,196,797,157,809,110,824"/>
+<area shape="rect" id="Node000013" href="$df/db3/a08707.html" title="Structure used to tell if a ParameterType is an arithmetic type." alt="" coords="171,818,358,858"/>
+<area shape="poly" id="edge998_Node000000_Node000013" title=" " alt="" coords="122,835,171,835,171,841,122,841"/>
+<area shape="rect" id="Node000014" href="$d6/db8/a08711.html" title="Structure used to tell if a ParameterType is an arithmetic type." alt="" coords="171,882,358,922"/>
+<area shape="poly" id="edge999_Node000000_Node000014" title=" " alt="" coords="110,852,157,867,196,879,194,885,155,873,108,857"/>
+<area shape="rect" id="Node000015" href="$de/db0/a08699.html" title="Structure used to tell if a ParameterType is an arithmetic type." alt="" coords="175,946,354,986"/>
+<area shape="poly" id="edge1000_Node000000_Node000015" title=" " alt="" coords="79,860,113,897,157,932,182,943,180,948,155,936,109,901,75,864"/>
+<area shape="rect" id="Node000016" href="$dd/d21/a08163.html" title=" " alt="" coords="171,1011,358,1065"/>
+<area shape="poly" id="edge1001_Node000000_Node000016" title=" " alt="" coords="70,862,103,929,127,965,158,996,176,1008,173,1013,154,1000,123,968,98,931,65,865"/>
+<area shape="rect" id="Node000017" href="$d2/dbd/a08307.html" title=" " alt="" coords="177,1089,352,1144"/>
+<area shape="poly" id="edge1002_Node000000_Node000017" title=" " alt="" coords="64,864,74,909,91,966,119,1024,137,1051,158,1075,178,1090,175,1094,154,1079,133,1054,114,1027,86,968,69,911,59,865"/>
+<area shape="rect" id="Node000018" href="$d3/d5b/a08827.html" title="Helper struct to tell if a pixel format represents a colour." alt="" coords="187,1169,342,1209"/>
+<area shape="poly" id="edge1003_Node000000_Node000018" title=" " alt="" coords="61,864,66,924,80,1001,92,1042,109,1083,131,1120,158,1153,189,1173,186,1177,154,1157,126,1123,104,1085,87,1044,75,1003,60,924,56,865"/>
+<area shape="rect" id="Node000019" href="$db/d42/a08311.html" title=" " alt="" coords="164,1233,365,1288"/>
+<area shape="poly" id="edge1004_Node000000_Node000019" title=" " alt="" coords="60,865,61,934,73,1028,85,1079,103,1129,127,1177,158,1219,172,1231,169,1235,154,1222,122,1179,98,1131,80,1081,68,1029,56,934,54,865"/>
+<area shape="rect" id="Node000020" href="$d0/d3b/a09271.html" title=" " alt="" coords="193,1313,336,1353"/>
+<area shape="poly" id="edge1005_Node000000_Node000020" title=" " alt="" coords="63,864,73,960,91,1090,104,1156,120,1216,138,1264,158,1298,174,1311,194,1320,192,1325,172,1315,154,1301,133,1267,115,1217,99,1157,86,1091,67,961,58,865"/>
+<area shape="rect" id="Node000021" href="$db/d7d/a09311.html" title=" " alt="" coords="185,1377,345,1417"/>
+<area shape="poly" id="edge1006_Node000000_Node000021" title=" " alt="" coords="62,864,70,972,87,1122,100,1198,116,1268,135,1324,158,1363,171,1374,186,1382,183,1387,168,1378,154,1366,130,1327,111,1269,94,1199,82,1123,65,973,57,865"/>
+<area shape="rect" id="Node000022" href="$df/d59/a09351.html" title=" " alt="" coords="171,1441,358,1481"/>
+<area shape="poly" id="edge1007_Node000000_Node000022" title=" " alt="" coords="61,864,67,984,83,1153,96,1239,112,1318,133,1383,145,1408,158,1427,173,1439,169,1443,154,1430,140,1411,128,1385,107,1319,90,1240,78,1153,62,984,56,865"/>
+<area shape="rect" id="Node000023" href="$d9/d15/a09347.html" title=" " alt="" coords="175,1505,354,1545"/>
+<area shape="poly" id="edge1008_Node000000_Node000023" title=" " alt="" coords="61,864,65,995,79,1183,91,1280,108,1369,130,1442,143,1470,158,1491,177,1506,173,1510,154,1494,139,1472,125,1443,103,1370,86,1281,74,1184,60,996,56,864"/>
+<area shape="rect" id="Node000024" href="$d8/d27/a09355.html" title=" " alt="" coords="172,1569,357,1609"/>
+<area shape="poly" id="edge1009_Node000000_Node000024" title=" " alt="" coords="61,865,63,1007,75,1214,87,1321,105,1419,128,1500,142,1531,158,1555,174,1568,170,1572,154,1558,137,1534,123,1502,99,1421,82,1322,70,1215,58,1007,55,865"/>
+<area shape="rect" id="Node000025" href="$df/dd1/a09343.html" title=" " alt="" coords="177,1633,353,1673"/>
+<area shape="poly" id="edge1010_Node000000_Node000025" title=" " alt="" coords="60,865,61,1018,72,1245,83,1362,101,1470,126,1559,141,1593,158,1619,178,1635,175,1639,154,1622,136,1595,121,1560,96,1471,78,1363,66,1245,56,1018,55,865"/>
+</map>

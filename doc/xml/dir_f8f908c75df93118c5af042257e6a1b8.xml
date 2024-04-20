@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dir_f8f908c75df93118c5af042257e6a1b8" kind="dir">
+    <compoundname>CastorUtils/FileParser</compoundname>
+    <innerfile refid="d4/dec/a01952">AttributeParsersBySection.hpp</innerfile>
+    <innerfile refid="d4/d93/a01955">FileParser.hpp</innerfile>
+    <innerfile refid="d3/d67/a01958">FileParserContext.hpp</innerfile>
+    <innerfile refid="d2/d23/a01961">FileParserModule.hpp</innerfile>
+    <innerfile refid="d6/d90/a01964">ParserParameter.hpp</innerfile>
+    <innerfile refid="de/d46/a01967">ParserParameterBase.hpp</innerfile>
+    <innerfile refid="d5/dd7/a01970">ParserParameterHelpers.hpp</innerfile>
+    <innerfile refid="d3/d59/a01973">ParserParameterTypeException.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/FileParser/"/>
+  </compounddef>
+</doxygen>

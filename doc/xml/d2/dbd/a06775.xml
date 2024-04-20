@@ -1,0 +1,398 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/dbd/a06775" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::VertexTransforming::PendingNode</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/dbd/a06775_1aba6559f762fbe3fd586056256127682f" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/d17/a06123" kindref="compound">SubmeshRenderNode</ref> const  *</type>
+        <definition>SubmeshRenderNode const* castor3d::VertexTransforming::PendingNode::node</definition>
+        <argsstring></argsstring>
+        <name>node</name>
+        <qualifiedname>castor3d::VertexTransforming::PendingNode::node</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/VertexTransforming.hpp" line="53" column="26" bodyfile="Castor3D/Render/Transform/VertexTransforming.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dbd/a06775_1aab76fe7cfd0322bf439f9f71ae9286d5" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/d76/a03451" kindref="compound">GpuBufferOffsetT</ref>&lt; castor::Point4f &gt; const  *</type>
+        <definition>GpuBufferOffsetT&lt; castor::Point4f &gt; const* castor3d::VertexTransforming::PendingNode::morphTargets</definition>
+        <argsstring></argsstring>
+        <name>morphTargets</name>
+        <qualifiedname>castor3d::VertexTransforming::PendingNode::morphTargets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/VertexTransforming.hpp" line="54" column="25" bodyfile="Castor3D/Render/Transform/VertexTransforming.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dbd/a06775_1ad5d00a3302e5b6444d8d5c7731f25926" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/d76/a03451" kindref="compound">GpuBufferOffsetT</ref>&lt; <ref refid="d9/db3/a07895" kindref="compound">MorphingWeightsConfiguration</ref> &gt; const  *</type>
+        <definition>GpuBufferOffsetT&lt; MorphingWeightsConfiguration &gt; const* castor3d::VertexTransforming::PendingNode::morphingWeights</definition>
+        <argsstring></argsstring>
+        <name>morphingWeights</name>
+        <qualifiedname>castor3d::VertexTransforming::PendingNode::morphingWeights</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/VertexTransforming.hpp" line="55" column="25" bodyfile="Castor3D/Render/Transform/VertexTransforming.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dbd/a06775_1af53e8d567088fb8f79f5b2096ef3941c" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/d76/a03451" kindref="compound">GpuBufferOffsetT</ref>&lt; <ref refid="dc/de6/a07919" kindref="compound">SkinningTransformsConfiguration</ref> &gt; const  *</type>
+        <definition>GpuBufferOffsetT&lt; SkinningTransformsConfiguration &gt; const* castor3d::VertexTransforming::PendingNode::skinTransforms</definition>
+        <argsstring></argsstring>
+        <name>skinTransforms</name>
+        <qualifiedname>castor3d::VertexTransforming::PendingNode::skinTransforms</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/VertexTransforming.hpp" line="56" column="25" bodyfile="Castor3D/Render/Transform/VertexTransforming.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/dbd/a06775_1a39edb947f24297fb66c2ae2914f07e71" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::VertexTransforming::PendingNode::PendingNode</definition>
+        <argsstring>(SubmeshRenderNode const *node, GpuBufferOffsetT&lt; castor::Point4f &gt; const *morphTargets, GpuBufferOffsetT&lt; MorphingWeightsConfiguration &gt; const *morphingWeights, GpuBufferOffsetT&lt; SkinningTransformsConfiguration &gt; const *skinTransforms)</argsstring>
+        <name>PendingNode</name>
+        <qualifiedname>castor3d::VertexTransforming::PendingNode::PendingNode</qualifiedname>
+        <param>
+          <type><ref refid="d4/d17/a06123" kindref="compound">SubmeshRenderNode</ref> const *</type>
+          <declname>node</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d76/a03451" kindref="compound">GpuBufferOffsetT</ref>&lt; castor::Point4f &gt; const *</type>
+          <declname>morphTargets</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d76/a03451" kindref="compound">GpuBufferOffsetT</ref>&lt; <ref refid="d9/db3/a07895" kindref="compound">MorphingWeightsConfiguration</ref> &gt; const *</type>
+          <declname>morphingWeights</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d76/a03451" kindref="compound">GpuBufferOffsetT</ref>&lt; <ref refid="dc/de6/a07919" kindref="compound">SkinningTransformsConfiguration</ref> &gt; const *</type>
+          <declname>skinTransforms</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transform/VertexTransforming.hpp" line="43" column="1" bodyfile="Castor3D/Render/Transform/VertexTransforming.hpp" bodystart="43" bodyend="52"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="16">
+        <label>Animable</label>
+        <link refid="d2/d7a/a03115"/>
+        <childnode refid="17" relation="public-inheritance">
+        </childnode>
+        <childnode refid="18" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="33">
+        <label>castor3d::GpuBufferOffsetT&lt; castor3d::MorphingWeightsConfiguration &gt;</label>
+        <link refid="d7/d76/a03451"/>
+        <childnode refid="30" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="31" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+        <childnode refid="32" relation="template-instance">
+          <edgelabel>&lt; castor3d::MorphingWeightsConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="34">
+        <label>castor3d::GpuBufferOffsetT&lt; castor3d::SkinningTransformsConfiguration &gt;</label>
+        <link refid="d7/d76/a03451"/>
+        <childnode refid="30" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="31" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+        <childnode refid="32" relation="template-instance">
+          <edgelabel>&lt; castor3d::SkinningTransformsConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor3d::GpuBufferOffsetT&lt; castor::Point4f &gt;</label>
+        <link refid="d7/d76/a03451"/>
+        <childnode refid="30" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="31" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+        <childnode refid="32" relation="template-instance">
+          <edgelabel>&lt; castor::Point4f &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; AnimableHandlerT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Material &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor::OwnedBy&lt; Mesh &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Mesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Scene &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::SignalT&lt; OnPassChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; OnPassChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor::SignalT&lt; OnSceneNodeReparentFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; OnSceneNodeReparentFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d2/d7a/a03115"/>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor3d::AnimatedMesh</label>
+        <link refid="db/ddc/a06807"/>
+        <childnode refid="25" relation="public-inheritance">
+        </childnode>
+        <childnode refid="26" relation="usage">
+          <edgelabel>m_mesh</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_geometry</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor3d::AnimatedObject</label>
+        <link refid="d4/def/a06811"/>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor3d::AnimatedSkeleton</label>
+        <link refid="df/d73/a06831"/>
+        <childnode refid="25" relation="public-inheritance">
+        </childnode>
+        <childnode refid="28" relation="usage">
+          <edgelabel>m_skeleton</edgelabel>
+        </childnode>
+        <childnode refid="26" relation="usage">
+          <edgelabel>m_mesh</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_geometry</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::Geometry</label>
+        <link refid="d8/d46/a06971"/>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+        <childnode refid="22" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>castor3d::GpuBufferBase</label>
+        <link refid="dc/d5c/a03483"/>
+      </node>
+      <node id="32">
+        <label>castor3d::GpuBufferOffsetT&lt; DataT &gt;</label>
+        <link refid="d7/d76/a03451"/>
+        <childnode refid="30" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="31" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+      </node>
+      <node id="31">
+        <label>castor3d::MemChunk</label>
+        <link refid="db/db8/a03471"/>
+      </node>
+      <node id="26">
+        <label>castor3d::Mesh</label>
+        <link refid="d2/dc7/a05391"/>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor3d::ModelBufferConfiguration</label>
+        <link refid="da/dee/a07891"/>
+      </node>
+      <node id="12">
+        <label>castor3d::MovableObject</label>
+        <link refid="da/d09/a07047"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_notifyIndex</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::Pass</label>
+        <link refid="df/d6c/a04863"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>onChanged</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor3d::RenderedObject</label>
+        <link refid="df/d83/a07127"/>
+      </node>
+      <node id="15">
+        <label>castor3d::SceneNode</label>
+        <link refid="d4/dc4/a07255"/>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>onParentChanged</edgelabel>
+        </childnode>
+      </node>
+      <node id="28">
+        <label>castor3d::Skeleton</label>
+        <link refid="d6/d3e/a05683"/>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::Submesh</label>
+        <link refid="dd/df1/a05635"/>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SubmeshRenderNode</label>
+        <link refid="d4/d17/a06123"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>pass</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>data</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>instance</edgelabel>
+        </childnode>
+        <childnode refid="23" relation="usage">
+          <edgelabel>modelData</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>mesh</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="usage">
+          <edgelabel>skeleton</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::VertexTransforming::PendingNode</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>node</edgelabel>
+        </childnode>
+        <childnode refid="29" relation="usage">
+          <edgelabel>morphTargets</edgelabel>
+        </childnode>
+        <childnode refid="33" relation="usage">
+          <edgelabel>morphingWeights</edgelabel>
+        </childnode>
+        <childnode refid="34" relation="usage">
+          <edgelabel>skinTransforms</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor::ConnectionT&lt; MySignalT &gt;</label>
+        <link refid="d4/ddb/a08183"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="7">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="17">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="8">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/Transform/VertexTransforming.hpp" line="41" column="1" bodyfile="Castor3D/Render/Transform/VertexTransforming.hpp" bodystart="42" bodyend="57"/>
+    <listofallmembers>
+      <member refid="d2/dbd/a06775_1ad5d00a3302e5b6444d8d5c7731f25926" prot="public" virt="non-virtual"><scope>castor3d::VertexTransforming::PendingNode</scope><name>morphingWeights</name></member>
+      <member refid="d2/dbd/a06775_1aab76fe7cfd0322bf439f9f71ae9286d5" prot="public" virt="non-virtual"><scope>castor3d::VertexTransforming::PendingNode</scope><name>morphTargets</name></member>
+      <member refid="d2/dbd/a06775_1aba6559f762fbe3fd586056256127682f" prot="public" virt="non-virtual"><scope>castor3d::VertexTransforming::PendingNode</scope><name>node</name></member>
+      <member refid="d2/dbd/a06775_1a39edb947f24297fb66c2ae2914f07e71" prot="public" virt="non-virtual"><scope>castor3d::VertexTransforming::PendingNode</scope><name>PendingNode</name></member>
+      <member refid="d2/dbd/a06775_1af53e8d567088fb8f79f5b2096ef3941c" prot="public" virt="non-virtual"><scope>castor3d::VertexTransforming::PendingNode</scope><name>skinTransforms</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

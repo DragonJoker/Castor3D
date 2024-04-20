@@ -1,0 +1,1371 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d5b/a06803" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Viewport</compoundname>
+    <includes local="no">Viewport.hpp</includes>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="db/d5b/a06803_1aa8c3469b25134d59da553080f955e10d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Matrix4x4f</type>
+        <definition>C3D_API castor::Matrix4x4f castor3d::Viewport::getRescaledProjection</definition>
+        <argsstring>(float scale) const</argsstring>
+        <name>getRescaledProjection</name>
+        <qualifiedname>castor3d::Viewport::getRescaledProjection</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>scale</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Accesseurs. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="166" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a5a31f54ea87509d12df547a555b3c257" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Matrix4x4f</type>
+        <definition>C3D_API castor::Matrix4x4f castor3d::Viewport::getRescaledSafeBandedProjection</definition>
+        <argsstring>(float scale) const</argsstring>
+        <name>getRescaledSafeBandedProjection</name>
+        <qualifiedname>castor3d::Viewport::getRescaledSafeBandedProjection</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>scale</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="167" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1ac055dfe84a8ca8a36e9b163ea4f730f9" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dd6/a09023" kindref="compound">castor::Size</ref> const &amp;</type>
+        <definition>castor::Size const  &amp; castor3d::Viewport::getSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getSize</name>
+        <qualifiedname>castor3d::Viewport::getSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="169" column="21" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="169" bodyend="172"/>
+        <referencedby refid="d2/dc3/a06951_1adc5d4295e939f5d05b3b10594a326686" compoundref="d3/dbc/a01451" startline="144" endline="147">castor3d::Camera::getSize</referencedby>
+        <referencedby refid="d2/dc3/a06951_1a38dae7d74ec72af0fa347c0eefb8872b" compoundref="d3/dbc/a01451" startline="250" endline="257">castor3d::Camera::resize</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1aa777cce3063ba3c299d776d6bce6a1e3" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="df/dba/a08999" kindref="compound">castor::Position</ref> const &amp;</type>
+        <definition>castor::Position const  &amp; castor3d::Viewport::getPosition</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getPosition</name>
+        <qualifiedname>castor3d::Viewport::getPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="174" column="25" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="174" bodyend="177"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a9a1dfbac35074095a584d7094fc35288" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1a4141612e14f3113f10b3872630c29b3d" kindref="member">ViewportType</ref></type>
+        <definition>ViewportType castor3d::Viewport::getType</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getType</name>
+        <qualifiedname>castor3d::Viewport::getType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="179" column="14" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="179" bodyend="182"/>
+        <referencedby refid="d2/dc3/a06951_1aae63db3ab522039fe77511b7978f6960" compoundref="d3/dbc/a01451" startline="139" endline="142">castor3d::Camera::getViewportType</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a741f98f78fc374c2ce72d9dbf83b0821" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::Viewport::getRatio</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getRatio</name>
+        <qualifiedname>castor3d::Viewport::getRatio</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="184" column="7" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="184" bodyend="187"/>
+        <referencedby refid="d2/dc3/a06951_1a198f38c9471f61b49d93b6ee20964e55" compoundref="d3/dbc/a01451" startline="169" endline="172">castor3d::Camera::getRatio</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a09ceb5787b4e55deb773d8d168e270a2" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::Viewport::getNear</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getNear</name>
+        <qualifiedname>castor3d::Viewport::getNear</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="189" column="7" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="189" bodyend="192"/>
+        <referencedby refid="d2/dc3/a06951_1acc1ad416e4f51169cd16661c049801f2" compoundref="d3/dbc/a01451" startline="159" endline="162">castor3d::Camera::getNear</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a0dc699fcb4f1cf6393e6fb24127c29b6" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::Viewport::getFar</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getFar</name>
+        <qualifiedname>castor3d::Viewport::getFar</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="194" column="7" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="194" bodyend="197"/>
+        <referencedby refid="d2/dc3/a06951_1a348da0fb22ffb751d5741d897c33da27" compoundref="d3/dbc/a01451" startline="164" endline="167">castor3d::Camera::getFar</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a740f33d5f9d620c509fcbba3807faaf8" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">castor::Angle</ref> const &amp;</type>
+        <definition>castor::Angle const  &amp; castor3d::Viewport::getFovY</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getFovY</name>
+        <qualifiedname>castor3d::Viewport::getFovY</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="199" column="22" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="199" bodyend="202"/>
+        <referencedby refid="d2/dc3/a06951_1af35919dd822add0906c03904cc2506ec" compoundref="d3/dbc/a01451" startline="174" endline="177">castor3d::Camera::getFovY</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a46a92130036c789fcb106ec400ba0a7d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::Viewport::getLeft</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getLeft</name>
+        <qualifiedname>castor3d::Viewport::getLeft</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="204" column="7" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="204" bodyend="207"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a94d50b22a61e4e6dee2b2a0988c8b7a8" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::Viewport::getRight</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getRight</name>
+        <qualifiedname>castor3d::Viewport::getRight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="209" column="7" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="209" bodyend="212"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1acdfb567d49171e58ae3a7ffd2a9efc1e" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::Viewport::getTop</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getTop</name>
+        <qualifiedname>castor3d::Viewport::getTop</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="214" column="7" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="214" bodyend="217"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1ad11b395c58d57df4d8d6891de488d1ad" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::Viewport::getBottom</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getBottom</name>
+        <qualifiedname>castor3d::Viewport::getBottom</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="219" column="7" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="219" bodyend="222"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1ab151e7057d4e896ef7cf39b8a2876607" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Viewport::getWidth</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getWidth</name>
+        <qualifiedname>castor3d::Viewport::getWidth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="224" column="10" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="224" bodyend="227"/>
+        <referencedby refid="d2/dc3/a06951_1a88448f9caa3d89b98746bc56c9accb12" compoundref="d3/dbc/a01451" startline="149" endline="152">castor3d::Camera::getWidth</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1aa5a3f606ff89db391d1122f0d09b1613" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Viewport::getHeight</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getHeight</name>
+        <qualifiedname>castor3d::Viewport::getHeight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="229" column="10" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="229" bodyend="232"/>
+        <referencedby refid="d2/dc3/a06951_1a373035b448a6bef453a5a4232cfdfa14" compoundref="d3/dbc/a01451" startline="154" endline="157">castor3d::Camera::getHeight</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1af6ea1fa5377b7ae48ca6db7f9ca330ed" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Viewport::isModified</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isModified</name>
+        <qualifiedname>castor3d::Viewport::isModified</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="234" column="6" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="234" bodyend="237"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a5c6b5a0d859972086d3ee7463388f940" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>castor::Matrix4x4f const &amp;</type>
+        <definition>castor::Matrix4x4f const  &amp; castor3d::Viewport::getProjection</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getProjection</name>
+        <qualifiedname>castor3d::Viewport::getProjection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="239" column="27" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="239" bodyend="242"/>
+        <referencedby refid="d2/dc3/a06951_1a45a52185945081d1018bc43f33ccf1db" compoundref="d3/dbc/a01451" startline="130" endline="137">castor3d::Camera::getProjection</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a164bb216e83e345a63b5fddb2c2c64aa" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>castor::Matrix4x4f const &amp;</type>
+        <definition>castor::Matrix4x4f const  &amp; castor3d::Viewport::getSafeBandedProjection</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getSafeBandedProjection</name>
+        <qualifiedname>castor3d::Viewport::getSafeBandedProjection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="244" column="27" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="244" bodyend="247"/>
+        <referencedby refid="d2/dc3/a06951_1a45a52185945081d1018bc43f33ccf1db" compoundref="d3/dbc/a01451" startline="130" endline="137">castor3d::Camera::getProjection</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a0e3dcbf267b6692ada50dc2279e9f0a8" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>VkViewport const &amp;</type>
+        <definition>VkViewport const  &amp; castor3d::Viewport::getViewport</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getViewport</name>
+        <qualifiedname>castor3d::Viewport::getViewport</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="249" column="19" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="249" bodyend="252"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a630d6d97583eb3ce0e8699167a33c708" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>VkRect2D const &amp;</type>
+        <definition>VkRect2D const  &amp; castor3d::Viewport::getScissor</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getScissor</name>
+        <qualifiedname>castor3d::Viewport::getScissor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="254" column="17" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="254" bodyend="257"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a58452200d471327b5a9383859d5ebc19" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> const &amp;</type>
+        <definition>Engine const  &amp; castor3d::Viewport::getEngine</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getEngine</name>
+        <qualifiedname>castor3d::Viewport::getEngine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="259" column="15" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="259" bodyend="262"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="db/d5b/a06803_1aad5c06099e652e703f6f06a9bef2c997" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Viewport::setPosition</definition>
+        <argsstring>(castor::Position const &amp;value) noexcept</argsstring>
+        <name>setPosition</name>
+        <qualifiedname>castor3d::Viewport::setPosition</qualifiedname>
+        <param>
+          <type><ref refid="df/dba/a08999" kindref="compound">castor::Position</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Mutateurs. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="273" column="6" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="273" bodyend="276"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a6026443211d53a493fc8924e205f4267" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Viewport::updateType</definition>
+        <argsstring>(ViewportType value) noexcept</argsstring>
+        <name>updateType</name>
+        <qualifiedname>castor3d::Viewport::updateType</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4141612e14f3113f10b3872630c29b3d" kindref="member">ViewportType</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="278" column="6" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="278" bodyend="281"/>
+        <referencedby refid="d2/dc3/a06951_1abfa6db9cee09d6cc4f1ca671b5968d5d" compoundref="d3/dbc/a01451" startline="259" endline="263">castor3d::Camera::setViewportType</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1ad763e3d2330488d9d84ed5b8d2bf4d74" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Viewport::updateRatio</definition>
+        <argsstring>(float value) noexcept</argsstring>
+        <name>updateRatio</name>
+        <qualifiedname>castor3d::Viewport::updateRatio</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="283" column="6" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="283" bodyend="286"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a34273c72be1e93683215c3f622409c5a" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Viewport::updateNear</definition>
+        <argsstring>(float value) noexcept</argsstring>
+        <name>updateNear</name>
+        <qualifiedname>castor3d::Viewport::updateNear</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="288" column="6" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="288" bodyend="291"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1af0b0c37061abd7032a4ae2815951b689" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Viewport::updateFar</definition>
+        <argsstring>(float value) noexcept</argsstring>
+        <name>updateFar</name>
+        <qualifiedname>castor3d::Viewport::updateFar</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="293" column="6" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="293" bodyend="296"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1aa09751497793b2794224b44219df72c5" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Viewport::updateFovY</definition>
+        <argsstring>(castor::Angle const &amp;value) noexcept</argsstring>
+        <name>updateFovY</name>
+        <qualifiedname>castor3d::Viewport::updateFovY</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">castor::Angle</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="298" column="6" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="298" bodyend="301"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a75ab9d5a7e510e82ab24e7d3b01787cb" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Viewport::updateLeft</definition>
+        <argsstring>(float value) noexcept</argsstring>
+        <name>updateLeft</name>
+        <qualifiedname>castor3d::Viewport::updateLeft</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="303" column="6" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="303" bodyend="306"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a1442df6cb265210c10bc1fc87f431ab9" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Viewport::updateRight</definition>
+        <argsstring>(float value) noexcept</argsstring>
+        <name>updateRight</name>
+        <qualifiedname>castor3d::Viewport::updateRight</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="308" column="6" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="308" bodyend="311"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a821a424d9304d965f69c81e98da2ffde" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Viewport::updateTop</definition>
+        <argsstring>(float value) noexcept</argsstring>
+        <name>updateTop</name>
+        <qualifiedname>castor3d::Viewport::updateTop</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="313" column="6" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="313" bodyend="316"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a6013dc1a8b6419481c88022818e27773" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Viewport::updateBottom</definition>
+        <argsstring>(float value) noexcept</argsstring>
+        <name>updateBottom</name>
+        <qualifiedname>castor3d::Viewport::updateBottom</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="318" column="6" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="318" bodyend="321"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="db/d5b/a06803_1a85848466024212875e1a6fd063063fcb" prot="public" static="yes" mutable="no">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> const <ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref>, size_t(<ref refid="d9/dba/a02278_1a4141612e14f3113f10b3872630c29b3dae558bb69fadec037d9eae46601a4df8e" kindref="member">ViewportType::eCount</ref>) &gt;</type>
+        <definition>C3D_API const castor::Array&lt; castor::String, size_t( ViewportType::eCount ) &gt; castor3d::Viewport::TypeName</definition>
+        <argsstring></argsstring>
+        <name>TypeName</name>
+        <qualifiedname>castor3d::Viewport::TypeName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="22" column="36" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/d5b/a06803_1a43dafcf059d689f658913691f4208782" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> const  &amp;</type>
+        <definition>Engine const&amp; castor3d::Viewport::m_engine</definition>
+        <argsstring></argsstring>
+        <name>m_engine</name>
+        <qualifiedname>castor3d::Viewport::m_engine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="325" column="15" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="325" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5b/a06803_1a93c0b6bdcc8b04bfcca9b795c5dfdcd5" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::Viewport::m_modified</definition>
+        <argsstring></argsstring>
+        <name>m_modified</name>
+        <qualifiedname>castor3d::Viewport::m_modified</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="326" column="6" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="326" bodyend="326"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5b/a06803_1a2fce4c757879820b44e2ede24fbd125d" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a04236f6601235ad5003d429f544c5e0e" kindref="member">castor::GroupChangeTracked</ref>&lt; float &gt;</type>
+        <definition>castor::GroupChangeTracked&lt; float &gt; castor3d::Viewport::m_left</definition>
+        <argsstring></argsstring>
+        <name>m_left</name>
+        <qualifiedname>castor3d::Viewport::m_left</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="327" column="28" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="327" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5b/a06803_1af19704c9da380e25aa171a5a2a6235ba" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a04236f6601235ad5003d429f544c5e0e" kindref="member">castor::GroupChangeTracked</ref>&lt; float &gt;</type>
+        <definition>castor::GroupChangeTracked&lt; float &gt; castor3d::Viewport::m_right</definition>
+        <argsstring></argsstring>
+        <name>m_right</name>
+        <qualifiedname>castor3d::Viewport::m_right</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="328" column="28" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="328" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5b/a06803_1a16160b0c3f455fd9caf3736648d69c49" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a04236f6601235ad5003d429f544c5e0e" kindref="member">castor::GroupChangeTracked</ref>&lt; float &gt;</type>
+        <definition>castor::GroupChangeTracked&lt; float &gt; castor3d::Viewport::m_top</definition>
+        <argsstring></argsstring>
+        <name>m_top</name>
+        <qualifiedname>castor3d::Viewport::m_top</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="329" column="28" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="329" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5b/a06803_1af237f044e64798d99c796af6f691ca2d" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a04236f6601235ad5003d429f544c5e0e" kindref="member">castor::GroupChangeTracked</ref>&lt; float &gt;</type>
+        <definition>castor::GroupChangeTracked&lt; float &gt; castor3d::Viewport::m_bottom</definition>
+        <argsstring></argsstring>
+        <name>m_bottom</name>
+        <qualifiedname>castor3d::Viewport::m_bottom</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="330" column="28" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="330" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5b/a06803_1ade5e5749b33a3eb1a0d7cc4fbfe2b7d1" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a04236f6601235ad5003d429f544c5e0e" kindref="member">castor::GroupChangeTracked</ref>&lt; float &gt;</type>
+        <definition>castor::GroupChangeTracked&lt; float &gt; castor3d::Viewport::m_far</definition>
+        <argsstring></argsstring>
+        <name>m_far</name>
+        <qualifiedname>castor3d::Viewport::m_far</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="331" column="28" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="331" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5b/a06803_1ad7f88043ad999792b7b54f1b332bf4c7" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a04236f6601235ad5003d429f544c5e0e" kindref="member">castor::GroupChangeTracked</ref>&lt; float &gt;</type>
+        <definition>castor::GroupChangeTracked&lt; float &gt; castor3d::Viewport::m_near</definition>
+        <argsstring></argsstring>
+        <name>m_near</name>
+        <qualifiedname>castor3d::Viewport::m_near</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="332" column="28" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="332" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5b/a06803_1a65c0a1858300c0cf2f3c7c74715bad8d" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a04236f6601235ad5003d429f544c5e0e" kindref="member">castor::GroupChangeTracked</ref>&lt; <ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">castor::Angle</ref> &gt;</type>
+        <definition>castor::GroupChangeTracked&lt; castor::Angle &gt; castor3d::Viewport::m_fovY</definition>
+        <argsstring></argsstring>
+        <name>m_fovY</name>
+        <qualifiedname>castor3d::Viewport::m_fovY</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="333" column="28" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="333" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5b/a06803_1a09dc12a371d06b9c545fc92a53ffac88" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a04236f6601235ad5003d429f544c5e0e" kindref="member">castor::GroupChangeTracked</ref>&lt; float &gt;</type>
+        <definition>castor::GroupChangeTracked&lt; float &gt; castor3d::Viewport::m_ratio</definition>
+        <argsstring></argsstring>
+        <name>m_ratio</name>
+        <qualifiedname>castor3d::Viewport::m_ratio</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="334" column="28" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="334" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5b/a06803_1ae5523bacf5e35a98ac35769f56efe8e9" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a04236f6601235ad5003d429f544c5e0e" kindref="member">castor::GroupChangeTracked</ref>&lt; <ref refid="d9/dba/a02278_1a4141612e14f3113f10b3872630c29b3d" kindref="member">ViewportType</ref> &gt;</type>
+        <definition>castor::GroupChangeTracked&lt; ViewportType &gt; castor3d::Viewport::m_type</definition>
+        <argsstring></argsstring>
+        <name>m_type</name>
+        <qualifiedname>castor3d::Viewport::m_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="335" column="28" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="335" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5b/a06803_1a336696e8108cf997c8917cb436e01fbc" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a04236f6601235ad5003d429f544c5e0e" kindref="member">castor::GroupChangeTracked</ref>&lt; <ref refid="d4/dd6/a09023" kindref="compound">castor::Size</ref> &gt;</type>
+        <definition>castor::GroupChangeTracked&lt; castor::Size &gt; castor3d::Viewport::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>castor3d::Viewport::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="336" column="28" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="336" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5b/a06803_1a9977bfa65d74ecd69c762fbf77ff3051" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a04236f6601235ad5003d429f544c5e0e" kindref="member">castor::GroupChangeTracked</ref>&lt; <ref refid="df/dba/a08999" kindref="compound">castor::Position</ref> &gt;</type>
+        <definition>castor::GroupChangeTracked&lt; castor::Position &gt; castor3d::Viewport::m_position</definition>
+        <argsstring></argsstring>
+        <name>m_position</name>
+        <qualifiedname>castor3d::Viewport::m_position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="337" column="28" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="337" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5b/a06803_1a3c7528eef5c708174c2793ceb644e623" prot="private" static="no" mutable="no">
+        <type>VkViewport</type>
+        <definition>VkViewport castor3d::Viewport::m_viewport</definition>
+        <argsstring></argsstring>
+        <name>m_viewport</name>
+        <qualifiedname>castor3d::Viewport::m_viewport</qualifiedname>
+        <initializer>{ 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="338" column="12" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="338" bodyend="338"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5b/a06803_1a19e1c57b2ab9e25f1079e59adf5f6a0d" prot="private" static="no" mutable="no">
+        <type>VkRect2D</type>
+        <definition>VkRect2D castor3d::Viewport::m_scissor</definition>
+        <argsstring></argsstring>
+        <name>m_scissor</name>
+        <qualifiedname>castor3d::Viewport::m_scissor</qualifiedname>
+        <initializer>{ { 0, 0 }, { 1u, 1u } }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="339" column="10" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="339" bodyend="339"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5b/a06803_1addb995e1dec2fd26121040bfc5cba404" prot="private" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::Viewport::m_projection</definition>
+        <argsstring></argsstring>
+        <name>m_projection</name>
+        <qualifiedname>castor3d::Viewport::m_projection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="340" column="20" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="340" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5b/a06803_1ac73f13476455378635cf2da1e5520c10" prot="private" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::Viewport::m_safeBandedProjection</definition>
+        <argsstring></argsstring>
+        <name>m_safeBandedProjection</name>
+        <qualifiedname>castor3d::Viewport::m_safeBandedProjection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="341" column="20" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="341" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="db/d5b/a06803_1adb16ab209cc8860cff6987bb0962bd8e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Viewport::Viewport</definition>
+        <argsstring>(Engine const &amp;engine, ViewportType type, castor::Angle const &amp;fovy, float aspect, float left, float right, float bottom, float top, float nearZ, float farZ)</argsstring>
+        <name>Viewport</name>
+        <qualifiedname>castor3d::Viewport::Viewport</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4141612e14f3113f10b3872630c29b3d" kindref="member">ViewportType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">castor::Angle</ref> const &amp;</type>
+          <declname>fovy</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>aspect</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>left</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>right</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>bottom</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>top</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>nearZ</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>farZ</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="25" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d5b/a06803_1a9e878db048358a32ff83395ec2e09cf8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/d5b/a06803" kindref="compound">Viewport</ref> &amp;</type>
+        <definition>C3D_API Viewport &amp; castor3d::Viewport::operator=</definition>
+        <argsstring>(Viewport const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::Viewport::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/d5b/a06803" kindref="compound">Viewport</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="37" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a914a97362180d784f3c9ea1793b3bdeb" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/d5b/a06803" kindref="compound">Viewport</ref> &amp;</type>
+        <definition>C3D_API Viewport &amp; castor3d::Viewport::operator=</definition>
+        <argsstring>(Viewport &amp;&amp;rhs) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::Viewport::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/d5b/a06803" kindref="compound">Viewport</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="38" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a79132679bfeeb67ceb3786439b11ceaa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Viewport::Viewport</definition>
+        <argsstring>(Viewport const &amp;rhs)</argsstring>
+        <name>Viewport</name>
+        <qualifiedname>castor3d::Viewport::Viewport</qualifiedname>
+        <param>
+          <type><ref refid="db/d5b/a06803" kindref="compound">Viewport</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="39" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a03e7479d078e79e2a886f9e87f514389" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Viewport::Viewport</definition>
+        <argsstring>(Viewport &amp;&amp;rhs) noexcept</argsstring>
+        <name>Viewport</name>
+        <qualifiedname>castor3d::Viewport::Viewport</qualifiedname>
+        <param>
+          <type><ref refid="db/d5b/a06803" kindref="compound">Viewport</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="40" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a68dbc550b0e902ee1bc26c3123e8e82b" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Viewport::~Viewport</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~Viewport</name>
+        <qualifiedname>castor3d::Viewport::~Viewport</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="41" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a6caef8c63e0e749dea77713e67f14d62" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Viewport::Viewport</definition>
+        <argsstring>(Engine const &amp;engine)</argsstring>
+        <name>Viewport</name>
+        <qualifiedname>castor3d::Viewport::Viewport</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="50" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a3c97b544d2d17878d82a015d0d8d54e7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::Viewport::update</definition>
+        <argsstring>()</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::Viewport::update</qualifiedname>
+        <briefdescription>
+<para>Applique la perspective. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> si le frustum de vue a été modifié </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="59" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1aec5a5fd2599a765baf4ad7743a3bd27a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Viewport::setPerspective</definition>
+        <argsstring>(castor::Angle const &amp;fovy, float aspect, float nearZ, float farZ)</argsstring>
+        <name>setPerspective</name>
+        <qualifiedname>castor3d::Viewport::setPerspective</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">castor::Angle</ref> const &amp;</type>
+          <declname>fovy</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>aspect</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>nearZ</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>farZ</declname>
+        </param>
+        <briefdescription>
+<para>Construit vioewport en perspective centrée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">fovy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Angle de vision Y. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">aspect</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Ratio Largeur / Hauteur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nearZ</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Position du plan proche. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">farZ</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Position du plan éloigné. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="74" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1abede55d3e237d3e5fcf35e3da0f7c135" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Viewport::setInfinitePerspective</definition>
+        <argsstring>(castor::Angle const &amp;fovy, float aspect, float nearZ)</argsstring>
+        <name>setInfinitePerspective</name>
+        <qualifiedname>castor3d::Viewport::setInfinitePerspective</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae8e874b0f16e0aed39b2128f83554e8b" kindref="member">castor::Angle</ref> const &amp;</type>
+          <declname>fovy</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>aspect</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>nearZ</declname>
+        </param>
+        <briefdescription>
+<para>Construit vioewport en perspective centrée avec plan éloigné infini. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">fovy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Angle de vision Y. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">aspect</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Ratio Largeur / Hauteur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nearZ</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Position du plan proche. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="90" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a8aaef5ec29c109658af77d7378d757c3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Viewport::setFrustum</definition>
+        <argsstring>(float left, float right, float bottom, float top, float nearZ, float farZ)</argsstring>
+        <name>setFrustum</name>
+        <qualifiedname>castor3d::Viewport::setFrustum</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>left</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>right</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>bottom</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>top</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>nearZ</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>farZ</declname>
+        </param>
+        <briefdescription>
+<para>Construit une matrice de projection en perspective non centrée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">left</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Position du plan gauche. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">right</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Position du plan droit. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bottom</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Position du plan bas. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">top</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Position du plan haut. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nearZ</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Position du plan proche. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">farZ</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Position du plan éloigné. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="111" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a315a2b3dbae86a2aeac56cd82cfe51ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Viewport::setOrtho</definition>
+        <argsstring>(float left, float right, float bottom, float top, float nearZ, float farZ)</argsstring>
+        <name>setOrtho</name>
+        <qualifiedname>castor3d::Viewport::setOrtho</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>left</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>right</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>bottom</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>top</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>nearZ</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>farZ</declname>
+        </param>
+        <briefdescription>
+<para>Construit une matrice de projection orthographique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">left</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Position du plan gauche. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">right</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Position du plan droit. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bottom</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Position du plan bas. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">top</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Position du plan haut. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nearZ</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Position du plan proche. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">farZ</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Position du plan éloigné. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="135" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1a6bf22fe2482397222b93c41f6a0464ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Viewport::resize</definition>
+        <argsstring>(const castor::Size &amp;value)</argsstring>
+        <name>resize</name>
+        <qualifiedname>castor3d::Viewport::resize</qualifiedname>
+        <param>
+          <type>const <ref refid="d4/dd6/a09023" kindref="compound">castor::Size</ref> &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Définit les dimensions de rendu du viewport. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La nouvelle valeur </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="149" column="14"/>
+        <referencedby refid="d2/dc3/a06951_1a38dae7d74ec72af0fa347c0eefb8872b" compoundref="d3/dbc/a01451" startline="250" endline="257">castor3d::Camera::resize</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a06803_1ac3b37a37a142d60a0880741f94887bac" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> float</type>
+        <definition>C3D_API float castor3d::Viewport::getProjectionScale</definition>
+        <argsstring>() const</argsstring>
+        <name>getProjectionScale</name>
+        <qualifiedname>castor3d::Viewport::getProjectionScale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le nombre de pixels par mètre, pour z = -1. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Viewport.hpp" line="156" column="15"/>
+        <referencedby refid="d2/dc3/a06951_1a83cfb19ac57357fb76621be586d9fa0b" compoundref="d3/dbc/a01451" startline="179" endline="182">castor3d::Camera::getProjectionScale</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/Viewport.hpp" line="19" column="1" bodyfile="Castor3D/Render/Viewport.hpp" bodystart="20" bodyend="342"/>
+    <listofallmembers>
+      <member refid="db/d5b/a06803_1ad11b395c58d57df4d8d6891de488d1ad" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getBottom</name></member>
+      <member refid="db/d5b/a06803_1a58452200d471327b5a9383859d5ebc19" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getEngine</name></member>
+      <member refid="db/d5b/a06803_1a0dc699fcb4f1cf6393e6fb24127c29b6" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getFar</name></member>
+      <member refid="db/d5b/a06803_1a740f33d5f9d620c509fcbba3807faaf8" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getFovY</name></member>
+      <member refid="db/d5b/a06803_1aa5a3f606ff89db391d1122f0d09b1613" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getHeight</name></member>
+      <member refid="db/d5b/a06803_1a46a92130036c789fcb106ec400ba0a7d" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getLeft</name></member>
+      <member refid="db/d5b/a06803_1a09ceb5787b4e55deb773d8d168e270a2" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getNear</name></member>
+      <member refid="db/d5b/a06803_1aa777cce3063ba3c299d776d6bce6a1e3" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getPosition</name></member>
+      <member refid="db/d5b/a06803_1a5c6b5a0d859972086d3ee7463388f940" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getProjection</name></member>
+      <member refid="db/d5b/a06803_1ac3b37a37a142d60a0880741f94887bac" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getProjectionScale</name></member>
+      <member refid="db/d5b/a06803_1a741f98f78fc374c2ce72d9dbf83b0821" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getRatio</name></member>
+      <member refid="db/d5b/a06803_1aa8c3469b25134d59da553080f955e10d" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getRescaledProjection</name></member>
+      <member refid="db/d5b/a06803_1a5a31f54ea87509d12df547a555b3c257" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getRescaledSafeBandedProjection</name></member>
+      <member refid="db/d5b/a06803_1a94d50b22a61e4e6dee2b2a0988c8b7a8" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getRight</name></member>
+      <member refid="db/d5b/a06803_1a164bb216e83e345a63b5fddb2c2c64aa" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getSafeBandedProjection</name></member>
+      <member refid="db/d5b/a06803_1a630d6d97583eb3ce0e8699167a33c708" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getScissor</name></member>
+      <member refid="db/d5b/a06803_1ac055dfe84a8ca8a36e9b163ea4f730f9" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getSize</name></member>
+      <member refid="db/d5b/a06803_1acdfb567d49171e58ae3a7ffd2a9efc1e" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getTop</name></member>
+      <member refid="db/d5b/a06803_1a9a1dfbac35074095a584d7094fc35288" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getType</name></member>
+      <member refid="db/d5b/a06803_1a0e3dcbf267b6692ada50dc2279e9f0a8" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getViewport</name></member>
+      <member refid="db/d5b/a06803_1ab151e7057d4e896ef7cf39b8a2876607" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>getWidth</name></member>
+      <member refid="db/d5b/a06803_1af6ea1fa5377b7ae48ca6db7f9ca330ed" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>isModified</name></member>
+      <member refid="db/d5b/a06803_1af237f044e64798d99c796af6f691ca2d" prot="private" virt="non-virtual"><scope>castor3d::Viewport</scope><name>m_bottom</name></member>
+      <member refid="db/d5b/a06803_1a43dafcf059d689f658913691f4208782" prot="private" virt="non-virtual"><scope>castor3d::Viewport</scope><name>m_engine</name></member>
+      <member refid="db/d5b/a06803_1ade5e5749b33a3eb1a0d7cc4fbfe2b7d1" prot="private" virt="non-virtual"><scope>castor3d::Viewport</scope><name>m_far</name></member>
+      <member refid="db/d5b/a06803_1a65c0a1858300c0cf2f3c7c74715bad8d" prot="private" virt="non-virtual"><scope>castor3d::Viewport</scope><name>m_fovY</name></member>
+      <member refid="db/d5b/a06803_1a2fce4c757879820b44e2ede24fbd125d" prot="private" virt="non-virtual"><scope>castor3d::Viewport</scope><name>m_left</name></member>
+      <member refid="db/d5b/a06803_1a93c0b6bdcc8b04bfcca9b795c5dfdcd5" prot="private" virt="non-virtual"><scope>castor3d::Viewport</scope><name>m_modified</name></member>
+      <member refid="db/d5b/a06803_1ad7f88043ad999792b7b54f1b332bf4c7" prot="private" virt="non-virtual"><scope>castor3d::Viewport</scope><name>m_near</name></member>
+      <member refid="db/d5b/a06803_1a9977bfa65d74ecd69c762fbf77ff3051" prot="private" virt="non-virtual"><scope>castor3d::Viewport</scope><name>m_position</name></member>
+      <member refid="db/d5b/a06803_1addb995e1dec2fd26121040bfc5cba404" prot="private" virt="non-virtual"><scope>castor3d::Viewport</scope><name>m_projection</name></member>
+      <member refid="db/d5b/a06803_1a09dc12a371d06b9c545fc92a53ffac88" prot="private" virt="non-virtual"><scope>castor3d::Viewport</scope><name>m_ratio</name></member>
+      <member refid="db/d5b/a06803_1af19704c9da380e25aa171a5a2a6235ba" prot="private" virt="non-virtual"><scope>castor3d::Viewport</scope><name>m_right</name></member>
+      <member refid="db/d5b/a06803_1ac73f13476455378635cf2da1e5520c10" prot="private" virt="non-virtual"><scope>castor3d::Viewport</scope><name>m_safeBandedProjection</name></member>
+      <member refid="db/d5b/a06803_1a19e1c57b2ab9e25f1079e59adf5f6a0d" prot="private" virt="non-virtual"><scope>castor3d::Viewport</scope><name>m_scissor</name></member>
+      <member refid="db/d5b/a06803_1a336696e8108cf997c8917cb436e01fbc" prot="private" virt="non-virtual"><scope>castor3d::Viewport</scope><name>m_size</name></member>
+      <member refid="db/d5b/a06803_1a16160b0c3f455fd9caf3736648d69c49" prot="private" virt="non-virtual"><scope>castor3d::Viewport</scope><name>m_top</name></member>
+      <member refid="db/d5b/a06803_1ae5523bacf5e35a98ac35769f56efe8e9" prot="private" virt="non-virtual"><scope>castor3d::Viewport</scope><name>m_type</name></member>
+      <member refid="db/d5b/a06803_1a3c7528eef5c708174c2793ceb644e623" prot="private" virt="non-virtual"><scope>castor3d::Viewport</scope><name>m_viewport</name></member>
+      <member refid="db/d5b/a06803_1a9e878db048358a32ff83395ec2e09cf8" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>operator=</name></member>
+      <member refid="db/d5b/a06803_1a914a97362180d784f3c9ea1793b3bdeb" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>operator=</name></member>
+      <member refid="db/d5b/a06803_1a6bf22fe2482397222b93c41f6a0464ed" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>resize</name></member>
+      <member refid="db/d5b/a06803_1a8aaef5ec29c109658af77d7378d757c3" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>setFrustum</name></member>
+      <member refid="db/d5b/a06803_1abede55d3e237d3e5fcf35e3da0f7c135" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>setInfinitePerspective</name></member>
+      <member refid="db/d5b/a06803_1a315a2b3dbae86a2aeac56cd82cfe51ae" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>setOrtho</name></member>
+      <member refid="db/d5b/a06803_1aec5a5fd2599a765baf4ad7743a3bd27a" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>setPerspective</name></member>
+      <member refid="db/d5b/a06803_1aad5c06099e652e703f6f06a9bef2c997" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>setPosition</name></member>
+      <member refid="db/d5b/a06803_1a85848466024212875e1a6fd063063fcb" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>TypeName</name></member>
+      <member refid="db/d5b/a06803_1a3c97b544d2d17878d82a015d0d8d54e7" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>update</name></member>
+      <member refid="db/d5b/a06803_1a6013dc1a8b6419481c88022818e27773" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>updateBottom</name></member>
+      <member refid="db/d5b/a06803_1af0b0c37061abd7032a4ae2815951b689" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>updateFar</name></member>
+      <member refid="db/d5b/a06803_1aa09751497793b2794224b44219df72c5" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>updateFovY</name></member>
+      <member refid="db/d5b/a06803_1a75ab9d5a7e510e82ab24e7d3b01787cb" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>updateLeft</name></member>
+      <member refid="db/d5b/a06803_1a34273c72be1e93683215c3f622409c5a" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>updateNear</name></member>
+      <member refid="db/d5b/a06803_1ad763e3d2330488d9d84ed5b8d2bf4d74" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>updateRatio</name></member>
+      <member refid="db/d5b/a06803_1a1442df6cb265210c10bc1fc87f431ab9" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>updateRight</name></member>
+      <member refid="db/d5b/a06803_1a821a424d9304d965f69c81e98da2ffde" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>updateTop</name></member>
+      <member refid="db/d5b/a06803_1a6026443211d53a493fc8924e205f4267" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>updateType</name></member>
+      <member refid="db/d5b/a06803_1adb16ab209cc8860cff6987bb0962bd8e" prot="private" virt="non-virtual"><scope>castor3d::Viewport</scope><name>Viewport</name></member>
+      <member refid="db/d5b/a06803_1a79132679bfeeb67ceb3786439b11ceaa" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>Viewport</name></member>
+      <member refid="db/d5b/a06803_1a03e7479d078e79e2a886f9e87f514389" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>Viewport</name></member>
+      <member refid="db/d5b/a06803_1a6caef8c63e0e749dea77713e67f14d62" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>Viewport</name></member>
+      <member refid="db/d5b/a06803_1a68dbc550b0e902ee1bc26c3123e8e82b" prot="public" virt="non-virtual"><scope>castor3d::Viewport</scope><name>~Viewport</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

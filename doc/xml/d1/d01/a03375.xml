@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d01/a03375" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BinaryParser&lt; SkinComponent &gt;</compoundname>
+    <basecompoundref refid="dd/de1/a03223" prot="public" virt="non-virtual">castor3d::BinaryParserBase&lt; SkinComponent &gt;</basecompoundref>
+    <includes local="no">BinarySkinComponent.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/d01/a03375_1a5f5163f26b269486ea7ed6ea78ce13bf" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryParser&lt; SkinComponent &gt;::doParse</definition>
+        <argsstring>(SkinComponent &amp;obj) override</argsstring>
+        <name>doParse</name>
+        <qualifiedname>castor3d::BinaryParser&lt; SkinComponent &gt;::doParse</qualifiedname>
+        <reimplements refid="dd/de1/a03223_1a020a66d5fc1b452dc76c82702d72bbb1">doParse</reimplements>
+        <param>
+          <type><ref refid="d6/d3f/a05571" kindref="compound">SkinComponent</ref> &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Fonction utilisée afin de récupérer des données spécifiques à partir d&apos;un chunk. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à lire. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si une erreur quelconque est arrivée. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/BinarySkinComponent.hpp" line="71" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; SkinComponent &gt;</label>
+        <link refid="dd/de1/a03223"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; SkinComponent &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; SkinComponent &gt;</label>
+        <link refid="d1/d01/a03375"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="dd/de1/a03223"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::BinaryParserBase&lt; SkinComponent &gt;</label>
+        <link refid="dd/de1/a03223"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>Name</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; SkinComponent &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="d5/d27/a03183"/>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryParser&lt; SkinComponent &gt;</label>
+        <link refid="d1/d01/a03375"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::BinaryParserBase&lt; TParsed &gt;</label>
+        <link refid="dd/de1/a03223"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>Name</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_fileVersion</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::Version</label>
+        <link refid="d5/d15/a05335"/>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Binary/BinarySkinComponent.hpp" line="57" column="1" bodyfile="Castor3D/Binary/BinarySkinComponent.hpp" bodystart="59" bodyend="72"/>
+    <listofallmembers>
+      <member refid="dd/de1/a03223_1a2d2d95dec369d65226919075124a981d" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>BinaryParserBase</name></member>
+      <member refid="dd/de1/a03223_1a5f7acc850b450a68c319fc9be8bd2188" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>BinaryParserBase</name></member>
+      <member refid="dd/de1/a03223_1ab52be21f75426fc16de46c93c80d194c" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>BinaryParserBase</name></member>
+      <member refid="dd/de1/a03223_1ad1fbebf70ad5b1caae1a7eb57c2f82e4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>checkError</name></member>
+      <member refid="dd/de1/a03223_1ae6f4694ede819151fe4e30e33235ff07" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>createBinaryParser</name></member>
+      <member refid="dd/de1/a03223_1ab5f9ba53ad5865f967b41e5a27ed73a9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>doGetSubChunk</name></member>
+      <member refid="dd/de1/a03223_1a2fc203ef8ed960c1a23b0bb8bed3bdaa" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>doIsLittleEndian</name></member>
+      <member refid="d1/d01/a03375_1a5f5163f26b269486ea7ed6ea78ce13bf" prot="private" virt="virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>doParse</name></member>
+      <member refid="dd/de1/a03223_1a0e1aa917e3bf897fab03a32d20890062" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>doParseChunk</name></member>
+      <member refid="dd/de1/a03223_1a22ca62addb3ab167995e18f49267efcf" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>doParseChunk</name></member>
+      <member refid="dd/de1/a03223_1a007cca0b880e3de8b5e7200a74050262" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>doParseChunk</name></member>
+      <member refid="dd/de1/a03223_1acf26569183c5eefb4870b38087e0de55" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>doParseChunk</name></member>
+      <member refid="dd/de1/a03223_1a5fac84360102001f5e730be1927c024e" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>doParseChunk</name></member>
+      <member refid="dd/de1/a03223_1a035881aba2b64571b30a5efd3faaf3d9" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>doParseHeader</name></member>
+      <member refid="dd/de1/a03223_1ab3df04f9aa2eb1f7a533ed18631f09c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>m_chunk</name></member>
+      <member refid="dd/de1/a03223_1a455764ca72b659dab2652baf56ce5885" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>m_fileVersion</name></member>
+      <member refid="dd/de1/a03223_1ae4820a3ab3e4b282240e5f1b969153c1" prot="protected" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>Name</name></member>
+      <member refid="dd/de1/a03223_1a263c0b5fc09225878cf4f446f9312957" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>operator=</name></member>
+      <member refid="dd/de1/a03223_1a2eb7f3b9512b520c707f5f2f531e1937" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>operator=</name></member>
+      <member refid="dd/de1/a03223_1a5db83668684ca219f67de3a381898e64" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>parse</name></member>
+      <member refid="dd/de1/a03223_1a6bbbb529f463085c7d259600ae1b3e99" prot="public" virt="non-virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>parse</name></member>
+      <member refid="dd/de1/a03223_1ad8a4e198e941c39024697c37580de366" prot="public" virt="virtual"><scope>castor3d::BinaryParser&lt; SkinComponent &gt;</scope><name>~BinaryParserBase</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,244 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d2f/a06551" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::RenderQueue::PassData</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/d2f/a06551_1a383af1f11ce0f8fb63a30fcb4d1c9ede" prot="public" static="no" mutable="yes">
+        <type><ref refid="d1/dff/a09451" kindref="compound">castor::SpinMutex</ref></type>
+        <definition>castor::SpinMutex castor3d::RenderQueue::PassData::eventMutex</definition>
+        <argsstring></argsstring>
+        <name>eventMutex</name>
+        <qualifiedname>castor3d::RenderQueue::PassData::eventMutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderQueue.hpp" line="211" column="27" bodyfile="Castor3D/Render/RenderQueue.hpp" bodystart="211" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d2f/a06551_1a268bdd47330679c8c54bae86e2fb9c25" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/d8b/a03739" kindref="compound">GpuFrameEvent</ref> *</type>
+        <definition>GpuFrameEvent* castor3d::RenderQueue::PassData::initEvent</definition>
+        <argsstring></argsstring>
+        <name>initEvent</name>
+        <qualifiedname>castor3d::RenderQueue::PassData::initEvent</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderQueue.hpp" line="212" column="16" bodyfile="Castor3D/Render/RenderQueue.hpp" bodystart="212" bodyend="212"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d2f/a06551_1afc662abce9c8dae23897f30a3f6d2288" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderQueue::PassData::initialised</definition>
+        <argsstring></argsstring>
+        <name>initialised</name>
+        <qualifiedname>castor3d::RenderQueue::PassData::initialised</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderQueue.hpp" line="213" column="6" bodyfile="Castor3D/Render/RenderQueue.hpp" bodystart="213" bodyend="213"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d2f/a06551_1accebb5f30dc78e2d608146d244b19dd4" prot="public" static="no" mutable="no">
+        <type>ashes::CommandBufferPtr</type>
+        <definition>ashes::CommandBufferPtr castor3d::RenderQueue::PassData::commandBuffer</definition>
+        <argsstring></argsstring>
+        <name>commandBuffer</name>
+        <qualifiedname>castor3d::RenderQueue::PassData::commandBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderQueue.hpp" line="214" column="25" bodyfile="Castor3D/Render/RenderQueue.hpp" bodystart="214" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d2f/a06551_1a43147ab1f0edfc67492b3bcc15dad874" prot="public" static="no" mutable="no">
+        <type>VkRenderPass</type>
+        <definition>VkRenderPass castor3d::RenderQueue::PassData::renderPassAtInit</definition>
+        <argsstring></argsstring>
+        <name>renderPassAtInit</name>
+        <qualifiedname>castor3d::RenderQueue::PassData::renderPassAtInit</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderQueue.hpp" line="215" column="14" bodyfile="Castor3D/Render/RenderQueue.hpp" bodystart="215" bodyend="215"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d2f/a06551_1a41ff8ea4563f687a5e94c62104375c50" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderQueue::PassData::PassData</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>PassData</name>
+        <qualifiedname>castor3d::RenderQueue::PassData::PassData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderQueue.hpp" line="190" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d2f/a06551_1a27cfbae3599ef5976a1adcd402c22a1d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderQueue::PassData::PassData</definition>
+        <argsstring>(PassData const &amp;)=delete</argsstring>
+        <name>PassData</name>
+        <qualifiedname>castor3d::RenderQueue::PassData::PassData</qualifiedname>
+        <param>
+          <type>PassData const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderQueue.hpp" line="191" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d2f/a06551_1a4b55eb2eae94162b8b2978585d00e3df" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>PassData &amp;</type>
+        <definition>PassData &amp; castor3d::RenderQueue::PassData::operator=</definition>
+        <argsstring>(PassData &amp;&amp;) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::RenderQueue::PassData::operator=</qualifiedname>
+        <param>
+          <type>PassData &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderQueue.hpp" line="192" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d2f/a06551_1a4215e54e0d9ee3613399dd95eb129a6c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>PassData &amp;</type>
+        <definition>PassData &amp; castor3d::RenderQueue::PassData::operator=</definition>
+        <argsstring>(PassData const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::RenderQueue::PassData::operator=</qualifiedname>
+        <param>
+          <type>PassData const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderQueue.hpp" line="193" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d2f/a06551_1a10d184e5044e81d65f11d0f1bc53c6b9" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderQueue::PassData::PassData</definition>
+        <argsstring>(PassData &amp;&amp;rhs) noexcept</argsstring>
+        <name>PassData</name>
+        <qualifiedname>castor3d::RenderQueue::PassData::PassData</qualifiedname>
+        <param>
+          <type>PassData &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderQueue.hpp" line="195" column="1" bodyfile="Castor3D/Render/RenderQueue.hpp" bodystart="195" bodyend="204"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d2f/a06551_1abf323d63a555cdfec6ec95ce1efb429a" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderQueue::PassData::~PassData</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~PassData</name>
+        <qualifiedname>castor3d::RenderQueue::PassData::~PassData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderQueue.hpp" line="206" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d2f/a06551_1ad49b160097217c987b90b75e985cb164" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderQueue::PassData::initialise</definition>
+        <argsstring>(QueueData const &amp;queueData, castor::String const &amp;name, VkRenderPass renderPass)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::RenderQueue::PassData::initialise</qualifiedname>
+        <param>
+          <type><ref refid="d3/d0e/a06399" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkRenderPass</type>
+          <declname>renderPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderQueue.hpp" line="207" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor3d::GpuFrameEvent</label>
+        <link refid="d5/d8b/a03739"/>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderQueue::PassData</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>eventMutex</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>initEvent</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::SpinMutex</label>
+        <link refid="d1/dff/a09451"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/RenderQueue.hpp" line="188" column="1" bodyfile="Castor3D/Render/RenderQueue.hpp" bodystart="189" bodyend="216"/>
+    <listofallmembers>
+      <member refid="df/d2f/a06551_1accebb5f30dc78e2d608146d244b19dd4" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue::PassData</scope><name>commandBuffer</name></member>
+      <member refid="df/d2f/a06551_1a383af1f11ce0f8fb63a30fcb4d1c9ede" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue::PassData</scope><name>eventMutex</name></member>
+      <member refid="df/d2f/a06551_1a268bdd47330679c8c54bae86e2fb9c25" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue::PassData</scope><name>initEvent</name></member>
+      <member refid="df/d2f/a06551_1ad49b160097217c987b90b75e985cb164" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue::PassData</scope><name>initialise</name></member>
+      <member refid="df/d2f/a06551_1afc662abce9c8dae23897f30a3f6d2288" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue::PassData</scope><name>initialised</name></member>
+      <member refid="df/d2f/a06551_1a4b55eb2eae94162b8b2978585d00e3df" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue::PassData</scope><name>operator=</name></member>
+      <member refid="df/d2f/a06551_1a4215e54e0d9ee3613399dd95eb129a6c" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue::PassData</scope><name>operator=</name></member>
+      <member refid="df/d2f/a06551_1a41ff8ea4563f687a5e94c62104375c50" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue::PassData</scope><name>PassData</name></member>
+      <member refid="df/d2f/a06551_1a27cfbae3599ef5976a1adcd402c22a1d" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue::PassData</scope><name>PassData</name></member>
+      <member refid="df/d2f/a06551_1a10d184e5044e81d65f11d0f1bc53c6b9" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue::PassData</scope><name>PassData</name></member>
+      <member refid="df/d2f/a06551_1a43147ab1f0edfc67492b3bcc15dad874" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue::PassData</scope><name>renderPassAtInit</name></member>
+      <member refid="df/d2f/a06551_1abf323d63a555cdfec6ec95ce1efb429a" prot="public" virt="non-virtual"><scope>castor3d::RenderQueue::PassData</scope><name>~PassData</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d73/a07939" kind="class" language="C++" prot="public">
+    <compoundname>castor::Aligned</compoundname>
+    <templateparamlist>
+      <param>
+        <type>int</type>
+        <declname>A</declname>
+        <defname>A</defname>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Classe template qui fournit le support de l&apos;alignement. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Align/AlignModule.hpp" line="27" column="1" bodyfile="CastorUtils/Align/AlignModule.hpp" bodystart="27" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

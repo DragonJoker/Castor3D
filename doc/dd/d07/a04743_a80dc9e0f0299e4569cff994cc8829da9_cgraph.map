@@ -1,0 +1,13 @@
+<map id="castor3d::DefaultReflRefrComponent::Plugin::filterComponentFlags" name="castor3d::DefaultReflRefrComponent::Plugin::filterComponentFlags">
+<area shape="rect" id="Node000001" title="Removes from given component flags the ones that are useless given the provided filter." alt="" coords="5,55,268,95"/>
+<area shape="rect" id="Node000002" href="$d9/dba/a02278.html#aff53303d5484577f7e5e747a6a602c2f" title=" " alt="" coords="352,5,492,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="236,53,344,31,345,36,237,58"/>
+<area shape="rect" id="Node000003" href="$d2/d2e/a04831.html#aefb50eb6d6e24464451c862ec58c6f05" title=" " alt="" coords="316,55,528,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="268,73,302,73,302,78,268,78"/>
+<area shape="rect" id="Node000006" href="$d9/dba/a02278.html#ad3d63b41dd70de2c73275db13818a77d" title=" " alt="" coords="355,120,489,145"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="237,93,345,115,344,120,236,98"/>
+<area shape="rect" id="Node000004" href="$d2/d2e/a04831.html#a3d4ca319e7c6e2dc3e40e81211846fee" title=" " alt="" coords="587,26,799,66"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="528,61,573,56,573,62,528,67"/>
+<area shape="rect" id="Node000005" href="$d9/dba/a02278.html#a17fb42a34e2f26ac65dc169db981b513" title=" " alt="" coords="576,91,809,116"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="528,84,563,87,562,93,528,89"/>
+</map>

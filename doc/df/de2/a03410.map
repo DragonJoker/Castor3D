@@ -1,0 +1,9 @@
+<map id="castor3d::ChunkWriterBase" name="castor3d::ChunkWriterBase">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,63,188,88"/>
+<area shape="rect" id="Node000002" href="$d0/d4b/a03415.html" title="Chunk data writer." alt="" coords="236,5,419,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,57,275,28,276,33,163,62"/>
+<area shape="rect" id="Node000003" href="$d3/d65/a03423.html" title="ChunkWriter specialisation for castor::Path." alt="" coords="251,55,403,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="201,73,251,73,251,78,201,78"/>
+<area shape="rect" id="Node000004" href="$d1/d42/a03419.html" title="ChunkWriter specialisation for castor::String." alt="" coords="251,119,403,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="157,89,255,117,254,122,156,94"/>
+</map>

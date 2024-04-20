@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/d0b/a09215" kind="class" language="C++" prot="public">
+    <compoundname>castor::IndexedRangeT</compoundname>
+    <basecompoundref refid="d9/da8/a09207" prot="public" virt="non-virtual">castor::Range&lt; T &gt;</basecompoundref>
+    <includes local="no">RangeSequence.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d5/d0b/a09215_1a9b92abf527257463dc108f4fddca88d5" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::IndexedRangeT&lt; T &gt;::m_index</definition>
+        <argsstring></argsstring>
+        <name>m_index</name>
+        <qualifiedname>castor::IndexedRangeT::m_index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangeSequence.hpp" line="31" column="10" bodyfile="CastorUtils/Math/RangeSequence.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d0b/a09215_1afd1d8c0eefe877627d2e82f692e8badc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::IndexedRangeT&lt; T &gt;::IndexedRangeT</definition>
+        <argsstring>(uint32_t index, T const &amp;min, T const &amp;max)</argsstring>
+        <name>IndexedRangeT</name>
+        <qualifiedname>castor::IndexedRangeT::IndexedRangeT</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>min</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>max</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangeSequence.hpp" line="17" column="1" bodyfile="CastorUtils/Math/RangeSequence.hpp" bodystart="17" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d0b/a09215_1a07765ec97313504d23afa5cda5ca5c56" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::IndexedRangeT&lt; T &gt;::getIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>getIndex</name>
+        <qualifiedname>castor::IndexedRangeT::getIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangeSequence.hpp" line="25" column="10" bodyfile="CastorUtils/Math/RangeSequence.hpp" bodystart="25" bodyend="28"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Un intervalle dans une séquence d&apos;intervalles. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::IndexedRangeT&lt; T &gt;</label>
+        <link refid="d5/d0b/a09215"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Range&lt; T &gt;</label>
+        <link refid="d9/da8/a09207"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::IndexedRangeT&lt; T &gt;</label>
+        <link refid="d5/d0b/a09215"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Range&lt; T &gt;</label>
+        <link refid="d9/da8/a09207"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Math/RangeSequence.hpp" line="13" column="1" bodyfile="CastorUtils/Math/RangeSequence.hpp" bodystart="15" bodyend="32"/>
+    <listofallmembers>
+      <member refid="d9/da8/a09207_1a1905ba672068865603e55a41343cf17d" prot="public" virt="non-virtual"><scope>castor::IndexedRangeT</scope><name>clamp</name></member>
+      <member refid="d5/d0b/a09215_1a07765ec97313504d23afa5cda5ca5c56" prot="public" virt="non-virtual"><scope>castor::IndexedRangeT</scope><name>getIndex</name></member>
+      <member refid="d9/da8/a09207_1a124df373e8f199d56b9bb21351e577f7" prot="public" virt="non-virtual"><scope>castor::IndexedRangeT</scope><name>getMax</name></member>
+      <member refid="d9/da8/a09207_1a0f0e99c4817d3689253818d82a8afc8d" prot="public" virt="non-virtual"><scope>castor::IndexedRangeT</scope><name>getMin</name></member>
+      <member refid="d9/da8/a09207_1af957dbebdd5330f15a76cc855eb03652" prot="public" virt="non-virtual"><scope>castor::IndexedRangeT</scope><name>has</name></member>
+      <member refid="d5/d0b/a09215_1afd1d8c0eefe877627d2e82f692e8badc" prot="public" virt="non-virtual"><scope>castor::IndexedRangeT</scope><name>IndexedRangeT</name></member>
+      <member refid="d9/da8/a09207_1a3ba21b7ce4847f2b9f9557289c36bd36" prot="public" virt="non-virtual"><scope>castor::IndexedRangeT</scope><name>invPercent</name></member>
+      <member refid="d9/da8/a09207_1ae4789643a936b9eda9dcfc1328a54b7f" prot="public" virt="non-virtual"><scope>castor::IndexedRangeT</scope><name>invValue</name></member>
+      <member refid="d5/d0b/a09215_1a9b92abf527257463dc108f4fddca88d5" prot="private" virt="non-virtual"><scope>castor::IndexedRangeT</scope><name>m_index</name></member>
+      <member refid="d9/da8/a09207_1a18a23ae9545aca1b31a8e13fbeede614" prot="public" virt="non-virtual"><scope>castor::IndexedRangeT</scope><name>percent</name></member>
+      <member refid="d9/da8/a09207_1a5f7acbd7dcb3c70e63e24272421e08e3" prot="public" virt="non-virtual"><scope>castor::IndexedRangeT</scope><name>Range</name></member>
+      <member refid="d9/da8/a09207_1a068135b0cd55ff059544f0b4f467ebe7" prot="public" virt="non-virtual"><scope>castor::IndexedRangeT</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

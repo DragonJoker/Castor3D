@@ -1,0 +1,317 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d47/a07775" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LayeredLpvGridConfigUbo</compoundname>
+    <includes local="no">LayeredLpvGridConfigUbo.hpp</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d6/d47/a07775_1a769c65d7b0402a70a4c46d71abd1cad9" prot="public" static="no">
+        <type><ref refid="dc/d19/a07875" kindref="compound">LayeredLpvGridConfigUboConfiguration</ref></type>
+        <definition>using castor3d::LayeredLpvGridConfigUbo::Configuration =  LayeredLpvGridConfigUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::Configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="50" column="1" bodyfile="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/d47/a07775_1a61a29c30322bb38bbd3d8e759f6bc0f0" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::LayeredLpvGridConfigUbo::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="95" column="21" bodyfile="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d47/a07775_1a736e4489cbf7021a9071e6ebd079600f" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d63/a03459" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d6/d47/a07775_1a769c65d7b0402a70a4c46d71abd1cad9" kindref="member">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::LayeredLpvGridConfigUbo::m_ubo</definition>
+        <argsstring></argsstring>
+        <name>m_ubo</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::m_ubo</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="96" column="22" bodyfile="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="96" bodyend="96"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d47/a07775_1a7a5150122b5a74bdd222ab2f6ab1df2f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LayeredLpvGridConfigUbo::LayeredLpvGridConfigUbo</definition>
+        <argsstring>(LayeredLpvGridConfigUbo const &amp;rhs)=delete</argsstring>
+        <name>LayeredLpvGridConfigUbo</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::LayeredLpvGridConfigUbo</qualifiedname>
+        <param>
+          <type><ref refid="d6/d47/a07775" kindref="compound">LayeredLpvGridConfigUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="53" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d47/a07775_1a8dda16689984409a22b33e8fce307f5a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/d47/a07775" kindref="compound">LayeredLpvGridConfigUbo</ref> &amp;</type>
+        <definition>C3D_API LayeredLpvGridConfigUbo &amp; castor3d::LayeredLpvGridConfigUbo::operator=</definition>
+        <argsstring>(LayeredLpvGridConfigUbo const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d6/d47/a07775" kindref="compound">LayeredLpvGridConfigUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="54" column="34"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d47/a07775_1a86ea1354cd0c213e5d3e0961dfe12b04" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LayeredLpvGridConfigUbo::LayeredLpvGridConfigUbo</definition>
+        <argsstring>(LayeredLpvGridConfigUbo &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>LayeredLpvGridConfigUbo</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::LayeredLpvGridConfigUbo</qualifiedname>
+        <param>
+          <type><ref refid="d6/d47/a07775" kindref="compound">LayeredLpvGridConfigUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="55" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d47/a07775_1a852a6bf783fff76b63f0c95d30d0a8a8" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/d47/a07775" kindref="compound">LayeredLpvGridConfigUbo</ref> &amp;</type>
+        <definition>C3D_API LayeredLpvGridConfigUbo &amp; castor3d::LayeredLpvGridConfigUbo::operator=</definition>
+        <argsstring>(LayeredLpvGridConfigUbo &amp;&amp;rhs) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d6/d47/a07775" kindref="compound">LayeredLpvGridConfigUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="56" column="34"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d47/a07775_1ad75e80b0da0b692532555481e5590892" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LayeredLpvGridConfigUbo::LayeredLpvGridConfigUbo</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>LayeredLpvGridConfigUbo</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::LayeredLpvGridConfigUbo</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="57" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d47/a07775_1a562ddad9cb9e054b616b87b013be7094" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LayeredLpvGridConfigUbo::~LayeredLpvGridConfigUbo</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~LayeredLpvGridConfigUbo</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::~LayeredLpvGridConfigUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="58" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d47/a07775_1a5bea644e1d4f4ee2b7ac641df36152a1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LayeredLpvGridConfigUbo::cpuUpdate</definition>
+        <argsstring>(castor::Array&lt; castor::Grid const *, LpvMaxCascadesCount &gt; const &amp;grids, float indirectAttenuation)</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::cpuUpdate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; <ref refid="d7/dc3/a08931" kindref="compound">castor::Grid</ref> const *, <ref refid="d9/dba/a02278_1acc8aa3b866f0302d8af30d15093b0ec8" kindref="member">LpvMaxCascadesCount</ref> &gt; const &amp;</type>
+          <declname>grids</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>indirectAttenuation</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="60" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d47/a07775_1abf797b052c74d7d258377d758b0383a0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LayeredLpvGridConfigUbo::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t dstBinding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::createPassBinding</qualifiedname>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="63" column="6" bodyfile="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="63" bodyend="67"/>
+        <references refid="d4/d63/a03459_1a926b4f99af45e4423f45a276b7d72505" compoundref="dd/d52/a00221" startline="86" endline="94">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createPassBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d47/a07775_1ab75a8a861f800ea0ac6a5f95b39b3683" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LayeredLpvGridConfigUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::createSizedBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="69" column="6" bodyfile="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="69" bodyend="73"/>
+        <references refid="d4/d63/a03459_1a2c6ad146d4910651544564c25ca7dccd" compoundref="dd/d52/a00221" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d47/a07775_1ab52a7b1884fb67ab3d0a4513bc761f0f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>ashes::WriteDescriptorSet castor3d::LayeredLpvGridConfigUbo::getDescriptorWrite</definition>
+        <argsstring>(uint32_t dstBinding, uint32_t dstArrayElement=0u) const</argsstring>
+        <name>getDescriptorWrite</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::getDescriptorWrite</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="75" column="27" bodyfile="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="75" bodyend="79"/>
+        <references refid="d4/d63/a03459_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="dd/d52/a00221" startline="107" endline="120">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</references>
+        <referencedby refid="d6/d47/a07775_1aa209afd132f1cf6f69764adb31a4d1e0" compoundref="d8/d9c/a01733" startline="81" endline="87">addDescriptorWrite</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d6/d47/a07775_1aa209afd132f1cf6f69764adb31a4d1e0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LayeredLpvGridConfigUbo::addDescriptorWrite</definition>
+        <argsstring>(ashes::WriteDescriptorSetArray &amp;descriptorWrites, uint32_t &amp;dstBinding, uint32_t dstArrayElement=0u) const</argsstring>
+        <name>addDescriptorWrite</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::addDescriptorWrite</qualifiedname>
+        <param>
+          <type>ashes::WriteDescriptorSetArray &amp;</type>
+          <declname>descriptorWrites</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="81" column="6" bodyfile="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="81" bodyend="87"/>
+        <references refid="d6/d47/a07775_1ab52a7b1884fb67ab3d0a4513bc761f0f" compoundref="d8/d9c/a01733" startline="75" endline="79">getDescriptorWrite</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d47/a07775_1ad71ab16cc8cfd64d584d0b907a30baa3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d63/a03459" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d6/d47/a07775_1a769c65d7b0402a70a4c46d71abd1cad9" kindref="member">Configuration</ref> &gt; const &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const  &amp; castor3d::LayeredLpvGridConfigUbo::getUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getUbo</name>
+        <qualifiedname>castor3d::LayeredLpvGridConfigUbo::getUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="89" column="29" bodyfile="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="89" bodyend="92"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" line="47" column="1" bodyfile="Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp" bodystart="48" bodyend="97"/>
+    <listofallmembers>
+      <member refid="d6/d47/a07775_1aa209afd132f1cf6f69764adb31a4d1e0" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>addDescriptorWrite</name></member>
+      <member refid="d6/d47/a07775_1a769c65d7b0402a70a4c46d71abd1cad9" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>Configuration</name></member>
+      <member refid="d6/d47/a07775_1a5bea644e1d4f4ee2b7ac641df36152a1" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>cpuUpdate</name></member>
+      <member refid="d6/d47/a07775_1abf797b052c74d7d258377d758b0383a0" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>createPassBinding</name></member>
+      <member refid="d6/d47/a07775_1ab75a8a861f800ea0ac6a5f95b39b3683" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>createSizedBinding</name></member>
+      <member refid="d6/d47/a07775_1ab52a7b1884fb67ab3d0a4513bc761f0f" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>getDescriptorWrite</name></member>
+      <member refid="d6/d47/a07775_1ad71ab16cc8cfd64d584d0b907a30baa3" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>getUbo</name></member>
+      <member refid="d6/d47/a07775_1a7a5150122b5a74bdd222ab2f6ab1df2f" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>LayeredLpvGridConfigUbo</name></member>
+      <member refid="d6/d47/a07775_1a86ea1354cd0c213e5d3e0961dfe12b04" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>LayeredLpvGridConfigUbo</name></member>
+      <member refid="d6/d47/a07775_1ad75e80b0da0b692532555481e5590892" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>LayeredLpvGridConfigUbo</name></member>
+      <member refid="d6/d47/a07775_1a61a29c30322bb38bbd3d8e759f6bc0f0" prot="private" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>m_device</name></member>
+      <member refid="d6/d47/a07775_1a736e4489cbf7021a9071e6ebd079600f" prot="private" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>m_ubo</name></member>
+      <member refid="d6/d47/a07775_1a8dda16689984409a22b33e8fce307f5a" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>operator=</name></member>
+      <member refid="d6/d47/a07775_1a852a6bf783fff76b63f0c95d30d0a8a8" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>operator=</name></member>
+      <member refid="d6/d47/a07775_1a562ddad9cb9e054b616b87b013be7094" prot="public" virt="non-virtual"><scope>castor3d::LayeredLpvGridConfigUbo</scope><name>~LayeredLpvGridConfigUbo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

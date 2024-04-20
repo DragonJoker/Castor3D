@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d16/a06179" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlayRenderer::TextComputePipeline</compoundname>
+    <includes local="no">OverlayRenderer.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/d16/a06179_1ab93e1f9413f683217df1e6ceb4492ac7" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::OverlayRenderer::TextComputePipeline::descriptorLayout</definition>
+        <argsstring></argsstring>
+        <name>descriptorLayout</name>
+        <qualifiedname>castor3d::OverlayRenderer::TextComputePipeline::descriptorLayout</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlayRenderer.hpp" line="64" column="31" bodyfile="Castor3D/Render/Overlays/OverlayRenderer.hpp" bodystart="64" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d16/a06179_1aa7a9b758c88d5dad23d365c1059940c8" prot="public" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::OverlayRenderer::TextComputePipeline::pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>pipelineLayout</name>
+        <qualifiedname>castor3d::OverlayRenderer::TextComputePipeline::pipelineLayout</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlayRenderer.hpp" line="65" column="26" bodyfile="Castor3D/Render/Overlays/OverlayRenderer.hpp" bodystart="65" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d16/a06179_1ab96a470d5a59ca3bc9de69bb71bf28df" prot="public" static="no" mutable="no">
+        <type>ashes::PipelinePtr</type>
+        <definition>ashes::PipelinePtr castor3d::OverlayRenderer::TextComputePipeline::pipeline</definition>
+        <argsstring></argsstring>
+        <name>pipeline</name>
+        <qualifiedname>castor3d::OverlayRenderer::TextComputePipeline::pipeline</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlayRenderer.hpp" line="66" column="20" bodyfile="Castor3D/Render/Overlays/OverlayRenderer.hpp" bodystart="66" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d16/a06179_1aad950f4f08e071d715e1b8aee931ce1b" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::OverlayRenderer::TextComputePipeline::descriptorPool</definition>
+        <argsstring></argsstring>
+        <name>descriptorPool</name>
+        <qualifiedname>castor3d::OverlayRenderer::TextComputePipeline::descriptorPool</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlayRenderer.hpp" line="67" column="29" bodyfile="Castor3D/Render/Overlays/OverlayRenderer.hpp" bodystart="67" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d16/a06179_1a7011fb8ed31438aec8cf2a663dfc022d" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a93b53452a3c421817a14b649ccec1fb7" kindref="member">castor::Map</ref>&lt; <ref refid="d6/d64/a05779" kindref="compound">FontTexture</ref> const *, <ref refid="d0/dca/a06175" kindref="compound">TextComputePipelineDescriptor</ref> &gt;</type>
+        <definition>castor::Map&lt; FontTexture const *, TextComputePipelineDescriptor &gt; castor3d::OverlayRenderer::TextComputePipeline::sets</definition>
+        <argsstring></argsstring>
+        <name>sets</name>
+        <qualifiedname>castor3d::OverlayRenderer::TextComputePipeline::sets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlayRenderer.hpp" line="68" column="13" bodyfile="Castor3D/Render/Overlays/OverlayRenderer.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/Overlays/OverlayRenderer.hpp" line="62" column="1" bodyfile="Castor3D/Render/Overlays/OverlayRenderer.hpp" bodystart="63" bodyend="69"/>
+    <listofallmembers>
+      <member refid="dd/d16/a06179_1ab93e1f9413f683217df1e6ceb4492ac7" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::TextComputePipeline</scope><name>descriptorLayout</name></member>
+      <member refid="dd/d16/a06179_1aad950f4f08e071d715e1b8aee931ce1b" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::TextComputePipeline</scope><name>descriptorPool</name></member>
+      <member refid="dd/d16/a06179_1ab96a470d5a59ca3bc9de69bb71bf28df" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::TextComputePipeline</scope><name>pipeline</name></member>
+      <member refid="dd/d16/a06179_1aa7a9b758c88d5dad23d365c1059940c8" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::TextComputePipeline</scope><name>pipelineLayout</name></member>
+      <member refid="dd/d16/a06179_1a7011fb8ed31438aec8cf2a663dfc022d" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::TextComputePipeline</scope><name>sets</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

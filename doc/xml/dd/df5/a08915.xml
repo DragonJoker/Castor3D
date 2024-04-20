@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/df5/a08915" kind="struct" language="C++" prot="public">
+    <compoundname>castor::LargerTyperT</compoundname>
+    <templateparamlist>
+      <param>
+        <type>typename TypeT</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Récupère le type plus large que celui donné. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="758" column="1" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="758" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

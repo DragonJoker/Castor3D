@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d1e/a08763" kind="struct" language="C++" prot="public" abstract="yes">
+    <compoundname>castor::Font::SFontImpl</compoundname>
+    <basecompoundref refid="da/d87/a08319" prot="public" virt="non-virtual">castor::NonMovable</basecompoundref>
+    <includes local="no">Font.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d1e/a08763_1a90fb12cd5e9211522c53a7c77445c4d6" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type></type>
+        <definition>virtual castor::Font::SFontImpl::~SFontImpl</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~SFontImpl</name>
+        <qualifiedname>castor::Font::SFontImpl::~SFontImpl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="72" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d1e/a08763_1a70ed65d910a149ba6f800fce97a55459" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor::Font::SFontImpl::initialise</definition>
+        <argsstring>()=0</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor::Font::SFontImpl::initialise</qualifiedname>
+        <briefdescription>
+<para>Initialise le loader. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="79" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d1e/a08763_1a479103ee883752ae27ea5f9b146c5bda" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void castor::Font::SFontImpl::cleanup</definition>
+        <argsstring>()=0</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor::Font::SFontImpl::cleanup</qualifiedname>
+        <briefdescription>
+<para>Nettoie le loader. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="86" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d1e/a08763_1a877765406a654c4815ee4cac9c8919ea" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d0/db3/a08783" kindref="compound">Glyph</ref></type>
+        <definition>virtual Glyph castor::Font::SFontImpl::loadGlyph</definition>
+        <argsstring>(char32_t c)=0</argsstring>
+        <name>loadGlyph</name>
+        <qualifiedname>castor::Font::SFontImpl::loadGlyph</qualifiedname>
+        <param>
+          <type>char32_t</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+<para>Charge le glyphe voulu. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le caractère. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le glyphe. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Font.hpp" line="97" column="15"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Structure utilisée pour charger des glyphes à la demande. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>PImpl pour cacher les inclusions de FreeType </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::Font::SFontImpl</label>
+        <link refid="dd/d1e/a08763"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::Font::SFontImpl</label>
+        <link refid="dd/d1e/a08763"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/Font.hpp" line="69" column="1" bodyfile="CastorUtils/Graphics/Font.hpp" bodystart="71" bodyend="98"/>
+    <listofallmembers>
+      <member refid="dd/d1e/a08763_1a479103ee883752ae27ea5f9b146c5bda" prot="public" virt="pure-virtual"><scope>castor::Font::SFontImpl</scope><name>cleanup</name></member>
+      <member refid="dd/d1e/a08763_1a70ed65d910a149ba6f800fce97a55459" prot="public" virt="pure-virtual"><scope>castor::Font::SFontImpl</scope><name>initialise</name></member>
+      <member refid="dd/d1e/a08763_1a877765406a654c4815ee4cac9c8919ea" prot="public" virt="pure-virtual"><scope>castor::Font::SFontImpl</scope><name>loadGlyph</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::Font::SFontImpl</scope><name>NonMovable</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::Font::SFontImpl</scope><name>~NonMovable</name></member>
+      <member refid="dd/d1e/a08763_1a90fb12cd5e9211522c53a7c77445c4d6" prot="public" virt="virtual"><scope>castor::Font::SFontImpl</scope><name>~SFontImpl</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

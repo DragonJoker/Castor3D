@@ -1,0 +1,2333 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/d1f/a11660" kind="page">
+    <compoundname>md_Z_1_2Projets_2C_09_09_2Castor3D_2doc_2Castor3D_2SceneFile-French</compoundname>
+    <title>Format de fichier CSCN</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><anchor id="d8/d1f/a11660_1autotoc_md143"/> Les fichiers CSCN sont au format texte et sont donc modifiables assez facilement (pour peu que l’on comprenne quelque chose à  la syntaxe :P)</para>
+<para>Les types de données qui apparaissent dans les fichiers de scène sont les suivants :</para>
+<para><itemizedlist>
+<listitem><para><emphasis>booléen</emphasis> : un booléen (<emphasis>true</emphasis> ou <emphasis>false</emphasis>).</para>
+</listitem><listitem><para><emphasis>entier</emphasis> : un entier.</para>
+</listitem><listitem><para><emphasis>masque_1</emphasis> : un entier hexadécimal représentant un masque pour une composante de couleur (<emphasis>0x000000FF</emphasis> ou autre).</para>
+</listitem><listitem><para><emphasis>masque_3</emphasis> : un entier hexadécimal représentant un masque pour trois composantes de couleur (<emphasis>0x00FFFFFF</emphasis> ou autre).</para>
+</listitem><listitem><para><emphasis>réel</emphasis> : un nombre réel, le séparateur des décimales est le point ( . ).</para>
+</listitem><listitem><para><emphasis>2, 3, 4 entiers</emphasis> : 2, 3 ou 4 entiers, séparés par des virgules ( , ) ou des espaces ( ).</para>
+</listitem><listitem><para><emphasis>2, 3, 4 réels</emphasis> : 2, 3 ou 4 réels, séparés par des virgules ( , ) ou des espaces ( ).</para>
+</listitem><listitem><para><emphasis>taille</emphasis> : 2 entiers supérieurs ou égaux à 0.</para>
+</listitem><listitem><para><emphasis>matrice de 2x2, 3x3, 4x4 réels</emphasis> : 2, 3 ou 4 groupes séparés par des points virgules ( ; ) de 2, 3 ou 4 réels séparés par des virgules ( *,* ) ou des espaces ( )</para>
+</listitem><listitem><para><emphasis>couleur_rvb</emphasis> : les composantes RVB d’une couleur, exprimées en réels compris entre 0.0 et 1.0.</para>
+</listitem><listitem><para><emphasis>couleur_rvba</emphasis> : les composantes RVBA d’une couleur, exprimées en réels compris entre 0.0 et 1.0.</para>
+</listitem><listitem><para><emphasis>couleur_hdr_rvb</emphasis> : les composantes RVB d’une couleur, exprimées en réels supérieurs ou égaux à 0.0.</para>
+</listitem><listitem><para><emphasis>couleur_hdr_rvba</emphasis> : les composantes RVBA d’une couleur, exprimées en réels supérieurs ou égaux à 0.0.</para>
+</listitem><listitem><para><emphasis>valeur</emphasis> : chaîne de caractère représentant une valeur prédéfinie.</para>
+</listitem><listitem><para><emphasis>nom</emphasis> : chaîne de caractères, entourée de guillemets ( " ).</para>
+</listitem><listitem><para><emphasis>fichier</emphasis> : chaîne de caractères représentant un chemin d’accès à un fichier, entourée de guillemets ( " ).</para>
+</listitem><listitem><para><emphasis>dossier</emphasis> : chaîne de caractères représentant un chemin d’accès à un dossier, entourée de guillemets ( " ).</para>
+</listitem></itemizedlist>
+</para>
+<sect1 id="d8/d1f/a11660_1autotoc_md144">
+<title>Description</title><para>Le fichier est décomposé en sections décrites de la manière suivante: <verbatim>[section-type] &quot;[section-name]&quot;
+{
+    // Section description
+}
+</verbatim> Exemple: <verbatim>light &quot;Light0&quot;
+{
+    type directional
+    colour 1.0 1.0 1.0
+    intensity 0.8 1.0
+}
+</verbatim> Certaines sections peuvent avoir des sous-sections : <verbatim>material &quot;Bronze&quot;
+{
+    pass
+    {
+        ambient 0.2125 0.1275 0.054
+        diffuse 0.714 0.4284 0.12144
+        emissive 0.0
+        specular 0.393548 0.271906 0.166721
+        shininess 25.6
+    }
+}
+</verbatim> </para>
+</sect1>
+<sect1 id="d8/d1f/a11660_1autotoc_md145">
+<title>Section root</title><para><itemizedlist>
+<listitem><para><bold>debug_overlays</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Active ou désactive les incrustation de débogage.</para>
+</listitem><listitem><para><bold>enable_full_loading</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Active ou désactive le chargement des passes qui ne sont pas utilisées dans la scène.</para>
+</listitem><listitem><para><bold>materials</bold> : <emphasis>value</emphasis> <linebreak/>
+ Permet de définir le type des matériaux utilisés dans le fichier. Les valeurs possibles sont :<itemizedlist>
+<listitem><para><emphasis>phong</emphasis> : Matériaux Blinn-Phong.</para>
+</listitem><listitem><para><emphasis>pbr</emphasis> : Matériaux PBR.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>default_unit</bold> : <emphasis>value</emphasis> <linebreak/>
+ Définit l&apos;untié de longueur par défaut du moteur. Les valeurs possibles sont :<itemizedlist>
+<listitem><para><emphasis>mm</emphasis> : Millimètres.</para>
+</listitem><listitem><para><emphasis>cm</emphasis> : Centimètres.</para>
+</listitem><listitem><para><emphasis>m</emphasis> : Mètres.</para>
+</listitem><listitem><para><emphasis>km</emphasis> : Kilomètres.</para>
+</listitem><listitem><para><emphasis>yd</emphasis> : Yards.</para>
+</listitem><listitem><para><emphasis>ft</emphasis> : Pieds.</para>
+</listitem><listitem><para><emphasis>in</emphasis> : Pouces.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>max_image_size</bold>: <emphasis>entier</emphasis> Permet de limiter les dimensions des images chargées (tout en conservant leurs proportions).</para>
+</listitem><listitem><para><bold>debug_max_image_size</bold>: <emphasis>entier</emphasis> Permet de limiter les dimensions des images chargées (tout en conservant leurs proportions), pour les versions debug.</para>
+</listitem><listitem><para><bold>lpv_grid_size</bold>: <emphasis>entier</emphasis> Permet de personnaliser les dimensions de la grille utilisée pour les Light Propagation Volumes (32 par défaut).</para>
+</listitem><listitem><para><bold>sampler</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un objet d’échantillonnage de texture.</para>
+</listitem><listitem><para><bold>material</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet la définition d’un matériau.</para>
+</listitem><listitem><para><bold>loading_screen</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet la redéfinition de l&apos;écran de chargement.</para>
+</listitem><listitem><para><bold>font</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet la définition d’une police utilisée dans les incrustations texte.</para>
+</listitem><listitem><para><bold>window</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet la définition d’une fenêtre de rendu.</para>
+</listitem><listitem><para><bold>panel_overlay</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une incrustation globale de type panneau simple.</para>
+</listitem><listitem><para><bold>border_panel_overlay</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une incrustation globale de type panneau avec bordure.</para>
+</listitem><listitem><para><bold>text_overlay</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une incrustation globale de type panneau avec texte.</para>
+</listitem><listitem><para><bold>scene</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une scène.</para>
+</listitem><listitem><para><bold>gui</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une GUI globale.</para>
+</listitem><listitem><para><bold>theme</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un thème de GUI.</para>
+</listitem><listitem><para><bold>box_layout</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un box layout de GUI global.</para>
+</listitem><listitem><para><bold>button</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un bouton.</para>
+</listitem><listitem><para><bold>static</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un texte statique.</para>
+</listitem><listitem><para><bold>slider</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un slider.</para>
+</listitem><listitem><para><bold>combobox</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une liste déroulante.</para>
+</listitem><listitem><para><bold>listbox</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une liste.</para>
+</listitem><listitem><para><bold>edit</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un texte éditable.</para>
+</listitem><listitem><para><bold>panel</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un panneau.</para>
+</listitem><listitem><para><bold>progress</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une barre de progression.</para>
+</listitem><listitem><para><bold>expandable_panel</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un panneau extensible.</para>
+</listitem><listitem><para><bold>frame</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une fenêtre.</para>
+</listitem><listitem><para><bold>default_font</bold> : <emphasis>name</emphasis> <linebreak/>
+ Permet de définir la police de GUI globale.</para>
+</listitem><listitem><para><bold>button_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de bouton.</para>
+</listitem><listitem><para><bold>static_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de texte statique.</para>
+</listitem><listitem><para><bold>slider_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de slider.</para>
+</listitem><listitem><para><bold>combobox_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de liste déroulante.</para>
+</listitem><listitem><para><bold>listbox_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de liste.</para>
+</listitem><listitem><para><bold>edit_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de texte éditable.</para>
+</listitem><listitem><para><bold>panel_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de panneau.</para>
+</listitem><listitem><para><bold>progress_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de barre de proogression.</para>
+</listitem><listitem><para><bold>expandable_panel_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de panneau extensible.</para>
+</listitem><listitem><para><bold>frame_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de fenêtre.</para>
+</listitem><listitem><para><bold>scrollbar_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de barre de progression.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d8/d1f/a11660_1autotoc_md146">
+<title>Section sampler</title><para><itemizedlist>
+<listitem><para><bold>min_filter</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Valeur pour la fonction de minification. Les valeurs possibles sont :<itemizedlist>
+<listitem><para><emphasis>linear</emphasis> : interpolation linéaire.</para>
+</listitem><listitem><para><emphasis>nearest</emphasis> : aucune interpolation.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>mag_filter</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Valeur pour la fonction de magnification. Les valeurs possibles sont :<itemizedlist>
+<listitem><para><emphasis>linear</emphasis> : interpolation linéaire.</para>
+</listitem><listitem><para><emphasis>nearest</emphasis> : aucune interpolation.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>mip_filter</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Valeur pour la fonction de mipmapping. Les valeurs possibles sont :<itemizedlist>
+<listitem><para><emphasis>linear</emphasis> : interpolation linéaire.</para>
+</listitem><listitem><para><emphasis>nearest</emphasis> : aucune interpolation.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>min_lod</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la valeur minimale du niveau de détail.</para>
+</listitem><listitem><para><bold>max_lod</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la valeur maximale du niveau de détail.</para>
+</listitem><listitem><para><bold>lod_bias</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit le MIP-Level minimal utilisé.</para>
+</listitem><listitem><para><bold>u_wrap_mode</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Définit le paramètre d’enveloppement de la texture en U. Peut prendre les valeurs suivantes :<itemizedlist>
+<listitem><para><emphasis>repeat</emphasis> : La texture est répétée.</para>
+</listitem><listitem><para><emphasis>mirrored_repeat</emphasis> : La texture est répétée, une instance sur 2 en miroir de la précédente.</para>
+</listitem><listitem><para><emphasis>clamp_to_border</emphasis> : La texture est étirée, la couleur des arêtes au bord de la texture est celle du bord de la texture.</para>
+</listitem><listitem><para><emphasis>clamp_to_edge</emphasis> : La texture est étirée, la couleur des arêtes au bord de la texture est un mélange de celle du bord de la texture et de celle du bord.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>v_wrap_mode</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Définit le paramètre d’enveloppement de la texture en V. Peut prendre les valeurs suivantes :<itemizedlist>
+<listitem><para><emphasis>repeat</emphasis> : La texture est répétée.</para>
+</listitem><listitem><para><emphasis>mirrored_repeat</emphasis> : La texture est répétée, une instance sur 2 en miroir de la précédente.</para>
+</listitem><listitem><para><emphasis>clamp_to_border</emphasis> : La texture est étirée, la couleur des arêtes au bord de la texture est celle du bord de la texture.</para>
+</listitem><listitem><para><emphasis>clamp_to_edge</emphasis> : La texture est étirée, la couleur des arêtes au bord de la texture est un mélange de celle du bord de la texture et de celle du bord.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>w_wrap_mode</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Définit le paramètre d’enveloppement de la texture en W. Peut prendre les valeurs suivantes :<itemizedlist>
+<listitem><para><emphasis>repeat</emphasis> : La texture est répétée.</para>
+</listitem><listitem><para><emphasis>mirrored_repeat</emphasis> : La texture est répétée, une instance sur 2 en miroir de la précédente.</para>
+</listitem><listitem><para><emphasis>clamp_to_border</emphasis> : La texture est étirée, la couleur des arêtes au bord de la texture est celle du bord de la texture.</para>
+</listitem><listitem><para><emphasis>clamp_to_edge</emphasis> : La texture est étirée, la couleur des arêtes au bord de la texture est un mélange de celle du bord de la texture et de celle du bord.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>border_colour</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Définit la couleur des bords non texturés.<itemizedlist>
+<listitem><para><emphasis>float_transparent_black</emphasis> : Noir transparent.</para>
+</listitem><listitem><para><emphasis>int_transparent_black</emphasis> : Noir transparent.</para>
+</listitem><listitem><para><emphasis>float_opaque_black</emphasis> : Noir opaque.</para>
+</listitem><listitem><para><emphasis>int_opaque_black</emphasis> : Noir opaque.</para>
+</listitem><listitem><para><emphasis>float_opaque_white</emphasis> : Blanc opaque.</para>
+</listitem><listitem><para><emphasis>int_opaque_white</emphasis> : Blanc opaque.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>anisotropic_filtering</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Dit si le filtrage anisotropique est activé (si supporté).</para>
+</listitem><listitem><para><bold>max_anisotropy</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit le degré maximal d’anisotropie.</para>
+</listitem><listitem><para><bold>comparison_mode</bold> : <emphasis>value</emphasis> <linebreak/>
+ Définit le mode de comparaison de l&apos;échantillonneur. Peut prendre les valeurs suivantes :<itemizedlist>
+<listitem><para><emphasis>none</emphasis> : Echantillonneur traditionnel.</para>
+</listitem><listitem><para><emphasis>ref_to_texture</emphasis> : Echantillonneur d&apos;ombres.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>comparison_func</bold> : <emphasis>value</emphasis> <linebreak/>
+ Définit la fonction de comparaison de l&apos;échantillonneur. Peut prendre les valeurs suivantes :<itemizedlist>
+<listitem><para><emphasis>always</emphasis> : la couleur de l’échantillon est toujours appliquée.</para>
+</listitem><listitem><para><emphasis>less</emphasis> : La couleur de l’échantillon est appliquée si sa valeur est inférieure à la valeur de référence.</para>
+</listitem><listitem><para><emphasis>less_or_equal</emphasis> : La couleur de l’échantillon est appliquée si sa valeur est inférieure ou égal à la valeur de référence.</para>
+</listitem><listitem><para><emphasis>equal</emphasis> : La couleur de l’échantillon est appliquée si sa valeur est égale à la valeur de référence.</para>
+</listitem><listitem><para><emphasis>not_equal</emphasis> : La couleur de l’échantillon est appliquée si sa valeur est différente de la valeur de référence.</para>
+</listitem><listitem><para><emphasis>greater_or_equal</emphasis> : La couleur de l’échantillon est appliquée si sa valeur est supérieure ou égal à la valeur de référence.</para>
+</listitem><listitem><para><emphasis>greater</emphasis> : La couleur de l’échantillon est appliquée si sa valeur est supérieure à la valeur de référence.</para>
+</listitem><listitem><para><emphasis>never</emphasis> : La couleur de l’échantillon n’est jamais appliquée.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d8/d1f/a11660_1autotoc_md147">
+<title>Section material</title><para>Les matériaux pouvant être multi-passes, il est possible de définir plusieurs sous-sections de passe.<itemizedlist>
+<listitem><para><bold>pass</bold> : <emphasis>section</emphasis> <linebreak/>
+ Commence un nouvelle section décrivant les propriétés de la passe.</para>
+</listitem><listitem><para><bold>render_pass</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le nom de la render pass utilisée pour dessiner les objets utilisant ce matériau.</para>
+</listitem></itemizedlist>
+</para>
+<sect2 id="d8/d1f/a11660_1autotoc_md148">
+<title>Section pass</title><para><itemizedlist>
+<listitem><para><bold>two_sided</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Définit si la passe est double face (défaut à false).</para>
+</listitem><listitem><para><bold>lighting</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Active l&apos;éclairage (défaut à true). <linebreak/>
+</para>
+</listitem><listitem><para><bold>lighting_model_</bold> : <emphasis>value</emphasis> <linebreak/>
+ Permet de définir le type d&apos;éclairage de la passe. Les valeurs possibles sont :<itemizedlist>
+<listitem><para><emphasis>phong</emphasis> : Blinn-Phong.</para>
+</listitem><listitem><para><emphasis>pbr</emphasis> : PBR.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>pickable</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Active le picking (défaut à true). <linebreak/>
+</para>
+</listitem><listitem><para><bold>texture_unit</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une nouvelle section concernant une texture.</para>
+</listitem><listitem><para><bold>reflections</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Active les réflexions (défaut à false). <linebreak/>
+</para>
+</listitem><listitem><para><bold>refraction_ratio</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit l&apos;indice de réfraction.</para>
+</listitem><listitem><para><bold>has_refraction</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Dit si la passe utilise la réfraction. Notez que même s’il n’y a pas de refraction map, la réfraction sera appliquée tout de même, en utilisant seulement la skybox.</para>
+</listitem><listitem><para><bold>alpha_blend_mode</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Nom du mode de mélange alpha, au choix parmi :<itemizedlist>
+<listitem><para><emphasis>none</emphasis> : Pas de mélange alpha.</para>
+</listitem><listitem><para><emphasis>additive</emphasis> : Les alphas de la source et de la destination s’additionnent.</para>
+</listitem><listitem><para><emphasis>multiplicative</emphasis> : Les alphas de la source et de la destination se multiplient.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>colour_blend_mode</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Nom du mode de mélange couleur, au choix parmi :<itemizedlist>
+<listitem><para><emphasis>none</emphasis> : Pas de mélange couleur.</para>
+</listitem><listitem><para><emphasis>additive</emphasis> : Les couleurs de la source et de la destination s’additionnent.</para>
+</listitem><listitem><para><emphasis>multiplicative</emphasis> : Les couleurs de la source et de la destination se multiplient.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>colour_srgb</bold> : <emphasis>couleur_rvb</emphasis> <linebreak/>
+ Définit la couleur.</para>
+</listitem><listitem><para><bold>diffuse</bold> : <emphasis>couleur_rvb</emphasis> <linebreak/>
+ Définit la couleur.</para>
+</listitem><listitem><para><bold>colour_hdr</bold> : <emphasis>couleur_hdr_rvb</emphasis> <linebreak/>
+ Defines la couleur.</para>
+</listitem><listitem><para><bold>albedo</bold> : <emphasis>couleur_hdr_rvb</emphasis> <linebreak/>
+ Defines la couleur.</para>
+</listitem><listitem><para><bold>specular_colour</bold> : <emphasis>couleur_rvb</emphasis> <linebreak/>
+ Définit la couleur de réflexion spéculaire.</para>
+</listitem><listitem><para><bold>specular_factor_</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit l&apos;intensité de la réflexion spéculaire.</para>
+</listitem><listitem><para><bold>metallic</bold> : <emphasis>réel (entre 0 et 1)</emphasis> <linebreak/>
+ Definit la metalness.</para>
+</listitem><listitem><para><bold>shininess</bold> : <emphasis>réel (entre 0 et 128)</emphasis> <linebreak/>
+ Définit la façon dont l&apos;exposant spéculaire.</para>
+</listitem><listitem><para><bold>glossiness</bold> : <emphasis>réel (entre 0 et 1)</emphasis> <linebreak/>
+ Définit l’éclat de la surface.</para>
+</listitem><listitem><para><bold>roughness</bold> : <emphasis>réel (entre 0 et 1)</emphasis> <linebreak/>
+ Définit la rugosité de la surface.</para>
+</listitem><listitem><para><bold>emissive_colour</bold> : <emphasis>couleur_rvb</emphasis> <linebreak/>
+ Définit la couleur émise.</para>
+</listitem><listitem><para><bold>emissive_factor</bold> : <emphasis>réel (entre 0 et 1)</emphasis> <linebreak/>
+ Définit le facteur d&apos;émission.</para>
+</listitem><listitem><para><bold>attenuation_colour</bold> : <emphasis>rgb_colour</emphasis> <linebreak/>
+ Définit la couleur d&apos;atténuation.</para>
+</listitem><listitem><para><bold>attenuation_distance</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la distance d&apos;atténuation.</para>
+</listitem><listitem><para><bold>thickness_factor</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit le facteur d&apos;épaisseur.</para>
+</listitem><listitem><para><bold>transmission</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit le facteur de transmission.</para>
+</listitem><listitem><para><bold>clearcoat_factor</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit le facteur de clearcoat.</para>
+</listitem><listitem><para><bold>clearcoat_roughness_factor</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la rugosité de clearcoat.</para>
+</listitem><listitem><para><bold>iridescence_factor</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit le facteur d&apos;iridescence.</para>
+</listitem><listitem><para><bold>iridescence_ior</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit l&apos;indice de réfraction de la couche d&apos;iridescence.</para>
+</listitem><listitem><para><bold>iridescence_min_thickness</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit l&apos;épaisseur maximale de la couche d&apos;iridescence.</para>
+</listitem><listitem><para><bold>iridescence_max_thickness</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit l&apos;épaisseur minimale de la couche d&apos;iridescence.</para>
+</listitem><listitem><para><bold>sheen_colour</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la couleur de la couche de sheen.</para>
+</listitem><listitem><para><bold>sheen_roughness</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la rugosité de la couche de sheen.</para>
+</listitem><listitem><para><bold>opacity</bold> : <emphasis>réel (entre 0 et 1)</emphasis> <linebreak/>
+ Définit l&apos;opacité.</para>
+</listitem><listitem><para><bold>bw_accumulation</bold> : <emphasis>entier compris entre 0 et 5</emphasis> <linebreak/>
+ Définit la fonction d&apos;accumulation, pour le blended weighted rendering.</para>
+</listitem><listitem><para><bold>alpha_func</bold> : func : <emphasis>valeur</emphasis> ref-val : <emphasis>réel</emphasis> <linebreak/>
+ Définit la fonction de gestion de l’alpha rejection pour la passe. Le second paramètre est la valeur de référence pour les calculs de transparence. Les valeurs possibles pour le premier paramètre sont :<itemizedlist>
+<listitem><para><emphasis>always</emphasis> : la couleur de l’échantillon est toujours appliquée.</para>
+</listitem><listitem><para><emphasis>less</emphasis> : La couleur de l’échantillon est appliquée si sa transparence est inférieure au 2ème paramètre.</para>
+</listitem><listitem><para><emphasis>less_or_equal</emphasis> : La couleur de l’échantillon est appliquée si sa transparence est inférieure ou égal au 2ème paramètre.</para>
+</listitem><listitem><para><emphasis>equal</emphasis> : La couleur de l’échantillon est appliquée si sa transparence est égale au 2ème paramètre.</para>
+</listitem><listitem><para><emphasis>not_equal</emphasis> : La couleur de l’échantillon est appliquée si sa transparence est différente du 2ème paramètre.</para>
+</listitem><listitem><para><emphasis>greater_or_equal</emphasis> : La couleur de l’échantillon est appliquée si sa transparence est supérieure ou égal au 2ème paramètre.</para>
+</listitem><listitem><para><emphasis>greater</emphasis> : La couleur de l’échantillon est appliquée si sa transparence est supérieure au 2ème paramètre.</para>
+</listitem><listitem><para><emphasis>never</emphasis> : La couleur de l’échantillon n’est jamais appliquée.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>blend_alpha_func</bold> : func : <emphasis>valeur</emphasis> ref-val : <emphasis>réel</emphasis> <linebreak/>
+ Définit la fonction de gestion de l’alpha rejection pour la passe, lorsque le blending est actif. Le second paramètre est la valeur de référence pour les calculs de transparence. Les valeurs possibles pour le premier paramètre sont :<itemizedlist>
+<listitem><para><emphasis>always</emphasis> : la couleur de l’échantillon est toujours appliquée.</para>
+</listitem><listitem><para><emphasis>less</emphasis> : La couleur de l’échantillon est appliquée si sa transparence est inférieure au 2ème paramètre.</para>
+</listitem><listitem><para><emphasis>less_or_equal</emphasis> : La couleur de l’échantillon est appliquée si sa transparence est inférieure ou égal au 2ème paramètre.</para>
+</listitem><listitem><para><emphasis>equal</emphasis> : La couleur de l’échantillon est appliquée si sa transparence est égale au 2ème paramètre.</para>
+</listitem><listitem><para><emphasis>not_equal</emphasis> : La couleur de l’échantillon est appliquée si sa transparence est différente du 2ème paramètre.</para>
+</listitem><listitem><para><emphasis>greater_or_equal</emphasis> : La couleur de l’échantillon est appliquée si sa transparence est supérieure ou égal au 2ème paramètre.</para>
+</listitem><listitem><para><emphasis>greater</emphasis> : La couleur de l’échantillon est appliquée si sa transparence est supérieure au 2ème paramètre.</para>
+</listitem><listitem><para><emphasis>never</emphasis> : La couleur de l’échantillon n’est jamais appliquée.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>mixed_interpolation</bold> : <emphasis>section</emphasis> <linebreak/>
+ Helper définissant <bold>alpha_blend_mode</bold> à <emphasis>interpolative</emphasis>, <bold>blend_alpha_func</bold> à <emphasis>less_or_equal</emphasis> et <bold>alpha_func</bold> à <emphasis>greater</emphasis> avec une valeur de référence à 0.95.</para>
+</listitem><listitem><para><bold>fractal</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Active le fractal UV mapping (défaut à false). <linebreak/>
+</para>
+</listitem><listitem><para><bold>untile</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Active l&apos;untiled UV mapping (défaut à false). <linebreak/>
+</para>
+</listitem><listitem><para><bold>parallax_occlusion</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Active ou désactive le parallax occlusion mapping (nécessite une normal map et une height map), les valeurs possibles sont :<itemizedlist>
+<listitem><para><emphasis>none</emphasis> : Désactivé.</para>
+</listitem><listitem><para><emphasis>one</emphasis> : Pas de tiling.</para>
+</listitem><listitem><para><emphasis>repeat</emphasis> : Tiling répété.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>subsurface_scattering</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une nouvelle section décrivant le subsurface scattering.</para>
+</listitem><listitem><para><bold>transmittance</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Facteur de transmittance (pour le subsurface scattering).</para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="d8/d1f/a11660_1autotoc_md149">
+<title>Section texture_unit</title><para><itemizedlist>
+<listitem><para><bold>image</bold> : <emphasis>fichier</emphasis> <linebreak/>
+ Définit le chemin où trouver l’image.</para>
+</listitem><listitem><para><bold>render_target</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir la texture en cible de rendu et de configurer cette cible.</para>
+</listitem><listitem><para><bold>channel</bold> : <emphasis>value {| value}</emphasis> <linebreak/>
+ Les canaux auxquels la texture peut être associée. Peut prendre les valeurs suivantes :<itemizedlist>
+<listitem><para><emphasis>diffuse</emphasis> : Couleur d&apos;éclairage diffus (Phong uniquement).</para>
+</listitem><listitem><para><emphasis>albedo</emphasis> : Couleur de base (PBR uniquement).</para>
+</listitem><listitem><para><emphasis>specular</emphasis> : Couleur spéculaire (Phong et PBR Specular/Glossiness).</para>
+</listitem><listitem><para><emphasis>specular_factor</emphasis> : Facteur spéculaire (Phong et PBR Specular/Glossiness).</para>
+</listitem><listitem><para><emphasis>metallic</emphasis> : Facteur métallique (PBR Metallic/Roughness uniquement).</para>
+</listitem><listitem><para><emphasis>shininess</emphasis> : Exposant spéculaire (Phong uniquement).</para>
+</listitem><listitem><para><emphasis>glossiness</emphasis> : Facteur de glossiness (PBR Specular/Glossiness uniquement).</para>
+</listitem><listitem><para><emphasis>roughness</emphasis> : Facteur de roughness (PBR Metallic/Roughness uniquement).</para>
+</listitem><listitem><para><emphasis>opacity</emphasis> : Facteur d&apos;opacité.</para>
+</listitem><listitem><para><emphasis>emissive</emphasis> : Couleur émissive.</para>
+</listitem><listitem><para><emphasis>transmission</emphasis> : Facteur de transmission (pour le subsurface scattering).</para>
+</listitem><listitem><para><emphasis>transmittance</emphasis> : Facteur de transmittance (pour le subsurface scattering).</para>
+</listitem><listitem><para><emphasis>occlusion</emphasis> : Facteur d&apos;occlusion.</para>
+</listitem><listitem><para><emphasis>normal</emphasis> : Normales.</para>
+</listitem><listitem><para><emphasis>height</emphasis> : Hauteur.</para>
+</listitem><listitem><para><emphasis>iridescence</emphasis> : Facteur d&apos;iridescence.</para>
+</listitem><listitem><para><emphasis>iridescence_thickness</emphasis> : Facteur de profondeur de la couche d&apos;iridescence.</para>
+</listitem><listitem><para><emphasis>clearcoat</emphasis> : Facteur de clearcoat.</para>
+</listitem><listitem><para><emphasis>clearcoat_normal</emphasis> : Normal map de la couche de clearcoat.</para>
+</listitem><listitem><para><emphasis>clearcoat_roughness</emphasis> : Facteur de rugosité de la couche de clearcoat.</para>
+</listitem><listitem><para><emphasis>thickness</emphasis> : Facteur d&apos;épaisseur.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>sampler</bold> : <emphasis>nom</emphasis> Définit l’échantillonneur pour la texture.</para>
+</listitem><listitem><para><bold>level_count</bold> : <emphasis>entier</emphasis> Définit le nombre maximal de mip levels.</para>
+</listitem><listitem><para><bold>diffuse_mask</bold> : <emphasis>masque_3</emphasis> <linebreak/>
+ Définit les composantes de la texture utilisées pour la couleur.</para>
+</listitem><listitem><para><bold>albedo_mask</bold> : <emphasis>masque_3</emphasis> <linebreak/>
+ Définit les composantes de la texture utilisées pour la couleur.</para>
+</listitem><listitem><para><bold>specular_mask</bold> : <emphasis>masque_3</emphasis> <linebreak/>
+ Définit les composantes de la texture utilisées pour la couleur de réflexion spéculaire.</para>
+</listitem><listitem><para><bold>metalness_mask</bold> : <emphasis>masque_1</emphasis> <linebreak/>
+ Définit la composante de la texture utilisée pour le facteur métallique.</para>
+</listitem><listitem><para><bold>shininess_mask</bold> : <emphasis>masque_1</emphasis> <linebreak/>
+ Définit la composante de la texture utilisée pour l&apos;exposant spéculaire.</para>
+</listitem><listitem><para><bold>glossiness_mask</bold> : <emphasis>masque_1</emphasis> <linebreak/>
+ Définit la composante de la texture utilisée pour le facteur de glossiness.</para>
+</listitem><listitem><para><bold>roughness_mask</bold> : <emphasis>masque_1</emphasis> <linebreak/>
+ Définit la composante de la texture utilisée pour le facteur de roughness.</para>
+</listitem><listitem><para><bold>opacity_mask</bold> : <emphasis>masque_1</emphasis> <linebreak/>
+ Définit la composante de la texture utilisée pour le facteur d&apos;opacité.</para>
+</listitem><listitem><para><bold>emissive_mask</bold> : <emphasis>masque_3</emphasis> <linebreak/>
+ Définit les composantes de la texture utilisées pour la couleur émissive.</para>
+</listitem><listitem><para><bold>transmittance_mask</bold> : <emphasis>masque_1</emphasis> <linebreak/>
+ Définit la composante de la texture utilisée pour le facteur de transmittance (pour le subsurface scattering).</para>
+</listitem><listitem><para><bold>occlusion_mask</bold> : <emphasis>masque_1</emphasis> <linebreak/>
+ Définit la composante de la texture utilisée pour le facteur d&apos;occlusion.</para>
+</listitem><listitem><para><bold>normal_mask</bold> : <emphasis>masque_3</emphasis> <linebreak/>
+ Définit les composantes de la texture utilisées pour les normales.</para>
+</listitem><listitem><para><bold>normal_directx</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Dit si les normales de la texture sont exprimées pour DirectX (la composante verte sera alors inversée).</para>
+</listitem><listitem><para><bold>normal_factor</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit le facteur de normal mapping.</para>
+</listitem><listitem><para><bold>normal_2channels</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Dit si la texture de normales utilise 2 canaux (Z sera reconstruit).</para>
+</listitem><listitem><para><bold>height_mask</bold> : <emphasis>masque_1</emphasis> <linebreak/>
+ Définit la composante de la texture utilisée pour la hauteur.</para>
+</listitem><listitem><para><bold>height_factor</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit le facteur de hauteur.</para>
+</listitem><listitem><para><bold>thickness_mask</bold> : <emphasis>mask_1</emphasis> <linebreak/>
+ Définit la composante de la texture utilisée pour le facteur d&apos;épaisseur.</para>
+</listitem><listitem><para><bold>transmission_mask</bold> : <emphasis>mask_1</emphasis> <linebreak/>
+ Définit la composante de la texture utilisée pour le facteur de transmission.</para>
+</listitem><listitem><para><bold>clearcoat_normal_mask</bold> : <emphasis>mask_3</emphasis> <linebreak/>
+ Définit la composante de la texture utilisée pour la normal map de la couche de clearcoat.</para>
+</listitem><listitem><para><bold>clearcoat_mask</bold> : <emphasis>mask_1</emphasis> <linebreak/>
+ Définit la composante de la texture utilisée pour le facteur de clearcoat.</para>
+</listitem><listitem><para><bold>clearcoat_roughness_mask</bold> : <emphasis>mask_1</emphasis> <linebreak/>
+ Définit la composante de la texture utilisée pour le facteur de rugosité de la couche de clearcoat.</para>
+</listitem><listitem><para><bold>iridescence_mask</bold> : <emphasis>mask_1</emphasis> <linebreak/>
+ Définit la composante de la texture utilisée pour le facteur d&apos;iridescence.</para>
+</listitem><listitem><para><bold>iridescence_thickness_mask</bold> : <emphasis>mask_1</emphasis> <linebreak/>
+ Définit la composante de la texture utilisée pour le facteur d&apos;épaisseur de la couche d&apos;iridescence.</para>
+</listitem><listitem><para><bold>sheen_mask</bold> : <emphasis>mask_3</emphasis> <linebreak/>
+ Définit la composante de la texture utilisée pour la couleur de la couche de sheen.</para>
+</listitem><listitem><para><bold>sheen_roughness_mask</bold> : <emphasis>mask_1</emphasis> <linebreak/>
+ Définit la composante de la texture utilisée pour la rugosité de la couche de sheen.</para>
+</listitem><listitem><para><bold>invert_y</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Définit si l&apos;image doit être inversée sur l&apos;axe Y.</para>
+</listitem><listitem><para><bold>transform</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit la transformation de base de la texture.</para>
+</listitem><listitem><para><bold>tileset</bold> : <emphasis>2 entiers</emphasis> <linebreak/>
+ Définit les dimensions du tile set de la texture.</para>
+</listitem><listitem><para><bold>tiles</bold> : <emphasis>entier</emphasis> <linebreak/>
+ Définit le nombre de tiles de la texture.</para>
+</listitem><listitem><para><bold>animation</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit l&apos;animation de transformation de la texture.</para>
+</listitem><listitem><para><bold>texcoord_set</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit le set de coordonnées de textures que cette texture va utiliser.</para>
+</listitem></itemizedlist>
+</para>
+<sect4 id="d8/d1f/a11660_1autotoc_md150">
+<title>Section transform</title><para><itemizedlist>
+<listitem><para><bold>rotate</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la rotation de la texture.</para>
+</listitem><listitem><para><bold>translate</bold> : <emphasis>2 réels</emphasis> <linebreak/>
+ Définit la translation de la texture.</para>
+</listitem><listitem><para><bold>scale</bold> : <emphasis>2 réels</emphasis> <linebreak/>
+ Définit la mise à l&apos;échelle de la texture.</para>
+</listitem><listitem><para><bold>tile</bold> : <emphasis>2 entiers</emphasis> <linebreak/>
+ Définit la tile sélectionnée.</para>
+</listitem></itemizedlist>
+</para>
+</sect4>
+<sect4 id="d8/d1f/a11660_1autotoc_md151">
+<title>Section animation</title><para><itemizedlist>
+<listitem><para><bold>rotate</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la vitesse d&apos;animation de la rotation de la texture.</para>
+</listitem><listitem><para><bold>translate</bold> : <emphasis>2 réels</emphasis> <linebreak/>
+ Définit la vitesse d&apos;animation de la translation de la texture.</para>
+</listitem><listitem><para><bold>scale</bold> : <emphasis>2 réels</emphasis> <linebreak/>
+ Définit la vitesse d&apos;animation de la mise à l&apos;échelle de la texture.</para>
+</listitem><listitem><para><bold>tile</bold> : <emphasis>2 entiers</emphasis> <linebreak/>
+ Définit si les tiles sont animées.</para>
+</listitem></itemizedlist>
+</para>
+</sect4>
+</sect3>
+<sect3 id="d8/d1f/a11660_1autotoc_md152">
+<title>Section shader_program</title><para><itemizedlist>
+<listitem><para><bold>compute_program</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une nouvelle section concernant le compute program.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d8/d1f/a11660_1autotoc_md153">
+<title>Section compute_program</title><para><itemizedlist>
+<listitem><para><bold>file</bold> : <emphasis>fichier</emphasis> <linebreak/>
+ Nom du fichier où se trouve le programme.</para>
+</listitem><listitem><para><bold>group_sizes</bold> : <emphasis>3 ints</emphasis> <linebreak/>
+ Définit les dispatch counts en X, Y et Z.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d8/d1f/a11660_1autotoc_md154">
+<title>Section subsurface_scattering</title><para><itemizedlist>
+<listitem><para><bold>strength</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la force de l’effet.</para>
+</listitem><listitem><para><bold>gaussian_width</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la largeur du flou Gaussien.</para>
+</listitem><listitem><para><bold>thickness_scale</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit l&apos;échelle de profondeur.</para>
+</listitem><listitem><para><bold>transmittance_profile</bold> : <emphasis>new section</emphasis> <linebreak/>
+ Définit une nouvelle section décrivant le profil de transmission.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d8/d1f/a11660_1autotoc_md155">
+<title>Section transmittance_profile</title><para><itemizedlist>
+<listitem><para><bold>factor</bold> : <emphasis>vec4f</emphasis> <linebreak/>
+ Définit les trois composantes RVB de la couleur, la quatrième composante définissant le facteur de multiplication de cette couleur.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+</sect1>
+<sect1 id="d8/d1f/a11660_1autotoc_md156">
+<title>Section font</title><para><itemizedlist>
+<listitem><para><bold>file</bold> : <emphasis>fichier</emphasis> <linebreak/>
+ Définit le fichier contenant la police.</para>
+</listitem><listitem><para><bold>height</bold> : <emphasis>entier</emphasis> <linebreak/>
+ Définit la hauteur des caractères (la précision).</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d8/d1f/a11660_1autotoc_md157">
+<title>Section scene</title><para><itemizedlist>
+<listitem><para><bold>ambient_light</bold> : <emphasis>couleur</emphasis> <linebreak/>
+ Définit la couleur de l’éclairage ambiant.</para>
+</listitem><listitem><para><bold>background_colour</bold> : <emphasis>couleur</emphasis> <linebreak/>
+ Définit la couleur de fond de la scène.</para>
+</listitem><listitem><para><bold>background_image</bold> : <emphasis>fichier</emphasis> <linebreak/>
+ Définit l’image de fond de la scène.</para>
+</listitem><listitem><para><bold>import</bold> : <emphasis>fichier</emphasis> <linebreak/>
+ Permet l’import d’une scène à partir d’un fichier de scène CSCN ou autre, supporté par les plug-ins d’import Castor3D.</para>
+</listitem><listitem><para><bold>include</bold> : <emphasis>fichier</emphasis> <linebreak/>
+ Inclut un fichier de scène, permettant de découper une scène en de multiples fichiers.</para>
+</listitem><listitem><para><bold>fog_type</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Définit le type de brouillard pour la scène. Les valeurs possibles sont :<itemizedlist>
+<listitem><para><emphasis>linear</emphasis> : L’intensité du brouillard augmente linéairement, avec la distance à la caméra.</para>
+</listitem><listitem><para><emphasis>exponential</emphasis> : L’intensité du brouillard augmente exponentiellement, avec la distance à la caméra.</para>
+</listitem><listitem><para><emphasis>squared_exponential</emphasis> : L’intensité du brouillard augmente encore plus, avec la distance à la caméra.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>fog_density</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la densité du brouillard, qui est multipliée par la distance, en fonction du type de brouillard.</para>
+</listitem><listitem><para><bold>directional_shadow_cascades</bold> : <emphasis>entier</emphasis> <linebreak/>
+ Définit le nombre de cascades des sources lumineuses directionnelles.</para>
+</listitem><listitem><para><bold>scene_node</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit un noeud de scène.</para>
+</listitem><listitem><para><bold>camera_node</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit un noeud de scène spécifique aux caméras.</para>
+</listitem><listitem><para><bold>light</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une source lumineuse.</para>
+</listitem><listitem><para><bold>object</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit un objet.</para>
+</listitem><listitem><para><bold>billboard</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit des billboards.</para>
+</listitem><listitem><para><bold>camera</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une caméra.</para>
+</listitem><listitem><para><bold>panel_overlay</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une incrustation de type panneau simple.</para>
+</listitem><listitem><para><bold>border_panel_overlay</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une incrustation de type panneau avec bordure.</para>
+</listitem><listitem><para><bold>text_overlay</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une incrustation de type panneau avec texte.</para>
+</listitem><listitem><para><bold>animated_object_group</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit un groupe d’objets animés avec des animations communes.</para>
+</listitem><listitem><para><bold>mesh</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une nouvelle section décrivant un maillage, pouvant être utilisé pou un ou plusieurs objets.</para>
+</listitem><listitem><para><bold>skeleton</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une nouvelle section décrivant un squelette, pouvant être utilisé pou un ou plusieurs maillages.</para>
+</listitem><listitem><para><bold>particle_system</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une nouvelle section décrivant un système de particules.</para>
+</listitem><listitem><para><bold>skybox</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une nouvelle section décrivant la skybox.</para>
+</listitem><listitem><para><bold>sampler</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une nouvelle section décrivant un échantillonneur.</para>
+</listitem><listitem><para><bold>voxel_cone_tracing</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une nouvelle section décrivant la configuration du voxel cone tracing.</para>
+</listitem><listitem><para><bold>gui</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une GUI pour la scène.</para>
+</listitem><listitem><para><bold>theme</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un thème de GUI.</para>
+</listitem><listitem><para><bold>box_layout</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un box layout de GUI pour la scène.</para>
+</listitem><listitem><para><bold>button</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un bouton.</para>
+</listitem><listitem><para><bold>static</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un texte statique.</para>
+</listitem><listitem><para><bold>slider</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un slider.</para>
+</listitem><listitem><para><bold>combobox</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une liste déroulante.</para>
+</listitem><listitem><para><bold>listbox</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une liste.</para>
+</listitem><listitem><para><bold>edit</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un texte éditable.</para>
+</listitem><listitem><para><bold>panel</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un panneau.</para>
+</listitem><listitem><para><bold>progress</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une barre de progression.</para>
+</listitem><listitem><para><bold>expandable_panel</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un panneau extensible.</para>
+</listitem><listitem><para><bold>frame</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une fenêtre.</para>
+</listitem><listitem><para><bold>default_font</bold> : <emphasis>name</emphasis> <linebreak/>
+ Permet de définir la police de GUI pour la scène.</para>
+</listitem><listitem><para><bold>button_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de bouton.</para>
+</listitem><listitem><para><bold>static_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de texte statique.</para>
+</listitem><listitem><para><bold>slider_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de slider.</para>
+</listitem><listitem><para><bold>combobox_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de liste déroulante.</para>
+</listitem><listitem><para><bold>listbox_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de liste.</para>
+</listitem><listitem><para><bold>edit_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de texte éditable.</para>
+</listitem><listitem><para><bold>panel_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de panneau.</para>
+</listitem><listitem><para><bold>progress_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de barre de proogression.</para>
+</listitem><listitem><para><bold>expandable_panel_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de panneau extensible.</para>
+</listitem><listitem><para><bold>frame_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de fenêtre.</para>
+</listitem><listitem><para><bold>scrollbar_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de barre de progression.</para>
+</listitem></itemizedlist>
+</para>
+<sect2 id="d8/d1f/a11660_1autotoc_md158">
+<title>Section skybox</title><para><itemizedlist>
+<listitem><para><bold>visible</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Définit la visibilité du fond (s&apos;il n&apos;est pas visible, il entre quand même en compte lors du calcul de l&apos;IBL).</para>
+</listitem><listitem><para><bold>equirectangular</bold> : <emphasis>fichier</emphasis> <emphasis>entier</emphasis> <linebreak/>
+ Définit la skybox depuis une image HDRi. Le second paramètre détermine les dimensions de la skybox.</para>
+</listitem><listitem><para><bold>cross</bold> : <emphasis>fichier</emphasis> <linebreak/>
+ Définit la skybox depuis une image en croix.</para>
+</listitem><listitem><para><bold>left</bold> : <emphasis>fichier</emphasis> <linebreak/>
+ Définit l&apos;image de gauche de la skybox.</para>
+</listitem><listitem><para><bold>right</bold> : <emphasis>fichier</emphasis> <linebreak/>
+ Définit l&apos;image de droite de la skybox.</para>
+</listitem><listitem><para><bold>top</bold> : <emphasis>fichier</emphasis> <linebreak/>
+ Définit l&apos;image du haut de la skybox.</para>
+</listitem><listitem><para><bold>bottom</bold> : <emphasis>fichier</emphasis> <linebreak/>
+ Définit l&apos;image du bas de la skybox.</para>
+</listitem><listitem><para><bold>front</bold> : <emphasis>fichier</emphasis> <linebreak/>
+ Définit l&apos;image de l&apos;avant de la skybox.</para>
+</listitem><listitem><para><bold>back</bold> : <emphasis>fichier</emphasis> <linebreak/>
+ Définit l&apos;image de l&apos;arrière de la skybox.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md159">
+<title>Section voxel_cone_tracing</title><para><itemizedlist>
+<listitem><para><bold>enabled</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Définit le statut d’activation du VCT.</para>
+</listitem><listitem><para><bold>conservative_rasterization</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Définit le statut d’activation de la rastérization conservatrice.</para>
+</listitem><listitem><para><bold>temporal_smoothing</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Définit le statut d’activation du lissage temporel.</para>
+</listitem><listitem><para><bold>secondary_bounce</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Définit le statut d’activation du second rebond.</para>
+</listitem><listitem><para><bold>grid_size</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit les dimensions de la texture 3D contenant les voxels.</para>
+</listitem><listitem><para><bold>num_cones</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit le nombre de cônes utilisés (maximum 16).</para>
+</listitem><listitem><para><bold>max_distance</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la distance maximale que les rayons peuvent atteindre.</para>
+</listitem><listitem><para><bold>ray_step_size</bold> : <emphasis>entier</emphasis> <linebreak/>
+ Définit la taille d&apos;un pas de rayon.</para>
+</listitem><listitem><para><bold>voxel_size</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la taille représentée par un voxel.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md160">
+<title>Section import</title><para><itemizedlist>
+<listitem><para><bold>file</bold> : <emphasis>path</emphasis> <linebreak/>
+ Importe la scène depuis le chemin donné.</para>
+</listitem><listitem><para><bold>file_anim</bold> : <emphasis>path</emphasis> <linebreak/>
+ Importe les animations depuis le chemin donné.</para>
+</listitem><listitem><para><bold>prefix</bold> : <emphasis>text</emphasis> <linebreak/>
+ Définit un préfixe qui sera attribué aux noms des objets, pour éviter les conflits de noms.</para>
+</listitem><listitem><para><bold>rescale</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Met les objects importés à l’échelle, sur les trois axes.</para>
+</listitem><listitem><para><bold>pitch</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Tourne les objects importés de l&apos;angle donné (en degrés) autour de l&apos;axe X.</para>
+</listitem><listitem><para><bold>yaw</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Tourne les objects importés de l&apos;angle donné (en degrés) autour de l&apos;axe Y.</para>
+</listitem><listitem><para><bold>roll</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Tourne les objects importés de l&apos;angle donné (en degrés) autour de l&apos;axe Z.</para>
+</listitem><listitem><para><bold>no_optimisations</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Désactive les optimisations lors de l&apos;import.</para>
+</listitem><listitem><para><bold>emissive_mult</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Applique un facteur de multiplication de l&apos;émissive aux valeurs d&apos;émissive importées.</para>
+</listitem><listitem><para><bold>recenter_camera</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Centre sur le résultat de l&apos;import la caméra désignée par le nom donné.</para>
+</listitem><listitem><para><bold>preferred_importer</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Permet de définir un importeur qui sera utilisé plutôt qu&apos;un autre, si plusieurs importeurs supportent le format de fichier.</para>
+</listitem><listitem><para><bold>ignore_vertex_colour</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Permet d&apos;ignorer la composante de couleur de sommets lors de l&apos;import d&apos;un mesh.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md161">
+<title>Sections scene_node et camera_node</title><para><itemizedlist>
+<listitem><para><bold>static</bold> : <emphasis>name</emphasis> <linebreak/>
+ Dit que le noeud est statique, et ne peut donc pas être déplacé/tourné//mis à l&apos;échelle après sa définition.</para>
+</listitem><listitem><para><bold>parent</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Définit le Node parent de celui-ci. Par défaut le parent est le RootNode. Le fait de transformer (tranlate, rotate, scale) un node parent transforme ses enfants.</para>
+</listitem><listitem><para><bold>position</bold> : <emphasis>3 réels</emphasis> <linebreak/>
+ La position du node par rapport à son parent.</para>
+</listitem><listitem><para><bold>orientation</bold> : <emphasis>4 réels</emphasis> <linebreak/>
+ Quaternion représentant l’orientation du node par rapport à son parent.</para>
+</listitem><listitem><para><bold>rotate</bold> : <emphasis>4 reals</emphasis> <linebreak/>
+ Accumule l&apos;orientation du noeud avec la rotation donnée.</para>
+</listitem><listitem><para><bold>direction</bold> : <emphasis>3 réels</emphasis> <linebreak/>
+ Définit la direction du node, par rapport à son parent.</para>
+</listitem><listitem><para><bold>scale</bold> : <emphasis>3 réels</emphasis> <linebreak/>
+ Echelle du node par rapport à son parent.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md162">
+<title>Section light</title><para><itemizedlist>
+<listitem><para><bold>type</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ 3 types de sources lumineuses existent dans Castor3D :<itemizedlist>
+<listitem><para><emphasis>directional</emphasis> : lumière directionnelle (telle le soleil).</para>
+</listitem><listitem><para><emphasis>point_light</emphasis> : une source située à un endroit et émettant dans toutes les directions.</para>
+</listitem><listitem><para><emphasis>spot_light</emphasis> : une source située à un endroit et émettant dans un cône orienté dans une direction.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>colour</bold> : <emphasis>3 réels</emphasis> <linebreak/>
+ Définit la couleur de la source lumineuse, au format RGB.</para>
+</listitem><listitem><para><bold>intensity</bold> : <emphasis>2 réels</emphasis> <linebreak/>
+ Définit les intensités diffuse et spéculaire de la source lumineuse.</para>
+</listitem><listitem><para><bold>attenuation</bold> : <emphasis>3 réels</emphasis> <linebreak/>
+ Définit les 3 composantes d’atténuation de la source lumineuse en fonction de l’éloignement de la source : constante, linéaire et quadratique. <linebreak/>
+</para>
+</listitem><listitem><para><bold>range</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la distance maximale d&apos;éclairage de la source lumineuse. <linebreak/>
+ spot_light et point_light uniquement.</para>
+</listitem><listitem><para><bold>inner_cut_off</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Angle d&apos;ouverture intérieur du cône du spot. <linebreak/>
+ spot_light uniquement.</para>
+</listitem><listitem><para><bold>outer_cut_off</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Angle d&apos;ouverture extérieur du cône du spot. <linebreak/>
+ spot_light uniquement.</para>
+</listitem><listitem><para><bold>exponent</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Attenuation fonction de la distance entre le point éclairé et le centre du cône lumineux. <linebreak/>
+ spot_light uniquement.</para>
+</listitem><listitem><para><bold>parent</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Définit le nom du SceneNode auquel la source lumineuse est attachée.</para>
+</listitem><listitem><para><bold>shadows</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une nouvelle section décrivant les ombres produites par la source lumineuse.</para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="d8/d1f/a11660_1autotoc_md163">
+<title>Section shadows</title><para><itemizedlist>
+<listitem><para><bold>producer</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Dit si la source lumineuse produit des ombres (<emphasis>true</emphasis>) ou pas (<emphasis>false</emphasis>).</para>
+</listitem><listitem><para><bold>filter</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Définit le type d&apos;ombres à utiliser. Peut prendre les valeurs suivantes :<itemizedlist>
+<listitem><para><emphasis>raw</emphasis> : Aucun filtre.</para>
+</listitem><listitem><para><emphasis>pcf</emphasis> : Filtre PCF.</para>
+</listitem><listitem><para><emphasis>variance</emphasis> : Variance Shadow Map.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>global_illumination</bold> : <emphasis>value</emphasis> <linebreak/>
+ Définit le type d&apos;éclairage indirect. Peut prendre les valeurs suivantes :<itemizedlist>
+<listitem><para><emphasis>none</emphasis> : Aucune.</para>
+</listitem><listitem><para><emphasis>lpv</emphasis> : Light Propagation Volumes.</para>
+</listitem><listitem><para><emphasis>lpv_geometry</emphasis> : Light Propagation Volumes avec injection des Géometries.</para>
+</listitem><listitem><para><emphasis>layered_lpv</emphasis> : Layered Light Propagation Volumes (uniquement pour les sources lumineuses directionnelles).</para>
+</listitem><listitem><para><emphasis>layered_lpv_geometry</emphasis> : Layered Light Propagation Volumes avec injection des Géometries (uniquement pour les sources lumineuses directionnelles).</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>volumetric_steps</bold> : <emphasis>entier</emphasis> <linebreak/>
+ Le nombre d&apos;étapes effectuées par le rayon pour calculer le volumetric light scattering.</para>
+</listitem><listitem><para><bold>volumetric_scattering</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit le facteur de volumetric light scattering.</para>
+</listitem><listitem><para><bold>raw_config</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une nouvelle section décrivant la configuration des ombres RAW.</para>
+</listitem><listitem><para><bold>pcf_config</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une nouvelle section décrivant la configuration des ombres PCF.</para>
+</listitem><listitem><para><bold>vsm_config</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une nouvelle section décrivant la configuration des ombres VSM.</para>
+</listitem></itemizedlist>
+</para>
+<sect4 id="d8/d1f/a11660_1autotoc_md164">
+<title>raw_config section</title><para><itemizedlist>
+<listitem><para><bold>min_offset</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit l&apos;offset minimal à appliquer à la valeur récupérée depuis la texture d&apos;ombres.</para>
+</listitem><listitem><para><bold>max_slope_offset</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit l&apos;offset maximal, relatif à la pente, à appliquer à la valeur récupérée depuis la texture d&apos;ombres.</para>
+</listitem></itemizedlist>
+</para>
+</sect4>
+<sect4 id="d8/d1f/a11660_1autotoc_md165">
+<title>pcf_config section</title><para><itemizedlist>
+<listitem><para><bold>min_offset</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit l&apos;offset minimal à appliquer à la valeur récupérée depuis la texture d&apos;ombres.</para>
+</listitem><listitem><para><bold>max_slope_offset</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit l&apos;offset maximal, relatif à la pente, à appliquer à la valeur récupérée depuis la texture d&apos;ombres.</para>
+</listitem><listitem><para><bold>filter_size</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la taille du filtre PCF.</para>
+</listitem><listitem><para><bold>sample_count</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit le nombre d&apos;échantillons du filtre PCF.</para>
+</listitem></itemizedlist>
+</para>
+</sect4>
+<sect4 id="d8/d1f/a11660_1autotoc_md166">
+<title>vsm_config section</title><para><itemizedlist>
+<listitem><para><bold>min_variance</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit le facteur maximal pour la variance, à appliquer à la valeur récupérée depuis la texture d&apos;ombres.</para>
+</listitem><listitem><para><bold>light_bleeding_reduction</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit le facteur de réduction du light bleeding.</para>
+</listitem></itemizedlist>
+</para>
+</sect4>
+</sect3>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md167">
+<title>Section object</title><para><itemizedlist>
+<listitem><para><bold>parent</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Nom du SceneNode auquel la géométrie est attachée.</para>
+</listitem><listitem><para><bold>mesh</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Définit le maillage utilisé par cet objet.</para>
+</listitem><listitem><para><bold>material</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Nom d’un materiau défini dans un fichier .cmtl ou dans ce fichier. Applique le materiau à tous les sous-maillages.</para>
+</listitem><listitem><para><bold>materials</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir le matériau pour chaque sous-maillage.</para>
+</listitem><listitem><para><bold>cast_shadows</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Définit si l’objet projette des ombres (<emphasis>true</emphasis>, valeur par défaut) ou pas (<emphasis>false</emphasis>).</para>
+</listitem><listitem><para><bold>receive_shadows</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Définit si l’objet reçoit des ombres (<emphasis>true</emphasis>, valeur par défaut) ou pas (<emphasis>false</emphasis>).</para>
+</listitem><listitem><para><bold>cullable</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Définit si l’objet est cullable (<emphasis>true</emphasis>, valeur par défaut) ou pas (<emphasis>false</emphasis>).</para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="d8/d1f/a11660_1autotoc_md168">
+<title>Section materials</title><para><itemizedlist>
+<listitem><para><bold>material</bold> : <emphasis>entier</emphasis>, <emphasis>nom</emphasis> <linebreak/>
+ Index du sous-maillage et nom du matériau à utiliser.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md169">
+<title>Section billboard</title><para>Permet de définir des billboards partageant le même matériau et faisant les mêmes dimensions.</para>
+<para><itemizedlist>
+<listitem><para><bold>parent</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Définit le SceneNode auquel ces billboards seront attachés.</para>
+</listitem><listitem><para><bold>type</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Définit le type de billboards. Les valeurs possibles sont :<itemizedlist>
+<listitem><para><emphasis>cylindrical</emphasis>: Les billboards font face à la caméra, sauf pour leur axe Y, qui reste fixe.</para>
+</listitem><listitem><para><emphasis>spherical</emphasis>: Les billboards font face à la caméra sur tous les axes.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>positions</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir les positions relatives des différentes instances des billboards.</para>
+</listitem><listitem><para><bold>material</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Définit le matériau utilisé pour l’affichage des billboards.</para>
+</listitem><listitem><para><bold>dimensions</bold> : <emphasis>taille</emphasis> <linebreak/>
+ Définit la taille des billboards.</para>
+</listitem><listitem><para><bold>size</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Définit le redimensionnement des billboards. Les valeurs possibles sont :<itemizedlist>
+<listitem><para><emphasis>dynamic</emphasis>: La taille varie, en fonction de la distance de la caméra.</para>
+</listitem><listitem><para><emphasis>fixed</emphasis>: La taille est fixe, quelle que soit la distance à la caméra.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="d8/d1f/a11660_1autotoc_md170">
+<title>Section positions</title><para><itemizedlist>
+<listitem><para><bold>pos</bold> : <emphasis>3 réels</emphasis> <linebreak/>
+ Définit la position relative d’un billboard.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md171">
+<title>Section particle_system</title><para><itemizedlist>
+<listitem><para><bold>parent</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le SceneNode auquel ce partcle system sera attaché.</para>
+</listitem><listitem><para><bold>particles_count</bold> : <emphasis>uint</emphasis> <linebreak/>
+ Définit le nombre maximal supporté de particules.</para>
+</listitem><listitem><para><bold>material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau utilisé par les particules.</para>
+</listitem><listitem><para><bold>dimensions</bold> : <emphasis>size</emphasis> <linebreak/>
+ Définit la taille des particules.</para>
+</listitem><listitem><para><bold>particle</bold> : <emphasis>section</emphasis> <linebreak/>
+ Nouvelle section décrivant le contenu d&apos;une particule.</para>
+</listitem><listitem><para><bold>cs_shader_program</bold> : <emphasis>section</emphasis> <linebreak/>
+ Nouvelle section décrivant le programme shader utilisé pour gérer les particules.</para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="d8/d1f/a11660_1autotoc_md172">
+<title>Section particle</title><para><itemizedlist>
+<listitem><para><bold>type</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Définit le nom du type de particule.</para>
+</listitem><listitem><para><bold>variable</bold> : <emphasis>nom</emphasis> <emphasis>valeur</emphasis> <emphasis>valeur par défaut</emphasis> <linebreak/>
+ Définit une variable membre d&apos;une particule. Le premier paramètre est le nom de la variable. Le second pparamètre est le type de la variable, peut valoir :<itemizedlist>
+<listitem><para><emphasis>int</emphasis> : 1 entier signé.</para>
+</listitem><listitem><para><emphasis>vec2i</emphasis> : 2 entiers signés.</para>
+</listitem><listitem><para><emphasis>vec3i</emphasis> : 3 entiers signés.</para>
+</listitem><listitem><para><emphasis>vec4i</emphasis> : 4 entiers signés.</para>
+</listitem><listitem><para><emphasis>uint</emphasis> : 1 entier non signé.</para>
+</listitem><listitem><para><emphasis>vec2ui</emphasis> : 2 entiers non signés.</para>
+</listitem><listitem><para><emphasis>vec3ui</emphasis> : 3 entiers non signés.</para>
+</listitem><listitem><para><emphasis>vec4ui</emphasis> : 4 entiers non signés.</para>
+</listitem><listitem><para><emphasis>float</emphasis> : 1 nombre flottant simple précision.</para>
+</listitem><listitem><para><emphasis>vec2f</emphasis> : 2 nombres flottants simple précision.</para>
+</listitem><listitem><para><emphasis>vec3f</emphasis> : 3 nombres flottants simple précision.</para>
+</listitem><listitem><para><emphasis>vec4f</emphasis> : 4 nombres flottants simple précision.</para>
+</listitem><listitem><para><emphasis>mat2x2f</emphasis> : Matrice 2x2 de nombres flottants simple précision.</para>
+</listitem><listitem><para><emphasis>mat3x3f</emphasis> : Matrice 3x3 de nombres flottants simple précision.</para>
+</listitem><listitem><para><emphasis>mat4x4f</emphasis> : Matrice 4x4 de nombres flottants simple précision. Le troisième paramètre est la valeur par défaut de la variable.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md173">
+<title>Section camera</title><para><itemizedlist>
+<listitem><para><bold>parent</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Définit le CameraNode auquel la caméra est attachée.</para>
+</listitem><listitem><para><bold>primitive</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Définit le type d’affichage de la caméra, peut prendre les valeurs suivantes :<itemizedlist>
+<listitem><para><emphasis>points</emphasis> : Des points.</para>
+</listitem><listitem><para><emphasis>lines</emphasis> : Des lignes disjointes.</para>
+</listitem><listitem><para><emphasis>line_loop</emphasis> : Une boucle formée de lignes jointes.</para>
+</listitem><listitem><para><emphasis>line_strip</emphasis> : Des lignes jointes.</para>
+</listitem><listitem><para><emphasis>triangles</emphasis> : Des triangles disjoints.</para>
+</listitem><listitem><para><emphasis>triangle_strip</emphasis> : Des triangles joints.</para>
+</listitem><listitem><para><emphasis>triangle_fan</emphasis> : Des triangles joints par le premier point.</para>
+</listitem><listitem><para><emphasis>quads</emphasis> : Des quadrilatères disjoints.</para>
+</listitem><listitem><para><emphasis>quad_strip</emphasis> : Des quadrilatères joints.</para>
+</listitem><listitem><para><emphasis>polygon</emphasis> : Des polygones.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>viewport</bold> : <emphasis>section</emphasis> Définit la fenêtre d’affichage de la caméra.</para>
+</listitem><listitem><para><bold>hdr_config</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une nouvelle section, décrivant la configuration HDR.</para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="d8/d1f/a11660_1autotoc_md174">
+<title>Section viewport</title><para><itemizedlist>
+<listitem><para><bold>type</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Type de viewport. Peut prendre les valeurs suivantes :<itemizedlist>
+<listitem><para><emphasis>ortho</emphasis> : Viewport orthographique.</para>
+</listitem><listitem><para><emphasis>perspective</emphasis> : Viewport perspective.</para>
+</listitem><listitem><para><emphasis>frustum</emphasis> : Viewport frustum.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>left</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la coordonnée X minimale affichée.</para>
+</listitem><listitem><para><bold>right</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la coordonnée X maximale affichée.</para>
+</listitem><listitem><para><bold>top</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la coordonnée Y minimale affichée.</para>
+</listitem><listitem><para><bold>bottom</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la coordonnée Y maximale affichée.</para>
+</listitem><listitem><para><bold>near</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la coordonnée Z minimale affichée.</para>
+</listitem><listitem><para><bold>far</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la coordonnée Z maximale affichée.</para>
+</listitem><listitem><para><bold>size</bold> : <emphasis>taille</emphasis> <linebreak/>
+ Définit la taille de la fenêtre d’affichage (en pixels).</para>
+</listitem><listitem><para><bold>fov_y</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit l’angle d’ouverture vertical, en radians.</para>
+</listitem><listitem><para><bold>aspect_ratio</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit l’aspect global de la fenêtre (1.33333 pour 4/3, 1.77777 pour 16/9 … ).</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d8/d1f/a11660_1autotoc_md175">
+<title>Section hdr_config</title><para><itemizedlist>
+<listitem><para><bold>exposure</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit l’exposition de la scène.</para>
+</listitem><listitem><para><bold>gamma</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la correction gamma de la scène.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md176">
+<title>Section animated_object_group</title><para><itemizedlist>
+<listitem><para><bold>animated_object</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Définit le nom d’un objet à ajouter dans le groupe.</para>
+</listitem><listitem><para><bold>animated_mesh</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Définit le nom d’un objet dont le maillage est à ajouter dans le groupe.</para>
+</listitem><listitem><para><bold>animated_skeleton</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Définit le nom d’un objet dont le squelette est à ajouter dans le groupe.</para>
+</listitem><listitem><para><bold>animated_node</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Définit le nom d’un node à ajouter dans le groupe.</para>
+</listitem><listitem><para><bold>animation</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Ajoute l’animation dont le nom est donné à la liste d’animations communes.</para>
+</listitem><listitem><para><bold>start_animation</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Démarre l’animation donnée.</para>
+</listitem><listitem><para><bold>pause_animation</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Met l’animation donnée en pause (elle doit avoir été démarrée au préalable).</para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="d8/d1f/a11660_1autotoc_md177">
+<title>Section animation</title><para><itemizedlist>
+<listitem><para><bold>looped</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Définit si l’animation est bouclée (<emphasis>true</emphasis>) ou pas (<emphasis>false</emphasis>, valeur par défaut).</para>
+</listitem><listitem><para><bold>scale</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la vitesse de l’animation (peut être négative, l’animation sera alors jouée à l’envers).</para>
+</listitem><listitem><para><bold>start_at</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit l&apos;index de départ de l&apos;animation.</para>
+</listitem><listitem><para><bold>stop_at</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit l&apos;index d&apos;arrêt de l&apos;animation.</para>
+</listitem><listitem><para><bold>interpolation</bold> : <emphasis>value</emphasis> <linebreak/>
+ Définit l&apos;interpolation entre les keyframes, peut valoir :<itemizedlist>
+<listitem><para><emphasis>nearest</emphasis> : Pas d&apos;interpolation.</para>
+</listitem><listitem><para><emphasis>linear</emphasis> : Interpolation linéaire.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+</sect1>
+<sect1 id="d8/d1f/a11660_1autotoc_md178">
+<title>Section skeleton</title><para><itemizedlist>
+<listitem><para><bold>import</bold> : <emphasis>fichier</emphasis> &lt;<emphasis>options</emphasis>&gt; <linebreak/>
+ Permet l’import d’un fichier contenant les données du squelette. Ce fichier peut être au format cmsh ou tout autre format supporté par Castor3D. Uniquement si le type du maillage est <bold>custom</bold>. Cette directive peut de plus prendre plusieurs options parmi les suivantes :<itemizedlist>
+<listitem><para><emphasis>rescale</emphasis>=*réel* : Met le squelette à l’échelle, sur les trois axes.</para>
+</listitem><listitem><para><emphasis>preferred_importer</emphasis>=*nom* : Permet de définir un importeur qui sera utilisé plutôt qu&apos;un autre, si plusieurs importeurs supportent le format de fichier.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>import_anim</bold> : <emphasis>fichier</emphasis> &lt;<emphasis>options</emphasis>&gt; <linebreak/>
+ Permet l’import d’un fichier contenant des données d&apos;animation de squelette. <linebreak/>
+ Cette directive peut de plus prendre plusieurs options parmi les suivantes :<itemizedlist>
+<listitem><para><emphasis>rescale</emphasis>=*réel* : Met le squelette à l’échelle, sur les trois axes.</para>
+</listitem><listitem><para><emphasis>preferred_importer</emphasis>=*nom* : Permet de définir un importeur qui sera utilisé plutôt qu&apos;un autre, si plusieurs importeurs supportent le format de fichier.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d8/d1f/a11660_1autotoc_md179">
+<title>Section mesh</title><para><itemizedlist>
+<listitem><para><bold>type</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Nom du type de maillage. Peut être :<itemizedlist>
+<listitem><para><emphasis>custom</emphasis> : maillage défini manuellement ou maillage importé.</para>
+</listitem><listitem><para><emphasis>cube</emphasis> : cube, il faut définir ses 3 dimensions par la suite.</para>
+</listitem><listitem><para><emphasis>cone</emphasis> : cône, il faut définir son rayon et sa hauteur par la suite.</para>
+</listitem><listitem><para><emphasis>cylinder</emphasis> : cylindre, dont il faut entrer ensuite le rayon et la hauteur.</para>
+</listitem><listitem><para><emphasis>sphere</emphasis> : sphère à faces “carrées”, il faut définir le nombre de subdivision et le rayon.</para>
+</listitem><listitem><para><emphasis>icosahedron</emphasis> : sphère à faces triangulaires, il faut définir le nombre de subdivision et le rayon.</para>
+</listitem><listitem><para><emphasis>torus</emphasis> : torre, il est nécessaire de définir le nombre de subdivisions internes, externes et les rayons interne et externe.</para>
+</listitem><listitem><para><emphasis>plane</emphasis> : un plan, il est nécessaire de définir le nombre de subdivisions en largeur et en profondeur ainsi que la largeur et la profondeur.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>skeleton</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le squelette utilisé par le maillage.</para>
+</listitem><listitem><para><bold>import</bold> : <emphasis>fichier</emphasis> &lt;<emphasis>options</emphasis>&gt; <linebreak/>
+ Permet l’import d’un fichier contenant les données du maillage. Ce fichier peut être au format cmsh ou tout autre format supporté par Castor3D. Uniquement si le type du maillage est <bold>custom</bold>. Cette directive peut de plus prendre plusieurs options parmi les suivantes :<itemizedlist>
+<listitem><para><emphasis>rescale</emphasis>=*réel* : Met le maillage à l’échelle, sur les trois axes.</para>
+</listitem><listitem><para><emphasis>pitch</emphasis>=*réel* : Tourne le maillage de l&apos;angle donné (en degrés) autour de l&apos;axe X.</para>
+</listitem><listitem><para><emphasis>yaw</emphasis>=*réel* : Tourne le maillage de l&apos;angle donné (en degrés) autour de l&apos;axe Y.</para>
+</listitem><listitem><para><emphasis>roll</emphasis>=*réel* : Tourne le maillage de l&apos;angle donné (en degrés) autour de l&apos;axe Z.</para>
+</listitem><listitem><para><emphasis>preferred_importer</emphasis>=*nom* : Permet de définir un importeur qui sera utilisé plutôt qu&apos;un autre, si plusieurs importeurs supportent le format de fichier.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>import_morph_target</bold> : <emphasis>fichier</emphasis> &lt;<emphasis>options</emphasis>&gt; <linebreak/>
+ Permet l’import d’un fichier contenant des données de maillage qui seront utilisées en tant que morph targets pour le mesh courant. Ce fichier peut être au format cmsh ou tout autre format supporté par Castor3D. Uniquement si le type du maillage est <bold>custom</bold>. Cette directive peut de plus prendre plusieurs options parmi les suivantes : Ce fichier peut être au format cmsh ou tout autre format supporté par Castor3D. <linebreak/>
+ Disponible uniquement si le type du maillage est <emphasis>custom</emphasis>. <linebreak/>
+ Cette directive peut de plus prendre plusieurs options parmi les suivantes :<itemizedlist>
+<listitem><para><emphasis>rescale</emphasis>=*réel* : Met le maillage à l’échelle, sur les trois axes.</para>
+</listitem><listitem><para><emphasis>pitch</emphasis>=*réel* : Tourne le maillage de l&apos;angle donné (en degrés) autour de l&apos;axe X.</para>
+</listitem><listitem><para><emphasis>yaw</emphasis>=*réel* : Tourne le maillage de l&apos;angle donné (en degrés) autour de l&apos;axe Y.</para>
+</listitem><listitem><para><emphasis>roll</emphasis>=*réel* : Tourne le maillage de l&apos;angle donné (en degrés) autour de l&apos;axe Z.</para>
+</listitem><listitem><para><emphasis>preferred_importer</emphasis>=*nom* : Permet de définir un importeur qui sera utilisé plutôt qu&apos;un autre, si plusieurs importeurs supportent le format de fichier.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>import_anim</bold> : <emphasis>fichier</emphasis> &lt;<emphasis>options</emphasis>&gt; <linebreak/>
+ Permet l’import d’un fichier contenant des données d&apos;animation de maillage. <linebreak/>
+ Ce fichier peut être au format cmsh ou tout autre format supporté par Castor3D. <linebreak/>
+ Disponible uniquement si le type du maillage est <emphasis>custom</emphasis>. <linebreak/>
+ Cette directive peut de plus prendre plusieurs options parmi les suivantes :<itemizedlist>
+<listitem><para><emphasis>rescale</emphasis>=*réel* : Met le maillage à l’échelle, sur les trois axes.</para>
+</listitem><listitem><para><emphasis>pitch</emphasis>=*réel* : Tourne le maillage de l&apos;angle donné (en degrés) autour de l&apos;axe X.</para>
+</listitem><listitem><para><emphasis>yaw</emphasis>=*réel* : Tourne le maillage de l&apos;angle donné (en degrés) autour de l&apos;axe Y.</para>
+</listitem><listitem><para><emphasis>roll</emphasis>=*réel* : Tourne le maillage de l&apos;angle donné (en degrés) autour de l&apos;axe Z.</para>
+</listitem><listitem><para><emphasis>preferred_importer</emphasis>=*nom* : Permet de définir un importeur qui sera utilisé plutôt qu&apos;un autre, si plusieurs importeurs supportent le format de fichier.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>division</bold> : <emphasis>nom</emphasis> <emphasis>entier</emphasis> <linebreak/>
+ Permet la subdivision du maillage en utilisant un algorithm défini par le nom donné (support en fonction des plugins). Le second paramètre est le nombre de fois où la division est effectuée (récursivement).</para>
+</listitem><listitem><para><bold>submesh</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit un sous-maillage, uniquement si le type du maillage est <bold>custom</bold>.</para>
+</listitem><listitem><para><bold>morph_animation</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une nouvelle section, décrivant une animation de morphing.</para>
+</listitem><listitem><para><bold>default_materials</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir le matériau pour chaque sous-maillage.</para>
+</listitem></itemizedlist>
+</para>
+<sect2 id="d8/d1f/a11660_1autotoc_md180">
+<title>Section submesh</title><para><itemizedlist>
+<listitem><para><bold>vertex</bold> : <emphasis>3 réels</emphasis> <linebreak/>
+ Ajoute le sommet défini par les coordonnées au sous-maillage.</para>
+</listitem><listitem><para><bold>uv</bold> : <emphasis>2 réels</emphasis> <linebreak/>
+ Définit les uv à utiliser pour le sommet déclaré précédemment.</para>
+</listitem><listitem><para><bold>uvw</bold> : <emphasis>3 réels</emphasis> <linebreak/>
+ Définit les uvw à utiliser pour le sommet déclaré précédemment.</para>
+</listitem><listitem><para><bold>normal</bold> : <emphasis>3 réels</emphasis> <linebreak/>
+ Définit la normale à utiliser pour le sommet déclaré précédemment.</para>
+</listitem><listitem><para><bold>tangent</bold> : <emphasis>3 réels</emphasis> <linebreak/>
+ Définit la tangente à utiliser pour le sommet déclaré précédemment.</para>
+</listitem><listitem><para><bold>face</bold> : <emphasis>3 ou 4 entiers</emphasis> <linebreak/>
+ Définit une face qui utilise les 3 ou 4 indices de sommet. S’il y a plus de 3 indices, crée autant de faces triangulaires que nécessaire.</para>
+</listitem><listitem><para><bold>face_uv</bold> : <emphasis>autant d’uv que d’indices de la face</emphasis> <linebreak/>
+ Définit les uv à utiliser pour la face déclarée précédemment.</para>
+</listitem><listitem><para><bold>face_uvw</bold> : <emphasis>autant d’uvw que d’indices de la face</emphasis> <linebreak/>
+ Définit les uvw à utiliser pour la face déclarée précédemment.</para>
+</listitem><listitem><para><bold>face_normals</bold> : <emphasis>autant de groupes de 3 réels que d’indices de la face</emphasis> <linebreak/>
+ Définit les normales à utiliser pour la face déclarée précédemment.</para>
+</listitem><listitem><para><bold>face_tangents</bold> : <emphasis>autant de groupes de 3 réels que d’indices de la face</emphasis> <linebreak/>
+ Définit les tangentes à utiliser pour la face déclarée précédemment.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md181">
+<title>Section morph_animation</title><para><itemizedlist>
+<listitem><para><bold>target_weight</bold> : <emphasis>réel</emphasis> <emphasis>entier</emphasis> <emphasis>réel</emphasis> Définit le poids pour une morph target. La première valeur est un indice de temps en secondes. La seconde valeur est l&apos;indice de la morph target. La troisième valeur est le poids de la target.</para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="d8/d1f/a11660_1autotoc_md182">
+<title>Section default_materials</title><para><itemizedlist>
+<listitem><para><bold>material</bold> : <emphasis>entier</emphasis>, <emphasis>nom</emphasis> <linebreak/>
+ Index du sous-maillage et nom du matériau à utiliser.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+</sect1>
+<sect1 id="d8/d1f/a11660_1autotoc_md183">
+<title>Section panel_overlay</title><para><itemizedlist>
+<listitem><para><bold>material</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Définit le matériau utilisé par le panneau.</para>
+</listitem><listitem><para><bold>position</bold> : <emphasis>2 réels</emphasis> <linebreak/>
+ Définit la position de l’incrustation, par rapport à son parent (ou à l’écran).</para>
+</listitem><listitem><para><bold>size</bold> : <emphasis>2 réels</emphasis> <linebreak/>
+ Définit la taille de l’incrustation, par rapport à son parent (ou à l’écran).</para>
+</listitem><listitem><para><bold>pxl_position</bold> : <emphasis>2 entiers</emphasis> <linebreak/>
+ Définit la position absolue de l’incrustation, en pixels.</para>
+</listitem><listitem><para><bold>pxl_size</bold> : <emphasis>2 entiers</emphasis> <linebreak/>
+ Définit la taille absolue de l’incrustation, en pixels.</para>
+</listitem><listitem><para><bold>uv</bold> : <emphasis>4 réels</emphasis> <linebreak/>
+ Définit les UV pour l’incrustation (gauche, haut, droit, bas).</para>
+</listitem><listitem><para><bold>panel_overlay</bold> : <emphasis>nom</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une incrustation fille de type panneau simple.</para>
+</listitem><listitem><para><bold>border_panel_overlay</bold> : <emphasis>nom</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une incrustation fille de type panneau avec bordure.</para>
+</listitem><listitem><para><bold>text_overlay</bold> : <emphasis>nom</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une incrustation fille de type panneau avec texte.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d8/d1f/a11660_1autotoc_md184">
+<title>Section border_panel_overlay</title><para><itemizedlist>
+<listitem><para><bold>material</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Définit le matériau utilisé par le panneau.</para>
+</listitem><listitem><para><bold>position</bold> : <emphasis>2 réels</emphasis> <linebreak/>
+ Définit la position de l’incrustation, par rapport à son parent (ou à l’écran).</para>
+</listitem><listitem><para><bold>size</bold> : <emphasis>2 réels</emphasis> <linebreak/>
+ Définit la taille de l’incrustation, par rapport à son parent (ou à l’écran).</para>
+</listitem><listitem><para><bold>pxl_position</bold> : <emphasis>2 réels</emphasis> <linebreak/>
+ Définit la position absolue de l’incrustation, en pixels.</para>
+</listitem><listitem><para><bold>pxl_size</bold> : <emphasis>2 réels</emphasis> <linebreak/>
+ Définit la taille absolue de l’incrustation, en pixels.</para>
+</listitem><listitem><para><bold>center_uv</bold> : <emphasis>4 réels</emphasis> <linebreak/>
+ Définit les UV pour le centre de l’incrustation (gauche, haut, droit, bas).</para>
+</listitem><listitem><para><bold>border_material</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Définit le matériau utilisé par la bordure du panneau.</para>
+</listitem><listitem><para><bold>border_position</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Définit la position de la bordure de l’incrustation, parmi les valeurs suivantes :<itemizedlist>
+<listitem><para><emphasis>internal</emphasis> : La bordure à l’intérieur de l’inscrustation (elle ne dépasse pas de l’incrustation).</para>
+</listitem><listitem><para><emphasis>middle</emphasis> : La bordure est à moitié à l’intérieur et à moitié à l’extérieur de l’incrustation (elle dépasse de l’incrustation).</para>
+</listitem><listitem><para><emphasis>external</emphasis> : La bordure est à l’extérieur de l’incrustation (elle n’empiète pas sur le contenu de l’incrustation).</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>border_size</bold> : <emphasis>4 réels</emphasis> <linebreak/>
+ Définit la taille des bords (gauche, droite, haut , bas), par rapport au parent (ou à l’écran).</para>
+</listitem><listitem><para><bold>pxl_border_size</bold> : <emphasis>2 entiers</emphasis> <linebreak/>
+ Définit la taille absolue de l’incrustation, en pixels.</para>
+</listitem><listitem><para><bold>border_inner_uv</bold> : <emphasis>4 réels</emphasis> <linebreak/>
+ Définit les UV pour la bordure de l’incrustation, côté intérieur (gauche, haut, droit, bas).</para>
+</listitem><listitem><para><bold>border_outer_uv</bold> : <emphasis>4 réels</emphasis> <linebreak/>
+ Définit les UV pour la bordure de l’incrustation, côté extérieur (gauche, haut, droit, bas).</para>
+</listitem><listitem><para><bold>panel_overlay</bold> : <emphasis>nom</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une incrustation fille de type panneau simple.</para>
+</listitem><listitem><para><bold>border_panel_overlay</bold> : <emphasis>nom</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une incrustation fille de type panneau avec bordure.</para>
+</listitem><listitem><para><bold>text_overlay</bold> : <emphasis>nom</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une incrustation fille de type panneau avec texte.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d8/d1f/a11660_1autotoc_md185">
+<title>Section text_overlay</title><para><itemizedlist>
+<listitem><para><bold>material</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Définit le matériau utilisé par le panneau.</para>
+</listitem><listitem><para><bold>position</bold> : <emphasis>2 réels</emphasis> <linebreak/>
+ Définit la position de l’incrustation, par rapport à son parent (ou à l’écran).</para>
+</listitem><listitem><para><bold>size</bold> : <emphasis>2 réels</emphasis> <linebreak/>
+ Définit la taille de l’incrustation, par rapport à son parent (ou à l’écran).</para>
+</listitem><listitem><para><bold>pxl_position</bold> : <emphasis>2 entiers</emphasis> <linebreak/>
+ Définit la position absolue de l’incrustation, en pixels.</para>
+</listitem><listitem><para><bold>pxl_size</bold> : <emphasis>2 entiers</emphasis> <linebreak/>
+ Définit la taille absolue de l’incrustation, en pixels.</para>
+</listitem><listitem><para><bold>font</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Définit la police utilisée par l’incrustation.</para>
+</listitem><listitem><para><bold>text</bold> : <emphasis>texte</emphasis> <linebreak/>
+ Définit le texte affiché.</para>
+</listitem><listitem><para><bold>text_wrapping</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Définit la manière dont le texte est découpé dans le cas où une ligne dépasse les dimensions de l’incrustation :<itemizedlist>
+<listitem><para><emphasis>none</emphasis> : Le texte n’est pas découpé (ce qui dépasse n’est pas affiché).</para>
+</listitem><listitem><para><emphasis>break</emphasis> : Le texte est découpé à la lettre (les mots sont coupés).</para>
+</listitem><listitem><para><emphasis>break_words</emphasis> : Le texte est découpé au mot (les mots restent entiers).</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>vertical_align</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Définit la manière dont le texte est aligné verticalement, dans son incrustation :<itemizedlist>
+<listitem><para><emphasis>top</emphasis> : Le texte est aligné en haut.</para>
+</listitem><listitem><para><emphasis>center</emphasis> : Le texte est centré.</para>
+</listitem><listitem><para><emphasis>bottom</emphasis> : Le texte est aligné en bas.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>horizontal_align</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Définit la manière dont le texte est aligné horizontalement, dans son incrustation :<itemizedlist>
+<listitem><para><emphasis>left</emphasis> : Le texte est aligné à gauche.</para>
+</listitem><listitem><para><emphasis>center</emphasis> : Le texte est centré.</para>
+</listitem><listitem><para><emphasis>right</emphasis> : Le texte est aligné à droite.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>texturing_mode</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Définit la manière dont la texture est appliquée :<itemizedlist>
+<listitem><para><emphasis>letter</emphasis> : La texture est appliquée sur chaque lettre.</para>
+</listitem><listitem><para><emphasis>text</emphasis> : La texture est appliquée sur tout le texte.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>line_spacing_mode</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Définit la hauteur des lignes :<itemizedlist>
+<listitem><para><emphasis>own_height</emphasis> : Chaque ligne a pour hauteur sa propre hauteur.</para>
+</listitem><listitem><para><emphasis>max_lines_height</emphasis> : Chaque ligne a pour hauteur la hauteur de la plus haute ligne.</para>
+</listitem><listitem><para><emphasis>max_font_height</emphasis> : Chaque ligne a pour hauteur la hauteur du plus haut caractère de la police.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>panel_overlay</bold> : <emphasis>nom</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une incrustation fille de type panneau simple.</para>
+</listitem><listitem><para><bold>border_panel_overlay</bold> : <emphasis>nom</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une incrustation fille de type panneau avec bordure.</para>
+</listitem><listitem><para><bold>text_overlay</bold> : <emphasis>nom</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une incrustation fille de type panneau avec texte.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d8/d1f/a11660_1autotoc_md186">
+<title>Section window</title><para><itemizedlist>
+<listitem><para><bold>vsync</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Permet de dire si on veut activer la synchronisation verticale.</para>
+</listitem><listitem><para><bold>fullscreen</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Permet d’activer ou non l’affichage plein écran.</para>
+</listitem><listitem><para><bold>allow_hdr</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Permet d’activer le rendu HDR si la surface le permet.</para>
+</listitem><listitem><para><bold>render_target</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une nouvelle section décrivant la cible de rendu.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d8/d1f/a11660_1autotoc_md187">
+<title>Section render_target</title><para><itemizedlist>
+<listitem><para><bold>scene</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Permet de définir la scène rendue dans cette cible.</para>
+</listitem><listitem><para><bold>camera</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Permet de définir la caméra utilisée pour rendre la scène.</para>
+</listitem><listitem><para><bold>size</bold> : <emphasis>taille</emphasis> <linebreak/>
+ Définit la taille du buffer interne de la cible de rendu.</para>
+</listitem><listitem><para><bold>format</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Définit le format des pixels du buffer couleur de la cible de rendu. Peut valoir :<itemizedlist>
+<listitem><para><emphasis>l8</emphasis> : Luminance 8 bits, 1 nombre entier 8 bits.</para>
+</listitem><listitem><para><emphasis>l16f</emphasis> : Luminance 16 bits, 1 nombre en virgule flottante 16 bits (half float).</para>
+</listitem><listitem><para><emphasis>l32f</emphasis> : Luminance 32 bits, 1 nombre en virgule flottante 32 bits (float).</para>
+</listitem><listitem><para><emphasis>al16</emphasis> : Transparence + Luminance, 2 nombres entiers 8 bits.</para>
+</listitem><listitem><para><emphasis>al16f</emphasis> : Transparence + Luminance, 2 nombres en virgule flottante 16 bits (half float).</para>
+</listitem><listitem><para><emphasis>al32f</emphasis> : Transparence + Luminance, 2 nombres en virgule flottante 32 bits (float).</para>
+</listitem><listitem><para><emphasis>argb1555</emphasis> : ARGB 16 bits, 1 bit alpha et chaque composante sur un entier 5 bits.</para>
+</listitem><listitem><para><emphasis>rgb565</emphasis> : RGB 16 bits, R sur un entier 5 bits, G sur un entier 6 bits et B sur un entier 5 bits.</para>
+</listitem><listitem><para><emphasis>argb16</emphasis> : ARGB 16 bits, chaque composante sur un entier 4 bits.</para>
+</listitem><listitem><para><emphasis>rgb24</emphasis> : RGB 24 bits, chaque composante sur un entier 8 bits.</para>
+</listitem><listitem><para><emphasis>argb32</emphasis> : ARGB 32 bits, chaque composante sur un entier 8 bits.</para>
+</listitem><listitem><para><emphasis>argb16f</emphasis> : ARGB 64 bits, chaque composante sur un flottant 16 bits (half float).</para>
+</listitem><listitem><para><emphasis>rgb32f</emphasis> : RGB 96 bits, chaque composante sur un flottant 32 bits (float).</para>
+</listitem><listitem><para><emphasis>argb32f</emphasis> : ARGB 128 bits, chaque composante sur un flottant 32 bits (float).</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>hdr_format</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Définit le format des pixels du buffer couleur HDR de la cible de rendu, si la surface supporte le rendu HDR. Peut valoir :<itemizedlist>
+<listitem><para><emphasis>l8</emphasis> : Luminance 8 bits, 1 nombre entier 8 bits.</para>
+</listitem><listitem><para><emphasis>l16f</emphasis> : Luminance 16 bits, 1 nombre en virgule flottante 16 bits (half float).</para>
+</listitem><listitem><para><emphasis>l32f</emphasis> : Luminance 32 bits, 1 nombre en virgule flottante 32 bits (float).</para>
+</listitem><listitem><para><emphasis>al16</emphasis> : Transparence + Luminance, 2 nombres entiers 8 bits.</para>
+</listitem><listitem><para><emphasis>al16f</emphasis> : Transparence + Luminance, 2 nombres en virgule flottante 16 bits (half float).</para>
+</listitem><listitem><para><emphasis>al32f</emphasis> : Transparence + Luminance, 2 nombres en virgule flottante 32 bits (float).</para>
+</listitem><listitem><para><emphasis>argb1555</emphasis> : ARGB 16 bits, 1 bit alpha et chaque composante sur un entier 5 bits.</para>
+</listitem><listitem><para><emphasis>rgb565</emphasis> : RGB 16 bits, R sur un entier 5 bits, G sur un entier 6 bits et B sur un entier 5 bits.</para>
+</listitem><listitem><para><emphasis>argb16</emphasis> : ARGB 16 bits, chaque composante sur un entier 4 bits.</para>
+</listitem><listitem><para><emphasis>rgb24</emphasis> : RGB 24 bits, chaque composante sur un entier 8 bits.</para>
+</listitem><listitem><para><emphasis>argb32</emphasis> : ARGB 32 bits, chaque composante sur un entier 8 bits.</para>
+</listitem><listitem><para><emphasis>argb16f</emphasis> : ARGB 64 bits, chaque composante sur un flottant 16 bits (half float).</para>
+</listitem><listitem><para><emphasis>rgb32f</emphasis> : RGB 96 bits, chaque composante sur un flottant 32 bits (float).</para>
+</listitem><listitem><para><emphasis>argb32f</emphasis> : ARGB 128 bits, chaque composante sur un flottant 32 bits (float).</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>srgb_format</bold> : <emphasis>valeur</emphasis> <linebreak/>
+ Définit le format des pixels du buffer couleur SRGB de la cible de rendu, si la surface ne supporte pas le rendu HDR. Peut valoir :<itemizedlist>
+<listitem><para><emphasis>l8</emphasis> : Luminance 8 bits, 1 nombre entier 8 bits.</para>
+</listitem><listitem><para><emphasis>l16f</emphasis> : Luminance 16 bits, 1 nombre en virgule flottante 16 bits (half float).</para>
+</listitem><listitem><para><emphasis>l32f</emphasis> : Luminance 32 bits, 1 nombre en virgule flottante 32 bits (float).</para>
+</listitem><listitem><para><emphasis>al16</emphasis> : Transparence + Luminance, 2 nombres entiers 8 bits.</para>
+</listitem><listitem><para><emphasis>al16f</emphasis> : Transparence + Luminance, 2 nombres en virgule flottante 16 bits (half float).</para>
+</listitem><listitem><para><emphasis>al32f</emphasis> : Transparence + Luminance, 2 nombres en virgule flottante 32 bits (float).</para>
+</listitem><listitem><para><emphasis>argb1555</emphasis> : ARGB 16 bits, 1 bit alpha et chaque composante sur un entier 5 bits.</para>
+</listitem><listitem><para><emphasis>rgb565</emphasis> : RGB 16 bits, R sur un entier 5 bits, G sur un entier 6 bits et B sur un entier 5 bits.</para>
+</listitem><listitem><para><emphasis>argb16</emphasis> : ARGB 16 bits, chaque composante sur un entier 4 bits.</para>
+</listitem><listitem><para><emphasis>rgb24</emphasis> : RGB 24 bits, chaque composante sur un entier 8 bits.</para>
+</listitem><listitem><para><emphasis>argb32</emphasis> : ARGB 32 bits, chaque composante sur un entier 8 bits.</para>
+</listitem><listitem><para><emphasis>argb16f</emphasis> : ARGB 64 bits, chaque composante sur un flottant 16 bits (half float).</para>
+</listitem><listitem><para><emphasis>rgb32f</emphasis> : RGB 96 bits, chaque composante sur un flottant 32 bits (float).</para>
+</listitem><listitem><para><emphasis>argb32f</emphasis> : ARGB 128 bits, chaque composante sur un flottant 32 bits (float).</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>postfx</bold> : <emphasis>nom</emphasis>, <emphasis>parametres optionnels</emphasis> <linebreak/>
+ Définit un effet post-rendu à utiliser. Les paramètres optionnels dépendent de l’effet choisi.</para>
+</listitem><listitem><para><bold>tone_mapping</bold> : <emphasis>nom</emphasis> <linebreak/>
+ Définit l’opérateur de mappage de ton, à utiliser avec la cible de rendu.</para>
+</listitem><listitem><para><bold>ssao</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une nouvelle section décrivant le Screen Space Ambient Occlusion.</para>
+</listitem><listitem><para><bold>clusters</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit une nouvelle section décrivant la configuration des clusters de sources lumineuses.</para>
+</listitem></itemizedlist>
+</para>
+<sect2 id="d8/d1f/a11660_1autotoc_md188">
+<title>Section ssao</title><para><itemizedlist>
+<listitem><para><bold>enabled</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Définit le statut d’activation du SSAO.</para>
+</listitem><listitem><para><bold>high_quality</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Définit la qalité de l’effet.</para>
+</listitem><listitem><para><bold>radius</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit le rayon de l’effet (exprimé en mètres).</para>
+</listitem><listitem><para><bold>bias</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit le bias de l’effet.</para>
+</listitem><listitem><para><bold>intensity</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit l’intensité de l’effet.</para>
+</listitem><listitem><para><bold>num_samples</bold> : <emphasis>entier</emphasis> <linebreak/>
+ Définit le nombre d’échantillons par pixel.</para>
+</listitem><listitem><para><bold>edge_sharpness</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la netteté des contours lors de la passe de flou.</para>
+</listitem><listitem><para><bold>blur_step_size</bold> : <emphasis>entier</emphasis> <linebreak/>
+ Définit la taille d’une étape, durant la passe de flou.</para>
+</listitem><listitem><para><bold>blur_radius</bold> : <emphasis>entier</emphasis> <linebreak/>
+ Définit le rayon du flou.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md189">
+<title>clusters section</title><para><itemizedlist>
+<listitem><para><bold>enabled</bold> : <emphasis>booléen</emphasis> Définit le statut d&apos;activation du clustered lighting.</para>
+</listitem><listitem><para><bold>use_lights_bvh</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Dit si le BVH est utilisé.</para>
+</listitem><listitem><para><bold>sort_lights</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Dit si les sources lumineuses sont triées avant la construction du BVH.</para>
+</listitem><listitem><para><bold>limit_clusters_to_lights_aabb</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Dit si les clusters de la caméra sont limités aux sources lumineuses visibles.</para>
+</listitem><listitem><para><bold>parse_depth_buffer</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Dit si le depth buffer est utilisé pour limiter le nombre de cluster de caméra à traiter.</para>
+</listitem><listitem><para><bold>use_spot_bounding_cone</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Dit si les bounding boxes des spot lights sont des cônes.</para>
+</listitem><listitem><para><bold>use_spot_tight_aabb</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Dit si les bounding boxes des spot lights sont les plus petites possibles.</para>
+</listitem><listitem><para><bold>enable_reduce_warp_optimisation</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Dit si la passe de réduction des bounding boxes des sources lumineuses utilise l&apos;optimisation des warps.</para>
+</listitem><listitem><para><bold>enable_bvh_warp_optimisation</bold> : <emphasis>booléen</emphasis> <linebreak/>
+ Dit si la passe de construction du BVH utilise l&apos;optimisation des warps.</para>
+</listitem><listitem><para><bold>split_scheme</bold> : <emphasis>value</emphasis> <linebreak/>
+ Définit le schéma de répartition des clusters le long de la profondeur de scène, peut valoir :<itemizedlist>
+<listitem><para><emphasis>exponential</emphasis> : L&apos;augmentation de la profondeur de clusters est exponentielle.</para>
+</listitem><listitem><para><emphasis>exponential_biased</emphasis> : L&apos;augmentation de la profondeur de clusters est exponentielle, commençant à une taille donnée.</para>
+</listitem><listitem><para><emphasis>linear</emphasis> : L&apos;augmentation de la profondeur de clusters est linéaire.</para>
+</listitem><listitem><para><emphasis>hybrid</emphasis> : Commence linéaire, finit exponentielle.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>bias</bold> : <emphasis>réel</emphasis> <linebreak/>
+ Définit la taille de départ lorsque <emphasis>split_scheme</emphasis> vaut <emphasis>exponential_biased</emphasis>.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+</sect1>
+<sect1 id="d8/d1f/a11660_1autotoc_md190">
+<title>Section gui</title><para><itemizedlist>
+<listitem><para><bold>theme</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un thème.</para>
+</listitem><listitem><para><bold>box_layout</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un box layout.</para>
+</listitem><listitem><para><bold>button</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un bouton.</para>
+</listitem><listitem><para><bold>static</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un texte statique.</para>
+</listitem><listitem><para><bold>slider</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un slider.</para>
+</listitem><listitem><para><bold>combobox</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une liste déroulante.</para>
+</listitem><listitem><para><bold>listbox</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une liste.</para>
+</listitem><listitem><para><bold>edit</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un texte éditable.</para>
+</listitem><listitem><para><bold>panel</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un panneau.</para>
+</listitem><listitem><para><bold>progress</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une barre de progression.</para>
+</listitem><listitem><para><bold>expandable_panel</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un panneau extensible.</para>
+</listitem><listitem><para><bold>frame</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une fenêtre.</para>
+</listitem><listitem><para><bold>default_font</bold> : <emphasis>name</emphasis> <linebreak/>
+ Permet de définir la police de texte.</para>
+</listitem><listitem><para><bold>button_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de bouton.</para>
+</listitem><listitem><para><bold>static_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de texte statique.</para>
+</listitem><listitem><para><bold>slider_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de slider.</para>
+</listitem><listitem><para><bold>combobox_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de liste déroulante.</para>
+</listitem><listitem><para><bold>listbox_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de liste.</para>
+</listitem><listitem><para><bold>edit_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de texte éditable.</para>
+</listitem><listitem><para><bold>panel_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de panneau.</para>
+</listitem><listitem><para><bold>progress_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de barre de proogression.</para>
+</listitem><listitem><para><bold>expandable_panel_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de panneau extensible.</para>
+</listitem><listitem><para><bold>frame_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de fenêtre.</para>
+</listitem><listitem><para><bold>scrollbar_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de barre de progression.</para>
+</listitem></itemizedlist>
+</para>
+<sect2 id="d8/d1f/a11660_1autotoc_md191">
+<title>Section theme</title><para><itemizedlist>
+<listitem><para><bold>default_font</bold> : <emphasis>name</emphasis> <linebreak/>
+ Permet de définir la police de texte.</para>
+</listitem><listitem><para><bold>button_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de bouton.</para>
+</listitem><listitem><para><bold>static_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de texte statique.</para>
+</listitem><listitem><para><bold>slider_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de slider.</para>
+</listitem><listitem><para><bold>combobox_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de liste déroulante.</para>
+</listitem><listitem><para><bold>listbox_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de liste.</para>
+</listitem><listitem><para><bold>edit_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de texte éditable.</para>
+</listitem><listitem><para><bold>panel_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de panneau.</para>
+</listitem><listitem><para><bold>progress_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de barre de proogression.</para>
+</listitem><listitem><para><bold>expandable_panel_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de panneau extensible.</para>
+</listitem><listitem><para><bold>frame_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de fenêtre.</para>
+</listitem><listitem><para><bold>scrollbar_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de barre de progression.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md192">
+<title>Section box_layout</title><para><itemizedlist>
+<listitem><para><bold>layout_ctrl</bold> : <emphasis>name</emphasis> <linebreak/>
+ Ajoute un contrôle au layout.</para>
+</listitem><listitem><para><bold>layout_staspace</bold> : <emphasis>uint</emphasis> <linebreak/>
+ Ajoute un spacer à taille statique au layout.</para>
+</listitem><listitem><para><bold>layout_dynspace</bold> <linebreak/>
+ Ajoute un spacer à taille dynamique au layout.</para>
+</listitem><listitem><para><bold>horizontal</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la direction du layout à horizontale.</para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="d8/d1f/a11660_1autotoc_md193">
+<title>Section layout_ctrl</title><para><itemizedlist>
+<listitem><para><bold>horizontal_align</bold> : <emphasis>value</emphasis> Définit l&apos;alignement horizontal du contrôle, peut valoir :<itemizedlist>
+<listitem><para><emphasis>left</emphasis> : Aligné à gauche.</para>
+</listitem><listitem><para><emphasis>center</emphasis> : Centré.</para>
+</listitem><listitem><para><emphasis>right</emphasis> : Aligné à droite.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>vertical_align</bold> : <emphasis>value</emphasis> <linebreak/>
+ Définit l&apos;alignement vertical du contrôle, peut valoir :<itemizedlist>
+<listitem><para><emphasis>top</emphasis> : Aligné en haut.</para>
+</listitem><listitem><para><emphasis>center</emphasis> : Centré.</para>
+</listitem><listitem><para><emphasis>bottom</emphasis> : Aligné en bas.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>stretch</bold> : <emphasis>boolean</emphasis> Définit si le contrôle remplit le layout, dans la direction opposée à celle du layout.</para>
+</listitem><listitem><para><bold>reserve_if_hidden</bold> : <emphasis>boolean</emphasis> Définit si les dimensions du contrôle sont réservées même si le contrôle est caché.</para>
+</listitem><listitem><para><bold>padding</bold> : <emphasis>4 uints</emphasis> Définit le nombre de pixels de padding autour du contrôle.</para>
+</listitem><listitem><para><bold>pad_left</bold> : <emphasis>uint</emphasis> Définit le nombre de pixels de padding à gauche du contrôle.</para>
+</listitem><listitem><para><bold>pad_top</bold> : <emphasis>uint</emphasis> Définit le nombre de pixels de padding au dessus du contrôle.</para>
+</listitem><listitem><para><bold>pad_right</bold> : <emphasis>uint</emphasis> Définit le nombre de pixels de padding à droite du contrôle.</para>
+</listitem><listitem><para><bold>pad_bottom</bold> : <emphasis>uint</emphasis> Définit le nombre de pixels de padding en dessous du contrôle.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md194">
+<title>Section button</title><para><itemizedlist>
+<listitem><para><bold>theme</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle depuis le thème donné.</para>
+</listitem><listitem><para><bold>style</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle</para>
+</listitem><listitem><para><bold>visible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du contrôle</para>
+</listitem><listitem><para><bold>pixel_position</bold> : <emphasis>2 ints</emphasis> <linebreak/>
+ Définit la position du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>pixel_size</bold> : <emphasis>2 uints</emphasis> <linebreak/>
+ Définit les dimensions du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>movable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est déplaçable.</para>
+</listitem><listitem><para><bold>resizable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est redimensionnable.</para>
+</listitem><listitem><para><bold>pixel_border_size</bold> : <emphasis>4 uints</emphasis> <linebreak/>
+ Définit les dimensions des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_inner_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV internes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_outer_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV externes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>center_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV du centre du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>caption</bold> : <emphasis>text</emphasis> <linebreak/>
+ Définit le texte du bouton.</para>
+</listitem><listitem><para><bold>horizontal_align</bold> : <emphasis>value</emphasis> Définit l&apos;alignement horizontal du texte du bouton, peut valoir :<itemizedlist>
+<listitem><para><emphasis>left</emphasis> : Aligné à gauche.</para>
+</listitem><listitem><para><emphasis>center</emphasis> : Centré.</para>
+</listitem><listitem><para><emphasis>right</emphasis> : Aligné à droite.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>vertical_align</bold> : <emphasis>value</emphasis> <linebreak/>
+ Définit l&apos;alignement vertical du texte du bouton, peut valoir :<itemizedlist>
+<listitem><para><emphasis>top</emphasis> : Aligné en haut.</para>
+</listitem><listitem><para><emphasis>center</emphasis> : Centré.</para>
+</listitem><listitem><para><emphasis>bottom</emphasis> : Aligné en bas.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md195">
+<title>Section combobox</title><para><itemizedlist>
+<listitem><para><bold>theme</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle depuis le thème donné.</para>
+</listitem><listitem><para><bold>style</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle</para>
+</listitem><listitem><para><bold>visible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du contrôle</para>
+</listitem><listitem><para><bold>pixel_position</bold> : <emphasis>2 ints</emphasis> <linebreak/>
+ Définit la position du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>pixel_size</bold> : <emphasis>2 uints</emphasis> <linebreak/>
+ Définit les dimensions du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>movable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est déplaçable.</para>
+</listitem><listitem><para><bold>resizable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est redimensionnable.</para>
+</listitem><listitem><para><bold>pixel_border_size</bold> : <emphasis>4 uints</emphasis> <linebreak/>
+ Définit les dimensions des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_inner_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV internes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_outer_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV externes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>center_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV du centre du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>item</bold> : <emphasis>text</emphasis> <linebreak/>
+ Définit un item de la liste déroulante.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md196">
+<title>Section edit</title><para><itemizedlist>
+<listitem><para><bold>theme</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle depuis le thème donné.</para>
+</listitem><listitem><para><bold>style</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle</para>
+</listitem><listitem><para><bold>visible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du contrôle</para>
+</listitem><listitem><para><bold>pixel_position</bold> : <emphasis>2 ints</emphasis> <linebreak/>
+ Définit la position du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>pixel_size</bold> : <emphasis>2 uints</emphasis> <linebreak/>
+ Définit les dimensions du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>movable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est déplaçable.</para>
+</listitem><listitem><para><bold>resizable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est redimensionnable.</para>
+</listitem><listitem><para><bold>pixel_border_size</bold> : <emphasis>4 uints</emphasis> <linebreak/>
+ Définit les dimensions des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_inner_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV internes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_outer_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV externes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>center_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV du centre du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>vertical_scrollbar</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle a une barre de défilement verticale en cas de besoin.</para>
+</listitem><listitem><para><bold>horizontal_scrollbar</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle a une barre de défilement horizontale en cas de besoin.</para>
+</listitem><listitem><para><bold>vertical_scrollbar_style</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style de la barre de défilement verticale.</para>
+</listitem><listitem><para><bold>horizontal_scrollbar_style</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style de la barre de défilement horizontale.</para>
+</listitem><listitem><para><bold>caption</bold> : <emphasis>text</emphasis> <linebreak/>
+ Définit le texte à éditer.</para>
+</listitem><listitem><para><bold>multiline</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est multilignes.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md197">
+<title>Section expandable_panel</title><para><itemizedlist>
+<listitem><para><bold>theme</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle depuis le thème donné.</para>
+</listitem><listitem><para><bold>style</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle</para>
+</listitem><listitem><para><bold>visible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du contrôle</para>
+</listitem><listitem><para><bold>pixel_position</bold> : <emphasis>2 ints</emphasis> <linebreak/>
+ Définit la position du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>pixel_size</bold> : <emphasis>2 uints</emphasis> <linebreak/>
+ Définit les dimensions du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>movable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est déplaçable.</para>
+</listitem><listitem><para><bold>resizable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est redimensionnable.</para>
+</listitem><listitem><para><bold>expand_caption</bold> : <emphasis>text</emphasis> <linebreak/>
+ Définit le texte de la zone d&apos;extension lorsque le panneau est étendu.</para>
+</listitem><listitem><para><bold>retract_caption</bold> : <emphasis>text</emphasis> <linebreak/>
+ Définit le texte de la zone d&apos;extension lorsque le panneau est rétracté.</para>
+</listitem><listitem><para><bold>header</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit la zone d&apos;en-tête du panneau.</para>
+</listitem><listitem><para><bold>expand</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit la zone d&apos;extension du panneau.</para>
+</listitem><listitem><para><bold>content</bold> : <emphasis>section</emphasis> Définit la zone du contenu du panneau.</para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="d8/d1f/a11660_1autotoc_md198">
+<title>Section header</title><para><itemizedlist>
+<listitem><para><bold>pixel_border_size</bold> : <emphasis>4 uints</emphasis> <linebreak/>
+ Définit les dimensions des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_inner_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV internes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_outer_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV externes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>center_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV du centre du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>box_layout</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un box layout.</para>
+</listitem><listitem><para><bold>button</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un bouton.</para>
+</listitem><listitem><para><bold>static</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un texte statique.</para>
+</listitem><listitem><para><bold>slider</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un slider.</para>
+</listitem><listitem><para><bold>combobox</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une menu déroulant.</para>
+</listitem><listitem><para><bold>listbox</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une liste.</para>
+</listitem><listitem><para><bold>edit</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un texte éditable.</para>
+</listitem><listitem><para><bold>panel</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un panneau.</para>
+</listitem><listitem><para><bold>progress</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une barre de progression.</para>
+</listitem><listitem><para><bold>expandable_panel</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un panneau extensible.</para>
+</listitem><listitem><para><bold>frame</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une fenêtre.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d8/d1f/a11660_1autotoc_md199">
+<title>Section expand</title><para><itemizedlist>
+<listitem><para><bold>pixel_border_size</bold> : <emphasis>4 uints</emphasis> <linebreak/>
+ Définit les dimensions des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_inner_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV internes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_outer_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV externes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>center_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV du centre du contrôle (gauche, droite, haut, bas).</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+<sect3 id="d8/d1f/a11660_1autotoc_md200">
+<title>Section content</title><para><itemizedlist>
+<listitem><para><bold>pixel_border_size</bold> : <emphasis>4 uints</emphasis> <linebreak/>
+ Définit les dimensions des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_inner_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV internes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_outer_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV externes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>center_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV du centre du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>box_layout</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un box layout.</para>
+</listitem><listitem><para><bold>button</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un bouton.</para>
+</listitem><listitem><para><bold>static</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un texte statique.</para>
+</listitem><listitem><para><bold>slider</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un slider.</para>
+</listitem><listitem><para><bold>combobox</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une menu déroulant.</para>
+</listitem><listitem><para><bold>listbox</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une liste.</para>
+</listitem><listitem><para><bold>edit</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un texte éditable.</para>
+</listitem><listitem><para><bold>panel</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un panneau.</para>
+</listitem><listitem><para><bold>progress</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une barre de progression.</para>
+</listitem><listitem><para><bold>expandable_panel</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un panneau extensible.</para>
+</listitem><listitem><para><bold>frame</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une fenêtre.</para>
+</listitem><listitem><para><bold>vertical_scrollbar</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle a une barre de défilement verticale en cas de besoin.</para>
+</listitem><listitem><para><bold>horizontal_scrollbar</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle a une barre de défilement horizontale en cas de besoin.</para>
+</listitem><listitem><para><bold>vertical_scrollbar_style</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style de la barre de défilement verticale.</para>
+</listitem><listitem><para><bold>horizontal_scrollbar_style</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style de la barre de défilement horizontale.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md201">
+<title>Section frame</title><para><itemizedlist>
+<listitem><para><bold>theme</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle depuis le thème donné.</para>
+</listitem><listitem><para><bold>style</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle</para>
+</listitem><listitem><para><bold>visible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du contrôle</para>
+</listitem><listitem><para><bold>pixel_position</bold> : <emphasis>2 ints</emphasis> <linebreak/>
+ Définit la position du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>pixel_size</bold> : <emphasis>2 uints</emphasis> <linebreak/>
+ Définit les dimensions du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>movable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est déplaçable.</para>
+</listitem><listitem><para><bold>resizable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est redimensionnable.</para>
+</listitem><listitem><para><bold>pixel_border_size</bold> : <emphasis>4 uints</emphasis> <linebreak/>
+ Définit les dimensions des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_inner_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV internes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_outer_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV externes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>center_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV du centre du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>horizontal_align</bold> : <emphasis>value</emphasis> Définit l&apos;alignement horizontal du texte du header, peut valoir :<itemizedlist>
+<listitem><para><emphasis>left</emphasis> : Aligné à gauche.</para>
+</listitem><listitem><para><emphasis>center</emphasis> : Centré.</para>
+</listitem><listitem><para><emphasis>right</emphasis> : Aligné à droite.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>vertical_align</bold> : <emphasis>value</emphasis> <linebreak/>
+ Définit l&apos;alignement vertical du texte du header, peut valoir :<itemizedlist>
+<listitem><para><emphasis>top</emphasis> : Aligné en haut.</para>
+</listitem><listitem><para><emphasis>center</emphasis> : Centré.</para>
+</listitem><listitem><para><emphasis>bottom</emphasis> : Aligné en bas.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>header_caption</bold> : <emphasis>text</emphasis> <linebreak/>
+ Définit le texte de l&apos;en-tête.</para>
+</listitem><listitem><para><bold>min_size</bold> : <emphasis>2 uints</emphasis> <linebreak/>
+ Définit les dimensions minimales de la fenêtre.</para>
+</listitem><listitem><para><bold>content</bold> : <emphasis>section</emphasis> <linebreak/>
+ Définit le contenu de la fenêtre.</para>
+</listitem></itemizedlist>
+</para>
+<sect3 id="d8/d1f/a11660_1autotoc_md202">
+<title>Section content</title><para><itemizedlist>
+<listitem><para><bold>pixel_border_size</bold> : <emphasis>4 uints</emphasis> <linebreak/>
+ Définit les dimensions des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_inner_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV internes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_outer_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV externes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>center_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV du centre du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>box_layout</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un box layout.</para>
+</listitem><listitem><para><bold>button</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un bouton.</para>
+</listitem><listitem><para><bold>static</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un texte statique.</para>
+</listitem><listitem><para><bold>slider</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un slider.</para>
+</listitem><listitem><para><bold>combobox</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une menu déroulant.</para>
+</listitem><listitem><para><bold>listbox</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une liste.</para>
+</listitem><listitem><para><bold>edit</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un texte éditable.</para>
+</listitem><listitem><para><bold>panel</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un panneau.</para>
+</listitem><listitem><para><bold>progress</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une barre de progression.</para>
+</listitem><listitem><para><bold>expandable_panel</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un panneau extensible.</para>
+</listitem><listitem><para><bold>frame</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une fenêtre.</para>
+</listitem><listitem><para><bold>vertical_scrollbar</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle a une barre de défilement verticale en cas de besoin.</para>
+</listitem><listitem><para><bold>horizontal_scrollbar</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle a une barre de défilement horizontale en cas de besoin.</para>
+</listitem><listitem><para><bold>vertical_scrollbar_style</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style de la barre de défilement verticale.</para>
+</listitem><listitem><para><bold>horizontal_scrollbar_style</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style de la barre de défilement horizontale.</para>
+</listitem></itemizedlist>
+</para>
+</sect3>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md203">
+<title>Section listbox</title><para><itemizedlist>
+<listitem><para><bold>theme</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle depuis le thème donné.</para>
+</listitem><listitem><para><bold>style</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle</para>
+</listitem><listitem><para><bold>visible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du contrôle</para>
+</listitem><listitem><para><bold>pixel_position</bold> : <emphasis>2 ints</emphasis> <linebreak/>
+ Définit la position du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>pixel_size</bold> : <emphasis>2 uints</emphasis> <linebreak/>
+ Définit les dimensions du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>movable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est déplaçable.</para>
+</listitem><listitem><para><bold>resizable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est redimensionnable.</para>
+</listitem><listitem><para><bold>pixel_border_size</bold> : <emphasis>4 uints</emphasis> <linebreak/>
+ Définit les dimensions des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_inner_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV internes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_outer_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV externes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>center_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV du centre du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>item</bold> : <emphasis>text</emphasis> <linebreak/>
+ Définit un item de la liste.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md204">
+<title>Section panel</title><para><itemizedlist>
+<listitem><para><bold>theme</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle depuis le thème donné.</para>
+</listitem><listitem><para><bold>style</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle</para>
+</listitem><listitem><para><bold>visible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du contrôle</para>
+</listitem><listitem><para><bold>pixel_position</bold> : <emphasis>2 ints</emphasis> <linebreak/>
+ Définit la position du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>pixel_size</bold> : <emphasis>2 uints</emphasis> <linebreak/>
+ Définit les dimensions du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>movable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est déplaçable.</para>
+</listitem><listitem><para><bold>resizable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est redimensionnable.</para>
+</listitem><listitem><para><bold>pixel_border_size</bold> : <emphasis>4 uints</emphasis> <linebreak/>
+ Définit les dimensions des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_inner_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV internes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_outer_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV externes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>center_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV du centre du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>box_layout</bold> : <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un box layout.</para>
+</listitem><listitem><para><bold>button</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un bouton.</para>
+</listitem><listitem><para><bold>static</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un texte statique.</para>
+</listitem><listitem><para><bold>slider</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un slider.</para>
+</listitem><listitem><para><bold>combobox</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une menu déroulant.</para>
+</listitem><listitem><para><bold>listbox</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une liste.</para>
+</listitem><listitem><para><bold>edit</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un texte éditable.</para>
+</listitem><listitem><para><bold>panel</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un panneau.</para>
+</listitem><listitem><para><bold>progress</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une barre de progression.</para>
+</listitem><listitem><para><bold>expandable_panel</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un panneau extensible.</para>
+</listitem><listitem><para><bold>frame</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir une fenêtre.</para>
+</listitem><listitem><para><bold>vertical_scrollbar</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle a une barre de défilement verticale en cas de besoin.</para>
+</listitem><listitem><para><bold>horizontal_scrollbar</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle a une barre de défilement horizontale en cas de besoin.</para>
+</listitem><listitem><para><bold>vertical_scrollbar_style</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style de la barre de défilement verticale.</para>
+</listitem><listitem><para><bold>horizontal_scrollbar_style</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style de la barre de défilement horizontale.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md205">
+<title>Section progress</title><para><itemizedlist>
+<listitem><para><bold>theme</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle depuis le thème donné.</para>
+</listitem><listitem><para><bold>style</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle</para>
+</listitem><listitem><para><bold>visible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du contrôle</para>
+</listitem><listitem><para><bold>pixel_position</bold> : <emphasis>2 ints</emphasis> <linebreak/>
+ Définit la position du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>pixel_size</bold> : <emphasis>2 uints</emphasis> <linebreak/>
+ Définit les dimensions du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>movable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est déplaçable.</para>
+</listitem><listitem><para><bold>resizable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est redimensionnable.</para>
+</listitem><listitem><para><bold>pixel_border_size</bold> : <emphasis>4 uints</emphasis> <linebreak/>
+ Définit les dimensions des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_inner_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV internes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_outer_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV externes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>center_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV du centre du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>left_to_right</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si la progression s&apos;effectue de gauche à droite (défaut).</para>
+</listitem><listitem><para><bold>right_to_left</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si la progression s&apos;effectue de droite à gauche.</para>
+</listitem><listitem><para><bold>top_to_bottom</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si la progression s&apos;effectue de de haut en bas.</para>
+</listitem><listitem><para><bold>bottom_to_top</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si la progression s&apos;effectue de bas en haut.</para>
+</listitem><listitem><para><bold>hide_title</bold> : <emphasis>boolean</emphasis> Définit si le titre est caché.</para>
+</listitem><listitem><para><bold>container_border_size</bold> : <emphasis>4 uints</emphasis> <linebreak/>
+ Définit si les dimensions des bordures du conteneur de la barre de progression.</para>
+</listitem><listitem><para><bold>bar_border_size</bold> : <emphasis>4 uints</emphasis> <linebreak/>
+ Définit si les dimensions des bordures de la barre de progression. Defines the progress bar border sizes.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md206">
+<title>Section slider</title><para><itemizedlist>
+<listitem><para><bold>theme</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle depuis le thème donné.</para>
+</listitem><listitem><para><bold>style</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle</para>
+</listitem><listitem><para><bold>visible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du contrôle</para>
+</listitem><listitem><para><bold>pixel_position</bold> : <emphasis>2 ints</emphasis> <linebreak/>
+ Définit la position du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>pixel_size</bold> : <emphasis>2 uints</emphasis> <linebreak/>
+ Définit les dimensions du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>movable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est déplaçable.</para>
+</listitem><listitem><para><bold>resizable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est redimensionnable.</para>
+</listitem><listitem><para><bold>pixel_border_size</bold> : <emphasis>4 uints</emphasis> <linebreak/>
+ Définit les dimensions des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_inner_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV internes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_outer_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV externes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>center_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV du centre du contrôle (gauche, droite, haut, bas).</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md207">
+<title>Section static</title><para><itemizedlist>
+<listitem><para><bold>theme</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle depuis le thème donné.</para>
+</listitem><listitem><para><bold>style</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le style du contrôle</para>
+</listitem><listitem><para><bold>visible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du contrôle</para>
+</listitem><listitem><para><bold>pixel_position</bold> : <emphasis>2 ints</emphasis> <linebreak/>
+ Définit la position du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>pixel_size</bold> : <emphasis>2 uints</emphasis> <linebreak/>
+ Définit les dimensions du contrôle, en pixels.</para>
+</listitem><listitem><para><bold>movable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est déplaçable.</para>
+</listitem><listitem><para><bold>resizable</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit si le contrôle est redimensionnable.</para>
+</listitem><listitem><para><bold>pixel_border_size</bold> : <emphasis>4 uints</emphasis> <linebreak/>
+ Définit les dimensions des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_inner_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV internes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>border_outer_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV externes des bordures du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>center_uv</bold> : <emphasis>4 floats</emphasis> <linebreak/>
+ Définit les UV du centre du contrôle (gauche, droite, haut, bas).</para>
+</listitem><listitem><para><bold>caption</bold> : <emphasis>text</emphasis> <linebreak/>
+ Définit le texte du contrôle.</para>
+</listitem><listitem><para><bold>horizontal_align</bold> : <emphasis>value</emphasis> Définit l&apos;alignement horizontal du texte, peut valoir :<itemizedlist>
+<listitem><para><emphasis>left</emphasis> : Aligné à gauche.</para>
+</listitem><listitem><para><emphasis>center</emphasis> : Centré.</para>
+</listitem><listitem><para><emphasis>right</emphasis> : Aligné à droite.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>vertical_align</bold> : <emphasis>value</emphasis> <linebreak/>
+ Définit l&apos;alignement vertical du texte, peut valoir :<itemizedlist>
+<listitem><para><emphasis>top</emphasis> : Aligné en haut.</para>
+</listitem><listitem><para><emphasis>center</emphasis> : Centré.</para>
+</listitem><listitem><para><emphasis>bottom</emphasis> : Aligné en bas.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md208">
+<title>Section button_style</title><para><itemizedlist>
+<listitem><para><bold>background_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité des bordures du contrôle.</para>
+</listitem><listitem><para><bold>background_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau des bordures du contrôle.</para>
+</listitem><listitem><para><bold>text_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du texte du bouton.</para>
+</listitem><listitem><para><bold>highlighted_background_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau de l&apos;arrière plan du bouton en surbrillance.</para>
+</listitem><listitem><para><bold>highlighted_foreground_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du premier plan du bouton en surbrillance.</para>
+</listitem><listitem><para><bold>highlighted_text_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du texte du bouton en surbrillance.</para>
+</listitem><listitem><para><bold>pushed_background_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau de l&apos;arrière plan du bouton appuyé.</para>
+</listitem><listitem><para><bold>pushed_foreground_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du premier plan du bouton appuyé.</para>
+</listitem><listitem><para><bold>pushed_text_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du texte du bouton appuyé.</para>
+</listitem><listitem><para><bold>disabled_background_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau de l&apos;arrière plan du bouton désactivé.</para>
+</listitem><listitem><para><bold>disabled_foreground_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du premier plan du bouton désactivé.</para>
+</listitem><listitem><para><bold>disabled_text_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du texte du bouton désactivé.</para>
+</listitem><listitem><para><bold>font</bold> : <emphasis>name</emphasis> Définit la police du texte du bouton.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md209">
+<title>Section combobox_style</title><para><itemizedlist>
+<listitem><para><bold>background_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité des bordures du contrôle.</para>
+</listitem><listitem><para><bold>background_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau des bordures du contrôle.</para>
+</listitem><listitem><para><bold>expand_style</bold> : <emphasis>button_style</emphasis> <linebreak/>
+ Définit le style pour le bouton d&apos;extension.</para>
+</listitem><listitem><para><bold>elements_style</bold> : <emphasis>listbox_style</emphasis> <linebreak/>
+ Définit le style pour les items.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md210">
+<title>Section edit_style</title><para><itemizedlist>
+<listitem><para><bold>background_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité des bordures du contrôle.</para>
+</listitem><listitem><para><bold>background_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau des bordures du contrôle.</para>
+</listitem><listitem><para><bold>text_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du texte.</para>
+</listitem><listitem><para><bold>selection_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du texte sélectionné.</para>
+</listitem><listitem><para><bold>font</bold> : <emphasis>name</emphasis> Définit la police du texte.</para>
+</listitem><listitem><para><bold>scrollbar_style</bold> : <emphasis>scrollbar_style</emphasis> Définit le style pour les barres de défilement.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md211">
+<title>Section expandable_panel_style</title><para><itemizedlist>
+<listitem><para><bold>background_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité des bordures du contrôle.</para>
+</listitem><listitem><para><bold>background_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau des bordures du contrôle.</para>
+</listitem><listitem><para><bold>header_style</bold> : <emphasis>panel_style</emphasis> <linebreak/>
+ Définit le style pour la zone d&apos;en-tête du panneau.</para>
+</listitem><listitem><para><bold>expand_style</bold> : <emphasis>button_style</emphasis> <linebreak/>
+ Définit le style pour la zone d&apos;extension du panneau.</para>
+</listitem><listitem><para><bold>content_style</bold> : <emphasis>panel_style</emphasis> <linebreak/>
+ Définit le style pour la zone de contenu du panneau.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md212">
+<title>Section frame_style</title><para><itemizedlist>
+<listitem><para><bold>background_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité des bordures du contrôle.</para>
+</listitem><listitem><para><bold>background_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau des bordures du contrôle.</para>
+</listitem><listitem><para><bold>header_text_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du texte de l&apos;en-tête.</para>
+</listitem><listitem><para><bold>header_font</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit la police du texte de l&apos;en-tête.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md213">
+<title>Section listbox_style</title><para><itemizedlist>
+<listitem><para><bold>background_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité des bordures du contrôle.</para>
+</listitem><listitem><para><bold>background_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau des bordures du contrôle.</para>
+</listitem><listitem><para><bold>item_style</bold> : <emphasis>static_style</emphasis> <linebreak/>
+ Définit le style pour les items de la liste.</para>
+</listitem><listitem><para><bold>selected_item_style</bold> : <emphasis>static_style</emphasis> <linebreak/>
+ Définit le style pour les items sélectionnés.</para>
+</listitem><listitem><para><bold>highlighted_item_style</bold> : <emphasis>static_style</emphasis> <linebreak/>
+ Définit le style pour les items en surbrillance.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md214">
+<title>Section panel_style</title><para><itemizedlist>
+<listitem><para><bold>default_font</bold> : <emphasis>name</emphasis> <linebreak/>
+ Permet de définir la police de texte.</para>
+</listitem><listitem><para><bold>button_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de bouton.</para>
+</listitem><listitem><para><bold>static_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de texte statique.</para>
+</listitem><listitem><para><bold>slider_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de slider.</para>
+</listitem><listitem><para><bold>combobox_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de liste déroulante.</para>
+</listitem><listitem><para><bold>listbox_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de liste.</para>
+</listitem><listitem><para><bold>edit_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de texte éditable.</para>
+</listitem><listitem><para><bold>panel_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de panneau.</para>
+</listitem><listitem><para><bold>progress_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de barre de proogression.</para>
+</listitem><listitem><para><bold>expandable_panel_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de panneau extensible.</para>
+</listitem><listitem><para><bold>frame_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de fenêtre.</para>
+</listitem><listitem><para><bold>scrollbar_style</bold> : <emphasis>name</emphasis> <emphasis>section</emphasis> <linebreak/>
+ Permet de définir un style de barre de progression.</para>
+</listitem><listitem><para><bold>background_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité des bordures du contrôle.</para>
+</listitem><listitem><para><bold>background_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau des bordures du contrôle.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md215">
+<title>Section progress_style</title><para><itemizedlist>
+<listitem><para><bold>background_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité des bordures du contrôle.</para>
+</listitem><listitem><para><bold>background_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau des bordures du contrôle.</para>
+</listitem><listitem><para><bold>title_font</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit la police du texte du titre.</para>
+</listitem><listitem><para><bold>title_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du texte du titre.</para>
+</listitem><listitem><para><bold>text_font</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit la police du texte de la barre de progression.</para>
+</listitem><listitem><para><bold>text_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du texte de la barre de progression.</para>
+</listitem><listitem><para><bold>container_style</bold> : <emphasis>panel_style</emphasis> <linebreak/>
+ Définit le style du conteneur de la barre de progression.</para>
+</listitem><listitem><para><bold>bar_style</bold> : <emphasis>panel_style</emphasis> <linebreak/>
+ Définit le style de la barre de progression.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md216">
+<title>Section slider_style</title><para><itemizedlist>
+<listitem><para><bold>background_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité des bordures du contrôle.</para>
+</listitem><listitem><para><bold>background_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau des bordures du contrôle.</para>
+</listitem><listitem><para><bold>line_style</bold> : <emphasis>static_style</emphasis> <linebreak/>
+ Définit le style de la barre du slider.</para>
+</listitem><listitem><para><bold>tick_style</bold> : <emphasis>static_style</emphasis> <linebreak/>
+ Définit le style du curseur du slider.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="d8/d1f/a11660_1autotoc_md217">
+<title>Section static_style</title><para><itemizedlist>
+<listitem><para><bold>background_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_invisible</bold> : <emphasis>boolean</emphasis> <linebreak/>
+ Définit la visibilité des bordures du contrôle.</para>
+</listitem><listitem><para><bold>background_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau de l&apos;arrière plan du contrôle.</para>
+</listitem><listitem><para><bold>foreground_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du premier plan du contrôle.</para>
+</listitem><listitem><para><bold>border_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau des bordures du contrôle.</para>
+</listitem><listitem><para><bold>text_material</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit le matériau du texte.</para>
+</listitem><listitem><para><bold>font</bold> : <emphasis>name</emphasis> <linebreak/>
+ Définit la police du texte. </para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+</sect1>
+    </detaileddescription>
+    <location file="Z:/Projets/C++/Castor3D/doc/Castor3D/SceneFile-French.md"/>
+  </compounddef>
+</doxygen>

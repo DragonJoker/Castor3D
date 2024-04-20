@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/ddb/a05415" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::MeshletCullData</compoundname>
+    <includes local="no">MeshModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/ddb/a05415_1a967595d14dd32bb5228d8fd1e45f845f" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::MeshletCullData::sphere</definition>
+        <argsstring></argsstring>
+        <name>sphere</name>
+        <qualifiedname>castor3d::MeshletCullData::sphere</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshModule.hpp" line="113" column="17" bodyfile="Castor3D/Model/Mesh/MeshModule.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/ddb/a05415_1a724fcd8dca53ab38a239d4ca8ffdc646" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::MeshletCullData::cone</definition>
+        <argsstring></argsstring>
+        <name>cone</name>
+        <qualifiedname>castor3d::MeshletCullData::cone</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshModule.hpp" line="114" column="17" bodyfile="Castor3D/Model/Mesh/MeshModule.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Données de culling pour un meshlet. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Model/Mesh/MeshModule.hpp" line="111" column="1" bodyfile="Castor3D/Model/Mesh/MeshModule.hpp" bodystart="112" bodyend="115"/>
+    <listofallmembers>
+      <member refid="d8/ddb/a05415_1a724fcd8dca53ab38a239d4ca8ffdc646" prot="public" virt="non-virtual"><scope>castor3d::MeshletCullData</scope><name>cone</name></member>
+      <member refid="d8/ddb/a05415_1a967595d14dd32bb5228d8fd1e45f845f" prot="public" virt="non-virtual"><scope>castor3d::MeshletCullData</scope><name>sphere</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

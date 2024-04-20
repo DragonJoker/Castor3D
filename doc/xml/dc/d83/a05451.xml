@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d83/a05451" kind="struct" language="C++" prot="public">
+    <compoundname>castor::Deleter&lt; castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt; &gt;</compoundname>
+    <includes local="no">ComponentModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type><ref refid="d9/dba/a02278_1a4faec35d0640cd94dc3530998e445ff0" kindref="member">castor3d::SubmeshData</ref></type>
+        <declname>SubmeshDataT</declname>
+        <defname>SubmeshDataT</defname>
+      </param>
+      <param>
+        <type>typename DataT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d83/a05451_1a1e41aebe9d59e348a0d44e3cfbd4d781" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Deleter&lt; castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt; &gt;::operator()</definition>
+        <argsstring>(castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt; *pointer) noexcept</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::Deleter&lt; castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt; &gt;::operator()</qualifiedname>
+        <param>
+          <type><ref refid="d7/d4f/a05431" kindref="compound">castor3d::BaseDataComponentT</ref>&lt; SubmeshDataT, DataT &gt; *</type>
+          <declname>pointer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="331" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="331" bodyend="334"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" line="329" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp" bodystart="330" bodyend="335"/>
+    <listofallmembers>
+      <member refid="dc/d83/a05451_1a1e41aebe9d59e348a0d44e3cfbd4d781" prot="public" virt="non-virtual"><scope>castor::Deleter&lt; castor3d::BaseDataComponentT&lt; SubmeshDataT, DataT &gt; &gt;</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

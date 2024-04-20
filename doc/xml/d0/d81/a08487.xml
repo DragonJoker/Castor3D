@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d81/a08487" kind="struct" language="C++" prot="public">
+    <compoundname>castor::RegexFormat&lt; double &gt;</compoundname>
+    <includes local="no">ParserParameterHelpers.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d0/d81/a08487_1ae5668de9d4ac9b6aea5407a1c1483955" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a98169622bc976df3189194c2b35fbf60" kindref="member">xchar</ref> const  *const</type>
+        <definition>CU_API xchar const* const castor::RegexFormat&lt; double &gt;::Value</definition>
+        <argsstring></argsstring>
+        <name>Value</name>
+        <qualifiedname>castor::RegexFormat&lt; double &gt;::Value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="119" column="34" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="119" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Spécialisation de <ref refid="d7/dd6/a08395" kindref="compound">RegexFormat</ref> pour double. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="117" column="1" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="118" bodyend="120"/>
+    <listofallmembers>
+      <member refid="d0/d81/a08487_1ae5668de9d4ac9b6aea5407a1c1483955" prot="public" virt="non-virtual"><scope>castor::RegexFormat&lt; double &gt;</scope><name>Value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

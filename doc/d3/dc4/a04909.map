@@ -1,5 +1,10 @@
-<map id="castor3d::EnvironmentMapPass" name="castor3d::EnvironmentMapPass">
-<area shape="rect" id="node1" title=" " alt="" coords="94,93,301,119"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,211,45"/>
-<area shape="rect" id="node3" title=" " alt="" coords="235,13,341,38"/>
+<map id="castor3d::SubsurfaceScattering" name="castor3d::SubsurfaceScattering">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,256,209,281"/>
+<area shape="rect" id="Node000002" href="$dc/d79/a08267.html" title=" " alt="" coords="15,168,199,193"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,207,110,255,105,255,105,207"/>
+<area shape="rect" id="Node000003" href="$da/d36/a08315.html" title=" " alt="" coords="55,5,197,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="122,44,114,80,110,129,110,168,104,168,105,129,109,80,116,43"/>
+<area shape="rect" id="Node000004" href="$dc/d79/a08267.html" title="Basic signal class." alt="" coords="124,80,307,105"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="153,37,202,77,199,82,149,42"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="192,116,124,170,120,166,188,112"/>
 </map>

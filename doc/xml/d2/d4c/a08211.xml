@@ -1,0 +1,654 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/d4c/a08211" kind="class" language="C++" prot="public">
+    <compoundname>castor::GroupChangeTrackedT</compoundname>
+    <includes local="no">GroupChangeTracked.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ValueT</type>
+      </param>
+      <param>
+        <type>typename ControlT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d2/d4c/a08211_1a2cc2c732767bf0c89bc58c8563bff2ff" prot="public" static="no">
+        <type>ValueT</type>
+        <definition>using castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::Type =  ValueT</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor::GroupChangeTrackedT::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="17" column="1" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/d4c/a08211_1ae600f217822572f857fa52f827b4c127" prot="private" static="no" mutable="no">
+        <type>ValueT</type>
+        <definition>ValueT castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::m_value</definition>
+        <argsstring></argsstring>
+        <name>m_value</name>
+        <qualifiedname>castor::GroupChangeTrackedT::m_value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="171" column="8" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d4c/a08211_1a45cdfd3bec90be5c6d4b0874c21f04fe" prot="private" static="no" mutable="no">
+        <type>ControlT &amp;</type>
+        <definition>ControlT&amp; castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::m_dirty</definition>
+        <argsstring></argsstring>
+        <name>m_dirty</name>
+        <qualifiedname>castor::GroupChangeTrackedT::m_dirty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="172" column="11" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="172" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d4c/a08211_1a686e682a50818082cee6907fbd780554" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void() &gt;</type>
+        <definition>castor::Function&lt; void() &gt; castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::m_callback</definition>
+        <argsstring></argsstring>
+        <name>m_callback</name>
+        <qualifiedname>castor::GroupChangeTrackedT::m_callback</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="173" column="18" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="173" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d4c/a08211_1a5d4502260fe1a6b8241e21ead7873d5a" prot="public" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::GroupChangeTrackedT</definition>
+        <argsstring>(ControlT &amp;dirty, castor::Function&lt; void() &gt; callback={}) noexcept</argsstring>
+        <name>GroupChangeTrackedT</name>
+        <qualifiedname>castor::GroupChangeTrackedT::GroupChangeTrackedT</qualifiedname>
+        <param>
+          <type>ControlT &amp;</type>
+          <declname>dirty</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void() &gt;</type>
+          <declname>callback</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="20" column="10" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="20" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1a551b5c84d32362c0e63f396b742d6251" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::GroupChangeTrackedT</definition>
+        <argsstring>(GroupChangeTrackedT &amp;&amp;rhs) noexcept</argsstring>
+        <name>GroupChangeTrackedT</name>
+        <qualifiedname>castor::GroupChangeTrackedT::GroupChangeTrackedT</qualifiedname>
+        <param>
+          <type><ref refid="d2/d4c/a08211" kindref="compound">GroupChangeTrackedT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="28" column="1" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="28" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1ab700eb82540d620ccfd83b5bf48cd558" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::GroupChangeTrackedT</definition>
+        <argsstring>(GroupChangeTrackedT const &amp;rhs) noexcept</argsstring>
+        <name>GroupChangeTrackedT</name>
+        <qualifiedname>castor::GroupChangeTrackedT::GroupChangeTrackedT</qualifiedname>
+        <param>
+          <type><ref refid="d2/d4c/a08211" kindref="compound">GroupChangeTrackedT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="35" column="1" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="35" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1a2f67b0eae4397918fde561552e27e9f4" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::GroupChangeTrackedT</definition>
+        <argsstring>(ControlT &amp;dirty, ValueT rhs, castor::Function&lt; void() &gt; callback={}) noexcept</argsstring>
+        <name>GroupChangeTrackedT</name>
+        <qualifiedname>castor::GroupChangeTrackedT::GroupChangeTrackedT</qualifiedname>
+        <param>
+          <type>ControlT &amp;</type>
+          <declname>dirty</declname>
+        </param>
+        <param>
+          <type>ValueT</type>
+          <declname>rhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void() &gt;</type>
+          <declname>callback</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="42" column="1" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="42" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1a4e3d078864afff8a16def0c1f8f027df" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::~GroupChangeTrackedT</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~GroupChangeTrackedT</name>
+        <qualifiedname>castor::GroupChangeTrackedT::~GroupChangeTrackedT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="51" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1a9d136f0cb843138fd54a8032bc4cde5f" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d4c/a08211" kindref="compound">GroupChangeTrackedT</ref> &amp;</type>
+        <definition>GroupChangeTrackedT &amp; castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::operator=</definition>
+        <argsstring>(ValueT const &amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::GroupChangeTrackedT::operator=</qualifiedname>
+        <param>
+          <type>ValueT const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="53" column="22" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="53" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1a693ebc5fb2f04a40701c61e5a0c977e8" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d4c/a08211" kindref="compound">GroupChangeTrackedT</ref> &amp;</type>
+        <definition>GroupChangeTrackedT &amp; castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::operator=</definition>
+        <argsstring>(GroupChangeTrackedT const &amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::GroupChangeTrackedT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d2/d4c/a08211" kindref="compound">GroupChangeTrackedT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="60" column="22" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="60" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1ac7c611b7765b125a3bafe477b896fdbd" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d4c/a08211" kindref="compound">GroupChangeTrackedT</ref> &amp;</type>
+        <definition>GroupChangeTrackedT &amp; castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::operator=</definition>
+        <argsstring>(GroupChangeTrackedT &amp;&amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::GroupChangeTrackedT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d2/d4c/a08211" kindref="compound">GroupChangeTrackedT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="67" column="22" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="67" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1a30b5efa2b17165013fbf625f48b19391" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::reset</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>reset</name>
+        <qualifiedname>castor::GroupChangeTrackedT::reset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="74" column="6" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="74" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1a844efeb763782de262eee1485f581217" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ValueT &amp;</type>
+        <definition>ValueT &amp; castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::naked</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>naked</name>
+        <qualifiedname>castor::GroupChangeTrackedT::naked</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="79" column="9" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="79" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1ae4746c123bcf2b5e7cbe7adc034dad3a" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ValueT const &amp;</type>
+        <definition>ValueT const  &amp; castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::value</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>value</name>
+        <qualifiedname>castor::GroupChangeTrackedT::value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="84" column="15" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="84" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1a8a8d95d629c434e9c977e4f287248dd5" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ControlT &amp;</type>
+        <definition>ControlT &amp; castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::control</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>control</name>
+        <qualifiedname>castor::GroupChangeTrackedT::control</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="89" column="11" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="89" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1a3ff18d5f3c4cbb61950fa9c45c3136b4" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void() &gt;</type>
+        <definition>castor::Function&lt; void() &gt; castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::callback</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>callback</name>
+        <qualifiedname>castor::GroupChangeTrackedT::callback</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="94" column="18" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="94" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1a9450d01f92b83e935085177c73920a49" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::isDirty</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isDirty</name>
+        <qualifiedname>castor::GroupChangeTrackedT::isDirty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="99" column="6" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="99" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1a6f3888b4001c496bac7994027348f8c2" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::operator ValueT const &amp;</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>operator ValueT const &amp;</name>
+        <qualifiedname>castor::GroupChangeTrackedT::operator ValueT const &amp;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="104" column="1" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="104" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1a45051ee93fe6f7adc6482dcb8fdba6c8" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::operator ValueT &amp;</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>operator ValueT &amp;</name>
+        <qualifiedname>castor::GroupChangeTrackedT::operator ValueT &amp;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="109" column="1" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="109" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1ae3f1a995693e25d1bd1cdfabf764dc07" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ValueT const &amp;</type>
+        <definition>ValueT const  &amp; castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::operator*</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>operator*</name>
+        <qualifiedname>castor::GroupChangeTrackedT::operator*</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="115" column="15" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="115" bodyend="118"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1a4e717be69452ccd3b2af94b988c9d387" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ValueT &amp;</type>
+        <definition>ValueT &amp; castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::operator*</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>operator*</name>
+        <qualifiedname>castor::GroupChangeTrackedT::operator*</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="120" column="9" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="120" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1aabd0faf879a3d98775b3c1f03c2e7776" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ValueT const *</type>
+        <definition>ValueT const  * castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::operator-&gt;</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>operator-&gt;</name>
+        <qualifiedname>castor::GroupChangeTrackedT::operator-&gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="126" column="15" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="126" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1aa2ec704a91b48daa6ad791632c147dad" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ValueT *</type>
+        <definition>ValueT * castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::operator-&gt;</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>operator-&gt;</name>
+        <qualifiedname>castor::GroupChangeTrackedT::operator-&gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="131" column="9" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="131" bodyend="135"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/d4c/a08211_1ac60c0c0b3b39dfc55d5dfceec2f207b0" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::doCopy</definition>
+        <argsstring>(std::atomic_bool &amp;lhs, std::atomic_bool const &amp;rhs) const</argsstring>
+        <name>doCopy</name>
+        <qualifiedname>castor::GroupChangeTrackedT::doCopy</qualifiedname>
+        <param>
+          <type>std::atomic_bool &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>std::atomic_bool const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="138" column="6" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="138" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1af759c91fef6fd2df9559dff65f57aff6" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::doCopy</definition>
+        <argsstring>(bool &amp;lhs, bool const &amp;rhs) const</argsstring>
+        <name>doCopy</name>
+        <qualifiedname>castor::GroupChangeTrackedT::doCopy</qualifiedname>
+        <param>
+          <type>bool &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>bool const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="149" column="6" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="149" bodyend="158"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d4c/a08211_1ade99ebc42e1e57f72d198180e3d1c563" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;::doMakeDirty</definition>
+        <argsstring>()</argsstring>
+        <name>doMakeDirty</name>
+        <qualifiedname>castor::GroupChangeTrackedT::doMakeDirty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="160" column="6" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="160" bodyend="168"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe template qui fournit une vue sur un tampon, à la manière d&apos;un std::array. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="11">
+        <label>castor::GroupChangeTrackedT&lt; BlendMode &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; BlendMode &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor::GroupChangeTrackedT&lt; ClusterSplitScheme &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ClusterSplitScheme &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::GroupChangeTrackedT&lt; ParallaxOcclusionMode &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ParallaxOcclusionMode &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::GroupChangeTrackedT&lt; SubsurfaceScatteringUPtr &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SubsurfaceScatteringUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor::GroupChangeTrackedT&lt; ViewportType &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ViewportType &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor::GroupChangeTrackedT&lt; VkCompareOp &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; VkCompareOp &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor::GroupChangeTrackedT&lt; ashes::Optional&lt; VkRect2D &gt; &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ashes::Optional&lt; VkRect2D &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor::GroupChangeTrackedT&lt; ashes::Optional&lt; VkViewport &gt; &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ashes::Optional&lt; VkViewport &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::GroupChangeTrackedT&lt; bool &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; bool &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor::GroupChangeTrackedT&lt; castor::AngleT &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::AngleT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::GroupChangeTrackedT&lt; castor::HdrRgbColour &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::HdrRgbColour &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor::GroupChangeTrackedT&lt; castor::Matrix4x4f &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::Matrix4x4f &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor::GroupChangeTrackedT&lt; castor::Point2ui &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::Point2ui &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor::GroupChangeTrackedT&lt; castor::Point3f &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::Point3f &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor::GroupChangeTrackedT&lt; castor::Point3ui &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::Point3ui &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor::GroupChangeTrackedT&lt; castor::Position &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::Position &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor::GroupChangeTrackedT&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::GroupChangeTrackedT&lt; castor::RgbColour &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::RgbColour &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor::GroupChangeTrackedT&lt; castor::RgbColourT &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::RgbColourT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor::GroupChangeTrackedT&lt; castor::Size &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::Size &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::GroupChangeTrackedT&lt; float &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; float &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::GroupChangeTrackedT&lt; uint32_t &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; uint32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="14" column="1" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="15" bodyend="174"/>
+    <listofallmembers>
+      <member refid="d2/d4c/a08211_1a3ff18d5f3c4cbb61950fa9c45c3136b4" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>callback</name></member>
+      <member refid="d2/d4c/a08211_1a8a8d95d629c434e9c977e4f287248dd5" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>control</name></member>
+      <member refid="d2/d4c/a08211_1ac60c0c0b3b39dfc55d5dfceec2f207b0" prot="private" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>doCopy</name></member>
+      <member refid="d2/d4c/a08211_1af759c91fef6fd2df9559dff65f57aff6" prot="private" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>doCopy</name></member>
+      <member refid="d2/d4c/a08211_1ade99ebc42e1e57f72d198180e3d1c563" prot="private" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>doMakeDirty</name></member>
+      <member refid="d2/d4c/a08211_1a5d4502260fe1a6b8241e21ead7873d5a" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>GroupChangeTrackedT</name></member>
+      <member refid="d2/d4c/a08211_1a551b5c84d32362c0e63f396b742d6251" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>GroupChangeTrackedT</name></member>
+      <member refid="d2/d4c/a08211_1ab700eb82540d620ccfd83b5bf48cd558" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>GroupChangeTrackedT</name></member>
+      <member refid="d2/d4c/a08211_1a2f67b0eae4397918fde561552e27e9f4" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>GroupChangeTrackedT</name></member>
+      <member refid="d2/d4c/a08211_1a9450d01f92b83e935085177c73920a49" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>isDirty</name></member>
+      <member refid="d2/d4c/a08211_1a686e682a50818082cee6907fbd780554" prot="private" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>m_callback</name></member>
+      <member refid="d2/d4c/a08211_1a45cdfd3bec90be5c6d4b0874c21f04fe" prot="private" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>m_dirty</name></member>
+      <member refid="d2/d4c/a08211_1ae600f217822572f857fa52f827b4c127" prot="private" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>m_value</name></member>
+      <member refid="d2/d4c/a08211_1a844efeb763782de262eee1485f581217" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>naked</name></member>
+      <member refid="d2/d4c/a08211_1a45051ee93fe6f7adc6482dcb8fdba6c8" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>operator ValueT &amp;</name></member>
+      <member refid="d2/d4c/a08211_1a6f3888b4001c496bac7994027348f8c2" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>operator ValueT const &amp;</name></member>
+      <member refid="d2/d4c/a08211_1ae3f1a995693e25d1bd1cdfabf764dc07" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>operator*</name></member>
+      <member refid="d2/d4c/a08211_1a4e717be69452ccd3b2af94b988c9d387" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>operator*</name></member>
+      <member refid="d2/d4c/a08211_1aabd0faf879a3d98775b3c1f03c2e7776" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>operator-&gt;</name></member>
+      <member refid="d2/d4c/a08211_1aa2ec704a91b48daa6ad791632c147dad" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>operator-&gt;</name></member>
+      <member refid="d2/d4c/a08211_1a9d136f0cb843138fd54a8032bc4cde5f" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>operator=</name></member>
+      <member refid="d2/d4c/a08211_1a693ebc5fb2f04a40701c61e5a0c977e8" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>operator=</name></member>
+      <member refid="d2/d4c/a08211_1ac7c611b7765b125a3bafe477b896fdbd" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>operator=</name></member>
+      <member refid="d2/d4c/a08211_1a30b5efa2b17165013fbf625f48b19391" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>reset</name></member>
+      <member refid="d2/d4c/a08211_1a2cc2c732767bf0c89bc58c8563bff2ff" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>Type</name></member>
+      <member refid="d2/d4c/a08211_1ae4746c123bcf2b5e7cbe7adc034dad3a" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>value</name></member>
+      <member refid="d2/d4c/a08211_1a4e3d078864afff8a16def0c1f8f027df" prot="public" virt="non-virtual"><scope>castor::GroupChangeTrackedT</scope><name>~GroupChangeTrackedT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

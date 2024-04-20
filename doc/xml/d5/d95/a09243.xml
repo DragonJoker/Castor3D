@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/d95/a09243" kind="struct" language="C++" prot="public">
+    <compoundname>castor::PointTyperT&lt; LengthT&lt; SrcT &gt;, DstCompT &gt;</compoundname>
+    <includes local="no">MathModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename SrcT</type>
+      </param>
+      <param>
+        <type>typename DstCompT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d5/d95/a09243_1ac829a31856d81202639ca1a649c22cd3" prot="public" static="no">
+        <type><ref refid="de/dda/a09107" kindref="compound">LengthT</ref>&lt; typename <ref refid="de/dd7/a09235" kindref="compound">PointTyperT</ref>&lt; SrcT, DstCompT &gt;::Type &gt;</type>
+        <definition>using castor::PointTyperT&lt; LengthT&lt; SrcT &gt;, DstCompT &gt;::Type =  LengthT&lt; typename PointTyperT&lt; SrcT, DstCompT &gt;::Type &gt;</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor::PointTyperT&lt; LengthT&lt; SrcT &gt;, DstCompT &gt;::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/MathModule.hpp" line="409" column="1" bodyfile="CastorUtils/Math/MathModule.hpp" bodystart="409" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/MathModule.hpp" line="407" column="1" bodyfile="CastorUtils/Math/MathModule.hpp" bodystart="408" bodyend="410"/>
+    <listofallmembers>
+      <member refid="d5/d95/a09243_1ac829a31856d81202639ca1a649c22cd3" prot="public" virt="non-virtual"><scope>castor::PointTyperT&lt; LengthT&lt; SrcT &gt;, DstCompT &gt;</scope><name>Type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

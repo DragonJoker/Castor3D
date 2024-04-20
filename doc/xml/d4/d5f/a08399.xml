@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/d5f/a08399" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserEnumTraits</compoundname>
+    <templateparamlist>
+      <param>
+        <type>typename EnumType</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Structure d&apos;aide pour les paramètres de parseur. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/FileParser/FileParserModule.hpp" line="254" column="1" bodyfile="CastorUtils/FileParser/FileParserModule.hpp" bodystart="254" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

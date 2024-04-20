@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/ddb/a09027" kind="struct" language="C++" prot="public">
+    <compoundname>stbi_io_callbacks</compoundname>
+    <includes local="no">stb_image.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/ddb/a09027_1a623e46b3a2a019611601409926283a88" prot="public" static="no" mutable="no">
+        <type>int(*</type>
+        <definition>int(* stbi_io_callbacks::read) (void *user, char *data, int size)</definition>
+        <argsstring>)(void *user, char *data, int size)</argsstring>
+        <name>read</name>
+        <qualifiedname>stbi_io_callbacks::read</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="419" column="4" bodyfile="CastorUtils/Graphics/stb_image.h" bodystart="419" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/ddb/a09027_1a257aac5480a90a6c4b8fbe86c1b01068" prot="public" static="no" mutable="no">
+        <type>void(*</type>
+        <definition>void(* stbi_io_callbacks::skip) (void *user, int n)</definition>
+        <argsstring>)(void *user, int n)</argsstring>
+        <name>skip</name>
+        <qualifiedname>stbi_io_callbacks::skip</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="420" column="4" bodyfile="CastorUtils/Graphics/stb_image.h" bodystart="420" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/ddb/a09027_1a319639db2f76e715eed7a7a974136832" prot="public" static="no" mutable="no">
+        <type>int(*</type>
+        <definition>int(* stbi_io_callbacks::eof) (void *user)</definition>
+        <argsstring>)(void *user)</argsstring>
+        <name>eof</name>
+        <qualifiedname>stbi_io_callbacks::eof</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image.h" line="421" column="4" bodyfile="CastorUtils/Graphics/stb_image.h" bodystart="421" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/stb_image.h" line="417" column="1" bodyfile="CastorUtils/Graphics/stb_image.h" bodystart="418" bodyend="422"/>
+    <listofallmembers>
+      <member refid="de/ddb/a09027_1a319639db2f76e715eed7a7a974136832" prot="public" virt="non-virtual"><scope>stbi_io_callbacks</scope><name>eof</name></member>
+      <member refid="de/ddb/a09027_1a623e46b3a2a019611601409926283a88" prot="public" virt="non-virtual"><scope>stbi_io_callbacks</scope><name>read</name></member>
+      <member refid="de/ddb/a09027_1a257aac5480a90a6c4b8fbe86c1b01068" prot="public" virt="non-virtual"><scope>stbi_io_callbacks</scope><name>skip</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

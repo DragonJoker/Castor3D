@@ -1,0 +1,27 @@
+<map id="castor::isBigEndian" name="castor::isBigEndian">
+<area shape="rect" id="Node000001" title="Detects if the current system is big endian." alt="" coords="236,365,371,390"/>
+<area shape="rect" id="Node000002" href="$d2/dd2/a02279.html#a0d184ae41d5975c6c14fc8cc48df18fe" title="Convert the given value to big endian if needed." alt="" coords="5,5,188,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="297,351,289,292,271,214,256,172,238,131,214,93,186,59,171,48,174,43,190,55,219,90,242,129,261,170,276,212,295,291,303,351"/>
+<area shape="rect" id="Node000003" href="$d2/dd2/a02279.html#a547f175c03da584bbcc49e7f6e4f4013" title="Convert the given value to big endian if needed." alt="" coords="5,69,188,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="295,352,283,304,263,242,231,179,210,149,186,123,170,112,173,107,190,119,214,146,235,176,267,240,288,302,300,351"/>
+<area shape="rect" id="Node000004" href="$d2/dd2/a02279.html#add97d0a02fa4f84214d94adce553304e" title="Convert the given big endian value to system endian if needed." alt="" coords="5,133,188,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="291,353,276,316,254,272,224,227,186,187,168,176,171,171,190,183,228,223,258,269,281,314,296,351"/>
+<area shape="rect" id="Node000005" href="$d2/dd2/a02279.html#a49a3ae83045c03ad117623890299fb1c" title="Convert the given big endian value to system endian if needed." alt="" coords="5,197,188,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="284,355,243,303,216,275,187,252,165,240,167,235,189,247,220,271,247,299,288,352"/>
+<area shape="rect" id="Node000006" href="$d2/dd2/a02279.html#a69cb2659d6729cb2651ef72d69cad6d8" title="Convert the given value to big endian if needed." alt="" coords="5,261,188,301"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="269,360,187,316,158,304,160,299,189,311,271,355"/>
+<area shape="rect" id="Node000007" href="$d2/dd2/a02279.html#a0e4596003b5027cb4faf7daf3febd1ab" title="Convert the given value to big endian if needed." alt="" coords="5,325,188,365"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="222,367,188,362,188,357,223,362"/>
+<area shape="rect" id="Node000008" href="$d2/dd2/a02279.html#ac0cf5e2146e104e8894be5b10788327f" title="Convert the given value to big endian if needed." alt="" coords="5,389,188,429"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="223,392,188,398,188,393,222,387"/>
+<area shape="rect" id="Node000009" href="$d2/dd2/a02279.html#a54e460b822ffcf0964269a724df7a7b6" title="Convert the given value to big endian if needed." alt="" coords="5,453,188,493"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="271,400,189,444,160,456,158,451,187,439,269,395"/>
+<area shape="rect" id="Node000010" href="$d2/dd2/a02279.html#a93e72f9c39ce923c9393d4f6df336175" title="Convert the given value to big endian if needed." alt="" coords="5,517,188,557"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="288,403,247,455,220,483,189,508,167,520,165,515,187,503,216,479,243,452,284,400"/>
+<area shape="rect" id="Node000011" href="$d2/dd2/a02279.html#ad58701f180fdf6d8fc87eb0948a6fa0b" title="Convert the given value to big endian if needed." alt="" coords="5,581,188,621"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="296,404,281,441,258,486,228,531,190,571,171,583,168,579,186,567,224,528,254,483,276,439,291,402"/>
+<area shape="rect" id="Node000012" href="$d2/dd2/a02279.html#ab4a7ba77cba814168c8a81b26370ff7e" title="Convert the given value to big endian if needed." alt="" coords="5,645,188,685"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="300,404,288,452,267,514,235,579,214,609,190,635,173,647,170,643,186,631,210,605,231,576,263,512,283,451,295,403"/>
+<area shape="rect" id="Node000013" href="$d2/dd2/a02279.html#ae57ba897bf67e8d944d1bac129d1482e" title="Convert the given value to big endian if needed." alt="" coords="5,709,188,749"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="303,404,295,464,276,542,261,585,242,626,219,665,190,699,174,711,171,707,186,695,214,662,238,623,256,583,271,541,289,463,297,403"/>
+</map>

@@ -1,15 +1,15 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_19beb1677fd60f69f1adee84ca7ad745" kind="dir">
-    <compoundname>Model/Mesh/Submesh</compoundname>
-    <innerdir refid="dir_517eb4e4681f670c5a2adec1eb9b993a">Model/Mesh/Submesh/Component</innerdir>
-    <innerfile refid="dc/d1b/a00827">Submesh.hpp</innerfile>
-    <innerfile refid="d9/daf/a00830">SubmeshModule.hpp</innerfile>
-    <innerfile refid="dc/d6e/a00833">SubmeshUtils.hpp</innerfile>
+    <compoundname>Castor3D/Model/Mesh/Submesh</compoundname>
+    <innerdir refid="dir_517eb4e4681f670c5a2adec1eb9b993a">Castor3D/Model/Mesh/Submesh/Component</innerdir>
+    <innerfile refid="d8/d1c/a00824">Submesh.hpp</innerfile>
+    <innerfile refid="dc/d1b/a00827">SubmeshModule.hpp</innerfile>
+    <innerfile refid="d9/daf/a00830">SubmeshUtils.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Model/Mesh/Submesh/"/>
+    <location file="Castor3D/Model/Mesh/Submesh/"/>
   </compounddef>
 </doxygen>

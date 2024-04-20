@@ -1,0 +1,530 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/da5/a09011" kind="class" language="C++" prot="public">
+    <compoundname>castor::Rectangle</compoundname>
+    <basecompoundref refid="da/d50/a08167" prot="private" virt="non-virtual">castor::DataHolderT&lt; RectangleData &gt;</basecompoundref>
+    <basecompoundref prot="public" virt="non-virtual">Coords4i</basecompoundref>
+    <includes local="no">Rectangle.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/da5/a09011_1ada0bc1b2d6a0a1976ec64dfe14ae15a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Rectangle::Rectangle</definition>
+        <argsstring>(Position const &amp;origin=Position(), Size const &amp;size=Size())</argsstring>
+        <name>Rectangle</name>
+        <qualifiedname>castor::Rectangle::Rectangle</qualifiedname>
+        <param>
+          <type><ref refid="df/dba/a08999" kindref="compound">Position</ref> const &amp;</type>
+          <declname>origin</declname>
+          <defval><ref refid="df/dba/a08999" kindref="compound">Position</ref>()</defval>
+        </param>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+          <defval><ref refid="d4/dd6/a09023" kindref="compound">Size</ref>()</defval>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">origin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="df/dba/a08999" kindref="compound">Position</ref> </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dimensions </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Rectangle.hpp" line="42" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da5/a09011_1a24c256c17ccd9a575aa7dbd461826b99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Rectangle::Rectangle</definition>
+        <argsstring>(int32_t left, int32_t top, int32_t right, int32_t bottom)</argsstring>
+        <name>Rectangle</name>
+        <qualifiedname>castor::Rectangle::Rectangle</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>left</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>top</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>right</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>bottom</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">left</parametername>
+<parametername direction="in">top</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="db/dcf/a09187" kindref="compound">Point</ref> haut gauche </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">right</parametername>
+<parametername direction="in">bottom</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="db/dcf/a09187" kindref="compound">Point</ref> bas droit </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Rectangle.hpp" line="53" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da5/a09011_1ab57995a6e080924167b93652de532ad8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1ad7694f38f6c437bc663e6ef48146c712" kindref="member">Intersection</ref></type>
+        <definition>CU_API Intersection castor::Rectangle::intersects</definition>
+        <argsstring>(Position const &amp;point) const</argsstring>
+        <name>intersects</name>
+        <qualifiedname>castor::Rectangle::intersects</qualifiedname>
+        <param>
+          <type><ref refid="df/dba/a08999" kindref="compound">Position</ref> const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Teste si le point donné est sur ou dans ce rectangle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point à tester </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput><ref refid="d2/dd2/a02279_1ad7694f38f6c437bc663e6ef48146c712a251270409212a198cb7feb40542a0f46" kindref="member">Intersection::eIn</ref></computeroutput> si sur ou dedans, <computeroutput><ref refid="d2/dd2/a02279_1ad7694f38f6c437bc663e6ef48146c712a2545002d2c0ce3415de288b81a231e0f" kindref="member">Intersection::eOut</ref></computeroutput> sinon </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Rectangle.hpp" line="64" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da5/a09011_1aeb60e4e26267b3959489c1e7cdc2a173" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1ad7694f38f6c437bc663e6ef48146c712" kindref="member">Intersection</ref></type>
+        <definition>CU_API Intersection castor::Rectangle::intersects</definition>
+        <argsstring>(Rectangle const &amp;rect) const</argsstring>
+        <name>intersects</name>
+        <qualifiedname>castor::Rectangle::intersects</qualifiedname>
+        <param>
+          <type><ref refid="d4/da5/a09011" kindref="compound">Rectangle</ref> const &amp;</type>
+          <declname>rect</declname>
+        </param>
+        <briefdescription>
+<para>Teste si le rectangle donné intersecte ce rectangle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rect</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le rectangle à tester </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le type d&apos;intersection entre les 2 rectangles </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Rectangle.hpp" line="75" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da5/a09011_1a1d9268be5bc2765fe5b7423e7e4e07b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::Rectangle::set</definition>
+        <argsstring>(int32_t left, int32_t top, int32_t right, int32_t bottom)</argsstring>
+        <name>set</name>
+        <qualifiedname>castor::Rectangle::set</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>left</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>top</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>right</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>bottom</declname>
+        </param>
+        <briefdescription>
+<para>Définit le rectangle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">left</parametername>
+<parametername direction="in">top</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="db/dcf/a09187" kindref="compound">Point</ref> haut gauche </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">right</parametername>
+<parametername direction="in">bottom</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="db/dcf/a09187" kindref="compound">Point</ref> bas droit </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Rectangle.hpp" line="86" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da5/a09011_1a06d4f8767ee52d391c4406688a25860e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::Rectangle::size</definition>
+        <argsstring>(Size &amp;result) const</argsstring>
+        <name>size</name>
+        <qualifiedname>castor::Rectangle::size</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+<para>Récupère les dimensions du rectangle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">result</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les dimensions du rectangle </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Rectangle.hpp" line="95" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da5/a09011_1a79fc7539e4a64b7423a67849529679bf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int castor::Rectangle::left</definition>
+        <argsstring>() const</argsstring>
+        <name>left</name>
+        <qualifiedname>castor::Rectangle::left</qualifiedname>
+        <briefdescription>
+<para>Récupère la coordonnée gauche. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La coordonnée gauche du rectangle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Rectangle.hpp" line="104" column="5" bodyfile="CastorUtils/Graphics/Rectangle.hpp" bodystart="104" bodyend="107"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; RectangleData &gt;::getData</references>
+        <references refid="dd/d46/a09007_1afe6365d45c2594245c0f5c15c342dcfe" compoundref="da/d14/a02066" startline="16">castor::RectangleData::Mbr::left</references>
+        <references refid="dc/dbe/a09003_1aeffdc8c517306477c1aef380be1f515d" compoundref="da/d14/a02066" startline="21">castor::RectangleData::rect</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da5/a09011_1af06c215310d2ef4a8f1ff810cd177881" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int &amp;</type>
+        <definition>int &amp; castor::Rectangle::left</definition>
+        <argsstring>()</argsstring>
+        <name>left</name>
+        <qualifiedname>castor::Rectangle::left</qualifiedname>
+        <briefdescription>
+<para>Récupère la coordonnée gauche. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La coordonnée gauche du rectangle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Rectangle.hpp" line="116" column="6" bodyfile="CastorUtils/Graphics/Rectangle.hpp" bodystart="116" bodyend="119"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; RectangleData &gt;::getData</references>
+        <references refid="dd/d46/a09007_1afe6365d45c2594245c0f5c15c342dcfe" compoundref="da/d14/a02066" startline="16">castor::RectangleData::Mbr::left</references>
+        <references refid="dc/dbe/a09003_1aeffdc8c517306477c1aef380be1f515d" compoundref="da/d14/a02066" startline="21">castor::RectangleData::rect</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da5/a09011_1ac832aae3881fa64b6a39ae61bb318226" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int castor::Rectangle::right</definition>
+        <argsstring>() const</argsstring>
+        <name>right</name>
+        <qualifiedname>castor::Rectangle::right</qualifiedname>
+        <briefdescription>
+<para>Récupère la coordonnée droite. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La coordonnée droite du rectangle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Rectangle.hpp" line="128" column="5" bodyfile="CastorUtils/Graphics/Rectangle.hpp" bodystart="128" bodyend="131"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; RectangleData &gt;::getData</references>
+        <references refid="dc/dbe/a09003_1aeffdc8c517306477c1aef380be1f515d" compoundref="da/d14/a02066" startline="21">castor::RectangleData::rect</references>
+        <references refid="dd/d46/a09007_1a7da188343744835d64e59639cda71c76" compoundref="da/d14/a02066" startline="18">castor::RectangleData::Mbr::right</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da5/a09011_1a4613156de50996d6fc53fab56b0f87eb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int &amp;</type>
+        <definition>int &amp; castor::Rectangle::right</definition>
+        <argsstring>()</argsstring>
+        <name>right</name>
+        <qualifiedname>castor::Rectangle::right</qualifiedname>
+        <briefdescription>
+<para>Récupère la coordonnée droite. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La coordonnée droite du rectangle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Rectangle.hpp" line="140" column="6" bodyfile="CastorUtils/Graphics/Rectangle.hpp" bodystart="140" bodyend="143"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; RectangleData &gt;::getData</references>
+        <references refid="dc/dbe/a09003_1aeffdc8c517306477c1aef380be1f515d" compoundref="da/d14/a02066" startline="21">castor::RectangleData::rect</references>
+        <references refid="dd/d46/a09007_1a7da188343744835d64e59639cda71c76" compoundref="da/d14/a02066" startline="18">castor::RectangleData::Mbr::right</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da5/a09011_1a82f11f64ca01212b5c5754ccce9ab51a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int castor::Rectangle::top</definition>
+        <argsstring>() const</argsstring>
+        <name>top</name>
+        <qualifiedname>castor::Rectangle::top</qualifiedname>
+        <briefdescription>
+<para>Récupère la coordonnée haute. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La coordonnée haute du rectangle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Rectangle.hpp" line="152" column="5" bodyfile="CastorUtils/Graphics/Rectangle.hpp" bodystart="152" bodyend="155"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; RectangleData &gt;::getData</references>
+        <references refid="dc/dbe/a09003_1aeffdc8c517306477c1aef380be1f515d" compoundref="da/d14/a02066" startline="21">castor::RectangleData::rect</references>
+        <references refid="dd/d46/a09007_1a7ffdb4b42ad2d0681a567477d5d175a2" compoundref="da/d14/a02066" startline="17">castor::RectangleData::Mbr::top</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da5/a09011_1ab2d446645899494247e8b09f23c94a8f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int &amp;</type>
+        <definition>int &amp; castor::Rectangle::top</definition>
+        <argsstring>()</argsstring>
+        <name>top</name>
+        <qualifiedname>castor::Rectangle::top</qualifiedname>
+        <briefdescription>
+<para>Récupère la coordonnée haute. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La coordonnée haute du rectangle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Rectangle.hpp" line="164" column="6" bodyfile="CastorUtils/Graphics/Rectangle.hpp" bodystart="164" bodyend="167"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; RectangleData &gt;::getData</references>
+        <references refid="dc/dbe/a09003_1aeffdc8c517306477c1aef380be1f515d" compoundref="da/d14/a02066" startline="21">castor::RectangleData::rect</references>
+        <references refid="dd/d46/a09007_1a7ffdb4b42ad2d0681a567477d5d175a2" compoundref="da/d14/a02066" startline="17">castor::RectangleData::Mbr::top</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da5/a09011_1a9835ed394339a62d820eace9c464ae13" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int castor::Rectangle::bottom</definition>
+        <argsstring>() const</argsstring>
+        <name>bottom</name>
+        <qualifiedname>castor::Rectangle::bottom</qualifiedname>
+        <briefdescription>
+<para>Récupère la coordonnée basse. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La coordonnée basse du rectangle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Rectangle.hpp" line="176" column="5" bodyfile="CastorUtils/Graphics/Rectangle.hpp" bodystart="176" bodyend="179"/>
+        <references refid="dd/d46/a09007_1a7a4f3c4d0f6e6354bd01399f5fe78619" compoundref="da/d14/a02066" startline="19">castor::RectangleData::Mbr::bottom</references>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; RectangleData &gt;::getData</references>
+        <references refid="dc/dbe/a09003_1aeffdc8c517306477c1aef380be1f515d" compoundref="da/d14/a02066" startline="21">castor::RectangleData::rect</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da5/a09011_1aa66c41cfcc2230dad02516a9c41fd4d3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int &amp;</type>
+        <definition>int &amp; castor::Rectangle::bottom</definition>
+        <argsstring>()</argsstring>
+        <name>bottom</name>
+        <qualifiedname>castor::Rectangle::bottom</qualifiedname>
+        <briefdescription>
+<para>Récupère la coordonnée basse. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La coordonnée basse du rectangle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Rectangle.hpp" line="188" column="6" bodyfile="CastorUtils/Graphics/Rectangle.hpp" bodystart="188" bodyend="191"/>
+        <references refid="dd/d46/a09007_1a7a4f3c4d0f6e6354bd01399f5fe78619" compoundref="da/d14/a02066" startline="19">castor::RectangleData::Mbr::bottom</references>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; RectangleData &gt;::getData</references>
+        <references refid="dc/dbe/a09003_1aeffdc8c517306477c1aef380be1f515d" compoundref="da/d14/a02066" startline="21">castor::RectangleData::rect</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da5/a09011_1aaf51e7864545f6542253c760df09b109" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int castor::Rectangle::getWidth</definition>
+        <argsstring>() const</argsstring>
+        <name>getWidth</name>
+        <qualifiedname>castor::Rectangle::getWidth</qualifiedname>
+        <briefdescription>
+<para>Récupère la largeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La largeur du rectangle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Rectangle.hpp" line="200" column="5" bodyfile="CastorUtils/Graphics/Rectangle.hpp" bodystart="200" bodyend="203"/>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; RectangleData &gt;::getData</references>
+        <references refid="dd/d46/a09007_1afe6365d45c2594245c0f5c15c342dcfe" compoundref="da/d14/a02066" startline="16">castor::RectangleData::Mbr::left</references>
+        <references refid="dc/dbe/a09003_1aeffdc8c517306477c1aef380be1f515d" compoundref="da/d14/a02066" startline="21">castor::RectangleData::rect</references>
+        <references refid="dd/d46/a09007_1a7da188343744835d64e59639cda71c76" compoundref="da/d14/a02066" startline="18">castor::RectangleData::Mbr::right</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da5/a09011_1ac131b6b6475cc46960c99af25209e5b5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int castor::Rectangle::getHeight</definition>
+        <argsstring>() const</argsstring>
+        <name>getHeight</name>
+        <qualifiedname>castor::Rectangle::getHeight</qualifiedname>
+        <briefdescription>
+<para>Récupère la hauteur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La hauteur du rectangle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Rectangle.hpp" line="212" column="5" bodyfile="CastorUtils/Graphics/Rectangle.hpp" bodystart="212" bodyend="215"/>
+        <references refid="dd/d46/a09007_1a7a4f3c4d0f6e6354bd01399f5fe78619" compoundref="da/d14/a02066" startline="19">castor::RectangleData::Mbr::bottom</references>
+        <references refid="da/d50/a08167_1aa58614a2095d691f70b9ba3606422208" compoundref="d9/d9b/a01889" startline="22" endline="25">castor::DataHolderT&lt; RectangleData &gt;::getData</references>
+        <references refid="dc/dbe/a09003_1aeffdc8c517306477c1aef380be1f515d" compoundref="da/d14/a02066" startline="21">castor::RectangleData::rect</references>
+        <references refid="dd/d46/a09007_1a7ffdb4b42ad2d0681a567477d5d175a2" compoundref="da/d14/a02066" startline="17">castor::RectangleData::Mbr::top</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>Coords4i</label>
+      </node>
+      <node id="2">
+        <label>castor::DataHolderT&lt; RectangleData &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; RectangleData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="1">
+        <label>castor::Rectangle</label>
+        <link refid="d4/da5/a09011"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>Coords4i</label>
+      </node>
+      <node id="2">
+        <label>castor::DataHolderT&lt; RectangleData &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; RectangleData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="1">
+        <label>castor::Rectangle</label>
+        <link refid="d4/da5/a09011"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/Rectangle.hpp" line="25" column="1" bodyfile="CastorUtils/Graphics/Rectangle.hpp" bodystart="28" bodyend="216"/>
+    <listofallmembers>
+      <member refid="d4/da5/a09011_1a9835ed394339a62d820eace9c464ae13" prot="public" virt="non-virtual"><scope>castor::Rectangle</scope><name>bottom</name></member>
+      <member refid="d4/da5/a09011_1aa66c41cfcc2230dad02516a9c41fd4d3" prot="public" virt="non-virtual"><scope>castor::Rectangle</scope><name>bottom</name></member>
+      <member refid="d4/da5/a09011_1ac131b6b6475cc46960c99af25209e5b5" prot="public" virt="non-virtual"><scope>castor::Rectangle</scope><name>getHeight</name></member>
+      <member refid="d4/da5/a09011_1aaf51e7864545f6542253c760df09b109" prot="public" virt="non-virtual"><scope>castor::Rectangle</scope><name>getWidth</name></member>
+      <member refid="d4/da5/a09011_1ab57995a6e080924167b93652de532ad8" prot="public" virt="non-virtual"><scope>castor::Rectangle</scope><name>intersects</name></member>
+      <member refid="d4/da5/a09011_1aeb60e4e26267b3959489c1e7cdc2a173" prot="public" virt="non-virtual"><scope>castor::Rectangle</scope><name>intersects</name></member>
+      <member refid="d4/da5/a09011_1a79fc7539e4a64b7423a67849529679bf" prot="public" virt="non-virtual"><scope>castor::Rectangle</scope><name>left</name></member>
+      <member refid="d4/da5/a09011_1af06c215310d2ef4a8f1ff810cd177881" prot="public" virt="non-virtual"><scope>castor::Rectangle</scope><name>left</name></member>
+      <member refid="d4/da5/a09011_1ada0bc1b2d6a0a1976ec64dfe14ae15a3" prot="public" virt="non-virtual"><scope>castor::Rectangle</scope><name>Rectangle</name></member>
+      <member refid="d4/da5/a09011_1a24c256c17ccd9a575aa7dbd461826b99" prot="public" virt="non-virtual"><scope>castor::Rectangle</scope><name>Rectangle</name></member>
+      <member refid="d4/da5/a09011_1ac832aae3881fa64b6a39ae61bb318226" prot="public" virt="non-virtual"><scope>castor::Rectangle</scope><name>right</name></member>
+      <member refid="d4/da5/a09011_1a4613156de50996d6fc53fab56b0f87eb" prot="public" virt="non-virtual"><scope>castor::Rectangle</scope><name>right</name></member>
+      <member refid="d4/da5/a09011_1a1d9268be5bc2765fe5b7423e7e4e07b5" prot="public" virt="non-virtual"><scope>castor::Rectangle</scope><name>set</name></member>
+      <member refid="d4/da5/a09011_1a06d4f8767ee52d391c4406688a25860e" prot="public" virt="non-virtual"><scope>castor::Rectangle</scope><name>size</name></member>
+      <member refid="d4/da5/a09011_1a82f11f64ca01212b5c5754ccce9ab51a" prot="public" virt="non-virtual"><scope>castor::Rectangle</scope><name>top</name></member>
+      <member refid="d4/da5/a09011_1ab2d446645899494247e8b09f23c94a8f" prot="public" virt="non-virtual"><scope>castor::Rectangle</scope><name>top</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

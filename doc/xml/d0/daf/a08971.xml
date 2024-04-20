@@ -1,0 +1,236 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/daf/a08971" kind="class" language="C++" prot="public">
+    <compoundname>castor::ImageWriter</compoundname>
+    <includes local="no">ImageWriter.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/daf/a08971_1a0db5853defa64e2a4d166ca4db02e95e" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; <ref refid="d2/dd2/a02279_1a2a1a29d7c841836baa5e821afa42c3e0" kindref="member">ImageWriterPtr</ref> &gt;</type>
+        <definition>Vector&lt; ImageWriterPtr &gt; castor::ImageWriter::m_writers</definition>
+        <argsstring></argsstring>
+        <name>m_writers</name>
+        <qualifiedname>castor::ImageWriter::m_writers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageWriter.hpp" line="94" column="8" bodyfile="CastorUtils/Graphics/ImageWriter.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/daf/a08971_1ad4a675aa58c0f7f01c6bd051bf557f9b" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af776079ca1d2ee2d1b993f2d34011159" kindref="member">StringMap</ref>&lt; <ref refid="dd/d59/a08967" kindref="compound">ImageWriterImpl</ref> * &gt;</type>
+        <definition>StringMap&lt; ImageWriterImpl * &gt; castor::ImageWriter::m_extWriters</definition>
+        <argsstring></argsstring>
+        <name>m_extWriters</name>
+        <qualifiedname>castor::ImageWriter::m_extWriters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageWriter.hpp" line="95" column="11" bodyfile="CastorUtils/Graphics/ImageWriter.hpp" bodystart="95" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/daf/a08971_1abe8e701dd4a2963298b8389f21893d1e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::ImageWriter::registerWriter</definition>
+        <argsstring>(String const &amp;extension, ImageWriterPtr writer)</argsstring>
+        <name>registerWriter</name>
+        <qualifiedname>castor::ImageWriter::registerWriter</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>extension</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a2a1a29d7c841836baa5e821afa42c3e0" kindref="member">ImageWriterPtr</ref></type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+<para>Enregistre un writer d&apos;image. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">extension</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;extension de fichier image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">writer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le writer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageWriter.hpp" line="48" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/daf/a08971_1ae6d3af8341d971e7a45759b04dbd1001" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::ImageWriter::registerWriter</definition>
+        <argsstring>(StringArray const &amp;extensions, ImageWriterPtr writer)</argsstring>
+        <name>registerWriter</name>
+        <qualifiedname>castor::ImageWriter::registerWriter</qualifiedname>
+        <param>
+          <type>StringArray const &amp;</type>
+          <declname>extensions</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a2a1a29d7c841836baa5e821afa42c3e0" kindref="member">ImageWriterPtr</ref></type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+<para>Enregistre un writer d&apos;image. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">extensions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La liste d&apos;extensions de fichier image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">writer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le writer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageWriter.hpp" line="59" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/daf/a08971_1a8393797a05bfff64ac239b692f30e8ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::ImageWriter::unregisterWriter</definition>
+        <argsstring>(String const &amp;extension)</argsstring>
+        <name>unregisterWriter</name>
+        <qualifiedname>castor::ImageWriter::unregisterWriter</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>extension</declname>
+        </param>
+        <briefdescription>
+<para>Désenregistre le writer pour l&apos;extension de fichier d&apos;image donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">extension</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;extension de fichier image. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageWriter.hpp" line="68" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/daf/a08971_1a04d4f8827e0e202cd469004fddd37936" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::ImageWriter::unregisterWriter</definition>
+        <argsstring>(StringArray const &amp;extensions)</argsstring>
+        <name>unregisterWriter</name>
+        <qualifiedname>castor::ImageWriter::unregisterWriter</qualifiedname>
+        <param>
+          <type>StringArray const &amp;</type>
+          <declname>extensions</declname>
+        </param>
+        <briefdescription>
+<para>Désenregistre le writer pour l&apos;extension de fichier d&apos;image donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">extensions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La liste d&apos;extensions de fichier image. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageWriter.hpp" line="77" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/daf/a08971_1ab90f74eb3d47270e7c5761056b7ec923" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::ImageWriter::write</definition>
+        <argsstring>(Path const &amp;path, PxBufferBase const &amp;buffer) const</argsstring>
+        <name>write</name>
+        <qualifiedname>castor::ImageWriter::write</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Enregistre les données d&apos;une image dans un fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin d&apos;accès au fichier image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un problème a été rencontré. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageWriter.hpp" line="90" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/ImageWriter.hpp" line="35" column="1" bodyfile="CastorUtils/Graphics/ImageWriter.hpp" bodystart="36" bodyend="96"/>
+    <listofallmembers>
+      <member refid="d0/daf/a08971_1ad4a675aa58c0f7f01c6bd051bf557f9b" prot="private" virt="non-virtual"><scope>castor::ImageWriter</scope><name>m_extWriters</name></member>
+      <member refid="d0/daf/a08971_1a0db5853defa64e2a4d166ca4db02e95e" prot="private" virt="non-virtual"><scope>castor::ImageWriter</scope><name>m_writers</name></member>
+      <member refid="d0/daf/a08971_1abe8e701dd4a2963298b8389f21893d1e" prot="public" virt="non-virtual"><scope>castor::ImageWriter</scope><name>registerWriter</name></member>
+      <member refid="d0/daf/a08971_1ae6d3af8341d971e7a45759b04dbd1001" prot="public" virt="non-virtual"><scope>castor::ImageWriter</scope><name>registerWriter</name></member>
+      <member refid="d0/daf/a08971_1a8393797a05bfff64ac239b692f30e8ed" prot="public" virt="non-virtual"><scope>castor::ImageWriter</scope><name>unregisterWriter</name></member>
+      <member refid="d0/daf/a08971_1a04d4f8827e0e202cd469004fddd37936" prot="public" virt="non-virtual"><scope>castor::ImageWriter</scope><name>unregisterWriter</name></member>
+      <member refid="d0/daf/a08971_1ab90f74eb3d47270e7c5761056b7ec923" prot="public" virt="non-virtual"><scope>castor::ImageWriter</scope><name>write</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,602 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d7b/a04903" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::PbrLightingModel</compoundname>
+    <basecompoundref refid="d1/d55/a07543" prot="public" virt="non-virtual">castor3d::shader::LightingModel</basecompoundref>
+    <includes local="no">GlslPbrLighting.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/d7b/a04903_1a11c13c31f49aa23726ef9c81122f0465" prot="public" static="no" mutable="no">
+        <type><ref refid="da/d94/a07483" kindref="compound">CookTorranceBRDF</ref></type>
+        <definition>CookTorranceBRDF castor3d::shader::PbrLightingModel::m_cookTorrance</definition>
+        <argsstring></argsstring>
+        <name>m_cookTorrance</name>
+        <qualifiedname>castor3d::shader::PbrLightingModel::m_cookTorrance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp" line="80" column="18" bodyfile="Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d7b/a04903_1a8b9bdfeef806ed24e56cb0bd87b2e4ae" prot="public" static="no" mutable="no">
+        <type><ref refid="da/d9a/a07655" kindref="compound">SheenBRDF</ref></type>
+        <definition>SheenBRDF castor3d::shader::PbrLightingModel::m_sheen</definition>
+        <argsstring></argsstring>
+        <name>m_sheen</name>
+        <qualifiedname>castor3d::shader::PbrLightingModel::m_sheen</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp" line="81" column="11" bodyfile="Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d7b/a04903_1a528b2c409e2a9b742b1c319628b411d9" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::PbrLightingModel::PbrLightingModel</definition>
+        <argsstring>(LightingModelID lightingModelId, sdw::ShaderWriter &amp;writer, Materials const &amp;materials, Utils &amp;utils, BRDFHelpers &amp;brdf, Shadow &amp;shadowModel, Lights &amp;lights, bool enableVolumetric)</argsstring>
+        <name>PbrLightingModel</name>
+        <qualifiedname>castor3d::shader::PbrLightingModel::PbrLightingModel</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a2f2cd84840221bf55c29f1919a0cae4e" kindref="member">LightingModelID</ref></type>
+          <declname>lightingModelId</declname>
+        </param>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/da5/a07555" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/dfe/a07715" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d85/a07467" kindref="compound">BRDFHelpers</ref> &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d89/a07651" kindref="compound">Shadow</ref> &amp;</type>
+          <declname>shadowModel</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df8/a07539" kindref="compound">Lights</ref> &amp;</type>
+          <declname>lights</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableVolumetric</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp" line="20" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d7b/a04903_1ab27ed5011e5598e00198196b27f0baa6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PbrLightingModel::adjustDirectLighting</definition>
+        <argsstring>(BlendComponents const &amp;components, DirectLighting &amp;lighting) const override</argsstring>
+        <name>adjustDirectLighting</name>
+        <qualifiedname>castor3d::shader::PbrLightingModel::adjustDirectLighting</qualifiedname>
+        <reimplements refid="d1/d55/a07543_1a4fefc878aea3750973107dfbbe02f22d">adjustDirectLighting</reimplements>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dd8/a07591" kindref="compound">DirectLighting</ref> &amp;</type>
+          <declname>lighting</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp" line="38" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="df/d7b/a04903_1a275e5b40200d89fe2c6619847df435fc" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">castor::StringView</ref></type>
+        <definition>static C3D_API castor::StringView castor3d::shader::PbrLightingModel::getName</definition>
+        <argsstring>()</argsstring>
+        <name>getName</name>
+        <qualifiedname>castor3d::shader::PbrLightingModel::getName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp" line="28" column="35"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d7b/a04903_1afe3f038a0cc3171f532d3ed0ccbf4e82" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> LightingModelUPtr</type>
+        <definition>static C3D_API LightingModelUPtr castor3d::shader::PbrLightingModel::create</definition>
+        <argsstring>(LightingModelID lightingModelId, sdw::ShaderWriter &amp;writer, Materials const &amp;materials, Utils &amp;utils, BRDFHelpers &amp;brdf, Shadow &amp;shadowModel, Lights &amp;lights, bool enableVolumetric)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::PbrLightingModel::create</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a2f2cd84840221bf55c29f1919a0cae4e" kindref="member">LightingModelID</ref></type>
+          <declname>lightingModelId</declname>
+        </param>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/da5/a07555" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/dfe/a07715" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d85/a07467" kindref="compound">BRDFHelpers</ref> &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d89/a07651" kindref="compound">Shadow</ref> &amp;</type>
+          <declname>shadowModel</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/df8/a07539" kindref="compound">Lights</ref> &amp;</type>
+          <declname>lights</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableVolumetric</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp" line="29" column="34"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="df/d7b/a04903_1a208981b86b547368a40466e39ee1ef2d" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PbrLightingModel::doFinish</definition>
+        <argsstring>(PassShaders const &amp;passShaders, BlendComponents &amp;components) override</argsstring>
+        <name>doFinish</name>
+        <qualifiedname>castor3d::shader::PbrLightingModel::doFinish</qualifiedname>
+        <reimplements refid="d1/d55/a07543_1a95843d4a608fa31b2995a0950308633f">doFinish</reimplements>
+        <param>
+          <type><ref refid="d5/d49/a07611" kindref="compound">PassShaders</ref> const &amp;</type>
+          <declname>passShaders</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp" line="42" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d7b/a04903_1a633dd20f889922d92d0f6ddcbdf9a6ee" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::PbrLightingModel::doComputeDiffuseTerm</definition>
+        <argsstring>(sdw::Vec3 const &amp;radiance, sdw::Float const &amp;intensity, BlendComponents const &amp;components, LightSurface const &amp;lightSurface, sdw::Float &amp;isLit, sdw::Vec3 output) override</argsstring>
+        <name>doComputeDiffuseTerm</name>
+        <qualifiedname>castor3d::shader::PbrLightingModel::doComputeDiffuseTerm</qualifiedname>
+        <reimplements refid="d1/d55/a07543_1adb5821bd3def3e8301babdbd9c357cf0">doComputeDiffuseTerm</reimplements>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>radiance</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>intensity</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d81/a07547" kindref="compound">LightSurface</ref> const &amp;</type>
+          <declname>lightSurface</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>isLit</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp" line="44" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d7b/a04903_1ae70786c98e6dfb8b6393d90116feba16" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PbrLightingModel::doComputeSpecularTerm</definition>
+        <argsstring>(sdw::Vec3 const &amp;radiance, sdw::Float const &amp;intensity, BlendComponents const &amp;components, LightSurface const &amp;lightSurface, sdw::Float const &amp;isLit, sdw::Vec3 output) override</argsstring>
+        <name>doComputeSpecularTerm</name>
+        <qualifiedname>castor3d::shader::PbrLightingModel::doComputeSpecularTerm</qualifiedname>
+        <reimplements refid="d1/d55/a07543_1a85e68eb556722a126d65d35ca8c811ad">doComputeSpecularTerm</reimplements>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>radiance</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>intensity</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d81/a07547" kindref="compound">LightSurface</ref> const &amp;</type>
+          <declname>lightSurface</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>isLit</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp" line="50" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d7b/a04903_1a69be1fe07981471766307c03aaa44280" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PbrLightingModel::doComputeCoatingTerm</definition>
+        <argsstring>(sdw::Vec3 const &amp;radiance, sdw::Float const &amp;intensity, BlendComponents const &amp;components, LightSurface const &amp;lightSurface, sdw::Float const &amp;isLit, sdw::Vec3 output) override</argsstring>
+        <name>doComputeCoatingTerm</name>
+        <qualifiedname>castor3d::shader::PbrLightingModel::doComputeCoatingTerm</qualifiedname>
+        <reimplements refid="d1/d55/a07543_1a0376dfde969986e3b32da7209a896d5f">doComputeCoatingTerm</reimplements>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>radiance</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>intensity</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d81/a07547" kindref="compound">LightSurface</ref> const &amp;</type>
+          <declname>lightSurface</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>isLit</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp" line="56" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d7b/a04903_1a9070f9402be8910e92336148938b7592" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PbrLightingModel::doComputeSheenTerm</definition>
+        <argsstring>(sdw::Vec3 const &amp;radiance, sdw::Float const &amp;intensity, BlendComponents const &amp;components, LightSurface const &amp;lightSurface, sdw::Float const &amp;isLit, sdw::Vec2 output) override</argsstring>
+        <name>doComputeSheenTerm</name>
+        <qualifiedname>castor3d::shader::PbrLightingModel::doComputeSheenTerm</qualifiedname>
+        <reimplements refid="d1/d55/a07543_1a5db185c09c901f4d3030647bfd3dc152">doComputeSheenTerm</reimplements>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>radiance</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>intensity</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d81/a07547" kindref="compound">LightSurface</ref> const &amp;</type>
+          <declname>lightSurface</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>isLit</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp" line="62" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d7b/a04903_1a83ac2de4962664749b97854effd856bc" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::PbrLightingModel::doGetDiffuseBrdf</definition>
+        <argsstring>(BlendComponents const &amp;components, DirectLighting const &amp;lighting, IndirectLighting const &amp;indirect, sdw::Float const &amp;ambientOcclusion, sdw::Vec3 const &amp;reflectedDiffuse) override</argsstring>
+        <name>doGetDiffuseBrdf</name>
+        <qualifiedname>castor3d::shader::PbrLightingModel::doGetDiffuseBrdf</qualifiedname>
+        <reimplements refid="d1/d55/a07543_1aad8263b338fd5bde87d42fb18f48b01a">doGetDiffuseBrdf</reimplements>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dd8/a07591" kindref="compound">DirectLighting</ref> const &amp;</type>
+          <declname>lighting</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d55/a07595" kindref="compound">IndirectLighting</ref> const &amp;</type>
+          <declname>indirect</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>ambientOcclusion</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>reflectedDiffuse</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp" line="68" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d7b/a04903_1a9556a70be8550edb19f4816cc0f0a8e6" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::PbrLightingModel::doGetSpecularBrdf</definition>
+        <argsstring>(BlendComponents const &amp;components, DirectLighting const &amp;lighting, IndirectLighting const &amp;indirect, sdw::Float const &amp;ambientOcclusion, sdw::Vec3 const &amp;reflectedSpecular) override</argsstring>
+        <name>doGetSpecularBrdf</name>
+        <qualifiedname>castor3d::shader::PbrLightingModel::doGetSpecularBrdf</qualifiedname>
+        <reimplements refid="d1/d55/a07543_1a6abc8cc0e8d48195d06d300093b84f03">doGetSpecularBrdf</reimplements>
+        <param>
+          <type><ref refid="da/dc6/a07459" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dd8/a07591" kindref="compound">DirectLighting</ref> const &amp;</type>
+          <declname>lighting</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d55/a07595" kindref="compound">IndirectLighting</ref> const &amp;</type>
+          <declname>indirect</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>ambientOcclusion</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>reflectedSpecular</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp" line="73" column="19"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::shader::LightingModel</label>
+        <link refid="d1/d55/a07543"/>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::PbrLightingModel</label>
+        <link refid="df/d7b/a04903"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>castor3d::shader::BufferT&lt; Material &gt;</label>
+        <link refid="dd/d24/a07475"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; Material &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::basic_string&lt; mbchar &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; mbchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::shader::BufferBase</label>
+        <link refid="d1/d33/a07471"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_variableName</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::shader::BufferT&lt; DataT &gt;</label>
+        <link refid="dd/d24/a07475"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::shader::CookTorranceBRDF</label>
+        <link refid="da/d94/a07483"/>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::LightingModel</label>
+        <link refid="d1/d55/a07543"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_materials</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_utils</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_shadowModel</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_lights</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_prefix</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::shader::Lights</label>
+        <link refid="d2/df8/a07539"/>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::Materials</label>
+        <link refid="d3/da5/a07555"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::PbrLightingModel</label>
+        <link refid="df/d7b/a04903"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_cookTorrance</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>m_sheen</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::shader::Shadow</label>
+        <link refid="d9/d89/a07651"/>
+      </node>
+      <node id="14">
+        <label>castor3d::shader::SheenBRDF</label>
+        <link refid="da/d9a/a07655"/>
+      </node>
+      <node id="9">
+        <label>castor3d::shader::Utils</label>
+        <link refid="d6/dfe/a07715"/>
+      </node>
+      <node id="7">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp" line="16" column="1" bodyfile="Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp" bodystart="18" bodyend="82"/>
+    <listofallmembers>
+      <member refid="df/d7b/a04903_1ab27ed5011e5598e00198196b27f0baa6" prot="public" virt="virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>adjustDirectLighting</name></member>
+      <member refid="d1/d55/a07543_1a4ec49b5ef87218651c5494b512f84781" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>combine</name></member>
+      <member refid="d1/d55/a07543_1a4d1c861861ef6cf73ad5b92e41852aaa" prot="public" virt="virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>combine</name></member>
+      <member refid="d1/d55/a07543_1a515db01d6c015e2bc35cea348104c6df" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>compute</name></member>
+      <member refid="d1/d55/a07543_1adb819872f1aceb88aba265a238d09566" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>compute</name></member>
+      <member refid="d1/d55/a07543_1a6768a432d02524ca5525afb3202cc95b" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>compute</name></member>
+      <member refid="d1/d55/a07543_1a1ce90c0b320461aa9e4200176e8a2641" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>computeAllButDiffuse</name></member>
+      <member refid="d1/d55/a07543_1a01e9f8bf9182110c52be4a6187a03b0e" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>computeAllButDiffuse</name></member>
+      <member refid="d1/d55/a07543_1a3f67226a98ee1ad42d5b4d4595e97c01" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>computeAllButDiffuse</name></member>
+      <member refid="d1/d55/a07543_1a69ec663d185cc919f388c496d56ff29d" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="d1/d55/a07543_1ae5524da351c42fe66391a392f567f0fd" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="d1/d55/a07543_1a16acf1f3013586d95cb6b2c1e60e05c7" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="df/d7b/a04903_1afe3f038a0cc3171f532d3ed0ccbf4e82" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>create</name></member>
+      <member refid="d1/d55/a07543_1a08d31133219b452f62c93cd52976ad33" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doApplyShadows</name></member>
+      <member refid="d1/d55/a07543_1ad4c8e7bb2cec77da0051f21027ab1129" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doApplyShadows</name></member>
+      <member refid="d1/d55/a07543_1ab731680da4895a061b2df5a61023e56d" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doApplyShadows</name></member>
+      <member refid="d1/d55/a07543_1a3540100e3039c853585e9fd200244924" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doApplyShadowsDiffuse</name></member>
+      <member refid="d1/d55/a07543_1a32cede5f2c42f0d4d2aa5d6feabca292" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doApplyShadowsDiffuse</name></member>
+      <member refid="d1/d55/a07543_1a78b5337b2afafc7ef94d0201edb36bc1" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doApplyShadowsDiffuse</name></member>
+      <member refid="d1/d55/a07543_1a8a6cc7ab24b5f66a069bbf8f893ac728" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doApplyVolumetric</name></member>
+      <member refid="d1/d55/a07543_1aad5903e775beaa20b067c5c149bdc246" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doAttenuate</name></member>
+      <member refid="df/d7b/a04903_1a69be1fe07981471766307c03aaa44280" prot="protected" virt="virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doComputeCoatingTerm</name></member>
+      <member refid="df/d7b/a04903_1a633dd20f889922d92d0f6ddcbdf9a6ee" prot="protected" virt="virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doComputeDiffuseTerm</name></member>
+      <member refid="d1/d55/a07543_1a90e2add0d61ca21ba8fd15424dc15125" prot="protected" virt="virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doComputeRadiance</name></member>
+      <member refid="d1/d55/a07543_1aee11a773d470fb1b04ac313fae430434" prot="protected" virt="virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doComputeScatteringTerm</name></member>
+      <member refid="df/d7b/a04903_1a9070f9402be8910e92336148938b7592" prot="protected" virt="virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doComputeSheenTerm</name></member>
+      <member refid="df/d7b/a04903_1ae70786c98e6dfb8b6393d90116feba16" prot="protected" virt="virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doComputeSpecularTerm</name></member>
+      <member refid="df/d7b/a04903_1a208981b86b547368a40466e39ee1ef2d" prot="protected" virt="virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doFinish</name></member>
+      <member refid="df/d7b/a04903_1a83ac2de4962664749b97854effd856bc" prot="protected" virt="virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doGetDiffuseBrdf</name></member>
+      <member refid="d1/d55/a07543_1a510ebc4ec0d45bd694282edbb4133279" prot="protected" virt="virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doGetNdotH</name></member>
+      <member refid="d1/d55/a07543_1a47201e83a7a1183d4a0d05400ab6d036" prot="protected" virt="virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doGetNdotL</name></member>
+      <member refid="df/d7b/a04903_1a9556a70be8550edb19f4816cc0f0a8e6" prot="protected" virt="virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doGetSpecularBrdf</name></member>
+      <member refid="d1/d55/a07543_1a144368731513220b1c2b9e788e05d27b" prot="protected" virt="virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doInitialiseBackground</name></member>
+      <member refid="d1/d55/a07543_1afa78b715df9f4a3630504778d03f1cef" prot="protected" virt="virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>doInitLightSpecifics</name></member>
+      <member refid="d1/d55/a07543_1a8fbae644541a4930eac0a337b2b8aa64" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>finish</name></member>
+      <member refid="d1/d55/a07543_1ad6d96471ec42ee685691c87d668cf482" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>getLightingModelId</name></member>
+      <member refid="df/d7b/a04903_1a275e5b40200d89fe2c6619847df435fc" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>getName</name></member>
+      <member refid="d1/d55/a07543_1ac62fec032d4ffc5d5bdef6b6ea5175d3" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>hasIblSupport</name></member>
+      <member refid="d1/d55/a07543_1a61bc2d5c026388cc4c9094a3ab000efb" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>LightingModel</name></member>
+      <member refid="d1/d55/a07543_1a3d5e340cd30b86e18b8c6aed4f727761" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_computeDirectional</name></member>
+      <member refid="d1/d55/a07543_1a8e751fe7115e3fc94c5cdbf70420cd44" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_computeDirectionalAllButDiffuse</name></member>
+      <member refid="d1/d55/a07543_1a184f00d5b7bc01857168597c65e36bcb" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_computeDirectionalDiffuse</name></member>
+      <member refid="d1/d55/a07543_1aba02344255d975344d20686a2b6207b9" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_computePoint</name></member>
+      <member refid="d1/d55/a07543_1a82e08f1c4a1cb3f95d9fd8dd00e00a40" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_computePointAllButDiffuse</name></member>
+      <member refid="d1/d55/a07543_1a8c6e2912ea36488a7f68e75f6baaa3e5" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_computePointDiffuse</name></member>
+      <member refid="d1/d55/a07543_1ade65af2cc5c9b86ab2bb21f6ed9835b0" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_computeSpot</name></member>
+      <member refid="d1/d55/a07543_1a4895b0b82d6d62affb7811a2678ec452" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_computeSpotAllButDiffuse</name></member>
+      <member refid="d1/d55/a07543_1a1c66dcc9b9d6f96fae52a2d38ed8696b" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_computeSpotDiffuse</name></member>
+      <member refid="df/d7b/a04903_1a11c13c31f49aa23726ef9c81122f0465" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_cookTorrance</name></member>
+      <member refid="d1/d55/a07543_1af40e2e45f920ce87c2957405acd74b9f" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_directionalCascadeCount</name></member>
+      <member refid="d1/d55/a07543_1a6a44da5d85d187d34475c51c5ed16177" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_directionalCascadeIndex</name></member>
+      <member refid="d1/d55/a07543_1a39b9293835a0631a98fbfaa2fd8e8389" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_directionalTransform</name></member>
+      <member refid="d1/d55/a07543_1ae1d302ee6ef967d87ded305060b82120" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_enableVolumetric</name></member>
+      <member refid="d1/d55/a07543_1a01a920e85d79804c590ed202772cb625" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_hasIblSupport</name></member>
+      <member refid="d1/d55/a07543_1ab16a0139aef3f38a75b46359d990a799" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_lightingModelId</name></member>
+      <member refid="d1/d55/a07543_1a1a7b2f117333c1d72b38ca25ab3473cf" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_lights</name></member>
+      <member refid="d1/d55/a07543_1a6dd820a0a3dbb47a71024f49fd45a1bf" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_materials</name></member>
+      <member refid="d1/d55/a07543_1a2d72b64bba53f58f0402ac9154f6c0be" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_prefix</name></member>
+      <member refid="d1/d55/a07543_1aeb2e90de20243347dba96c922e1319d2" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_shadowModel</name></member>
+      <member refid="df/d7b/a04903_1a8b9bdfeef806ed24e56cb0bd87b2e4ae" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_sheen</name></member>
+      <member refid="d1/d55/a07543_1a1baa5150b5128d81ec99a1a32abca718" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_type</name></member>
+      <member refid="d1/d55/a07543_1a9e5d3c9e33f06597c63d4c64b62bc564" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_utils</name></member>
+      <member refid="d1/d55/a07543_1a129490d8e4f0ea553f16dcaeb2b2c089" prot="protected" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>m_writer</name></member>
+      <member refid="df/d7b/a04903_1a528b2c409e2a9b742b1c319628b411d9" prot="public" virt="non-virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>PbrLightingModel</name></member>
+      <member refid="d1/d55/a07543_1abe10ab0abda22bc960dc51b76be2c739" prot="public" virt="virtual"><scope>castor3d::shader::PbrLightingModel</scope><name>~LightingModel</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

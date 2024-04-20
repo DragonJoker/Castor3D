@@ -1,0 +1,1104 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/d55/a06815" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::AnimatedObjectGroup</compoundname>
+    <basecompoundref refid="d5/d3c/a08223" prot="public" virt="non-virtual">castor::NamedBaseT&lt; String &gt;</basecompoundref>
+    <basecompoundref refid="d6/da8/a08227" prot="public" virt="non-virtual">castor::OwnedBy&lt; Scene &gt;</basecompoundref>
+    <includes local="no">AnimatedObjectGroup.hpp</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d7/d55/a06815_1aff2f036af245137e49a0591e151a1c0a" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1af776079ca1d2ee2d1b993f2d34011159" kindref="member">castor::StringMap</ref>&lt; AnimatedObjectUPtr &gt;</type>
+        <definition>using castor3d::AnimatedObjectGroup::AnimatedObjectMap =  castor::StringMap&lt; AnimatedObjectUPtr &gt;</definition>
+        <argsstring></argsstring>
+        <name>AnimatedObjectMap</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::AnimatedObjectMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="25" column="1" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/d55/a06815_1a7b21c2af0de578cd65671bcf6b5ad76a" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a8365fd0caacd512d3ed19dad1072fbd2" kindref="member">OnAnimatedSkeletonChange</ref></type>
+        <definition>OnAnimatedSkeletonChange castor3d::AnimatedObjectGroup::onSkeletonAdded</definition>
+        <argsstring></argsstring>
+        <name>onSkeletonAdded</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::onSkeletonAdded</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="275" column="26" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="275" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d55/a06815_1aa99e279c2a8de7e0657d3618f8fa404f" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a8365fd0caacd512d3ed19dad1072fbd2" kindref="member">OnAnimatedSkeletonChange</ref></type>
+        <definition>OnAnimatedSkeletonChange castor3d::AnimatedObjectGroup::onSkeletonRemoved</definition>
+        <argsstring></argsstring>
+        <name>onSkeletonRemoved</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::onSkeletonRemoved</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="276" column="26" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="276" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d55/a06815_1a99d002fc5f227630f4937767d436d105" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a914e2456e7b06e96c42b645999796f81" kindref="member">OnAnimatedMeshChange</ref></type>
+        <definition>OnAnimatedMeshChange castor3d::AnimatedObjectGroup::onMeshAdded</definition>
+        <argsstring></argsstring>
+        <name>onMeshAdded</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::onMeshAdded</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="277" column="22" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="277" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d55/a06815_1ae5407924bb2ebe2c6a6501db4dff005a" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a914e2456e7b06e96c42b645999796f81" kindref="member">OnAnimatedMeshChange</ref></type>
+        <definition>OnAnimatedMeshChange castor3d::AnimatedObjectGroup::onMeshRemoved</definition>
+        <argsstring></argsstring>
+        <name>onMeshRemoved</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::onMeshRemoved</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="278" column="22" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="278" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d55/a06815_1aaec68b7f8b4338c2aa8dfc60146fbc28" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a0efd068ce08efc9e9c63622fce42d135" kindref="member">OnAnimatedTextureChange</ref></type>
+        <definition>OnAnimatedTextureChange castor3d::AnimatedObjectGroup::onTextureAdded</definition>
+        <argsstring></argsstring>
+        <name>onTextureAdded</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::onTextureAdded</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="279" column="25" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="279" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d55/a06815_1ae33606a3618bb8a3736fc7ddf5a5fffb" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a0efd068ce08efc9e9c63622fce42d135" kindref="member">OnAnimatedTextureChange</ref></type>
+        <definition>OnAnimatedTextureChange castor3d::AnimatedObjectGroup::onTextureRemoved</definition>
+        <argsstring></argsstring>
+        <name>onTextureRemoved</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::onTextureRemoved</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="280" column="25" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="280" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d55/a06815_1a4a43506c8afa08eab3d476e8e5812984" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a5e2943ae4afd3945dedc1ef13bcb6973" kindref="member">OnAnimatedSceneNodeChange</ref></type>
+        <definition>OnAnimatedSceneNodeChange castor3d::AnimatedObjectGroup::onSceneNodeAdded</definition>
+        <argsstring></argsstring>
+        <name>onSceneNodeAdded</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::onSceneNodeAdded</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="281" column="27" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="281" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d55/a06815_1a80d46641745c779a89ff0100ab1b7c65" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a5e2943ae4afd3945dedc1ef13bcb6973" kindref="member">OnAnimatedSceneNodeChange</ref></type>
+        <definition>OnAnimatedSceneNodeChange castor3d::AnimatedObjectGroup::onSceneNodeRemoved</definition>
+        <argsstring></argsstring>
+        <name>onSceneNodeRemoved</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::onSceneNodeRemoved</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="282" column="27" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="282" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/d55/a06815_1a00e649a4c866f898d47cf8673da088f0" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1aac576e8c269a11fce456cc20c48417d6" kindref="member">GroupAnimationMap</ref></type>
+        <definition>GroupAnimationMap castor3d::AnimatedObjectGroup::m_animations</definition>
+        <argsstring></argsstring>
+        <name>m_animations</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::m_animations</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="285" column="19" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="285" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d55/a06815_1a4189688b2a5abf803efaec2fcd32844d" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d55/a06815_1aff2f036af245137e49a0591e151a1c0a" kindref="member">AnimatedObjectMap</ref></type>
+        <definition>AnimatedObjectMap castor3d::AnimatedObjectGroup::m_objects</definition>
+        <argsstring></argsstring>
+        <name>m_objects</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::m_objects</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="286" column="19" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="286" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d55/a06815_1a431f7114cf05d08dcbdde658752e9616" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d7e/a09419" kindref="compound">castor::PreciseTimer</ref></type>
+        <definition>castor::PreciseTimer castor3d::AnimatedObjectGroup::m_timer</definition>
+        <argsstring></argsstring>
+        <name>m_timer</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::m_timer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="287" column="22" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="287" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d55/a06815_1a962ff37bfc38f69180e2545cd5509d0f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimatedObjectGroup::AnimatedObjectGroup</definition>
+        <argsstring>(castor::String const &amp;name, Scene &amp;scene)</argsstring>
+        <name>AnimatedObjectGroup</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::AnimatedObjectGroup</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur spécifié </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La scène </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du groupe </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="36" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1a2ec5ee5197ebdbc6bdcbb10db78788fd" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimatedObjectGroup::~AnimatedObjectGroup</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~AnimatedObjectGroup</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::~AnimatedObjectGroup</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="44" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1ac829eae9fc0fa4857936d67aab898007" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> AnimatedObjectRPtr</type>
+        <definition>C3D_API AnimatedObjectRPtr castor3d::AnimatedObjectGroup::addObject</definition>
+        <argsstring>(SceneNode &amp;node, castor::String const &amp;name)</argsstring>
+        <name>addObject</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::addObject</qualifiedname>
+        <param>
+          <type><ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Crée un <ref refid="d4/def/a06811" kindref="compound">AnimatedObject</ref> à partir du <ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> donné, l&apos;ajoute à la liste. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le <ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> à partir duquel l&apos;<ref refid="d4/def/a06811" kindref="compound">AnimatedObject</ref> est créé. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;instance du <ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="55" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1a5133097b233406c809766cec33ff8b7a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> AnimatedObjectRPtr</type>
+        <definition>C3D_API AnimatedObjectRPtr castor3d::AnimatedObjectGroup::addObject</definition>
+        <argsstring>(Mesh &amp;mesh, Geometry &amp;geometry, castor::String const &amp;name)</argsstring>
+        <name>addObject</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::addObject</qualifiedname>
+        <param>
+          <type><ref refid="d2/dc7/a05391" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d46/a06971" kindref="compound">Geometry</ref> &amp;</type>
+          <declname>geometry</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Crée un <ref refid="d4/def/a06811" kindref="compound">AnimatedObject</ref> à partir du <ref refid="d2/dc7/a05391" kindref="compound">Mesh</ref> donné, l&apos;ajoute à la liste. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le <ref refid="d2/dc7/a05391" kindref="compound">Mesh</ref> à partir duquel l&apos;<ref refid="d4/def/a06811" kindref="compound">AnimatedObject</ref> est créé. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">geometry</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La géométrie instanciant le maillage. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;instance du <ref refid="d2/dc7/a05391" kindref="compound">Mesh</ref>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="69" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1a1ecedfdbfcef25c57f59f405bd8b4cab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> AnimatedObjectRPtr</type>
+        <definition>C3D_API AnimatedObjectRPtr castor3d::AnimatedObjectGroup::addObject</definition>
+        <argsstring>(Skeleton &amp;skeleton, Mesh &amp;mesh, Geometry &amp;geometry, castor::String const &amp;name)</argsstring>
+        <name>addObject</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::addObject</qualifiedname>
+        <param>
+          <type><ref refid="d6/d3e/a05683" kindref="compound">Skeleton</ref> &amp;</type>
+          <declname>skeleton</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dc7/a05391" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d46/a06971" kindref="compound">Geometry</ref> &amp;</type>
+          <declname>geometry</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Crée un <ref refid="d4/def/a06811" kindref="compound">AnimatedObject</ref> à partir du <ref refid="d6/d3e/a05683" kindref="compound">Skeleton</ref> donné, l&apos;ajoute à la liste. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">skeleton</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le <ref refid="d6/d3e/a05683" kindref="compound">Skeleton</ref> à partir duquel l&apos;<ref refid="d4/def/a06811" kindref="compound">AnimatedObject</ref> est créé. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le maillage auquel le squelette est lié. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">geometry</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La géométrie instanciant le maillage. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;instance du <ref refid="d6/d3e/a05683" kindref="compound">Skeleton</ref>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="86" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1a4e515ba9136c4afb53fc1477980ccc3d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> AnimatedObjectRPtr</type>
+        <definition>C3D_API AnimatedObjectRPtr castor3d::AnimatedObjectGroup::addObject</definition>
+        <argsstring>(TextureSourceInfo const &amp;sourceInfo, TextureConfiguration const &amp;config, Pass &amp;pass)</argsstring>
+        <name>addObject</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::addObject</qualifiedname>
+        <param>
+          <type><ref refid="db/d40/a04987" kindref="compound">TextureSourceInfo</ref> const &amp;</type>
+          <declname>sourceInfo</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/dc1/a04943" kindref="compound">TextureConfiguration</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+<para>Crée un <ref refid="d4/def/a06811" kindref="compound">AnimatedObject</ref> pour une texture, l&apos;ajoute à la liste. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">sourceInfo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les informations de source de la texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La configuration de texture </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La passe instanciant la texture. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="102" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1ad56c4cf98272b753ee617fe4b1b255ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::AnimatedObjectGroup::addObject</definition>
+        <argsstring>(AnimatedObjectUPtr object)</argsstring>
+        <name>addObject</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::addObject</qualifiedname>
+        <param>
+          <type>AnimatedObjectUPtr</type>
+          <declname>object</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute un <ref refid="d4/def/a06811" kindref="compound">AnimatedObject</ref> à ce groupe. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Cette fonction considère que l&apos;objet a préalablement été créé afin d&apos;être intégré à ce groupe (avec donc les bonnes scène et map d&apos;animations) </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">object</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le <ref refid="d4/def/a06811" kindref="compound">AnimatedObject</ref> à ajouter </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="115" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1a8d56801e5efbede3482d3ce7f796e2ec" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/def/a06811" kindref="compound">AnimatedObject</ref> *</type>
+        <definition>C3D_API AnimatedObject * castor3d::AnimatedObjectGroup::findObject</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>findObject</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::findObject</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Recherche un <ref refid="d4/def/a06811" kindref="compound">AnimatedObject</ref> en fonction de son nom. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;<ref refid="d4/def/a06811" kindref="compound">AnimatedObject</ref>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="124" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1a90749f7c5fa3a769c9b4f3b0fd856e35" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::AnimatedObjectGroup::addAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>addAnimation</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::addAnimation</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute une animation à la liste. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;animation à ajouter. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si l&apos;animation n&apos;existait pas encore. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="135" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1a2280656b662e3f14fbb5e3b0985dbfca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObjectGroup::setAnimationLooped</definition>
+        <argsstring>(castor::String const &amp;name, bool looped)</argsstring>
+        <name>setAnimationLooped</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::setAnimationLooped</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>looped</declname>
+        </param>
+        <briefdescription>
+<para>Définit le statut de bouclage de l&apos;animation voulue. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;animation. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">looped</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le statut. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="146" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1aeaf6771179e36092f458cc2f26be3253" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObjectGroup::setAnimationScale</definition>
+        <argsstring>(castor::String const &amp;name, float scale)</argsstring>
+        <name>setAnimationScale</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::setAnimationScale</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>scale</declname>
+        </param>
+        <briefdescription>
+<para>Définit le multiplicateur de temps de l&apos;animation voulue. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;animation. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le multiplicateur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="158" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1a2e42b536b916fd2974347890e975b896" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObjectGroup::setAnimationStartingPoint</definition>
+        <argsstring>(castor::String const &amp;name, castor::Milliseconds value)</argsstring>
+        <name>setAnimationStartingPoint</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::setAnimationStartingPoint</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a9bbae2d5d564fa58ccbb16ec1d0ed7a1" kindref="member">castor::Milliseconds</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Définit le point de départ de l&apos;animation voulue. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;animation. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point de départ. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="170" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1a84e3d210360c581d6bbd6318135d9823" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObjectGroup::setAnimationStoppingPoint</definition>
+        <argsstring>(castor::String const &amp;name, castor::Milliseconds value)</argsstring>
+        <name>setAnimationStoppingPoint</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::setAnimationStoppingPoint</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a9bbae2d5d564fa58ccbb16ec1d0ed7a1" kindref="member">castor::Milliseconds</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Définit le point d&apos;arrêt de l&apos;animation voulue. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;animation. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point d&apos;arrêt. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="182" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1ab9e148a24e25c1242bce039c3aebef13" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObjectGroup::setAnimationInterpolation</definition>
+        <argsstring>(castor::String const &amp;name, InterpolatorType mode)</argsstring>
+        <name>setAnimationInterpolation</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::setAnimationInterpolation</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1ad38387ab8e17377a42314bc21c171ab0" kindref="member">InterpolatorType</ref></type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+<para>Définit le mode d&apos;interpolation de l&apos;animation voulue. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;animation. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">mode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le mode d&apos;interpolation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="194" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1a8b98d75877ed4fd12c472299364649b4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObjectGroup::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::update</qualifiedname>
+        <param>
+          <type><ref refid="dc/d23/a06511" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Mise à jour CPU. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données d&apos;update. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="204" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1a6006dc4a503f95a041f2fe9630514f88" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObjectGroup::startAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>startAnimation</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::startAnimation</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Démarre l&apos;animation identifiée par le nom donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;animation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="213" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1ae9af719ed9b3281b809b8888b92026a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObjectGroup::stopAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>stopAnimation</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::stopAnimation</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Stoppe l&apos;animation identifiée par le nom donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;animation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="222" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1a41cc3bae02c710355bd0d456726146c0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObjectGroup::pauseAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>pauseAnimation</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::pauseAnimation</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Met en pause l&apos;animation identifiée par le nom donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;animation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="231" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1a27cae3224d010df8e4b5a8af5fa4c904" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObjectGroup::startAllAnimations</definition>
+        <argsstring>()</argsstring>
+        <name>startAllAnimations</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::startAllAnimations</qualifiedname>
+        <briefdescription>
+<para>Démarre toutes les animations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="238" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1a92e9e7949dccdb42be401e29d6cf8642" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObjectGroup::stopAllAnimations</definition>
+        <argsstring>()</argsstring>
+        <name>stopAllAnimations</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::stopAllAnimations</qualifiedname>
+        <briefdescription>
+<para>Stoppe toutes les animations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="245" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1a352b02437145eb02b33bcdf35fe4d0a1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedObjectGroup::pauseAllAnimations</definition>
+        <argsstring>()</argsstring>
+        <name>pauseAllAnimations</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::pauseAllAnimations</qualifiedname>
+        <briefdescription>
+<para>Met en pause toutes les animations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="252" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1a663466dfcf093af32c11c5e708f024c1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1aac576e8c269a11fce456cc20c48417d6" kindref="member">GroupAnimationMap</ref> const &amp;</type>
+        <definition>GroupAnimationMap const  &amp; castor3d::AnimatedObjectGroup::getAnimations</definition>
+        <argsstring>() const</argsstring>
+        <name>getAnimations</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::getAnimations</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La map d&apos;animations. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="259" column="26" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="259" bodyend="262"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d55/a06815_1ad60bc408f568d1351ff648b4be4665f3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d7/d55/a06815_1aff2f036af245137e49a0591e151a1c0a" kindref="member">AnimatedObjectMap</ref> const &amp;</type>
+        <definition>AnimatedObjectMap const  &amp; castor3d::AnimatedObjectGroup::getObjects</definition>
+        <argsstring>() const</argsstring>
+        <name>getObjects</name>
+        <qualifiedname>castor3d::AnimatedObjectGroup::getObjects</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Les objets animés. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="269" column="26" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="269" bodyend="272"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Scene &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::AnimatedObjectGroup</label>
+        <link refid="d7/d55/a06815"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Scene &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::SignalT&lt; OnAnimatedMeshChangeFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnAnimatedMeshChangeFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor::SignalT&lt; OnAnimatedSceneNodeChangeFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnAnimatedSceneNodeChangeFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::SignalT&lt; OnAnimatedSkeletonChangeFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnAnimatedSkeletonChangeFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor::SignalT&lt; OnAnimatedTextureChangeFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnAnimatedTextureChangeFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::AnimatedObjectGroup</label>
+        <link refid="d7/d55/a06815"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>onSkeletonAdded</edgelabel>
+          <edgelabel>onSkeletonRemoved</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>onMeshAdded</edgelabel>
+          <edgelabel>onMeshRemoved</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>onTextureAdded</edgelabel>
+          <edgelabel>onTextureRemoved</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>onSceneNodeAdded</edgelabel>
+          <edgelabel>onSceneNodeRemoved</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="6">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="7">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" line="20" column="1" bodyfile="Castor3D/Scene/Animation/AnimatedObjectGroup.hpp" bodystart="23" bodyend="288"/>
+    <listofallmembers>
+      <member refid="d7/d55/a06815_1a90749f7c5fa3a769c9b4f3b0fd856e35" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>addAnimation</name></member>
+      <member refid="d7/d55/a06815_1ac829eae9fc0fa4857936d67aab898007" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>addObject</name></member>
+      <member refid="d7/d55/a06815_1a5133097b233406c809766cec33ff8b7a" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>addObject</name></member>
+      <member refid="d7/d55/a06815_1a1ecedfdbfcef25c57f59f405bd8b4cab" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>addObject</name></member>
+      <member refid="d7/d55/a06815_1a4e515ba9136c4afb53fc1477980ccc3d" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>addObject</name></member>
+      <member refid="d7/d55/a06815_1ad56c4cf98272b753ee617fe4b1b255ee" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>addObject</name></member>
+      <member refid="d7/d55/a06815_1a962ff37bfc38f69180e2545cd5509d0f" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>AnimatedObjectGroup</name></member>
+      <member refid="d7/d55/a06815_1aff2f036af245137e49a0591e151a1c0a" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>AnimatedObjectMap</name></member>
+      <member refid="d7/d55/a06815_1a8d56801e5efbede3482d3ce7f796e2ec" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>findObject</name></member>
+      <member refid="d7/d55/a06815_1a663466dfcf093af32c11c5e708f024c1" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>getAnimations</name></member>
+      <member refid="d5/d3c/a08223_1abc1fa9ec1a50d2023373baa4d4c79519" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>getName</name></member>
+      <member refid="d7/d55/a06815_1ad60bc408f568d1351ff648b4be4665f3" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>getObjects</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>getOwner</name></member>
+      <member refid="d7/d55/a06815_1a00e649a4c866f898d47cf8673da088f0" prot="private" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>m_animations</name></member>
+      <member refid="d5/d3c/a08223_1a869b429a7190ecf614d8221b270e6dca" prot="protected" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>m_name</name></member>
+      <member refid="d7/d55/a06815_1a4189688b2a5abf803efaec2fcd32844d" prot="private" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>m_objects</name></member>
+      <member refid="d7/d55/a06815_1a431f7114cf05d08dcbdde658752e9616" prot="private" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>m_timer</name></member>
+      <member refid="d5/d3c/a08223_1a4a6e4748603541685b04f95fb91efb26" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>NamedBaseT</name></member>
+      <member refid="d7/d55/a06815_1a99d002fc5f227630f4937767d436d105" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>onMeshAdded</name></member>
+      <member refid="d7/d55/a06815_1ae5407924bb2ebe2c6a6501db4dff005a" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>onMeshRemoved</name></member>
+      <member refid="d7/d55/a06815_1a4a43506c8afa08eab3d476e8e5812984" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>onSceneNodeAdded</name></member>
+      <member refid="d7/d55/a06815_1a80d46641745c779a89ff0100ab1b7c65" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>onSceneNodeRemoved</name></member>
+      <member refid="d7/d55/a06815_1a7b21c2af0de578cd65671bcf6b5ad76a" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>onSkeletonAdded</name></member>
+      <member refid="d7/d55/a06815_1aa99e279c2a8de7e0657d3618f8fa404f" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>onSkeletonRemoved</name></member>
+      <member refid="d7/d55/a06815_1aaec68b7f8b4338c2aa8dfc60146fbc28" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>onTextureAdded</name></member>
+      <member refid="d7/d55/a06815_1ae33606a3618bb8a3736fc7ddf5a5fffb" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>onTextureRemoved</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>OwnedBy</name></member>
+      <member refid="d7/d55/a06815_1a352b02437145eb02b33bcdf35fe4d0a1" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>pauseAllAnimations</name></member>
+      <member refid="d7/d55/a06815_1a41cc3bae02c710355bd0d456726146c0" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>pauseAnimation</name></member>
+      <member refid="d5/d3c/a08223_1a2d62ce1925efead03c4e0842c06b3e11" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>rename</name></member>
+      <member refid="d7/d55/a06815_1ab9e148a24e25c1242bce039c3aebef13" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>setAnimationInterpolation</name></member>
+      <member refid="d7/d55/a06815_1a2280656b662e3f14fbb5e3b0985dbfca" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>setAnimationLooped</name></member>
+      <member refid="d7/d55/a06815_1aeaf6771179e36092f458cc2f26be3253" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>setAnimationScale</name></member>
+      <member refid="d7/d55/a06815_1a2e42b536b916fd2974347890e975b896" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>setAnimationStartingPoint</name></member>
+      <member refid="d7/d55/a06815_1a84e3d210360c581d6bbd6318135d9823" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>setAnimationStoppingPoint</name></member>
+      <member refid="d7/d55/a06815_1a27cae3224d010df8e4b5a8af5fa4c904" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>startAllAnimations</name></member>
+      <member refid="d7/d55/a06815_1a6006dc4a503f95a041f2fe9630514f88" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>startAnimation</name></member>
+      <member refid="d7/d55/a06815_1a92e9e7949dccdb42be401e29d6cf8642" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>stopAllAnimations</name></member>
+      <member refid="d7/d55/a06815_1ae9af719ed9b3281b809b8888b92026a9" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>stopAnimation</name></member>
+      <member refid="d7/d55/a06815_1a8b98d75877ed4fd12c472299364649b4" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>update</name></member>
+      <member refid="d7/d55/a06815_1a2ec5ee5197ebdbc6bdcbb10db78788fd" prot="public" virt="non-virtual"><scope>castor3d::AnimatedObjectGroup</scope><name>~AnimatedObjectGroup</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

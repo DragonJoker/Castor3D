@@ -1,4 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$d8/d69/a02661.html" title=" " alt="" coords="5,5,188,45"/>
-<area shape="rect" id="node2" href="$db/d38/a02789.html" title="Animable binary loader." alt="" coords="236,5,388,45"/>
+<area shape="rect" id="Node000000" href="$d4/d9c/a03231.html" title=" " alt="" coords="5,5,220,45"/>
+<area shape="rect" id="Node000001" href="$d4/d00/a03323.html" title="SkeletonAnimationKeyFrame binary loader." alt="" coords="268,5,483,45"/>
+<area shape="poly" id="edge424_Node000000_Node000001" title=" " alt="" coords="233,23,268,23,268,28,233,28"/>
 </map>

@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/df4/a09327" kind="struct" language="C++" prot="public">
+    <compoundname>castor::SpeedTraitsT&lt; Point&lt; ValueT, 3 &gt; &gt;</compoundname>
+    <includes local="no">Speed.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ValueT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d6/df4/a09327_1a49327dbbe36d0fdb7e0b177fca12df0a" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; ValueT, 3 &gt;</type>
+        <definition>static Point&lt; ValueT, 3 &gt; castor::SpeedTraitsT&lt; Point&lt; ValueT, 3 &gt; &gt;::convert</definition>
+        <argsstring>(double d)</argsstring>
+        <name>convert</name>
+        <qualifiedname>castor::SpeedTraitsT&lt; Point&lt; ValueT, 3 &gt; &gt;::convert</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>d</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="33" column="14" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="33" bodyend="36"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/Speed.hpp" line="31" column="1" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="32" bodyend="37"/>
+    <listofallmembers>
+      <member refid="d6/df4/a09327_1a49327dbbe36d0fdb7e0b177fca12df0a" prot="public" virt="non-virtual"><scope>castor::SpeedTraitsT&lt; Point&lt; ValueT, 3 &gt; &gt;</scope><name>convert</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

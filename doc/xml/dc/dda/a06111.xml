@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/dda/a06111" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RenderNodeTraitsT&lt; BillboardRenderNode &gt;</compoundname>
+    <includes local="no">RenderNodeModule.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dc/dda/a06111_1a95212f23507c34c8d60f0f2f39598889" prot="public" static="no">
+        <type><ref refid="d5/d31/a06931" kindref="compound">BillboardBase</ref></type>
+        <definition>using castor3d::RenderNodeTraitsT&lt; BillboardRenderNode &gt;::Object =  BillboardBase</definition>
+        <argsstring></argsstring>
+        <name>Object</name>
+        <qualifiedname>castor3d::RenderNodeTraitsT&lt; BillboardRenderNode &gt;::Object</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/RenderNodeModule.hpp" line="75" column="1" bodyfile="Castor3D/Render/Node/RenderNodeModule.hpp" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/dda/a06111_1a79878c724b256aaced9a09387e98528f" prot="public" static="no">
+        <type><ref refid="d5/d31/a06931" kindref="compound">BillboardBase</ref></type>
+        <definition>using castor3d::RenderNodeTraitsT&lt; BillboardRenderNode &gt;::Instance =  BillboardBase</definition>
+        <argsstring></argsstring>
+        <name>Instance</name>
+        <qualifiedname>castor3d::RenderNodeTraitsT&lt; BillboardRenderNode &gt;::Instance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/RenderNodeModule.hpp" line="76" column="1" bodyfile="Castor3D/Render/Node/RenderNodeModule.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/dda/a06111_1a735390813ca58c5287570013ee0324a9" prot="public" static="no">
+        <type>VkDrawIndirectCommand</type>
+        <definition>using castor3d::RenderNodeTraitsT&lt; BillboardRenderNode &gt;::Command =  VkDrawIndirectCommand</definition>
+        <argsstring></argsstring>
+        <name>Command</name>
+        <qualifiedname>castor3d::RenderNodeTraitsT&lt; BillboardRenderNode &gt;::Command</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/RenderNodeModule.hpp" line="77" column="1" bodyfile="Castor3D/Render/Node/RenderNodeModule.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/Node/RenderNodeModule.hpp" line="73" column="1" bodyfile="Castor3D/Render/Node/RenderNodeModule.hpp" bodystart="74" bodyend="78"/>
+    <listofallmembers>
+      <member refid="dc/dda/a06111_1a735390813ca58c5287570013ee0324a9" prot="public" virt="non-virtual"><scope>castor3d::RenderNodeTraitsT&lt; BillboardRenderNode &gt;</scope><name>Command</name></member>
+      <member refid="dc/dda/a06111_1a79878c724b256aaced9a09387e98528f" prot="public" virt="non-virtual"><scope>castor3d::RenderNodeTraitsT&lt; BillboardRenderNode &gt;</scope><name>Instance</name></member>
+      <member refid="dc/dda/a06111_1a95212f23507c34c8d60f0f2f39598889" prot="public" virt="non-virtual"><scope>castor3d::RenderNodeTraitsT&lt; BillboardRenderNode &gt;</scope><name>Object</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

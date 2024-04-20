@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d68/a07951" kind="struct" language="C++" prot="public">
+    <compoundname>castor::NoInit</compoundname>
+    <includes local="no">CastorUtils.hpp</includes>
+    <briefdescription>
+<para>Structure utilisée pour les constructeurs d&apos;objets à ne pas initialiser. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="see"><para><ref refid="dc/dc3/a09203" kindref="compound">QuaternionT</ref> </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="CastorUtils/CastorUtils.hpp" line="40" column="1" bodyfile="CastorUtils/CastorUtils.hpp" bodystart="41" bodyend="42"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

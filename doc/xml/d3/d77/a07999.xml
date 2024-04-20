@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/d77/a07999" kind="class" language="C++" prot="public">
+    <compoundname>castor::Loader</compoundname>
+    <basecompoundref refid="da/d87/a08319" prot="public" virt="non-virtual">castor::NonMovable</basecompoundref>
+    <derivedcompoundref refid="d5/d12/a07975" prot="public" virt="non-virtual">castor::BinaryLoader&lt; Font &gt;</derivedcompoundref>
+    <includes local="no">Loader.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class T</type>
+      </param>
+      <param>
+        <type><ref refid="d2/dd2/a02279_1ac4972a01abb873aee032c3071b56cbe4" kindref="member">FileType</ref></type>
+        <declname>FT</declname>
+        <defname>FT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="protected-type">
+      <memberdef kind="typedef" id="d3/d77/a07999_1a6c70d744b7b6231d7f7eb0e6d2446990" prot="protected" static="no">
+        <type>typename <ref refid="de/d8a/a07983" kindref="compound">FileTyper</ref>&lt; FT &gt;::Type</type>
+        <definition>using castor::Loader&lt; T, FT &gt;::Type =  typename FileTyper&lt; FT &gt;::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor::Loader::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Loader.hpp" line="18" column="1" bodyfile="CastorUtils/Data/Loader.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d77/a07999_1a533c9398afec6cb4bcd884d38ff4ec57" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::Loader&lt; T, FT &gt;::Loader</definition>
+        <argsstring>()=default</argsstring>
+        <name>Loader</name>
+        <qualifiedname>castor::Loader::Loader</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Loader.hpp" line="27" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07999_1a7d9fe6e26c86cc1301619e8c76223124" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type></type>
+        <definition>virtual castor::Loader&lt; T, FT &gt;::~Loader</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~Loader</name>
+        <qualifiedname>castor::Loader::~Loader</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Loader.hpp" line="34" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07999_1aa06599d499d4c8d0248565cfd912252f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>bool</type>
+        <definition>virtual bool castor::Loader&lt; T, FT &gt;::operator()</definition>
+        <argsstring>(T &amp;object, Type &amp;file)</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::Loader::operator()</qualifiedname>
+        <param>
+          <type>T &amp;</type>
+          <declname>object</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d77/a07999_1a6c70d744b7b6231d7f7eb0e6d2446990" kindref="member">Type</ref> &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+<para>Lit une ressource à partir d&apos;un fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">object</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à lire. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le fichier où lire l&apos;objet. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Loader.hpp" line="45" column="14" bodyfile="CastorUtils/Data/Loader.hpp" bodystart="45" bodyend="49"/>
+        <references refid="da/dcd/a01835_1a0c7816fdaee978d5a9f398e0d45381c4" compoundref="da/dcd/a01835" startline="30">CU_LoaderError</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe de base pour les loaders de ressource. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Contient les 2 fonctions nécessaire a un loader : Load et Save. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::BinaryLoader&lt; Font &gt;</label>
+        <link refid="d5/d12/a07975"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; Font &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::Loader&lt; Font, FileType::eBinary &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Font, FileType::eBinary &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Loader&lt; T, FileType::eBinary &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; T, FileType::eBinary &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::Loader&lt; T, FileType::eText &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; T, FileType::eText &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::BinaryLoader&lt; T &gt;</label>
+        <link refid="d5/d12/a07975"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Font::BinaryLoader</label>
+        <link refid="d1/dfc/a08759"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::Loader&lt; T, FT &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="9">
+        <label>castor::TextLoaderT&lt; T &gt;</label>
+        <link refid="dc/d7c/a08079"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::Loader&lt; T, FT &gt;</label>
+        <link refid="d3/d77/a07999"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Data/Loader.hpp" line="14" column="1" bodyfile="CastorUtils/Data/Loader.hpp" bodystart="16" bodyend="50"/>
+    <listofallmembers>
+      <member refid="d3/d77/a07999_1a533c9398afec6cb4bcd884d38ff4ec57" prot="public" virt="non-virtual"><scope>castor::Loader</scope><name>Loader</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::Loader</scope><name>NonMovable</name></member>
+      <member refid="d3/d77/a07999_1aa06599d499d4c8d0248565cfd912252f" prot="public" virt="virtual"><scope>castor::Loader</scope><name>operator()</name></member>
+      <member refid="d3/d77/a07999_1a6c70d744b7b6231d7f7eb0e6d2446990" prot="protected" virt="non-virtual"><scope>castor::Loader</scope><name>Type</name></member>
+      <member refid="d3/d77/a07999_1a7d9fe6e26c86cc1301619e8c76223124" prot="public" virt="virtual"><scope>castor::Loader</scope><name>~Loader</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::Loader</scope><name>~NonMovable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

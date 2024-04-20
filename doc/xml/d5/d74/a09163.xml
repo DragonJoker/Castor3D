@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/d74/a09163" kind="struct" language="C++" prot="public">
+    <compoundname>castor::details::MinRecT&lt; DataT, LhsT, RhsT, ValuesT... &gt;</compoundname>
+    <includes local="no">Math.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>ValueTypeT</type>
+        <declname>DataT</declname>
+        <defname>DataT</defname>
+      </param>
+      <param>
+        <type>DataT</type>
+        <declname>LhsT</declname>
+        <defname>LhsT</defname>
+      </param>
+      <param>
+        <type>DataT</type>
+        <declname>RhsT</declname>
+        <defname>RhsT</defname>
+      </param>
+      <param>
+        <type>DataT ...</type>
+        <declname>ValuesT</declname>
+        <defname>ValuesT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d5/d74/a09163_1a948fdcfe9c78de46d3ee1701d9558f96" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr DataT</type>
+        <definition>constexpr DataT castor::details::MinRecT&lt; DataT, LhsT, RhsT, ValuesT... &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>castor::details::MinRecT&lt; DataT, LhsT, RhsT, ValuesT... &gt;::value</qualifiedname>
+        <initializer>= <ref refid="d1/dab/a09151" kindref="compound">MinRecT</ref>&lt; DataT, std::max( LhsT, RhsT ), ValuesT... &gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Math.hpp" line="150" column="24" bodyfile="CastorUtils/Math/Math.hpp" bodystart="150" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>DataT</label>
+      </node>
+      <node id="1">
+        <label>castor::details::MinRecT&lt; DataT, LhsT, RhsT, ValuesT... &gt;</label>
+        <link refid="d5/d74/a09163"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>value</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Math/Math.hpp" line="148" column="1" bodyfile="CastorUtils/Math/Math.hpp" bodystart="149" bodyend="151"/>
+    <listofallmembers>
+      <member refid="d5/d74/a09163_1a948fdcfe9c78de46d3ee1701d9558f96" prot="public" virt="non-virtual"><scope>castor::details::MinRecT&lt; DataT, LhsT, RhsT, ValuesT... &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

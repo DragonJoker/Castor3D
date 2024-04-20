@@ -1,0 +1,456 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d1f/a07319" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::FontGlyphBuffer</compoundname>
+    <includes local="no">FontGlyphBuffer.hpp</includes>
+    <innerclass refid="dd/d99/a07323" prot="public">castor3d::FontGlyphBuffer::FontGlyphData</innerclass>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dc/d1f/a07319_1a05ddc02b42f81afc0db78765c7896fcb" prot="public" static="no">
+        <type><ref refid="d4/dcc/a08151" kindref="compound">castor::ArrayView</ref>&lt; <ref refid="dd/d99/a07323" kindref="compound">FontGlyphData</ref> &gt;</type>
+        <definition>using castor3d::FontGlyphBuffer::FontGlyphsData =  castor::ArrayView&lt; FontGlyphData &gt;</definition>
+        <argsstring></argsstring>
+        <name>FontGlyphsData</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::FontGlyphsData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="126" column="1" bodyfile="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="126" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dc/d1f/a07319_1af23dce5575007f1d2d6e6a8e57398bdb" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::FontGlyphBuffer::DataSize</definition>
+        <argsstring></argsstring>
+        <name>DataSize</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::DataSize</qualifiedname>
+        <initializer>= uint32_t( sizeof( <ref refid="dd/d99/a07323" kindref="compound">FontGlyphData</ref> ) )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="127" column="27" bodyfile="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="127" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/d1f/a07319_1a93a627f31b1b5341fb3c24a2fb21561f" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/d64/a05779" kindref="compound">FontTexture</ref> const  &amp;</type>
+        <definition>FontTexture const&amp; castor3d::FontGlyphBuffer::m_texture</definition>
+        <argsstring></argsstring>
+        <name>m_texture</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::m_texture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="130" column="20" bodyfile="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d1f/a07319_1a4494c79ac1a8f60b0be4679be107e2a6" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/de5/a07315" kindref="compound">ShaderBuffer</ref></type>
+        <definition>ShaderBuffer castor3d::FontGlyphBuffer::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="131" column="14" bodyfile="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d1f/a07319_1a39149e3929393e418024ce16b8cce02c" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d1f/a07319_1a05ddc02b42f81afc0db78765c7896fcb" kindref="member">FontGlyphsData</ref></type>
+        <definition>FontGlyphsData castor3d::FontGlyphBuffer::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::m_data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="132" column="16" bodyfile="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d1f/a07319_1a0ae841351ac7b0bf40030215634858b0" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d0/db3/a08783" kindref="compound">castor::Glyph</ref> const * &gt;</type>
+        <definition>castor::Vector&lt; castor::Glyph const * &gt; castor3d::FontGlyphBuffer::m_glyphs</definition>
+        <argsstring></argsstring>
+        <name>m_glyphs</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::m_glyphs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="133" column="16" bodyfile="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="133" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d1f/a07319_1aafa3f1b5eb5de9224172cbf90c7986bb" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aac3763b795438810958473f0b84908fb" kindref="member">castor::Mutex</ref></type>
+        <definition>castor::Mutex castor3d::FontGlyphBuffer::m_mutex</definition>
+        <argsstring></argsstring>
+        <name>m_mutex</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::m_mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="134" column="15" bodyfile="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d1f/a07319_1a2e3fa831e2d4e04499c8c7ba982d4990" prot="private" static="no" mutable="no">
+        <type>std::atomic_uint32_t</type>
+        <definition>std::atomic_uint32_t castor3d::FontGlyphBuffer::m_count</definition>
+        <argsstring></argsstring>
+        <name>m_count</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::m_count</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="135" column="22" bodyfile="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="135" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d1f/a07319_1a3b48ed29b424136a5dc2fe41a0a22846" prot="private" static="no" mutable="no">
+        <type>std::atomic_bool</type>
+        <definition>std::atomic_bool castor3d::FontGlyphBuffer::m_dirty</definition>
+        <argsstring></argsstring>
+        <name>m_dirty</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::m_dirty</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="136" column="18" bodyfile="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="136" bodyend="136"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d1f/a07319_1adb3a3d672066bfcd3868f8978f2feb60" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::FontGlyphBuffer::FontGlyphBuffer</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, FontTexture const &amp;texture, uint32_t count)</argsstring>
+        <name>FontGlyphBuffer</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::FontGlyphBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d64/a05779" kindref="compound">FontTexture</ref> const &amp;</type>
+          <declname>texture</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le device GPU. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">texture</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La texture de font parente. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre maximal de configurations. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="36" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d1f/a07319_1a3a4ff288312a913404acaa30642cbcbd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::FontGlyphBuffer::add</definition>
+        <argsstring>(castor::Glyph const &amp;glyph)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::add</qualifiedname>
+        <param>
+          <type><ref refid="d0/db3/a08783" kindref="compound">castor::Glyph</ref> const &amp;</type>
+          <declname>glyph</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute une glyphe au tampon. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">glyph</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La glyphe. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="48" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d1f/a07319_1a78c07322813a3eaf22d964dff907378f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::FontGlyphBuffer::update</definition>
+        <argsstring>(UploadData &amp;uploader)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::update</qualifiedname>
+        <param>
+          <type><ref refid="d7/d12/a03583" kindref="compound">UploadData</ref> &amp;</type>
+          <declname>uploader</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour le tampon. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="55" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d1f/a07319_1a689606753720e0a98af4e81831103b17" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkDescriptorSetLayoutBinding</type>
+        <definition>C3D_API VkDescriptorSetLayoutBinding castor3d::FontGlyphBuffer::createLayoutBinding</definition>
+        <argsstring>(uint32_t binding, VkShaderStageFlags stages=(VK_SHADER_STAGE_FRAGMENT_BIT|VK_SHADER_STAGE_GEOMETRY_BIT|VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT|VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT|VK_SHADER_STAGE_VERTEX_BIT)) const</argsstring>
+        <name>createLayoutBinding</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::createLayoutBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>stages</declname>
+          <defval>(VK_SHADER_STAGE_FRAGMENT_BIT|VK_SHADER_STAGE_GEOMETRY_BIT|VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT|VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT|VK_SHADER_STAGE_VERTEX_BIT)</defval>
+        </param>
+        <briefdescription>
+<para>Crée une attache de layout de set de descripteurs. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="62" column="38"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d1f/a07319_1a36cf0cf8c4886ba59ddc14fc3e08c507" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::WriteDescriptorSet</type>
+        <definition>C3D_API ashes::WriteDescriptorSet castor3d::FontGlyphBuffer::getBinding</definition>
+        <argsstring>(uint32_t binding) const</argsstring>
+        <name>getBinding</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::getBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Crée le descriptor write pour ce tampon. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="74" column="35"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d1f/a07319_1a20c1d019876de8c50d0846fab50b99dd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::FontGlyphBuffer::createBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;binding) const</argsstring>
+        <name>createBinding</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::createBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Crée une attache de set de descripteurs au point donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">descriptorSet</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le set de descripteurs recevant l&apos;attache. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">binding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;attache de layout de set de descripteurs. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="85" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d1f/a07319_1a9068a9299016f38a5962d2fa74fa8b3f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint8_t *</type>
+        <definition>uint8_t * castor3d::FontGlyphBuffer::getPtr</definition>
+        <argsstring>()</argsstring>
+        <name>getPtr</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::getPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="88" column="10" bodyfile="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="88" bodyend="91"/>
+        <references refid="d3/de5/a07315_1aab3e4f6ec159dfbd374a5bbf30175e66" compoundref="d2/dc1/a01562" startline="129" endline="132">castor3d::ShaderBuffer::getPtr</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d1f/a07319_1ad31c88f7eebcd32e4756d3140e7c2d96" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::BufferBase const &amp;</type>
+        <definition>ashes::BufferBase const  &amp; castor3d::FontGlyphBuffer::getBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::getBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="93" column="26" bodyfile="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="93" bodyend="96"/>
+        <references refid="d3/de5/a07315_1a93fa3c57187d033653873bb1ae7862c2" compoundref="d2/dc1/a01562" startline="144" endline="147">castor3d::ShaderBuffer::getBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d1f/a07319_1a117aaa0831c39fc009e2f7c68238b566" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::FontGlyphBuffer::setMaxHeight</definition>
+        <argsstring>(uint32_t value)</argsstring>
+        <name>setMaxHeight</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::setMaxHeight</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="98" column="6" bodyfile="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="98" bodyend="102"/>
+        <references refid="d3/de5/a07315_1a987a7a5f7ab5e6e537f5bebfde5961cf" compoundref="d2/dc1/a01562" startline="163" endline="166">castor3d::ShaderBuffer::setSecondCount</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d1f/a07319_1a87ec6049a214fae89e23ed17c0ca3052" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::FontGlyphBuffer::setImgWidth</definition>
+        <argsstring>(uint32_t value)</argsstring>
+        <name>setImgWidth</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::setImgWidth</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="104" column="6" bodyfile="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="104" bodyend="108"/>
+        <references refid="d3/de5/a07315_1a2721d5e810f0e83a83d157a8d22cc90a" compoundref="d2/dc1/a01562" startline="168" endline="171">castor3d::ShaderBuffer::setThirdCount</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d1f/a07319_1a52d610a6df89b84d845bee8e3d2f9597" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::FontGlyphBuffer::setImgHeight</definition>
+        <argsstring>(uint32_t value)</argsstring>
+        <name>setImgHeight</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::setImgHeight</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="110" column="6" bodyfile="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="110" bodyend="114"/>
+        <references refid="d3/de5/a07315_1aa091fb373e5f538f9a09b64ed515fd45" compoundref="d2/dc1/a01562" startline="173" endline="176">castor3d::ShaderBuffer::setFourthCount</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="19" column="1" bodyfile="Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="20" bodyend="137"/>
+    <listofallmembers>
+      <member refid="dc/d1f/a07319_1a3a4ff288312a913404acaa30642cbcbd" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>add</name></member>
+      <member refid="dc/d1f/a07319_1a20c1d019876de8c50d0846fab50b99dd" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>createBinding</name></member>
+      <member refid="dc/d1f/a07319_1a689606753720e0a98af4e81831103b17" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>createLayoutBinding</name></member>
+      <member refid="dc/d1f/a07319_1af23dce5575007f1d2d6e6a8e57398bdb" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>DataSize</name></member>
+      <member refid="dc/d1f/a07319_1adb3a3d672066bfcd3868f8978f2feb60" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>FontGlyphBuffer</name></member>
+      <member refid="dc/d1f/a07319_1a05ddc02b42f81afc0db78765c7896fcb" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>FontGlyphsData</name></member>
+      <member refid="dc/d1f/a07319_1a36cf0cf8c4886ba59ddc14fc3e08c507" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>getBinding</name></member>
+      <member refid="dc/d1f/a07319_1ad31c88f7eebcd32e4756d3140e7c2d96" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>getBuffer</name></member>
+      <member refid="dc/d1f/a07319_1a9068a9299016f38a5962d2fa74fa8b3f" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>getPtr</name></member>
+      <member refid="dc/d1f/a07319_1a4494c79ac1a8f60b0be4679be107e2a6" prot="private" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>m_buffer</name></member>
+      <member refid="dc/d1f/a07319_1a2e3fa831e2d4e04499c8c7ba982d4990" prot="private" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>m_count</name></member>
+      <member refid="dc/d1f/a07319_1a39149e3929393e418024ce16b8cce02c" prot="private" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>m_data</name></member>
+      <member refid="dc/d1f/a07319_1a3b48ed29b424136a5dc2fe41a0a22846" prot="private" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>m_dirty</name></member>
+      <member refid="dc/d1f/a07319_1a0ae841351ac7b0bf40030215634858b0" prot="private" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>m_glyphs</name></member>
+      <member refid="dc/d1f/a07319_1aafa3f1b5eb5de9224172cbf90c7986bb" prot="private" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>m_mutex</name></member>
+      <member refid="dc/d1f/a07319_1a93a627f31b1b5341fb3c24a2fb21561f" prot="private" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>m_texture</name></member>
+      <member refid="dc/d1f/a07319_1a52d610a6df89b84d845bee8e3d2f9597" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>setImgHeight</name></member>
+      <member refid="dc/d1f/a07319_1a87ec6049a214fae89e23ed17c0ca3052" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>setImgWidth</name></member>
+      <member refid="dc/d1f/a07319_1a117aaa0831c39fc009e2f7c68238b566" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>setMaxHeight</name></member>
+      <member refid="dc/d1f/a07319_1a78c07322813a3eaf22d964dff907378f" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

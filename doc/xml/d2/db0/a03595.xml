@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/db0/a03595" kind="struct" language="C++" prot="protected">
+    <compoundname>castor3d::UploadData::ImageDataRange</compoundname>
+    <includes local="no">UploadData.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/db0/a03595_1a4b5f40e06240eeabcf848e9f3b5ca576" prot="public" static="no" mutable="no">
+        <type>void const  *</type>
+        <definition>void const* castor3d::UploadData::ImageDataRange::srcData</definition>
+        <argsstring></argsstring>
+        <name>srcData</name>
+        <qualifiedname>castor3d::UploadData::ImageDataRange::srcData</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="138" column="13" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="138" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db0/a03595_1a3b4183799ff805f08594b04f5e4197ea" prot="public" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::UploadData::ImageDataRange::srcSize</definition>
+        <argsstring></argsstring>
+        <name>srcSize</name>
+        <qualifiedname>castor3d::UploadData::ImageDataRange::srcSize</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="139" column="14" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="139" bodyend="139"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db0/a03595_1a7f2c1e641b9ac9e2dddcbbb4931802da" prot="public" static="no" mutable="no">
+        <type>ashes::Image const  *</type>
+        <definition>ashes::Image const* castor3d::UploadData::ImageDataRange::dstImage</definition>
+        <argsstring></argsstring>
+        <name>dstImage</name>
+        <qualifiedname>castor3d::UploadData::ImageDataRange::dstImage</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="140" column="21" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="140" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db0/a03595_1a2e9337309752cafbc9a20ac8ef4822a1" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/d6e/a08955" kindref="compound">castor::ImageLayout</ref></type>
+        <definition>castor::ImageLayout castor3d::UploadData::ImageDataRange::dstLayout</definition>
+        <argsstring></argsstring>
+        <name>dstLayout</name>
+        <qualifiedname>castor3d::UploadData::ImageDataRange::dstLayout</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="141" column="21" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="141" bodyend="141"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db0/a03595_1abc2d9bbb4a2ceeaa3f341fb4b8e61789" prot="public" static="no" mutable="no">
+        <type>VkImageSubresourceRange</type>
+        <definition>VkImageSubresourceRange castor3d::UploadData::ImageDataRange::dstRange</definition>
+        <argsstring></argsstring>
+        <name>dstRange</name>
+        <qualifiedname>castor3d::UploadData::ImageDataRange::dstRange</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="142" column="25" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="142" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db0/a03595_1a871c13c49f8738483bf3a098788f11d4" prot="public" static="no" mutable="no">
+        <type>VkImageLayout</type>
+        <definition>VkImageLayout castor3d::UploadData::ImageDataRange::dstImageLayout</definition>
+        <argsstring></argsstring>
+        <name>dstImageLayout</name>
+        <qualifiedname>castor3d::UploadData::ImageDataRange::dstImageLayout</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="143" column="15" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="143" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/db0/a03595_1ad65a349fb4f33480baf7446f79ed5bd8" prot="public" static="no" mutable="no">
+        <type>VkPipelineStageFlags</type>
+        <definition>VkPipelineStageFlags castor3d::UploadData::ImageDataRange::dstPipelineFlags</definition>
+        <argsstring></argsstring>
+        <name>dstPipelineFlags</name>
+        <qualifiedname>castor3d::UploadData::ImageDataRange::dstPipelineFlags</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/UploadData.hpp" line="144" column="22" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="144" bodyend="144"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::UploadData::ImageDataRange</label>
+        <link refid="d2/db0/a03595"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>dstLayout</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::ImageLayout</label>
+        <link refid="d5/d6e/a08955"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Buffer/UploadData.hpp" line="136" column="1" bodyfile="Castor3D/Buffer/UploadData.hpp" bodystart="137" bodyend="145"/>
+    <listofallmembers>
+      <member refid="d2/db0/a03595_1a7f2c1e641b9ac9e2dddcbbb4931802da" prot="public" virt="non-virtual"><scope>castor3d::UploadData::ImageDataRange</scope><name>dstImage</name></member>
+      <member refid="d2/db0/a03595_1a871c13c49f8738483bf3a098788f11d4" prot="public" virt="non-virtual"><scope>castor3d::UploadData::ImageDataRange</scope><name>dstImageLayout</name></member>
+      <member refid="d2/db0/a03595_1a2e9337309752cafbc9a20ac8ef4822a1" prot="public" virt="non-virtual"><scope>castor3d::UploadData::ImageDataRange</scope><name>dstLayout</name></member>
+      <member refid="d2/db0/a03595_1ad65a349fb4f33480baf7446f79ed5bd8" prot="public" virt="non-virtual"><scope>castor3d::UploadData::ImageDataRange</scope><name>dstPipelineFlags</name></member>
+      <member refid="d2/db0/a03595_1abc2d9bbb4a2ceeaa3f341fb4b8e61789" prot="public" virt="non-virtual"><scope>castor3d::UploadData::ImageDataRange</scope><name>dstRange</name></member>
+      <member refid="d2/db0/a03595_1a4b5f40e06240eeabcf848e9f3b5ca576" prot="public" virt="non-virtual"><scope>castor3d::UploadData::ImageDataRange</scope><name>srcData</name></member>
+      <member refid="d2/db0/a03595_1a3b4183799ff805f08594b04f5e4197ea" prot="public" virt="non-virtual"><scope>castor3d::UploadData::ImageDataRange</scope><name>srcSize</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

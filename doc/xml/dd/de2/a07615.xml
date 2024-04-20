@@ -1,0 +1,211 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/de2/a07615" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::Intersection</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;Intersection&quot;, sdw::type::MemoryLayout::eC, sdw::Vec3Field&lt; &quot;point&quot; &gt;, sdw::BooleanField&lt; &quot;valid&quot; &gt;, sdw::FloatField&lt; &quot;t&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">GlslRay.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/de2/a07615_1a25dd5a72657d86b6523f0f617fc4cff9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Intersection::Intersection</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>Intersection</name>
+        <qualifiedname>castor3d::shader::Intersection::Intersection</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslRay.hpp" line="21" column="9" bodyfile="Castor3D/Shader/Shaders/GlslRay.hpp" bodystart="21" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/de2/a07615_1ad0f898923f47479058e9f0bc5661d85d" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Intersection::Intersection</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>Intersection</name>
+        <qualifiedname>castor3d::shader::Intersection::Intersection</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslRay.hpp" line="28" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/de2/a07615_1ac32f9c5d869f3514fc1d5fd60b8d88f3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Intersection::Intersection</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::Vec3 const &amp;p)</argsstring>
+        <name>Intersection</name>
+        <qualifiedname>castor3d::shader::Intersection::Intersection</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslRay.hpp" line="29" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/de2/a07615_1aa677339c155802f649d92af457ae578d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Intersection::Intersection</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::Vec3 const &amp;p, sdw::Boolean const &amp;v)</argsstring>
+        <name>Intersection</name>
+        <qualifiedname>castor3d::shader::Intersection::Intersection</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>sdw::Boolean const &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslRay.hpp" line="31" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/de2/a07615_1a04b34a53f49237b091de6ab8badb3ea5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Intersection::Intersection</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::Vec3 const &amp;p, sdw::Boolean const &amp;v, sdw::Float const &amp;t)</argsstring>
+        <name>Intersection</name>
+        <qualifiedname>castor3d::shader::Intersection::Intersection</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>sdw::Boolean const &amp;</type>
+          <declname>v</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslRay.hpp" line="34" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/de2/a07615_1a63db0c4e1338d3c1928216a57468f6e5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::Intersection::point</definition>
+        <argsstring>() const</argsstring>
+        <name>point</name>
+        <qualifiedname>castor3d::shader::Intersection::point</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslRay.hpp" line="39" column="6" bodyfile="Castor3D/Shader/Shaders/GlslRay.hpp" bodystart="39" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/de2/a07615_1a5dafab6f7a022fd651b1f31e177d3edc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::Intersection::valid</definition>
+        <argsstring>() const</argsstring>
+        <name>valid</name>
+        <qualifiedname>castor3d::shader::Intersection::valid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslRay.hpp" line="44" column="6" bodyfile="Castor3D/Shader/Shaders/GlslRay.hpp" bodystart="44" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/de2/a07615_1aeb1b4df02bf736b5e4adebfdbefc29b5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::Intersection::t</definition>
+        <argsstring>() const</argsstring>
+        <name>t</name>
+        <qualifiedname>castor3d::shader::Intersection::t</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslRay.hpp" line="49" column="6" bodyfile="Castor3D/Shader/Shaders/GlslRay.hpp" bodystart="49" bodyend="52"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::Intersection</label>
+        <link refid="dd/de2/a07615"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;Intersection&quot;, sdw::type::MemoryLayout::eC, sdw::Vec3Field&lt; &quot;point&quot; &gt;, sdw::BooleanField&lt; &quot;valid&quot; &gt;, sdw::FloatField&lt; &quot;t&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::Intersection</label>
+        <link refid="dd/de2/a07615"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;Intersection&quot;, sdw::type::MemoryLayout::eC, sdw::Vec3Field&lt; &quot;point&quot; &gt;, sdw::BooleanField&lt; &quot;valid&quot; &gt;, sdw::FloatField&lt; &quot;t&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslRay.hpp" line="14" column="1" bodyfile="Castor3D/Shader/Shaders/GlslRay.hpp" bodystart="20" bodyend="53"/>
+    <listofallmembers>
+      <member refid="dd/de2/a07615_1a25dd5a72657d86b6523f0f617fc4cff9" prot="public" virt="non-virtual"><scope>castor3d::shader::Intersection</scope><name>Intersection</name></member>
+      <member refid="dd/de2/a07615_1ad0f898923f47479058e9f0bc5661d85d" prot="public" virt="non-virtual"><scope>castor3d::shader::Intersection</scope><name>Intersection</name></member>
+      <member refid="dd/de2/a07615_1ac32f9c5d869f3514fc1d5fd60b8d88f3" prot="public" virt="non-virtual"><scope>castor3d::shader::Intersection</scope><name>Intersection</name></member>
+      <member refid="dd/de2/a07615_1aa677339c155802f649d92af457ae578d" prot="public" virt="non-virtual"><scope>castor3d::shader::Intersection</scope><name>Intersection</name></member>
+      <member refid="dd/de2/a07615_1a04b34a53f49237b091de6ab8badb3ea5" prot="public" virt="non-virtual"><scope>castor3d::shader::Intersection</scope><name>Intersection</name></member>
+      <member refid="dd/de2/a07615_1a63db0c4e1338d3c1928216a57468f6e5" prot="public" virt="non-virtual"><scope>castor3d::shader::Intersection</scope><name>point</name></member>
+      <member refid="dd/de2/a07615_1aeb1b4df02bf736b5e4adebfdbefc29b5" prot="public" virt="non-virtual"><scope>castor3d::shader::Intersection</scope><name>t</name></member>
+      <member refid="dd/de2/a07615_1a5dafab6f7a022fd651b1f31e177d3edc" prot="public" virt="non-virtual"><scope>castor3d::shader::Intersection</scope><name>valid</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

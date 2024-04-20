@@ -1,0 +1,13 @@
+<map id="castor3d::InstantiationComponent::Data" name="castor3d::InstantiationComponent::Data">
+<area shape="rect" id="Node000001" title=" " alt="" coords="55,313,271,353"/>
+<area shape="rect" id="Node000002" href="$d7/d76/a03451.html" title=" " alt="" coords="59,211,267,251"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,265,166,313,161,313,161,265"/>
+<area shape="rect" id="Node000003" href="$dc/d5c/a03483.html" title=" " alt="" coords="5,5,172,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="77,44,62,86,60,110,64,132,78,155,95,176,134,208,131,212,92,180,73,159,60,134,54,110,56,85,72,42"/>
+<area shape="rect" id="Node000005" href="$d7/d76/a03451.html" title="An offset and range of a GpuBuffer." alt="" coords="110,93,281,133"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="114,38,175,91,172,95,110,42"/>
+<area shape="rect" id="Node000004" href="$db/db8/a03471.html" title="A memory range, in bytes." alt="" coords="226,5,373,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="312,43,323,74,329,112,328,152,322,171,312,188,293,207,269,219,266,215,289,203,308,185,317,169,323,151,324,113,317,76,307,44"/>
+<area shape="poly" id="edge6_Node000005_Node000004" title=" " alt="" coords="278,42,218,95,215,91,275,38"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="173,146,167,158,163,185,163,210,158,211,157,185,162,157,168,144"/>
+</map>

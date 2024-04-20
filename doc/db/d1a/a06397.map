@@ -1,4 +1,9 @@
-<map id="castor3d::shader::MicrofacetDistributionSample" name="castor3d::shader::MicrofacetDistributionSample">
-<area shape="rect" id="node1" title=" " alt="" coords="283,42,469,82"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,235,119"/>
+<map id="castor3d::QueueData" name="castor3d::QueueData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="14,299,159,324"/>
+<area shape="rect" id="Node000002" href="$db/de7/a06407.html" title=" " alt="" coords="11,211,163,236"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,250,89,298,84,298,84,250"/>
+<area shape="rect" id="Node000003" href="$dd/dbb/a08207.html" title=" " alt="" coords="5,108,168,148"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="89,162,89,210,84,210,84,162"/>
+<area shape="rect" id="Node000004" href="$dd/dbb/a08207.html" title="Template class providing implicit conversion from a scoped enum to its integral base type." alt="" coords="5,5,168,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="89,59,89,108,84,108,84,59"/>
 </map>

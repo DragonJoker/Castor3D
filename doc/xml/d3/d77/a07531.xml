@@ -1,0 +1,346 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/d77/a07531" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::SpotLight</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_SpotLight&quot;, sdw::type::MemoryLayout::eC, sdw::StructFieldT&lt; Light, &quot;base&quot; &gt;, sdw::Vec3Field&lt; &quot;direction&quot; &gt;, sdw::FloatField&lt; &quot;outerCutOffCos&quot; &gt;, sdw::FloatField&lt; &quot;innerCutOff&quot; &gt;, sdw::FloatField&lt; &quot;outerCutOff&quot; &gt;, sdw::FloatField&lt; &quot;innerCutOffSin&quot; &gt;, sdw::FloatField&lt; &quot;outerCutOffSin&quot; &gt;, sdw::FloatField&lt; &quot;innerCutOffCos&quot; &gt;, sdw::FloatField&lt; &quot;outerCutOffTan&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">GlslLight.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d77/a07531_1a095cb3462bc1350da119571e3ee53727" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::SpotLight::SpotLight</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>SpotLight</name>
+        <qualifiedname>castor3d::shader::SpotLight::SpotLight</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="116" column="9" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="116" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07531_1a6867127ddbe02cdf32c04096a315fcca" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::SpotLight::getAttenuationFactor</definition>
+        <argsstring>(sdw::Float const &amp;distance, sdw::Float &amp;attenuation) const</argsstring>
+        <name>getAttenuationFactor</name>
+        <qualifiedname>castor3d::shader::SpotLight::getAttenuationFactor</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>distance</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>attenuation</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="123" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07531_1a5703bb73a4aa6001a09c02c7a540c399" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SpotLight::base</definition>
+        <argsstring>() const</argsstring>
+        <name>base</name>
+        <qualifiedname>castor3d::shader::SpotLight::base</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="127" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="127" bodyend="127"/>
+        <referencedby refid="d3/d77/a07531_1afedac6017611a3c4a441516a68a9a7aa" compoundref="db/d95/a01637" startline="129" endline="129">colour</referencedby>
+        <referencedby refid="da/d68/a02280_1af27c3044756f27edfc909f006747c749" compoundref="db/d95/a01637" startline="155" endline="158">castor3d::shader::computeRange</referencedby>
+        <referencedby refid="d3/d77/a07531_1aa04d3774a4a952c11eb78e9f77d90841" compoundref="db/d95/a01637" startline="135" endline="135">exponent</referencedby>
+        <referencedby refid="d3/d77/a07531_1a2a0b23766637550b9e2b7913c160b5d4" compoundref="db/d95/a01637" startline="130" endline="130">intensity</referencedby>
+        <referencedby refid="d3/d77/a07531_1ae9c46c6a2892a5b3824273736e32f7c1" compoundref="db/d95/a01637" startline="134" endline="134">position</referencedby>
+        <referencedby refid="d3/d77/a07531_1a07197ef5da7301622f0c98498badd42a" compoundref="db/d95/a01637" startline="131" endline="131">range</referencedby>
+        <referencedby refid="d3/d77/a07531_1a2f36f817acafcfb36d50f82500e8867d" compoundref="db/d95/a01637" startline="132" endline="132">shadowMapIndex</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07531_1afedac6017611a3c4a441516a68a9a7aa" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SpotLight::colour</definition>
+        <argsstring>() const</argsstring>
+        <name>colour</name>
+        <qualifiedname>castor3d::shader::SpotLight::colour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="129" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="129" bodyend="129"/>
+        <references refid="d3/d77/a07531_1a5703bb73a4aa6001a09c02c7a540c399" compoundref="db/d95/a01637" startline="127" endline="127">base</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07531_1a2a0b23766637550b9e2b7913c160b5d4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SpotLight::intensity</definition>
+        <argsstring>() const</argsstring>
+        <name>intensity</name>
+        <qualifiedname>castor3d::shader::SpotLight::intensity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="130" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="130" bodyend="130"/>
+        <references refid="d3/d77/a07531_1a5703bb73a4aa6001a09c02c7a540c399" compoundref="db/d95/a01637" startline="127" endline="127">base</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07531_1a07197ef5da7301622f0c98498badd42a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SpotLight::range</definition>
+        <argsstring>() const</argsstring>
+        <name>range</name>
+        <qualifiedname>castor3d::shader::SpotLight::range</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="131" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="131" bodyend="131"/>
+        <references refid="d3/d77/a07531_1a5703bb73a4aa6001a09c02c7a540c399" compoundref="db/d95/a01637" startline="127" endline="127">base</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07531_1a2f36f817acafcfb36d50f82500e8867d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SpotLight::shadowMapIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>shadowMapIndex</name>
+        <qualifiedname>castor3d::shader::SpotLight::shadowMapIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="132" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="132" bodyend="132"/>
+        <references refid="d3/d77/a07531_1a5703bb73a4aa6001a09c02c7a540c399" compoundref="db/d95/a01637" startline="127" endline="127">base</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07531_1ae9c46c6a2892a5b3824273736e32f7c1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SpotLight::position</definition>
+        <argsstring>() const</argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::shader::SpotLight::position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="134" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="134" bodyend="134"/>
+        <references refid="d3/d77/a07531_1a5703bb73a4aa6001a09c02c7a540c399" compoundref="db/d95/a01637" startline="127" endline="127">base</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07531_1aa04d3774a4a952c11eb78e9f77d90841" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SpotLight::exponent</definition>
+        <argsstring>() const</argsstring>
+        <name>exponent</name>
+        <qualifiedname>castor3d::shader::SpotLight::exponent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="135" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="135" bodyend="135"/>
+        <references refid="d3/d77/a07531_1a5703bb73a4aa6001a09c02c7a540c399" compoundref="db/d95/a01637" startline="127" endline="127">base</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07531_1aa6810f96ddabbf75515449a626ee9584" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SpotLight::direction</definition>
+        <argsstring>() const</argsstring>
+        <name>direction</name>
+        <qualifiedname>castor3d::shader::SpotLight::direction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="136" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="136" bodyend="136"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07531_1ae93148ce4e04369cdef9959ca52ba4a2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SpotLight::innerCutOff</definition>
+        <argsstring>() const</argsstring>
+        <name>innerCutOff</name>
+        <qualifiedname>castor3d::shader::SpotLight::innerCutOff</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="137" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="137" bodyend="137"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07531_1a6db2dee5e78adfebc6fab60cf70b54a7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SpotLight::outerCutOff</definition>
+        <argsstring>() const</argsstring>
+        <name>outerCutOff</name>
+        <qualifiedname>castor3d::shader::SpotLight::outerCutOff</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="138" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="138" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07531_1a6cc6f1ea4bd0385831a0088d6fb65c1b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SpotLight::innerCutOffCos</definition>
+        <argsstring>() const</argsstring>
+        <name>innerCutOffCos</name>
+        <qualifiedname>castor3d::shader::SpotLight::innerCutOffCos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="139" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="139" bodyend="139"/>
+        <referencedby refid="d3/d77/a07531_1abbc68b9c2da5cabf8c25c2376e376e2f" compoundref="db/d95/a01637" startline="145" endline="145">cutOffsCosDiff</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07531_1a37c8b145421a2f20a63129da8d8862d9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SpotLight::outerCutOffCos</definition>
+        <argsstring>() const</argsstring>
+        <name>outerCutOffCos</name>
+        <qualifiedname>castor3d::shader::SpotLight::outerCutOffCos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="140" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="140" bodyend="140"/>
+        <referencedby refid="d3/d77/a07531_1abbc68b9c2da5cabf8c25c2376e376e2f" compoundref="db/d95/a01637" startline="145" endline="145">cutOffsCosDiff</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07531_1a44b25bc51e0c147028e1aad300111b04" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SpotLight::innerCutOffSin</definition>
+        <argsstring>() const</argsstring>
+        <name>innerCutOffSin</name>
+        <qualifiedname>castor3d::shader::SpotLight::innerCutOffSin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="141" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="141" bodyend="141"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07531_1a25752e9e1d6b96a9e533f3b0cb50afb7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SpotLight::outerCutOffSin</definition>
+        <argsstring>() const</argsstring>
+        <name>outerCutOffSin</name>
+        <qualifiedname>castor3d::shader::SpotLight::outerCutOffSin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="142" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="142" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07531_1a4bbdfeb8306c8178cb79377405b496cd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SpotLight::outerCutOffTan</definition>
+        <argsstring>() const</argsstring>
+        <name>outerCutOffTan</name>
+        <qualifiedname>castor3d::shader::SpotLight::outerCutOffTan</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="143" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="143" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d77/a07531_1abbc68b9c2da5cabf8c25c2376e376e2f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SpotLight::cutOffsCosDiff</definition>
+        <argsstring>() const</argsstring>
+        <name>cutOffsCosDiff</name>
+        <qualifiedname>castor3d::shader::SpotLight::cutOffsCosDiff</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="145" column="6" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="145" bodyend="145"/>
+        <references refid="d3/d77/a07531_1a6cc6f1ea4bd0385831a0088d6fb65c1b" compoundref="db/d95/a01637" startline="139" endline="139">innerCutOffCos</references>
+        <references refid="d3/d77/a07531_1a37c8b145421a2f20a63129da8d8862d9" compoundref="db/d95/a01637" startline="140" endline="140">outerCutOffCos</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::SpotLight</label>
+        <link refid="d3/d77/a07531"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_SpotLight&quot;, sdw::type::MemoryLayout::eC, sdw::StructFieldT&lt; Light, &quot;base&quot; &gt;, sdw::Vec3Field&lt; &quot;direction&quot; &gt;, sdw::FloatField&lt; &quot;outerCutOffCos&quot; &gt;, sdw::FloatField&lt; &quot;innerCutOff&quot; &gt;, sdw::FloatField&lt; &quot;outerCutOff&quot; &gt;, sdw::FloatField&lt; &quot;innerCutOffSin&quot; &gt;, sdw::FloatField&lt; &quot;outerCutOffSin&quot; &gt;, sdw::FloatField&lt; &quot;innerCutOffCos&quot; &gt;, sdw::FloatField&lt; &quot;outerCutOffTan&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::SpotLight</label>
+        <link refid="d3/d77/a07531"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_SpotLight&quot;, sdw::type::MemoryLayout::eC, sdw::StructFieldT&lt; Light, &quot;base&quot; &gt;, sdw::Vec3Field&lt; &quot;direction&quot; &gt;, sdw::FloatField&lt; &quot;outerCutOffCos&quot; &gt;, sdw::FloatField&lt; &quot;innerCutOff&quot; &gt;, sdw::FloatField&lt; &quot;outerCutOff&quot; &gt;, sdw::FloatField&lt; &quot;innerCutOffSin&quot; &gt;, sdw::FloatField&lt; &quot;outerCutOffSin&quot; &gt;, sdw::FloatField&lt; &quot;innerCutOffCos&quot; &gt;, sdw::FloatField&lt; &quot;outerCutOffTan&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslLight.hpp" line="103" column="1" bodyfile="Castor3D/Shader/Shaders/GlslLight.hpp" bodystart="115" bodyend="146"/>
+    <listofallmembers>
+      <member refid="d3/d77/a07531_1a5703bb73a4aa6001a09c02c7a540c399" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>base</name></member>
+      <member refid="d3/d77/a07531_1afedac6017611a3c4a441516a68a9a7aa" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>colour</name></member>
+      <member refid="d3/d77/a07531_1abbc68b9c2da5cabf8c25c2376e376e2f" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>cutOffsCosDiff</name></member>
+      <member refid="d3/d77/a07531_1aa6810f96ddabbf75515449a626ee9584" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>direction</name></member>
+      <member refid="d3/d77/a07531_1aa04d3774a4a952c11eb78e9f77d90841" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>exponent</name></member>
+      <member refid="d3/d77/a07531_1a6867127ddbe02cdf32c04096a315fcca" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>getAttenuationFactor</name></member>
+      <member refid="d3/d77/a07531_1ae93148ce4e04369cdef9959ca52ba4a2" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>innerCutOff</name></member>
+      <member refid="d3/d77/a07531_1a6cc6f1ea4bd0385831a0088d6fb65c1b" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>innerCutOffCos</name></member>
+      <member refid="d3/d77/a07531_1a44b25bc51e0c147028e1aad300111b04" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>innerCutOffSin</name></member>
+      <member refid="d3/d77/a07531_1a2a0b23766637550b9e2b7913c160b5d4" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>intensity</name></member>
+      <member refid="d3/d77/a07531_1a6db2dee5e78adfebc6fab60cf70b54a7" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>outerCutOff</name></member>
+      <member refid="d3/d77/a07531_1a37c8b145421a2f20a63129da8d8862d9" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>outerCutOffCos</name></member>
+      <member refid="d3/d77/a07531_1a25752e9e1d6b96a9e533f3b0cb50afb7" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>outerCutOffSin</name></member>
+      <member refid="d3/d77/a07531_1a4bbdfeb8306c8178cb79377405b496cd" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>outerCutOffTan</name></member>
+      <member refid="d3/d77/a07531_1ae9c46c6a2892a5b3824273736e32f7c1" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>position</name></member>
+      <member refid="d3/d77/a07531_1a07197ef5da7301622f0c98498badd42a" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>range</name></member>
+      <member refid="d3/d77/a07531_1a2f36f817acafcfb36d50f82500e8867d" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>shadowMapIndex</name></member>
+      <member refid="d3/d77/a07531_1a095cb3462bc1350da119571e3ee53727" prot="public" virt="non-virtual"><scope>castor3d::shader::SpotLight</scope><name>SpotLight</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

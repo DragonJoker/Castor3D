@@ -1,0 +1,10 @@
+<map id="castor::BinaryLoader&lt; T &gt;" name="castor::BinaryLoader&lt; T &gt;">
+<area shape="rect" id="Node000001" title="Partial castor::Loader specialisation for binary files." alt="" coords="5,257,179,283"/>
+<area shape="rect" id="Node000002" href="$d3/d77/a07999.html" title=" " alt="" coords="23,168,161,208"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,222,95,257,89,257,89,222"/>
+<area shape="rect" id="Node000003" href="$da/d87/a08319.html" title=" " alt="" coords="40,5,176,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,45,99,80,94,168,89,168,93,80,100,44"/>
+<area shape="rect" id="Node000004" href="$d3/d77/a07999.html" title="Main resource loader class." alt="" coords="109,80,267,105"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="133,38,177,78,173,82,129,42"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="168,117,113,170,110,166,165,113"/>
+</map>

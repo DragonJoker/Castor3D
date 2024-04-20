@@ -1,5 +1,7 @@
-<map id="castor3d::IridescenceComponent::MaterialShader" name="castor3d::IridescenceComponent::MaterialShader">
-<area shape="rect" id="node1" title=" " alt="" coords="5,167,217,207"/>
-<area shape="rect" id="node2" href="$dc/d86/a04022.html" title=" " alt="" coords="10,79,213,119"/>
-<area shape="rect" id="node3" href="$d0/dee/a04014.html" title=" " alt="" coords="12,5,211,31"/>
+<map id="castor3d::ObjectBufferOffset::GpuBufferChunk" name="castor3d::ObjectBufferOffset::GpuBufferChunk">
+<area shape="rect" id="Node000001" title=" " alt="" coords="92,108,277,148"/>
+<area shape="rect" id="Node000002" href="$db/d47/a03447.html" title="A GPU buffer pool, that uses an allocator to allocate sub&#45;buffers." alt="" coords="5,5,180,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,54,169,106,165,110,117,57"/>
+<area shape="rect" id="Node000003" href="$db/db8/a03471.html" title="A memory range, in bytes." alt="" coords="205,13,351,38"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="260,50,204,110,200,106,256,46"/>
 </map>

@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/d0e/a06399" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::QueueData</compoundname>
+    <includes local="no">RenderDevice.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d0e/a06399_1ab944da5330def14cd9cee5a1880353bf" prot="public" static="no" mutable="no">
+        <type><ref refid="db/de7/a06407" kindref="compound">QueuesData</ref> const  *</type>
+        <definition>QueuesData const* castor3d::QueueData::parent</definition>
+        <argsstring></argsstring>
+        <name>parent</name>
+        <qualifiedname>castor3d::QueueData::parent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="188" column="19" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="188" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d0e/a06399_1a9ea5f5a06a287dfd20f4fa0763c0691a" prot="public" static="no" mutable="no">
+        <type>ashes::QueuePtr</type>
+        <definition>ashes::QueuePtr castor3d::QueueData::queue</definition>
+        <argsstring></argsstring>
+        <name>queue</name>
+        <qualifiedname>castor3d::QueueData::queue</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="189" column="17" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="189" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d0e/a06399_1a05e44cc927d33ffdbbc113102cd70172" prot="public" static="no" mutable="no">
+        <type>ashes::CommandPoolPtr</type>
+        <definition>ashes::CommandPoolPtr castor3d::QueueData::commandPool</definition>
+        <argsstring></argsstring>
+        <name>commandPool</name>
+        <qualifiedname>castor3d::QueueData::commandPool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="190" column="23" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="190" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d0e/a06399_1afd7207d167e1315cbfdff7a2693738d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::QueueData::QueueData</definition>
+        <argsstring>(QueueData const &amp;)=delete</argsstring>
+        <name>QueueData</name>
+        <qualifiedname>castor3d::QueueData::QueueData</qualifiedname>
+        <param>
+          <type><ref refid="d3/d0e/a06399" kindref="compound">QueueData</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="178" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d0e/a06399_1a0a52223c612645e9cb50d6afd516da1a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d0e/a06399" kindref="compound">QueueData</ref> &amp;</type>
+        <definition>QueueData &amp; castor3d::QueueData::operator=</definition>
+        <argsstring>(QueueData const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::QueueData::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d3/d0e/a06399" kindref="compound">QueueData</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="179" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d0e/a06399_1a88c972becdfacf74f43e9d87e0fc719c" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::QueueData::QueueData</definition>
+        <argsstring>(QueueData &amp;&amp;) noexcept=default</argsstring>
+        <name>QueueData</name>
+        <qualifiedname>castor3d::QueueData::QueueData</qualifiedname>
+        <param>
+          <type><ref refid="d3/d0e/a06399" kindref="compound">QueueData</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="180" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d0e/a06399_1ac80707e0229738ba4fce3012c1d5990e" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d0e/a06399" kindref="compound">QueueData</ref> &amp;</type>
+        <definition>C3D_API QueueData &amp; castor3d::QueueData::operator=</definition>
+        <argsstring>(QueueData &amp;&amp;) noexcept=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::QueueData::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d3/d0e/a06399" kindref="compound">QueueData</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="181" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d0e/a06399_1ad3c77458ecd2e6a514889c41fca1db5e" prot="public" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::QueueData::QueueData</definition>
+        <argsstring>(QueuesData const *parent) noexcept</argsstring>
+        <name>QueueData</name>
+        <qualifiedname>castor3d::QueueData::QueueData</qualifiedname>
+        <param>
+          <type><ref refid="db/de7/a06407" kindref="compound">QueuesData</ref> const *</type>
+          <declname>parent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="183" column="10" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="183" bodyend="186"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor::FlagCombination&lt; QueueFamilyFlag &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; QueueFamilyFlag &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::QueueData</label>
+        <link refid="d3/d0e/a06399"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>parent</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::QueuesData</label>
+        <link refid="db/de7/a06407"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>familySupport</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::FlagCombination&lt; FlagType &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/RenderDevice.hpp" line="176" column="1" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="177" bodyend="191"/>
+    <listofallmembers>
+      <member refid="d3/d0e/a06399_1a05e44cc927d33ffdbbc113102cd70172" prot="public" virt="non-virtual"><scope>castor3d::QueueData</scope><name>commandPool</name></member>
+      <member refid="d3/d0e/a06399_1a0a52223c612645e9cb50d6afd516da1a" prot="public" virt="non-virtual"><scope>castor3d::QueueData</scope><name>operator=</name></member>
+      <member refid="d3/d0e/a06399_1ac80707e0229738ba4fce3012c1d5990e" prot="public" virt="non-virtual"><scope>castor3d::QueueData</scope><name>operator=</name></member>
+      <member refid="d3/d0e/a06399_1ab944da5330def14cd9cee5a1880353bf" prot="public" virt="non-virtual"><scope>castor3d::QueueData</scope><name>parent</name></member>
+      <member refid="d3/d0e/a06399_1a9ea5f5a06a287dfd20f4fa0763c0691a" prot="public" virt="non-virtual"><scope>castor3d::QueueData</scope><name>queue</name></member>
+      <member refid="d3/d0e/a06399_1afd7207d167e1315cbfdff7a2693738d1" prot="public" virt="non-virtual"><scope>castor3d::QueueData</scope><name>QueueData</name></member>
+      <member refid="d3/d0e/a06399_1a88c972becdfacf74f43e9d87e0fc719c" prot="public" virt="non-virtual"><scope>castor3d::QueueData</scope><name>QueueData</name></member>
+      <member refid="d3/d0e/a06399_1ad3c77458ecd2e6a514889c41fca1db5e" prot="public" virt="non-virtual"><scope>castor3d::QueueData</scope><name>QueueData</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

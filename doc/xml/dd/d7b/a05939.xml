@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d7b/a05939" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::DebugDrawer::Pipeline</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/d7b/a05939_1a728c1a242f6aba0c9707b16f2887ee85" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::DebugDrawer::Pipeline::descriptorLayout</definition>
+        <argsstring></argsstring>
+        <name>descriptorLayout</name>
+        <qualifiedname>castor3d::DebugDrawer::Pipeline::descriptorLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Debug/DebugDrawer.hpp" line="76" column="31" bodyfile="Castor3D/Render/Debug/DebugDrawer.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d7b/a05939_1a6b30d666ae6de32ea9fa4d71dcdc7ef4" prot="public" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::DebugDrawer::Pipeline::pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>pipelineLayout</name>
+        <qualifiedname>castor3d::DebugDrawer::Pipeline::pipelineLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Debug/DebugDrawer.hpp" line="77" column="26" bodyfile="Castor3D/Render/Debug/DebugDrawer.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d7b/a05939_1a34228450aea282cb570afe76cbe51904" prot="public" static="no" mutable="no">
+        <type>ashes::GraphicsPipelinePtr</type>
+        <definition>ashes::GraphicsPipelinePtr castor3d::DebugDrawer::Pipeline::pipeline</definition>
+        <argsstring></argsstring>
+        <name>pipeline</name>
+        <qualifiedname>castor3d::DebugDrawer::Pipeline::pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Debug/DebugDrawer.hpp" line="78" column="28" bodyfile="Castor3D/Render/Debug/DebugDrawer.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d7b/a05939_1abcde2f14b7b6f2a9e268bfcda25f475a" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::DebugDrawer::Pipeline::descriptorPool</definition>
+        <argsstring></argsstring>
+        <name>descriptorPool</name>
+        <qualifiedname>castor3d::DebugDrawer::Pipeline::descriptorPool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Debug/DebugDrawer.hpp" line="79" column="29" bodyfile="Castor3D/Render/Debug/DebugDrawer.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d7b/a05939_1a1b1c93d6e41e5617b8e9e6ba4df0505b" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::DebugDrawer::Pipeline::descriptorSet</definition>
+        <argsstring></argsstring>
+        <name>descriptorSet</name>
+        <qualifiedname>castor3d::DebugDrawer::Pipeline::descriptorSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Debug/DebugDrawer.hpp" line="80" column="25" bodyfile="Castor3D/Render/Debug/DebugDrawer.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d7b/a05939_1a6bd3f9fa38daa7c31b0f8e4c695d1fe4" prot="public" static="no" mutable="no">
+        <type><ref refid="de/d3d/a03515" kindref="compound">ObjectBufferOffset</ref></type>
+        <definition>ObjectBufferOffset castor3d::DebugDrawer::Pipeline::vertices</definition>
+        <argsstring></argsstring>
+        <name>vertices</name>
+        <qualifiedname>castor3d::DebugDrawer::Pipeline::vertices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Debug/DebugDrawer.hpp" line="81" column="20" bodyfile="Castor3D/Render/Debug/DebugDrawer.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d7b/a05939_1a8c51c71e0e237764f6d9cb3ef54707f9" prot="public" static="no" mutable="no">
+        <type><ref refid="de/d3d/a03515" kindref="compound">ObjectBufferOffset</ref></type>
+        <definition>ObjectBufferOffset castor3d::DebugDrawer::Pipeline::indices</definition>
+        <argsstring></argsstring>
+        <name>indices</name>
+        <qualifiedname>castor3d::DebugDrawer::Pipeline::indices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Debug/DebugDrawer.hpp" line="82" column="20" bodyfile="Castor3D/Render/Debug/DebugDrawer.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::DebugDrawer::Pipeline</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>indices</edgelabel>
+          <edgelabel>vertices</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ObjectBufferOffset</label>
+        <link refid="de/d3d/a03515"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/Debug/DebugDrawer.hpp" line="74" column="1" bodyfile="Castor3D/Render/Debug/DebugDrawer.hpp" bodystart="75" bodyend="83"/>
+    <listofallmembers>
+      <member refid="dd/d7b/a05939_1a728c1a242f6aba0c9707b16f2887ee85" prot="public" virt="non-virtual"><scope>castor3d::DebugDrawer::Pipeline</scope><name>descriptorLayout</name></member>
+      <member refid="dd/d7b/a05939_1abcde2f14b7b6f2a9e268bfcda25f475a" prot="public" virt="non-virtual"><scope>castor3d::DebugDrawer::Pipeline</scope><name>descriptorPool</name></member>
+      <member refid="dd/d7b/a05939_1a1b1c93d6e41e5617b8e9e6ba4df0505b" prot="public" virt="non-virtual"><scope>castor3d::DebugDrawer::Pipeline</scope><name>descriptorSet</name></member>
+      <member refid="dd/d7b/a05939_1a8c51c71e0e237764f6d9cb3ef54707f9" prot="public" virt="non-virtual"><scope>castor3d::DebugDrawer::Pipeline</scope><name>indices</name></member>
+      <member refid="dd/d7b/a05939_1a34228450aea282cb570afe76cbe51904" prot="public" virt="non-virtual"><scope>castor3d::DebugDrawer::Pipeline</scope><name>pipeline</name></member>
+      <member refid="dd/d7b/a05939_1a6b30d666ae6de32ea9fa4d71dcdc7ef4" prot="public" virt="non-virtual"><scope>castor3d::DebugDrawer::Pipeline</scope><name>pipelineLayout</name></member>
+      <member refid="dd/d7b/a05939_1a6bd3f9fa38daa7c31b0f8e4c695d1fe4" prot="public" virt="non-virtual"><scope>castor3d::DebugDrawer::Pipeline</scope><name>vertices</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

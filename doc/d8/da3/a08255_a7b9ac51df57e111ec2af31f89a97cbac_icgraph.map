@@ -1,0 +1,21 @@
+<map id="castor::ResourceCacheBaseT::cleanup" name="castor::ResourceCacheBaseT::cleanup">
+<area shape="rect" id="Node000001" title="Sets all the elements to be cleaned up." alt="" coords="720,133,908,173"/>
+<area shape="rect" id="Node000002" href="$d8/da3/a08255.html#a74a35e486aa159b89451ccfb86e2dbd9" title=" " alt="" coords="484,133,672,173"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="706,155,672,155,672,150,706,150"/>
+<area shape="rect" id="Node000003" href="$d8/da3/a08255.html#a21d0ef274f434e61b1d0c336a8c7253a" title="Logging version of tryRemove." alt="" coords="248,27,436,67"/>
+<area shape="poly" id="edge8_Node000001_Node000003" title=" " alt="" coords="758,130,671,98,549,72,436,58,437,52,550,67,673,93,760,125"/>
+<area shape="rect" id="Node000006" href="$d8/da3/a08255.html#a55752549d182d7d232c432746b6b5312" title="Logging version of tryRemove." alt="" coords="248,93,436,133"/>
+<area shape="poly" id="edge9_Node000001_Node000006" title=" " alt="" coords="723,132,672,123,549,114,436,113,436,107,549,109,672,118,724,127"/>
+<area shape="rect" id="Node000007" href="$d8/da3/a08255.html#a5d16d1a42b2ea9518a97d9d8e1408140" title="Removes an element, given a name." alt="" coords="248,159,436,199"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="726,178,672,187,549,193,436,190,436,184,549,188,672,182,725,173"/>
+<area shape="rect" id="Node000008" href="$d8/da3/a08255.html#aa66962c4bd8bfec19c1d9df146349f9e" title="Removes an element, given a name." alt="" coords="248,229,436,269"/>
+<area shape="poly" id="edge11_Node000001_Node000008" title=" " alt="" coords="740,179,673,198,550,222,436,240,436,234,549,217,671,193,739,174"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="527,128,435,83,402,70,404,65,437,78,530,124"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="470,137,436,131,437,126,471,132"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="471,167,437,171,436,166,470,162"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="517,181,437,214,394,231,392,226,435,209,515,176"/>
+<area shape="rect" id="Node000004" href="$d8/d4f/a03703.html#addc711e1060765415a0812574efb17a7" title=" " alt="" coords="5,5,200,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="234,37,200,33,200,27,235,32"/>
+<area shape="rect" id="Node000005" href="$d8/d4f/a03703.html#a5df7c3836acec8a82912d16172ef0b01" title=" " alt="" coords="18,55,187,95"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="234,63,188,68,187,63,234,57"/>
+</map>

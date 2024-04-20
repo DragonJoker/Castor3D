@@ -1,0 +1,11 @@
+<map id="castor3d::BinaryParserBase::checkError" name="castor3d::BinaryParserBase::checkError">
+<area shape="rect" id="Node000001" title=" " alt="" coords="472,63,657,103"/>
+<area shape="rect" id="Node000002" href="$dd/de1/a03223.html#a035881aba2b64571b30a5efd3faaf3d9" title="Parses the header chunk." alt="" coords="239,5,424,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="469,62,413,48,414,43,470,57"/>
+<area shape="rect" id="Node000003" href="$dd/de1/a03223.html#a5db83668684ca219f67de3a381898e64" title="From file reader function." alt="" coords="5,35,191,75"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="458,79,191,63,191,58,458,74"/>
+<area shape="rect" id="Node000004" href="$dd/de1/a03223.html#a6bbbb529f463085c7d259600ae1b3e99" title="From chunk reader function." alt="" coords="239,120,424,160"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="470,109,414,123,413,117,469,103"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="225,41,191,46,191,40,225,36"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="137,23,124,16,98,13,76,15,62,20,57,26,60,34,55,35,52,25,59,16,74,10,98,8,125,11,140,18"/>
+</map>

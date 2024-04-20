@@ -1,5 +1,17 @@
-<map id="castor3d::PtrCacheTraitsT&lt; Overlay, castor::String &gt;" name="castor3d::PtrCacheTraitsT&lt; Overlay, castor::String &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="5,227,188,267"/>
-<area shape="rect" id="node2" href="$dd/dde/a02958.html" title=" " alt="" coords="13,123,180,177"/>
-<area shape="rect" id="node3" href="$dd/dde/a02958.html" title=" " alt="" coords="13,5,180,45"/>
+<map id="castor3d::PassComponent" name="castor3d::PassComponent">
+<area shape="rect" id="Node000001" title=" " alt="" coords="683,97,859,122"/>
+<area shape="rect" id="Node000002" href="$d6/da8/a08227.html" title=" " alt="" coords="331,7,507,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="510,33,659,67,739,94,737,99,658,72,509,38"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="13,7,196,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="210,17,331,17,331,23,210,23"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="356,57,483,97"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="497,82,683,99,682,104,496,87"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="41,57,168,97"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="182,75,356,75,356,80,182,80"/>
+<area shape="rect" id="Node000006" href="$d2/d2e/a04831.html" title=" " alt="" coords="313,122,525,147"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="539,132,658,125,702,119,703,125,659,131,539,137"/>
+<area shape="rect" id="Node000007" href="$d6/da6/a04827.html" title=" " alt="" coords="318,172,521,212"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="534,176,596,165,658,151,702,136,741,120,743,125,704,141,659,156,597,171,534,181"/>
+<area shape="rect" id="Node000008" href="$d2/d04/a04815.html" title=" " alt="" coords="5,179,204,205"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="218,189,318,189,318,195,218,195"/>
 </map>

@@ -1,0 +1,11 @@
+<map id="castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock" name="castor3d::ConfigurationVisitorBase::ConfigurationVisitorBlock">
+<area shape="rect" id="Node000001" title=" " alt="" coords="129,211,334,251"/>
+<area shape="rect" id="Node000002" href="$db/dc2/a05011.html" title=" " alt="" coords="5,115,228,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,148,212,209,208,213,138,152"/>
+<area shape="rect" id="Node000003" href="$d0/d0c/a05015.html" title=" " alt="" coords="21,5,213,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="119,59,119,115,114,115,114,59"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="252,108,379,148"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="293,160,249,212,245,209,289,157"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="252,5,379,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="318,59,318,108,313,108,313,59"/>
+</map>

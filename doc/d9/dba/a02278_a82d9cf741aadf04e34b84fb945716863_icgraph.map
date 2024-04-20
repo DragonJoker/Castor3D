@@ -1,0 +1,11 @@
+<map id="castor3d::makeGpuFunctorEvent" name="castor3d::makeGpuFunctorEvent">
+<area shape="rect" id="Node000001" title="Helper function to create a functor event." alt="" coords="471,37,651,77"/>
+<area shape="rect" id="Node000002" href="$d9/dba/a02278.html#a424692ba227ad469a00aa18d1fdbd802" title="Helper function to create a cleanup event." alt="" coords="240,5,423,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="457,46,422,41,423,35,457,40"/>
+<area shape="rect" id="Node000004" href="$d9/dba/a02278.html#aaf67c7f08e12d5b908a8e9d0d95df55e" title="Helper function to create an initialise event." alt="" coords="240,69,423,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="457,74,423,79,422,74,457,69"/>
+<area shape="rect" id="Node000003" href="$d1/d22/a03731.html#a46ed639594b040664061bb864c8d38c1" title=" " alt="" coords="9,5,189,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="226,28,189,28,189,23,226,23"/>
+<area shape="rect" id="Node000005" href="$d1/df0/a03727.html#ac39ad25122a42c42858573c48b06f8a0" title=" " alt="" coords="5,69,192,109"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="226,92,192,92,192,87,226,87"/>
+</map>

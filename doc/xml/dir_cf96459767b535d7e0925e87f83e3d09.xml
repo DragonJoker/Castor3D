@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dir_cf96459767b535d7e0925e87f83e3d09" kind="dir">
+    <compoundname>CastorUtils/Design</compoundname>
+    <innerfile refid="d9/d7d/a01880">ArrayView.hpp</innerfile>
+    <innerfile refid="db/d4b/a01883">BlockGuard.hpp</innerfile>
+    <innerfile refid="d9/dd5/a01886">ChangeTracked.hpp</innerfile>
+    <innerfile refid="d9/d9b/a01889">DataHolder.hpp</innerfile>
+    <innerfile refid="dc/d31/a01892">DesignModule.hpp</innerfile>
+    <innerfile refid="db/d29/a01895">DynamicBitset.hpp</innerfile>
+    <innerfile refid="dd/d8e/a01898">Factory.hpp</innerfile>
+    <innerfile refid="d5/d99/a01901">FlagCombination.hpp</innerfile>
+    <innerfile refid="d4/d0d/a01904">GroupChangeTracked.hpp</innerfile>
+    <innerfile refid="de/dca/a01907">Named.hpp</innerfile>
+    <innerfile refid="d4/dff/a01910">NonCopyable.hpp</innerfile>
+    <innerfile refid="d4/d07/a01913">OwnedBy.hpp</innerfile>
+    <innerfile refid="d0/d36/a01916">Resource.hpp</innerfile>
+    <innerfile refid="de/d90/a01919">ResourceCache.hpp</innerfile>
+    <innerfile refid="dd/d19/a01922">ResourceCacheBase.hpp</innerfile>
+    <innerfile refid="d6/d18/a01925">ScopeGuard.hpp</innerfile>
+    <innerfile refid="d1/db0/a01928">Signal.hpp</innerfile>
+    <innerfile refid="d5/d31/a01931">Templates.hpp</innerfile>
+    <innerfile refid="de/da9/a01934">ThreadSafeSignal.hpp</innerfile>
+    <innerfile refid="d9/d17/a01937">UnicityException.hpp</innerfile>
+    <innerfile refid="d5/dba/a01940">Unique.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Design/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,481 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/da4/a02295" kind="namespace" language="C++">
+    <compoundname>castor::format</compoundname>
+    <innerclass refid="d0/ddd/a09551" prot="public">castor::format::BasePrefixer</innerclass>
+    <innerclass refid="d7/d2b/a09531" prot="public">castor::format::BasicIndentBuffer</innerclass>
+    <innerclass refid="d4/d72/a09535" prot="public">castor::format::BasicIndentBufferManager</innerclass>
+    <innerclass refid="dd/d27/a09559" prot="public">castor::format::BasicLinePrefixTraits</innerclass>
+    <innerclass refid="d7/dfc/a09543" prot="public">castor::format::BasicPrefixBuffer</innerclass>
+    <innerclass refid="d0/d6f/a09547" prot="public">castor::format::BasicPrefixBufferManager</innerclass>
+    <innerclass refid="d9/d7e/a09555" prot="public">castor::format::BasicPrefixTraits</innerclass>
+    <innerclass refid="d4/d2d/a09539" prot="public">castor::format::Indent</innerclass>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="dd/da4/a02295_1ac0c48921f94f5795938caa17da3596fd" prot="public" static="no">
+        <type><ref refid="d7/d2b/a09531" kindref="compound">BasicIndentBuffer</ref>&lt; char &gt;</type>
+        <definition>using castor::format::SpaceIndentBuffer =  BasicIndentBuffer&lt; char &gt;</definition>
+        <argsstring></argsstring>
+        <name>SpaceIndentBuffer</name>
+        <qualifiedname>castor::format::SpaceIndentBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamModule.hpp" line="93" column="1" bodyfile="CastorUtils/Stream/StreamModule.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/da4/a02295_1a5410bbaad66effc6b898552a0adffb55" prot="public" static="no">
+        <type><ref refid="d7/d2b/a09531" kindref="compound">BasicIndentBuffer</ref>&lt; wchar_t &gt;</type>
+        <definition>using castor::format::WSpaceIndentBuffer =  BasicIndentBuffer&lt; wchar_t &gt;</definition>
+        <argsstring></argsstring>
+        <name>WSpaceIndentBuffer</name>
+        <qualifiedname>castor::format::WSpaceIndentBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamModule.hpp" line="94" column="1" bodyfile="CastorUtils/Stream/StreamModule.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/da4/a02295_1a1afee6c0f750dd35928dba1ae508f96d" prot="public" static="no">
+        <type><ref refid="d7/d2b/a09531" kindref="compound">BasicIndentBuffer</ref>&lt; char, &apos;\t&apos; &gt;</type>
+        <definition>using castor::format::TabIndentBuffer =  BasicIndentBuffer&lt; char, &apos;\t&apos; &gt;</definition>
+        <argsstring></argsstring>
+        <name>TabIndentBuffer</name>
+        <qualifiedname>castor::format::TabIndentBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamModule.hpp" line="96" column="1" bodyfile="CastorUtils/Stream/StreamModule.hpp" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/da4/a02295_1aeb2de61d0b2a39c2727b1f21e3b65aa0" prot="public" static="no">
+        <type><ref refid="d7/d2b/a09531" kindref="compound">BasicIndentBuffer</ref>&lt; wchar_t, L&apos;\t&apos; &gt;</type>
+        <definition>using castor::format::WTabIndentBuffer =  BasicIndentBuffer&lt; wchar_t, L&apos;\t&apos; &gt;</definition>
+        <argsstring></argsstring>
+        <name>WTabIndentBuffer</name>
+        <qualifiedname>castor::format::WTabIndentBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamModule.hpp" line="97" column="1" bodyfile="CastorUtils/Stream/StreamModule.hpp" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/da4/a02295_1aae643c789827f2662fb1cada2a7f93d6" prot="public" static="no">
+        <type><ref refid="d4/d72/a09535" kindref="compound">BasicIndentBufferManager</ref>&lt; char, std::char_traits&lt; char &gt; &gt;</type>
+        <definition>using castor::format::IndentBufferManager =  BasicIndentBufferManager&lt; char, std::char_traits&lt; char &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>IndentBufferManager</name>
+        <qualifiedname>castor::format::IndentBufferManager</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamModule.hpp" line="99" column="1" bodyfile="CastorUtils/Stream/StreamModule.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/da4/a02295_1ad2cd1ed0904e2652b51cee3cb133a828" prot="public" static="no">
+        <type><ref refid="d4/d72/a09535" kindref="compound">BasicIndentBufferManager</ref>&lt; wchar_t, std::char_traits&lt; wchar_t &gt; &gt;</type>
+        <definition>using castor::format::WIndentBufferManager =  BasicIndentBufferManager&lt; wchar_t, std::char_traits&lt; wchar_t &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>WIndentBufferManager</name>
+        <qualifiedname>castor::format::WIndentBufferManager</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamModule.hpp" line="100" column="1" bodyfile="CastorUtils/Stream/StreamModule.hpp" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/da4/a02295_1a36a8339208b4a14472e9c73dff9b3759" prot="public" static="no">
+        <type><ref refid="d0/ddd/a09551" kindref="compound">BasePrefixer</ref>&lt; char, <ref refid="d9/d7e/a09555" kindref="compound">BasicPrefixTraits</ref>&lt; char &gt; &gt;</type>
+        <definition>using castor::format::Prefix =  BasePrefixer&lt; char, BasicPrefixTraits&lt; char &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>Prefix</name>
+        <qualifiedname>castor::format::Prefix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamModule.hpp" line="102" column="1" bodyfile="CastorUtils/Stream/StreamModule.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/da4/a02295_1a9a0c8e4cd592ff080d58e8d38d26251b" prot="public" static="no">
+        <type><ref refid="d0/ddd/a09551" kindref="compound">BasePrefixer</ref>&lt; wchar_t, <ref refid="d9/d7e/a09555" kindref="compound">BasicPrefixTraits</ref>&lt; wchar_t &gt; &gt;</type>
+        <definition>using castor::format::WPrefix =  BasePrefixer&lt; wchar_t, BasicPrefixTraits&lt; wchar_t &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>WPrefix</name>
+        <qualifiedname>castor::format::WPrefix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamModule.hpp" line="103" column="1" bodyfile="CastorUtils/Stream/StreamModule.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/da4/a02295_1afa6378442b2ac3e3df6c08557149718c" prot="public" static="no">
+        <type><ref refid="d0/ddd/a09551" kindref="compound">BasePrefixer</ref>&lt; char, <ref refid="dd/d27/a09559" kindref="compound">BasicLinePrefixTraits</ref>&lt; char &gt; &gt;</type>
+        <definition>using castor::format::LinePrefix =  BasePrefixer&lt; char, BasicLinePrefixTraits&lt; char &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>LinePrefix</name>
+        <qualifiedname>castor::format::LinePrefix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamModule.hpp" line="105" column="1" bodyfile="CastorUtils/Stream/StreamModule.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/da4/a02295_1a374ae7c3442bcc35aba4af11ba310174" prot="public" static="no">
+        <type><ref refid="d0/ddd/a09551" kindref="compound">BasePrefixer</ref>&lt; wchar_t, <ref refid="dd/d27/a09559" kindref="compound">BasicLinePrefixTraits</ref>&lt; wchar_t &gt; &gt;</type>
+        <definition>using castor::format::WLinePrefix =  BasePrefixer&lt; wchar_t, BasicLinePrefixTraits&lt; wchar_t &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>WLinePrefix</name>
+        <qualifiedname>castor::format::WLinePrefix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamModule.hpp" line="106" column="1" bodyfile="CastorUtils/Stream/StreamModule.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/da4/a02295_1af8d4d207d786877138343de17a3e73f0" prot="public" static="no">
+        <type><ref refid="d7/dfc/a09543" kindref="compound">BasicPrefixBuffer</ref>&lt; <ref refid="dd/da4/a02295_1a36a8339208b4a14472e9c73dff9b3759" kindref="member">Prefix</ref>, char &gt;</type>
+        <definition>using castor::format::PrefixBuffer =  BasicPrefixBuffer&lt; Prefix, char &gt;</definition>
+        <argsstring></argsstring>
+        <name>PrefixBuffer</name>
+        <qualifiedname>castor::format::PrefixBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamModule.hpp" line="108" column="1" bodyfile="CastorUtils/Stream/StreamModule.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/da4/a02295_1a91ce1ee73a270c330db03a1d05d1ac15" prot="public" static="no">
+        <type><ref refid="d7/dfc/a09543" kindref="compound">BasicPrefixBuffer</ref>&lt; <ref refid="dd/da4/a02295_1a9a0c8e4cd592ff080d58e8d38d26251b" kindref="member">WPrefix</ref>, wchar_t &gt;</type>
+        <definition>using castor::format::WPrefixBuffer =  BasicPrefixBuffer&lt; WPrefix, wchar_t &gt;</definition>
+        <argsstring></argsstring>
+        <name>WPrefixBuffer</name>
+        <qualifiedname>castor::format::WPrefixBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamModule.hpp" line="109" column="1" bodyfile="CastorUtils/Stream/StreamModule.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/da4/a02295_1aeeca4b6e9c27ad1501cb2712c65d25fe" prot="public" static="no">
+        <type><ref refid="d7/dfc/a09543" kindref="compound">BasicPrefixBuffer</ref>&lt; <ref refid="dd/da4/a02295_1afa6378442b2ac3e3df6c08557149718c" kindref="member">LinePrefix</ref>, char &gt;</type>
+        <definition>using castor::format::LinePrefixBuffer =  BasicPrefixBuffer&lt; LinePrefix, char &gt;</definition>
+        <argsstring></argsstring>
+        <name>LinePrefixBuffer</name>
+        <qualifiedname>castor::format::LinePrefixBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamModule.hpp" line="111" column="1" bodyfile="CastorUtils/Stream/StreamModule.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/da4/a02295_1aaaef645e8a068b082be35fb80058c51e" prot="public" static="no">
+        <type><ref refid="d7/dfc/a09543" kindref="compound">BasicPrefixBuffer</ref>&lt; <ref refid="dd/da4/a02295_1a374ae7c3442bcc35aba4af11ba310174" kindref="member">WLinePrefix</ref>, wchar_t &gt;</type>
+        <definition>using castor::format::WLinePrefixBuffer =  BasicPrefixBuffer&lt; WLinePrefix, wchar_t &gt;</definition>
+        <argsstring></argsstring>
+        <name>WLinePrefixBuffer</name>
+        <qualifiedname>castor::format::WLinePrefixBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamModule.hpp" line="112" column="1" bodyfile="CastorUtils/Stream/StreamModule.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="dd/da4/a02295_1a866895ab689f76857dc64ebec430872c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>long &amp;</type>
+        <definition>long &amp; castor::format::indentValue</definition>
+        <argsstring>(std::ios_base &amp;ios)</argsstring>
+        <name>indentValue</name>
+        <qualifiedname>castor::format::indentValue</qualifiedname>
+        <param>
+          <type>std::ios_base &amp;</type>
+          <declname>ios</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur d&apos;indentation pour le flux donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">ios</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le flux </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur la valeur d&apos;indentation actuelle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentManipulators.hpp" line="42" column="14" bodyfile="CastorUtils/Stream/StreamIndentManipulators.hpp" bodystart="42" bodyend="46"/>
+        <referencedby refid="dd/da4/a02295_1ad11991b97148aca914bdcd8d7b77072b" compoundref="d7/d24/a02261" startline="57" endline="60">getIndent</referencedby>
+        <referencedby refid="dd/da4/a02295_1a64252245b850a1fd8c64f337aaa26c29" compoundref="d7/d24/a02261" startline="71" endline="74">setIndent</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/da4/a02295_1ad11991b97148aca914bdcd8d7b77072b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>long</type>
+        <definition>long castor::format::getIndent</definition>
+        <argsstring>(std::ios_base &amp;ios)</argsstring>
+        <name>getIndent</name>
+        <qualifiedname>castor::format::getIndent</qualifiedname>
+        <param>
+          <type>std::ios_base &amp;</type>
+          <declname>ios</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur d&apos;indentation pour le flux donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">ios</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le flux </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La valeur d&apos;indentation </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentManipulators.hpp" line="57" column="13" bodyfile="CastorUtils/Stream/StreamIndentManipulators.hpp" bodystart="57" bodyend="60"/>
+        <references refid="dd/da4/a02295_1a866895ab689f76857dc64ebec430872c" compoundref="d7/d24/a02261" startline="42" endline="46">indentValue</references>
+        <referencedby refid="dd/da4/a02295_1adfece89cf0c7305fca2ad98e0537e9d8" compoundref="d7/d24/a02261" startline="98" endline="121">callback</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/da4/a02295_1a64252245b850a1fd8c64f337aaa26c29" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::format::setIndent</definition>
+        <argsstring>(std::ios_base &amp;ios, unsigned int val)</argsstring>
+        <name>setIndent</name>
+        <qualifiedname>castor::format::setIndent</qualifiedname>
+        <param>
+          <type>std::ios_base &amp;</type>
+          <declname>ios</declname>
+        </param>
+        <param>
+          <type>unsigned int</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+<para>Définit la valeur d&apos;indentation pour le flux donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">ios</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le flux </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">val</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La nouvelle valeur d&apos;indentation </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentManipulators.hpp" line="71" column="13" bodyfile="CastorUtils/Stream/StreamIndentManipulators.hpp" bodystart="71" bodyend="74"/>
+        <references refid="dd/da4/a02295_1a866895ab689f76857dc64ebec430872c" compoundref="d7/d24/a02261" startline="42" endline="46">indentValue</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/da4/a02295_1a4cee44f81f0f44959e09376bc4bd5025" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharType</type>
+          </param>
+          <param>
+            <type>typename BufferType</type>
+            <defval>BasicIndentBuffer&lt; CharType &gt;</defval>
+          </param>
+          <param>
+            <type>typename BufferManagerType</type>
+            <defval>BasicIndentBufferManager&lt; CharType &gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>BufferType *</type>
+        <definition>BufferType * castor::format::installIndentBuffer</definition>
+        <argsstring>(std::basic_ostream&lt; CharType &gt; &amp;stream)</argsstring>
+        <name>installIndentBuffer</name>
+        <qualifiedname>castor::format::installIndentBuffer</qualifiedname>
+        <param>
+          <type>std::basic_ostream&lt; CharType &gt; &amp;</type>
+          <declname>stream</declname>
+        </param>
+        <briefdescription>
+<para>Initialise le flux afin de pouvoir l&apos;indenter. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">stream</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le flux </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentManipulators.hpp" line="84" column="20" bodyfile="CastorUtils/Stream/StreamIndentManipulators.hpp" bodystart="84" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/da4/a02295_1adfece89cf0c7305fca2ad98e0537e9d8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharType</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::format::callback</definition>
+        <argsstring>(std::ios_base::event ev, std::ios_base &amp;ios, CU_UnusedParam(int, x))</argsstring>
+        <name>callback</name>
+        <qualifiedname>castor::format::callback</qualifiedname>
+        <param>
+          <type>std::ios_base::event</type>
+          <declname>ev</declname>
+        </param>
+        <param>
+          <type>std::ios_base &amp;</type>
+          <declname>ios</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d62/a01805_1a13ec5452e4b085806a30126e07306693" kindref="member">CU_UnusedParam</ref>(int, x)</type>
+        </param>
+        <briefdescription>
+<para>Le callback des évènements du flux. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentManipulators.hpp" line="98" column="13" bodyfile="CastorUtils/Stream/StreamIndentManipulators.hpp" bodystart="98" bodyend="121"/>
+        <references refid="dd/da4/a02295_1ad11991b97148aca914bdcd8d7b77072b" compoundref="d7/d24/a02261" startline="57" endline="60">getIndent</references>
+        <references refid="d4/d72/a09535_1a9af195ed1d4ec17429040e764bbb8e12" compoundref="dc/db6/a02258" startline="162" endline="166">castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::instance</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/da4/a02295_1a7d0f2260aa89f513bc5c95844f37ca2e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename PrefixType</type>
+          </param>
+          <param>
+            <type>typename CharType</type>
+          </param>
+          <param>
+            <type>typename BufferType</type>
+            <defval>BasicPrefixBuffer&lt; BasePrefixer&lt; CharType, PrefixType &gt;, CharType &gt;</defval>
+          </param>
+          <param>
+            <type>typename BufferManagerType</type>
+            <defval>BasicPrefixBufferManager&lt; BasePrefixer&lt; CharType, PrefixType &gt;, CharType &gt;</defval>
+          </param>
+        </templateparamlist>
+        <type>BufferType *</type>
+        <definition>BufferType * castor::format::installPrefixBuffer</definition>
+        <argsstring>(std::basic_ostream&lt; CharType &gt; &amp;stream)</argsstring>
+        <name>installPrefixBuffer</name>
+        <qualifiedname>castor::format::installPrefixBuffer</qualifiedname>
+        <param>
+          <type>std::basic_ostream&lt; CharType &gt; &amp;</type>
+          <declname>stream</declname>
+        </param>
+        <briefdescription>
+<para>Initialise le flux afin de pouvoir l&apos;indenter. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">stream</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le flux </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixManipulators.hpp" line="56" column="20" bodyfile="CastorUtils/Stream/StreamPrefixManipulators.hpp" bodystart="56" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/da4/a02295_1a9a39f57fba5779f316940f3bd1723962" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename PrefixType</type>
+          </param>
+          <param>
+            <type>typename CharType</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::format::callback</definition>
+        <argsstring>(std::ios_base::event ev, std::ios_base &amp;ios, CU_UnusedParam(int, x))</argsstring>
+        <name>callback</name>
+        <qualifiedname>castor::format::callback</qualifiedname>
+        <param>
+          <type>std::ios_base::event</type>
+          <declname>ev</declname>
+        </param>
+        <param>
+          <type>std::ios_base &amp;</type>
+          <declname>ios</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d62/a01805_1a13ec5452e4b085806a30126e07306693" kindref="member">CU_UnusedParam</ref>(int, x)</type>
+        </param>
+        <briefdescription>
+<para>Le callback des évènements du flux. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixManipulators.hpp" line="70" column="13" bodyfile="CastorUtils/Stream/StreamPrefixManipulators.hpp" bodystart="70" bodyend="93"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Stream/StreamIndentBuffer.hpp" line="13" column="1"/>
+  </compounddef>
+</doxygen>

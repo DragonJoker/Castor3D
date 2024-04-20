@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/ddf/a07979" kind="class" language="C++" prot="public">
+    <compoundname>castor::BinaryWriter</compoundname>
+    <basecompoundref refid="db/d9d/a07995" prot="public" virt="non-virtual">castor::FileWriter&lt; T, FileType::eBinary &gt;</basecompoundref>
+    <includes local="no">BinaryWriter.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="protected-type">
+      <memberdef kind="typedef" id="d5/ddf/a07979_1a04ce852ecb152d3ad6541ae0b36aa4de" prot="protected" static="no">
+        <type>typename <ref refid="db/d9d/a07995" kindref="compound">FileWriter</ref>&lt; T, <ref refid="d2/dd2/a02279_1ac4972a01abb873aee032c3071b56cbe4aef6572f06eb221f3fcc2a3efd4f39c5e" kindref="member">FileType::eBinary</ref> &gt;::Type</type>
+        <definition>using castor::BinaryWriter&lt; T &gt;::Type =  typename FileWriter&lt; T, FileType::eBinary &gt;::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor::BinaryWriter::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/BinaryWriter.hpp" line="17" column="1" bodyfile="CastorUtils/Data/BinaryWriter.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/ddf/a07979_1ab894c783ebe397026b631bf7df49f945" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::BinaryWriter&lt; T &gt;::BinaryWriter</definition>
+        <argsstring>()=default</argsstring>
+        <name>BinaryWriter</name>
+        <qualifiedname>castor::BinaryWriter::BinaryWriter</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/BinaryWriter.hpp" line="26" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/ddf/a07979_1aec8057a9f8089816b77922226547c701" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::BinaryWriter&lt; T &gt;::~BinaryWriter</definition>
+        <argsstring>() noexcept override=default</argsstring>
+        <name>~BinaryWriter</name>
+        <qualifiedname>castor::BinaryWriter::~BinaryWriter</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/BinaryWriter.hpp" line="33" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Spécialisation partielle de <ref refid="d3/d77/a07999" kindref="compound">castor::Loader</ref>, pour les fichiers binaires. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::FileWriter&lt; T, FileType::eBinary &gt;</label>
+        <link refid="db/d9d/a07995"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; T, FileType::eBinary &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::Writer&lt; DataT, FileTyper&lt; FileTypeT &gt;::Type &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; DataT, FileTyper&lt; FileTypeT &gt;::Type &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::BinaryWriter&lt; T &gt;</label>
+        <link refid="d5/ddf/a07979"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::FileWriter&lt; DataT, FileTypeT &gt;</label>
+        <link refid="db/d9d/a07995"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="7">
+        <label>castor::Writer&lt; DataT, StreamT &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Writer&lt; DataT, StreamT &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::FileWriter&lt; T, FileType::eBinary &gt;</label>
+        <link refid="db/d9d/a07995"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; T, FileType::eBinary &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::Writer&lt; DataT, FileTyper&lt; FileTypeT &gt;::Type &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; DataT, FileTyper&lt; FileTypeT &gt;::Type &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::BinaryWriter&lt; T &gt;</label>
+        <link refid="d5/ddf/a07979"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::FileWriter&lt; DataT, FileTypeT &gt;</label>
+        <link refid="db/d9d/a07995"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="7">
+        <label>castor::Writer&lt; DataT, StreamT &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Writer&lt; DataT, StreamT &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Data/BinaryWriter.hpp" line="13" column="1" bodyfile="CastorUtils/Data/BinaryWriter.hpp" bodystart="15" bodyend="34"/>
+    <listofallmembers>
+      <member refid="d5/ddf/a07979_1ab894c783ebe397026b631bf7df49f945" prot="public" virt="non-virtual"><scope>castor::BinaryWriter</scope><name>BinaryWriter</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::BinaryWriter</scope><name>NonMovable</name></member>
+      <member refid="dc/d3a/a07991_1acce0e94bd93e1dd12b330034532ff036" prot="public" virt="virtual"><scope>castor::BinaryWriter</scope><name>operator()</name></member>
+      <member refid="d5/ddf/a07979_1a04ce852ecb152d3ad6541ae0b36aa4de" prot="protected" virt="non-virtual"><scope>castor::BinaryWriter</scope><name>Type</name></member>
+      <member refid="d5/ddf/a07979_1aec8057a9f8089816b77922226547c701" prot="public" virt="non-virtual"><scope>castor::BinaryWriter</scope><name>~BinaryWriter</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::BinaryWriter</scope><name>~NonMovable</name></member>
+      <member refid="dc/d3a/a07991_1a0a52e8b5ddf994f9832bf0a600342999" prot="public" virt="virtual"><scope>castor::BinaryWriter</scope><name>~Writer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d5b/a07947" kind="class" language="C++" prot="public">
+    <compoundname>castor::NonAlignedMemoryAllocator</compoundname>
+    <includes local="no">NonAlignedMemoryAllocator.hpp</includes>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="db/d5b/a07947_1a76e7815b13b56f33a4a8eb255edf9f99" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint8_t *</type>
+        <definition>static uint8_t * castor::NonAlignedMemoryAllocator::allocate</definition>
+        <argsstring>(size_t size)</argsstring>
+        <name>allocate</name>
+        <qualifiedname>castor::NonAlignedMemoryAllocator::allocate</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Alloue de la mémoire. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;adresse mémoire de l&apos;espace alloué. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Align/NonAlignedMemoryAllocator.hpp" line="22" column="17" bodyfile="CastorUtils/Align/NonAlignedMemoryAllocator.hpp" bodystart="22" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5b/a07947_1aa742fbe5f748ba10375f1d9ff469746a" prot="public" static="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor::NonAlignedMemoryAllocator::deallocate</definition>
+        <argsstring>(uint8_t *space) noexcept</argsstring>
+        <name>deallocate</name>
+        <qualifiedname>castor::NonAlignedMemoryAllocator::deallocate</qualifiedname>
+        <param>
+          <type>uint8_t *</type>
+          <declname>space</declname>
+        </param>
+        <briefdescription>
+<para>Libère la mémoire donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">space</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La mémoire à libérer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Align/NonAlignedMemoryAllocator.hpp" line="34" column="13" bodyfile="CastorUtils/Align/NonAlignedMemoryAllocator.hpp" bodystart="34" bodyend="37"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Align/NonAlignedMemoryAllocator.hpp" line="11" column="1" bodyfile="CastorUtils/Align/NonAlignedMemoryAllocator.hpp" bodystart="12" bodyend="38"/>
+    <listofallmembers>
+      <member refid="db/d5b/a07947_1a76e7815b13b56f33a4a8eb255edf9f99" prot="public" virt="non-virtual"><scope>castor::NonAlignedMemoryAllocator</scope><name>allocate</name></member>
+      <member refid="db/d5b/a07947_1aa742fbe5f748ba10375f1d9ff469746a" prot="public" virt="non-virtual"><scope>castor::NonAlignedMemoryAllocator</scope><name>deallocate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

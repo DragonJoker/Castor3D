@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dir_6b53c51ad1896b06b2adf11890ca306b" kind="dir">
+    <compoundname>Render/Overlays</compoundname>
+    <innerfile refid="d1/dfa/a01097">OverlayPass.hpp</innerfile>
+    <innerfile refid="d3/dbd/a01100">OverlayPreparer.hpp</innerfile>
+    <innerfile refid="d9/d10/a01103">OverlayRenderer.hpp</innerfile>
+    <innerfile refid="da/d4e/a01106">OverlaysModule.hpp</innerfile>
+    <innerfile refid="d8/dbf/a01109">OverlayTextBufferPool.hpp</innerfile>
+    <innerfile refid="d0/d39/a01112">OverlayVertexBufferPool.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Overlays/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,9 @@
+<map id="castor3d::Pass::getComponentPlugin" name="castor3d::Pass::getComponentPlugin">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,208,45"/>
+<area shape="rect" id="Node000002" href="$df/d6c/a04863.html#a09fd3f5ff71de87ab9ac6e7aeac1244d" title=" " alt="" coords="507,13,719,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="208,10,256,7,357,3,459,7,493,9,493,14,459,12,357,8,256,12,208,16"/>
+<area shape="rect" id="Node000003" href="$df/d6c/a04863.html#aac04bf8570a1e0e9a72fd1d2158a6ac0" title=" " alt="" coords="256,45,459,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="209,39,243,44,242,50,208,44"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="458,47,517,38,518,43,459,52"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="311,46,308,36,315,26,332,21,357,19,386,22,402,29,400,34,385,27,357,24,333,26,318,31,313,37,316,44"/>
+</map>

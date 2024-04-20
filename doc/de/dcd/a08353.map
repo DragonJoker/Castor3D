@@ -1,0 +1,9 @@
+<map id="castor::Exception" name="castor::Exception">
+<area shape="rect" id="Node000001" title=" " alt="" coords="41,255,165,280"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,115,109,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="68,153,101,254,96,255,63,155"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="134,108,261,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="179,161,113,256,109,253,174,158"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="134,5,261,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="200,59,200,108,195,108,195,59"/>
+</map>

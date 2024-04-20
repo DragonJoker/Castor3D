@@ -1,5 +1,5 @@
-<map id="castor3d::DividerPlugin" name="castor3d::DividerPlugin">
-<area shape="rect" id="node1" title=" " alt="" coords="21,152,176,177"/>
-<area shape="rect" id="node2" href="$d5/d8e/a04874.html" title=" " alt="" coords="41,79,157,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,31"/>
+<map id="castor3d::PassMapComponentPlugin" name="castor3d::PassMapComponentPlugin">
+<area shape="rect" id="Node000001" title=" " alt="" coords="11,79,212,119"/>
+<area shape="rect" id="Node000002" href="$d2/d2e/a04831.html" title=" " alt="" coords="5,5,217,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,44,114,79,109,79,109,44"/>
 </map>

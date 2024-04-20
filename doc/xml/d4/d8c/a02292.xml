@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/d8c/a02292" kind="namespace" language="C++">
+    <compoundname>castor::string::details</compoundname>
+    <innerclass refid="d7/d15/a09423" prot="public">castor::string::details::TrimDefaultArgsT</innerclass>
+    <innerclass refid="d9/d1b/a09427" prot="public">castor::string::details::TrimDefaultArgsT&lt; char &gt;</innerclass>
+    <innerclass refid="d9/d26/a09439" prot="public">castor::string::details::TrimDefaultArgsT&lt; char16_t &gt;</innerclass>
+    <innerclass refid="d9/d29/a09443" prot="public">castor::string::details::TrimDefaultArgsT&lt; char32_t &gt;</innerclass>
+    <innerclass refid="d1/d0d/a09435" prot="public">castor::string::details::TrimDefaultArgsT&lt; char8_t &gt;</innerclass>
+    <innerclass refid="d4/d5c/a09431" prot="public">castor::string::details::TrimDefaultArgsT&lt; wchar_t &gt;</innerclass>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="d4/d8c/a02292_1af51bd2c3818afef8c526eeab4af2c855" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>std::basic_string_view&lt; CharT &gt; constexpr</type>
+        <definition>std::basic_string_view&lt; CharT &gt; constexpr castor::string::details::trimDefaultArgs</definition>
+        <argsstring></argsstring>
+        <name>trimDefaultArgs</name>
+        <qualifiedname>castor::string::details::trimDefaultArgs</qualifiedname>
+        <initializer>= <ref refid="d7/d15/a09423" kindref="compound">TrimDefaultArgsT</ref>&lt; CharT &gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="53" column="34" bodyfile="CastorUtils/Miscellaneous/StringUtils.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Miscellaneous/StringUtils.hpp" line="17" column="1"/>
+  </compounddef>
+</doxygen>

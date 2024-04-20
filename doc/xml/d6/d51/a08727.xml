@@ -1,0 +1,391 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d51/a08727" kind="class" language="C++" prot="public">
+    <compoundname>castor::BoundingBox</compoundname>
+    <basecompoundref refid="da/dc6/a08731" prot="public" virt="non-virtual">castor::BoundingContainer&lt; 3 &gt;</basecompoundref>
+    <includes local="no">BoundingBox.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/d51/a08727_1a01f75bdc33bcaa38be62171d764d4cca" prot="private" static="no" mutable="no">
+        <type>Point3f</type>
+        <definition>Point3f castor::BoundingBox::m_dimensions</definition>
+        <argsstring></argsstring>
+        <name>m_dimensions</name>
+        <qualifiedname>castor::BoundingBox::m_dimensions</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Les dimensions de la bounding box. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingBox.hpp" line="129" column="9" bodyfile="CastorUtils/Graphics/BoundingBox.hpp" bodystart="129" bodyend="129"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d51/a08727_1a87ee7d2de0f07ebdce79d2b6bad9fb82" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::BoundingBox::BoundingBox</definition>
+        <argsstring>()=default</argsstring>
+        <name>BoundingBox</name>
+        <qualifiedname>castor::BoundingBox::BoundingBox</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingBox.hpp" line="15" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d51/a08727_1af37d30d030c2873c8a0a2594ff5e53ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::BoundingBox::BoundingBox</definition>
+        <argsstring>(Point3f const &amp;min, Point3f const &amp;max)</argsstring>
+        <name>BoundingBox</name>
+        <qualifiedname>castor::BoundingBox::BoundingBox</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>min</declname>
+        </param>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>max</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir des points min et max. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">min</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point minimal. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">max</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point maximal. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingBox.hpp" line="26" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d51/a08727_1a97dc1afc1a1ec8b6dedcff6ae516ed3c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/d51/a08727" kindref="compound">BoundingBox</ref></type>
+        <definition>CU_API BoundingBox castor::BoundingBox::getUnion</definition>
+        <argsstring>(BoundingBox const &amp;bb) const</argsstring>
+        <name>getUnion</name>
+        <qualifiedname>castor::BoundingBox::getUnion</qualifiedname>
+        <param>
+          <type><ref refid="d6/d51/a08727" kindref="compound">BoundingBox</ref> const &amp;</type>
+          <declname>bb</declname>
+        </param>
+        <briefdescription>
+<para>Calcule la bounding box résultant de l&apos;union de cette bounding box et de celle donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">bb</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;autre bounding box. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La bounding box résultante. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingBox.hpp" line="37" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d51/a08727_1a3ff4e70bcbee7504e5fdda724a144935" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::BoundingBox::isWithin</definition>
+        <argsstring>(Point3f const &amp;point) const override</argsstring>
+        <name>isWithin</name>
+        <qualifiedname>castor::BoundingBox::isWithin</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Teste si un point est contenu dans le conteneur (mais pas à la limite). </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point à tester. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si le point est dans le conteneur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingBox.hpp" line="48" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d51/a08727_1a2aecdd7b2a28d1414a528f5aed15403c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::BoundingBox::isOnLimits</definition>
+        <argsstring>(Point3f const &amp;point) const override</argsstring>
+        <name>isOnLimits</name>
+        <qualifiedname>castor::BoundingBox::isOnLimits</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Teste si un point est sur la limite du conteneur, et pas dedans. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point à tester. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si le point est sur la limite. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingBox.hpp" line="59" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d51/a08727_1a6bce4aeb3c310195a1762d2e5cea07ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::BoundingBox::load</definition>
+        <argsstring>(Point3f const &amp;min, Point3f const &amp;max)</argsstring>
+        <name>load</name>
+        <qualifiedname>castor::BoundingBox::load</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>min</declname>
+        </param>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>max</declname>
+        </param>
+        <briefdescription>
+<para>Réinitialise la boîte aux limites données. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">min</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point minimal. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">max</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point maximal. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingBox.hpp" line="70" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d51/a08727_1ac667bc5ee0ad4d915513bad96c393c95" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/d51/a08727" kindref="compound">BoundingBox</ref></type>
+        <definition>CU_API BoundingBox castor::BoundingBox::getAxisAligned</definition>
+        <argsstring>(Matrix4x4f const &amp;transformations) const</argsstring>
+        <name>getAxisAligned</name>
+        <qualifiedname>castor::BoundingBox::getAxisAligned</qualifiedname>
+        <param>
+          <type>Matrix4x4f const &amp;</type>
+          <declname>transformations</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la boîte alignée sur les axes, pour les transformations données. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">transformations</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La matrice de transformation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingBox.hpp" line="79" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d51/a08727_1abc8d9e669c301aed07b279ffd6b08c5b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> Point3f</type>
+        <definition>CU_API Point3f castor::BoundingBox::getPositiveVertex</definition>
+        <argsstring>(Point3f const &amp;normal) const</argsstring>
+        <name>getPositiveVertex</name>
+        <qualifiedname>castor::BoundingBox::getPositiveVertex</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>normal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingBox.hpp" line="87" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d51/a08727_1ae43629a052aeb69a773b80b8e532d1fc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> Point3f</type>
+        <definition>CU_API Point3f castor::BoundingBox::getNegativeVertex</definition>
+        <argsstring>(Point3f const &amp;normal) const</argsstring>
+        <name>getNegativeVertex</name>
+        <qualifiedname>castor::BoundingBox::getNegativeVertex</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>normal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingBox.hpp" line="94" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d51/a08727_1a676c9133a8cdf5ae7eb2f2d115d8f2f4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Point3f</type>
+        <definition>Point3f castor::BoundingBox::getMin</definition>
+        <argsstring>() const</argsstring>
+        <name>getMin</name>
+        <qualifiedname>castor::BoundingBox::getMin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le point minimal. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingBox.hpp" line="101" column="9" bodyfile="CastorUtils/Graphics/BoundingBox.hpp" bodystart="101" bodyend="104"/>
+        <references refid="da/dc6/a08731_1a3e50ad04847a8533434c6e4a59583359" compoundref="d6/d8e/a01979" startline="64" endline="67">castor::BoundingContainer&lt; Dimension &gt;::getCenter</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d51/a08727_1a5d8fe12e5cabeb18fa65be2f13cf04df" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Point3f</type>
+        <definition>Point3f castor::BoundingBox::getMax</definition>
+        <argsstring>() const</argsstring>
+        <name>getMax</name>
+        <qualifiedname>castor::BoundingBox::getMax</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le point maximal. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingBox.hpp" line="111" column="9" bodyfile="CastorUtils/Graphics/BoundingBox.hpp" bodystart="111" bodyend="114"/>
+        <references refid="da/dc6/a08731_1a3e50ad04847a8533434c6e4a59583359" compoundref="d6/d8e/a01979" startline="64" endline="67">castor::BoundingContainer&lt; Dimension &gt;::getCenter</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d51/a08727_1a2bdeb15becab977ca32ef771fe4e9f32" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Point3f const &amp;</type>
+        <definition>Point3f const  &amp; castor::BoundingBox::getDimensions</definition>
+        <argsstring>() const</argsstring>
+        <name>getDimensions</name>
+        <qualifiedname>castor::BoundingBox::getDimensions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Les dimensions. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingBox.hpp" line="121" column="16" bodyfile="CastorUtils/Graphics/BoundingBox.hpp" bodystart="121" bodyend="124"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>BoundingContainer3D</label>
+        <link refid="da/dc6/a08731"/>
+      </node>
+      <node id="1">
+        <label>castor::BoundingBox</label>
+        <link refid="d6/d51/a08727"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>BoundingContainer3D</label>
+        <link refid="da/dc6/a08731"/>
+      </node>
+      <node id="1">
+        <label>castor::BoundingBox</label>
+        <link refid="d6/d51/a08727"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/BoundingBox.hpp" line="11" column="1" bodyfile="CastorUtils/Graphics/BoundingBox.hpp" bodystart="13" bodyend="130"/>
+    <listofallmembers>
+      <member refid="d6/d51/a08727_1a87ee7d2de0f07ebdce79d2b6bad9fb82" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>BoundingBox</name></member>
+      <member refid="d6/d51/a08727_1af37d30d030c2873c8a0a2594ff5e53ae" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>BoundingBox</name></member>
+      <member refid="da/dc6/a08731_1ae812b72b4c22180211ea369c47c807ec" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>BoundingContainer</name></member>
+      <member refid="da/dc6/a08731_1a40f770e152228f625222849ab31166fc" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>BoundingContainer</name></member>
+      <member refid="da/dc6/a08731_1a77c73fd155594406312d8fc82d84d60b" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>BoundingContainer</name></member>
+      <member refid="da/dc6/a08731_1a883c22c6046853f2a64d407c8f5de458" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>BoundingContainer</name></member>
+      <member refid="d6/d51/a08727_1ac667bc5ee0ad4d915513bad96c393c95" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>getAxisAligned</name></member>
+      <member refid="da/dc6/a08731_1a3e50ad04847a8533434c6e4a59583359" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>getCenter</name></member>
+      <member refid="d6/d51/a08727_1a2bdeb15becab977ca32ef771fe4e9f32" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>getDimensions</name></member>
+      <member refid="d6/d51/a08727_1a5d8fe12e5cabeb18fa65be2f13cf04df" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>getMax</name></member>
+      <member refid="d6/d51/a08727_1a676c9133a8cdf5ae7eb2f2d115d8f2f4" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>getMin</name></member>
+      <member refid="d6/d51/a08727_1ae43629a052aeb69a773b80b8e532d1fc" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>getNegativeVertex</name></member>
+      <member refid="d6/d51/a08727_1abc8d9e669c301aed07b279ffd6b08c5b" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>getPositiveVertex</name></member>
+      <member refid="d6/d51/a08727_1a97dc1afc1a1ec8b6dedcff6ae516ed3c" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>getUnion</name></member>
+      <member refid="d6/d51/a08727_1a2aecdd7b2a28d1414a528f5aed15403c" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>isOnLimits</name></member>
+      <member refid="da/dc6/a08731_1a15b371f2c35be936aac7025e469c738f" prot="public" virt="pure-virtual" ambiguityscope="castor::BoundingContainer::"><scope>castor::BoundingBox</scope><name>isOnLimits</name></member>
+      <member refid="d6/d51/a08727_1a3ff4e70bcbee7504e5fdda724a144935" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>isWithin</name></member>
+      <member refid="da/dc6/a08731_1a2e7294ec987f1a067009faf3155ab402" prot="public" virt="pure-virtual" ambiguityscope="castor::BoundingContainer::"><scope>castor::BoundingBox</scope><name>isWithin</name></member>
+      <member refid="d6/d51/a08727_1a6bce4aeb3c310195a1762d2e5cea07ff" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>load</name></member>
+      <member refid="d6/d51/a08727_1a01f75bdc33bcaa38be62171d764d4cca" prot="private" virt="non-virtual"><scope>castor::BoundingBox</scope><name>m_dimensions</name></member>
+      <member refid="da/dc6/a08731_1aa459d046786830e4e3223a51e832b3cd" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>MyPoint</name></member>
+      <member refid="da/dc6/a08731_1a426566d32bc1c42d74b188f257b3ccda" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>operator=</name></member>
+      <member refid="da/dc6/a08731_1ade60d404c88a6b78c17cca7e044d9d69" prot="public" virt="non-virtual"><scope>castor::BoundingBox</scope><name>operator=</name></member>
+      <member refid="da/dc6/a08731_1a1cb2689d6741a63bb85d722e02c56cba" prot="protected" virt="non-virtual"><scope>castor::BoundingBox</scope><name>setCenter</name></member>
+      <member refid="da/dc6/a08731_1a50781789daa8a61109aae08c384a5cbf" prot="public" virt="virtual"><scope>castor::BoundingBox</scope><name>~BoundingContainer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

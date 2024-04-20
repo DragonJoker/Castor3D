@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/d75/a06503" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RenderWindowDesc</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d75/a06503_1a7f84f415a603250474656c7a4f1e27b3" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::RenderWindowDesc::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>castor3d::RenderWindowDesc::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="861" column="16" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="861" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d75/a06503_1a4731f5885a97089a8f2512b438149128" prot="public" static="no" mutable="no">
+        <type>RenderTargetRPtr</type>
+        <definition>RenderTargetRPtr castor3d::RenderWindowDesc::renderTarget</definition>
+        <argsstring></argsstring>
+        <name>renderTarget</name>
+        <qualifiedname>castor3d::RenderWindowDesc::renderTarget</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="862" column="18" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="862" bodyend="862"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d75/a06503_1a962046e9382c5c9eba20c22dae2d56dc" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderWindowDesc::enableVSync</definition>
+        <argsstring></argsstring>
+        <name>enableVSync</name>
+        <qualifiedname>castor3d::RenderWindowDesc::enableVSync</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="863" column="6" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="863" bodyend="863"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d75/a06503_1abb366356c5f5de8e057a4738894a5324" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderWindowDesc::fullscreen</definition>
+        <argsstring></argsstring>
+        <name>fullscreen</name>
+        <qualifiedname>castor3d::RenderWindowDesc::fullscreen</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="864" column="6" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="864" bodyend="864"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d75/a06503_1a69024d014942f541661b6a47e4c5f6fd" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderWindowDesc::allowHdr</definition>
+        <argsstring></argsstring>
+        <name>allowHdr</name>
+        <qualifiedname>castor3d::RenderWindowDesc::allowHdr</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="865" column="6" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="865" bodyend="865"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderWindowDesc</label>
+        <link refid="de/d75/a06503"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/RenderModule.hpp" line="859" column="1" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="860" bodyend="866"/>
+    <listofallmembers>
+      <member refid="de/d75/a06503_1a69024d014942f541661b6a47e4c5f6fd" prot="public" virt="non-virtual"><scope>castor3d::RenderWindowDesc</scope><name>allowHdr</name></member>
+      <member refid="de/d75/a06503_1a962046e9382c5c9eba20c22dae2d56dc" prot="public" virt="non-virtual"><scope>castor3d::RenderWindowDesc</scope><name>enableVSync</name></member>
+      <member refid="de/d75/a06503_1abb366356c5f5de8e057a4738894a5324" prot="public" virt="non-virtual"><scope>castor3d::RenderWindowDesc</scope><name>fullscreen</name></member>
+      <member refid="de/d75/a06503_1a7f84f415a603250474656c7a4f1e27b3" prot="public" virt="non-virtual"><scope>castor3d::RenderWindowDesc</scope><name>name</name></member>
+      <member refid="de/d75/a06503_1a4731f5885a97089a8f2512b438149128" prot="public" virt="non-virtual"><scope>castor3d::RenderWindowDesc</scope><name>renderTarget</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

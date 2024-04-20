@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d09/a07299" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LightingModelFactory::Entry</compoundname>
+    <includes local="no">LightingModelFactory.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d09/a07299_1a2eaa1d87ceaa55a706e92f21c543bb9b" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dc6/a07295_1a3d7e246866d937f1fb64ec1636756e2c" kindref="member">Key</ref></type>
+        <definition>Key castor3d::LightingModelFactory::Entry::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>castor3d::LightingModelFactory::Entry::name</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/LightingModelFactory.hpp" line="25" column="5" bodyfile="Castor3D/Shader/LightingModelFactory.hpp" bodystart="25" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d09/a07299_1a3ad0c5c6627da58ac9e0ccc41ac9d749" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dc6/a07295_1a842945ac4c2b77f7d08c1b41ea83d229" kindref="member">Creator</ref></type>
+        <definition>Creator castor3d::LightingModelFactory::Entry::create</definition>
+        <argsstring></argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::LightingModelFactory::Entry::create</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/LightingModelFactory.hpp" line="26" column="9" bodyfile="Castor3D/Shader/LightingModelFactory.hpp" bodystart="26" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d09/a07299_1a0492f8be77780c2431916b3d9505ea73" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a2f2cd84840221bf55c29f1919a0cae4e" kindref="member">LightingModelID</ref></type>
+        <definition>LightingModelID castor3d::LightingModelFactory::Entry::lightingModelId</definition>
+        <argsstring></argsstring>
+        <name>lightingModelId</name>
+        <qualifiedname>castor3d::LightingModelFactory::Entry::lightingModelId</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/LightingModelFactory.hpp" line="27" column="17" bodyfile="Castor3D/Shader/LightingModelFactory.hpp" bodystart="27" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d09/a07299_1a3abb9d5c68a10468abc7341dc5579ff0" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a326a2edfed57262c18e7993c9bd9feee" kindref="member">BackgroundModelID</ref></type>
+        <definition>BackgroundModelID castor3d::LightingModelFactory::Entry::backgroundModelId</definition>
+        <argsstring></argsstring>
+        <name>backgroundModelId</name>
+        <qualifiedname>castor3d::LightingModelFactory::Entry::backgroundModelId</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/LightingModelFactory.hpp" line="28" column="19" bodyfile="Castor3D/Shader/LightingModelFactory.hpp" bodystart="28" bodyend="28"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::LightingModelFactory::Entry</label>
+        <link refid="d0/d09/a07299"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/LightingModelFactory.hpp" line="23" column="1" bodyfile="Castor3D/Shader/LightingModelFactory.hpp" bodystart="24" bodyend="29"/>
+    <listofallmembers>
+      <member refid="d0/d09/a07299_1a3abb9d5c68a10468abc7341dc5579ff0" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory::Entry</scope><name>backgroundModelId</name></member>
+      <member refid="d0/d09/a07299_1a3ad0c5c6627da58ac9e0ccc41ac9d749" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory::Entry</scope><name>create</name></member>
+      <member refid="d0/d09/a07299_1a0492f8be77780c2431916b3d9505ea73" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory::Entry</scope><name>lightingModelId</name></member>
+      <member refid="d0/d09/a07299_1a2eaa1d87ceaa55a706e92f21c543bb9b" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory::Entry</scope><name>name</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

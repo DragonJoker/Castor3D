@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/de5/a09359" kind="class" language="C++" prot="public">
+    <compoundname>castor::SphericalVertex</compoundname>
+    <includes local="no">SphericalVertex.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/de5/a09359_1a7c1cc5c292caa293511edb7206f316d7" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor::SphericalVertex::m_radius</definition>
+        <argsstring></argsstring>
+        <name>m_radius</name>
+        <qualifiedname>castor::SphericalVertex::m_radius</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Rayon (distance à l&apos;origine). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SphericalVertex.hpp" line="40" column="7" bodyfile="CastorUtils/Math/SphericalVertex.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de5/a09359_1ac28d54308587c5dc02cb64ed780a8474" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor::SphericalVertex::m_phi</definition>
+        <argsstring></argsstring>
+        <name>m_phi</name>
+        <qualifiedname>castor::SphericalVertex::m_phi</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Angle sur le plan XY. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SphericalVertex.hpp" line="43" column="7" bodyfile="CastorUtils/Math/SphericalVertex.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de5/a09359_1a7da12047749bc0685adbbb0bcb7e6d31" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor::SphericalVertex::m_theta</definition>
+        <argsstring></argsstring>
+        <name>m_theta</name>
+        <qualifiedname>castor::SphericalVertex::m_theta</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Angle sur le plan XZ. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SphericalVertex.hpp" line="46" column="7" bodyfile="CastorUtils/Math/SphericalVertex.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/de5/a09359_1a086c553855e3ce4d025d7c44e1bf16b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::SphericalVertex::SphericalVertex</definition>
+        <argsstring>(float radius=0, float phi=0, float theta=0)</argsstring>
+        <name>SphericalVertex</name>
+        <qualifiedname>castor::SphericalVertex::SphericalVertex</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>radius</declname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>phi</declname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>theta</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+<para>Constructeur spécifié </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">radius</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Distance à l&apos;origine </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">phi</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Angle Phi </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">theta</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Angle Theta </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SphericalVertex.hpp" line="26" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/de5/a09359_1a0dac2794e116584209267488747da66b" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::SphericalVertex::SphericalVertex</definition>
+        <argsstring>(Point3f const &amp;vertex)</argsstring>
+        <name>SphericalVertex</name>
+        <qualifiedname>castor::SphericalVertex::SphericalVertex</qualifiedname>
+        <param>
+          <type>Point3f const &amp;</type>
+          <declname>vertex</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir d&apos;un point cartésien. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">vertex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le vertex à convertir </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/SphericalVertex.hpp" line="35" column="17"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/SphericalVertex.hpp" line="11" column="1" bodyfile="CastorUtils/Math/SphericalVertex.hpp" bodystart="12" bodyend="47"/>
+    <listofallmembers>
+      <member refid="d8/de5/a09359_1ac28d54308587c5dc02cb64ed780a8474" prot="public" virt="non-virtual"><scope>castor::SphericalVertex</scope><name>m_phi</name></member>
+      <member refid="d8/de5/a09359_1a7c1cc5c292caa293511edb7206f316d7" prot="public" virt="non-virtual"><scope>castor::SphericalVertex</scope><name>m_radius</name></member>
+      <member refid="d8/de5/a09359_1a7da12047749bc0685adbbb0bcb7e6d31" prot="public" virt="non-virtual"><scope>castor::SphericalVertex</scope><name>m_theta</name></member>
+      <member refid="d8/de5/a09359_1a086c553855e3ce4d025d7c44e1bf16b1" prot="public" virt="non-virtual"><scope>castor::SphericalVertex</scope><name>SphericalVertex</name></member>
+      <member refid="d8/de5/a09359_1a0dac2794e116584209267488747da66b" prot="public" virt="non-virtual"><scope>castor::SphericalVertex</scope><name>SphericalVertex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

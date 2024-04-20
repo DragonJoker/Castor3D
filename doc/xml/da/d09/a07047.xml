@@ -1,0 +1,474 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d09/a07047" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::MovableObject</compoundname>
+    <basecompoundref refid="d6/da8/a08227" prot="public" virt="non-virtual">castor::OwnedBy&lt; Scene &gt;</basecompoundref>
+    <basecompoundref refid="d5/d3c/a08223" prot="public" virt="non-virtual">castor::NamedBaseT&lt; String &gt;</basecompoundref>
+    <derivedcompoundref refid="db/d1b/a06935" prot="public" virt="non-virtual">castor3d::BillboardList</derivedcompoundref>
+    <derivedcompoundref refid="d2/dc3/a06951" prot="public" virt="non-virtual">castor3d::Camera</derivedcompoundref>
+    <derivedcompoundref refid="d8/d46/a06971" prot="public" virt="non-virtual">castor3d::Geometry</derivedcompoundref>
+    <derivedcompoundref refid="da/d3c/a06987" prot="public" virt="non-virtual">castor3d::Light</derivedcompoundref>
+    <derivedcompoundref refid="de/dde/a07107" prot="public" virt="non-virtual">castor3d::ParticleSystem</derivedcompoundref>
+    <includes local="no">MovableObject.hpp</includes>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="da/d09/a07047_1a27eca0f5f8dc03517598e5046593f60b" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> EngineRPtr</type>
+        <definition>C3D_API EngineRPtr castor3d::MovableObject::getEngine</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getEngine</name>
+        <qualifiedname>castor3d::MovableObject::getEngine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Accesseurs. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/MovableObject.hpp" line="93" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d09/a07047_1afc3403e6c40a4e1679eccd9b380ce9c3" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> *</type>
+        <definition>SceneNode * castor3d::MovableObject::getParent</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getParent</name>
+        <qualifiedname>castor3d::MovableObject::getParent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/MovableObject.hpp" line="95" column="13" bodyfile="Castor3D/Scene/MovableObject.hpp" bodystart="95" bodyend="98"/>
+        <references refid="da/d09/a07047_1aa058c86365c45c7d4b85a04ce56a9d22" compoundref="dc/d47/a01487" startline="112" endline="112">m_sceneNode</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d09/a07047_1a1333acdd70effe47adb0c01106e3b30e" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1a3b295abad3147d934a7378cad0a0ebca" kindref="member">MovableType</ref></type>
+        <definition>MovableType castor3d::MovableObject::getMovableType</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getMovableType</name>
+        <qualifiedname>castor3d::MovableObject::getMovableType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/MovableObject.hpp" line="100" column="13" bodyfile="Castor3D/Scene/MovableObject.hpp" bodystart="100" bodyend="103"/>
+        <references refid="da/d09/a07047_1acf6726e80bb3098468fe1fcd5a1f720e" compoundref="dc/d47/a01487" startline="109">m_type</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="da/d09/a07047_1acf6726e80bb3098468fe1fcd5a1f720e" prot="protected" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a3b295abad3147d934a7378cad0a0ebca" kindref="member">MovableType</ref></type>
+        <definition>MovableType castor3d::MovableObject::m_type</definition>
+        <argsstring></argsstring>
+        <name>m_type</name>
+        <qualifiedname>castor3d::MovableObject::m_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le type d&apos;objet déplaçable. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/MovableObject.hpp" line="109" column="13" bodyfile="Castor3D/Scene/MovableObject.hpp" bodystart="109" bodyend="-1"/>
+        <referencedby refid="da/d09/a07047_1a1333acdd70effe47adb0c01106e3b30e" compoundref="dc/d47/a01487" startline="100" endline="103">getMovableType</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="da/d09/a07047_1aa058c86365c45c7d4b85a04ce56a9d22" prot="protected" static="no" mutable="no">
+        <type><ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> *</type>
+        <definition>SceneNode* castor3d::MovableObject::m_sceneNode</definition>
+        <argsstring></argsstring>
+        <name>m_sceneNode</name>
+        <qualifiedname>castor3d::MovableObject::m_sceneNode</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le noeud parent. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/MovableObject.hpp" line="112" column="12" bodyfile="Castor3D/Scene/MovableObject.hpp" bodystart="112" bodyend="112"/>
+        <referencedby refid="da/d09/a07047_1afc3403e6c40a4e1679eccd9b380ce9c3" compoundref="dc/d47/a01487" startline="95" endline="98">getParent</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="da/d09/a07047_1a8385c7c8fd9aee20a3c6de804cb09514" prot="protected" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1af2569378867762585c925eb1bc53ef82" kindref="member">OnSceneNodeChangedConnection</ref></type>
+        <definition>OnSceneNodeChangedConnection castor3d::MovableObject::m_notifyIndex</definition>
+        <argsstring></argsstring>
+        <name>m_notifyIndex</name>
+        <qualifiedname>castor3d::MovableObject::m_notifyIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>L&apos;indice de notifcation des changements du noeud. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/MovableObject.hpp" line="115" column="30" bodyfile="Castor3D/Scene/MovableObject.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d09/a07047_1a40b0fe7602fb945cb5b89de71a8cf4d8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MovableObject::MovableObject</definition>
+        <argsstring>(castor::String const &amp;name, Scene &amp;scene, MovableType type, SceneNode &amp;node)</argsstring>
+        <name>MovableObject</name>
+        <qualifiedname>castor3d::MovableObject::MovableObject</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a3b295abad3147d934a7378cad0a0ebca" kindref="member">MovableType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La scène parente </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Noeud parent </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type de <ref refid="da/d09/a07047" kindref="compound">MovableObject</ref> </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/MovableObject.hpp" line="37" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d09/a07047_1acf7517058566afbb2290a7856fc9dfee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MovableObject::MovableObject</definition>
+        <argsstring>(castor::String const &amp;name, Scene &amp;scene, MovableType type)</argsstring>
+        <name>MovableObject</name>
+        <qualifiedname>castor3d::MovableObject::MovableObject</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a3b295abad3147d934a7378cad0a0ebca" kindref="member">MovableType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La scène parente </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type de <ref refid="da/d09/a07047" kindref="compound">MovableObject</ref> </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/MovableObject.hpp" line="53" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d09/a07047_1a1bf609d5ffbdc5a0d38c0d071991f37f" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::MovableObject::~MovableObject</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~MovableObject</name>
+        <qualifiedname>castor3d::MovableObject::~MovableObject</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/MovableObject.hpp" line="62" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d09/a07047_1afbef8194f2a0b9e15c9cc483221a08ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MovableObject::detach</definition>
+        <argsstring>()</argsstring>
+        <name>detach</name>
+        <qualifiedname>castor3d::MovableObject::detach</qualifiedname>
+        <briefdescription>
+<para>Détache l&apos;objet de son parent. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/MovableObject.hpp" line="69" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d09/a07047_1ab2169299d3e08b4e50066e400d1d86dc" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::MovableObject::attachTo</definition>
+        <argsstring>(SceneNode &amp;node)</argsstring>
+        <name>attachTo</name>
+        <qualifiedname>castor3d::MovableObject::attachTo</qualifiedname>
+        <reimplementedby refid="db/d1b/a06935_1a9dd2ca096fbcf603036aedb7c67d0a20">attachTo</reimplementedby>
+        <param>
+          <type><ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para>Attache l&apos;object à un noeud. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/MovableObject.hpp" line="76" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d09/a07047_1a3308ef0055a0be80c34d6aefeff2044a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MovableObject::markDirty</definition>
+        <argsstring>()</argsstring>
+        <name>markDirty</name>
+        <qualifiedname>castor3d::MovableObject::markDirty</qualifiedname>
+        <briefdescription>
+<para>Ajout l&apos;objet à la liste des objets à mettre à jour de la scène. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/MovableObject.hpp" line="83" column="14"/>
+        <referencedby refid="d2/dc3/a06951_1a38dae7d74ec72af0fa347c0eefb8872b" compoundref="d3/dbc/a01451" startline="250" endline="257">castor3d::Camera::resize</referencedby>
+        <referencedby refid="da/d3c/a06987_1ac251086294c1586f164bf32242e3fd8f" compoundref="d5/d67/a01466" startline="372" endline="376">castor3d::Light::setGlobalIlluminationType</referencedby>
+        <referencedby refid="da/d3c/a06987_1aff7b307ba1a84311d4002067130a1249" compoundref="d5/d67/a01466" startline="345" endline="349">castor3d::Light::setShadowConfig</referencedby>
+        <referencedby refid="d2/dc3/a06951_1ae8bb96f14872d17f9c01d458e5058ed5" compoundref="d3/dbc/a01451" startline="239" endline="243">castor3d::Camera::setView</referencedby>
+        <referencedby refid="d2/dc3/a06951_1abfa6db9cee09d6cc4f1ca671b5968d5d" compoundref="d3/dbc/a01451" startline="259" endline="263">castor3d::Camera::setViewportType</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Scene &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::BillboardList</label>
+        <link refid="db/d1b/a06935"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::Camera</label>
+        <link refid="d2/dc3/a06951"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::Geometry</label>
+        <link refid="d8/d46/a06971"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::Light</label>
+        <link refid="da/d3c/a06987"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::MovableObject</label>
+        <link refid="da/d09/a07047"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::ParticleSystem</label>
+        <link refid="de/dde/a07107"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="6">
+        <label>Animable</label>
+        <link refid="d2/d7a/a03115"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; AnimableHandlerT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Scene &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor::SignalT&lt; OnSceneNodeReparentFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; OnSceneNodeReparentFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d2/d7a/a03115"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::MovableObject</label>
+        <link refid="da/d09/a07047"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_notifyIndex</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::SceneNode</label>
+        <link refid="d4/dc4/a07255"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>onParentChanged</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor::ConnectionT&lt; MySignalT &gt;</label>
+        <link refid="d4/ddb/a08183"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="11">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="7">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="12">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/MovableObject.hpp" line="18" column="1" bodyfile="Castor3D/Scene/MovableObject.hpp" bodystart="21" bodyend="116"/>
+    <listofallmembers>
+      <member refid="da/d09/a07047_1ab2169299d3e08b4e50066e400d1d86dc" prot="public" virt="virtual"><scope>castor3d::MovableObject</scope><name>attachTo</name></member>
+      <member refid="da/d09/a07047_1afbef8194f2a0b9e15c9cc483221a08ee" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>detach</name></member>
+      <member refid="da/d09/a07047_1a27eca0f5f8dc03517598e5046593f60b" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>getEngine</name></member>
+      <member refid="da/d09/a07047_1a1333acdd70effe47adb0c01106e3b30e" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>getMovableType</name></member>
+      <member refid="d5/d3c/a08223_1abc1fa9ec1a50d2023373baa4d4c79519" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>getName</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>getOwner</name></member>
+      <member refid="da/d09/a07047_1afc3403e6c40a4e1679eccd9b380ce9c3" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>getParent</name></member>
+      <member refid="d5/d3c/a08223_1a869b429a7190ecf614d8221b270e6dca" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>m_name</name></member>
+      <member refid="da/d09/a07047_1a8385c7c8fd9aee20a3c6de804cb09514" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>m_notifyIndex</name></member>
+      <member refid="da/d09/a07047_1aa058c86365c45c7d4b85a04ce56a9d22" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>m_sceneNode</name></member>
+      <member refid="da/d09/a07047_1acf6726e80bb3098468fe1fcd5a1f720e" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>m_type</name></member>
+      <member refid="da/d09/a07047_1a3308ef0055a0be80c34d6aefeff2044a" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>markDirty</name></member>
+      <member refid="da/d09/a07047_1a40b0fe7602fb945cb5b89de71a8cf4d8" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>MovableObject</name></member>
+      <member refid="da/d09/a07047_1acf7517058566afbb2290a7856fc9dfee" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>MovableObject</name></member>
+      <member refid="d5/d3c/a08223_1a4a6e4748603541685b04f95fb91efb26" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>NamedBaseT</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>OwnedBy</name></member>
+      <member refid="d5/d3c/a08223_1a2d62ce1925efead03c4e0842c06b3e11" prot="public" virt="non-virtual"><scope>castor3d::MovableObject</scope><name>rename</name></member>
+      <member refid="da/d09/a07047_1a1bf609d5ffbdc5a0d38c0d071991f37f" prot="public" virt="virtual"><scope>castor3d::MovableObject</scope><name>~MovableObject</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

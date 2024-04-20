@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_b70b22b959ecebdb1f17b0f917c94768" kind="dir">
-    <compoundname>Render/GlobalIllumination/VoxelConeTracing</compoundname>
-    <innerfile refid="df/d59/a01001">VoxelBufferToTexture.hpp</innerfile>
-    <innerfile refid="df/dbc/a01004">VoxelizeModule.hpp</innerfile>
-    <innerfile refid="d6/d8d/a01007">VoxelizePass.hpp</innerfile>
-    <innerfile refid="d0/d2b/a01010">Voxelizer.hpp</innerfile>
-    <innerfile refid="d7/d59/a01013">VoxelSceneData.hpp</innerfile>
-    <innerfile refid="de/def/a01016">VoxelSecondaryBounce.hpp</innerfile>
+    <compoundname>Castor3D/Render/GlobalIllumination/VoxelConeTracing</compoundname>
+    <innerfile refid="da/d17/a01046">VctConfig.hpp</innerfile>
+    <innerfile refid="d0/d22/a01049">VoxelBufferToTexture.hpp</innerfile>
+    <innerfile refid="d9/dce/a01052">VoxelizeModule.hpp</innerfile>
+    <innerfile refid="d2/d71/a01055">VoxelizePass.hpp</innerfile>
+    <innerfile refid="d5/d4c/a01058">Voxelizer.hpp</innerfile>
+    <innerfile refid="de/d9e/a01061">VoxelSecondaryBounce.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/GlobalIllumination/VoxelConeTracing/"/>
+    <location file="Castor3D/Render/GlobalIllumination/VoxelConeTracing/"/>
   </compounddef>
 </doxygen>

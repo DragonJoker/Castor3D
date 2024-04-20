@@ -1,0 +1,196 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dd/dc1/a00212" kind="file" language="C++">
+    <compoundname>GpuBufferPackedAllocator.hpp</compoundname>
+    <includes refid="dc/d57/a00194" local="yes">BufferModule.hpp</includes>
+    <includes local="no">vector</includes>
+    <includedby refid="dc/d9a/a00218" local="yes">Buffer/ObjectBufferOffset.hpp</includedby>
+    <includedby refid="dd/d52/a00221" local="yes">Buffer/ObjectBufferPool.hpp</includedby>
+    <incdepgraph>
+      <node id="5">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="6">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="7">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="8">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="9">
+        <label>CastorUtils/Graphics/Size.hpp</label>
+      </node>
+      <node id="10">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="11">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="4">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="18">
+        <label>CastorUtils/Pool/BuddyAllocator.hpp</label>
+      </node>
+      <node id="13">
+        <label>RenderGraph/FrameGraphPrerequisites.hpp</label>
+      </node>
+      <node id="2">
+        <label>BufferModule.hpp</label>
+        <link refid="dc/d57/a00194"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Buffer/GpuBufferPackedAllocator.hpp</label>
+        <link refid="dd/dc1/a00212"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="db/dc3/a00284"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="19">
+        <label>cstddef</label>
+      </node>
+      <node id="14">
+        <label>cstdint</label>
+      </node>
+      <node id="15">
+        <label>memory</label>
+      </node>
+      <node id="16">
+        <label>string</label>
+      </node>
+      <node id="17">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="3">
+        <label>Buffer/GeometryBuffers.hpp</label>
+        <link refid="de/db1/a00197"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Buffer/GpuBufferPackedAllocator.hpp</label>
+        <link refid="dd/dc1/a00212"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Buffer/ObjectBufferOffset.hpp</label>
+        <link refid="dc/d9a/a00218"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>Buffer/ObjectBufferPool.hpp</label>
+        <link refid="dd/d52/a00221"/>
+      </node>
+      <node id="4">
+        <label>Model/Mesh/Submesh/Submesh.hpp</label>
+        <link refid="dc/d1b/a00827"/>
+      </node>
+      <node id="7">
+        <label>Render/PBR/BrdfPrefilter.hpp</label>
+        <link refid="db/d17/a01148"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>Render/PBR/IblTextures.hpp</label>
+        <link refid="d5/d16/a01154"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>Scene/Background/Background.hpp</label>
+        <link refid="d4/d3c/a01418"/>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>Scene/Background/Colour.hpp</label>
+        <link refid="db/d78/a01427"/>
+      </node>
+      <node id="11">
+        <label>Scene/Background/Image.hpp</label>
+        <link refid="d8/dd0/a01430"/>
+      </node>
+      <node id="12">
+        <label>Scene/Background/Skybox.hpp</label>
+        <link refid="d0/de2/a01442"/>
+      </node>
+      <node id="5">
+        <label>Scene/BillboardList.hpp</label>
+        <link refid="dd/d08/a01448"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="db/d8d/a02917" prot="public">castor3d::GpuBufferPackedAllocator</innerclass>
+    <innerclass refid="df/d27/a02921" prot="private">castor3d::GpuBufferPackedAllocator::MemChunkCompare</innerclass>
+    <innernamespace refid="d3/d5e/a01725">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Buffer/GpuBufferPackedAllocator.hpp"/>
+  </compounddef>
+</doxygen>

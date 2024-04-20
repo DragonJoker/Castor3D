@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d6c/a03495" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::GpuBufferBuddyAllocatorTraits::Block</compoundname>
+    <includes local="no">GpuBufferBuddyAllocator.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/d6c/a03495_1a35b84f4c8e3c9cb893d72247a4c17631" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/d17/a03491_1ad5aca6297e2f1509e1a9195e846f05ff" kindref="member">PointerType</ref></type>
+        <definition>PointerType castor3d::GpuBufferBuddyAllocatorTraits::Block::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>castor3d::GpuBufferBuddyAllocatorTraits::Block::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/GpuBufferBuddyAllocator.hpp" line="16" column="13" bodyfile="Castor3D/Buffer/GpuBufferBuddyAllocator.hpp" bodystart="16" bodyend="-1"/>
+        <referencedby refid="d0/d17/a03491_1ad6e226481f38134632f4f82aa5c3aab1" compoundref="de/df3/a00185" startline="85" endline="88">castor3d::GpuBufferBuddyAllocatorTraits::isNull</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Buffer/GpuBufferBuddyAllocator.hpp" line="14" column="1" bodyfile="Castor3D/Buffer/GpuBufferBuddyAllocator.hpp" bodystart="15" bodyend="17"/>
+    <listofallmembers>
+      <member refid="dd/d6c/a03495_1a35b84f4c8e3c9cb893d72247a4c17631" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBuddyAllocatorTraits::Block</scope><name>data</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

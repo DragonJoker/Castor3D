@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/dc3/a09307" kind="struct" language="C++" prot="public">
+    <compoundname>castor::IsRangedValueT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::false_type</basecompoundref>
+    <includes local="no">RangedValue.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::IsRangedValueT&lt; T &gt;</label>
+        <link refid="d3/dc3/a09307"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::false_type</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::IsRangedValueT&lt; T &gt;</label>
+        <link refid="d3/dc3/a09307"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::false_type</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Math/RangedValue.hpp" line="422" column="1" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="423" bodyend="424"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

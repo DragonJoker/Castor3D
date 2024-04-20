@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/d76/a05879" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::GenericPlugin</compoundname>
+    <basecompoundref refid="db/d5e/a05891" prot="public" virt="non-virtual">castor3d::Plugin</basecompoundref>
+    <includes local="no">GenericPlugin.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d76/a05879_1a4cedf7e07e66b1fe6c151b7b063942f5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GenericPlugin::GenericPlugin</definition>
+        <argsstring>(castor::DynamicLibraryUPtr library, Engine *engine)</argsstring>
+        <name>GenericPlugin</name>
+        <qualifiedname>castor3d::GenericPlugin::GenericPlugin</qualifiedname>
+        <param>
+          <type>castor::DynamicLibraryUPtr</type>
+          <declname>library</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> *</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">library</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La bibliothèque partagée contenant le plug-in </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/GenericPlugin.hpp" line="27" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d76/a05879_1a75d089bc334054c776874736f30768c6" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GenericPlugin::~GenericPlugin</definition>
+        <argsstring>() noexcept override</argsstring>
+        <name>~GenericPlugin</name>
+        <qualifiedname>castor3d::GenericPlugin::~GenericPlugin</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/GenericPlugin.hpp" line="35" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::GenericPlugin</label>
+        <link refid="de/d76/a05879"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Plugin</label>
+        <link refid="db/d5e/a05891"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="8" relation="private-inheritance">
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::GenericPlugin</label>
+        <link refid="de/d76/a05879"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Plugin</label>
+        <link refid="db/d5e/a05891"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_pfnGetRequiredVersion</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_pfnOnLoad</edgelabel>
+          <edgelabel>m_pfnOnUnload</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::Version</label>
+        <link refid="d5/d15/a05335"/>
+      </node>
+      <node id="8">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="9">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="8" relation="private-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Plugin/GenericPlugin.hpp" line="13" column="1" bodyfile="Castor3D/Plugin/GenericPlugin.hpp" bodystart="15" bodyend="36"/>
+    <listofallmembers>
+      <member refid="de/d76/a05879_1a4cedf7e07e66b1fe6c151b7b063942f5" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>GenericPlugin</name></member>
+      <member refid="db/d5e/a05891_1a76345cfa813957198ab5a735b3bf2c84" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>getName</name></member>
+      <member refid="db/d5e/a05891_1a9fe46462b345af39a924f8081f09002d" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>GetNameFunction</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>getOwner</name></member>
+      <member refid="db/d5e/a05891_1a21c697a5bb64dc09df8604a595ed4ef1" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>getRequiredVersion</name></member>
+      <member refid="db/d5e/a05891_1ac7505429b1d290b40c09fbf488c52b43" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>GetRequiredVersionFunction</name></member>
+      <member refid="db/d5e/a05891_1adfce87274549c3458e705ec6f49f2466" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>getType</name></member>
+      <member refid="db/d5e/a05891_1a57603a105bb12a698c4192413f6c01c0" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>GetTypeFunction</name></member>
+      <member refid="db/d5e/a05891_1a6eee27fad0b4dc406af8dac993816e1e" prot="protected" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>load</name></member>
+      <member refid="db/d5e/a05891_1af67ef96075d71ead62f1a47cff5ac7b5" prot="protected" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>m_library</name></member>
+      <member refid="db/d5e/a05891_1a999f657823e4cbcf844a81e32b96dec4" prot="protected" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>m_pfnGetName</name></member>
+      <member refid="db/d5e/a05891_1aa2e6fc5f27975d42f1329569f37e6a3e" prot="protected" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>m_pfnGetRequiredVersion</name></member>
+      <member refid="db/d5e/a05891_1a7f9b6b8f678d6ea93023fbe76573eb92" prot="protected" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>m_pfnOnLoad</name></member>
+      <member refid="db/d5e/a05891_1ac8c60d89e2821bc824ab0150f4196989" prot="protected" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>m_pfnOnUnload</name></member>
+      <member refid="db/d5e/a05891_1ad988a5d361f28b80ba19dd2caac722e1" prot="protected" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>m_type</name></member>
+      <member refid="db/d5e/a05891_1ad9481aa690ebce52bc156c1205a6e926" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>OnLoadFunction</name></member>
+      <member refid="db/d5e/a05891_1a270e7bcd56155a8810cdce16eb9a2af7" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>OnUnloadFunction</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>OwnedBy</name></member>
+      <member refid="db/d5e/a05891_1a34467cc6f0925b83827b0884c5b4c496" prot="protected" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>Plugin</name></member>
+      <member refid="db/d5e/a05891_1a0d3fd522e0c2a3396428a5a97cdb0c18" prot="protected" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>unload</name></member>
+      <member refid="de/d76/a05879_1a75d089bc334054c776874736f30768c6" prot="public" virt="non-virtual"><scope>castor3d::GenericPlugin</scope><name>~GenericPlugin</name></member>
+      <member refid="db/d5e/a05891_1a74a6dc68249b01895f5c682c6a539a6a" prot="public" virt="virtual"><scope>castor3d::GenericPlugin</scope><name>~Plugin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

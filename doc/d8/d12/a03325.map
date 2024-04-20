@@ -1,7 +1,16 @@
-<map id="castor3d::FractalMappingComponent" name="castor3d::FractalMappingComponent">
-<area shape="rect" id="node1" title=" " alt="" coords="46,376,215,416"/>
-<area shape="rect" id="node2" href="$d1/deb/a03418.html" title=" " alt="" coords="5,272,256,327"/>
-<area shape="rect" id="node3" href="$d2/d95/a04030.html" title=" " alt="" coords="9,80,185,105"/>
-<area shape="rect" id="node5" href="$d1/deb/a03418.html" title="Pass component holding base pass data." alt="" coords="119,155,353,195"/>
-<area shape="rect" id="node4" title=" " alt="" coords="9,5,185,31"/>
+<map id="castor3d::BinaryParser&lt; SkeletonAnimationKeyFrame &gt;" name="castor3d::BinaryParser&lt; SkeletonAnimationKeyFrame &gt;">
+<area shape="rect" id="Node000001" title="SkeletonAnimationKeyFrame binary loader." alt="" coords="985,89,1200,129"/>
+<area shape="rect" id="Node000002" href="$dd/de1/a03223.html" title=" " alt="" coords="721,89,936,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="950,107,985,107,985,112,950,112"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="19,5,146,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="160,20,266,20,401,25,550,37,698,61,780,87,778,92,697,67,549,43,401,30,266,25,160,26"/>
+<area shape="rect" id="Node000006" href="$dd/de1/a03223.html" title="Binary data chunk reader base class." alt="" coords="291,56,476,96"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="160,36,291,58,290,63,159,41"/>
+<area shape="rect" id="Node000004" href="$d5/d27/a03183.html" title=" " alt="" coords="5,107,160,133"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="174,119,291,120,476,120,721,112,721,117,476,125,291,125,174,124"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="173,104,290,87,291,92,174,109"/>
+<area shape="rect" id="Node000005" href="$d5/d15/a05335.html" title=" " alt="" coords="21,171,145,197"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="158,175,398,154,697,124,721,121,722,126,698,129,399,160,159,181"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="138,165,266,122,334,94,336,99,268,126,139,170"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="490,81,721,99,721,104,490,87"/>
 </map>

@@ -1,0 +1,13 @@
+<map id="castor3d::EquirectangularToCube" name="castor3d::EquirectangularToCube">
+<area shape="rect" id="Node000001" title=" " alt="" coords="13,419,184,459"/>
+<area shape="rect" id="Node000002" href="$d0/de1/a06735.html" title=" " alt="" coords="23,344,174,369"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,383,101,419,96,419,96,383"/>
+<area shape="rect" id="Node000003" href="$dc/d32/a06415.html" title=" " alt="" coords="19,256,178,281"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="101,295,101,343,96,343,96,295"/>
+<area shape="rect" id="Node000004" href="$d5/d4e/a06559.html" title=" " alt="" coords="15,168,182,193"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="101,207,101,255,96,255,96,207"/>
+<area shape="rect" id="Node000005" href="$d6/da8/a08227.html" title=" " alt="" coords="5,93,192,119"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="101,133,101,168,96,168,96,133"/>
+<area shape="rect" id="Node000006" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="7,5,190,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="101,45,101,93,96,93,96,45"/>
+</map>

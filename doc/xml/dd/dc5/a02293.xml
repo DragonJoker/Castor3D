@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/dc5/a02293" kind="namespace" language="C++">
+    <compoundname>castor::system</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="dd/dc5/a02293_1a929d02771b4a29e81b600876b50e1b13" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::system::sleep</definition>
+        <argsstring>(uint32_t time)</argsstring>
+        <name>sleep</name>
+        <qualifiedname>castor::system::sleep</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>time</declname>
+        </param>
+        <briefdescription>
+<para>Suspend l&apos;exécution du thread courant pour un temps donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">time</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le temps de suspension en millisecondes. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Utils.hpp" line="25" column="13" declfile="CastorUtils/Miscellaneous/Utils.hpp" declline="25" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dc5/a02293_1abec146d0bb3c64f167ecd0cabc4d1715" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::system::getScreenSize</definition>
+        <argsstring>(uint32_t screen, Size &amp;size)</argsstring>
+        <name>getScreenSize</name>
+        <qualifiedname>castor::system::getScreenSize</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>screen</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la taille de l&apos;écran donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">screen</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;indice de l&apos;écran. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la taille. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si la taille a été récupérée. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Utils.hpp" line="38" column="13" declfile="CastorUtils/Miscellaneous/Utils.hpp" declline="38" declcolumn="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dc5/a02293_1a3aa9cc1374ecde7ec6f0ef7d4a83a66f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>CU_API String castor::system::getLastErrorText</definition>
+        <argsstring>()</argsstring>
+        <name>getLastErrorText</name>
+        <qualifiedname>castor::system::getLastErrorText</qualifiedname>
+        <briefdescription>
+<para>Récupère le texte de la dernière erreur système. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le texte. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Utils.hpp" line="47" column="15" declfile="CastorUtils/Miscellaneous/Utils.hpp" declline="47" declcolumn="15"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dc5/a02293_1ae3c9a6bc59602f98e1380f77b58cea90" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>CU_API String castor::system::getOSName</definition>
+        <argsstring>()</argsstring>
+        <name>getOSName</name>
+        <qualifiedname>castor::system::getOSName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le nom de l&apos;operating system. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Utils.hpp" line="54" column="15" declfile="CastorUtils/Miscellaneous/Utils.hpp" declline="54" declcolumn="15"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Miscellaneous/Utils.hpp" line="15" column="1"/>
+  </compounddef>
+</doxygen>

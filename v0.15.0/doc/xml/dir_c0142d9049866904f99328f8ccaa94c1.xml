@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dir_c0142d9049866904f99328f8ccaa94c1" kind="dir">
+    <compoundname>Gui/Layout</compoundname>
+    <innerfile refid="dd/df5/a00386">Layout.hpp</innerfile>
+    <innerfile refid="dc/dc9/a00389">LayoutBox.hpp</innerfile>
+    <innerfile refid="d4/d27/a00392">LayoutItemFlags.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Gui/Layout/"/>
+  </compounddef>
+</doxygen>

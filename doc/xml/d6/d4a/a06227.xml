@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d4a/a06227" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlaysCounts</compoundname>
+    <includes local="no">OverlaysModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d4a/a06227_1a058857698ed509de362eb9989a300417" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlaysCounts::overlays</definition>
+        <argsstring></argsstring>
+        <name>overlays</name>
+        <qualifiedname>castor3d::OverlaysCounts::overlays</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlaysModule.hpp" line="201" column="10" bodyfile="Castor3D/Render/Overlays/OverlaysModule.hpp" bodystart="201" bodyend="201"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d4a/a06227_1ae702d9e1b015630e85e79a71e008663c" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlaysCounts::quads</definition>
+        <argsstring></argsstring>
+        <name>quads</name>
+        <qualifiedname>castor3d::OverlaysCounts::quads</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlaysModule.hpp" line="202" column="10" bodyfile="Castor3D/Render/Overlays/OverlaysModule.hpp" bodystart="202" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d4a/a06227_1ac13aebe41f6a735590e4574d9a9e2aa0" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlaysCounts::drawCalls</definition>
+        <argsstring></argsstring>
+        <name>drawCalls</name>
+        <qualifiedname>castor3d::OverlaysCounts::drawCalls</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Overlays/OverlaysModule.hpp" line="203" column="10" bodyfile="Castor3D/Render/Overlays/OverlaysModule.hpp" bodystart="203" bodyend="203"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/Overlays/OverlaysModule.hpp" line="199" column="1" bodyfile="Castor3D/Render/Overlays/OverlaysModule.hpp" bodystart="200" bodyend="204"/>
+    <listofallmembers>
+      <member refid="d6/d4a/a06227_1ac13aebe41f6a735590e4574d9a9e2aa0" prot="public" virt="non-virtual"><scope>castor3d::OverlaysCounts</scope><name>drawCalls</name></member>
+      <member refid="d6/d4a/a06227_1a058857698ed509de362eb9989a300417" prot="public" virt="non-virtual"><scope>castor3d::OverlaysCounts</scope><name>overlays</name></member>
+      <member refid="d6/d4a/a06227_1ae702d9e1b015630e85e79a71e008663c" prot="public" virt="non-virtual"><scope>castor3d::OverlaysCounts</scope><name>quads</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

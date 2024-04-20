@@ -1,0 +1,15 @@
+<map id="castor::PxBuffer&lt; PF &gt;" name="castor::PxBuffer&lt; PF &gt;">
+<area shape="rect" id="Node000001" title="Pixel buffer class, with pixel format as a template param." alt="" coords="97,360,253,385"/>
+<area shape="rect" id="Node000002" href="$dd/df9/a08987.html" title=" " alt="" coords="103,285,248,311"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,325,178,360,173,360,173,325"/>
+<area shape="rect" id="Node000003" href="$d4/dd6/a09023.html" title=" " alt="" coords="129,197,221,223"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="178,237,178,285,173,285,173,237"/>
+<area shape="rect" id="Node000004" href="$da/d50/a08167.html" title=" " alt="" coords="5,108,143,148"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="110,154,162,195,159,199,107,159"/>
+<area shape="rect" id="Node000005" href="$da/d50/a08167.html" title="Some data holder." alt="" coords="5,5,143,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="77,59,77,108,71,108,71,59"/>
+<area shape="rect" id="Node000006" href="$d9/d6a/a09103.html" title=" " alt="" coords="167,108,322,148"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="221,160,187,199,183,195,217,157"/>
+<area shape="rect" id="Node000007" href="$d9/d6a/a09103.html" title="Templated static dimensions point representation." alt="" coords="179,5,310,45"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="247,59,247,108,242,108,242,59"/>
+</map>

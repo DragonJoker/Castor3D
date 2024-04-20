@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/dbb/a08659" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserParameterHelper&lt; ParameterType::eHdrRgbaColour &gt;</compoundname>
+    <includes local="no">ParserParameterHelpers.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d0/dbb/a08659_1a1a02ba9b9e05b9f68a4ce8ef39aac8aa" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1abef501abd8305434e8c297a85c67b5ea" kindref="member">HdrRgbaColour</ref></type>
+        <definition>using castor::ParserParameterHelper&lt; ParameterType::eHdrRgbaColour &gt;::ValueType =  HdrRgbaColour</definition>
+        <argsstring></argsstring>
+        <name>ValueType</name>
+        <qualifiedname>castor::ParserParameterHelper&lt; ParameterType::eHdrRgbaColour &gt;::ValueType</qualifiedname>
+        <briefdescription>
+<para>~english The parameter value type. Le type de valeur du paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="748" column="1" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="748" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d0/dbb/a08659_1aa770dfa1b7a3cac13ef3ecbacf6d43f8" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> constexpr <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222" kindref="member">ParameterType</ref></type>
+        <definition>CU_API constexpr ParameterType castor::ParserParameterHelper&lt; ParameterType::eHdrRgbaColour &gt;::ParamType</definition>
+        <argsstring></argsstring>
+        <name>ParamType</name>
+        <qualifiedname>castor::ParserParameterHelper&lt; ParameterType::eHdrRgbaColour &gt;::ParamType</qualifiedname>
+        <initializer>= <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222a9db9c23debf6eea289c5d78d4c8b904c" kindref="member">ParameterType::eHdrRgbaColour</ref></initializer>
+        <briefdescription>
+<para>~english The parameter type. Le type de paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="750" column="39" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="750" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dbb/a08659_1aafbd638a086cb34fae08ca41a31e6ead" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref> constexpr</type>
+        <definition>CU_API StringView constexpr castor::ParserParameterHelper&lt; ParameterType::eHdrRgbaColour &gt;::StringType</definition>
+        <argsstring></argsstring>
+        <name>StringType</name>
+        <qualifiedname>castor::ParserParameterHelper&lt; ParameterType::eHdrRgbaColour &gt;::StringType</qualifiedname>
+        <initializer>= <ref refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" kindref="member">cuT</ref>( &quot;HDR RGBA colour&quot; )</initializer>
+        <briefdescription>
+<para>~english The parameter type name. Le nom du type de paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="752" column="36" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="752" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Specialisation de <ref refid="de/db2/a08403" kindref="compound">ParserParameterHelper</ref> pour ParameterType::eHdrColour. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserParameterHelper&lt; ParameterType::eHdrRgbaColour &gt;</label>
+        <link refid="d0/dbb/a08659"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>StringType</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::basic_string_view&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp" line="745" column="10" bodyfile="CastorUtils/FileParser/ParserParameterHelpers.hpp" bodystart="746" bodyend="753"/>
+    <listofallmembers>
+      <member refid="d0/dbb/a08659_1aa770dfa1b7a3cac13ef3ecbacf6d43f8" prot="public" virt="non-virtual"><scope>castor::ParserParameterHelper&lt; ParameterType::eHdrRgbaColour &gt;</scope><name>ParamType</name></member>
+      <member refid="d0/dbb/a08659_1aafbd638a086cb34fae08ca41a31e6ead" prot="public" virt="non-virtual"><scope>castor::ParserParameterHelper&lt; ParameterType::eHdrRgbaColour &gt;</scope><name>StringType</name></member>
+      <member refid="d0/dbb/a08659_1a1a02ba9b9e05b9f68a4ce8ef39aac8aa" prot="public" virt="non-virtual"><scope>castor::ParserParameterHelper&lt; ParameterType::eHdrRgbaColour &gt;</scope><name>ValueType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

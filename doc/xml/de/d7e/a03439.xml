@@ -1,0 +1,320 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/d7e/a03439" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::CmshAnimationImporter</compoundname>
+    <basecompoundref refid="dc/d11/a03123" prot="public" virt="non-virtual">castor3d::AnimationImporter</basecompoundref>
+    <includes local="no">CmshImporter.hpp</includes>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="de/d7e/a03439_1aa750d0c35520db1934f5197740ce934d" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const</type>
+        <definition>castor::String const castor3d::CmshAnimationImporter::MeshAnimType</definition>
+        <argsstring></argsstring>
+        <name>MeshAnimType</name>
+        <qualifiedname>castor3d::CmshAnimationImporter::MeshAnimType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="163" column="29" bodyfile="Castor3D/Binary/CmshImporter.hpp" bodystart="163" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d7e/a03439_1a311c48c50942d5605ac26d4c6ae477fe" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const</type>
+        <definition>castor::String const castor3d::CmshAnimationImporter::SkeletonAnimType</definition>
+        <argsstring></argsstring>
+        <name>SkeletonAnimType</name>
+        <qualifiedname>castor3d::CmshAnimationImporter::SkeletonAnimType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="164" column="29" bodyfile="Castor3D/Binary/CmshImporter.hpp" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d7e/a03439_1a01652af53adef1aec9add69d178966a0" prot="public" static="yes" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const</type>
+        <definition>castor::String const castor3d::CmshAnimationImporter::NodeAnimType</definition>
+        <argsstring></argsstring>
+        <name>NodeAnimType</name>
+        <qualifiedname>castor3d::CmshAnimationImporter::NodeAnimType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="165" column="29" bodyfile="Castor3D/Binary/CmshImporter.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d7e/a03439_1a2f215abef897ebc7c760c96b3ebd45d1" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::CmshAnimationImporter::CmshAnimationImporter</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>CmshAnimationImporter</name>
+        <qualifiedname>castor3d::CmshAnimationImporter::CmshAnimationImporter</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="137" column="18"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="de/d7e/a03439_1a0562dfc7da1c7f1ae7fa05c03f776e3f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>AnimationImporterUPtr</type>
+        <definition>static AnimationImporterUPtr castor3d::CmshAnimationImporter::create</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::CmshAnimationImporter::create</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Fonction de création. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="146" column="30"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="de/d7e/a03439_1a38ecadb5c08005c0e88e4074b25384a6" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::CmshAnimationImporter::doImportSkeleton</definition>
+        <argsstring>(SkeletonAnimation &amp;skeleton) override</argsstring>
+        <name>doImportSkeleton</name>
+        <qualifiedname>castor3d::CmshAnimationImporter::doImportSkeleton</qualifiedname>
+        <reimplements refid="dc/d11/a03123_1a7ad20b0cc0b7204c036b34069b7ad7aa">doImportSkeleton</reimplements>
+        <param>
+          <type><ref refid="dc/d03/a05655" kindref="compound">SkeletonAnimation</ref> &amp;</type>
+          <declname>skeleton</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;import de <ref refid="dc/d03/a05655" kindref="compound">SkeletonAnimation</ref>.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">skeleton</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les données importées. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un problème quelconque est survenu.   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="152" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7e/a03439_1a8df544e86224d43fa854e5451704f5ef" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::CmshAnimationImporter::doImportMesh</definition>
+        <argsstring>(MeshAnimation &amp;mesh) override</argsstring>
+        <name>doImportMesh</name>
+        <qualifiedname>castor3d::CmshAnimationImporter::doImportMesh</qualifiedname>
+        <reimplements refid="dc/d11/a03123_1a3fc43e53d6b6f936ace81f92402237ad">doImportMesh</reimplements>
+        <param>
+          <type><ref refid="dd/dd5/a05343" kindref="compound">MeshAnimation</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;import de <ref refid="dd/dd5/a05343" kindref="compound">MeshAnimation</ref>.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les données importées. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un problème quelconque est survenu.   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="156" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7e/a03439_1a0fcfa7a4451a4cdacbc0d7688fbeaf93" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::CmshAnimationImporter::doImportNode</definition>
+        <argsstring>(SceneNodeAnimation &amp;node) override</argsstring>
+        <name>doImportNode</name>
+        <qualifiedname>castor3d::CmshAnimationImporter::doImportNode</qualifiedname>
+        <reimplements refid="dc/d11/a03123_1a754abfa8ff745a5d0e9b086d87774f5b">doImportNode</reimplements>
+        <param>
+          <type><ref refid="d2/dfb/a06863" kindref="compound">SceneNodeAnimation</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;import de <ref refid="d2/dfb/a06863" kindref="compound">SceneNodeAnimation</ref>.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les données importées. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un problème quelconque est survenu.   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/CmshImporter.hpp" line="160" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::AnimationImporter</label>
+        <link refid="dc/d11/a03123"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::CmshAnimationImporter</label>
+        <link refid="de/d7e/a03439"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::ParametersT&lt; castor::String &gt;</label>
+        <link refid="d0/d45/a05315"/>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::AnimationImporter</label>
+        <link refid="dc/d11/a03123"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_file</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_parameters</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::CmshAnimationImporter</label>
+        <link refid="de/d7e/a03439"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>MeshAnimType</edgelabel>
+          <edgelabel>NodeAnimType</edgelabel>
+          <edgelabel>SkeletonAnimType</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::ImporterFile</label>
+        <link refid="db/df9/a03951"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::ParametersT&lt; KeyT &gt;</label>
+        <link refid="d0/d45/a05315"/>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="8">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Binary/CmshImporter.hpp" line="125" column="1" bodyfile="Castor3D/Binary/CmshImporter.hpp" bodystart="127" bodyend="166"/>
+    <listofallmembers>
+      <member refid="dc/d11/a03123_1ab22bb26ca83542220520dca04e7e6bb3" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>AnimationImporter</name></member>
+      <member refid="de/d7e/a03439_1a2f215abef897ebc7c760c96b3ebd45d1" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>CmshAnimationImporter</name></member>
+      <member refid="de/d7e/a03439_1a0562dfc7da1c7f1ae7fa05c03f776e3f" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>create</name></member>
+      <member refid="de/d7e/a03439_1a8df544e86224d43fa854e5451704f5ef" prot="protected" virt="virtual"><scope>castor3d::CmshAnimationImporter</scope><name>doImportMesh</name></member>
+      <member refid="de/d7e/a03439_1a0fcfa7a4451a4cdacbc0d7688fbeaf93" prot="protected" virt="virtual"><scope>castor3d::CmshAnimationImporter</scope><name>doImportNode</name></member>
+      <member refid="de/d7e/a03439_1a38ecadb5c08005c0e88e4074b25384a6" prot="protected" virt="virtual"><scope>castor3d::CmshAnimationImporter</scope><name>doImportSkeleton</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>getOwner</name></member>
+      <member refid="dc/d11/a03123_1a9ad0b88b692cb2324af912528ab3fd19" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>import</name></member>
+      <member refid="dc/d11/a03123_1a626589fde9b16826ab56949b9a7e11df" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>import</name></member>
+      <member refid="dc/d11/a03123_1adcc6f74a352776a1a23a58b0a9ec0265" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>import</name></member>
+      <member refid="dc/d11/a03123_1a66d4da844b5fd8bc6c21344c19f59130" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>import</name></member>
+      <member refid="dc/d11/a03123_1a3185b397d5849a4b6f1348b0484b1a07" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>import</name></member>
+      <member refid="dc/d11/a03123_1a59bcd12bf439d0eae36d65e1f8f570d7" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>import</name></member>
+      <member refid="dc/d11/a03123_1ac05f6472defe8fc407aa97d503b47ded" prot="protected" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>m_file</name></member>
+      <member refid="dc/d11/a03123_1a82a39c4933b2e056776a64f19b14c0d3" prot="protected" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>m_parameters</name></member>
+      <member refid="de/d7e/a03439_1aa750d0c35520db1934f5197740ce934d" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>MeshAnimType</name></member>
+      <member refid="de/d7e/a03439_1a01652af53adef1aec9add69d178966a0" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>NodeAnimType</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>OwnedBy</name></member>
+      <member refid="de/d7e/a03439_1a311c48c50942d5605ac26d4c6ae477fe" prot="public" virt="non-virtual"><scope>castor3d::CmshAnimationImporter</scope><name>SkeletonAnimType</name></member>
+      <member refid="dc/d11/a03123_1a541b4514f669cd111e11094ccc534836" prot="public" virt="virtual"><scope>castor3d::CmshAnimationImporter</scope><name>~AnimationImporter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

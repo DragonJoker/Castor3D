@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/d29/a06487" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::CulledNodeT</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename NodeT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d29/a06487_1a06e437912ea737b8a137b2a838fa798a" prot="public" static="no" mutable="no">
+        <type>NodeT const  *</type>
+        <definition>NodeT const* castor3d::CulledNodeT&lt; NodeT &gt;::node</definition>
+        <argsstring></argsstring>
+        <name>node</name>
+        <qualifiedname>castor3d::CulledNodeT::node</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="803" column="14" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="803" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d29/a06487_1a1a159a87890208ec76266bae0d02087a" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::CulledNodeT&lt; NodeT &gt;::instanceCount</definition>
+        <argsstring></argsstring>
+        <name>instanceCount</name>
+        <qualifiedname>castor3d::CulledNodeT::instanceCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="804" column="10" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="804" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d29/a06487_1a6c266e8658349547da20ff65b449c4f9" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::CulledNodeT&lt; NodeT &gt;::visible</definition>
+        <argsstring></argsstring>
+        <name>visible</name>
+        <qualifiedname>castor3d::CulledNodeT::visible</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="805" column="6" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="805" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d29/a06487_1a65ca39a25adae5ea3daf8dda88eab618" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::CulledNodeT&lt; NodeT &gt;::CulledNodeT</definition>
+        <argsstring>(NodeT const *pnode={}, uint32_t pinstanceCount={}, bool pvisible={})</argsstring>
+        <name>CulledNodeT</name>
+        <qualifiedname>castor3d::CulledNodeT::CulledNodeT</qualifiedname>
+        <param>
+          <type>NodeT const *</type>
+          <declname>pnode</declname>
+          <defval>{}</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>pinstanceCount</declname>
+          <defval>{}</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>pvisible</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="793" column="10" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="793" bodyend="801"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/RenderModule.hpp" line="791" column="1" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="792" bodyend="806"/>
+    <listofallmembers>
+      <member refid="d3/d29/a06487_1a65ca39a25adae5ea3daf8dda88eab618" prot="public" virt="non-virtual"><scope>castor3d::CulledNodeT</scope><name>CulledNodeT</name></member>
+      <member refid="d3/d29/a06487_1a1a159a87890208ec76266bae0d02087a" prot="public" virt="non-virtual"><scope>castor3d::CulledNodeT</scope><name>instanceCount</name></member>
+      <member refid="d3/d29/a06487_1a06e437912ea737b8a137b2a838fa798a" prot="public" virt="non-virtual"><scope>castor3d::CulledNodeT</scope><name>node</name></member>
+      <member refid="d3/d29/a06487_1a6c266e8658349547da20ff65b449c4f9" prot="public" virt="non-virtual"><scope>castor3d::CulledNodeT</scope><name>visible</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,306 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/d8c/a07279" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::SceneNodeImporter</compoundname>
+    <basecompoundref refid="d6/da8/a08227" prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">SceneNodeImporter.hpp</includes>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d2/d8c/a07279_1ad5a6f1a277591952b31597044b2f34be" prot="protected" static="no" mutable="no">
+        <type><ref refid="db/df9/a03951" kindref="compound">ImporterFile</ref> *</type>
+        <definition>ImporterFile* castor3d::SceneNodeImporter::m_file</definition>
+        <argsstring></argsstring>
+        <name>m_file</name>
+        <qualifiedname>castor3d::SceneNodeImporter::m_file</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNodeImporter.hpp" line="78" column="15" bodyfile="Castor3D/Scene/SceneNodeImporter.hpp" bodystart="78" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d8c/a07279_1a69ffefac10ef337d7477c8e5cfa1c42f" prot="protected" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref></type>
+        <definition>Parameters castor3d::SceneNodeImporter::m_parameters</definition>
+        <argsstring></argsstring>
+        <name>m_parameters</name>
+        <qualifiedname>castor3d::SceneNodeImporter::m_parameters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNodeImporter.hpp" line="79" column="12" bodyfile="Castor3D/Scene/SceneNodeImporter.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d8c/a07279_1ae4421b21f07441d25c019e82012a423b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual castor3d::SceneNodeImporter::~SceneNodeImporter</definition>
+        <argsstring>()=default</argsstring>
+        <name>~SceneNodeImporter</name>
+        <qualifiedname>castor3d::SceneNodeImporter::~SceneNodeImporter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNodeImporter.hpp" line="19" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d8c/a07279_1a490a7a7e4cd6db9bdee4779701db2d8f" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneNodeImporter::SceneNodeImporter</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>SceneNodeImporter</name>
+        <qualifiedname>castor3d::SceneNodeImporter::SceneNodeImporter</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNodeImporter.hpp" line="28" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d8c/a07279_1a358a5da1066cba1e54c2d86dff30a3d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::SceneNodeImporter::import</definition>
+        <argsstring>(SceneNode &amp;node, ImporterFile *file, Parameters const &amp;parameters)</argsstring>
+        <name>import</name>
+        <qualifiedname>castor3d::SceneNodeImporter::import</qualifiedname>
+        <param>
+          <type><ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <param>
+          <type><ref refid="db/df9/a03951" kindref="compound">ImporterFile</ref> *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;import de <ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les données importées. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin vers le fichier à importer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Paramètres de configuration de l&apos;import. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un problème quelconque est survenu. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNodeImporter.hpp" line="43" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d2/d8c/a07279_1a0885dc47fb190e3842bd8b56a64eb9c4" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>static C3D_API bool castor3d::SceneNodeImporter::import</definition>
+        <argsstring>(SceneNode &amp;node, castor::Path const &amp;pathFile, Parameters const &amp;parameters)</argsstring>
+        <name>import</name>
+        <qualifiedname>castor3d::SceneNodeImporter::import</qualifiedname>
+        <param>
+          <type><ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>pathFile</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;import de <ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les données importées. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pathFile</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin vers le fichier à importer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Paramètres de configuration de l&apos;import. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un problème quelconque est survenu. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNodeImporter.hpp" line="60" column="21"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/d8c/a07279_1aac064b1a8dc847d324bf6939490f02bc" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>bool</type>
+        <definition>virtual bool castor3d::SceneNodeImporter::doImportSceneNode</definition>
+        <argsstring>(SceneNode &amp;node)=0</argsstring>
+        <name>doImportSceneNode</name>
+        <qualifiedname>castor3d::SceneNodeImporter::doImportSceneNode</qualifiedname>
+        <param>
+          <type><ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;import de <ref refid="d4/dc4/a07255" kindref="compound">SceneNode</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les données importées. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un problème quelconque est survenu. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneNodeImporter.hpp" line="75" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SceneNodeImporter</label>
+        <link refid="d2/d8c/a07279"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::ParametersT&lt; castor::String &gt;</label>
+        <link refid="d0/d45/a05315"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::ImporterFile</label>
+        <link refid="db/df9/a03951"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::ParametersT&lt; KeyT &gt;</label>
+        <link refid="d0/d45/a05315"/>
+      </node>
+      <node id="1">
+        <label>castor3d::SceneNodeImporter</label>
+        <link refid="d2/d8c/a07279"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_file</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_parameters</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/SceneNodeImporter.hpp" line="15" column="1" bodyfile="Castor3D/Scene/SceneNodeImporter.hpp" bodystart="17" bodyend="80"/>
+    <listofallmembers>
+      <member refid="d2/d8c/a07279_1aac064b1a8dc847d324bf6939490f02bc" prot="private" virt="pure-virtual"><scope>castor3d::SceneNodeImporter</scope><name>doImportSceneNode</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeImporter</scope><name>getOwner</name></member>
+      <member refid="d2/d8c/a07279_1a358a5da1066cba1e54c2d86dff30a3d1" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeImporter</scope><name>import</name></member>
+      <member refid="d2/d8c/a07279_1a0885dc47fb190e3842bd8b56a64eb9c4" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeImporter</scope><name>import</name></member>
+      <member refid="d2/d8c/a07279_1ad5a6f1a277591952b31597044b2f34be" prot="protected" virt="non-virtual"><scope>castor3d::SceneNodeImporter</scope><name>m_file</name></member>
+      <member refid="d2/d8c/a07279_1a69ffefac10ef337d7477c8e5cfa1c42f" prot="protected" virt="non-virtual"><scope>castor3d::SceneNodeImporter</scope><name>m_parameters</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::SceneNodeImporter</scope><name>OwnedBy</name></member>
+      <member refid="d2/d8c/a07279_1a490a7a7e4cd6db9bdee4779701db2d8f" prot="public" virt="non-virtual"><scope>castor3d::SceneNodeImporter</scope><name>SceneNodeImporter</name></member>
+      <member refid="d2/d8c/a07279_1ae4421b21f07441d25c019e82012a423b" prot="public" virt="virtual"><scope>castor3d::SceneNodeImporter</scope><name>~SceneNodeImporter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

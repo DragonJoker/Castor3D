@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/d8b/a11657" kind="page">
+    <compoundname>md_Z_1_2Projets_2C_09_09_2Castor3D_2doc_2Castor3D_2Build-French</compoundname>
+    <title>Générer Castor3D</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><anchor id="d7/d8b/a11657_1autotoc_md0"/> Castor3D utilise CMake pour générer les fichiers de projets.<linebreak/>
+</para>
+<para>Vous devez donc lancer CMake pour générer les fichiers de projet pour la solution que vous préférez.<linebreak/>
+</para>
+<para>La génération de projets s&apos;appuie sur vcpkg pour la gestion des dépendances.<linebreak/>
+</para>
+<para>La documentation de CastorUtils et Castor3D peut être générée via Doxygen.<linebreak/>
+</para>
+<para>Les compilateurs testés sont les suivants :<itemizedlist>
+<listitem><para>Visual Studio 2022</para>
+</listitem><listitem><para>gcc 12.0</para>
+</listitem><listitem><para>clang 14.0</para>
+</listitem></itemizedlist>
+</para>
+<sect1 id="d7/d8b/a11657_1autotoc_md1">
+<title>Options</title><para>La génération est configurable dans CMake, via les options suivantes :<itemizedlist>
+<listitem><para><bold>PROJECTS_BINARIES_OUTPUT_DIR</bold></para>
+<para>Utilisé pour définir le dossier de base des binaires finaux. Dans ce dossier, les sous-dossiers bin, lib et share sont créés, et les binaires sont placés dans les sous-dossiers appropriés. Certains fichiers seront aussi copiés dans le sous-dossier share (les traductions, par exemple). Sur Windows, les DLL externes seront copiées dans le dossier bin, si elles sont trouvées.</para>
+</listitem><listitem><para><bold>PROJECTS_GENERATE_DOC</bold></para>
+<para>Utilisé pour activer/désactiver la création des projets de génération de documentation.</para>
+</listitem><listitem><para><bold>PROJECTS_UNITY_BUILD</bold></para>
+<para>Utilisé pour activer/désactiver l&apos;utilisation des Jumbo/Unity builds lors de la compilation.</para>
+</listitem><listitem><para><bold>PROJECTS_USE_PRECOMPILED_HEADERS</bold></para>
+<para>Utilisé pour activer/désactiver l&apos;utilisation des Precompiled Headers lors de la compilation.</para>
+</listitem><listitem><para><bold>PROJECTS_USE_PRETTY_PRINTING</bold></para>
+<para>Si cette option est activée, et si A-Style est trouvé, de nouveaux projets de test seront créés, permettant de lancer A-Style sur les sources associés à ces projets.</para>
+</listitem><listitem><para><bold>PROJECTS_WARNINGS_AS_ERRORS</bold></para>
+<para>Si cette option est activée, les warnings de compilation seront traités comme des erreurs.</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_CASTOR3D</bold></para>
+<para>Cette option particulière vous permet de désactiver le build de Castor3D, et de tout projet en dépendant, résultant en la génération de CastorUtils et CastorUtilsTest uniquement.</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_PLUGINS</bold></para>
+<para>Une autre option particulière, permettant de désactiver la génération des plugins.</para>
+</listitem><listitem><para><bold>CASTOR_C3D_NEEDS_GLSL</bold></para>
+<para>Permet d&apos;activer le support de l&apos;import de shaders en GLSL dans le moteur.</para>
+</listitem><listitem><para><bold>CASTOR_USE_FREEIMAGE</bold></para>
+<para>Permet de charger les images PNG via FreeImage.</para>
+</listitem><listitem><para><bold>CASTOR_USE_GLSLANG</bold></para>
+<para>Permet d&apos;activer le support de l&apos;import de shaders en GLSL dans le moteur.</para>
+</listitem><listitem><para><bold>CASTOR_USE_MESH_SHADERS</bold></para>
+<para>Permet d&apos;activer l&apos;utilisation des mesh shaders.</para>
+</listitem><listitem><para><bold>CASTOR_USE_TASK_SHADERS</bold></para>
+<para>Permet d&apos;activer l&apos;utilisation des task shaders.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_DEMO</bold></para>
+<para>Active la génération des applications d&apos;exemple.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_GENERATOR</bold></para>
+<para>Active la génération des plugins de type Generator.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_GENERIC</bold></para>
+<para>Active la génération des plugins de type Generic.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_IMPORTER</bold></para>
+<para>Active la génération des plugins de type Importer.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_INTEROP</bold></para>
+<para>Active la génération des bindings avec d&apos;autres langages.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_PARTICLES</bold></para>
+<para>Active la génération des plugins de type Particle.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_POSTFX</bold></para>
+<para>Active la génération des plugins de type PostEffect.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_SETUP</bold></para>
+<para>Active la génération des projets de setup.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_TEST</bold></para>
+<para>Active la génération des applications de test.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_TONEMAPS</bold></para>
+<para>Active la génération des plugins de type ToneMapping. (Le plugin LinearToneMapping sera tout de même généré, étant celui utilisé par défaut).</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_TOOL</bold></para>
+<para>Active la génération des applications utilitaires.</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_DEMO_(NAME)</bold></para>
+<para>Active la génération de l&apos;application d&apos;exemple (NAME).</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_GENERATOR_(NAME)</bold></para>
+<para>Active la génération du plugin Generator (NAME).</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_GENERIC_(NAME)</bold></para>
+<para>Active la génération du plugin Generic (NAME).</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_IMPORTER_(NAME)</bold></para>
+<para>Active la génération du plugin Importer (NAME).</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_INTEROP_(NAME)</bold></para>
+<para>Active la génération du binding (NAME).</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_POSTFX_(NAME)</bold></para>
+<para>Active la génération du plugin PostEffect (NAME).</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_TONEMAP_(NAME)</bold></para>
+<para>Active la génération du plugin ToneMap (NAME).</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_TEST_(NAME)</bold></para>
+<para>Active la génération de l&apos;application de test (NAME).</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_TOOL_(NAME)</bold></para>
+<para>Active la génération de l&apos;application utilitaire (NAME). </para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+    </detaileddescription>
+    <location file="Z:/Projets/C++/Castor3D/doc/Castor3D/Build-French.md"/>
+  </compounddef>
+</doxygen>

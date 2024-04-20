@@ -1,0 +1,36 @@
+<map id="castor3d::BinaryParserBase::doParseHeader" name="castor3d::BinaryParserBase::doParseHeader">
+<area shape="rect" id="Node000001" title="Parses the header chunk." alt="" coords="5,297,191,337"/>
+<area shape="rect" id="Node000002" href="$dd/de1/a03223.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4" title=" " alt="" coords="239,89,424,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,295,157,220,194,177,237,139,246,134,249,138,240,143,198,181,162,223,113,298"/>
+<area shape="rect" id="Node000003" href="$dd/de1/a03223.html#a0e1aa917e3bf897fab03a32d20890062" title="Retrieves a value array from a chunk." alt="" coords="239,153,424,193"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="121,295,172,253,237,210,263,197,265,201,240,214,176,258,124,299"/>
+<area shape="rect" id="Node000010" href="$d9/dba/a02278.html#a18b75386e45b81504fc6c5e9ece3d006" title=" " alt="" coords="931,218,1090,243"/>
+<area shape="poly" id="edge17_Node000001_Node000010" title=" " alt="" coords="134,295,182,272,238,253,330,236,425,224,613,212,783,213,917,220,917,225,783,218,613,218,426,229,331,241,239,259,184,277,136,300"/>
+<area shape="rect" id="Node000013" href="$d5/d27/a03183.html#a08e242acd79584a8c061b89c14f68452" title="Retrieves the chunk data size." alt="" coords="254,268,409,308"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="191,303,240,297,241,302,191,308"/>
+<area shape="rect" id="Node000014" href="$d9/dba/a02278.html#a7f5dee29f8589db515b5267b84c9ac5e" title=" " alt="" coords="249,333,413,358"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="191,326,236,331,236,337,191,331"/>
+<area shape="rect" id="Node000015" href="$d9/dba/a02278.html#a55001a89450107aff1d25db30844947e" title=" " alt="" coords="249,382,413,407"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="151,335,240,367,269,376,267,381,238,372,149,340"/>
+<area shape="rect" id="Node000016" href="$d9/dba/a02278.html#aab8661e5d664e92f493a8f6c8272e264" title=" " alt="" coords="241,431,421,457"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="123,336,175,376,240,416,260,425,258,430,237,421,172,381,120,340"/>
+<area shape="rect" id="Node000017" href="$d5/d27/a03183.html#ab3148d763e8fca01e746ec01991db22b" title="Retrieves a subchunk." alt="" coords="254,481,409,521"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="115,336,166,399,201,435,240,466,252,473,250,478,237,470,197,439,162,403,111,339"/>
+<area shape="rect" id="Node000004" href="$d0/d87/a03399.html#a51aa9cc211a27e96cdfbdb431808cc8f" title="Retrieves a value array from a chunk." alt="" coords="472,153,627,193"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="425,171,458,171,458,176,425,176"/>
+<area shape="rect" id="Node000005" href="$d6/d0e/a03395.html#a062463121032ba679336be2382c508d0" title="Retrieves a value array from a chunk." alt="" coords="679,63,865,103"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="598,151,709,105,711,110,601,156"/>
+<area shape="rect" id="Node000008" href="$d9/dba/a02278.html#ac8fd79a65bf3d510536e2f77797a5df7" title="Prepares chunk data for read/write." alt="" coords="675,163,869,189"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="627,172,661,172,661,177,627,177"/>
+<area shape="rect" id="Node000006" href="$d5/d27/a03183.html#af711032d94753cb2d482fe2bcf3afb17" title="Checks that the remaining place can hold the given size." alt="" coords="933,5,1088,45"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="855,60,919,45,920,50,857,65"/>
+<area shape="rect" id="Node000007" href="$d5/d27/a03183.html#a7c1bb3cf53d6b4a6856c9964c54fac11" title="Retrieves data from the chunk." alt="" coords="921,70,1101,95"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="865,80,907,80,907,85,865,85"/>
+<area shape="rect" id="Node000009" href="$d2/dd2/a02279.html#aa4e7623135b28fcbdeb6f2d423df6746" title="Detects if the current system is little endian." alt="" coords="939,119,1083,145"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="841,161,928,145,929,150,842,166"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="829,186,942,212,941,217,827,191"/>
+<area shape="rect" id="Node000011" href="$d9/dba/a02278.html#a430f3de9071e7d03358bb1b39d07c2b8" title="Sets given value to big endian." alt="" coords="917,169,1104,194"/>
+<area shape="poly" id="edge10_Node000008_Node000011" title=" " alt="" coords="870,176,904,176,903,182,870,181"/>
+<area shape="rect" id="Node000012" href="$d2/dd2/a02279.html#a90cf51f94dda321c89fc40fa450d0b91" title="Convert from little or big endian to the other." alt="" coords="1152,169,1323,194"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="1104,179,1138,179,1138,184,1104,184"/>
+</map>

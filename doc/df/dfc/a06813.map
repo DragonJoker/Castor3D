@@ -1,0 +1,28 @@
+<map id="castor3d::AnimatedObjectGroup" name="castor3d::AnimatedObjectGroup">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1032,149,1205,189"/>
+<area shape="rect" id="Node000002" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="699,17,805,43"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="820,32,911,48,961,61,1009,80,1060,112,1100,147,1096,151,1057,116,1007,84,960,66,910,53,819,38"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="661,67,843,92"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="857,82,932,92,1009,110,1050,127,1086,146,1084,151,1048,132,1007,115,931,97,857,87"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="197,5,380,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="394,21,508,31,631,47,706,64,705,69,630,53,508,36,394,26"/>
+<area shape="rect" id="Node000005" href="$dc/d79/a08267.html" title=" " alt="" coords="655,117,849,157"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="863,144,1032,158,1031,164,862,149"/>
+<area shape="rect" id="Node000006" href="$da/d36/a08315.html" title=" " alt="" coords="5,221,148,247"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="98,209,141,172,168,153,196,137,258,110,311,92,361,80,408,74,456,74,507,78,631,95,695,114,693,119,630,101,507,83,456,79,408,80,362,85,313,97,259,115,199,142,170,157,144,176,101,213"/>
+<area shape="rect" id="Node000007" href="$dc/d79/a08267.html" title="Basic signal class." alt="" coords="197,221,380,247"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="162,231,197,231,197,237,162,237"/>
+<area shape="rect" id="Node000008" href="$dc/d79/a08267.html" title=" " alt="" coords="655,181,849,221"/>
+<area shape="poly" id="edge9_Node000008_Node000006" title=" " alt="" coords="118,213,244,166,323,143,403,126,521,102,547,100,573,103,601,111,632,126,642,136,646,147,649,157,656,167,675,178,672,183,653,171,644,160,641,148,638,139,629,131,599,116,572,108,547,105,522,107,405,131,324,148,246,172,120,218"/>
+<area shape="rect" id="Node000009" href="$dc/d79/a08267.html" title=" " alt="" coords="655,309,849,349"/>
+<area shape="poly" id="edge12_Node000009_Node000006" title=" " alt="" coords="99,255,141,298,169,320,199,337,259,363,313,380,362,391,408,394,456,393,507,387,630,367,668,358,703,346,705,351,669,364,631,373,508,393,456,398,408,400,361,396,311,386,257,368,196,342,166,324,138,302,95,259"/>
+<area shape="rect" id="Node000010" href="$dc/d79/a08267.html" title=" " alt="" coords="655,245,849,285"/>
+<area shape="poly" id="edge15_Node000010_Node000006" title=" " alt="" coords="120,250,246,296,324,320,405,337,522,362,547,363,572,360,599,352,629,337,638,329,641,318,644,306,653,295,672,283,674,287,656,299,649,309,646,320,642,331,632,341,601,357,573,366,547,368,522,367,403,342,323,325,244,302,118,255"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="329,213,403,186,534,159,655,142,656,148,535,164,405,191,331,218"/>
+<area shape="poly" id="edge10_Node000008_Node000007" title=" " alt="" coords="394,224,655,205,655,210,394,229"/>
+<area shape="poly" id="edge13_Node000009_Node000007" title=" " alt="" coords="317,253,357,281,405,303,468,319,534,328,598,332,655,332,655,338,597,338,533,334,467,325,403,309,354,285,314,258"/>
+<area shape="poly" id="edge16_Node000010_Node000007" title=" " alt="" coords="343,248,404,261,535,269,655,268,655,273,535,275,404,266,342,253"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="863,199,934,196,1008,190,1033,186,1034,191,1008,195,935,202,863,204"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="862,329,936,319,972,308,1007,293,1039,270,1066,242,1104,187,1109,190,1070,245,1042,274,1009,298,974,313,937,324,863,334"/>
+<area shape="poly" id="edge14_Node000001_Node000010" title=" " alt="" coords="863,260,935,251,1007,233,1052,212,1090,187,1093,191,1055,216,1009,238,936,256,863,265"/>
+</map>

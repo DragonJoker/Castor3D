@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/dce/a03971" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ImporterFile::CameraData</compoundname>
+    <includes local="no">ImporterFile.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/dce/a03971_1abad8068c292832567381078abdfbb853" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::ImporterFile::CameraData::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>castor3d::ImporterFile::CameraData::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/ImporterFile.hpp" line="102" column="16" bodyfile="Castor3D/ImporterFile.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dce/a03971_1ad4ee6719427c982ffb88111e08e080ea" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a4141612e14f3113f10b3872630c29b3d" kindref="member">ViewportType</ref></type>
+        <definition>ViewportType castor3d::ImporterFile::CameraData::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>castor3d::ImporterFile::CameraData::type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/ImporterFile.hpp" line="103" column="14" bodyfile="Castor3D/ImporterFile.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/dce/a03971_1aebb6690ce246535337332255af8f2247" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ImporterFile::CameraData::CameraData</definition>
+        <argsstring>(castor::String pname, ViewportType ptype)</argsstring>
+        <name>CameraData</name>
+        <qualifiedname>castor3d::ImporterFile::CameraData::CameraData</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>pname</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a4141612e14f3113f10b3872630c29b3d" kindref="member">ViewportType</ref></type>
+          <declname>ptype</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/ImporterFile.hpp" line="95" column="1" bodyfile="Castor3D/ImporterFile.hpp" bodystart="95" bodyend="100"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ImporterFile::CameraData</label>
+        <link refid="d0/dce/a03971"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/ImporterFile.hpp" line="93" column="1" bodyfile="Castor3D/ImporterFile.hpp" bodystart="94" bodyend="104"/>
+    <listofallmembers>
+      <member refid="d0/dce/a03971_1aebb6690ce246535337332255af8f2247" prot="public" virt="non-virtual"><scope>castor3d::ImporterFile::CameraData</scope><name>CameraData</name></member>
+      <member refid="d0/dce/a03971_1abad8068c292832567381078abdfbb853" prot="public" virt="non-virtual"><scope>castor3d::ImporterFile::CameraData</scope><name>name</name></member>
+      <member refid="d0/dce/a03971_1ad4ee6719427c982ffb88111e08e080ea" prot="public" virt="non-virtual"><scope>castor3d::ImporterFile::CameraData</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

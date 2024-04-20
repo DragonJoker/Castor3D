@@ -1,7 +1,30 @@
-<map id="castor3d::TransparentPassResult" name="castor3d::TransparentPassResult">
-<area shape="rect" id="node1" title=" " alt="" coords="13,347,191,387"/>
-<area shape="rect" id="node2" href="$de/de4/a04922.html" title=" " alt="" coords="37,257,167,297"/>
-<area shape="rect" id="node3" href="$d6/d54/a04918.html" title=" " alt="" coords="5,80,159,105"/>
-<area shape="rect" id="node5" href="$de/de4/a04922.html" title=" " alt="" coords="103,155,234,195"/>
-<area shape="rect" id="node4" title=" " alt="" coords="29,5,135,31"/>
+<map id="castor3d::OverlayContext" name="castor3d::OverlayContext">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1495,168,1663,193"/>
+<area shape="rect" id="Node000002" href="$d3/db2/a07139.html" title=" " alt="" coords="1236,116,1399,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1396,141,1515,165,1514,171,1395,147"/>
+<area shape="rect" id="Node000003" href="$de/dd6/a07151.html" title=" " alt="" coords="1007,155,1159,180"/>
+<area shape="poly" id="edge14_Node000001_Node000003" title=" " alt="" coords="1173,167,1494,176,1494,181,1173,172"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1172,150,1239,139,1240,144,1173,155"/>
+<area shape="rect" id="Node000004" href="$d8/d4f/a03703.html" title=" " alt="" coords="740,39,860,64"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="874,53,929,62,984,81,1011,97,1036,116,1072,152,1068,156,1032,120,1008,101,982,86,928,67,873,58"/>
+<area shape="rect" id="Node000005" href="$dc/d63/a08283.html" title=" " alt="" coords="445,39,616,64"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="629,49,740,49,740,54,629,54"/>
+<area shape="rect" id="Node000006" href="$da/d87/a08319.html" title=" " alt="" coords="5,36,141,61"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="155,46,445,48,445,54,155,52"/>
+<area shape="rect" id="Node000007" href="$dc/d63/a08283.html" title="Representation of a Unique instance class." alt="" coords="191,5,328,31"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="154,33,190,27,191,32,155,38"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="342,25,445,38,445,44,341,31"/>
+<area shape="rect" id="Node000008" href="$de/d75/a06503.html" title=" " alt="" coords="701,140,899,165"/>
+<area shape="poly" id="edge8_Node000003_Node000008" title=" " alt="" coords="912,156,1007,161,1007,166,912,161"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="467,115,594,155"/>
+<area shape="poly" id="edge13_Node000002_Node000009" title=" " alt="" coords="607,122,640,119,677,119,1209,123,1236,124,1236,129,1209,129,677,125,640,125,608,127"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="608,138,701,144,701,149,607,143"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="196,115,323,155"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="337,133,467,133,467,138,337,138"/>
+<area shape="rect" id="Node000011" href="$d9/d93/a09063.html" title=" " alt="" coords="723,189,877,215"/>
+<area shape="poly" id="edge11_Node000003_Node000011" title=" " alt="" coords="891,189,982,178,1006,175,1007,180,983,183,892,194"/>
+<area shape="rect" id="Node000012" href="$d6/daf/a05323.html" title=" " alt="" coords="724,239,876,264"/>
+<area shape="poly" id="edge12_Node000003_Node000012" title=" " alt="" coords="876,233,982,205,1052,178,1054,182,983,210,878,238"/>
+<area shape="rect" id="Node000013" href="$d8/df0/a05791.html" title=" " alt="" coords="1233,229,1401,269"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="1414,225,1470,211,1538,191,1540,196,1471,217,1415,231"/>
 </map>

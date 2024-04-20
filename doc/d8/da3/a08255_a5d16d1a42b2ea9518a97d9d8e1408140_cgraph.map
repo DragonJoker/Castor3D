@@ -1,0 +1,16 @@
+<map id="castor::ResourceCacheBaseT::tryRemove" name="castor::ResourceCacheBaseT::tryRemove">
+<area shape="rect" id="Node000001" title="Removes an element, given a name." alt="" coords="5,80,193,120"/>
+<area shape="rect" id="Node000002" href="$d8/da3/a08255.html#a7b9ac51df57e111ec2af31f89a97cbac" title="Sets all the elements to be cleaned up." alt="" coords="477,80,665,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="193,99,241,100,429,100,464,100,464,105,429,105,241,105,193,105"/>
+<area shape="rect" id="Node000004" href="$d8/da3/a08255.html#a16408750c3e49683268744e1f35761df" title=" " alt="" coords="713,5,901,45"/>
+<area shape="poly" id="edge7_Node000001_Node000004" title=" " alt="" coords="135,77,184,54,241,36,363,17,486,9,602,9,700,13,700,18,602,14,486,14,363,22,242,41,186,59,138,82"/>
+<area shape="rect" id="Node000005" href="$d2/dd2/a02279.html#a58f3178234ce83e643568e48a0ed6a3f" title=" " alt="" coords="724,155,891,181"/>
+<area shape="poly" id="edge8_Node000001_Node000005" title=" " alt="" coords="194,106,710,156,710,161,193,112"/>
+<area shape="rect" id="Node000006" href="$d8/da3/a08255.html#a74a35e486aa159b89451ccfb86e2dbd9" title=" " alt="" coords="241,51,429,91"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="193,86,227,81,228,87,194,91"/>
+<area shape="rect" id="Node000003" href="$d8/da3/a08255.html#a9623d8ca68e009f78e842011a9caceb4" title=" " alt="" coords="713,80,901,120"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="666,97,699,97,699,103,666,103"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="634,77,730,47,731,52,636,83"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="642,117,750,149,749,154,641,123"/>
+<area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="430,80,464,84,463,89,429,85"/>
+</map>

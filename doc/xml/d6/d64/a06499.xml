@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d64/a06499" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TechniqueQueues</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d64/a06499_1abbeec84b824c1839d3ecbd25fb18256b" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1ab11a7c1374f16f01b45b8b2593402b4e" kindref="member">RenderQueueArray</ref></type>
+        <definition>RenderQueueArray castor3d::TechniqueQueues::queues</definition>
+        <argsstring></argsstring>
+        <name>queues</name>
+        <qualifiedname>castor3d::TechniqueQueues::queues</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="837" column="18" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="837" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d64/a06499_1afa5f02a93cbee3ec79624ca0f2fbd5d3" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a1e0853cf26ea6ce64763fa7f60d50b00" kindref="member">ShadowMapLightTypeArray</ref></type>
+        <definition>ShadowMapLightTypeArray castor3d::TechniqueQueues::shadowMaps</definition>
+        <argsstring></argsstring>
+        <name>shadowMaps</name>
+        <qualifiedname>castor3d::TechniqueQueues::shadowMaps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="838" column="25" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="838" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d64/a06499_1a447663a99de94e6df8fce644b39709df" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dab/a07363" kindref="compound">ShadowBuffer</ref> const  *</type>
+        <definition>ShadowBuffer const* castor3d::TechniqueQueues::shadowBuffer</definition>
+        <argsstring></argsstring>
+        <name>shadowBuffer</name>
+        <qualifiedname>castor3d::TechniqueQueues::shadowBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="839" column="21" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="839" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::ShadowBuffer</label>
+        <link refid="d2/dab/a07363"/>
+      </node>
+      <node id="1">
+        <label>castor3d::TechniqueQueues</label>
+        <link refid="d6/d64/a06499"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>shadowBuffer</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/RenderModule.hpp" line="835" column="1" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="836" bodyend="840"/>
+    <listofallmembers>
+      <member refid="d6/d64/a06499_1abbeec84b824c1839d3ecbd25fb18256b" prot="public" virt="non-virtual"><scope>castor3d::TechniqueQueues</scope><name>queues</name></member>
+      <member refid="d6/d64/a06499_1a447663a99de94e6df8fce644b39709df" prot="public" virt="non-virtual"><scope>castor3d::TechniqueQueues</scope><name>shadowBuffer</name></member>
+      <member refid="d6/d64/a06499_1afa5f02a93cbee3ec79624ca0f2fbd5d3" prot="public" virt="non-virtual"><scope>castor3d::TechniqueQueues</scope><name>shadowMaps</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/dd0/a07451" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::UvT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">UvStructT&lt; UvTypeT, FlagT &gt;</basecompoundref>
+    <includes local="no">GlslBaseIO.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename UvTypeT</type>
+      </param>
+      <param>
+        <type>sdw::var::Flag</type>
+        <declname>FlagT</declname>
+        <defname>FlagT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/dd0/a07451_1ac7e2f3015841dadc447880168510ca6f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::UvT&lt; UvTypeT, FlagT &gt;::UvT</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>UvT</name>
+        <qualifiedname>castor3d::shader::UvT::UvT</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslBaseIO.hpp" line="79" column="1" bodyfile="Castor3D/Shader/Shaders/GlslBaseIO.hpp" bodystart="79" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dd0/a07451_1a32181987bc7dfddb6f832135ad1765a9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::UvT&lt; UvTypeT, FlagT &gt;::uv</definition>
+        <argsstring>() const</argsstring>
+        <name>uv</name>
+        <qualifiedname>castor3d::shader::UvT::uv</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslBaseIO.hpp" line="86" column="6" bodyfile="Castor3D/Shader/Shaders/GlslBaseIO.hpp" bodystart="86" bodyend="86"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>UvStructT&lt; UvTypeT, FlagT &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::UvT&lt; UvTypeT, FlagT &gt;</label>
+        <link refid="d0/dd0/a07451"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>UvStructT&lt; UvTypeT, FlagT &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::UvT&lt; UvTypeT, FlagT &gt;</label>
+        <link refid="d0/dd0/a07451"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslBaseIO.hpp" line="76" column="1" bodyfile="Castor3D/Shader/Shaders/GlslBaseIO.hpp" bodystart="78" bodyend="87"/>
+    <listofallmembers>
+      <member refid="d0/dd0/a07451_1a32181987bc7dfddb6f832135ad1765a9" prot="public" virt="non-virtual"><scope>castor3d::shader::UvT</scope><name>uv</name></member>
+      <member refid="d0/dd0/a07451_1ac7e2f3015841dadc447880168510ca6f" prot="public" virt="non-virtual"><scope>castor3d::shader::UvT</scope><name>UvT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

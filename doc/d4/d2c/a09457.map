@@ -1,0 +1,12 @@
+<map id="castor::WorkerThread" name="castor::WorkerThread">
+<area shape="rect" id="Node000001" title=" " alt="" coords="851,31,997,56"/>
+<area shape="rect" id="Node000002" href="$da/d87/a08319.html" title=" " alt="" coords="579,5,715,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="729,23,851,34,850,39,728,28"/>
+<area shape="rect" id="Node000003" href="$dc/d79/a08267.html" title=" " alt="" coords="548,55,747,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="760,64,850,51,851,56,761,69"/>
+<area shape="rect" id="Node000004" href="$da/d36/a08315.html" title=" " alt="" coords="5,60,148,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="162,66,329,62,524,66,548,68,547,73,524,71,329,68,162,71"/>
+<area shape="rect" id="Node000005" href="$dc/d79/a08267.html" title="Basic signal class." alt="" coords="197,95,380,120"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="162,84,211,92,210,97,161,89"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="394,114,458,114,524,110,547,106,548,112,524,115,458,120,394,119"/>
+</map>

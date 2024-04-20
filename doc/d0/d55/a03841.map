@@ -1,5 +1,13 @@
-<map id="castor3d::SheenMapComponent::ComponentsShader" name="castor3d::SheenMapComponent::ComponentsShader">
-<area shape="rect" id="node1" title=" " alt="" coords="17,167,225,207"/>
-<area shape="rect" id="node2" href="$d7/d1d/a04018.html" title=" " alt="" coords="5,79,236,119"/>
-<area shape="rect" id="node3" href="$d0/dee/a04014.html" title=" " alt="" coords="21,5,220,31"/>
+<map id="castor3d::ScrollableCtrl::ScrolledControl" name="castor3d::ScrollableCtrl::ScrolledControl">
+<area shape="rect" id="Node000001" title=" " alt="" coords="95,285,253,325"/>
+<area shape="rect" id="Node000002" href="$df/dba/a08999.html" title=" " alt="" coords="117,197,231,223"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,236,177,285,171,285,171,236"/>
+<area shape="rect" id="Node000003" href="$da/d50/a08167.html" title=" " alt="" coords="5,108,143,148"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="110,155,161,195,158,199,107,159"/>
+<area shape="rect" id="Node000004" href="$da/d50/a08167.html" title="Some data holder." alt="" coords="5,5,143,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="77,59,77,108,71,108,71,59"/>
+<area shape="rect" id="Node000005" href="$d9/d6a/a09103.html" title=" " alt="" coords="167,108,314,148"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="218,160,186,199,182,195,214,157"/>
+<area shape="rect" id="Node000006" href="$d9/d6a/a09103.html" title="Templated static dimensions point representation." alt="" coords="175,5,306,45"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="243,59,243,108,238,108,238,59"/>
 </map>

@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/dc3/a01787" kind="file" language="C++">
+    <compoundname>CastorUtilsPch.hpp</compoundname>
+    <includes local="yes">CastorUtils/config.hpp</includes>
+    <incdepgraph>
+      <node id="2">
+        <label>CastorUtils/config.hpp</label>
+      </node>
+      <node id="1">
+        <label>CastorUtils/CastorUtilsPch.hpp</label>
+        <link refid="de/dc3/a01787"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/CastorUtilsPch.hpp"/>
+  </compounddef>
+</doxygen>

@@ -1,6 +1,10 @@
-<map id="castor3d::SheenMapComponent" name="castor3d::SheenMapComponent">
-<area shape="rect" id="node1" title=" " alt="" coords="5,225,213,251"/>
-<area shape="rect" id="node2" href="$d3/d14/a04046.html" title=" " alt="" coords="9,152,210,177"/>
-<area shape="rect" id="node3" href="$d2/d95/a04030.html" title=" " alt="" coords="21,79,197,104"/>
-<area shape="rect" id="node4" title=" " alt="" coords="21,5,197,31"/>
+<map id="castor3d::ScrollableCtrl" name="castor3d::ScrollableCtrl">
+<area shape="rect" id="Node000001" title=" " alt="" coords="12,271,169,296"/>
+<area shape="rect" id="Node000002" href="$dc/d79/a08267.html" title=" " alt="" coords="5,168,176,208"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,222,93,270,88,270,88,222"/>
+<area shape="rect" id="Node000003" href="$da/d36/a08315.html" title=" " alt="" coords="38,5,181,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,44,97,80,93,127,93,168,88,168,88,127,92,80,100,43"/>
+<area shape="rect" id="Node000004" href="$dc/d79/a08267.html" title="Basic signal class." alt="" coords="107,80,290,105"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="136,37,186,77,182,82,133,42"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="177,116,114,170,111,166,173,112"/>
 </map>

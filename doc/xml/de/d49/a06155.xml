@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/d49/a06155" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::VisibilityResolvePass::PipelineNodesDescriptors</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d49/a06155_1a883cb5ccc14b1e546b06ded36f3e892b" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::VisibilityResolvePass::PipelineNodesDescriptors::pipelineId</definition>
+        <argsstring></argsstring>
+        <name>pipelineId</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::PipelineNodesDescriptors::pipelineId</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/VisibilityResolvePass.hpp" line="164" column="10" bodyfile="Castor3D/Render/Opaque/VisibilityResolvePass.hpp" bodystart="164" bodyend="164"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d49/a06155_1a5ffca0cd72ebc678da1e8ca6471604e5" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSet const  *</type>
+        <definition>ashes::DescriptorSet const* castor3d::VisibilityResolvePass::PipelineNodesDescriptors::vtxDescriptorSet</definition>
+        <argsstring></argsstring>
+        <name>vtxDescriptorSet</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::PipelineNodesDescriptors::vtxDescriptorSet</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Opaque/VisibilityResolvePass.hpp" line="165" column="29" bodyfile="Castor3D/Render/Opaque/VisibilityResolvePass.hpp" bodystart="165" bodyend="165"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/Opaque/VisibilityResolvePass.hpp" line="162" column="1" bodyfile="Castor3D/Render/Opaque/VisibilityResolvePass.hpp" bodystart="163" bodyend="166"/>
+    <listofallmembers>
+      <member refid="de/d49/a06155_1a883cb5ccc14b1e546b06ded36f3e892b" prot="public" virt="non-virtual"><scope>castor3d::VisibilityResolvePass::PipelineNodesDescriptors</scope><name>pipelineId</name></member>
+      <member refid="de/d49/a06155_1a5ffca0cd72ebc678da1e8ca6471604e5" prot="public" virt="non-virtual"><scope>castor3d::VisibilityResolvePass::PipelineNodesDescriptors</scope><name>vtxDescriptorSet</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

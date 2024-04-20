@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d91/a07819" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::OverlaysIDs</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_OverlaysIDs&quot;, sdw::type::MemoryLayout::eStd430, sdw::UIntArrayField&lt; &quot;v&quot;, MaxWordsPerBuffer &gt; &gt;</basecompoundref>
+    <includes local="no">OverlayUbo.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d91/a07819_1a55976ecfbc0b157aebbfca0095b089f5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::OverlaysIDs::OverlaysIDs</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>OverlaysIDs</name>
+        <qualifiedname>castor3d::shader::OverlaysIDs::OverlaysIDs</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/OverlayUbo.hpp" line="220" column="1" bodyfile="Castor3D/Shader/Ubos/OverlayUbo.hpp" bodystart="220" bodyend="225"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d91/a07819_1a9fa553878b7a1606cf43a96bbc26ea31" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::OverlaysIDs::operator[]</definition>
+        <argsstring>(sdw::UInt const &amp;index) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor3d::shader::OverlaysIDs::operator[]</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/OverlayUbo.hpp" line="227" column="6" bodyfile="Castor3D/Shader/Ubos/OverlayUbo.hpp" bodystart="227" bodyend="230"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::OverlaysIDs</label>
+        <link refid="df/d91/a07819"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_OverlaysIDs&quot;, sdw::type::MemoryLayout::eStd430, sdw::UIntArrayField&lt; &quot;v&quot;, MaxWordsPerBuffer &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::OverlaysIDs</label>
+        <link refid="df/d91/a07819"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_OverlaysIDs&quot;, sdw::type::MemoryLayout::eStd430, sdw::UIntArrayField&lt; &quot;v&quot;, MaxWordsPerBuffer &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Ubos/OverlayUbo.hpp" line="215" column="1" bodyfile="Castor3D/Shader/Ubos/OverlayUbo.hpp" bodystart="219" bodyend="231"/>
+    <listofallmembers>
+      <member refid="df/d91/a07819_1a9fa553878b7a1606cf43a96bbc26ea31" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlaysIDs</scope><name>operator[]</name></member>
+      <member refid="df/d91/a07819_1a55976ecfbc0b157aebbfca0095b089f5" prot="public" virt="non-virtual"><scope>castor3d::shader::OverlaysIDs</scope><name>OverlaysIDs</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

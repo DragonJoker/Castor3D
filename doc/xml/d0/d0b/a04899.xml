@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d0b/a04899" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::PhongPass</compoundname>
+    <includes local="no">PhongPass.hpp</includes>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d0/d0b/a04899_1aacb6f492aec849355f50b3985a2930cf" prot="public" static="yes" mutable="no">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">castor::StringView</ref> const</type>
+        <definition>C3D_API castor::StringView const castor3d::PhongPass::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::PhongPass::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/PhongPass.hpp" line="17" column="41" bodyfile="Castor3D/Material/Pass/PhongPass.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d0b/a04899_1a11f1f79def33ed9d0766b0cfe222a41a" prot="public" static="yes" mutable="no">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">castor::StringView</ref> const</type>
+        <definition>C3D_API castor::StringView const castor3d::PhongPass::LightingModel</definition>
+        <argsstring></argsstring>
+        <name>LightingModel</name>
+        <qualifiedname>castor3d::PhongPass::LightingModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/PhongPass.hpp" line="18" column="41" bodyfile="Castor3D/Material/Pass/PhongPass.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d0/d0b/a04899_1a369563c964ea89a074c9555da3748a46" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> PassUPtr</type>
+        <definition>static C3D_API PassUPtr castor3d::PhongPass::create</definition>
+        <argsstring>(LightingModelID lightingModelId, Material &amp;parent)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::PhongPass::create</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a2f2cd84840221bf55c29f1919a0cae4e" kindref="member">LightingModelID</ref></type>
+          <declname>lightingModelId</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d42/a03979" kindref="compound">Material</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/PhongPass.hpp" line="14" column="25"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::PhongPass</label>
+        <link refid="d0/d0b/a04899"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>LightingModel</edgelabel>
+          <edgelabel>Type</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::basic_string_view&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/PhongPass.hpp" line="11" column="1" bodyfile="Castor3D/Material/Pass/PhongPass.hpp" bodystart="12" bodyend="19"/>
+    <listofallmembers>
+      <member refid="d0/d0b/a04899_1a369563c964ea89a074c9555da3748a46" prot="public" virt="non-virtual"><scope>castor3d::PhongPass</scope><name>create</name></member>
+      <member refid="d0/d0b/a04899_1a11f1f79def33ed9d0766b0cfe222a41a" prot="public" virt="non-virtual"><scope>castor3d::PhongPass</scope><name>LightingModel</name></member>
+      <member refid="d0/d0b/a04899_1aacb6f492aec849355f50b3985a2930cf" prot="public" virt="non-virtual"><scope>castor3d::PhongPass</scope><name>Type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_4d2af45186488f4957e91f52d0870c5b" kind="dir">
-    <compoundname>Render/ShadowMap</compoundname>
+    <compoundname>Castor3D/Render/ShadowMap</compoundname>
     <innerfile refid="dd/d95/a01247">ShadowMap.hpp</innerfile>
     <innerfile refid="d4/d22/a01250">ShadowMapDirectional.hpp</innerfile>
     <innerfile refid="d3/d0b/a01253">ShadowMapModule.hpp</innerfile>
@@ -16,6 +16,6 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/ShadowMap/"/>
+    <location file="Castor3D/Render/ShadowMap/"/>
   </compounddef>
 </doxygen>

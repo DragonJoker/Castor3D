@@ -1,0 +1,21 @@
+<map id="castor3d::Plugin" name="castor3d::Plugin">
+<area shape="rect" id="Node000001" title=" " alt="" coords="541,153,657,179"/>
+<area shape="rect" id="Node000004" href="$d5/dfd/a05871.html" title=" " alt="" coords="726,5,881,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="613,140,650,89,676,62,705,40,730,28,732,33,708,44,679,66,654,92,617,143"/>
+<area shape="rect" id="Node000005" href="$dd/dc3/a05875.html" title=" " alt="" coords="717,55,890,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="624,143,661,115,706,89,737,78,739,83,708,94,664,119,627,147"/>
+<area shape="rect" id="Node000006" href="$de/d76/a05879.html" title=" " alt="" coords="723,104,884,129"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="665,148,749,127,751,132,666,153"/>
+<area shape="rect" id="Node000007" href="$df/df8/a05883.html" title=" " alt="" coords="722,153,885,179"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="671,163,722,163,722,169,671,169"/>
+<area shape="rect" id="Node000008" href="$d9/d99/a05887.html" title=" " alt="" coords="723,203,883,228"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="666,179,751,200,749,205,665,184"/>
+<area shape="rect" id="Node000009" href="$db/d12/a05903.html" title=" " alt="" coords="724,252,883,277"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="627,185,664,213,708,238,739,249,737,254,706,243,661,217,624,189"/>
+<area shape="rect" id="Node000010" href="$da/d2e/a05907.html" title=" " alt="" coords="707,301,900,327"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="617,189,654,240,679,266,708,288,732,299,730,304,705,292,676,270,650,243,613,192"/>
+<area shape="rect" id="Node000002" href="$d6/da8/a08227.html" title=" " alt="" coords="305,153,492,179"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="505,163,541,163,541,169,505,169"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="5,153,188,179"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="202,163,305,163,305,169,202,169"/>
+</map>

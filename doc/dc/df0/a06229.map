@@ -1,0 +1,47 @@
+<map id="castor3d::OverlayTextBuffer" name="castor3d::OverlayTextBuffer">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1439,180,1620,205"/>
+<area shape="rect" id="Node000002" href="$d8/d4f/a03703.html" title=" " alt="" coords="1168,35,1288,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1294,61,1319,69,1369,83,1416,104,1473,142,1516,178,1513,182,1470,146,1413,108,1367,88,1318,74,1292,66"/>
+<area shape="rect" id="Node000003" href="$dc/d63/a08283.html" title=" " alt="" coords="771,35,941,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="955,45,1167,45,1167,50,955,50"/>
+<area shape="rect" id="Node000004" href="$da/d87/a08319.html" title=" " alt="" coords="29,5,165,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="178,12,430,9,586,13,742,25,792,32,792,37,741,30,585,19,430,14,179,17"/>
+<area shape="rect" id="Node000005" href="$dc/d63/a08283.html" title="Representation of a Unique instance class." alt="" coords="403,35,541,60"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="179,22,403,39,403,45,178,27"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="555,45,771,45,771,50,555,50"/>
+<area shape="rect" id="Node000006" href="$dc/d32/a06415.html" title=" " alt="" coords="1149,84,1307,109"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="1294,110,1416,146,1498,177,1497,182,1414,151,1292,115"/>
+<area shape="rect" id="Node000007" href="$d5/d4e/a06559.html" title=" " alt="" coords="773,84,939,109"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="953,94,1148,94,1148,99,953,99"/>
+<area shape="rect" id="Node000008" href="$d6/da8/a08227.html" title=" " alt="" coords="379,84,565,109"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="579,94,772,94,772,99,579,99"/>
+<area shape="rect" id="Node000009" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="5,84,188,109"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="202,94,378,94,378,99,202,99"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="1165,134,1291,174"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="1305,161,1439,178,1438,184,1305,166"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="793,134,919,174"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="933,151,1164,151,1164,157,933,157"/>
+<area shape="rect" id="Node000012" href="$da/d36/a06235.html" title=" " alt="" coords="1137,277,1319,332"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="1314,270,1493,203,1495,208,1316,275"/>
+<area shape="rect" id="Node000013" href="$d4/dcc/a08151.html" title=" " alt="" coords="591,366,739,406"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="753,392,831,394,923,392,1019,381,1112,358,1124,351,1136,342,1161,330,1163,334,1139,347,1127,356,1114,363,1020,386,923,397,831,400,753,397"/>
+<area shape="rect" id="Node000014" href="$d4/dcc/a08151.html" title="Templated class that provide std::array style buffer view." alt="" coords="14,327,179,367"/>
+<area shape="poly" id="edge14_Node000013_Node000014" title=" " alt="" coords="193,351,212,353,591,378,591,384,212,358,193,357"/>
+<area shape="rect" id="Node000016" href="$d4/dcc/a08151.html" title=" " alt="" coords="405,293,539,333"/>
+<area shape="poly" id="edge17_Node000016_Node000014" title=" " alt="" coords="193,336,405,316,405,321,193,341"/>
+<area shape="rect" id="Node000018" href="$d4/dcc/a08151.html" title=" " alt="" coords="589,214,741,254"/>
+<area shape="poly" id="edge20_Node000018_Node000014" title=" " alt="" coords="155,320,211,301,313,278,415,260,589,238,589,243,416,265,314,283,213,306,157,325"/>
+<area shape="rect" id="Node000020" href="$d4/dcc/a08151.html" title=" " alt="" coords="593,423,738,463"/>
+<area shape="poly" id="edge24_Node000020_Node000014" title=" " alt="" coords="166,369,213,382,315,402,419,417,593,436,592,441,418,423,314,407,211,387,165,374"/>
+<area shape="rect" id="Node000015" href="$da/d36/a06235.html" title=" " alt="" coords="765,279,947,319"/>
+<area shape="poly" id="edge15_Node000012_Node000015" title=" " alt="" coords="960,298,1137,301,1137,306,960,303"/>
+<area shape="rect" id="Node000017" href="$da/d36/a06235.html" title=" " alt="" coords="1137,199,1319,253"/>
+<area shape="poly" id="edge21_Node000017_Node000015" title=" " alt="" coords="960,278,1113,249,1136,244,1138,249,1114,254,961,283"/>
+<area shape="rect" id="Node000019" href="$da/d36/a06235.html" title=" " alt="" coords="1137,356,1319,411"/>
+<area shape="poly" id="edge25_Node000019_Node000015" title=" " alt="" coords="959,320,1137,360,1136,365,958,325"/>
+<area shape="poly" id="edge16_Node000015_Node000016" title=" " alt="" coords="552,307,765,300,765,305,553,313"/>
+<area shape="poly" id="edge18_Node000001_Node000017" title=" " alt="" coords="1332,213,1414,205,1438,202,1439,207,1415,210,1333,219"/>
+<area shape="poly" id="edge19_Node000017_Node000018" title=" " alt="" coords="755,230,1137,225,1137,230,755,235"/>
+<area shape="poly" id="edge22_Node000001_Node000019" title=" " alt="" coords="1307,348,1317,342,1376,307,1431,268,1511,203,1515,208,1435,272,1379,311,1320,347,1310,352"/>
+<area shape="poly" id="edge23_Node000019_Node000020" title=" " alt="" coords="751,439,845,436,946,429,1030,418,1113,403,1137,399,1138,404,1114,409,1031,423,947,434,846,441,752,445"/>
+</map>

@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/da2/a04991" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TextureData</compoundname>
+    <includes local="no">TextureUnit.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/da2/a04991_1a3dbfaca93a47ca8fdbca8344a395eec8" prot="public" static="no" mutable="no">
+        <type><ref refid="db/d40/a04987" kindref="compound">TextureSourceInfo</ref></type>
+        <definition>TextureSourceInfo castor3d::TextureData::sourceInfo</definition>
+        <argsstring></argsstring>
+        <name>sourceInfo</name>
+        <qualifiedname>castor3d::TextureData::sourceInfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Texture/TextureUnit.hpp" line="36" column="19" bodyfile="Castor3D/Material/Texture/TextureUnit.hpp" bodystart="36" bodyend="-1"/>
+        <referencedby refid="d9/d7c/a04999_1a5da92043a4472e88abfff3e6f72b61c0" compoundref="da/d46/a00665" startline="238" endline="241">castor3d::TextureUnit::getSourceInfo</referencedby>
+        <referencedby refid="d9/d7c/a04999_1add49cbab82d230ad49928c5a1cac65c6" compoundref="da/d46/a00665" startline="202" endline="205">castor3d::TextureUnit::isRenderTarget</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/da2/a04991_1ac3b710a9895c5732f138accbf8db20f1" prot="public" static="no" mutable="no">
+        <type>castor::ImageRPtr</type>
+        <definition>castor::ImageRPtr castor3d::TextureData::image</definition>
+        <argsstring></argsstring>
+        <name>image</name>
+        <qualifiedname>castor3d::TextureData::image</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Texture/TextureUnit.hpp" line="37" column="19" bodyfile="Castor3D/Material/Texture/TextureUnit.hpp" bodystart="37" bodyend="-1"/>
+        <referencedby refid="d9/d7c/a04999_1aefd8f33f154b4b9e17931fb467f24a92" compoundref="da/d46/a00665" startline="253" endline="257">castor3d::TextureUnit::getCPUImage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/da2/a04991_1a84da7bab9a9545890edc62d548f8dc2e" prot="public" static="no" mutable="no">
+        <type>VkImageUsageFlags</type>
+        <definition>VkImageUsageFlags castor3d::TextureData::usage</definition>
+        <argsstring></argsstring>
+        <name>usage</name>
+        <qualifiedname>castor3d::TextureData::usage</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Texture/TextureUnit.hpp" line="38" column="19" bodyfile="Castor3D/Material/Texture/TextureUnit.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/da2/a04991_1ad6a714db42031caa84e446e3a1623ef8" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::TextureData::TextureData</definition>
+        <argsstring>(TextureSourceInfo psourceInfo, castor::ImageRPtr pimage={}, VkImageUsageFlags pusage=VkImageUsageFlags{ VK_IMAGE_USAGE_SAMPLED_BIT|VK_IMAGE_USAGE_TRANSFER_DST_BIT })</argsstring>
+        <name>TextureData</name>
+        <qualifiedname>castor3d::TextureData::TextureData</qualifiedname>
+        <param>
+          <type><ref refid="db/d40/a04987" kindref="compound">TextureSourceInfo</ref></type>
+          <declname>psourceInfo</declname>
+        </param>
+        <param>
+          <type>castor::ImageRPtr</type>
+          <declname>pimage</declname>
+          <defval>{}</defval>
+        </param>
+        <param>
+          <type>VkImageUsageFlags</type>
+          <declname>pusage</declname>
+          <defval>VkImageUsageFlags{ VK_IMAGE_USAGE_SAMPLED_BIT|VK_IMAGE_USAGE_TRANSFER_DST_BIT }</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Texture/TextureUnit.hpp" line="27" column="10" bodyfile="Castor3D/Material/Texture/TextureUnit.hpp" bodystart="27" bodyend="34"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::TextureData</label>
+        <link refid="d1/da2/a04991"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>sourceInfo</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::TextureSourceInfo</label>
+        <link refid="db/d40/a04987"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Texture/TextureUnit.hpp" line="25" column="1" bodyfile="Castor3D/Material/Texture/TextureUnit.hpp" bodystart="26" bodyend="39"/>
+    <listofallmembers>
+      <member refid="d1/da2/a04991_1ac3b710a9895c5732f138accbf8db20f1" prot="public" virt="non-virtual"><scope>castor3d::TextureData</scope><name>image</name></member>
+      <member refid="d1/da2/a04991_1a3dbfaca93a47ca8fdbca8344a395eec8" prot="public" virt="non-virtual"><scope>castor3d::TextureData</scope><name>sourceInfo</name></member>
+      <member refid="d1/da2/a04991_1ad6a714db42031caa84e446e3a1623ef8" prot="public" virt="non-virtual"><scope>castor3d::TextureData</scope><name>TextureData</name></member>
+      <member refid="d1/da2/a04991_1a84da7bab9a9545890edc62d548f8dc2e" prot="public" virt="non-virtual"><scope>castor3d::TextureData</scope><name>usage</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

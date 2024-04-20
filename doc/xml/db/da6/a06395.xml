@@ -1,0 +1,299 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/da6/a06395" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::Extensions</compoundname>
+    <includes local="no">RenderDevice.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/da6/a06395_1a463c4bca5b57831bcc62e1ab6cf2ebc3" prot="private" static="no" mutable="no">
+        <type>ashes::StringArray</type>
+        <definition>ashes::StringArray castor3d::Extensions::m_extensionsNames</definition>
+        <argsstring></argsstring>
+        <name>m_extensionsNames</name>
+        <qualifiedname>castor3d::Extensions::m_extensionsNames</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="161" column="20" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/da6/a06395_1a819b8423a3c5cbbfea651d3bb6002410" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a86c3cb3f752d72a3b31f2b33de41d5e4" kindref="member">FeatureArray</ref></type>
+        <definition>FeatureArray castor3d::Extensions::m_features</definition>
+        <argsstring></argsstring>
+        <name>m_features</name>
+        <qualifiedname>castor3d::Extensions::m_features</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="162" column="14" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/da6/a06395_1a223ea53a7eb7de2e943ce59356667bd1" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1ac11744fab8be34f163f94f7f890d778e" kindref="member">PropertyArray</ref></type>
+        <definition>PropertyArray castor3d::Extensions::m_properties</definition>
+        <argsstring></argsstring>
+        <name>m_properties</name>
+        <qualifiedname>castor3d::Extensions::m_properties</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="163" column="15" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="163" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/da6/a06395_1ab374751509fa33aeeef88fa6f85a3e77" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Extensions::addExtension</definition>
+        <argsstring>(castor::MbString const &amp;extName)</argsstring>
+        <name>addExtension</name>
+        <qualifiedname>castor3d::Extensions::addExtension</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">castor::MbString</ref> const &amp;</type>
+          <declname>extName</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute une extension. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="60" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da6/a06395_1a2d44f2a484ff54f147b34550a02f1f83" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Extensions::addExtension</definition>
+        <argsstring>(castor::MbString const &amp;extName, VkStructure *featureStruct, VkStructure *propertyStruct=nullptr)</argsstring>
+        <name>addExtension</name>
+        <qualifiedname>castor3d::Extensions::addExtension</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">castor::MbString</ref> const &amp;</type>
+          <declname>extName</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d47/a06387" kindref="compound">VkStructure</ref> *</type>
+          <declname>featureStruct</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d47/a06387" kindref="compound">VkStructure</ref> *</type>
+          <declname>propertyStruct</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+<para>Ajoute une extension, et sa feature structure optionnelle, qui sera remplie via le physical device. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="69" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da6/a06395_1a6d48d91cf303e86ab072fe8a38fb887b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename StructT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::Extensions::addFeature</definition>
+        <argsstring>(castor::MbString const &amp;extName, StructT *featureStruct)</argsstring>
+        <name>addFeature</name>
+        <qualifiedname>castor3d::Extensions::addFeature</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">castor::MbString</ref> const &amp;</type>
+          <declname>extName</declname>
+        </param>
+        <param>
+          <type>StructT *</type>
+          <declname>featureStruct</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute une feature structure, qui sera remplie via le physical device. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="81" column="6" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="81" bodyend="89"/>
+        <referencedby refid="db/da6/a06395_1a8a05a774bde62b7bef1b43cdc19dede8" compoundref="d0/d5a/a01199" startline="99" endline="102">addFeature</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/da6/a06395_1a8a05a774bde62b7bef1b43cdc19dede8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename StructT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::Extensions::addFeature</definition>
+        <argsstring>(StructT *featureStruct)</argsstring>
+        <name>addFeature</name>
+        <qualifiedname>castor3d::Extensions::addFeature</qualifiedname>
+        <param>
+          <type>StructT *</type>
+          <declname>featureStruct</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute une feature structure, qui sera remplie via le physical device. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="99" column="6" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="99" bodyend="102"/>
+        <references refid="db/da6/a06395_1a6d48d91cf303e86ab072fe8a38fb887b" compoundref="d0/d5a/a01199" startline="81" endline="89">addFeature</references>
+      </memberdef>
+      <memberdef kind="function" id="db/da6/a06395_1aa8ac9ba0a9fde8ead80b32ebbcf6350e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename StructT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::Extensions::addProperty</definition>
+        <argsstring>(castor::MbString const &amp;extName, StructT *propStruct)</argsstring>
+        <name>addProperty</name>
+        <qualifiedname>castor3d::Extensions::addProperty</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">castor::MbString</ref> const &amp;</type>
+          <declname>extName</declname>
+        </param>
+        <param>
+          <type>StructT *</type>
+          <declname>propStruct</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute une feature structure, qui sera remplie via le physical device. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="112" column="6" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="112" bodyend="120"/>
+        <referencedby refid="db/da6/a06395_1a3770732f75e9c00643d731074b317e49" compoundref="d0/d5a/a01199" startline="130" endline="133">addProperty</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/da6/a06395_1a3770732f75e9c00643d731074b317e49" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename StructT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::Extensions::addProperty</definition>
+        <argsstring>(StructT *propStruct)</argsstring>
+        <name>addProperty</name>
+        <qualifiedname>castor3d::Extensions::addProperty</qualifiedname>
+        <param>
+          <type>StructT *</type>
+          <declname>propStruct</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute une feature structure, qui sera remplie via le physical device. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="130" column="6" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="130" bodyend="133"/>
+        <references refid="db/da6/a06395_1aa8ac9ba0a9fde8ead80b32ebbcf6350e" compoundref="d0/d5a/a01199" startline="112" endline="120">addProperty</references>
+      </memberdef>
+      <memberdef kind="function" id="db/da6/a06395_1a8f92305822d3c9a8fc70993791f3fd22" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::StringArray const &amp;</type>
+        <definition>ashes::StringArray const  &amp; castor3d::Extensions::getExtensionsNames</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getExtensionsNames</name>
+        <qualifiedname>castor3d::Extensions::getExtensionsNames</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="135" column="27" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="135" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da6/a06395_1ac242662ebb6475c74dc176ed0934fc3f" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1a86c3cb3f752d72a3b31f2b33de41d5e4" kindref="member">FeatureArray</ref> &amp;</type>
+        <definition>FeatureArray &amp; castor3d::Extensions::getFeatures</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>getFeatures</name>
+        <qualifiedname>castor3d::Extensions::getFeatures</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="140" column="15" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="140" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da6/a06395_1adc64c3445531f2fbaf4960330968ecc1" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1a86c3cb3f752d72a3b31f2b33de41d5e4" kindref="member">FeatureArray</ref> const &amp;</type>
+        <definition>FeatureArray const  &amp; castor3d::Extensions::getFeatures</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getFeatures</name>
+        <qualifiedname>castor3d::Extensions::getFeatures</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="145" column="21" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="145" bodyend="148"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da6/a06395_1a68b4911faf1f0d380404f5cb2cb625d0" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1ac11744fab8be34f163f94f7f890d778e" kindref="member">PropertyArray</ref> &amp;</type>
+        <definition>PropertyArray &amp; castor3d::Extensions::getProperties</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>getProperties</name>
+        <qualifiedname>castor3d::Extensions::getProperties</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="150" column="16" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="150" bodyend="153"/>
+      </memberdef>
+      <memberdef kind="function" id="db/da6/a06395_1aeeb3359dc7922bba2397a40cb0531771" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1ac11744fab8be34f163f94f7f890d778e" kindref="member">PropertyArray</ref> const &amp;</type>
+        <definition>PropertyArray const  &amp; castor3d::Extensions::getProperties</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getProperties</name>
+        <qualifiedname>castor3d::Extensions::getProperties</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderDevice.hpp" line="155" column="22" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="155" bodyend="158"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/RenderDevice.hpp" line="49" column="1" bodyfile="Castor3D/Render/RenderDevice.hpp" bodystart="50" bodyend="164"/>
+    <listofallmembers>
+      <member refid="db/da6/a06395_1ab374751509fa33aeeef88fa6f85a3e77" prot="public" virt="non-virtual"><scope>castor3d::Extensions</scope><name>addExtension</name></member>
+      <member refid="db/da6/a06395_1a2d44f2a484ff54f147b34550a02f1f83" prot="public" virt="non-virtual"><scope>castor3d::Extensions</scope><name>addExtension</name></member>
+      <member refid="db/da6/a06395_1a6d48d91cf303e86ab072fe8a38fb887b" prot="public" virt="non-virtual"><scope>castor3d::Extensions</scope><name>addFeature</name></member>
+      <member refid="db/da6/a06395_1a8a05a774bde62b7bef1b43cdc19dede8" prot="public" virt="non-virtual"><scope>castor3d::Extensions</scope><name>addFeature</name></member>
+      <member refid="db/da6/a06395_1aa8ac9ba0a9fde8ead80b32ebbcf6350e" prot="public" virt="non-virtual"><scope>castor3d::Extensions</scope><name>addProperty</name></member>
+      <member refid="db/da6/a06395_1a3770732f75e9c00643d731074b317e49" prot="public" virt="non-virtual"><scope>castor3d::Extensions</scope><name>addProperty</name></member>
+      <member refid="db/da6/a06395_1a8f92305822d3c9a8fc70993791f3fd22" prot="public" virt="non-virtual"><scope>castor3d::Extensions</scope><name>getExtensionsNames</name></member>
+      <member refid="db/da6/a06395_1ac242662ebb6475c74dc176ed0934fc3f" prot="public" virt="non-virtual"><scope>castor3d::Extensions</scope><name>getFeatures</name></member>
+      <member refid="db/da6/a06395_1adc64c3445531f2fbaf4960330968ecc1" prot="public" virt="non-virtual"><scope>castor3d::Extensions</scope><name>getFeatures</name></member>
+      <member refid="db/da6/a06395_1a68b4911faf1f0d380404f5cb2cb625d0" prot="public" virt="non-virtual"><scope>castor3d::Extensions</scope><name>getProperties</name></member>
+      <member refid="db/da6/a06395_1aeeb3359dc7922bba2397a40cb0531771" prot="public" virt="non-virtual"><scope>castor3d::Extensions</scope><name>getProperties</name></member>
+      <member refid="db/da6/a06395_1a463c4bca5b57831bcc62e1ab6cf2ebc3" prot="private" virt="non-virtual"><scope>castor3d::Extensions</scope><name>m_extensionsNames</name></member>
+      <member refid="db/da6/a06395_1a819b8423a3c5cbbfea651d3bb6002410" prot="private" virt="non-virtual"><scope>castor3d::Extensions</scope><name>m_features</name></member>
+      <member refid="db/da6/a06395_1a223ea53a7eb7de2e943ce59356667bd1" prot="private" virt="non-virtual"><scope>castor3d::Extensions</scope><name>m_properties</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

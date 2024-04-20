@@ -1,0 +1,9 @@
+<map id="castor3d::TextureAnimationInstance" name="castor3d::TextureAnimationInstance">
+<area shape="rect" id="Node000001" title=" " alt="" coords="9,257,191,297"/>
+<area shape="rect" id="Node000002" href="$d3/d30/a06839.html" title=" " alt="" coords="7,183,193,208"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,222,103,257,97,257,97,222"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="5,93,195,133"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="103,147,103,182,97,182,97,147"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="9,5,191,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="103,44,103,93,97,93,97,44"/>
+</map>

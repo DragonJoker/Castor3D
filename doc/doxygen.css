@@ -1,4 +1,4 @@
-/* The standard CSS for doxygen 1.9.6*/
+/* The standard CSS for doxygen 1.10.0*/
 
 body {
     background-color: black;
@@ -15,8 +15,6 @@ body, table, div, p, dl {
 /* @group Heading Levels */
 
 .title {
-	font-weight: 400;
-	font-size: 14px;
 	font-family: Roboto,sans-serif;
 	line-height: 28px;
 	font-size: 150%;
@@ -149,6 +147,12 @@ div.qindex{
 	color: #334975;
 }
 
+#main-menu a:focus {
+	outline: auto;
+	z-index: 10;
+	position: relative;
+}
+
 dt.alphachar{
 	font-size: 180%;
 	font-weight: bold;
@@ -208,7 +212,13 @@ a {
 }
 
 a:hover {
-	text-decoration: underline;
+	text-decoration: none;
+	background:   linear-gradient(to bottom, transparent 0,transparent calc(100% - 1px), currentColor 100%);
+}
+
+a:hover > span.arrow {
+        text-decoration: none;
+        background : #101826;
 }
 
 a.el {
@@ -284,37 +294,70 @@ ul.multicol {
 .fragment {
   text-align: left;
   direction: ltr;
-  overflow-x: auto; /*Fixed: fragment lines overlap floating elements*/
+  overflow-x: auto;
   overflow-y: hidden;
+  position: relative;
+  min-height: 12px;
+  margin: 10px 0px;
+  padding: 10px 10px;
+  border: 1px solid #30363D;
+  border-radius: 4px;
+  background-color: #090D16;
+  color: #C9D1D9;
 }
 
 pre.fragment {
-        border: 1px solid #30363D;
-        background-color: black;
-	color: #C9D1D9;
-        padding: 4px 6px;
-        margin: 4px 8px 4px 2px;
-        overflow: auto;
-        word-wrap: break-word;
-        font-size:  9pt;
-        line-height: 125%;
-        font-family: monospace,fixed;
-        font-size: 105%;
+  word-wrap: break-word;
+  font-size:  10pt;
+  line-height: 125%;
+  font-family: 'JetBrains Mono',Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace,fixed;
 }
 
-div.fragment {
-	padding: 0 0 1px 0; /*Fixed: last line underline overlap border*/
-	margin: 4px 8px 4px 2px;
-	color: #C9D1D9;
-	background-color: black;
-	border: 1px solid #30363D;
+.clipboard {
+        width: 24px;
+        height: 24px;
+        right: 5px;
+        top: 5px;
+        opacity: 0;
+        position: absolute;
+        display: inline;
+        overflow: auto;
+        fill: #C9D1D9;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+}
+
+.clipboard.success {
+        border: 1px solid #C9D1D9;
+        border-radius: 4px;
+}
+
+.fragment:hover .clipboard, .clipboard.success {
+        opacity: .28;
+}
+
+.clipboard:hover, .clipboard.success {
+        opacity: 1 !important;
+}
+
+.clipboard:active:not([class~=success]) svg {
+        transform: scale(.91);
+}
+
+.clipboard.success svg {
+        fill: #0EA80E;
+}
+
+.clipboard.success {
+        border-color: #0EA80E;
 }
 
 div.line {
-	font-family: monospace,fixed;
+	font-family: 'JetBrains Mono',Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace,fixed;
         font-size: 13px;
 	min-height: 13px;
-	line-height: 1.0;
+	line-height: 1.2;
 	text-wrap: unrestricted;
 	white-space: -moz-pre-wrap; /* Moz */
 	white-space: -pre-wrap;     /* Opera 4-6 */
@@ -347,6 +390,18 @@ div.line.glow {
 	box-shadow: 0 0 10px cyan;
 }
 
+span.fold {
+        margin-left: 5px;
+        margin-right: 1px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding: 0px;
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	background-repeat:no-repeat;
+        background-position:center;
+}
 
 span.lineno {
 	padding-right: 4px;
@@ -418,10 +473,6 @@ img.light-mode-visible {
 	display: none;
 }
 
-img.formulaDsp {
-	
-}
-
 img.formulaInl, img.inline {
 	vertical-align: middle;
 }
@@ -484,16 +535,20 @@ span.charliteral {
 	color: #00E0F0;
 }
 
+span.xmlcdata {
+	color: #C9D1D9;
+}
+
 span.vhdldigit { 
 	color: #FF00FF;
 }
 
 span.vhdlchar { 
-	color: #000000;
+	color: #C0C0C0;
 }
 
 span.vhdlkeyword { 
-	color: #700070;
+	color: #CF53C9;
 }
 
 span.vhdllogic { 
@@ -675,7 +730,7 @@ table.memberdecls {
 }
 
 .overload {
-        font-family: monospace,fixed;
+        font-family: 'JetBrains Mono',Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace,fixed;
 	font-size: 65%;
 }
 
@@ -717,17 +772,25 @@ dl.reflist dd {
 
 .paramtype {
 	white-space: nowrap;
+	padding: 0px;
+	padding-bottom: 1px;
 }
 
 .paramname {
-	color: #D28757;
 	white-space: nowrap;
+        padding: 0px;
+        padding-bottom: 1px;
+        margin-left: 2px;
 }
+
 .paramname em {
+	color: #D28757;
 	font-style: normal;
+	margin-right: 1px;
 }
-.paramname code {
-        line-height: 14px;
+
+.paramname .paramdefval {
+	font-family: 'JetBrains Mono',Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace,fixed;
 }
 
 .params, .retval, .exception, .tparams {
@@ -746,7 +809,7 @@ dl.reflist dd {
 }
 
 .params .paramdir, .tparams .paramdir {
-        font-family: monospace,fixed;
+        font-family: 'JetBrains Mono',Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace,fixed;
         vertical-align: top;
 }
 
@@ -898,8 +961,7 @@ div.directory {
     width: 24px;
     height: 18px;
     margin-bottom: 4px;
-    background-image:url('folderopen.png');
-    background-position: 0px -4px;
+    background-image:url('folderopend.svg');
     background-repeat: repeat-y;
     vertical-align:top;
     display: inline-block;
@@ -909,8 +971,7 @@ div.directory {
     width: 24px;
     height: 18px;
     margin-bottom: 4px;
-    background-image:url('folderclosed.png');
-    background-position: 0px -4px;
+    background-image:url('folderclosedd.svg');
     background-repeat: repeat-y;
     vertical-align:top;
     display: inline-block;
@@ -920,7 +981,7 @@ div.directory {
     width: 24px;
     height: 18px;
     margin-bottom: 4px;
-    background-image:url('docd.png');
+    background-image:url('docd.svg');
     background-position: 0px -4px;
     background-repeat: repeat-y;
     vertical-align:top;
@@ -1063,7 +1124,6 @@ table.fieldtable {
 {
 	height:32px;
 	display:block;
-	text-decoration: none;
 	outline: none;
 	color: #B6C4DF;
 	font-family: 'Lucida Grande',Geneva,Helvetica,Arial,sans-serif;
@@ -1152,7 +1212,8 @@ dl {
         padding: 0 0 0 0;
 }
 
-/* dl.note, dl.warning, dl.attention, dl.pre, dl.post, dl.invariant, dl.deprecated, dl.todo, dl.test, dl.bug, dl.examples */
+/*
+
 dl.section {
 	margin-left: 0px;
 	padding-left: 0px;
@@ -1207,8 +1268,101 @@ dl.bug {
   border-color: #C08050;
 }
 
+*/
+
+dl.bug dt a, dl.deprecated dt a, dl.todo dt a, dl.test a {
+    font-weight: bold !important;
+}
+
+dl.warning, dl.attention, dl.note, dl.deprecated, dl.bug,
+dl.invariant, dl.pre, dl.post, dl.todo, dl.test, dl.remark {
+    padding: 10px;
+    margin: 10px 0px;
+    overflow: hidden;
+    margin-left: 0;
+    border-radius: 4px;
+}
+
 dl.section dd {
-	margin-bottom: 6px;
+    margin-bottom: 2px;
+}
+
+dl.warning, dl.attention {
+    background: #2e1917;
+    border-left: 8px solid #ad2617;
+    color: #f5b1aa;
+}
+
+dl.warning dt, dl.attention dt {
+    color: #ad2617;
+}
+
+dl.note, dl.remark {
+    background: #3b2e04;
+    border-left: 8px solid #f1b602;
+    color: #ceb670;
+}
+
+dl.note dt, dl.remark dt {
+    color: #f1b602;
+}
+
+dl.todo {
+    background: #163750;
+    border-left: 8px solid #1982D2;
+    color: #dcf0fa;
+}
+
+dl.todo dt {
+    color: #1982D2;
+}
+
+dl.test {
+    background: #121258;
+    border-left: 8px solid #4242cf;
+    color: #c0c0da;
+}
+
+dl.test dt {
+    color: #4242cf;
+}
+
+dl.bug dt a {
+    color: #7661b3 !important;
+}
+
+dl.bug {
+    background: #2a2536;
+    border-left: 8px solid #7661b3;
+    color: #ae9ed6;
+}
+
+dl.bug dt a {
+    color: #7661b3 !important;
+}
+
+dl.deprecated {
+    background: #2e323b;
+    border-left: 8px solid #738396;
+    color: #abb0bd;
+}
+
+dl.deprecated dt a {
+    color: #738396 !important;
+}
+
+dl.section dd, dl.bug dd, dl.deprecated dd, dl.todo dd, dl.test dd {
+    margin-inline-start: 0px;
+}
+
+dl.invariant, dl.pre, dl.post {
+    background: #303a35;
+    border-left: 8px solid #76ce96;
+    color: #cceed5;
+}
+
+dl.invariant dt, dl.pre dt, dl.post dt {
+    color: #76ce96;
 }
 
 
@@ -1223,12 +1377,12 @@ dl.section dd {
 	vertical-align: bottom;
 	border-collapse: separate;
 }
- 
+
 #projectlogo img
-{ 
+{
 	border: 0px none;
 }
- 
+
 #projectalign
 {
         vertical-align: middle;
@@ -1329,7 +1483,7 @@ div.toc {
 }
 
 div.toc li {
-        background: url("bdwn.png") no-repeat scroll 0 5px transparent;
+        background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='10px' width='5px'><text x='0' y='5' font-size='10' fill='grey'>&%238595;</text></svg>") no-repeat scroll 0 5px transparent;
         font: 10px/1.2 Verdana,'DejaVu Sans',Geneva,sans-serif;
         margin-top: 5px;
         padding-left: 10px;
@@ -1358,11 +1512,11 @@ div.toc li.level2 {
 }
 
 div.toc li.level3 {
-        margin-left: 30px;
+        margin-left: 15px;
 }
 
 div.toc li.level4 {
-        margin-left: 45px;
+        margin-left: 15px;
 }
 
 span.emoji {

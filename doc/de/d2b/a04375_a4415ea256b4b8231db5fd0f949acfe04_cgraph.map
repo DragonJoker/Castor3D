@@ -1,0 +1,11 @@
+<map id="castor3d::AttenuationMapComponent::Plugin::fillTextureConfiguration" name="castor3d::AttenuationMapComponent::Plugin::fillTextureConfiguration">
+<area shape="rect" id="Node000001" title="Fills the texture configuration for use with this component." alt="" coords="5,20,200,75"/>
+<area shape="rect" id="Node000002" href="$d9/dba/a02278.html#aca9266480e6d0378e87f784f76d6994d" title=" " alt="" coords="264,5,465,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,34,250,28,251,33,200,39"/>
+<area shape="rect" id="Node000003" href="$de/d2b/a04375.html#aedd084ba8051d638200203111fd0b7ee" title=" " alt="" coords="248,55,481,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="200,55,235,59,234,64,200,60"/>
+<area shape="rect" id="Node000004" href="$d2/d2e/a04831.html#a3d4ca319e7c6e2dc3e40e81211846fee" title=" " alt="" coords="529,26,741,66"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="481,60,515,56,516,62,482,65"/>
+<area shape="rect" id="Node000005" href="$d9/dba/a02278.html#a813eb0a53ad6b3f96433a39acae9f59b" title=" " alt="" coords="545,91,725,116"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="482,85,532,90,531,95,481,90"/>
+</map>

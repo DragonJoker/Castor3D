@@ -1,0 +1,438 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/d33/a09227" kind="class" language="C++" prot="public">
+    <compoundname>castor::SpeedT</compoundname>
+    <includes local="no">Speed.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ValueT</type>
+      </param>
+      <param>
+        <type>typename DurationT</type>
+      </param>
+      <param>
+        <type>typename TraitsT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d9/d33/a09227_1acfe2a816e9d5ed2868bafd3c1b1ad21e" prot="public" static="no">
+        <type>DurationT</type>
+        <definition>using castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::duration_type =  DurationT</definition>
+        <argsstring></argsstring>
+        <name>duration_type</name>
+        <qualifiedname>castor::SpeedT::duration_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="64" column="1" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d9/d33/a09227_1a12ddb8415846aaf08f7015d4bcb8cd2a" prot="public" static="no">
+        <type>ValueT</type>
+        <definition>using castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::value_type =  ValueT</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>castor::SpeedT::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="65" column="1" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="d9/d33/a09227_1a7e7554d9f76eaa9658a4705d962fca58" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ValueU</type>
+          </param>
+          <param>
+            <type>typename DurationU</type>
+          </param>
+          <param>
+            <type>typename TraitsU</type>
+          </param>
+        </templateparamlist>
+        <type>class</type>
+        <definition>friend class SpeedT</definition>
+        <argsstring></argsstring>
+        <name>SpeedT</name>
+        <qualifiedname>castor::SpeedT::SpeedT</qualifiedname>
+        <param>
+          <type><ref refid="d9/d33/a09227" kindref="compound">SpeedT</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="61" column="14" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="d9/d33/a09227_1a1aa5e6b1a0b15e9f48d7372ecf3195d8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Value</type>
+          </param>
+          <param>
+            <type>typename Duration</type>
+          </param>
+          <param>
+            <type>typename Traits</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool operator==</definition>
+        <argsstring>(SpeedT&lt; Value, Duration, Traits &gt; const &amp;, SpeedT&lt; Value, Duration, Traits &gt; const &amp;)</argsstring>
+        <name>operator==</name>
+        <qualifiedname>castor::SpeedT::operator==</qualifiedname>
+        <param>
+          <type><ref refid="d9/d33/a09227" kindref="compound">SpeedT</ref>&lt; Value, Duration, Traits &gt; const &amp;</type>
+        </param>
+        <param>
+          <type><ref refid="d9/d33/a09227" kindref="compound">SpeedT</ref>&lt; Value, Duration, Traits &gt; const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="157" column="13"/>
+      </memberdef>
+      <memberdef kind="friend" id="d9/d33/a09227_1a1546b849a3eceaefb5ec331cb93de752" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Value</type>
+          </param>
+          <param>
+            <type>typename Duration</type>
+          </param>
+          <param>
+            <type>typename Traits</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool operator&lt;</definition>
+        <argsstring>(SpeedT&lt; Value, Duration &gt; const &amp;, SpeedT&lt; Value, Duration, Traits &gt; const &amp;)</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>castor::SpeedT::operator&lt;</qualifiedname>
+        <param>
+          <type><ref refid="d9/d33/a09227" kindref="compound">SpeedT</ref>&lt; Value, Duration &gt; const &amp;</type>
+        </param>
+        <param>
+          <type><ref refid="d9/d33/a09227" kindref="compound">SpeedT</ref>&lt; Value, Duration, Traits &gt; const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="159" column="8"/>
+      </memberdef>
+      <memberdef kind="friend" id="d9/d33/a09227_1a60634091c2d55dd6bca76d92fa739fe1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename Value</type>
+          </param>
+          <param>
+            <type>typename Duration</type>
+          </param>
+          <param>
+            <type>typename Traits</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool operator&gt;</definition>
+        <argsstring>(SpeedT&lt; Value, Duration, Traits &gt; const &amp;, SpeedT&lt; Value, Duration, Traits &gt; const &amp;)</argsstring>
+        <name>operator&gt;</name>
+        <qualifiedname>castor::SpeedT::operator&gt;</qualifiedname>
+        <param>
+          <type><ref refid="d9/d33/a09227" kindref="compound">SpeedT</ref>&lt; Value, Duration, Traits &gt; const &amp;</type>
+        </param>
+        <param>
+          <type><ref refid="d9/d33/a09227" kindref="compound">SpeedT</ref>&lt; Value, Duration, Traits &gt; const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="161" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d9/d33/a09227_1a454bae11130add0d272abd2b191ab964" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>DurationT constexpr</type>
+        <definition>DurationT constexpr castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::Zero</definition>
+        <argsstring></argsstring>
+        <name>Zero</name>
+        <qualifiedname>castor::SpeedT::Zero</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="150" column="28" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="150" bodyend="150"/>
+        <referencedby refid="d9/d33/a09227_1adbe2ff7130e6c2ebda1d1982ef4a3dd9" compoundref="d6/d1e/a02171" startline="100" endline="122">castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::getDurationRatioFrom</referencedby>
+        <referencedby refid="d9/d33/a09227_1a8e4b2d07d5521a86b9766e751b1a85ef" compoundref="d6/d1e/a02171" startline="125" endline="147">castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::getDurationRatioTo</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d33/a09227_1adec8e9ffecaba3f918cd2223818ba6e2" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>DurationT constexpr</type>
+        <definition>DurationT constexpr castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::Unit</definition>
+        <argsstring></argsstring>
+        <name>Unit</name>
+        <qualifiedname>castor::SpeedT::Unit</qualifiedname>
+        <initializer>{ 1u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="151" column="28" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="151" bodyend="151"/>
+        <referencedby refid="d9/d33/a09227_1adbe2ff7130e6c2ebda1d1982ef4a3dd9" compoundref="d6/d1e/a02171" startline="100" endline="122">castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::getDurationRatioFrom</referencedby>
+        <referencedby refid="d9/d33/a09227_1a8e4b2d07d5521a86b9766e751b1a85ef" compoundref="d6/d1e/a02171" startline="125" endline="147">castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::getDurationRatioTo</referencedby>
+        <referencedby refid="d9/d33/a09227_1abbc85c55c4ce41662abbb9670a5193f3" compoundref="d6/d1e/a02171" startline="82" endline="86">castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::operator=</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/d33/a09227_1ae2b3094ba880275ce6b107df429e8e0f" prot="private" static="no" mutable="no">
+        <type>ValueT</type>
+        <definition>ValueT castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::m_value</definition>
+        <argsstring></argsstring>
+        <name>m_value</name>
+        <qualifiedname>castor::SpeedT::m_value</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="154" column="8" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="154" bodyend="154"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d33/a09227_1a80a990330c84cce9a75b7485a29eb181" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::SpeedT</definition>
+        <argsstring>()=default</argsstring>
+        <name>SpeedT</name>
+        <qualifiedname>castor::SpeedT::SpeedT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="68" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d33/a09227_1a302113d44ae288d134de0b3eb4e629bb" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::SpeedT</definition>
+        <argsstring>(ValueT const &amp;value)</argsstring>
+        <name>SpeedT</name>
+        <qualifiedname>castor::SpeedT::SpeedT</qualifiedname>
+        <param>
+          <type>ValueT const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="70" column="10" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="70" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d33/a09227_1a2e785dcc476dc6937f87547214c10526" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ValueU</type>
+          </param>
+          <param>
+            <type>typename DurationU</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::SpeedT</definition>
+        <argsstring>(SpeedT&lt; ValueU, DurationU &gt; const &amp;rhs)</argsstring>
+        <name>SpeedT</name>
+        <qualifiedname>castor::SpeedT::SpeedT</qualifiedname>
+        <param>
+          <type><ref refid="d9/d33/a09227" kindref="compound">SpeedT</ref>&lt; ValueU, DurationU &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="76" column="10" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="76" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d33/a09227_1abbc85c55c4ce41662abbb9670a5193f3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ValueU</type>
+          </param>
+          <param>
+            <type>typename DurationU</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d33/a09227" kindref="compound">SpeedT</ref> &amp;</type>
+        <definition>SpeedT &amp; castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::operator=</definition>
+        <argsstring>(SpeedT&lt; ValueU, DurationU &gt; const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::SpeedT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d9/d33/a09227" kindref="compound">SpeedT</ref>&lt; ValueU, DurationU &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="82" column="9" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="82" bodyend="86"/>
+        <references refid="d9/d33/a09227_1adec8e9ffecaba3f918cd2223818ba6e2" compoundref="d6/d1e/a02171" startline="151" endline="151">castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::Unit</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d33/a09227_1a83281bb57ab45f140bcc1c61a67a40ba" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DurationU</type>
+          </param>
+        </templateparamlist>
+        <type>ValueT</type>
+        <definition>ValueT castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::getDistance</definition>
+        <argsstring>(DurationU const &amp;duration) const</argsstring>
+        <name>getDistance</name>
+        <qualifiedname>castor::SpeedT::getDistance</qualifiedname>
+        <param>
+          <type>DurationU const &amp;</type>
+          <declname>duration</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="89" column="8" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="89" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d33/a09227_1a1d02ca760c056652b2458a264d62f412" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ValueT const &amp;</type>
+        <definition>ValueT const  &amp; castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::getValue</definition>
+        <argsstring>() const</argsstring>
+        <name>getValue</name>
+        <qualifiedname>castor::SpeedT::getValue</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="94" column="15" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="94" bodyend="97"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d9/d33/a09227_1adbe2ff7130e6c2ebda1d1982ef4a3dd9" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DurationU</type>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>static double castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::getDurationRatioFrom</definition>
+        <argsstring>()</argsstring>
+        <name>getDurationRatioFrom</name>
+        <qualifiedname>castor::SpeedT::getDurationRatioFrom</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="100" column="15" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="100" bodyend="122"/>
+        <references refid="d9/d33/a09227_1adec8e9ffecaba3f918cd2223818ba6e2" compoundref="d6/d1e/a02171" startline="151" endline="151">castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::Unit</references>
+        <references refid="d9/d33/a09227_1a454bae11130add0d272abd2b191ab964" compoundref="d6/d1e/a02171" startline="150" endline="150">castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::Zero</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d33/a09227_1a8e4b2d07d5521a86b9766e751b1a85ef" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DurationU</type>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>static double castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::getDurationRatioTo</definition>
+        <argsstring>()</argsstring>
+        <name>getDurationRatioTo</name>
+        <qualifiedname>castor::SpeedT::getDurationRatioTo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Speed.hpp" line="125" column="15" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="125" bodyend="147"/>
+        <references refid="d9/d33/a09227_1adec8e9ffecaba3f918cd2223818ba6e2" compoundref="d6/d1e/a02171" startline="151" endline="151">castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::Unit</references>
+        <references refid="d9/d33/a09227_1a454bae11130add0d272abd2b191ab964" compoundref="d6/d1e/a02171" startline="150" endline="150">castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;::Zero</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Une vitesse. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::SpeedT&lt; castor::Angle, castor::Seconds &gt;</label>
+        <link refid="d9/d33/a09227"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::Angle, castor::Seconds &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::SpeedT&lt; castor::Point2f, castor::Seconds &gt;</label>
+        <link refid="d9/d33/a09227"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::Point2f, castor::Seconds &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::SpeedT&lt; ValueT, DurationT, TraitsT &gt;</label>
+        <link refid="d9/d33/a09227"/>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/Math/Speed.hpp" line="58" column="1" bodyfile="CastorUtils/Math/Speed.hpp" bodystart="59" bodyend="162"/>
+    <listofallmembers>
+      <member refid="d9/d33/a09227_1acfe2a816e9d5ed2868bafd3c1b1ad21e" prot="public" virt="non-virtual"><scope>castor::SpeedT</scope><name>duration_type</name></member>
+      <member refid="d9/d33/a09227_1a83281bb57ab45f140bcc1c61a67a40ba" prot="public" virt="non-virtual"><scope>castor::SpeedT</scope><name>getDistance</name></member>
+      <member refid="d9/d33/a09227_1adbe2ff7130e6c2ebda1d1982ef4a3dd9" prot="public" virt="non-virtual"><scope>castor::SpeedT</scope><name>getDurationRatioFrom</name></member>
+      <member refid="d9/d33/a09227_1a8e4b2d07d5521a86b9766e751b1a85ef" prot="public" virt="non-virtual"><scope>castor::SpeedT</scope><name>getDurationRatioTo</name></member>
+      <member refid="d9/d33/a09227_1a1d02ca760c056652b2458a264d62f412" prot="public" virt="non-virtual"><scope>castor::SpeedT</scope><name>getValue</name></member>
+      <member refid="d9/d33/a09227_1ae2b3094ba880275ce6b107df429e8e0f" prot="private" virt="non-virtual"><scope>castor::SpeedT</scope><name>m_value</name></member>
+      <member refid="d9/d33/a09227_1a1546b849a3eceaefb5ec331cb93de752" prot="private" virt="non-virtual"><scope>castor::SpeedT</scope><name>operator&lt;</name></member>
+      <member refid="d9/d33/a09227_1abbc85c55c4ce41662abbb9670a5193f3" prot="public" virt="non-virtual"><scope>castor::SpeedT</scope><name>operator=</name></member>
+      <member refid="d9/d33/a09227_1a1aa5e6b1a0b15e9f48d7372ecf3195d8" prot="private" virt="non-virtual"><scope>castor::SpeedT</scope><name>operator==</name></member>
+      <member refid="d9/d33/a09227_1a60634091c2d55dd6bca76d92fa739fe1" prot="private" virt="non-virtual"><scope>castor::SpeedT</scope><name>operator&gt;</name></member>
+      <member refid="d9/d33/a09227_1a7e7554d9f76eaa9658a4705d962fca58" prot="private" virt="non-virtual"><scope>castor::SpeedT</scope><name>SpeedT</name></member>
+      <member refid="d9/d33/a09227_1a80a990330c84cce9a75b7485a29eb181" prot="public" virt="non-virtual"><scope>castor::SpeedT</scope><name>SpeedT</name></member>
+      <member refid="d9/d33/a09227_1a302113d44ae288d134de0b3eb4e629bb" prot="public" virt="non-virtual"><scope>castor::SpeedT</scope><name>SpeedT</name></member>
+      <member refid="d9/d33/a09227_1a2e785dcc476dc6937f87547214c10526" prot="public" virt="non-virtual"><scope>castor::SpeedT</scope><name>SpeedT</name></member>
+      <member refid="d9/d33/a09227_1adec8e9ffecaba3f918cd2223818ba6e2" prot="public" virt="non-virtual"><scope>castor::SpeedT</scope><name>Unit</name></member>
+      <member refid="d9/d33/a09227_1a12ddb8415846aaf08f7015d4bcb8cd2a" prot="public" virt="non-virtual"><scope>castor::SpeedT</scope><name>value_type</name></member>
+      <member refid="d9/d33/a09227_1a454bae11130add0d272abd2b191ab964" prot="public" virt="non-virtual"><scope>castor::SpeedT</scope><name>Zero</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

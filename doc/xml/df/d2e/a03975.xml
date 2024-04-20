@@ -1,0 +1,588 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d2e/a03975" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ImporterFileFactory</compoundname>
+    <includes local="no">ImporterFile.hpp</includes>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="df/d2e/a03975_1a4e556896f8c6a0ca454d0c2273cd3b09" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; ImporterFileUPtr(<ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;, <ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> *, <ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;, <ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;, <ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *) &gt;</type>
+        <definition>using castor3d::ImporterFileFactory::Creator =  castor::Function&lt; ImporterFileUPtr( Engine &amp;, Scene *, castor::Path const &amp;, Parameters const &amp;, ProgressBar * ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>Creator</name>
+        <qualifiedname>castor3d::ImporterFileFactory::Creator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/ImporterFile.hpp" line="209" column="1" bodyfile="Castor3D/ImporterFile.hpp" bodystart="209" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/d2e/a03975_1ad737485a2ca1f5bfa4f24cd81332a984" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1afaceb665bb135b35bf24ad03bccf63b9" kindref="member">castor::UnorderedStringMap</ref>&lt; <ref refid="d2/dd2/a02279_1afaceb665bb135b35bf24ad03bccf63b9" kindref="member">castor::UnorderedStringMap</ref>&lt; Creator &gt; &gt;</type>
+        <definition>castor::UnorderedStringMap&lt; castor::UnorderedStringMap&lt; Creator &gt; &gt; castor3d::ImporterFileFactory::m_registered</definition>
+        <argsstring></argsstring>
+        <name>m_registered</name>
+        <qualifiedname>castor3d::ImporterFileFactory::m_registered</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/ImporterFile.hpp" line="383" column="28" bodyfile="Castor3D/ImporterFile.hpp" bodystart="383" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d2e/a03975_1acc0d8896bf810793e7e18eb5953bc1fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ImporterFileFactory::ImporterFileFactory</definition>
+        <argsstring>()</argsstring>
+        <name>ImporterFileFactory</name>
+        <qualifiedname>castor3d::ImporterFileFactory::ImporterFileFactory</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/ImporterFile.hpp" line="212" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d2e/a03975_1ad1c91f14ca2a024a20cee62afe2f41f4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ImporterFileUPtr</type>
+        <definition>C3D_API ImporterFileUPtr castor3d::ImporterFileFactory::create</definition>
+        <argsstring>(castor::String const &amp;type, castor::String const &amp;name, Engine &amp;engine, castor::Path const &amp;file, Parameters const &amp;parameters, ProgressBar *progress=nullptr) const</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::ImporterFileFactory::create</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+<para>Crée un importeur à partir d&apos;un type de fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type de fichier. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;importeur préféré. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le fichier contenant les données à importer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les paramètres d&apos;import. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Une barre de progression optionnelle. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;importeur créé. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/ImporterFile.hpp" line="233" column="26"/>
+        <referencedby refid="df/d2e/a03975_1a7ed98c75620d5ee3ee538b897fd967dc" compoundref="df/d70/a00431" startline="323" endline="329">registerType</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/d2e/a03975_1a2e84341b33adccf4f74577083b0595f9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ImporterFileUPtr</type>
+        <definition>C3D_API ImporterFileUPtr castor3d::ImporterFileFactory::create</definition>
+        <argsstring>(castor::String const &amp;type, castor::String const &amp;name, Scene &amp;scene, castor::Path const &amp;file, Parameters const &amp;parameters, ProgressBar *progress=nullptr) const</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::ImporterFileFactory::create</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+<para>Crée un importeur à partir d&apos;un type de fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type de fichier. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;importeur préféré. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La scène parente. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le fichier contenant les données à importer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les paramètres d&apos;import. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Une barre de progression optionnelle. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;importeur créé. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/ImporterFile.hpp" line="259" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d2e/a03975_1a0cd3441c5318268256777a4b986bf885" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ImporterFileUPtr</type>
+        <definition>C3D_API ImporterFileUPtr castor3d::ImporterFileFactory::create</definition>
+        <argsstring>(castor::String const &amp;type, Engine &amp;engine, castor::Path const &amp;file, Parameters const &amp;parameters, ProgressBar *progress=nullptr) const</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::ImporterFileFactory::create</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+<para>Crée un importeur à partir d&apos;un type de fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type de fichier. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le fichier contenant les données à importer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les paramètres d&apos;import. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Une barre de progression optionnelle. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;importeur créé. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/ImporterFile.hpp" line="283" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d2e/a03975_1a13ed67e0a9834349ca4c597934d1f7fb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ImporterFileUPtr</type>
+        <definition>C3D_API ImporterFileUPtr castor3d::ImporterFileFactory::create</definition>
+        <argsstring>(castor::String const &amp;type, Scene &amp;scene, castor::Path const &amp;file, Parameters const &amp;parameters, ProgressBar *progress=nullptr) const</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::ImporterFileFactory::create</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+<para>Crée un importeur à partir d&apos;un type de fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type de fichier. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La scène parente. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le fichier contenant les données à importer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les paramètres d&apos;import. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Une barre de progression optionnelle. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;importeur créé. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/ImporterFile.hpp" line="306" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d2e/a03975_1a7ed98c75620d5ee3ee538b897fd967dc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ImporterFileFactory::registerType</definition>
+        <argsstring>(castor::String const &amp;type, castor::String const &amp;name, Creator create)</argsstring>
+        <name>registerType</name>
+        <qualifiedname>castor3d::ImporterFileFactory::registerType</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>Creator</type>
+          <declname>create</declname>
+        </param>
+        <briefdescription>
+<para>Enregistre un type de fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type d&apos;objet. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;importeur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">create</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La fonction de création d&apos;objet. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/ImporterFile.hpp" line="323" column="6" bodyfile="Castor3D/ImporterFile.hpp" bodystart="323" bodyend="329"/>
+        <references refid="df/d2e/a03975_1ad1c91f14ca2a024a20cee62afe2f41f4">create</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d2e/a03975_1afc6185aaef2bc989fd1ca8f743498301" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ImporterFileFactory::unregisterType</definition>
+        <argsstring>(castor::String const &amp;type, castor::String const &amp;name) noexcept</argsstring>
+        <name>unregisterType</name>
+        <qualifiedname>castor3d::ImporterFileFactory::unregisterType</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Désenregistre un type de fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type d&apos;objet. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;importeur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/ImporterFile.hpp" line="340" column="6" bodyfile="Castor3D/ImporterFile.hpp" bodystart="340" bodyend="357"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d2e/a03975_1a87af2c4e484574b555c29b5e4dc8eba7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ImporterFileFactory::isTypeRegistered</definition>
+        <argsstring>(castor::String const &amp;type) const</argsstring>
+        <name>isTypeRegistered</name>
+        <qualifiedname>castor3d::ImporterFileFactory::isTypeRegistered</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+<para>Vérifie si un type de fichier est enregistré. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type de fichier. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si enregistré. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/ImporterFile.hpp" line="368" column="6" bodyfile="Castor3D/ImporterFile.hpp" bodystart="368" bodyend="371"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="df/d2e/a03975_1ad545d7fc49f9838115d064d8c68bde52" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>ImporterFileUPtr</type>
+        <definition>ImporterFileUPtr castor3d::ImporterFileFactory::doCreate</definition>
+        <argsstring>(castor::String const &amp;type, castor::String const &amp;name, Engine &amp;engine, Scene *scene, castor::Path const &amp;file, Parameters const &amp;parameters, ProgressBar *progress) const</argsstring>
+        <name>doCreate</name>
+        <qualifiedname>castor3d::ImporterFileFactory::doCreate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/ImporterFile.hpp" line="374" column="18"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/ImporterFile.hpp" line="207" column="1" bodyfile="Castor3D/ImporterFile.hpp" bodystart="208" bodyend="384"/>
+    <listofallmembers>
+      <member refid="df/d2e/a03975_1ad1c91f14ca2a024a20cee62afe2f41f4" prot="public" virt="non-virtual"><scope>castor3d::ImporterFileFactory</scope><name>create</name></member>
+      <member refid="df/d2e/a03975_1a2e84341b33adccf4f74577083b0595f9" prot="public" virt="non-virtual"><scope>castor3d::ImporterFileFactory</scope><name>create</name></member>
+      <member refid="df/d2e/a03975_1a0cd3441c5318268256777a4b986bf885" prot="public" virt="non-virtual"><scope>castor3d::ImporterFileFactory</scope><name>create</name></member>
+      <member refid="df/d2e/a03975_1a13ed67e0a9834349ca4c597934d1f7fb" prot="public" virt="non-virtual"><scope>castor3d::ImporterFileFactory</scope><name>create</name></member>
+      <member refid="df/d2e/a03975_1a4e556896f8c6a0ca454d0c2273cd3b09" prot="private" virt="non-virtual"><scope>castor3d::ImporterFileFactory</scope><name>Creator</name></member>
+      <member refid="df/d2e/a03975_1ad545d7fc49f9838115d064d8c68bde52" prot="private" virt="non-virtual"><scope>castor3d::ImporterFileFactory</scope><name>doCreate</name></member>
+      <member refid="df/d2e/a03975_1acc0d8896bf810793e7e18eb5953bc1fe" prot="public" virt="non-virtual"><scope>castor3d::ImporterFileFactory</scope><name>ImporterFileFactory</name></member>
+      <member refid="df/d2e/a03975_1a87af2c4e484574b555c29b5e4dc8eba7" prot="public" virt="non-virtual"><scope>castor3d::ImporterFileFactory</scope><name>isTypeRegistered</name></member>
+      <member refid="df/d2e/a03975_1ad737485a2ca1f5bfa4f24cd81332a984" prot="private" virt="non-virtual"><scope>castor3d::ImporterFileFactory</scope><name>m_registered</name></member>
+      <member refid="df/d2e/a03975_1a7ed98c75620d5ee3ee538b897fd967dc" prot="public" virt="non-virtual"><scope>castor3d::ImporterFileFactory</scope><name>registerType</name></member>
+      <member refid="df/d2e/a03975_1afc6185aaef2bc989fd1ca8f743498301" prot="public" virt="non-virtual"><scope>castor3d::ImporterFileFactory</scope><name>unregisterType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

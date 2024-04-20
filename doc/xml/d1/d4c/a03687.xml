@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d4c/a03687" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PtrCacheTraitsT</compoundname>
+    <templateparamlist>
+      <param>
+        <type>typename ResT</type>
+      </param>
+      <param>
+        <type>typename KeyT</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Structure permettant de spécialiser le comportement d&apos;un cache. </para>
+    </detaileddescription>
+    <location file="Castor3D/Castor3DModule.hpp" line="114" column="1" bodyfile="Castor3D/Castor3DModule.hpp" bodystart="114" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

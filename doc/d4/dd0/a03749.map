@@ -1,5 +1,14 @@
-<map id="castor3d::HeightMapComponent::Plugin" name="castor3d::HeightMapComponent::Plugin">
-<area shape="rect" id="node1" title=" " alt="" coords="7,167,215,207"/>
-<area shape="rect" id="node2" href="$d9/d2c/a04042.html" title=" " alt="" coords="11,79,212,119"/>
-<area shape="rect" id="node3" href="$db/df2/a04026.html" title=" " alt="" coords="5,5,217,31"/>
+<map id="castor3d::NonClientEventHandler&lt; Derived &gt;" name="castor3d::NonClientEventHandler&lt; Derived &gt;">
+<area shape="rect" id="Node000001" title="Description of an event handler, class that can receive event." alt="" coords="32,331,200,371"/>
+<area shape="rect" id="Node000002" href="$da/db0/a03747.html" title=" " alt="" coords="38,256,194,281"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,295,119,331,113,331,113,295"/>
+<area shape="rect" id="Node000003" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="5,168,112,193"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="76,203,110,254,106,257,72,206"/>
+<area shape="rect" id="Node000004" href="$dc/d79/a08267.html" title=" " alt="" coords="137,168,359,193"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="220,203,135,258,132,253,217,199"/>
+<area shape="rect" id="Node000005" href="$da/d36/a08315.html" title=" " alt="" coords="151,5,294,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="216,45,210,74,212,105,226,139,242,167,238,169,221,142,207,106,205,73,211,43"/>
+<area shape="rect" id="Node000006" href="$dc/d79/a08267.html" title="Basic signal class." alt="" coords="221,80,403,105"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="249,37,299,77,296,82,246,42"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="297,118,259,169,255,166,293,115"/>
 </map>

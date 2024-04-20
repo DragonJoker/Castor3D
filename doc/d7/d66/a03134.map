@@ -1,0 +1,11 @@
+<map id="castor3d::Interpolator&lt; DataT &gt;" name="castor3d::Interpolator&lt; DataT &gt;">
+<area shape="rect" id="Node000001" title="Template class which handles the interpolations, would it be quaternion, point, real,..." alt="" coords="5,91,149,131"/>
+<area shape="rect" id="Node000002" href="$d3/dd4/a03151.html" title="Partial specialisation of InterpolatorT, for InterpolatorType::eLinear." alt="" coords="333,5,501,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="162,89,332,49,333,55,164,94"/>
+<area shape="rect" id="Node000003" href="$d5/d1f/a03147.html" title="Partial specialisation of InterpolatorT, for InterpolatorType::eNearest." alt="" coords="333,84,501,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="163,109,333,109,333,114,163,114"/>
+<area shape="rect" id="Node000004" href="$d7/d36/a03135.html" title=" " alt="" coords="341,163,494,203"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="163,127,341,165,340,170,162,132"/>
+<area shape="rect" id="Node000005" href="$dc/d9b/a03155.html" title="Handles the Quaternion linear interpolations." alt="" coords="551,156,731,211"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="508,181,550,181,550,186,508,186"/>
+</map>

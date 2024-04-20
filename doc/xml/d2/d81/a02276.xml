@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/d81/a02276" kind="page">
+    <compoundname>todo</compoundname>
+    <title>Liste des choses à faire</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><variablelist>
+<varlistentry><term>Membre <ref refid="dd/d55/a09279_1aaabe3f211792971e144664a22a588cb6" kindref="member">castor::PlaneEquation::intersects</ref>  (<ref refid="dd/d55/a09279" kindref="compound">PlaneEquation</ref> const &amp;plane, Line3D&lt; float &gt; &amp;line) const</term></varlistentry>
+<listitem><para><anchor id="d2/d81/a02276_1_todo000001"/>Find origin point</para>
+<para></para>
+</listitem>
+</variablelist>
+</para>
+    </detaileddescription>
+    <location file="d2/d81/a02276"/>
+  </compounddef>
+</doxygen>

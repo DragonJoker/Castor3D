@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dir_38921dac01801a9e91a60a0b691361ca" kind="dir">
+    <compoundname>CastorUtils/Miscellaneous</compoundname>
+    <innerfile refid="df/d14/a02183">BitSize.hpp</innerfile>
+    <innerfile refid="d5/d4d/a02186">BlockTimer.hpp</innerfile>
+    <innerfile refid="d8/d85/a02189">BlockTracker.hpp</innerfile>
+    <innerfile refid="dc/da6/a02192">CpuInformations.hpp</innerfile>
+    <innerfile refid="df/d0e/a02195">Debug.hpp</innerfile>
+    <innerfile refid="d7/db7/a02198">DynamicLibrary.hpp</innerfile>
+    <innerfile refid="dd/d14/a02201">Hash.hpp</innerfile>
+    <innerfile refid="d4/de1/a11702">MiscellaneousModule.hpp</innerfile>
+    <innerfile refid="df/d4a/a02204">PreciseTimer.hpp</innerfile>
+    <innerfile refid="dd/d6f/a02207">StringUtils.hpp</innerfile>
+    <innerfile refid="d8/d1e/a02210">Utils.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Miscellaneous/"/>
+  </compounddef>
+</doxygen>

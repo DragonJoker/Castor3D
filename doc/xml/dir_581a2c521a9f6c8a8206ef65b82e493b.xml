@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dir_581a2c521a9f6c8a8206ef65b82e493b" kind="dir">
+    <compoundname>CastorUtils</compoundname>
+    <innerdir refid="dir_eb4b37955468fb741928c8c8a3179a24">CastorUtils/Align</innerdir>
+    <innerdir refid="dir_cf15dedf31366765b807c510073cd2d5">CastorUtils/Config</innerdir>
+    <innerdir refid="dir_80126dbd3fbd88f95f62f3072c143307">CastorUtils/Data</innerdir>
+    <innerdir refid="dir_cf96459767b535d7e0925e87f83e3d09">CastorUtils/Design</innerdir>
+    <innerdir refid="dir_da50365d3005a046df1afb863a866179">CastorUtils/Exception</innerdir>
+    <innerdir refid="dir_f8f908c75df93118c5af042257e6a1b8">CastorUtils/FileParser</innerdir>
+    <innerdir refid="dir_9e0c8cc4722a3ea2e524b82b09211b04">CastorUtils/Graphics</innerdir>
+    <innerdir refid="dir_97324af3b5ce9ff3c1bac87d62f66657">CastorUtils/Log</innerdir>
+    <innerdir refid="dir_ccecb13bac77b6512676eb9b9783a479">CastorUtils/Math</innerdir>
+    <innerdir refid="dir_38921dac01801a9e91a60a0b691361ca">CastorUtils/Miscellaneous</innerdir>
+    <innerdir refid="dir_773f2264828379eeee716d639257f55c">CastorUtils/Multithreading</innerdir>
+    <innerdir refid="dir_20961bbdb1a1523d4925c4b08c0a98bf">CastorUtils/Noise</innerdir>
+    <innerdir refid="dir_081abc9e948bc40c507592e9e8af5296">CastorUtils/Pool</innerdir>
+    <innerdir refid="dir_abc4c8c3198c34801214fa735dba0a7d">CastorUtils/Stream</innerdir>
+    <innerfile refid="d6/d3d/a01784">CastorUtils.hpp</innerfile>
+    <innerfile refid="de/dc3/a01787">CastorUtilsPch.hpp</innerfile>
+    <innerfile refid="d2/d20/a01790">CastorUtilsPrerequisites.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/"/>
+  </compounddef>
+</doxygen>

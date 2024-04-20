@@ -1,0 +1,1026 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/d6a/a09103" kind="class" language="C++" prot="public">
+    <compoundname>castor::Coords</compoundname>
+    <derivedcompoundref refid="dc/dc3/a09203" prot="public" virt="non-virtual">castor::QuaternionT&lt; T &gt;</derivedcompoundref>
+    <includes local="no">Coords.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+      <param>
+        <type>uint32_t</type>
+        <declname>Count</declname>
+        <defname>Count</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d9/d6a/a09103_1a75f4771f2e46024d2c1c46140a8f596c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::Coords&lt; T, Count &gt;::Coords</definition>
+        <argsstring>()=default</argsstring>
+        <name>Coords</name>
+        <qualifiedname>castor::Coords::Coords</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Construction / Destruction. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="53" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1a9aa8b07b52a81f1756eb5089e65a1ad0" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::Coords&lt; T, Count &gt;::Coords</definition>
+        <argsstring>(Point&lt; T, Count &gt; &amp;rhs)</argsstring>
+        <name>Coords</name>
+        <qualifiedname>castor::Coords::Coords</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, Count &gt; &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="54" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1ad6b0a1b4c2ec75857e6102aa56722d7d" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::Coords&lt; T, Count &gt;::Coords</definition>
+        <argsstring>(T *rhs)</argsstring>
+        <name>Coords</name>
+        <qualifiedname>castor::Coords::Coords</qualifiedname>
+        <param>
+          <type>T *</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="55" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d9/d6a/a09103_1ab03428e4e41572fb3b165b4e9819d120" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+        <definition>Coords &amp; castor::Coords&lt; T, Count &gt;::operator=</definition>
+        <argsstring>(T *rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Coords::operator=</qualifiedname>
+        <param>
+          <type>T *</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Opérateurs d&apos;affectation. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="64" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1a8254f9513693b90533c62f2650242daa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+        <definition>Coords &amp; castor::Coords&lt; T, Count &gt;::operator=</definition>
+        <argsstring>(Point&lt; T, Count &gt; const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Coords::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; T, Count &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="65" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d9/d6a/a09103_1a98290333f21625932bc49bd7feb3aa2c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+        <definition>Coords &amp; castor::Coords&lt; T, Count &gt;::operator+=</definition>
+        <argsstring>(Coords&lt; U, UCount &gt; const &amp;rhs)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::Coords::operator+=</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; U, UCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Opérateurs arithmétiques. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="75" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1ab0fd249c7148489f4e9d0d68c0739a34" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+        <definition>Coords &amp; castor::Coords&lt; T, Count &gt;::operator-=</definition>
+        <argsstring>(Coords&lt; U, UCount &gt; const &amp;rhs)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::Coords::operator-=</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; U, UCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="77" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1a4e758ceaf0230ca03133bf172fdc6552" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+        <definition>Coords &amp; castor::Coords&lt; T, Count &gt;::operator*=</definition>
+        <argsstring>(Coords&lt; U, UCount &gt; const &amp;rhs)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::Coords::operator*=</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; U, UCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="79" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1a422c73e91d94d36a65926478003bca39" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+        <definition>Coords &amp; castor::Coords&lt; T, Count &gt;::operator/=</definition>
+        <argsstring>(Coords&lt; U, UCount &gt; const &amp;rhs)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::Coords::operator/=</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; U, UCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="81" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1aa6c9f261457444316555aff7f1948948" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+        <definition>Coords &amp; castor::Coords&lt; T, Count &gt;::operator+=</definition>
+        <argsstring>(Point&lt; U, UCount &gt; const &amp;rhs)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::Coords::operator+=</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; U, UCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="84" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1ada307fda3dc9a8efaa12f607a35ea60b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+        <definition>Coords &amp; castor::Coords&lt; T, Count &gt;::operator-=</definition>
+        <argsstring>(Point&lt; U, UCount &gt; const &amp;rhs)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::Coords::operator-=</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; U, UCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="86" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1a902c19f1decbff33fc3ba6b14908f26f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+        <definition>Coords &amp; castor::Coords&lt; T, Count &gt;::operator*=</definition>
+        <argsstring>(Point&lt; U, UCount &gt; const &amp;rhs)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::Coords::operator*=</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; U, UCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="88" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1a4b08c2cfb99ea8c3db51115c7b4fb2bb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+        <definition>Coords &amp; castor::Coords&lt; T, Count &gt;::operator/=</definition>
+        <argsstring>(Point&lt; U, UCount &gt; const &amp;rhs)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::Coords::operator/=</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; U, UCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="90" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1a926b1e77b13b51c34e5f956aaead85c7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+        <definition>Coords &amp; castor::Coords&lt; T, Count &gt;::operator+=</definition>
+        <argsstring>(U const *coords)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::Coords::operator+=</qualifiedname>
+        <param>
+          <type>U const *</type>
+          <declname>coords</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="93" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1ab29316eb508e7f012713b94511e377ba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+        <definition>Coords &amp; castor::Coords&lt; T, Count &gt;::operator-=</definition>
+        <argsstring>(U const *coords)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::Coords::operator-=</qualifiedname>
+        <param>
+          <type>U const *</type>
+          <declname>coords</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="95" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1a16d100bc980825cc9ac58a3db6329339" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+        <definition>Coords &amp; castor::Coords&lt; T, Count &gt;::operator*=</definition>
+        <argsstring>(U const *coords)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::Coords::operator*=</qualifiedname>
+        <param>
+          <type>U const *</type>
+          <declname>coords</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="97" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1ab4b4bb9bd0e1689046aebb7adc3fd51c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+        <definition>Coords &amp; castor::Coords&lt; T, Count &gt;::operator/=</definition>
+        <argsstring>(U const *coords)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::Coords::operator/=</qualifiedname>
+        <param>
+          <type>U const *</type>
+          <declname>coords</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="99" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1a79dfffffae1cc234cb606f1c8838837d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+        <definition>Coords &amp; castor::Coords&lt; T, Count &gt;::operator+=</definition>
+        <argsstring>(T const &amp;coord)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::Coords::operator+=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>coord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="101" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1ac3547dcdd54a4d457577976b0da43295" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+        <definition>Coords &amp; castor::Coords&lt; T, Count &gt;::operator-=</definition>
+        <argsstring>(T const &amp;coord)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::Coords::operator-=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>coord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="102" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1a87111886288381baa244151cac8398fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+        <definition>Coords &amp; castor::Coords&lt; T, Count &gt;::operator*=</definition>
+        <argsstring>(T const &amp;coord)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::Coords::operator*=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>coord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="103" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1a57d38ef518880ed02803805ac5fd6011" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+        <definition>Coords &amp; castor::Coords&lt; T, Count &gt;::operator/=</definition>
+        <argsstring>(T const &amp;coord)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::Coords::operator/=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>coord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="104" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d9/d6a/a09103_1a5da7605848895176b638779f8457d0fd" prot="private" static="no">
+        <type>T</type>
+        <definition>using castor::Coords&lt; T, Count &gt;::value_type =  T</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>castor::Coords::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="26" column="1" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d9/d6a/a09103_1ad9aac52f3ff516892549fe6b4a092c5f" prot="private" static="no">
+        <type>value_type &amp;</type>
+        <definition>using castor::Coords&lt; T, Count &gt;::reference =  value_type &amp;</definition>
+        <argsstring></argsstring>
+        <name>reference</name>
+        <qualifiedname>castor::Coords::reference</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="27" column="1" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d9/d6a/a09103_1a3d83a8ee75110c8465ae2328e919d268" prot="private" static="no">
+        <type>value_type *</type>
+        <definition>using castor::Coords&lt; T, Count &gt;::pointer =  value_type *</definition>
+        <argsstring></argsstring>
+        <name>pointer</name>
+        <qualifiedname>castor::Coords::pointer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="28" column="1" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d9/d6a/a09103_1ab1f3439f997bd0a37218b4c35ca7d00a" prot="private" static="no">
+        <type>value_type const &amp;</type>
+        <definition>using castor::Coords&lt; T, Count &gt;::const_reference =  value_type const &amp;</definition>
+        <argsstring></argsstring>
+        <name>const_reference</name>
+        <qualifiedname>castor::Coords::const_reference</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="29" column="1" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d9/d6a/a09103_1a8635b86842222d160beee7543718474e" prot="private" static="no">
+        <type>value_type const *</type>
+        <definition>using castor::Coords&lt; T, Count &gt;::const_pointer =  value_type const *</definition>
+        <argsstring></argsstring>
+        <name>const_pointer</name>
+        <qualifiedname>castor::Coords::const_pointer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="30" column="1" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d9/d6a/a09103_1a3b60bd30222b9da08ac2d52585f77b57" prot="private" static="no">
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; value_type, Count &gt; &amp;</type>
+        <definition>using castor::Coords&lt; T, Count &gt;::point_reference =  Coords&lt; value_type, Count &gt; &amp;</definition>
+        <argsstring></argsstring>
+        <name>point_reference</name>
+        <qualifiedname>castor::Coords::point_reference</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="31" column="1" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d9/d6a/a09103_1a9dd9676ec577b93d521aba5658c23582" prot="private" static="no">
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; value_type, Count &gt; *</type>
+        <definition>using castor::Coords&lt; T, Count &gt;::point_pointer =  Coords&lt; value_type, Count &gt; *</definition>
+        <argsstring></argsstring>
+        <name>point_pointer</name>
+        <qualifiedname>castor::Coords::point_pointer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="32" column="1" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d9/d6a/a09103_1a20704580c051c64771d244c5db37e0e1" prot="private" static="no">
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; value_type, Count &gt; const &amp;</type>
+        <definition>using castor::Coords&lt; T, Count &gt;::const_point_reference =  Coords&lt; value_type, Count &gt; const &amp;</definition>
+        <argsstring></argsstring>
+        <name>const_point_reference</name>
+        <qualifiedname>castor::Coords::const_point_reference</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="33" column="1" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d9/d6a/a09103_1a866796015b76f9cdadb8608134d271c0" prot="private" static="no">
+        <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; value_type, Count &gt; const *</type>
+        <definition>using castor::Coords&lt; T, Count &gt;::const_point_pointer =  Coords&lt; value_type, Count &gt; const *</definition>
+        <argsstring></argsstring>
+        <name>const_point_pointer</name>
+        <qualifiedname>castor::Coords::const_point_pointer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="34" column="1" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d9/d6a/a09103_1adb214212d158c4c347af9c7c0f973a2a" prot="public" static="no">
+        <type>value_type *</type>
+        <definition>using castor::Coords&lt; T, Count &gt;::iterator =  value_type *</definition>
+        <argsstring></argsstring>
+        <name>iterator</name>
+        <qualifiedname>castor::Coords::iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Typedef d&apos;un pointeur sur les données. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="40" column="1" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d9/d6a/a09103_1a94573d926b28fd774cb7b1460bd646f6" prot="public" static="no">
+        <type>value_type const *</type>
+        <definition>using castor::Coords&lt; T, Count &gt;::const_iterator =  value_type const *</definition>
+        <argsstring></argsstring>
+        <name>const_iterator</name>
+        <qualifiedname>castor::Coords::const_iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Typedef d&apos;un pointeur constant sur les données. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="43" column="1" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="d9/d6a/a09103_1a94de584fc690443d180636ed82e27c28" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type>class</type>
+        <definition>friend class Coords</definition>
+        <argsstring></argsstring>
+        <name>Coords</name>
+        <qualifiedname>castor::Coords::Coords</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="24" column="29" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="d9/d6a/a09103_1a551e7d834db546202b558b3a8ab12303" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr std::size_t</type>
+        <definition>constexpr std::size_t castor::Coords&lt; T, Count &gt;::binary_size</definition>
+        <argsstring></argsstring>
+        <name>binary_size</name>
+        <qualifiedname>castor::Coords::binary_size</qualifiedname>
+        <initializer>= sizeof( T ) * Count</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="35" column="30" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/d6a/a09103_1a9d47341d3e4fa2a47647c21d76d965a5" prot="private" static="no" mutable="no">
+        <type>T *</type>
+        <definition>T* castor::Coords&lt; T, Count &gt;::m_coords</definition>
+        <argsstring></argsstring>
+        <name>m_coords</name>
+        <qualifiedname>castor::Coords::m_coords</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="233" column="4" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="233" bodyend="233"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d6a/a09103_1a31059aab49b93880080ec996ec252811" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Coords&lt; T, Count &gt;::swap</definition>
+        <argsstring>(Coords &amp;rhs) noexcept</argsstring>
+        <name>swap</name>
+        <qualifiedname>castor::Coords::swap</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref> &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Echange les données de c epoint avec celles du point donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point à échanger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="114" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1ae52ce3eafd7305bb76a9a825998b3794" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::Coords&lt; T, Count &gt;::size</definition>
+        <argsstring>() const</argsstring>
+        <name>size</name>
+        <qualifiedname>castor::Coords::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La taille totale du point (count * elemSize). </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="121" column="10" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="121" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1ab34eef90cc275e4140b0a671b1b43729" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>T const &amp;</type>
+        <definition>T const  &amp; castor::Coords&lt; T, Count &gt;::operator[]</definition>
+        <argsstring>(uint32_t index) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::Coords::operator[]</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la donnée à l&apos;index donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Aucun check n&apos;est fait, s&apos;il y a une erreur d&apos;index, attendez-vous à un crash </para>
+</simplesect>
+<simplesect kind="return"><para>Une référence constante sur la donnée à l&apos;index voulu </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="135" column="10" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="135" bodyend="141"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1aa1069c59af90a81bed8ec20744c40976" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>T &amp;</type>
+        <definition>T &amp; castor::Coords&lt; T, Count &gt;::operator[]</definition>
+        <argsstring>(uint32_t index)</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::Coords::operator[]</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la donnée à l&apos;index donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Aucun check n&apos;est fait, s&apos;il y a une erreur d&apos;index, attendez-vous à un crash </para>
+</simplesect>
+<simplesect kind="return"><para>Une référence sur la donnée à l&apos;index voulu </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="152" column="4" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="152" bodyend="158"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1a4fd6d2393fd35f33dde94c7c9153360f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>T *</type>
+        <definition>T * castor::Coords&lt; T, Count &gt;::ptr</definition>
+        <argsstring>()</argsstring>
+        <name>ptr</name>
+        <qualifiedname>castor::Coords::ptr</qualifiedname>
+        <briefdescription>
+<para>Récupère un pointeur non constant sur les données. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le pointeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="167" column="4" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="167" bodyend="170"/>
+        <referencedby refid="d9/dba/a02278_1a06304787bcd14219ba8a68175aa3d5ad" compoundref="d6/d7d/a00161" startline="816" endline="819">castor3d::getBuffer</referencedby>
+        <referencedby refid="d9/dba/a02278_1a8232bc508dcb9b2707dc0934ed289804" compoundref="d6/d7d/a00161" startline="774" endline="777">castor3d::getBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1accb88b430d4e2c3c193c907c097fabd0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>T const *</type>
+        <definition>T const  * castor::Coords&lt; T, Count &gt;::constPtr</definition>
+        <argsstring>() const</argsstring>
+        <name>constPtr</name>
+        <qualifiedname>castor::Coords::constPtr</qualifiedname>
+        <briefdescription>
+<para>Récupère un pointeur constant sur les données. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le pointeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="179" column="10" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="179" bodyend="182"/>
+        <referencedby refid="d9/dba/a02278_1aa72bbf48f80ba90db7c33f292f5d8861" compoundref="d6/d7d/a00161" startline="802" endline="805">castor3d::getBuffer</referencedby>
+        <referencedby refid="d9/dba/a02278_1a14ed359356bfe1b4120bd6e86be20588" compoundref="d6/d7d/a00161" startline="760" endline="763">castor3d::getBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1ae423ba2d6fbbe19b93f8337364d43740" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/d6a/a09103_1adb214212d158c4c347af9c7c0f973a2a" kindref="member">iterator</ref></type>
+        <definition>iterator castor::Coords&lt; T, Count &gt;::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::Coords::begin</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur sur le premier élément. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="191" column="10" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="191" bodyend="194"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1aa4a1173ea64fb7733962086448597fae" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/d6a/a09103_1a94573d926b28fd774cb7b1460bd646f6" kindref="member">const_iterator</ref></type>
+        <definition>const_iterator castor::Coords&lt; T, Count &gt;::begin</definition>
+        <argsstring>() const</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::Coords::begin</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur constant sur le premier élément. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="203" column="16" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="203" bodyend="206"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1aeb03d143ddb1a26fdfde00b2c3212dac" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/d6a/a09103_1adb214212d158c4c347af9c7c0f973a2a" kindref="member">iterator</ref></type>
+        <definition>iterator castor::Coords&lt; T, Count &gt;::end</definition>
+        <argsstring>()</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::Coords::end</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur sur le dernier élément. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="215" column="10" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="215" bodyend="218"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d6a/a09103_1a98451ff98028153f07b5467630e3f5b3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/d6a/a09103_1a94573d926b28fd774cb7b1460bd646f6" kindref="member">const_iterator</ref></type>
+        <definition>const_iterator castor::Coords&lt; T, Count &gt;::end</definition>
+        <argsstring>() const</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::Coords::end</qualifiedname>
+        <briefdescription>
+<para>Récupère un itérateur constant sur le dernier élément. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;itérateur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Coords.hpp" line="227" column="16" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="227" bodyend="230"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe de points à dimensions statiques. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Peut recevoir les types de données qui ont une Policy créée </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::Coords&lt; int32_t, 2 &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; int32_t, 2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Coords&lt; uint32_t, 2 &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::Coords&lt; T, Count &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+      </node>
+      <node id="4">
+        <label>castor::Position</label>
+        <link refid="df/dba/a08999"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::QuaternionT&lt; T &gt;</label>
+        <link refid="dc/dc3/a09203"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::Size</label>
+        <link refid="d4/dd6/a09023"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/Math/Coords.hpp" line="21" column="1" bodyfile="CastorUtils/Math/Coords.hpp" bodystart="22" bodyend="234"/>
+    <listofallmembers>
+      <member refid="d9/d6a/a09103_1ae423ba2d6fbbe19b93f8337364d43740" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>begin</name></member>
+      <member refid="d9/d6a/a09103_1aa4a1173ea64fb7733962086448597fae" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>begin</name></member>
+      <member refid="d9/d6a/a09103_1a551e7d834db546202b558b3a8ab12303" prot="private" virt="non-virtual"><scope>castor::Coords</scope><name>binary_size</name></member>
+      <member refid="d9/d6a/a09103_1a94573d926b28fd774cb7b1460bd646f6" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>const_iterator</name></member>
+      <member refid="d9/d6a/a09103_1a866796015b76f9cdadb8608134d271c0" prot="private" virt="non-virtual"><scope>castor::Coords</scope><name>const_point_pointer</name></member>
+      <member refid="d9/d6a/a09103_1a20704580c051c64771d244c5db37e0e1" prot="private" virt="non-virtual"><scope>castor::Coords</scope><name>const_point_reference</name></member>
+      <member refid="d9/d6a/a09103_1a8635b86842222d160beee7543718474e" prot="private" virt="non-virtual"><scope>castor::Coords</scope><name>const_pointer</name></member>
+      <member refid="d9/d6a/a09103_1ab1f3439f997bd0a37218b4c35ca7d00a" prot="private" virt="non-virtual"><scope>castor::Coords</scope><name>const_reference</name></member>
+      <member refid="d9/d6a/a09103_1accb88b430d4e2c3c193c907c097fabd0" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>constPtr</name></member>
+      <member refid="d9/d6a/a09103_1a94de584fc690443d180636ed82e27c28" prot="private" virt="non-virtual"><scope>castor::Coords</scope><name>Coords</name></member>
+      <member refid="d9/d6a/a09103_1a75f4771f2e46024d2c1c46140a8f596c" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>Coords</name></member>
+      <member refid="d9/d6a/a09103_1a9aa8b07b52a81f1756eb5089e65a1ad0" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>Coords</name></member>
+      <member refid="d9/d6a/a09103_1ad6b0a1b4c2ec75857e6102aa56722d7d" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>Coords</name></member>
+      <member refid="d9/d6a/a09103_1aeb03d143ddb1a26fdfde00b2c3212dac" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>end</name></member>
+      <member refid="d9/d6a/a09103_1a98451ff98028153f07b5467630e3f5b3" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>end</name></member>
+      <member refid="d9/d6a/a09103_1adb214212d158c4c347af9c7c0f973a2a" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>iterator</name></member>
+      <member refid="d9/d6a/a09103_1a9d47341d3e4fa2a47647c21d76d965a5" prot="private" virt="non-virtual"><scope>castor::Coords</scope><name>m_coords</name></member>
+      <member refid="d9/d6a/a09103_1a4e758ceaf0230ca03133bf172fdc6552" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator*=</name></member>
+      <member refid="d9/d6a/a09103_1a902c19f1decbff33fc3ba6b14908f26f" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator*=</name></member>
+      <member refid="d9/d6a/a09103_1a16d100bc980825cc9ac58a3db6329339" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator*=</name></member>
+      <member refid="d9/d6a/a09103_1a87111886288381baa244151cac8398fa" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator*=</name></member>
+      <member refid="d9/d6a/a09103_1a98290333f21625932bc49bd7feb3aa2c" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator+=</name></member>
+      <member refid="d9/d6a/a09103_1aa6c9f261457444316555aff7f1948948" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator+=</name></member>
+      <member refid="d9/d6a/a09103_1a926b1e77b13b51c34e5f956aaead85c7" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator+=</name></member>
+      <member refid="d9/d6a/a09103_1a79dfffffae1cc234cb606f1c8838837d" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator+=</name></member>
+      <member refid="d9/d6a/a09103_1ab0fd249c7148489f4e9d0d68c0739a34" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator-=</name></member>
+      <member refid="d9/d6a/a09103_1ada307fda3dc9a8efaa12f607a35ea60b" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator-=</name></member>
+      <member refid="d9/d6a/a09103_1ab29316eb508e7f012713b94511e377ba" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator-=</name></member>
+      <member refid="d9/d6a/a09103_1ac3547dcdd54a4d457577976b0da43295" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator-=</name></member>
+      <member refid="d9/d6a/a09103_1a422c73e91d94d36a65926478003bca39" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator/=</name></member>
+      <member refid="d9/d6a/a09103_1a4b08c2cfb99ea8c3db51115c7b4fb2bb" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator/=</name></member>
+      <member refid="d9/d6a/a09103_1ab4b4bb9bd0e1689046aebb7adc3fd51c" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator/=</name></member>
+      <member refid="d9/d6a/a09103_1a57d38ef518880ed02803805ac5fd6011" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator/=</name></member>
+      <member refid="d9/d6a/a09103_1ab03428e4e41572fb3b165b4e9819d120" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator=</name></member>
+      <member refid="d9/d6a/a09103_1a8254f9513693b90533c62f2650242daa" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator=</name></member>
+      <member refid="d9/d6a/a09103_1ab34eef90cc275e4140b0a671b1b43729" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator[]</name></member>
+      <member refid="d9/d6a/a09103_1aa1069c59af90a81bed8ec20744c40976" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>operator[]</name></member>
+      <member refid="d9/d6a/a09103_1a9dd9676ec577b93d521aba5658c23582" prot="private" virt="non-virtual"><scope>castor::Coords</scope><name>point_pointer</name></member>
+      <member refid="d9/d6a/a09103_1a3b60bd30222b9da08ac2d52585f77b57" prot="private" virt="non-virtual"><scope>castor::Coords</scope><name>point_reference</name></member>
+      <member refid="d9/d6a/a09103_1a3d83a8ee75110c8465ae2328e919d268" prot="private" virt="non-virtual"><scope>castor::Coords</scope><name>pointer</name></member>
+      <member refid="d9/d6a/a09103_1a4fd6d2393fd35f33dde94c7c9153360f" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>ptr</name></member>
+      <member refid="d9/d6a/a09103_1ad9aac52f3ff516892549fe6b4a092c5f" prot="private" virt="non-virtual"><scope>castor::Coords</scope><name>reference</name></member>
+      <member refid="d9/d6a/a09103_1ae52ce3eafd7305bb76a9a825998b3794" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>size</name></member>
+      <member refid="d9/d6a/a09103_1a31059aab49b93880080ec996ec252811" prot="public" virt="non-virtual"><scope>castor::Coords</scope><name>swap</name></member>
+      <member refid="d9/d6a/a09103_1a5da7605848895176b638779f8457d0fd" prot="private" virt="non-virtual"><scope>castor::Coords</scope><name>value_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

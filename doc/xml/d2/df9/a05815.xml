@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/df9/a05815" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserEnumTraits&lt; castor3d::TextLineSpacingMode &gt;</compoundname>
+    <includes local="no">Overlay.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d2/df9/a05815_1aaad9daba467780227db09f6c8d88493c" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref> constexpr</type>
+        <definition>StringView constexpr castor::ParserEnumTraits&lt; castor3d::TextLineSpacingMode &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::TextLineSpacingMode &gt;::Name</qualifiedname>
+        <initializer>= <ref refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" kindref="member">cuT</ref>( &quot;TextLineSpacingMode&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/Overlay.hpp" line="416" column="29" bodyfile="Castor3D/Overlay/Overlay.hpp" bodystart="416" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/df9/a05815_1a95fed6824fcc906bc011cc44f2c9b0be" prot="public" static="yes" mutable="no">
+        <type>UInt32StrMap const</type>
+        <definition>UInt32StrMap const castor::ParserEnumTraits&lt; castor3d::TextLineSpacingMode &gt;::Values</definition>
+        <argsstring></argsstring>
+        <name>Values</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::TextLineSpacingMode &gt;::Values</qualifiedname>
+        <initializer>= []()
+			{
+				UInt32StrMap result;
+				result = <ref refid="d9/dba/a02278_1a89ee8e4edb4c883ef7c66b8dc60cc430" kindref="member">castor3d::getEnumMapT</ref>&lt; <ref refid="d9/dba/a02278_1abd7f1f735abf0b76cd2014b1c184fabe" kindref="member">castor3d::TextLineSpacingMode</ref> &gt;();
+				return result;
+			}( )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/Overlay.hpp" line="417" column="34" bodyfile="Castor3D/Overlay/Overlay.hpp" bodystart="417" bodyend="422"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserEnumTraits&lt; castor3d::TextLineSpacingMode &gt;</label>
+        <link refid="d2/df9/a05815"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>Name</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>Values</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>UInt32StrMap</label>
+      </node>
+      <node id="2">
+        <label>std::basic_string_view&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Overlay/Overlay.hpp" line="414" column="1" bodyfile="Castor3D/Overlay/Overlay.hpp" bodystart="415" bodyend="423"/>
+    <listofallmembers>
+      <member refid="d2/df9/a05815_1aaad9daba467780227db09f6c8d88493c" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::TextLineSpacingMode &gt;</scope><name>Name</name></member>
+      <member refid="d2/df9/a05815_1a95fed6824fcc906bc011cc44f2c9b0be" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::TextLineSpacingMode &gt;</scope><name>Values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,14 @@
+<map id="castor3d::shader::FontData" name="castor3d::shader::FontData">
+<area shape="rect" id="Node000001" title=" " alt="" coords="35,477,215,503"/>
+<area shape="rect" id="Node000002" href="$dd/d24/a07475.html" title=" " alt="" coords="45,388,205,428"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,442,127,477,122,477,122,442"/>
+<area shape="rect" id="Node000003" href="$d1/d33/a07471.html" title=" " alt="" coords="5,211,196,236"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,250,113,325,123,387,118,388,107,326,100,250"/>
+<area shape="rect" id="Node000006" href="$dd/d24/a07475.html" title=" " alt="" coords="122,285,282,325"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="128,242,180,283,176,287,124,247"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="37,108,164,148"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="103,162,103,210,98,210,98,162"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="37,5,164,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="103,59,103,108,98,108,98,59"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="181,338,141,390,137,386,177,335"/>
+</map>

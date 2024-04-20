@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/d07/a05847" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlayLines</compoundname>
+    <includes local="no">OverlayModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d07/a05847_1a8220a54ebeb297052d0b01f73eea14f5" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::OverlayLines::maxRange</definition>
+        <argsstring></argsstring>
+        <name>maxRange</name>
+        <qualifiedname>castor3d::OverlayLines::maxRange</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/OverlayModule.hpp" line="414" column="17" bodyfile="Castor3D/Overlay/OverlayModule.hpp" bodystart="414" bodyend="414"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d07/a05847_1a595861b884f0fa8b6a6b54895636499e" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::OverlayLines::topOffset</definition>
+        <argsstring></argsstring>
+        <name>topOffset</name>
+        <qualifiedname>castor3d::OverlayLines::topOffset</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/OverlayModule.hpp" line="415" column="7" bodyfile="Castor3D/Overlay/OverlayModule.hpp" bodystart="415" bodyend="415"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d07/a05847_1af41f9f5463347f48b652a226a883c4d0" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlayLines::count</definition>
+        <argsstring></argsstring>
+        <name>count</name>
+        <qualifiedname>castor3d::OverlayLines::count</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/OverlayModule.hpp" line="416" column="10" bodyfile="Castor3D/Overlay/OverlayModule.hpp" bodystart="416" bodyend="416"/>
+        <referencedby refid="d2/dea/a05863_1ab8814f44b70507bd594cd741f60ac9b4" compoundref="d0/d85/a00908" startline="175" endline="178">castor3d::TextOverlay::getLineCount</referencedby>
+        <referencedby refid="d8/d07/a05847_1aa97f20f3a2731959c0a273c0e2dd5edb" compoundref="d3/d8a/a00899" startline="419" endline="424">getNext</referencedby>
+        <referencedby refid="d8/d07/a05847_1a7ef11f605e874ca7b22b8f59bbcff5e4" compoundref="d3/d8a/a00899" startline="431" endline="434">lines</referencedby>
+        <referencedby refid="d8/d07/a05847_1a198a180c968cb814d28cf3f133b14326" compoundref="d3/d8a/a00899" startline="426" endline="429">lines</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d07/a05847_1ade4f81214666dad6425f32a255d5c952" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; <ref refid="d8/d08/a05843" kindref="compound">TextLine</ref>, <ref refid="d9/dba/a02278_1a11eb09687f64450cf747737f35d83d03" kindref="member">MaxTextsContsPerOverlay</ref> &gt;</type>
+        <definition>castor::Array&lt; TextLine, MaxTextsContsPerOverlay &gt; castor3d::OverlayLines::elems</definition>
+        <argsstring></argsstring>
+        <name>elems</name>
+        <qualifiedname>castor3d::OverlayLines::elems</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/OverlayModule.hpp" line="417" column="15" bodyfile="Castor3D/Overlay/OverlayModule.hpp" bodystart="417" bodyend="417"/>
+        <referencedby refid="d8/d07/a05847_1aa97f20f3a2731959c0a273c0e2dd5edb" compoundref="d3/d8a/a00899" startline="419" endline="424">getNext</referencedby>
+        <referencedby refid="d8/d07/a05847_1a7ef11f605e874ca7b22b8f59bbcff5e4" compoundref="d3/d8a/a00899" startline="431" endline="434">lines</referencedby>
+        <referencedby refid="d8/d07/a05847_1a198a180c968cb814d28cf3f133b14326" compoundref="d3/d8a/a00899" startline="426" endline="429">lines</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d07/a05847_1aa97f20f3a2731959c0a273c0e2dd5edb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::OverlayLines::getNext</definition>
+        <argsstring>()</argsstring>
+        <name>getNext</name>
+        <qualifiedname>castor3d::OverlayLines::getNext</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/OverlayModule.hpp" line="419" column="7" bodyfile="Castor3D/Overlay/OverlayModule.hpp" bodystart="419" bodyend="424"/>
+        <references refid="d8/d07/a05847_1af41f9f5463347f48b652a226a883c4d0" compoundref="d3/d8a/a00899" startline="416" endline="416">count</references>
+        <references refid="d8/d07/a05847_1ade4f81214666dad6425f32a255d5c952" compoundref="d3/d8a/a00899" startline="417" endline="417">elems</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d07/a05847_1a198a180c968cb814d28cf3f133b14326" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::OverlayLines::lines</definition>
+        <argsstring>() const</argsstring>
+        <name>lines</name>
+        <qualifiedname>castor3d::OverlayLines::lines</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/OverlayModule.hpp" line="426" column="6" bodyfile="Castor3D/Overlay/OverlayModule.hpp" bodystart="426" bodyend="429"/>
+        <references refid="d8/d07/a05847_1af41f9f5463347f48b652a226a883c4d0" compoundref="d3/d8a/a00899" startline="416" endline="416">count</references>
+        <references refid="d8/d07/a05847_1ade4f81214666dad6425f32a255d5c952" compoundref="d3/d8a/a00899" startline="417" endline="417">elems</references>
+        <references refid="d2/dd2/a02279_1ae0a3e7eea924d39ca155a1fb041d37df" compoundref="d9/d7d/a01880" startline="187" endline="193">castor::makeArrayView</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d07/a05847_1a7ef11f605e874ca7b22b8f59bbcff5e4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::OverlayLines::lines</definition>
+        <argsstring>()</argsstring>
+        <name>lines</name>
+        <qualifiedname>castor3d::OverlayLines::lines</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/OverlayModule.hpp" line="431" column="6" bodyfile="Castor3D/Overlay/OverlayModule.hpp" bodystart="431" bodyend="434"/>
+        <references refid="d8/d07/a05847_1af41f9f5463347f48b652a226a883c4d0" compoundref="d3/d8a/a00899" startline="416" endline="416">count</references>
+        <references refid="d8/d07/a05847_1ade4f81214666dad6425f32a255d5c952" compoundref="d3/d8a/a00899" startline="417" endline="417">elems</references>
+        <references refid="d2/dd2/a02279_1ae0a3e7eea924d39ca155a1fb041d37df" compoundref="d9/d7d/a01880" startline="187" endline="193">castor::makeArrayView</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Contient les lignes formant l&apos;incrustation. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Overlay/OverlayModule.hpp" line="412" column="1" bodyfile="Castor3D/Overlay/OverlayModule.hpp" bodystart="413" bodyend="435"/>
+    <listofallmembers>
+      <member refid="d8/d07/a05847_1af41f9f5463347f48b652a226a883c4d0" prot="public" virt="non-virtual"><scope>castor3d::OverlayLines</scope><name>count</name></member>
+      <member refid="d8/d07/a05847_1ade4f81214666dad6425f32a255d5c952" prot="public" virt="non-virtual"><scope>castor3d::OverlayLines</scope><name>elems</name></member>
+      <member refid="d8/d07/a05847_1aa97f20f3a2731959c0a273c0e2dd5edb" prot="public" virt="non-virtual"><scope>castor3d::OverlayLines</scope><name>getNext</name></member>
+      <member refid="d8/d07/a05847_1a198a180c968cb814d28cf3f133b14326" prot="public" virt="non-virtual"><scope>castor3d::OverlayLines</scope><name>lines</name></member>
+      <member refid="d8/d07/a05847_1a7ef11f605e874ca7b22b8f59bbcff5e4" prot="public" virt="non-virtual"><scope>castor3d::OverlayLines</scope><name>lines</name></member>
+      <member refid="d8/d07/a05847_1a8220a54ebeb297052d0b01f73eea14f5" prot="public" virt="non-virtual"><scope>castor3d::OverlayLines</scope><name>maxRange</name></member>
+      <member refid="d8/d07/a05847_1a595861b884f0fa8b6a6b54895636499e" prot="public" virt="non-virtual"><scope>castor3d::OverlayLines</scope><name>topOffset</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

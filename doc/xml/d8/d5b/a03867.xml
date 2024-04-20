@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/d5b/a03867" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Spacer</compoundname>
+    <includes local="no">Layout.hpp</includes>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d8/d5b/a03867_1a58395237c82bf1921d1b39011682689c" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint32_t constexpr</type>
+        <definition>uint32_t constexpr castor3d::Spacer::Dynamic</definition>
+        <argsstring></argsstring>
+        <name>Dynamic</name>
+        <qualifiedname>castor3d::Spacer::Dynamic</qualifiedname>
+        <initializer>= ~0u</initializer>
+        <briefdescription>
+<para>Set the spacer size to this value to create a dynamic spacer. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="22" column="27" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="22" bodyend="-1"/>
+        <referencedby refid="d8/d5b/a03867_1afef48cc035b8fe76bfdaabd9435ae115" compoundref="d4/d13/a00377" startline="37" endline="40">isDynamic</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d8/d5b/a03867_1a34207c7f0e333d263f676cc256846665" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Spacer::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>castor3d::Spacer::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="51" column="10" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d5b/a03867_1a7b49df5460f9834df24b99a31a91178f" prot="public" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::Spacer::Spacer</definition>
+        <argsstring>(uint32_t size=Dynamic) noexcept</argsstring>
+        <name>Spacer</name>
+        <qualifiedname>castor3d::Spacer::Spacer</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+          <defval><ref refid="d8/d5b/a03867_1a58395237c82bf1921d1b39011682689c" kindref="member">Dynamic</ref></defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The spacer size. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="29" column="10" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="29" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d5b/a03867_1afef48cc035b8fe76bfdaabd9435ae115" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Spacer::isDynamic</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isDynamic</name>
+        <qualifiedname>castor3d::Spacer::isDynamic</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if spacer size varies </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="37" column="6" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="37" bodyend="40"/>
+        <references refid="d8/d5b/a03867_1a58395237c82bf1921d1b39011682689c" compoundref="d4/d13/a00377" startline="22">Dynamic</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d5b/a03867_1adc173d48c61e21a169a69e8d0a1022ed" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Spacer::getSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getSize</name>
+        <qualifiedname>castor3d::Spacer::getSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The spacer size. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Layout/Layout.hpp" line="45" column="10" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="45" bodyend="48"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Gui/Layout/Layout.hpp" line="18" column="1" bodyfile="Castor3D/Gui/Layout/Layout.hpp" bodystart="19" bodyend="52"/>
+    <listofallmembers>
+      <member refid="d8/d5b/a03867_1a58395237c82bf1921d1b39011682689c" prot="public" virt="non-virtual"><scope>castor3d::Spacer</scope><name>Dynamic</name></member>
+      <member refid="d8/d5b/a03867_1adc173d48c61e21a169a69e8d0a1022ed" prot="public" virt="non-virtual"><scope>castor3d::Spacer</scope><name>getSize</name></member>
+      <member refid="d8/d5b/a03867_1afef48cc035b8fe76bfdaabd9435ae115" prot="public" virt="non-virtual"><scope>castor3d::Spacer</scope><name>isDynamic</name></member>
+      <member refid="d8/d5b/a03867_1a34207c7f0e333d263f676cc256846665" prot="private" virt="non-virtual"><scope>castor3d::Spacer</scope><name>m_size</name></member>
+      <member refid="d8/d5b/a03867_1a7b49df5460f9834df24b99a31a91178f" prot="public" virt="non-virtual"><scope>castor3d::Spacer</scope><name>Spacer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

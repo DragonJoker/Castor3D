@@ -1,0 +1,18 @@
+<map id="castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;" name="castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;">
+<area shape="rect" id="Node000001" title="Light cache." alt="" coords="1225,65,1388,119"/>
+<area shape="rect" id="Node000002" href="$d8/d07/a03627.html" title=" " alt="" coords="991,65,1176,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1190,89,1225,89,1225,95,1190,95"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="385,74,568,99"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="582,85,990,89,990,94,582,90"/>
+<area shape="rect" id="Node000006" href="$d8/d07/a03627.html" title=" " alt="" coords="621,15,807,55"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="548,68,621,52,623,57,549,74"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="8,74,191,99"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="204,84,385,84,385,89,204,89"/>
+<area shape="rect" id="Node000005" href="$d8/da3/a08255.html" title="Base class for an element cache." alt="" coords="620,129,808,169"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="822,130,966,108,990,104,991,110,967,113,822,136"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="821,48,967,71,991,74,990,80,966,76,820,53"/>
+<area shape="rect" id="Node000007" href="$d8/da3/a08255.html" title=" " alt="" coords="383,5,571,45"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="585,27,621,28,621,34,584,32"/>
+<area shape="rect" id="Node000008" href="$d8/da3/a08255.html" title="Base class for an element cache." alt="" coords="5,5,193,45"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="207,23,382,23,382,28,207,28"/>
+</map>

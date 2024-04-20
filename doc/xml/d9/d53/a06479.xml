@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/d53/a06479" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RenderCounts</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d53/a06479_1a916e6765bd3cbbe9df049da148387170" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderCounts::vertexCount</definition>
+        <argsstring></argsstring>
+        <name>vertexCount</name>
+        <qualifiedname>castor3d::RenderCounts::vertexCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le nombre de sommets. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="476" column="10" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="476" bodyend="476"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d53/a06479_1a29b7efdf2d34b6ae8c0eec5a53c9ec85" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderCounts::faceCount</definition>
+        <argsstring></argsstring>
+        <name>faceCount</name>
+        <qualifiedname>castor3d::RenderCounts::faceCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le nombre de faces. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="479" column="10" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="479" bodyend="479"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d53/a06479_1a841d8e175743b2e505646d7ea4ab7ea8" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderCounts::objectCount</definition>
+        <argsstring></argsstring>
+        <name>objectCount</name>
+        <qualifiedname>castor3d::RenderCounts::objectCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le nombre d&apos;objets. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="482" column="10" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="482" bodyend="482"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d53/a06479_1a53bb2dd5ef5527d00fddcf93a42bb238" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderCounts::billboardCount</definition>
+        <argsstring></argsstring>
+        <name>billboardCount</name>
+        <qualifiedname>castor3d::RenderCounts::billboardCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le nombre de billboards. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="485" column="10" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="485" bodyend="485"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d53/a06479_1a653763c2e7c54d13597ace9349829f70" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderCounts::lightsCount</definition>
+        <argsstring></argsstring>
+        <name>lightsCount</name>
+        <qualifiedname>castor3d::RenderCounts::lightsCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le nombre de source lumineuses. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="488" column="10" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="488" bodyend="488"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Les comptes des objets 3D. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/RenderModule.hpp" line="472" column="1" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="473" bodyend="489"/>
+    <listofallmembers>
+      <member refid="d9/d53/a06479_1a53bb2dd5ef5527d00fddcf93a42bb238" prot="public" virt="non-virtual"><scope>castor3d::RenderCounts</scope><name>billboardCount</name></member>
+      <member refid="d9/d53/a06479_1a29b7efdf2d34b6ae8c0eec5a53c9ec85" prot="public" virt="non-virtual"><scope>castor3d::RenderCounts</scope><name>faceCount</name></member>
+      <member refid="d9/d53/a06479_1a653763c2e7c54d13597ace9349829f70" prot="public" virt="non-virtual"><scope>castor3d::RenderCounts</scope><name>lightsCount</name></member>
+      <member refid="d9/d53/a06479_1a841d8e175743b2e505646d7ea4ab7ea8" prot="public" virt="non-virtual"><scope>castor3d::RenderCounts</scope><name>objectCount</name></member>
+      <member refid="d9/d53/a06479_1a916e6765bd3cbbe9df049da148387170" prot="public" virt="non-virtual"><scope>castor3d::RenderCounts</scope><name>vertexCount</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

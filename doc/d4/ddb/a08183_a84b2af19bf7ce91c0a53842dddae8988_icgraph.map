@@ -1,0 +1,7 @@
+<map id="castor::ConnectionT::disconnect" name="castor::ConnectionT::disconnect">
+<area shape="rect" id="Node000001" title="Disconnects the function from the signal." alt="" coords="192,37,331,77"/>
+<area shape="rect" id="Node000002" href="$d4/ddb/a08183.html#a67db2f38c08a422ef937e8bdfe03cc2a" title="Move assignment operator." alt="" coords="5,5,144,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,46,144,40,145,35,178,40"/>
+<area shape="rect" id="Node000003" href="$d4/ddb/a08183.html#a2d04937aeddf6055946d96981bda9c73" title="Destructor." alt="" coords="5,69,144,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="178,74,145,80,144,75,178,69"/>
+</map>

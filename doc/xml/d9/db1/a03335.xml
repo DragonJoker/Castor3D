@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/db1/a03335" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;</compoundname>
+    <basecompoundref refid="d4/d9c/a03231" prot="public" virt="non-virtual">castor3d::BinaryWriterBase&lt; SkeletonAnimationNode &gt;</basecompoundref>
+    <includes local="no">BinarySkeletonAnimationNode.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d9/db1/a03335_1ae4cd3b1abadc82ee2c90960acdab1175" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;::doWrite</definition>
+        <argsstring>(SkeletonAnimationNode const &amp;obj) override</argsstring>
+        <name>doWrite</name>
+        <qualifiedname>castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;::doWrite</qualifiedname>
+        <reimplements refid="d4/d9c/a03231_1a720ab792b3e53c6556c3cb4e5b0e2d06">doWrite</reimplements>
+        <param>
+          <type><ref refid="d4/d71/a05671" kindref="compound">SkeletonAnimationNode</ref> const &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Fonction utilisée afin de remplir le chunk de données spécifiques. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">obj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à écrire. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si une erreur quelconque est arrivée. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Binary/BinarySkeletonAnimationNode.hpp" line="48" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::BinaryWriterBase&lt; SkeletonAnimationNode &gt;</label>
+        <link refid="d4/d9c/a03231"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationNode &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;</label>
+        <link refid="d9/db1/a03335"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
+        <link refid="d4/d9c/a03231"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::BinaryWriterBase&lt; SkeletonAnimationNode &gt;</label>
+        <link refid="d4/d9c/a03231"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationNode &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BinaryChunk</label>
+        <link refid="d5/d27/a03183"/>
+      </node>
+      <node id="1">
+        <label>castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;</label>
+        <link refid="d9/db1/a03335"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::BinaryWriterBase&lt; TWritten &gt;</label>
+        <link refid="d4/d9c/a03231"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_chunk</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Binary/BinarySkeletonAnimationNode.hpp" line="34" column="1" bodyfile="Castor3D/Binary/BinarySkeletonAnimationNode.hpp" bodystart="36" bodyend="49"/>
+    <listofallmembers>
+      <member refid="d9/db1/a03335_1ae4cd3b1abadc82ee2c90960acdab1175" prot="private" virt="virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;</scope><name>doWrite</name></member>
+      <member refid="d4/d9c/a03231_1a95685db95521fe46169767620976688c" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d4/d9c/a03231_1ac978d1019caf2d37ad181911c78dde33" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d4/d9c/a03231_1a1cf5e80f4e1564a6fd090a607ba1b033" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d4/d9c/a03231_1a5c34d6366fb3a830b669fe7116e52043" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d4/d9c/a03231_1a3bd1cb047e1f2872668a4397496bd7c4" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d4/d9c/a03231_1a7bdb655caf767fdde8a4267602e06191" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;</scope><name>doWriteChunk</name></member>
+      <member refid="d4/d9c/a03231_1a8828d359b7a61ea2b657d5aada2dd87b" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;</scope><name>doWriteHeader</name></member>
+      <member refid="d4/d9c/a03231_1ad6c66bdde51dd57ab2b27f4ddc8db513" prot="protected" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;</scope><name>m_chunk</name></member>
+      <member refid="d4/d9c/a03231_1a21e7985d2f99ff20a6056d198aac07c5" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;</scope><name>write</name></member>
+      <member refid="d4/d9c/a03231_1a3b4ae75e6ecd0bdf9f5dc26381633dab" prot="public" virt="non-virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;</scope><name>write</name></member>
+      <member refid="d4/d9c/a03231_1a455d885b04ddaed4d650461bbef1711c" prot="public" virt="virtual"><scope>castor3d::BinaryWriter&lt; SkeletonAnimationNode &gt;</scope><name>~BinaryWriterBase</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

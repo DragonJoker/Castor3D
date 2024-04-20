@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/db5/a07647" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::ShadowsBuffer</compoundname>
+    <includes local="no">GlslShadow.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/db5/a07647_1aa279b4edd59d0527482d4f986daf8ae9" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; <ref refid="df/d9c/a07643" kindref="compound">AllShadowData</ref> &gt;</type>
+        <definition>castor::RawUniquePtr&lt; AllShadowData &gt; castor3d::shader::ShadowsBuffer::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <qualifiedname>castor3d::shader::ShadowsBuffer::m_data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="144" column="22" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="144" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/db5/a07647_1a01128b93f8bf31d00f702cdd9d26f422" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::ShadowsBuffer::ShadowsBuffer</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, uint32_t binding, uint32_t set, bool enable=true)</argsstring>
+        <name>ShadowsBuffer</name>
+        <qualifiedname>castor3d::shader::ShadowsBuffer::ShadowsBuffer</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enable</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="134" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/db5/a07647_1a62945ee4792c8e1bbff78953822c2513" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d69/a07631" kindref="compound">DirectionalShadowData</ref></type>
+        <definition>C3D_API DirectionalShadowData castor3d::shader::ShadowsBuffer::getDirectionalShadows</definition>
+        <argsstring>() const</argsstring>
+        <name>getDirectionalShadows</name>
+        <qualifiedname>castor3d::shader::ShadowsBuffer::getDirectionalShadows</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="139" column="31"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/db5/a07647_1ac858f406def44201b1de615bc6f854ad" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/df5/a07635" kindref="compound">PointShadowData</ref></type>
+        <definition>C3D_API PointShadowData castor3d::shader::ShadowsBuffer::getPointShadows</definition>
+        <argsstring>(sdw::Int const &amp;index) const</argsstring>
+        <name>getPointShadows</name>
+        <qualifiedname>castor3d::shader::ShadowsBuffer::getPointShadows</qualifiedname>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="140" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/db5/a07647_1a3a7c76eb1c160dff0d10c7d6a9dc435a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/d57/a07639" kindref="compound">SpotShadowData</ref></type>
+        <definition>C3D_API SpotShadowData castor3d::shader::ShadowsBuffer::getSpotShadows</definition>
+        <argsstring>(sdw::Int const &amp;index) const</argsstring>
+        <name>getSpotShadows</name>
+        <qualifiedname>castor3d::shader::ShadowsBuffer::getSpotShadows</qualifiedname>
+        <param>
+          <type>sdw::Int const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="141" column="24"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/Shaders/GlslShadow.hpp" line="131" column="1" bodyfile="Castor3D/Shader/Shaders/GlslShadow.hpp" bodystart="132" bodyend="145"/>
+    <listofallmembers>
+      <member refid="d1/db5/a07647_1a62945ee4792c8e1bbff78953822c2513" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowsBuffer</scope><name>getDirectionalShadows</name></member>
+      <member refid="d1/db5/a07647_1ac858f406def44201b1de615bc6f854ad" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowsBuffer</scope><name>getPointShadows</name></member>
+      <member refid="d1/db5/a07647_1a3a7c76eb1c160dff0d10c7d6a9dc435a" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowsBuffer</scope><name>getSpotShadows</name></member>
+      <member refid="d1/db5/a07647_1aa279b4edd59d0527482d4f986daf8ae9" prot="private" virt="non-virtual"><scope>castor3d::shader::ShadowsBuffer</scope><name>m_data</name></member>
+      <member refid="d1/db5/a07647_1a01128b93f8bf31d00f702cdd9d26f422" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowsBuffer</scope><name>ShadowsBuffer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

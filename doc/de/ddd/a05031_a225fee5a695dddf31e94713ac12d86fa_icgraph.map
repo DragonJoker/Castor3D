@@ -1,0 +1,13 @@
+<map id="castor3d::GpuInformations::hasFeature" name="castor3d::GpuInformations::hasFeature">
+<area shape="rect" id="Node000001" title="Tells if the feature is supported supports stereo." alt="" coords="456,69,631,109"/>
+<area shape="rect" id="Node000002" href="$d5/d4e/a06559.html#aa39a76f00c71485a8436ceeff10c18e4" title=" " alt="" coords="236,5,403,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="459,68,389,48,391,43,460,63"/>
+<area shape="rect" id="Node000003" href="$de/ddd/a05031.html#a114235ec0ed3f5295ee4a8545aaccb96" title=" " alt="" coords="231,69,408,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="442,92,408,92,408,87,442,87"/>
+<area shape="rect" id="Node000005" href="$de/ddd/a05031.html#a944817491b8927bf269adbf58eceb1f0" title=" " alt="" coords="232,133,407,173"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="460,116,391,136,389,131,459,111"/>
+<area shape="rect" id="Node000004" href="$d5/d4e/a06559.html#aa70628b5a711acf61792fbbd9f6558a3" title=" " alt="" coords="5,69,183,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="217,92,183,92,183,87,217,87"/>
+<area shape="rect" id="Node000006" href="$d5/d4e/a06559.html#a6167986947bc7580b7174573997564ae" title=" " alt="" coords="11,133,177,173"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="218,156,178,156,178,151,218,151"/>
+</map>

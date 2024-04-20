@@ -1,0 +1,22 @@
+<map id="castor3d::SceneNode" name="castor3d::SceneNode">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1383,101,1529,127"/>
+<area shape="rect" id="Node000002" href="$d2/d7a/a03115.html" title=" " alt="" coords="1101,52,1177,77"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1191,68,1359,93,1392,99,1391,104,1358,98,1191,74"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="607,5,789,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="803,23,1028,45,1101,56,1101,61,1028,50,803,28"/>
+<area shape="rect" id="Node000004" href="$d2/d7a/a03115.html" title="Animable public interface." alt="" coords="623,55,773,95"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="787,71,1101,63,1101,68,788,76"/>
+<area shape="rect" id="Node000005" href="$d6/da8/a08227.html" title=" " alt="" coords="369,55,557,95"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="571,73,622,73,622,78,571,78"/>
+<area shape="rect" id="Node000006" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="5,63,188,88"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="202,73,369,73,369,78,202,78"/>
+<area shape="rect" id="Node000007" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="1086,101,1193,127"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1207,111,1382,111,1382,117,1207,117"/>
+<area shape="rect" id="Node000008" href="$dc/d79/a08267.html" title=" " alt="" coords="1052,151,1227,191"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1240,152,1358,131,1395,124,1396,129,1359,137,1241,158"/>
+<area shape="rect" id="Node000009" href="$da/d36/a08315.html" title=" " alt="" coords="392,140,535,165"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="549,149,583,149,806,144,903,144,1028,151,1052,154,1051,159,1028,157,903,150,806,150,583,154,549,154"/>
+<area shape="rect" id="Node000010" href="$dc/d79/a08267.html" title="Basic signal class." alt="" coords="607,171,789,196"/>
+<area shape="poly" id="edge10_Node000010_Node000009" title=" " alt="" coords="549,161,607,169,606,174,548,166"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="803,178,1052,171,1052,176,803,183"/>
+</map>

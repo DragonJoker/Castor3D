@@ -1,0 +1,319 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/dba/a07283" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ShadowConfig</compoundname>
+    <includes local="no">Shadow.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/dba/a07283_1a5752a3751b6057386e593ad68c81d22d" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::ShadowConfig::enabled</definition>
+        <argsstring></argsstring>
+        <name>enabled</name>
+        <qualifiedname>castor3d::ShadowConfig::enabled</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Shadow.hpp" line="24" column="6" bodyfile="Castor3D/Scene/Shadow.hpp" bodystart="24" bodyend="24"/>
+        <referencedby refid="da/d3c/a06987_1a722a2c0a9b858917acda75feee220dac" compoundref="d5/d67/a01466" startline="170" endline="173">castor3d::Light::isExpectedShadowProducer</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dba/a07283_1a38c33f848aa6dc85c84140086894e193" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a9ec5fbf127078bb3d04ad81e2ce4d0ae" kindref="member">ShadowType</ref></type>
+        <definition>ShadowType castor3d::ShadowConfig::filterType</definition>
+        <argsstring></argsstring>
+        <name>filterType</name>
+        <qualifiedname>castor3d::ShadowConfig::filterType</qualifiedname>
+        <initializer>{ <ref refid="d9/dba/a02278_1a9ec5fbf127078bb3d04ad81e2ce4d0aeabe988781e4e1de1c6a36fb698afbbe1f" kindref="member">ShadowType::eNone</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Shadow.hpp" line="25" column="12" bodyfile="Castor3D/Scene/Shadow.hpp" bodystart="25" bodyend="25"/>
+        <referencedby refid="da/d3c/a06987_1af39d6a0500a74daeabcb6b9fd5104e01" compoundref="d5/d67/a01466" startline="175" endline="178">castor3d::Light::getShadowType</referencedby>
+        <referencedby refid="da/d3c/a06987_1a8db0fba4dc0c69f124e5f11e2fb3845b" compoundref="d5/d67/a01466" startline="378" endline="381">castor3d::Light::setShadowType</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dba/a07283_1a59f4e8ecdc3bc6c3f4715d3314d840b0" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a5353c515b055b6a63da8559b02908a0f" kindref="member">GlobalIlluminationType</ref></type>
+        <definition>GlobalIlluminationType castor3d::ShadowConfig::globalIllumination</definition>
+        <argsstring></argsstring>
+        <name>globalIllumination</name>
+        <qualifiedname>castor3d::ShadowConfig::globalIllumination</qualifiedname>
+        <initializer>{ <ref refid="d9/dba/a02278_1a5353c515b055b6a63da8559b02908a0fabe988781e4e1de1c6a36fb698afbbe1f" kindref="member">GlobalIlluminationType::eNone</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Shadow.hpp" line="26" column="24" bodyfile="Castor3D/Scene/Shadow.hpp" bodystart="26" bodyend="26"/>
+        <referencedby refid="da/d3c/a06987_1a82fa672aa244e9768b6c7f3bd5101443" compoundref="d5/d67/a01466" startline="211" endline="214">castor3d::Light::getExpectedGlobalIlluminationType</referencedby>
+        <referencedby refid="da/d3c/a06987_1ac251086294c1586f164bf32242e3fd8f" compoundref="d5/d67/a01466" startline="372" endline="376">castor3d::Light::setGlobalIlluminationType</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dba/a07283_1a35b0dc99817232afc617ac6a7184fa53" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ShadowConfig::volumetricSteps</definition>
+        <argsstring></argsstring>
+        <name>volumetricSteps</name>
+        <qualifiedname>castor3d::ShadowConfig::volumetricSteps</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Shadow.hpp" line="27" column="10" bodyfile="Castor3D/Scene/Shadow.hpp" bodystart="27" bodyend="27"/>
+        <referencedby refid="da/d3c/a06987_1a2ac1ceee105e02ea3857cba96a773e7e" compoundref="d5/d67/a01466" startline="226" endline="229">castor3d::Light::getVolumetricSteps</referencedby>
+        <referencedby refid="da/d3c/a06987_1ae272e20fac3c3329c9bf6556aec5ade0" compoundref="d5/d67/a01466" startline="383" endline="386">castor3d::Light::setVolumetricSteps</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dba/a07283_1a688cb64dfa59feb2e92e00fdc35d9526" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ShadowConfig::volumetricScattering</definition>
+        <argsstring></argsstring>
+        <name>volumetricScattering</name>
+        <qualifiedname>castor3d::ShadowConfig::volumetricScattering</qualifiedname>
+        <initializer>{ 0.2f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Shadow.hpp" line="28" column="7" bodyfile="Castor3D/Scene/Shadow.hpp" bodystart="28" bodyend="28"/>
+        <referencedby refid="da/d3c/a06987_1a793fe1738e2c09dee90d5aa71732cc99" compoundref="d5/d67/a01466" startline="231" endline="234">castor3d::Light::getVolumetricScatteringFactor</referencedby>
+        <referencedby refid="da/d3c/a06987_1aa8b881e3208f3bb9bd46c2532299c4a2" compoundref="d5/d67/a01466" startline="388" endline="391">castor3d::Light::setVolumetricScatteringFactor</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dba/a07283_1ab5a47fd1fe0d735179bc753013a0095f" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::ShadowConfig::rawOffsets</definition>
+        <argsstring></argsstring>
+        <name>rawOffsets</name>
+        <qualifiedname>castor3d::ShadowConfig::rawOffsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Shadow.hpp" line="29" column="17" bodyfile="Castor3D/Scene/Shadow.hpp" bodystart="29" bodyend="-1"/>
+        <referencedby refid="da/d3c/a06987_1ac938aebbd0d17ed48b4f4d138d0f4fdd" compoundref="d5/d67/a01466" startline="236" endline="239">castor3d::Light::getShadowRawOffsets</referencedby>
+        <referencedby refid="da/d3c/a06987_1a829d5dfd0008b1db500fc857c17db39c" compoundref="d5/d67/a01466" startline="398" endline="401">castor3d::Light::setRawMaxSlopeOffset</referencedby>
+        <referencedby refid="da/d3c/a06987_1ac75e21f7eb5001c3bee7648300a73758" compoundref="d5/d67/a01466" startline="393" endline="396">castor3d::Light::setRawMinOffset</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dba/a07283_1a7f392d242bbc87e8f1452b058403cf96" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::ShadowConfig::pcfOffsets</definition>
+        <argsstring></argsstring>
+        <name>pcfOffsets</name>
+        <qualifiedname>castor3d::ShadowConfig::pcfOffsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Shadow.hpp" line="30" column="17" bodyfile="Castor3D/Scene/Shadow.hpp" bodystart="30" bodyend="-1"/>
+        <referencedby refid="da/d3c/a06987_1a8d6383ed14358d7e885a00543b3f6d4f" compoundref="d5/d67/a01466" startline="241" endline="244">castor3d::Light::getShadowPcfOffsets</referencedby>
+        <referencedby refid="da/d3c/a06987_1aa036e5714df4591be760247bd1327aef" compoundref="d5/d67/a01466" startline="408" endline="411">castor3d::Light::setPcfMaxSlopeOffset</referencedby>
+        <referencedby refid="da/d3c/a06987_1a80cdda0de453402ca23bf06c33209962" compoundref="d5/d67/a01466" startline="403" endline="406">castor3d::Light::setPcfMinOffset</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dba/a07283_1a5acacf89a1eb95dd40ad9e7b439fcc80" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ShadowConfig::vsmMinVariance</definition>
+        <argsstring></argsstring>
+        <name>vsmMinVariance</name>
+        <qualifiedname>castor3d::ShadowConfig::vsmMinVariance</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Shadow.hpp" line="31" column="7" bodyfile="Castor3D/Scene/Shadow.hpp" bodystart="31" bodyend="31"/>
+        <referencedby refid="da/d3c/a06987_1a64d4b1b7eee0e08512d30b60a19cace1" compoundref="d5/d67/a01466" startline="246" endline="249">castor3d::Light::getVsmMinVariance</referencedby>
+        <referencedby refid="da/d3c/a06987_1ae99f5f65c715d6202958d33de380d1ac" compoundref="d5/d67/a01466" startline="423" endline="426">castor3d::Light::setVsmMinVariance</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dba/a07283_1a7764536c6da30b8946c11f8f3ea6fd5b" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::ShadowConfig::vsmLightBleedingReduction</definition>
+        <argsstring></argsstring>
+        <name>vsmLightBleedingReduction</name>
+        <qualifiedname>castor3d::ShadowConfig::vsmLightBleedingReduction</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Shadow.hpp" line="32" column="7" bodyfile="Castor3D/Scene/Shadow.hpp" bodystart="32" bodyend="32"/>
+        <referencedby refid="da/d3c/a06987_1a2533564dc9ea96e95ddbadd9adba93d2" compoundref="d5/d67/a01466" startline="251" endline="254">castor3d::Light::getVsmLightBleedingReduction</referencedby>
+        <referencedby refid="da/d3c/a06987_1a18fae2527e139f98cd5354174b31ca3c" compoundref="d5/d67/a01466" startline="428" endline="431">castor3d::Light::setVsmLightBleedingReduction</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dba/a07283_1a8efcaab6d914bfa4b5a7231340c95fee" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/de9/a09211" kindref="compound">castor::RangedValue</ref>&lt; uint32_t &gt;</type>
+        <definition>castor::RangedValue&lt; uint32_t &gt; castor3d::ShadowConfig::pcfFilterSize</definition>
+        <argsstring></argsstring>
+        <name>pcfFilterSize</name>
+        <qualifiedname>castor3d::ShadowConfig::pcfFilterSize</qualifiedname>
+        <initializer>{ 4u, <ref refid="d2/dd2/a02279_1adb20060264652dae04682f6046d32776" kindref="member">castor::makeRange</ref>( 0u, <ref refid="d9/dba/a02278_1a3b3d068a66394f2abe3c3097f0a9dcc6" kindref="member">MaxPcfFilterSize</ref> ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Shadow.hpp" line="33" column="21" bodyfile="Castor3D/Scene/Shadow.hpp" bodystart="33" bodyend="33"/>
+        <referencedby refid="da/d3c/a06987_1a12372db5088cdf2632023164f7f93a7a" compoundref="d5/d67/a01466" startline="256" endline="259">castor3d::Light::getShadowPcfFilterSize</referencedby>
+        <referencedby refid="da/d3c/a06987_1a57b3107d8f636ce4573b5275e10ec6d6" compoundref="d5/d67/a01466" startline="413" endline="416">castor3d::Light::setPcfFilterSize</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dba/a07283_1ac3a96e522641de004b01e1f06cf287cd" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/de9/a09211" kindref="compound">castor::RangedValue</ref>&lt; uint32_t &gt;</type>
+        <definition>castor::RangedValue&lt; uint32_t &gt; castor3d::ShadowConfig::pcfSampleCount</definition>
+        <argsstring></argsstring>
+        <name>pcfSampleCount</name>
+        <qualifiedname>castor3d::ShadowConfig::pcfSampleCount</qualifiedname>
+        <initializer>{ 8u, <ref refid="d2/dd2/a02279_1adb20060264652dae04682f6046d32776" kindref="member">castor::makeRange</ref>( 0u, <ref refid="d9/dba/a02278_1a264337803339c9429ea40f5d88a3f6cc" kindref="member">MaxPcfSampleCount</ref> ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Shadow.hpp" line="34" column="21" bodyfile="Castor3D/Scene/Shadow.hpp" bodystart="34" bodyend="34"/>
+        <referencedby refid="da/d3c/a06987_1a97bfca91e95b9a1f9f5c398e5b7f931b" compoundref="d5/d67/a01466" startline="261" endline="264">castor3d::Light::getShadowPcfSampleCount</referencedby>
+        <referencedby refid="da/d3c/a06987_1a892ce6818b097e8882090bc51ac1fb36" compoundref="d5/d67/a01466" startline="418" endline="421">castor3d::Light::setPcfSampleCount</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dba/a07283_1ac877fee9ddfa832866aaae2f54c7003f" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/d51/a06023" kindref="compound">LpvConfig</ref></type>
+        <definition>LpvConfig castor3d::ShadowConfig::lpvConfig</definition>
+        <argsstring></argsstring>
+        <name>lpvConfig</name>
+        <qualifiedname>castor3d::ShadowConfig::lpvConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Shadow.hpp" line="35" column="11" bodyfile="Castor3D/Scene/Shadow.hpp" bodystart="35" bodyend="-1"/>
+        <referencedby refid="da/d3c/a06987_1ac2fb7f973d0cba9b157c41ec8b5e5307" compoundref="d5/d67/a01466" startline="221" endline="224">castor3d::Light::getLpvConfig</referencedby>
+        <referencedby refid="da/d3c/a06987_1a24fcb3481810ce02efe674ac98de9c19" compoundref="d5/d67/a01466" startline="216" endline="219">castor3d::Light::getLpvConfig</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/dba/a07283_1a3ee60812c8355caa1e66d94bbd47109a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ShadowConfig::accept</definition>
+        <argsstring>(ConfigurationVisitorBase &amp;visitor, LightType lightType)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::ShadowConfig::accept</qualifiedname>
+        <param>
+          <type><ref refid="db/dc2/a05011" kindref="compound">ConfigurationVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>lightType</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Shadow.hpp" line="19" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d7/dba/a07283_1ac9e4b236a2738b0fddb1dcc742420387" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::ShadowConfig::addParsers</definition>
+        <argsstring>(castor::AttributeParsers &amp;result)</argsstring>
+        <name>addParsers</name>
+        <qualifiedname>castor3d::ShadowConfig::addParsers</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7138ba41c2c2c4ced36cacefe5eb2c33" kindref="member">castor::AttributeParsers</ref> &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Shadow.hpp" line="22" column="21"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="5">
+        <label>castor::ChangeTrackedT&lt; float &gt;</label>
+        <link refid="d2/def/a08159"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; float &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::RangedValue&lt; uint32_t &gt;</label>
+        <link refid="d8/de9/a09211"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; uint32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::LpvConfig</label>
+        <link refid="dd/d51/a06023"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>indirectAttenuation</edgelabel>
+          <edgelabel>texelAreaModifier</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ShadowConfig</label>
+        <link refid="d7/dba/a07283"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>pcfFilterSize</edgelabel>
+          <edgelabel>pcfSampleCount</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>lpvConfig</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::ChangeTrackedT&lt; ValueT, ControlT &gt;</label>
+        <link refid="d2/def/a08159"/>
+      </node>
+      <node id="3">
+        <label>castor::RangedValue&lt; T &gt;</label>
+        <link refid="d8/de9/a09211"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/Shadow.hpp" line="17" column="1" bodyfile="Castor3D/Scene/Shadow.hpp" bodystart="18" bodyend="36"/>
+    <listofallmembers>
+      <member refid="d7/dba/a07283_1a3ee60812c8355caa1e66d94bbd47109a" prot="public" virt="non-virtual"><scope>castor3d::ShadowConfig</scope><name>accept</name></member>
+      <member refid="d7/dba/a07283_1ac9e4b236a2738b0fddb1dcc742420387" prot="public" virt="non-virtual"><scope>castor3d::ShadowConfig</scope><name>addParsers</name></member>
+      <member refid="d7/dba/a07283_1a5752a3751b6057386e593ad68c81d22d" prot="public" virt="non-virtual"><scope>castor3d::ShadowConfig</scope><name>enabled</name></member>
+      <member refid="d7/dba/a07283_1a38c33f848aa6dc85c84140086894e193" prot="public" virt="non-virtual"><scope>castor3d::ShadowConfig</scope><name>filterType</name></member>
+      <member refid="d7/dba/a07283_1a59f4e8ecdc3bc6c3f4715d3314d840b0" prot="public" virt="non-virtual"><scope>castor3d::ShadowConfig</scope><name>globalIllumination</name></member>
+      <member refid="d7/dba/a07283_1ac877fee9ddfa832866aaae2f54c7003f" prot="public" virt="non-virtual"><scope>castor3d::ShadowConfig</scope><name>lpvConfig</name></member>
+      <member refid="d7/dba/a07283_1a8efcaab6d914bfa4b5a7231340c95fee" prot="public" virt="non-virtual"><scope>castor3d::ShadowConfig</scope><name>pcfFilterSize</name></member>
+      <member refid="d7/dba/a07283_1a7f392d242bbc87e8f1452b058403cf96" prot="public" virt="non-virtual"><scope>castor3d::ShadowConfig</scope><name>pcfOffsets</name></member>
+      <member refid="d7/dba/a07283_1ac3a96e522641de004b01e1f06cf287cd" prot="public" virt="non-virtual"><scope>castor3d::ShadowConfig</scope><name>pcfSampleCount</name></member>
+      <member refid="d7/dba/a07283_1ab5a47fd1fe0d735179bc753013a0095f" prot="public" virt="non-virtual"><scope>castor3d::ShadowConfig</scope><name>rawOffsets</name></member>
+      <member refid="d7/dba/a07283_1a688cb64dfa59feb2e92e00fdc35d9526" prot="public" virt="non-virtual"><scope>castor3d::ShadowConfig</scope><name>volumetricScattering</name></member>
+      <member refid="d7/dba/a07283_1a35b0dc99817232afc617ac6a7184fa53" prot="public" virt="non-virtual"><scope>castor3d::ShadowConfig</scope><name>volumetricSteps</name></member>
+      <member refid="d7/dba/a07283_1a7764536c6da30b8946c11f8f3ea6fd5b" prot="public" virt="non-virtual"><scope>castor3d::ShadowConfig</scope><name>vsmLightBleedingReduction</name></member>
+      <member refid="d7/dba/a07283_1a5acacf89a1eb95dd40ad9e7b439fcc80" prot="public" virt="non-virtual"><scope>castor3d::ShadowConfig</scope><name>vsmMinVariance</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

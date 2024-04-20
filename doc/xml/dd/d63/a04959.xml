@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d63/a04959" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ArrayView</compoundname>
+    <includes local="no">TextureLayout.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ViewT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/d63/a04959_1affa9ed91064c21995ebe2fe83b06ad5a" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/d31/a04951" kindref="compound">MipView</ref> *</type>
+        <definition>MipView* castor3d::ArrayView&lt; ViewT &gt;::view</definition>
+        <argsstring></argsstring>
+        <name>view</name>
+        <qualifiedname>castor3d::ArrayView::view</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Texture/TextureLayout.hpp" line="59" column="10" bodyfile="Castor3D/Material/Texture/TextureLayout.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d63/a04959_1ae70dff132217e4a24d1f81240ae428b2" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; ViewT &gt;</type>
+        <definition>castor::Vector&lt; ViewT &gt; castor3d::ArrayView&lt; ViewT &gt;::layers</definition>
+        <argsstring></argsstring>
+        <name>layers</name>
+        <qualifiedname>castor3d::ArrayView::layers</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Texture/TextureLayout.hpp" line="60" column="16" bodyfile="Castor3D/Material/Texture/TextureLayout.hpp" bodystart="60" bodyend="60"/>
+        <referencedby refid="dd/d63/a04959_1a4326bf34de29aa53db509da1068b9b1c" compoundref="de/ddd/a00653" startline="63" endline="69">castor3d::ArrayView&lt; ViewT &gt;::forEachView</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d63/a04959_1a4326bf34de29aa53db509da1068b9b1c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::ArrayView&lt; ViewT &gt;::forEachView</definition>
+        <argsstring>(FuncT function) const</argsstring>
+        <name>forEachView</name>
+        <qualifiedname>castor3d::ArrayView::forEachView</qualifiedname>
+        <param>
+          <type>FuncT</type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Texture/TextureLayout.hpp" line="63" column="6" bodyfile="Castor3D/Material/Texture/TextureLayout.hpp" bodystart="63" bodyend="69"/>
+        <references refid="dd/d63/a04959_1ae70dff132217e4a24d1f81240ae428b2" compoundref="de/ddd/a00653" startline="60" endline="60">castor3d::ArrayView&lt; ViewT &gt;::layers</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor3d::ArrayView&lt; castor3d::CubeView &gt;</label>
+        <link refid="dd/d63/a04959"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::CubeView &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ArrayView&lt; castor3d::MipView &gt;</label>
+        <link refid="dd/d63/a04959"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::MipView &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ArrayView&lt; ViewT &gt;</label>
+        <link refid="dd/d63/a04959"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::ArrayView&lt; ViewT &gt;</label>
+        <link refid="dd/d63/a04959"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>view</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::MipView</label>
+        <link refid="d9/d31/a04951"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Texture/TextureLayout.hpp" line="57" column="1" bodyfile="Castor3D/Material/Texture/TextureLayout.hpp" bodystart="58" bodyend="70"/>
+    <listofallmembers>
+      <member refid="dd/d63/a04959_1a4326bf34de29aa53db509da1068b9b1c" prot="public" virt="non-virtual"><scope>castor3d::ArrayView</scope><name>forEachView</name></member>
+      <member refid="dd/d63/a04959_1ae70dff132217e4a24d1f81240ae428b2" prot="public" virt="non-virtual"><scope>castor3d::ArrayView</scope><name>layers</name></member>
+      <member refid="dd/d63/a04959_1affa9ed91064c21995ebe2fe83b06ad5a" prot="public" virt="non-virtual"><scope>castor3d::ArrayView</scope><name>view</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

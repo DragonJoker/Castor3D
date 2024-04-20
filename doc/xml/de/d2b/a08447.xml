@@ -1,0 +1,347 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/d2b/a08447" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor::ParserParameterBase</compoundname>
+    <derivedcompoundref refid="de/dc0/a08423" prot="public" virt="non-virtual">castor::ParserParameter&lt; Type, std::enable_if_t&lt; !hasBaseParameterTypeV&lt; Type &gt; &amp;&amp;!isArithmeticTypeV&lt; Type &gt; &gt; &gt;</derivedcompoundref>
+    <derivedcompoundref refid="db/dec/a08427" prot="public" virt="non-virtual">castor::ParserParameter&lt; Type, std::enable_if_t&lt; IsArithmeticType&lt; Type &gt;::value &gt; &gt;</derivedcompoundref>
+    <includes local="no">ParserParameterBase.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d2b/a08447_1a522312a8be825a74fa7cf0435381ce5e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::ParserParameterBase::ParserParameterBase</definition>
+        <argsstring>()=default</argsstring>
+        <name>ParserParameterBase</name>
+        <qualifiedname>castor::ParserParameterBase::ParserParameterBase</qualifiedname>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterBase.hpp" line="25" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d2b/a08447_1ac857bb7b7fc5f8fbd7be58c45955edea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::ParserParameterBase::ParserParameterBase</definition>
+        <argsstring>(ParserParameterBase const &amp;)=default</argsstring>
+        <name>ParserParameterBase</name>
+        <qualifiedname>castor::ParserParameterBase::ParserParameterBase</qualifiedname>
+        <param>
+          <type><ref refid="de/d2b/a08447" kindref="compound">ParserParameterBase</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterBase.hpp" line="26" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d2b/a08447_1a35b2576db80f9ba52a0386475c69fca9" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::ParserParameterBase::ParserParameterBase</definition>
+        <argsstring>(ParserParameterBase &amp;&amp;) noexcept=default</argsstring>
+        <name>ParserParameterBase</name>
+        <qualifiedname>castor::ParserParameterBase::ParserParameterBase</qualifiedname>
+        <param>
+          <type><ref refid="de/d2b/a08447" kindref="compound">ParserParameterBase</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterBase.hpp" line="27" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d2b/a08447_1aa2dbc8974ad46f7932325fe2873c59e7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="de/d2b/a08447" kindref="compound">ParserParameterBase</ref> &amp;</type>
+        <definition>CU_API ParserParameterBase &amp; castor::ParserParameterBase::operator=</definition>
+        <argsstring>(ParserParameterBase const &amp;)=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ParserParameterBase::operator=</qualifiedname>
+        <param>
+          <type><ref refid="de/d2b/a08447" kindref="compound">ParserParameterBase</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterBase.hpp" line="28" column="29"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d2b/a08447_1a147637f52d21273d89cbbb5384456c37" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="de/d2b/a08447" kindref="compound">ParserParameterBase</ref> &amp;</type>
+        <definition>CU_API ParserParameterBase &amp; castor::ParserParameterBase::operator=</definition>
+        <argsstring>(ParserParameterBase &amp;&amp;) noexcept=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ParserParameterBase::operator=</qualifiedname>
+        <param>
+          <type><ref refid="de/d2b/a08447" kindref="compound">ParserParameterBase</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterBase.hpp" line="29" column="29"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d2b/a08447_1a16d69fa8336be44cecb5fd7900849bf1" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>virtual CU_API castor::ParserParameterBase::~ParserParameterBase</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~ParserParameterBase</name>
+        <qualifiedname>castor::ParserParameterBase::~ParserParameterBase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterBase.hpp" line="30" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d2b/a08447_1a41610aa89493c0f5a8f142047decd507" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222" kindref="member">ParameterType</ref></type>
+        <definition>virtual CU_API ParameterType castor::ParserParameterBase::getType</definition>
+        <argsstring>() const =0</argsstring>
+        <name>getType</name>
+        <qualifiedname>castor::ParserParameterBase::getType</qualifiedname>
+        <reimplementedby refid="de/dc0/a08423_1a4f7061cef7688c388c86ad27381a887f">getType</reimplementedby>
+        <reimplementedby refid="db/dec/a08427_1a6a88863c992d8df6222bbb3501c02fe5">getType</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le type du paramètre. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterBase.hpp" line="37" column="30"/>
+        <referencedby refid="de/d2b/a08447_1a0a021fc761d88ea19cb2796bdd398246" compoundref="de/d46/a01967" startline="44" endline="47">getBaseType</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="de/d2b/a08447_1a0a021fc761d88ea19cb2796bdd398246" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222" kindref="member">ParameterType</ref></type>
+        <definition>virtual CU_API ParameterType castor::ParserParameterBase::getBaseType</definition>
+        <argsstring>() const</argsstring>
+        <name>getBaseType</name>
+        <qualifiedname>castor::ParserParameterBase::getBaseType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le type de base du paramètre (comme <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222a8c15e6038102a3065760b26043b9c162" kindref="member">ParameterType::eText</ref> pour <ref refid="d2/dd2/a02279_1a64114a56af07e11adb6eb2f3f816d222aa866af182acab9fffb643ecb752cd9e5" kindref="member">ParameterType::eName</ref>). </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterBase.hpp" line="44" column="30" bodyfile="CastorUtils/FileParser/ParserParameterBase.hpp" bodystart="44" bodyend="47"/>
+        <references refid="de/d2b/a08447_1a41610aa89493c0f5a8f142047decd507">getType</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d2b/a08447_1aaa1b185a3f59b17babb040e63322f51b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref></type>
+        <definition>virtual CU_API StringView castor::ParserParameterBase::getStrType</definition>
+        <argsstring>() const =0</argsstring>
+        <name>getStrType</name>
+        <qualifiedname>castor::ParserParameterBase::getStrType</qualifiedname>
+        <reimplementedby refid="de/dc0/a08423_1a7848d7e3ac53e5dcc371aee88dee2433">getStrType</reimplementedby>
+        <reimplementedby refid="db/dec/a08427_1a11d1c56558e79dcace9aaa878bc17e73">getStrType</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le type du chaîne paramètre. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterBase.hpp" line="54" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d2b/a08447_1aa2f674a593f9568a444c4736e98f3f63" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1ae025149db64e1fa986a71e2460c50263" kindref="member">ParserParameterBaseSPtr</ref></type>
+        <definition>virtual CU_API ParserParameterBaseSPtr castor::ParserParameterBase::clone</definition>
+        <argsstring>() const =0</argsstring>
+        <name>clone</name>
+        <qualifiedname>castor::ParserParameterBase::clone</qualifiedname>
+        <reimplementedby refid="de/dc0/a08423_1a59a35afd30422aeedf82f6f30519f2c9">clone</reimplementedby>
+        <reimplementedby refid="db/dec/a08427_1acdbcaa1bc560b42ba25bb55cd0e1293f">clone</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Une copie de ce paramètre. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterBase.hpp" line="61" column="40"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d2b/a08447_1ad0e328983258a26699a4bf3cc2222fdc" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>virtual CU_API bool castor::ParserParameterBase::parse</definition>
+        <argsstring>(LoggerInstance &amp;logger, String &amp;params)=0</argsstring>
+        <name>parse</name>
+        <qualifiedname>castor::ParserParameterBase::parse</qualifiedname>
+        <reimplementedby refid="de/dc0/a08423_1a2f3b3a1e0ccc85da51c911e0b4ab6f3c">parse</reimplementedby>
+        <reimplementedby refid="db/dec/a08427_1a17c37c630e58cd431ff16d6666fef776">parse</reimplementedby>
+        <param>
+          <type><ref refid="d9/d93/a09063" kindref="compound">LoggerInstance</ref> &amp;</type>
+          <declname>logger</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> &amp;</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+<para>Vérifie le paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">logger</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;instance de logger. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le texte contenant la valeur du paramètre. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un problème quelconque est arrivé. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterBase.hpp" line="74" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d2b/a08447_1aeb683727ae9221147f3120ea2b60ebd7" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>virtual CU_API bool castor::ParserParameterBase::isSet</definition>
+        <argsstring>()=0</argsstring>
+        <name>isSet</name>
+        <qualifiedname>castor::ParserParameterBase::isSet</qualifiedname>
+        <reimplementedby refid="de/dc0/a08423_1af50d78e75fb0bfe9e54d6d3587315344">isSet</reimplementedby>
+        <reimplementedby refid="db/dec/a08427_1a440f3393e707ef67183725d57a7da357">isSet</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>false</computeroutput> si la valeur du paramètre n&apos;est pas définie. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterBase.hpp" line="82" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d2b/a08447_1ae0e81dd342ef0b965a8c1dade00d6dc8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>T const &amp;</type>
+        <definition>T const  &amp; castor::ParserParameterBase::get</definition>
+        <argsstring>(T &amp;value) const</argsstring>
+        <name>get</name>
+        <qualifiedname>castor::ParserParameterBase::get</qualifiedname>
+        <param>
+          <type>T &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur du paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la valeur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La valeur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterBase.hpp" line="94" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d2b/a08447_1ace87ad3fdc8e10b8dadafa7d773f7661" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>T</type>
+        <definition>T castor::ParserParameterBase::get</definition>
+        <argsstring>() const</argsstring>
+        <name>get</name>
+        <qualifiedname>castor::ParserParameterBase::get</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur du paramètre. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/ParserParameterBase.hpp" line="102" column="3" bodyfile="CastorUtils/FileParser/ParserParameterBase.hpp" bodystart="102" bodyend="107"/>
+        <references refid="de/d2b/a08447_1ace87ad3fdc8e10b8dadafa7d773f7661" compoundref="de/d46/a01967" startline="102" endline="107">get</references>
+        <referencedby refid="de/d2b/a08447_1ace87ad3fdc8e10b8dadafa7d773f7661" compoundref="de/d46/a01967" startline="102" endline="107">get</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::ParserParameter&lt; Type, std::enable_if_t&lt; !hasBaseParameterTypeV&lt; Type &gt; &amp;&amp;!isArithmeticTypeV&lt; Type &gt; &gt; &gt;</label>
+        <link refid="de/dc0/a08423"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::ParserParameter&lt; Type, std::enable_if_t&lt; IsArithmeticType&lt; Type &gt;::value &gt; &gt;</label>
+        <link refid="db/dec/a08427"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::ParserParameterBase</label>
+        <link refid="de/d2b/a08447"/>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/FileParser/ParserParameterBase.hpp" line="16" column="1" bodyfile="CastorUtils/FileParser/ParserParameterBase.hpp" bodystart="17" bodyend="108"/>
+    <listofallmembers>
+      <member refid="de/d2b/a08447_1aa2f674a593f9568a444c4736e98f3f63" prot="public" virt="pure-virtual"><scope>castor::ParserParameterBase</scope><name>clone</name></member>
+      <member refid="de/d2b/a08447_1ae0e81dd342ef0b965a8c1dade00d6dc8" prot="public" virt="non-virtual"><scope>castor::ParserParameterBase</scope><name>get</name></member>
+      <member refid="de/d2b/a08447_1ace87ad3fdc8e10b8dadafa7d773f7661" prot="public" virt="non-virtual"><scope>castor::ParserParameterBase</scope><name>get</name></member>
+      <member refid="de/d2b/a08447_1a0a021fc761d88ea19cb2796bdd398246" prot="public" virt="virtual"><scope>castor::ParserParameterBase</scope><name>getBaseType</name></member>
+      <member refid="de/d2b/a08447_1aaa1b185a3f59b17babb040e63322f51b" prot="public" virt="pure-virtual"><scope>castor::ParserParameterBase</scope><name>getStrType</name></member>
+      <member refid="de/d2b/a08447_1a41610aa89493c0f5a8f142047decd507" prot="public" virt="pure-virtual"><scope>castor::ParserParameterBase</scope><name>getType</name></member>
+      <member refid="de/d2b/a08447_1aeb683727ae9221147f3120ea2b60ebd7" prot="public" virt="pure-virtual"><scope>castor::ParserParameterBase</scope><name>isSet</name></member>
+      <member refid="de/d2b/a08447_1aa2dbc8974ad46f7932325fe2873c59e7" prot="public" virt="non-virtual"><scope>castor::ParserParameterBase</scope><name>operator=</name></member>
+      <member refid="de/d2b/a08447_1a147637f52d21273d89cbbb5384456c37" prot="public" virt="non-virtual"><scope>castor::ParserParameterBase</scope><name>operator=</name></member>
+      <member refid="de/d2b/a08447_1ad0e328983258a26699a4bf3cc2222fdc" prot="public" virt="pure-virtual"><scope>castor::ParserParameterBase</scope><name>parse</name></member>
+      <member refid="de/d2b/a08447_1a522312a8be825a74fa7cf0435381ce5e" prot="public" virt="non-virtual"><scope>castor::ParserParameterBase</scope><name>ParserParameterBase</name></member>
+      <member refid="de/d2b/a08447_1ac857bb7b7fc5f8fbd7be58c45955edea" prot="public" virt="non-virtual"><scope>castor::ParserParameterBase</scope><name>ParserParameterBase</name></member>
+      <member refid="de/d2b/a08447_1a35b2576db80f9ba52a0386475c69fca9" prot="public" virt="non-virtual"><scope>castor::ParserParameterBase</scope><name>ParserParameterBase</name></member>
+      <member refid="de/d2b/a08447_1a16d69fa8336be44cecb5fd7900849bf1" prot="public" virt="virtual"><scope>castor::ParserParameterBase</scope><name>~ParserParameterBase</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

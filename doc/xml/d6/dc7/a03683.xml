@@ -1,0 +1,154 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/dc7/a03683" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TextureUnitCache::ThreadData</compoundname>
+    <includes local="no">TextureCache.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/dc7/a03683_1a54a528e3de20b0ec744ff667c157124b" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/da2/a04991" kindref="compound">TextureData</ref> *</type>
+        <definition>TextureData* castor3d::TextureUnitCache::ThreadData::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>castor3d::TextureUnitCache::ThreadData::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/TextureCache.hpp" line="32" column="14" bodyfile="Castor3D/Cache/TextureCache.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/dc7/a03683_1a1baeee5840d5cbf49337e47a98ae3e29" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref> *</type>
+        <definition>Texture* castor3d::TextureUnitCache::ThreadData::texture</definition>
+        <argsstring></argsstring>
+        <name>texture</name>
+        <qualifiedname>castor3d::TextureUnitCache::ThreadData::texture</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/TextureCache.hpp" line="33" column="10" bodyfile="Castor3D/Cache/TextureCache.hpp" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/dc7/a03683_1a30e3dd73f29349489dcabf8c1cf5f7cc" prot="public" static="no" mutable="no">
+        <type>std::atomic_bool</type>
+        <definition>std::atomic_bool castor3d::TextureUnitCache::ThreadData::interrupted</definition>
+        <argsstring></argsstring>
+        <name>interrupted</name>
+        <qualifiedname>castor3d::TextureUnitCache::ThreadData::interrupted</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/TextureCache.hpp" line="34" column="18" bodyfile="Castor3D/Cache/TextureCache.hpp" bodystart="34" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/dc7/a03683_1adff54d80cba53c660be68ca94bb80319" prot="public" static="no" mutable="no">
+        <type>std::atomic_bool</type>
+        <definition>std::atomic_bool castor3d::TextureUnitCache::ThreadData::expected</definition>
+        <argsstring></argsstring>
+        <name>expected</name>
+        <qualifiedname>castor3d::TextureUnitCache::ThreadData::expected</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/TextureCache.hpp" line="35" column="18" bodyfile="Castor3D/Cache/TextureCache.hpp" bodystart="35" bodyend="35"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/dc7/a03683_1a9b58068e9f75a976ea1ded9bb13199ef" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::TextureUnitCache::ThreadData::ThreadData</definition>
+        <argsstring>(TextureData &amp;pdata)</argsstring>
+        <name>ThreadData</name>
+        <qualifiedname>castor3d::TextureUnitCache::ThreadData::ThreadData</qualifiedname>
+        <param>
+          <type><ref refid="d1/da2/a04991" kindref="compound">TextureData</ref> &amp;</type>
+          <declname>pdata</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Cache/TextureCache.hpp" line="27" column="10" bodyfile="Castor3D/Cache/TextureCache.hpp" bodystart="27" bodyend="30"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="7">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::RenderDevice</label>
+        <link refid="dc/d32/a06415"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d5/d4e/a06559"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Texture</label>
+        <link refid="d1/d95/a06703"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>device</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::TextureData</label>
+        <link refid="d1/da2/a04991"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>sourceInfo</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::TextureSourceInfo</label>
+        <link refid="db/d40/a04987"/>
+      </node>
+      <node id="1">
+        <label>castor3d::TextureUnitCache::ThreadData</label>
+        <link refid="d6/dc7/a03683"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>data</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>texture</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Cache/TextureCache.hpp" line="25" column="1" bodyfile="Castor3D/Cache/TextureCache.hpp" bodystart="26" bodyend="36"/>
+    <listofallmembers>
+      <member refid="d6/dc7/a03683_1a54a528e3de20b0ec744ff667c157124b" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache::ThreadData</scope><name>data</name></member>
+      <member refid="d6/dc7/a03683_1adff54d80cba53c660be68ca94bb80319" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache::ThreadData</scope><name>expected</name></member>
+      <member refid="d6/dc7/a03683_1a30e3dd73f29349489dcabf8c1cf5f7cc" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache::ThreadData</scope><name>interrupted</name></member>
+      <member refid="d6/dc7/a03683_1a1baeee5840d5cbf49337e47a98ae3e29" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache::ThreadData</scope><name>texture</name></member>
+      <member refid="d6/dc7/a03683_1a9b58068e9f75a976ea1ded9bb13199ef" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache::ThreadData</scope><name>ThreadData</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

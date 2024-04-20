@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/d58/a08979" kind="struct" language="C++" prot="public">
+    <compoundname>castor::PxCompressionSupport</compoundname>
+    <includes local="no">PixelBufferBase.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d58/a08979_1a3a52750f3fe4a44225ac071bae7b867a" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor::PxCompressionSupport::supportBC1</definition>
+        <argsstring></argsstring>
+        <name>supportBC1</name>
+        <qualifiedname>castor::PxCompressionSupport::supportBC1</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="21" column="6" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="21" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d58/a08979_1a6a74482aa7cf21b8cad5ad02e367c233" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor::PxCompressionSupport::supportBC3</definition>
+        <argsstring></argsstring>
+        <name>supportBC3</name>
+        <qualifiedname>castor::PxCompressionSupport::supportBC3</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="22" column="6" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="22" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d58/a08979_1a8f1e055175730c03b3f35b9170a2ae7a" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor::PxCompressionSupport::supportBC5</definition>
+        <argsstring></argsstring>
+        <name>supportBC5</name>
+        <qualifiedname>castor::PxCompressionSupport::supportBC5</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="23" column="6" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="23" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d58/a08979_1a68c83c82302310bedc2a8a1acbece3eb" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor::PxCompressionSupport::supportBC6</definition>
+        <argsstring></argsstring>
+        <name>supportBC6</name>
+        <qualifiedname>castor::PxCompressionSupport::supportBC6</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="24" column="6" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="24" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d58/a08979_1a3c94c11909510b8c936ed66b0d441537" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor::PxCompressionSupport::supportBC7</definition>
+        <argsstring></argsstring>
+        <name>supportBC7</name>
+        <qualifiedname>castor::PxCompressionSupport::supportBC7</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="25" column="6" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="25" bodyend="25"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="19" column="1" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="20" bodyend="26"/>
+    <listofallmembers>
+      <member refid="de/d58/a08979_1a3a52750f3fe4a44225ac071bae7b867a" prot="public" virt="non-virtual"><scope>castor::PxCompressionSupport</scope><name>supportBC1</name></member>
+      <member refid="de/d58/a08979_1a6a74482aa7cf21b8cad5ad02e367c233" prot="public" virt="non-virtual"><scope>castor::PxCompressionSupport</scope><name>supportBC3</name></member>
+      <member refid="de/d58/a08979_1a8f1e055175730c03b3f35b9170a2ae7a" prot="public" virt="non-virtual"><scope>castor::PxCompressionSupport</scope><name>supportBC5</name></member>
+      <member refid="de/d58/a08979_1a68c83c82302310bedc2a8a1acbece3eb" prot="public" virt="non-virtual"><scope>castor::PxCompressionSupport</scope><name>supportBC6</name></member>
+      <member refid="de/d58/a08979_1a3c94c11909510b8c936ed66b0d441537" prot="public" virt="non-virtual"><scope>castor::PxCompressionSupport</scope><name>supportBC7</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

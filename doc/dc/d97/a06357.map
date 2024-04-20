@@ -1,0 +1,27 @@
+<map id="castor3d::PipelineFlags" name="castor3d::PipelineFlags">
+<area shape="rect" id="Node000001" title="Pipeline flags." alt="" coords="1037,289,1196,315"/>
+<area shape="rect" id="Node000002" href="$d9/d28/a06351.html" title=" " alt="" coords="819,139,987,179"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="947,185,1098,287,1095,291,944,189"/>
+<area shape="rect" id="Node000003" href="$d1/dc1/a04099.html" title=" " alt="" coords="380,5,607,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="621,24,708,41,752,54,795,70,845,102,884,137,881,141,842,106,792,75,750,59,707,46,620,30"/>
+<area shape="rect" id="Node000004" href="$d1/db0/a05447.html" title=" " alt="" coords="393,55,594,95"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="608,85,699,100,794,119,850,137,848,142,793,125,698,105,607,91"/>
+<area shape="rect" id="Node000005" href="$d9/d0d/a03995.html" title=" " alt="" coords="406,120,581,145"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="595,137,819,151,818,157,594,142"/>
+<area shape="rect" id="Node000006" href="$dd/dbb/a08207.html" title=" " alt="" coords="412,170,575,210"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="588,183,793,169,818,166,818,172,794,174,589,188"/>
+<area shape="rect" id="Node000007" href="$dd/dbb/a08207.html" title="Template class providing implicit conversion from a scoped enum to its integral base type." alt="" coords="36,234,199,274"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="212,235,411,201,412,206,212,241"/>
+<area shape="rect" id="Node000008" href="$dd/dbb/a08207.html" title=" " alt="" coords="412,234,575,274"/>
+<area shape="poly" id="edge8_Node000008_Node000007" title=" " alt="" coords="212,251,411,251,411,257,212,257"/>
+<area shape="rect" id="Node000012" href="$dd/dbb/a08207.html" title=" " alt="" coords="631,286,793,326"/>
+<area shape="poly" id="edge13_Node000012_Node000007" title=" " alt="" coords="213,266,254,271,457,290,630,300,630,306,457,296,253,277,212,271"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="588,240,687,224,793,199,855,177,857,182,794,205,688,229,589,245"/>
+<area shape="rect" id="Node000009" href="$d2/de6/a06355.html" title=" " alt="" coords="817,350,988,390"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="978,343,1075,312,1076,317,980,348"/>
+<area shape="rect" id="Node000010" href="$d6/d66/a05595.html" title=" " alt="" coords="392,357,595,383"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="608,367,817,367,817,373,608,373"/>
+<area shape="rect" id="Node000011" href="$d0/d52/a05583.html" title=" " alt="" coords="5,357,229,383"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="243,367,392,367,392,373,243,373"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="807,302,1037,300,1037,305,807,308"/>
+</map>

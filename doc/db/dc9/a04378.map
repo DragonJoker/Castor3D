@@ -1,0 +1,11 @@
+<map id="castor3d::ClearcoatMapComponent" name="castor3d::ClearcoatMapComponent">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,317,232,343"/>
+<area shape="rect" id="Node000002" href="$da/d9f/a04859.html" title=" " alt="" coords="18,243,219,268"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,282,121,317,116,317,116,282"/>
+<area shape="rect" id="Node000003" href="$db/db4/a04835.html" title=" " alt="" coords="31,168,207,193"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="121,208,121,242,116,242,116,208"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title=" " alt="" coords="31,93,207,119"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="121,133,121,168,116,168,116,133"/>
+<area shape="rect" id="Node000005" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="27,5,210,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="121,45,121,93,116,93,116,45"/>
+</map>

@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/df2/a09363" kind="class" language="C++" prot="public">
+    <compoundname>castor::BlockTimer</compoundname>
+    <basecompoundref refid="da/d87/a08319" prot="public" virt="non-virtual">castor::NonMovable</basecompoundref>
+    <includes local="no">BlockTimer.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/df2/a09363_1a24c8998eff4e19e6a45ed0513b055f54" prot="private" static="no" mutable="no">
+        <type>std::string_view</type>
+        <definition>std::string_view castor::BlockTimer::m_file</definition>
+        <argsstring></argsstring>
+        <name>m_file</name>
+        <qualifiedname>castor::BlockTimer::m_file</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/BlockTimer.hpp" line="35" column="18" bodyfile="CastorUtils/Miscellaneous/BlockTimer.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/df2/a09363_1a832c29563fbe62731b114486cb4fb3a2" prot="private" static="no" mutable="no">
+        <type>std::string_view</type>
+        <definition>std::string_view castor::BlockTimer::m_function</definition>
+        <argsstring></argsstring>
+        <name>m_function</name>
+        <qualifiedname>castor::BlockTimer::m_function</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/BlockTimer.hpp" line="36" column="18" bodyfile="CastorUtils/Miscellaneous/BlockTimer.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/df2/a09363_1a627dc5201c6af5e15c666341666048f6" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>String castor::BlockTimer::m_name</definition>
+        <argsstring></argsstring>
+        <name>m_name</name>
+        <qualifiedname>castor::BlockTimer::m_name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/BlockTimer.hpp" line="37" column="8" bodyfile="CastorUtils/Miscellaneous/BlockTimer.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/df2/a09363_1a41e6621ab001d6fcc1048ef114013852" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::BlockTimer::m_line</definition>
+        <argsstring></argsstring>
+        <name>m_line</name>
+        <qualifiedname>castor::BlockTimer::m_line</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/BlockTimer.hpp" line="38" column="10" bodyfile="CastorUtils/Miscellaneous/BlockTimer.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/df2/a09363_1a4573cf3f661744cc9f3f888646bcecd7" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d7e/a09419" kindref="compound">PreciseTimer</ref></type>
+        <definition>PreciseTimer castor::BlockTimer::m_timer</definition>
+        <argsstring></argsstring>
+        <name>m_timer</name>
+        <qualifiedname>castor::BlockTimer::m_timer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/BlockTimer.hpp" line="39" column="14" bodyfile="CastorUtils/Miscellaneous/BlockTimer.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/df2/a09363_1a232a06d5e2e44820816d4bea6dffc439" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::BlockTimer::BlockTimer</definition>
+        <argsstring>(char const *file, char const *function, String name, uint32_t line)</argsstring>
+        <name>BlockTimer</name>
+        <qualifiedname>castor::BlockTimer::BlockTimer</qualifiedname>
+        <param>
+          <type>char const *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>char const *</type>
+          <declname>function</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>line</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le fichier où se trouve la fonction. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La fonction appelante. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du bloc. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">line</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne dans la fonction. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/BlockTimer.hpp" line="28" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/df2/a09363_1ab6e2d18a7890fdea135d9bc8f240f617" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::BlockTimer::~BlockTimer</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~BlockTimer</name>
+        <qualifiedname>castor::BlockTimer::~BlockTimer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/BlockTimer.hpp" line="32" column="8"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::BlockTimer</label>
+        <link refid="d1/df2/a09363"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::BlockTimer</label>
+        <link refid="d1/df2/a09363"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Miscellaneous/BlockTimer.hpp" line="12" column="1" bodyfile="CastorUtils/Miscellaneous/BlockTimer.hpp" bodystart="14" bodyend="40"/>
+    <listofallmembers>
+      <member refid="d1/df2/a09363_1a232a06d5e2e44820816d4bea6dffc439" prot="public" virt="non-virtual"><scope>castor::BlockTimer</scope><name>BlockTimer</name></member>
+      <member refid="d1/df2/a09363_1a24c8998eff4e19e6a45ed0513b055f54" prot="private" virt="non-virtual"><scope>castor::BlockTimer</scope><name>m_file</name></member>
+      <member refid="d1/df2/a09363_1a832c29563fbe62731b114486cb4fb3a2" prot="private" virt="non-virtual"><scope>castor::BlockTimer</scope><name>m_function</name></member>
+      <member refid="d1/df2/a09363_1a41e6621ab001d6fcc1048ef114013852" prot="private" virt="non-virtual"><scope>castor::BlockTimer</scope><name>m_line</name></member>
+      <member refid="d1/df2/a09363_1a627dc5201c6af5e15c666341666048f6" prot="private" virt="non-virtual"><scope>castor::BlockTimer</scope><name>m_name</name></member>
+      <member refid="d1/df2/a09363_1a4573cf3f661744cc9f3f888646bcecd7" prot="private" virt="non-virtual"><scope>castor::BlockTimer</scope><name>m_timer</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::BlockTimer</scope><name>NonMovable</name></member>
+      <member refid="d1/df2/a09363_1ab6e2d18a7890fdea135d9bc8f240f617" prot="public" virt="non-virtual"><scope>castor::BlockTimer</scope><name>~BlockTimer</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::BlockTimer</scope><name>~NonMovable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

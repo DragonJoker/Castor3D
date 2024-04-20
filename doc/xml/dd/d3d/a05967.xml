@@ -1,0 +1,227 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d3d/a05967" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::IndirectLightingData</compoundname>
+    <includes local="no">GlobalIlluminationModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/d3d/a05967_1a6a43b1b22f04555a7a701121d01c4766" prot="public" static="no" mutable="no">
+        <type><ref refid="da/dff/a07783" kindref="compound">LpvGridConfigUbo</ref> const  *</type>
+        <definition>LpvGridConfigUbo const* castor3d::IndirectLightingData::lpvConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>lpvConfigUbo</name>
+        <qualifiedname>castor3d::IndirectLightingData::lpvConfigUbo</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp" line="86" column="25" bodyfile="Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp" bodystart="86" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3d/a05967_1a6676223ce860908bdbe9e7f6b4df55b2" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/d47/a07775" kindref="compound">LayeredLpvGridConfigUbo</ref> const  *</type>
+        <definition>LayeredLpvGridConfigUbo const* castor3d::IndirectLightingData::llpvConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>llpvConfigUbo</name>
+        <qualifiedname>castor3d::IndirectLightingData::llpvConfigUbo</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp" line="87" column="32" bodyfile="Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp" bodystart="87" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3d/a05967_1a92e4b3c4a62521fac1203ccc9803cb9c" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/d63/a07931" kindref="compound">VoxelizerUbo</ref> const  *</type>
+        <definition>VoxelizerUbo const* castor3d::IndirectLightingData::vctConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>vctConfigUbo</name>
+        <qualifiedname>castor3d::IndirectLightingData::vctConfigUbo</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp" line="88" column="21" bodyfile="Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp" bodystart="88" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3d/a05967_1a322bd8bc60ad231339a84826f96c83d4" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d72/a06019" kindref="compound">LightVolumePassResult</ref> const  *</type>
+        <definition>LightVolumePassResult const* castor3d::IndirectLightingData::lpvResult</definition>
+        <argsstring></argsstring>
+        <name>lpvResult</name>
+        <qualifiedname>castor3d::IndirectLightingData::lpvResult</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp" line="89" column="30" bodyfile="Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp" bodystart="89" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3d/a05967_1a3e69c2ca2562eb9e3c242c7639b4c8e2" prot="public" static="no" mutable="no">
+        <type>LightVolumePassResultArray const  *</type>
+        <definition>LightVolumePassResultArray const* castor3d::IndirectLightingData::llpvResult</definition>
+        <argsstring></argsstring>
+        <name>llpvResult</name>
+        <qualifiedname>castor3d::IndirectLightingData::llpvResult</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp" line="90" column="35" bodyfile="Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp" bodystart="90" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3d/a05967_1a1630220108f71ed697a470e0a1cf3ce2" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const  *</type>
+        <definition>Texture const* castor3d::IndirectLightingData::vctFirstBounce</definition>
+        <argsstring></argsstring>
+        <name>vctFirstBounce</name>
+        <qualifiedname>castor3d::IndirectLightingData::vctFirstBounce</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp" line="91" column="16" bodyfile="Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp" bodystart="91" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d3d/a05967_1a1e4fcd5ab234afd791dc00b034fedfd3" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref> const  *</type>
+        <definition>Texture const* castor3d::IndirectLightingData::vctSecondaryBounce</definition>
+        <argsstring></argsstring>
+        <name>vctSecondaryBounce</name>
+        <qualifiedname>castor3d::IndirectLightingData::vctSecondaryBounce</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp" line="92" column="16" bodyfile="Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp" bodystart="92" bodyend="92"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="6">
+        <label>castor3d::GBufferT&lt; LpvTexture &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="7" relation="private-inheritance">
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; LpvTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d8/d33/a05959"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d0/d22/a05963"/>
+        <childnode refid="7" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::IndirectLightingData</label>
+        <link refid="dd/d3d/a05967"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>lpvConfigUbo</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>llpvConfigUbo</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>vctConfigUbo</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>lpvResult</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>vctFirstBounce</edgelabel>
+          <edgelabel>vctSecondaryBounce</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::LayeredLpvGridConfigUbo</label>
+        <link refid="d6/d47/a07775"/>
+      </node>
+      <node id="5">
+        <label>castor3d::LightVolumePassResult</label>
+        <link refid="dc/d72/a06019"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::LpvGridConfigUbo</label>
+        <link refid="da/dff/a07783"/>
+      </node>
+      <node id="9">
+        <label>castor3d::RenderDevice</label>
+        <link refid="dc/d32/a06415"/>
+        <childnode refid="10" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d5/d4e/a06559"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::Texture</label>
+        <link refid="d1/d95/a06703"/>
+        <childnode refid="9" relation="usage">
+          <edgelabel>device</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::VoxelizerUbo</label>
+        <link refid="d0/d63/a07931"/>
+      </node>
+      <node id="8">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="12">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp" line="84" column="1" bodyfile="Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp" bodystart="85" bodyend="93"/>
+    <listofallmembers>
+      <member refid="dd/d3d/a05967_1a6676223ce860908bdbe9e7f6b4df55b2" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingData</scope><name>llpvConfigUbo</name></member>
+      <member refid="dd/d3d/a05967_1a3e69c2ca2562eb9e3c242c7639b4c8e2" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingData</scope><name>llpvResult</name></member>
+      <member refid="dd/d3d/a05967_1a6a43b1b22f04555a7a701121d01c4766" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingData</scope><name>lpvConfigUbo</name></member>
+      <member refid="dd/d3d/a05967_1a322bd8bc60ad231339a84826f96c83d4" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingData</scope><name>lpvResult</name></member>
+      <member refid="dd/d3d/a05967_1a92e4b3c4a62521fac1203ccc9803cb9c" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingData</scope><name>vctConfigUbo</name></member>
+      <member refid="dd/d3d/a05967_1a1630220108f71ed697a470e0a1cf3ce2" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingData</scope><name>vctFirstBounce</name></member>
+      <member refid="dd/d3d/a05967_1a1e4fcd5ab234afd791dc00b034fedfd3" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingData</scope><name>vctSecondaryBounce</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

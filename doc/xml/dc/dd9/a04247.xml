@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/dd9/a04247" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SheenData</compoundname>
+    <includes local="no">SheenComponent.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/dd9/a04247_1ae8929a7910bf931ca43e8b43eeebe7ae" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ac3f6d2ca50f484925164c6f2a13c97e8" kindref="member">castor::AtomicGroupChangeTracked</ref>&lt; <ref refid="d2/dd2/a02279_1ae6e51493f47ee99a48e6bc37c45ab9b9" kindref="member">castor::HdrRgbColour</ref> &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; castor::HdrRgbColour &gt; castor3d::SheenData::factor</definition>
+        <argsstring></argsstring>
+        <name>factor</name>
+        <qualifiedname>castor3d::SheenData::factor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp" line="23" column="34" bodyfile="Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp" bodystart="23" bodyend="-1"/>
+        <referencedby refid="df/d3a/a04251_1a4c6796a8fc825c92524337e06851fb8c" compoundref="de/d4e/a00500" startline="98" endline="101">castor3d::SheenComponent::getSheenFactor</referencedby>
+        <referencedby refid="df/d3a/a04251_1ad1eabafd413e45feef299f5f13e8c78a" compoundref="de/d4e/a00500" startline="108" endline="111">castor3d::SheenComponent::setSheenFactor</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dc/dd9/a04247_1a8bbed7f2efd82b5689ba6084093ddc63" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ac3f6d2ca50f484925164c6f2a13c97e8" kindref="member">castor::AtomicGroupChangeTracked</ref>&lt; float &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; float &gt; castor3d::SheenData::roughness</definition>
+        <argsstring></argsstring>
+        <name>roughness</name>
+        <qualifiedname>castor3d::SheenData::roughness</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp" line="24" column="34" bodyfile="Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp" bodystart="24" bodyend="-1"/>
+        <referencedby refid="df/d3a/a04251_1ab72aa1460deb9ad26ac27fd1545f7aa2" compoundref="de/d4e/a00500" startline="103" endline="106">castor3d::SheenComponent::getRoughnessFactor</referencedby>
+        <referencedby refid="df/d3a/a04251_1a3324599afb7e8872d16cf1b6e30cda66" compoundref="de/d4e/a00500" startline="113" endline="116">castor3d::SheenComponent::setRoughnessFactor</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/dd9/a04247_1a4061b59e336beacf9d5aac67ddd8a6fc" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::SheenData::SheenData</definition>
+        <argsstring>(std::atomic_bool &amp;dirty)</argsstring>
+        <name>SheenData</name>
+        <qualifiedname>castor3d::SheenData::SheenData</qualifiedname>
+        <param>
+          <type>std::atomic_bool &amp;</type>
+          <declname>dirty</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp" line="17" column="10" bodyfile="Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp" bodystart="17" bodyend="21"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::GroupChangeTrackedT&lt; castor::RgbColourT &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; castor::RgbColourT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::GroupChangeTrackedT&lt; float &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; float &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SheenData</label>
+        <link refid="dc/dd9/a04247"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>factor</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>roughness</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::GroupChangeTrackedT&lt; ValueT, ControlT &gt;</label>
+        <link refid="d2/d4c/a08211"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp" line="15" column="1" bodyfile="Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp" bodystart="16" bodyend="25"/>
+    <listofallmembers>
+      <member refid="dc/dd9/a04247_1ae8929a7910bf931ca43e8b43eeebe7ae" prot="public" virt="non-virtual"><scope>castor3d::SheenData</scope><name>factor</name></member>
+      <member refid="dc/dd9/a04247_1a8bbed7f2efd82b5689ba6084093ddc63" prot="public" virt="non-virtual"><scope>castor3d::SheenData</scope><name>roughness</name></member>
+      <member refid="dc/dd9/a04247_1a4061b59e336beacf9d5aac67ddd8a6fc" prot="public" virt="non-virtual"><scope>castor3d::SheenData</scope><name>SheenData</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

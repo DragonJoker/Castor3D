@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d7d/a06615" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::WindowContext</compoundname>
+    <includes local="no">RenderWindow.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d7d/a06615_1ad501ab5c66ac8c504572ba62f44cc4be" prot="public" static="no" mutable="no">
+        <type><ref refid="de/dd6/a07151" kindref="compound">RootContext</ref> *</type>
+        <definition>RootContext* castor3d::WindowContext::root</definition>
+        <argsstring></argsstring>
+        <name>root</name>
+        <qualifiedname>castor3d::WindowContext::root</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderWindow.hpp" line="574" column="14" bodyfile="Castor3D/Render/RenderWindow.hpp" bodystart="574" bodyend="574"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d7d/a06615_1a32544e06b6e585c6c9f8398e1576fa1d" prot="public" static="no" mutable="no">
+        <type><ref refid="de/d75/a06503" kindref="compound">RenderWindowDesc</ref></type>
+        <definition>RenderWindowDesc castor3d::WindowContext::window</definition>
+        <argsstring></argsstring>
+        <name>window</name>
+        <qualifiedname>castor3d::WindowContext::window</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderWindow.hpp" line="575" column="18" bodyfile="Castor3D/Render/RenderWindow.hpp" bodystart="575" bodyend="575"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="5" relation="private-inheritance">
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::ProgressBar</label>
+        <link refid="d6/daf/a05323"/>
+      </node>
+      <node id="7">
+        <label>castor3d::RenderWindowDesc</label>
+        <link refid="de/d75/a06503"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::RootContext</label>
+        <link refid="de/dd6/a07151"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>engine</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>window</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>logger</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>progress</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::WindowContext</label>
+        <link refid="da/d7d/a06615"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>root</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>window</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor::LoggerInstance</label>
+        <link refid="d9/d93/a09063"/>
+      </node>
+      <node id="5">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="6">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="5" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/RenderWindow.hpp" line="572" column="1" bodyfile="Castor3D/Render/RenderWindow.hpp" bodystart="573" bodyend="576"/>
+    <listofallmembers>
+      <member refid="da/d7d/a06615_1ad501ab5c66ac8c504572ba62f44cc4be" prot="public" virt="non-virtual"><scope>castor3d::WindowContext</scope><name>root</name></member>
+      <member refid="da/d7d/a06615_1a32544e06b6e585c6c9f8398e1576fa1d" prot="public" virt="non-virtual"><scope>castor3d::WindowContext</scope><name>window</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d09/a08787" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ImageLoaderConfig</compoundname>
+    <includes local="no">GraphicsModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/d09/a08787_1a6a4e9b53e20ddb4395e58ab4e304e159" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor::ImageLoaderConfig::allowCompression</definition>
+        <argsstring></argsstring>
+        <name>allowCompression</name>
+        <qualifiedname>castor::ImageLoaderConfig::allowCompression</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="189" column="6" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="189" bodyend="189"/>
+        <referencedby refid="db/d40/a04987_1a535d40a6ab78626face424b1ab4d2108" compoundref="dc/df1/a00662" startline="105" endline="109">castor3d::TextureSourceInfo::allowCompression</referencedby>
+        <referencedby refid="db/d40/a04987_1a86b2028e6131a41d5b8293f140bd539c" compoundref="dc/df1/a00662" startline="111" endline="115">castor3d::TextureSourceInfo::allowCompression</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d09/a08787_1a51b25ff698cb765216ba3f4f3ccd4e03" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor::ImageLoaderConfig::generateMips</definition>
+        <argsstring></argsstring>
+        <name>generateMips</name>
+        <qualifiedname>castor::ImageLoaderConfig::generateMips</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="190" column="6" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="190" bodyend="190"/>
+        <referencedby refid="db/d40/a04987_1af2e8425d94a5ad5f4663f5e9ab80daf7" compoundref="dc/df1/a00662" startline="127" endline="131">castor3d::TextureSourceInfo::generateMips</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d09/a08787_1ad079901ec4f055f73c40fbcd2827a2ee" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor::ImageLoaderConfig::layersToTiles</definition>
+        <argsstring></argsstring>
+        <name>layersToTiles</name>
+        <qualifiedname>castor::ImageLoaderConfig::layersToTiles</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="191" column="6" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="191" bodyend="191"/>
+        <referencedby refid="db/d40/a04987_1a61526513377679d742564a5369c99dc7" compoundref="dc/df1/a00662" startline="133" endline="137">castor3d::TextureSourceInfo::layersToTiles</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d09/a08787_1a1d19553de69ce6068a983578d2106ae3" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor::ImageLoaderConfig::allowSRGB</definition>
+        <argsstring></argsstring>
+        <name>allowSRGB</name>
+        <qualifiedname>castor::ImageLoaderConfig::allowSRGB</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="192" column="6" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="192" bodyend="192"/>
+        <referencedby refid="db/d40/a04987_1a261a3b9db7ac6aa89660efce86c529ae" compoundref="dc/df1/a00662" startline="117" endline="120">castor3d::TextureSourceInfo::allowSRGB</referencedby>
+        <referencedby refid="db/d40/a04987_1a000dd3df0c6f1d9d5275a352d54cdd42" compoundref="dc/df1/a00662" startline="122" endline="125">castor3d::TextureSourceInfo::allowSRGB</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>La configuration de chargement d&apos;une image. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/GraphicsModule.hpp" line="187" column="1" bodyfile="CastorUtils/Graphics/GraphicsModule.hpp" bodystart="188" bodyend="193"/>
+    <listofallmembers>
+      <member refid="dc/d09/a08787_1a6a4e9b53e20ddb4395e58ab4e304e159" prot="public" virt="non-virtual"><scope>castor::ImageLoaderConfig</scope><name>allowCompression</name></member>
+      <member refid="dc/d09/a08787_1a1d19553de69ce6068a983578d2106ae3" prot="public" virt="non-virtual"><scope>castor::ImageLoaderConfig</scope><name>allowSRGB</name></member>
+      <member refid="dc/d09/a08787_1a51b25ff698cb765216ba3f4f3ccd4e03" prot="public" virt="non-virtual"><scope>castor::ImageLoaderConfig</scope><name>generateMips</name></member>
+      <member refid="dc/d09/a08787_1ad079901ec4f055f73c40fbcd2827a2ee" prot="public" virt="non-virtual"><scope>castor::ImageLoaderConfig</scope><name>layersToTiles</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

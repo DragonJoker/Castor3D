@@ -1,4 +1,14 @@
-<map id="castor3d::FontGlyphBuffer::FontGlyphData" name="castor3d::FontGlyphBuffer::FontGlyphData">
-<area shape="rect" id="node1" title=" " alt="" coords="13,79,187,119"/>
-<area shape="rect" id="node2" href="$d1/d1b/a06326.html" title=" " alt="" coords="5,5,195,31"/>
+<map id="castor3d::RenderQuad" name="castor3d::RenderQuad">
+<area shape="rect" id="Node000001" title=" " alt="" coords="84,344,236,369"/>
+<area shape="rect" id="Node000002" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="5,256,112,281"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,288,148,341,144,345,81,292"/>
+<area shape="rect" id="Node000003" href="$d5/d4e/a06559.html" title=" " alt="" coords="98,168,265,193"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="181,207,164,344,159,343,176,207"/>
+<area shape="rect" id="Node000006" href="$dc/d32/a06415.html" title=" " alt="" coords="289,256,447,281"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="220,197,344,253,342,258,218,202"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title=" " alt="" coords="88,93,275,119"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="184,133,184,168,179,168,179,133"/>
+<area shape="rect" id="Node000005" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="90,5,273,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="184,45,184,93,179,93,179,45"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="328,289,189,346,187,341,326,284"/>
 </map>

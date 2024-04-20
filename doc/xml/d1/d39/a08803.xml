@@ -1,0 +1,410 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d39/a08803" kind="class" language="C++" prot="public">
+    <compoundname>castor::PxBuffer</compoundname>
+    <basecompoundref refid="dd/df9/a08987" prot="public" virt="non-virtual">castor::PxBufferBase</basecompoundref>
+    <includes local="no">PixelBuffer.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+        <declname>PF</declname>
+        <defname>PF</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d1/d39/a08803_1a96ce61ce4e0d0aafbabdd4cb391333e3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d1/d39/a08803_1a7d03167acc5f83d4b600f29d4d21bfa6" kindref="member">MyPixel</ref></type>
+        <definition>MyPixel castor::PxBuffer&lt; PF &gt;::at</definition>
+        <argsstring>(uint32_t x, uint32_t y) const</argsstring>
+        <name>at</name>
+        <qualifiedname>castor::PxBuffer::at</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>y</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Accesseurs. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBuffer.hpp" line="75" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a08803_1a447c50175a9079ef7c3f6fce9d322618" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d1/d39/a08803_1ae5394ae12a3850650504f9fcf6042e52" kindref="member">iterator</ref></type>
+        <definition>iterator castor::PxBuffer&lt; PF &gt;::pixelsBegin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>pixelsBegin</name>
+        <qualifiedname>castor::PxBuffer::pixelsBegin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBuffer.hpp" line="77" column="10" bodyfile="CastorUtils/Graphics/PixelBuffer.hpp" bodystart="77" bodyend="80"/>
+        <references refid="dd/df9/a08987_1a5ee07455950ba1d92ff14a2b0faebe60" compoundref="d7/d13/a02045" startline="645">castor::PxBufferBase::m_buffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a08803_1ad8a81007dcfcee4db60c5bb23895f1bb" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d1/d39/a08803_1ae5394ae12a3850650504f9fcf6042e52" kindref="member">iterator</ref></type>
+        <definition>iterator castor::PxBuffer&lt; PF &gt;::pixelsEnd</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>pixelsEnd</name>
+        <qualifiedname>castor::PxBuffer::pixelsEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBuffer.hpp" line="82" column="10" bodyfile="CastorUtils/Graphics/PixelBuffer.hpp" bodystart="82" bodyend="85"/>
+        <references refid="dd/df9/a08987_1a5ee07455950ba1d92ff14a2b0faebe60" compoundref="d7/d13/a02045" startline="645">castor::PxBufferBase::m_buffer</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d1/d39/a08803_1a7d03167acc5f83d4b600f29d4d21bfa6" prot="public" static="no">
+        <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref>&lt; PF &gt;</type>
+        <definition>using castor::PxBuffer&lt; PF &gt;::MyPixel =  Pixel&lt; PF &gt;</definition>
+        <argsstring></argsstring>
+        <name>MyPixel</name>
+        <qualifiedname>castor::PxBuffer::MyPixel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBuffer.hpp" line="22" column="1" bodyfile="CastorUtils/Graphics/PixelBuffer.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d1/d39/a08803_1ae5394ae12a3850650504f9fcf6042e52" prot="public" static="no">
+        <type><ref refid="d3/d1a/a08811" kindref="compound">PixelIterator</ref>&lt; PF &gt;</type>
+        <definition>using castor::PxBuffer&lt; PF &gt;::iterator =  PixelIterator&lt; PF &gt;</definition>
+        <argsstring></argsstring>
+        <name>iterator</name>
+        <qualifiedname>castor::PxBuffer::iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBuffer.hpp" line="23" column="1" bodyfile="CastorUtils/Graphics/PixelBuffer.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d1/d39/a08803_1aaf12a2e31145d355fb160152279dd742" prot="public" static="no">
+        <type><ref refid="d4/d1d/a08807" kindref="compound">ConstPixelIterator</ref>&lt; PF &gt;</type>
+        <definition>using castor::PxBuffer&lt; PF &gt;::const_iterator =  ConstPixelIterator&lt; PF &gt;</definition>
+        <argsstring></argsstring>
+        <name>const_iterator</name>
+        <qualifiedname>castor::PxBuffer::const_iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBuffer.hpp" line="24" column="1" bodyfile="CastorUtils/Graphics/PixelBuffer.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d39/a08803_1adffd330f5204b99cdf1d4a8a18ac9c14" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::PxBuffer&lt; PF &gt;::PxBuffer</definition>
+        <argsstring>(Size const &amp;size, uint32_t layers, uint32_t levels, uint8_t const *buffer=nullptr, PixelFormat bufferFormat=PixelFormat::eR8G8B8A8_UNORM)</argsstring>
+        <name>PxBuffer</name>
+        <qualifiedname>castor::PxBuffer::PxBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>layers</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>levels</declname>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>buffer</declname>
+          <defval>nullptr</defval>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>bufferFormat</declname>
+          <defval>PixelFormat::eR8G8B8A8_UNORM</defval>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les dimensions voulues pour le buffer </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">layers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Couches du buffer (layers ou slices) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">levels</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Niveaux de mip du buffer </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Buffer de données </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Format des pixels du buffer de données </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBuffer.hpp" line="43" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a08803_1a5c4433ac19651354417d89ca5032c825" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::PxBuffer&lt; PF &gt;::PxBuffer</definition>
+        <argsstring>(Size const &amp;size, uint8_t const *buffer=nullptr, PixelFormat bufferFormat=PixelFormat::eR8G8B8A8_UNORM)</argsstring>
+        <name>PxBuffer</name>
+        <qualifiedname>castor::PxBuffer::PxBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>buffer</declname>
+          <defval>nullptr</defval>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>bufferFormat</declname>
+          <defval>PixelFormat::eR8G8B8A8_UNORM</defval>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les dimensions voulues pour le buffer </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Buffer de données </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Format des pixels du buffer de données </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBuffer.hpp" line="60" column="10" bodyfile="CastorUtils/Graphics/PixelBuffer.hpp" bodystart="60" bodyend="65"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/d39/a08803_1a3e54a1a0fb7fa398737bce75ab543b4e" prot="private" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint8_t const *</type>
+        <definition>uint8_t const  * castor::PxBufferBase::begin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::PxBuffer::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBuffer.hpp" line="89" column="1" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="295" bodyend="298"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d39/a08803_1a9a6326ed68ffa3d7c2ddadcf52774ce9" prot="private" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint8_t const *</type>
+        <definition>uint8_t const  * castor::PxBufferBase::end</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::PxBuffer::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBuffer.hpp" line="90" column="1" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="300" bodyend="303"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Buffer de pixels avec le format de pixel en argument template. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::PxBuffer&lt; PF &gt;</label>
+        <link refid="d1/d39/a08803"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::PxBufferBase</label>
+        <link refid="dd/df9/a08987"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="6">
+        <label>castor::Coords&lt; uint32_t, 2 &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::DataHolderT&lt; SizeData &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; SizeData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::Coords&lt; T, Count &gt;</label>
+        <link refid="d9/d6a/a09103"/>
+      </node>
+      <node id="5">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="1">
+        <label>castor::PxBuffer&lt; PF &gt;</label>
+        <link refid="d1/d39/a08803"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::PxBufferBase</label>
+        <link refid="dd/df9/a08987"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_size</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Size</label>
+        <link refid="d4/dd6/a09023"/>
+        <childnode refid="4" relation="private-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/PixelBuffer.hpp" line="18" column="1" bodyfile="CastorUtils/Graphics/PixelBuffer.hpp" bodystart="20" bodyend="91"/>
+    <listofallmembers>
+      <member refid="d1/d39/a08803_1a96ce61ce4e0d0aafbabdd4cb391333e3" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>at</name></member>
+      <member refid="d1/d39/a08803_1a3e54a1a0fb7fa398737bce75ab543b4e" prot="private" virt="non-virtual"><scope>castor::PxBuffer</scope><name>begin</name></member>
+      <member refid="dd/df9/a08987_1a3111dfa0c768dcbe75abaa42ad39379c" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>cbegin</name></member>
+      <member refid="dd/df9/a08987_1a17699c2221f4ab9d7e401753c5d24c98" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>cend</name></member>
+      <member refid="dd/df9/a08987_1a0de8bbf1f9c22dd173ca37b86495e385" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>clear</name></member>
+      <member refid="dd/df9/a08987_1ac1e0131fa58bb55a3c63d6ad5c673bb0" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>clone</name></member>
+      <member refid="d1/d39/a08803_1aaf12a2e31145d355fb160152279dd742" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>const_iterator</name></member>
+      <member refid="dd/df9/a08987_1a7904a98af7b74471d162e28c9d278815" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>ConstPixelData</name></member>
+      <member refid="dd/df9/a08987_1a913e6dac264141eaf23c42cee132db00" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>convertToTiles</name></member>
+      <member refid="dd/df9/a08987_1a6cac5cb051ac8092cc1219a2cf88d9eb" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>create</name></member>
+      <member refid="dd/df9/a08987_1a2e2e076c00783e494932092dfe61a24f" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>create</name></member>
+      <member refid="dd/df9/a08987_1a7a2354c2ea9d0a13272c2a1ea8d21d81" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>create</name></member>
+      <member refid="dd/df9/a08987_1a5f304b374ef20de947fa2f7ade5c11fc" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>create</name></member>
+      <member refid="dd/df9/a08987_1a6362592f2d822c2de46a2fbe0a401e9d" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>create</name></member>
+      <member refid="dd/df9/a08987_1ae5f5a4d3739d1274b92c8ad7dc02de56" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>create</name></member>
+      <member refid="dd/df9/a08987_1ae374d18cc00f62490deae65c1713e0e5" prot="protected" virt="non-virtual"><scope>castor::PxBuffer</scope><name>doConvert</name></member>
+      <member refid="d1/d39/a08803_1a9a6326ed68ffa3d7c2ddadcf52774ce9" prot="private" virt="non-virtual"><scope>castor::PxBuffer</scope><name>end</name></member>
+      <member refid="dd/df9/a08987_1ae5554a6b9b095cc58126b2a952977892" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>flip</name></member>
+      <member refid="dd/df9/a08987_1a71996cb68a73a1d1822d9ef52ee28ea1" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>generateMips</name></member>
+      <member refid="dd/df9/a08987_1a124eede8c1f80052781f6a7afad3c8fd" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getAlign</name></member>
+      <member refid="dd/df9/a08987_1ae97cb3ec537d5186779d67c6c3b99130" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getAt</name></member>
+      <member refid="dd/df9/a08987_1a3e3b755e9ac2965995aff3dae565e698" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getAt</name></member>
+      <member refid="dd/df9/a08987_1a5713532df1210d37bbf350d69d928360" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getAt</name></member>
+      <member refid="dd/df9/a08987_1af834c3a9e4d601d3e3db75a98e7e5b7b" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getAt</name></member>
+      <member refid="dd/df9/a08987_1a9be8f18b1764dc522ad4987f36608856" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getConstPtr</name></member>
+      <member refid="dd/df9/a08987_1a1ae7125e8d5e73e4b9e9d72b6c1b5e4a" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getCount</name></member>
+      <member refid="dd/df9/a08987_1ab33d4c052a19248839bb637203ad0bcb" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getDimensions</name></member>
+      <member refid="dd/df9/a08987_1ac87ea1116c4be4c2d9dcd3daf9494905" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getFormat</name></member>
+      <member refid="dd/df9/a08987_1a914ac0ada101f2aa932884e18a37a250" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getHeight</name></member>
+      <member refid="dd/df9/a08987_1acf5b112ac61e4376439c2132739381ec" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getLayers</name></member>
+      <member refid="dd/df9/a08987_1af28492c18b265d0c1485c5bc60d35809" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getLevels</name></member>
+      <member refid="dd/df9/a08987_1a9cf1921e9b6b772214222520a4cddad7" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getPtr</name></member>
+      <member refid="dd/df9/a08987_1ae3650d9e6524272127cd60666ad6f00a" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getSize</name></member>
+      <member refid="dd/df9/a08987_1ad304432fd9cfa3330576661bbba71f34" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getTileHeight</name></member>
+      <member refid="dd/df9/a08987_1ac8a9dc2dd9f975f01b63c15212a3313d" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getTiles</name></member>
+      <member refid="dd/df9/a08987_1a834e10b7496afe17390ddf69c3f383e2" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getTileSize</name></member>
+      <member refid="dd/df9/a08987_1a027e7feff5936185517a08ca11581288" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getTileWidth</name></member>
+      <member refid="dd/df9/a08987_1a73620ef43aee567accf951b50d23957b" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>getWidth</name></member>
+      <member refid="dd/df9/a08987_1a22c2306b1fe58b48c134f55c25111124" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>initialise</name></member>
+      <member refid="dd/df9/a08987_1a6162ecba9c293702ead57a696544378e" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>initialise</name></member>
+      <member refid="dd/df9/a08987_1a5806cd5591c33b2ebc03164ff40d0d89" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>initialise</name></member>
+      <member refid="dd/df9/a08987_1a33f681592de84ac7bdb3c6f95b598a58" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>isFlipped</name></member>
+      <member refid="d1/d39/a08803_1ae5394ae12a3850650504f9fcf6042e52" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>iterator</name></member>
+      <member refid="dd/df9/a08987_1aa97233c4ebf3fa1274bcf1dbf81d4339" prot="protected" virt="non-virtual"><scope>castor::PxBuffer</scope><name>m_align</name></member>
+      <member refid="dd/df9/a08987_1a5ee07455950ba1d92ff14a2b0faebe60" prot="protected" virt="non-virtual"><scope>castor::PxBuffer</scope><name>m_buffer</name></member>
+      <member refid="dd/df9/a08987_1a69c35170d090e328a700c6ebc6168661" prot="protected" virt="non-virtual"><scope>castor::PxBuffer</scope><name>m_layers</name></member>
+      <member refid="dd/df9/a08987_1a4855f4c1d335079a412dafb0276b8777" prot="protected" virt="non-virtual"><scope>castor::PxBuffer</scope><name>m_levels</name></member>
+      <member refid="dd/df9/a08987_1aa72fd741ad1b4dd72727b7b52729ae11" prot="protected" virt="non-virtual"><scope>castor::PxBuffer</scope><name>m_size</name></member>
+      <member refid="dd/df9/a08987_1a691eb2ccdf0a09f080ae050b0dc998fe" prot="protected" virt="non-virtual"><scope>castor::PxBuffer</scope><name>m_tiles</name></member>
+      <member refid="d1/d39/a08803_1a7d03167acc5f83d4b600f29d4d21bfa6" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>MyPixel</name></member>
+      <member refid="dd/df9/a08987_1a073da6da845c3073f7e436a2900c4206" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>operator=</name></member>
+      <member refid="dd/df9/a08987_1ae50a1cdac94c4fe833a3c8424f93a83b" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>operator=</name></member>
+      <member refid="dd/df9/a08987_1abcbbb1571ed4efd710103ba7d8e8078a" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>PixelData</name></member>
+      <member refid="d1/d39/a08803_1a447c50175a9079ef7c3f6fce9d322618" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>pixelsBegin</name></member>
+      <member refid="d1/d39/a08803_1ad8a81007dcfcee4db60c5bb23895f1bb" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>pixelsEnd</name></member>
+      <member refid="dd/df9/a08987_1adb1ea170c68df343dcd6e2f2364f0877" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>PxArray</name></member>
+      <member refid="d1/d39/a08803_1adffd330f5204b99cdf1d4a8a18ac9c14" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>PxBuffer</name></member>
+      <member refid="d1/d39/a08803_1a5c4433ac19651354417d89ca5032c825" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>PxBuffer</name></member>
+      <member refid="dd/df9/a08987_1a567ae3e875ffc8a8bb1f434a643bcb04" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>PxBufferBase</name></member>
+      <member refid="dd/df9/a08987_1a57744939c8221f29ddd138db30ecb90e" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>PxBufferBase</name></member>
+      <member refid="dd/df9/a08987_1acef8b29a48cdc9ddb91bd473702dfe41" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>PxBufferBase</name></member>
+      <member refid="dd/df9/a08987_1ae07c08d2cface7af291287a19b05dbea" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>PxBufferBase</name></member>
+      <member refid="dd/df9/a08987_1a2c7797ea8d2f520d39a8762bcb979f5c" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>swap</name></member>
+      <member refid="dd/df9/a08987_1a28fb272965fef7e8349cf5acedf71573" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>update</name></member>
+      <member refid="dd/df9/a08987_1a11ebf587e16d046552e01d25728f909e" prot="public" virt="non-virtual"><scope>castor::PxBuffer</scope><name>~PxBufferBase</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

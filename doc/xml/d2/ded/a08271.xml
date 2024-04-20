@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/ded/a08271" kind="class" language="C++" prot="public">
+    <compoundname>castor::ScopeGuard</compoundname>
+    <includes local="no">ScopeGuard.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ScopeExitFuncType</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/ded/a08271_1a8a6e25b96c4f5099e2d7e23c8b9c5868" prot="private" static="no" mutable="no">
+        <type>ScopeExitFuncType</type>
+        <definition>ScopeExitFuncType castor::ScopeGuard&lt; ScopeExitFuncType &gt;::m_function</definition>
+        <argsstring></argsstring>
+        <name>m_function</name>
+        <qualifiedname>castor::ScopeGuard::m_function</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ScopeGuard.hpp" line="77" column="19" bodyfile="CastorUtils/Design/ScopeGuard.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/ded/a08271_1a5d40a3084219a6de5f0fc0ed38eb0d0d" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ScopeGuard&lt; ScopeExitFuncType &gt;::ScopeGuard</definition>
+        <argsstring>(ScopeExitFuncType const &amp;function)</argsstring>
+        <name>ScopeGuard</name>
+        <qualifiedname>castor::ScopeGuard::ScopeGuard</qualifiedname>
+        <param>
+          <type>ScopeExitFuncType const &amp;</type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La fonction. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ScopeGuard.hpp" line="25" column="10" bodyfile="CastorUtils/Design/ScopeGuard.hpp" bodystart="25" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/ded/a08271_1a88f604ab37bd3cd0d64247d0446fb84a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::ScopeGuard&lt; ScopeExitFuncType &gt;::ScopeGuard</definition>
+        <argsstring>(ScopeGuard const &amp;rhs)=delete</argsstring>
+        <name>ScopeGuard</name>
+        <qualifiedname>castor::ScopeGuard::ScopeGuard</qualifiedname>
+        <param>
+          <type><ref refid="d2/ded/a08271" kindref="compound">ScopeGuard</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par copie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à copier. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ScopeGuard.hpp" line="37" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/ded/a08271_1a180be8a21b673e43bef80674aa0e001f" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ScopeGuard&lt; ScopeExitFuncType &gt;::ScopeGuard</definition>
+        <argsstring>(ScopeGuard &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>ScopeGuard</name>
+        <qualifiedname>castor::ScopeGuard::ScopeGuard</qualifiedname>
+        <param>
+          <type><ref refid="d2/ded/a08271" kindref="compound">ScopeGuard</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à déplacer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ScopeGuard.hpp" line="46" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/ded/a08271_1ac6f129a13a437b9c9864733ae8a15f2a" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ScopeGuard&lt; ScopeExitFuncType &gt;::~ScopeGuard</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~ScopeGuard</name>
+        <qualifiedname>castor::ScopeGuard::~ScopeGuard</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ScopeGuard.hpp" line="53" column="1" bodyfile="CastorUtils/Design/ScopeGuard.hpp" bodystart="53" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/ded/a08271_1aaf2d1659026dd820faaf70e7fd8bdb99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/ded/a08271" kindref="compound">ScopeGuard</ref> &amp;</type>
+        <definition>ScopeGuard &amp; castor::ScopeGuard&lt; ScopeExitFuncType &gt;::operator=</definition>
+        <argsstring>(ScopeGuard const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ScopeGuard::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d2/ded/a08271" kindref="compound">ScopeGuard</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par copie. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à copier. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ScopeGuard.hpp" line="65" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/ded/a08271_1adc20f4e59b878bc180b22893fd18fdd3" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/ded/a08271" kindref="compound">ScopeGuard</ref> &amp;</type>
+        <definition>ScopeGuard &amp; castor::ScopeGuard&lt; ScopeExitFuncType &gt;::operator=</definition>
+        <argsstring>(ScopeGuard &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ScopeGuard::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d2/ded/a08271" kindref="compound">ScopeGuard</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par déplacement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;objet à déplacer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ScopeGuard.hpp" line="74" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe utilisée pour exécuter du code à la sortie d&apos;un scope. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Design/ScopeGuard.hpp" line="14" column="1" bodyfile="CastorUtils/Design/ScopeGuard.hpp" bodystart="15" bodyend="78"/>
+    <listofallmembers>
+      <member refid="d2/ded/a08271_1a8a6e25b96c4f5099e2d7e23c8b9c5868" prot="private" virt="non-virtual"><scope>castor::ScopeGuard</scope><name>m_function</name></member>
+      <member refid="d2/ded/a08271_1aaf2d1659026dd820faaf70e7fd8bdb99" prot="public" virt="non-virtual"><scope>castor::ScopeGuard</scope><name>operator=</name></member>
+      <member refid="d2/ded/a08271_1adc20f4e59b878bc180b22893fd18fdd3" prot="public" virt="non-virtual"><scope>castor::ScopeGuard</scope><name>operator=</name></member>
+      <member refid="d2/ded/a08271_1a5d40a3084219a6de5f0fc0ed38eb0d0d" prot="public" virt="non-virtual"><scope>castor::ScopeGuard</scope><name>ScopeGuard</name></member>
+      <member refid="d2/ded/a08271_1a88f604ab37bd3cd0d64247d0446fb84a" prot="public" virt="non-virtual"><scope>castor::ScopeGuard</scope><name>ScopeGuard</name></member>
+      <member refid="d2/ded/a08271_1a180be8a21b673e43bef80674aa0e001f" prot="public" virt="non-virtual"><scope>castor::ScopeGuard</scope><name>ScopeGuard</name></member>
+      <member refid="d2/ded/a08271_1ac6f129a13a437b9c9864733ae8a15f2a" prot="public" virt="non-virtual"><scope>castor::ScopeGuard</scope><name>~ScopeGuard</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

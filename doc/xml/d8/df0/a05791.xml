@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/df0/a05791" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlayContext::OverlayPtr</compoundname>
+    <includes local="no">Overlay.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/df0/a05791_1abf46513ce6096d815b1d1b0e9def4140" prot="public" static="no" mutable="no">
+        <type>OverlayUPtr</type>
+        <definition>OverlayUPtr castor3d::OverlayContext::OverlayPtr::uptr</definition>
+        <argsstring></argsstring>
+        <name>uptr</name>
+        <qualifiedname>castor3d::OverlayContext::OverlayPtr::uptr</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/Overlay.hpp" line="339" column="13" bodyfile="Castor3D/Overlay/Overlay.hpp" bodystart="339" bodyend="339"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/df0/a05791_1abc5795baeb6b68a17defd4e0e3ec0a39" prot="public" static="no" mutable="no">
+        <type>OverlayRPtr</type>
+        <definition>OverlayRPtr castor3d::OverlayContext::OverlayPtr::rptr</definition>
+        <argsstring></argsstring>
+        <name>rptr</name>
+        <qualifiedname>castor3d::OverlayContext::OverlayPtr::rptr</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/Overlay.hpp" line="340" column="13" bodyfile="Castor3D/Overlay/Overlay.hpp" bodystart="340" bodyend="340"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Overlay/Overlay.hpp" line="337" column="1" bodyfile="Castor3D/Overlay/Overlay.hpp" bodystart="338" bodyend="341"/>
+    <listofallmembers>
+      <member refid="d8/df0/a05791_1abc5795baeb6b68a17defd4e0e3ec0a39" prot="public" virt="non-virtual"><scope>castor3d::OverlayContext::OverlayPtr</scope><name>rptr</name></member>
+      <member refid="d8/df0/a05791_1abf46513ce6096d815b1d1b0e9def4140" prot="public" virt="non-virtual"><scope>castor3d::OverlayContext::OverlayPtr</scope><name>uptr</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dir_eccd3726f38e033a60ddecbeceab6fea" kind="dir">
+    <compoundname>Material/Pass/Component</compoundname>
+    <innerdir refid="dir_b31bf74aaa78ddd1e9fc91a1cebefee3">Material/Pass/Component/Base</innerdir>
+    <innerdir refid="dir_bfd6c3ec76afce51786bb17a92b28154">Material/Pass/Component/Lighting</innerdir>
+    <innerdir refid="dir_ffcbc8bc09b8cc8fe3aecf852f5266ee">Material/Pass/Component/Map</innerdir>
+    <innerdir refid="dir_e89de1a874a39a885a1106a5b958574f">Material/Pass/Component/Other</innerdir>
+    <innerfile refid="db/d8e/a00482">BaseDataPassComponent.hpp</innerfile>
+    <innerfile refid="d7/d7d/a14827">ComponentModule.hpp</innerfile>
+    <innerfile refid="d4/d14/a00608">PassComponent.hpp</innerfile>
+    <innerfile refid="dd/dc0/a00611">PassComponentRegister.hpp</innerfile>
+    <innerfile refid="d7/d80/a00614">PassMapComponent.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/Component/"/>
+  </compounddef>
+</doxygen>

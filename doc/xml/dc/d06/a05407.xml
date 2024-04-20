@@ -1,0 +1,355 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d06/a05407" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::MeshImporter</compoundname>
+    <basecompoundref refid="d6/da8/a08227" prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <derivedcompoundref refid="d2/d78/a03431" prot="public" virt="non-virtual">castor3d::CmshMeshImporter</derivedcompoundref>
+    <includes local="no">MeshImporter.hpp</includes>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="dc/d06/a05407_1aa12aff29f8d27a8f4acf225e361d64d5" prot="protected" static="no" mutable="no">
+        <type><ref refid="db/df9/a03951" kindref="compound">ImporterFile</ref> *</type>
+        <definition>ImporterFile* castor3d::MeshImporter::m_file</definition>
+        <argsstring></argsstring>
+        <name>m_file</name>
+        <qualifiedname>castor3d::MeshImporter::m_file</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshImporter.hpp" line="90" column="15" bodyfile="Castor3D/Model/Mesh/MeshImporter.hpp" bodystart="90" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d06/a05407_1a8023fdbac648fab9057efdd454af67c6" prot="protected" static="no" mutable="no">
+        <type>MeshPtrStrMap</type>
+        <definition>MeshPtrStrMap castor3d::MeshImporter::m_meshes</definition>
+        <argsstring></argsstring>
+        <name>m_meshes</name>
+        <qualifiedname>castor3d::MeshImporter::m_meshes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Les maillages chargés. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshImporter.hpp" line="93" column="15" bodyfile="Castor3D/Model/Mesh/MeshImporter.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d06/a05407_1afb5a24369d04781b9fa30b5d824307a2" prot="protected" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref></type>
+        <definition>Parameters castor3d::MeshImporter::m_parameters</definition>
+        <argsstring></argsstring>
+        <name>m_parameters</name>
+        <qualifiedname>castor3d::MeshImporter::m_parameters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Paramètres de configuration de l&apos;import. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshImporter.hpp" line="96" column="12" bodyfile="Castor3D/Model/Mesh/MeshImporter.hpp" bodystart="96" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d06/a05407_1ab487a61ca9280ca08416a78209be114c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual castor3d::MeshImporter::~MeshImporter</definition>
+        <argsstring>()=default</argsstring>
+        <name>~MeshImporter</name>
+        <qualifiedname>castor3d::MeshImporter::~MeshImporter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshImporter.hpp" line="25" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d06/a05407_1a045aa14041b53b76e24b6302849dcae4" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MeshImporter::MeshImporter</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>MeshImporter</name>
+        <qualifiedname>castor3d::MeshImporter::MeshImporter</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshImporter.hpp" line="34" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d06/a05407_1a3aa3902a3e6adcb84d7678401cbf15e7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::MeshImporter::import</definition>
+        <argsstring>(Mesh &amp;mesh, ImporterFile *file, Parameters const &amp;parameters, bool forceImport)</argsstring>
+        <name>import</name>
+        <qualifiedname>castor3d::MeshImporter::import</qualifiedname>
+        <param>
+          <type><ref refid="d2/dc7/a05391" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type><ref refid="db/df9/a03951" kindref="compound">ImporterFile</ref> *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>forceImport</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;import de <ref refid="d2/dc7/a05391" kindref="compound">Mesh</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les données importées. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin vers le fichier à importer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Paramètres de configuration de l&apos;import. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">forceImport</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si le mesh importé doit être importé même s&apos;il est déjà rempli. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un problème quelconque est survenu. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshImporter.hpp" line="51" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dc/d06/a05407_1a817d5241e3b9c015b5288449c8f3ca48" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>static C3D_API bool castor3d::MeshImporter::import</definition>
+        <argsstring>(Mesh &amp;mesh, castor::Path const &amp;pathFile, Parameters const &amp;parameters, bool forceImport)</argsstring>
+        <name>import</name>
+        <qualifiedname>castor3d::MeshImporter::import</qualifiedname>
+        <param>
+          <type><ref refid="d2/dc7/a05391" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>pathFile</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>forceImport</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;import de <ref refid="d2/dc7/a05391" kindref="compound">Mesh</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les données importées. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pathFile</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin vers le fichier à importer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Paramètres de configuration de l&apos;import. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">forceImport</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si le mesh importé doit être importé même s&apos;il est déjà rempli. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un problème quelconque est survenu. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshImporter.hpp" line="71" column="21"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="dc/d06/a05407_1a0eb9bc99966ced84853d1ff07fad8ce0" prot="protected" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::MeshImporter::doImportMesh</definition>
+        <argsstring>(Mesh &amp;mesh)=0</argsstring>
+        <name>doImportMesh</name>
+        <qualifiedname>castor3d::MeshImporter::doImportMesh</qualifiedname>
+        <reimplementedby refid="d2/d78/a03431_1a858dd3c449a55dde12352af9e6a7ff72">doImportMesh</reimplementedby>
+        <param>
+          <type><ref refid="d2/dc7/a05391" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;import de <ref refid="d2/dc7/a05391" kindref="compound">Mesh</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les données importées. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un problème quelconque est survenu. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshImporter.hpp" line="87" column="22"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::CmshMeshImporter</label>
+        <link refid="d2/d78/a03431"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::MeshImporter</label>
+        <link refid="dc/d06/a05407"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::ParametersT&lt; castor::String &gt;</label>
+        <link refid="d0/d45/a05315"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::ImporterFile</label>
+        <link refid="db/df9/a03951"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::MeshImporter</label>
+        <link refid="dc/d06/a05407"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_file</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_parameters</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::ParametersT&lt; KeyT &gt;</label>
+        <link refid="d0/d45/a05315"/>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Model/Mesh/MeshImporter.hpp" line="21" column="1" bodyfile="Castor3D/Model/Mesh/MeshImporter.hpp" bodystart="23" bodyend="97"/>
+    <listofallmembers>
+      <member refid="dc/d06/a05407_1a0eb9bc99966ced84853d1ff07fad8ce0" prot="protected" virt="pure-virtual"><scope>castor3d::MeshImporter</scope><name>doImportMesh</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>getOwner</name></member>
+      <member refid="dc/d06/a05407_1a3aa3902a3e6adcb84d7678401cbf15e7" prot="public" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>import</name></member>
+      <member refid="dc/d06/a05407_1a817d5241e3b9c015b5288449c8f3ca48" prot="public" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>import</name></member>
+      <member refid="dc/d06/a05407_1aa12aff29f8d27a8f4acf225e361d64d5" prot="protected" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>m_file</name></member>
+      <member refid="dc/d06/a05407_1a8023fdbac648fab9057efdd454af67c6" prot="protected" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>m_meshes</name></member>
+      <member refid="dc/d06/a05407_1afb5a24369d04781b9fa30b5d824307a2" prot="protected" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>m_parameters</name></member>
+      <member refid="dc/d06/a05407_1a045aa14041b53b76e24b6302849dcae4" prot="public" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>MeshImporter</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::MeshImporter</scope><name>OwnedBy</name></member>
+      <member refid="dc/d06/a05407_1ab487a61ca9280ca08416a78209be114c" prot="public" virt="virtual"><scope>castor3d::MeshImporter</scope><name>~MeshImporter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

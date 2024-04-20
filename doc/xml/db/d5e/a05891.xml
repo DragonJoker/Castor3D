@@ -1,0 +1,502 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d5e/a05891" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Plugin</compoundname>
+    <basecompoundref refid="d6/da8/a08227" prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <derivedcompoundref refid="d5/dfd/a05871" prot="public" virt="non-virtual">castor3d::DividerPlugin</derivedcompoundref>
+    <derivedcompoundref refid="dd/dc3/a05875" prot="public" virt="non-virtual">castor3d::GeneratorPlugin</derivedcompoundref>
+    <derivedcompoundref refid="de/d76/a05879" prot="public" virt="non-virtual">castor3d::GenericPlugin</derivedcompoundref>
+    <derivedcompoundref refid="df/df8/a05883" prot="public" virt="non-virtual">castor3d::ImporterPlugin</derivedcompoundref>
+    <derivedcompoundref refid="d9/d99/a05887" prot="public" virt="non-virtual">castor3d::ParticlePlugin</derivedcompoundref>
+    <derivedcompoundref refid="db/d12/a05903" prot="public" virt="non-virtual">castor3d::PostFxPlugin</derivedcompoundref>
+    <derivedcompoundref refid="da/d2e/a05907" prot="public" virt="non-virtual">castor3d::ToneMappingPlugin</derivedcompoundref>
+    <includes local="no">Plugin.hpp</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="db/d5e/a05891_1ad9481aa690ebce52bc156c1205a6e926" prot="public" static="no">
+        <type>void(*)(<ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> *, <ref refid="db/d5e/a05891" kindref="compound">Plugin</ref> *)</type>
+        <definition>using castor3d::Plugin::OnLoadFunction =  void ( * )( Engine *, Plugin * )</definition>
+        <argsstring></argsstring>
+        <name>OnLoadFunction</name>
+        <qualifiedname>castor3d::Plugin::OnLoadFunction</qualifiedname>
+        <briefdescription>
+<para>&lt; Signature for the plug-in&apos;s loading function </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Signature for the plug-in&apos;s unloading function </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/Plugin.hpp" line="17" column="1" bodyfile="Castor3D/Plugin/Plugin.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/d5e/a05891_1a270e7bcd56155a8810cdce16eb9a2af7" prot="public" static="no">
+        <type>void(*)(<ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> *) noexcept</type>
+        <definition>using castor3d::Plugin::OnUnloadFunction =  void ( * )( Engine * )noexcept</definition>
+        <argsstring></argsstring>
+        <name>OnUnloadFunction</name>
+        <qualifiedname>castor3d::Plugin::OnUnloadFunction</qualifiedname>
+        <briefdescription>
+<para>Signature for the plug-in&apos;s type retrieval function. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/Plugin.hpp" line="19" column="1" bodyfile="Castor3D/Plugin/Plugin.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/d5e/a05891_1a57603a105bb12a698c4192413f6c01c0" prot="public" static="no">
+        <type>void(*)(<ref refid="d9/dba/a02278_1aecf8304db7dd49c874ec216f139e5f67" kindref="member">PluginType</ref> *)</type>
+        <definition>using castor3d::Plugin::GetTypeFunction =  void ( * )( PluginType * )</definition>
+        <argsstring></argsstring>
+        <name>GetTypeFunction</name>
+        <qualifiedname>castor3d::Plugin::GetTypeFunction</qualifiedname>
+        <briefdescription>
+<para>Signature for the plug-in&apos;s version checking function. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/Plugin.hpp" line="21" column="1" bodyfile="Castor3D/Plugin/Plugin.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/d5e/a05891_1ac7505429b1d290b40c09fbf488c52b43" prot="public" static="no">
+        <type>void(*)(<ref refid="d5/d15/a05335" kindref="compound">Version</ref> *version)</type>
+        <definition>using castor3d::Plugin::GetRequiredVersionFunction =  void ( * )( Version * version )</definition>
+        <argsstring></argsstring>
+        <name>GetRequiredVersionFunction</name>
+        <qualifiedname>castor3d::Plugin::GetRequiredVersionFunction</qualifiedname>
+        <briefdescription>
+<para>Signature for the plug-in&apos;s name retrieval function. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/Plugin.hpp" line="23" column="1" bodyfile="Castor3D/Plugin/Plugin.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/d5e/a05891_1a9fe46462b345af39a924f8081f09002d" prot="public" static="no">
+        <type>void(*)(char const **)</type>
+        <definition>using castor3d::Plugin::GetNameFunction =  void ( * )( char const ** )</definition>
+        <argsstring></argsstring>
+        <name>GetNameFunction</name>
+        <qualifiedname>castor3d::Plugin::GetNameFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/Plugin.hpp" line="25" column="1" bodyfile="Castor3D/Plugin/Plugin.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="db/d5e/a05891_1af67ef96075d71ead62f1a47cff5ac7b5" prot="protected" static="no" mutable="no">
+        <type>castor::DynamicLibraryUPtr</type>
+        <definition>castor::DynamicLibraryUPtr castor3d::Plugin::m_library</definition>
+        <argsstring></argsstring>
+        <name>m_library</name>
+        <qualifiedname>castor3d::Plugin::m_library</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La bibliothèque du plug-in. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/Plugin.hpp" line="101" column="28" bodyfile="Castor3D/Plugin/Plugin.hpp" bodystart="101" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5e/a05891_1aa2e6fc5f27975d42f1329569f37e6a3e" prot="protected" static="no" mutable="no">
+        <type><ref refid="db/d5e/a05891_1ac7505429b1d290b40c09fbf488c52b43" kindref="member">GetRequiredVersionFunction</ref></type>
+        <definition>GetRequiredVersionFunction castor3d::Plugin::m_pfnGetRequiredVersion</definition>
+        <argsstring></argsstring>
+        <name>m_pfnGetRequiredVersion</name>
+        <qualifiedname>castor3d::Plugin::m_pfnGetRequiredVersion</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La fonction de récupération de la version requise. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/Plugin.hpp" line="104" column="28" bodyfile="Castor3D/Plugin/Plugin.hpp" bodystart="104" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5e/a05891_1a999f657823e4cbcf844a81e32b96dec4" prot="protected" static="no" mutable="no">
+        <type><ref refid="db/d5e/a05891_1a9fe46462b345af39a924f8081f09002d" kindref="member">GetNameFunction</ref></type>
+        <definition>GetNameFunction castor3d::Plugin::m_pfnGetName</definition>
+        <argsstring></argsstring>
+        <name>m_pfnGetName</name>
+        <qualifiedname>castor3d::Plugin::m_pfnGetName</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La fonction de récupération du nom du plug-in. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/Plugin.hpp" line="107" column="17" bodyfile="Castor3D/Plugin/Plugin.hpp" bodystart="107" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5e/a05891_1a7f9b6b8f678d6ea93023fbe76573eb92" prot="protected" static="no" mutable="no">
+        <type><ref refid="db/d5e/a05891_1ad9481aa690ebce52bc156c1205a6e926" kindref="member">OnLoadFunction</ref></type>
+        <definition>OnLoadFunction castor3d::Plugin::m_pfnOnLoad</definition>
+        <argsstring></argsstring>
+        <name>m_pfnOnLoad</name>
+        <qualifiedname>castor3d::Plugin::m_pfnOnLoad</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La fonction de chargement du plug-in. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/Plugin.hpp" line="110" column="16" bodyfile="Castor3D/Plugin/Plugin.hpp" bodystart="110" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5e/a05891_1ac8c60d89e2821bc824ab0150f4196989" prot="protected" static="no" mutable="no">
+        <type><ref refid="db/d5e/a05891_1a270e7bcd56155a8810cdce16eb9a2af7" kindref="member">OnUnloadFunction</ref></type>
+        <definition>OnUnloadFunction castor3d::Plugin::m_pfnOnUnload</definition>
+        <argsstring></argsstring>
+        <name>m_pfnOnUnload</name>
+        <qualifiedname>castor3d::Plugin::m_pfnOnUnload</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La fonction de déchargement du plug-in. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/Plugin.hpp" line="113" column="18" bodyfile="Castor3D/Plugin/Plugin.hpp" bodystart="113" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d5e/a05891_1ad988a5d361f28b80ba19dd2caac722e1" prot="protected" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1aecf8304db7dd49c874ec216f139e5f67" kindref="member">PluginType</ref></type>
+        <definition>PluginType castor3d::Plugin::m_type</definition>
+        <argsstring></argsstring>
+        <name>m_type</name>
+        <qualifiedname>castor3d::Plugin::m_type</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le type du plug-in. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/Plugin.hpp" line="116" column="12" bodyfile="Castor3D/Plugin/Plugin.hpp" bodystart="116" bodyend="116"/>
+        <referencedby refid="db/d5e/a05891_1adfce87274549c3458e705ec6f49f2466" compoundref="d8/d38/a00926" startline="77" endline="80">getType</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="db/d5e/a05891_1a34467cc6f0925b83827b0884c5b4c496" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Plugin::Plugin</definition>
+        <argsstring>(PluginType type, castor::DynamicLibraryUPtr library, Engine &amp;engine)</argsstring>
+        <name>Plugin</name>
+        <qualifiedname>castor3d::Plugin::Plugin</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aecf8304db7dd49c874ec216f139e5f67" kindref="member">PluginType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>castor::DynamicLibraryUPtr</type>
+          <declname>library</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type du plug-in </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">library</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La bibliothèque partagée contenant le plug-in </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/Plugin.hpp" line="40" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5e/a05891_1a6eee27fad0b4dc406af8dac993816e1e" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Plugin::load</definition>
+        <argsstring>()</argsstring>
+        <name>load</name>
+        <qualifiedname>castor3d::Plugin::load</qualifiedname>
+        <briefdescription>
+<para>Exécute la fonction de chargement du plug-in. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/Plugin.hpp" line="89" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5e/a05891_1a0d3fd522e0c2a3396428a5a97cdb0c18" prot="protected" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Plugin::unload</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>unload</name>
+        <qualifiedname>castor3d::Plugin::unload</qualifiedname>
+        <briefdescription>
+<para>Exécute la fonction de déchargement du plug-in. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/Plugin.hpp" line="96" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d5e/a05891_1a74a6dc68249b01895f5c682c6a539a6a" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::Plugin::~Plugin</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~Plugin</name>
+        <qualifiedname>castor3d::Plugin::~Plugin</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/Plugin.hpp" line="50" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5e/a05891_1a21c697a5bb64dc09df8604a595ed4ef1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Plugin::getRequiredVersion</definition>
+        <argsstring>(Version &amp;version) const</argsstring>
+        <name>getRequiredVersion</name>
+        <qualifiedname>castor3d::Plugin::getRequiredVersion</qualifiedname>
+        <param>
+          <type><ref refid="d5/d15/a05335" kindref="compound">Version</ref> &amp;</type>
+          <declname>version</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la version nécessaire au bon fonctionnement du plug-in. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">version</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit la version. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/Plugin.hpp" line="59" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5e/a05891_1a76345cfa813957198ab5a735b3bf2c84" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>C3D_API castor::String castor3d::Plugin::getName</definition>
+        <argsstring>() const</argsstring>
+        <name>getName</name>
+        <qualifiedname>castor3d::Plugin::getName</qualifiedname>
+        <briefdescription>
+<para>Récupère le nom du plug-in. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le nom </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/Plugin.hpp" line="68" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d5e/a05891_1adfce87274549c3458e705ec6f49f2466" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1aecf8304db7dd49c874ec216f139e5f67" kindref="member">PluginType</ref></type>
+        <definition>PluginType castor3d::Plugin::getType</definition>
+        <argsstring>() const</argsstring>
+        <name>getType</name>
+        <qualifiedname>castor3d::Plugin::getType</qualifiedname>
+        <briefdescription>
+<para>Récupère le type du plug-in. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le type </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/Plugin.hpp" line="77" column="12" bodyfile="Castor3D/Plugin/Plugin.hpp" bodystart="77" bodyend="80"/>
+        <references refid="db/d5e/a05891_1ad988a5d361f28b80ba19dd2caac722e1" compoundref="d8/d38/a00926" startline="116" endline="116">m_type</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::DividerPlugin</label>
+        <link refid="d5/dfd/a05871"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::GeneratorPlugin</label>
+        <link refid="dd/dc3/a05875"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::GenericPlugin</label>
+        <link refid="de/d76/a05879"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::ImporterPlugin</label>
+        <link refid="df/df8/a05883"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::ParticlePlugin</label>
+        <link refid="d9/d99/a05887"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::Plugin</label>
+        <link refid="db/d5e/a05891"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::PostFxPlugin</label>
+        <link refid="db/d12/a05903"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::ToneMappingPlugin</label>
+        <link refid="da/d2e/a05907"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="7" relation="private-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::Plugin</label>
+        <link refid="db/d5e/a05891"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_pfnGetRequiredVersion</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_pfnOnLoad</edgelabel>
+          <edgelabel>m_pfnOnUnload</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Version</label>
+        <link refid="d5/d15/a05335"/>
+      </node>
+      <node id="7">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="8">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="7" relation="private-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Plugin/Plugin.hpp" line="12" column="1" bodyfile="Castor3D/Plugin/Plugin.hpp" bodystart="14" bodyend="117"/>
+    <listofallmembers>
+      <member refid="db/d5e/a05891_1a76345cfa813957198ab5a735b3bf2c84" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>getName</name></member>
+      <member refid="db/d5e/a05891_1a9fe46462b345af39a924f8081f09002d" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>GetNameFunction</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>getOwner</name></member>
+      <member refid="db/d5e/a05891_1a21c697a5bb64dc09df8604a595ed4ef1" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>getRequiredVersion</name></member>
+      <member refid="db/d5e/a05891_1ac7505429b1d290b40c09fbf488c52b43" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>GetRequiredVersionFunction</name></member>
+      <member refid="db/d5e/a05891_1adfce87274549c3458e705ec6f49f2466" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>getType</name></member>
+      <member refid="db/d5e/a05891_1a57603a105bb12a698c4192413f6c01c0" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>GetTypeFunction</name></member>
+      <member refid="db/d5e/a05891_1a6eee27fad0b4dc406af8dac993816e1e" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>load</name></member>
+      <member refid="db/d5e/a05891_1af67ef96075d71ead62f1a47cff5ac7b5" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>m_library</name></member>
+      <member refid="db/d5e/a05891_1a999f657823e4cbcf844a81e32b96dec4" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>m_pfnGetName</name></member>
+      <member refid="db/d5e/a05891_1aa2e6fc5f27975d42f1329569f37e6a3e" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>m_pfnGetRequiredVersion</name></member>
+      <member refid="db/d5e/a05891_1a7f9b6b8f678d6ea93023fbe76573eb92" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>m_pfnOnLoad</name></member>
+      <member refid="db/d5e/a05891_1ac8c60d89e2821bc824ab0150f4196989" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>m_pfnOnUnload</name></member>
+      <member refid="db/d5e/a05891_1ad988a5d361f28b80ba19dd2caac722e1" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>m_type</name></member>
+      <member refid="db/d5e/a05891_1ad9481aa690ebce52bc156c1205a6e926" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>OnLoadFunction</name></member>
+      <member refid="db/d5e/a05891_1a270e7bcd56155a8810cdce16eb9a2af7" prot="public" virt="non-virtual"><scope>castor3d::Plugin</scope><name>OnUnloadFunction</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>OwnedBy</name></member>
+      <member refid="db/d5e/a05891_1a34467cc6f0925b83827b0884c5b4c496" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>Plugin</name></member>
+      <member refid="db/d5e/a05891_1a0d3fd522e0c2a3396428a5a97cdb0c18" prot="protected" virt="non-virtual"><scope>castor3d::Plugin</scope><name>unload</name></member>
+      <member refid="db/d5e/a05891_1a74a6dc68249b01895f5c682c6a539a6a" prot="public" virt="virtual"><scope>castor3d::Plugin</scope><name>~Plugin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

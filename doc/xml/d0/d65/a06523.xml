@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d65/a06523" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TargetDebugConfig</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d65/a06523_1a018d54cc0d0b2a9a461ed9aa053de699" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TargetDebugConfig::intermediateImageIndex</definition>
+        <argsstring></argsstring>
+        <name>intermediateImageIndex</name>
+        <qualifiedname>castor3d::TargetDebugConfig::intermediateImageIndex</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="965" column="10" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="965" bodyend="965"/>
+        <referencedby refid="d0/d65/a06523_1a99cbc59d2a9fc98545114667eed95d8e" compoundref="d5/d32/a01214" startline="967" endline="971">resetImages</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d65/a06523_1aa371db415989964f486bc9b247b333d3" prot="private" static="no" mutable="no">
+        <type>castor::StringArray</type>
+        <definition>castor::StringArray castor3d::TargetDebugConfig::m_intermediateImageNames</definition>
+        <argsstring></argsstring>
+        <name>m_intermediateImageNames</name>
+        <qualifiedname>castor3d::TargetDebugConfig::m_intermediateImageNames</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="994" column="21" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="994" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d65/a06523_1a99cbc59d2a9fc98545114667eed95d8e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TargetDebugConfig::resetImages</definition>
+        <argsstring>()</argsstring>
+        <name>resetImages</name>
+        <qualifiedname>castor3d::TargetDebugConfig::resetImages</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="967" column="6" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="967" bodyend="971"/>
+        <references refid="d0/d65/a06523_1a018d54cc0d0b2a9a461ed9aa053de699" compoundref="d5/d32/a01214" startline="965" endline="965">intermediateImageIndex</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d65/a06523_1a3fbd40634ec475164f90c49290f90fb4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TargetDebugConfig::registerImage</definition>
+        <argsstring>(castor::String name)</argsstring>
+        <name>registerImage</name>
+        <qualifiedname>castor3d::TargetDebugConfig::registerImage</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="973" column="10" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="973" bodyend="986"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d65/a06523_1a1ea5312d3e4f998af5eb1548820e203e" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>castor::StringArray const &amp;</type>
+        <definition>castor::StringArray const  &amp; castor3d::TargetDebugConfig::getIntermediateImages</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getIntermediateImages</name>
+        <qualifiedname>castor3d::TargetDebugConfig::getIntermediateImages</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderModule.hpp" line="988" column="28" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="988" bodyend="991"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/RenderModule.hpp" line="963" column="1" bodyfile="Castor3D/Render/RenderModule.hpp" bodystart="964" bodyend="995"/>
+    <listofallmembers>
+      <member refid="d0/d65/a06523_1a1ea5312d3e4f998af5eb1548820e203e" prot="public" virt="non-virtual"><scope>castor3d::TargetDebugConfig</scope><name>getIntermediateImages</name></member>
+      <member refid="d0/d65/a06523_1a018d54cc0d0b2a9a461ed9aa053de699" prot="public" virt="non-virtual"><scope>castor3d::TargetDebugConfig</scope><name>intermediateImageIndex</name></member>
+      <member refid="d0/d65/a06523_1aa371db415989964f486bc9b247b333d3" prot="private" virt="non-virtual"><scope>castor3d::TargetDebugConfig</scope><name>m_intermediateImageNames</name></member>
+      <member refid="d0/d65/a06523_1a3fbd40634ec475164f90c49290f90fb4" prot="public" virt="non-virtual"><scope>castor3d::TargetDebugConfig</scope><name>registerImage</name></member>
+      <member refid="d0/d65/a06523_1a99cbc59d2a9fc98545114667eed95d8e" prot="public" virt="non-virtual"><scope>castor3d::TargetDebugConfig</scope><name>resetImages</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

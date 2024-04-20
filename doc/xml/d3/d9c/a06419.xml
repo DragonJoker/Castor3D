@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/d9c/a06419" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RenderInfo</compoundname>
+    <includes local="no">RenderInfo.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d9c/a06419_1a8f69c817d47e07bef95746c6ff4113ef" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/d53/a06479" kindref="compound">RenderCounts</ref></type>
+        <definition>RenderCounts castor3d::RenderInfo::visible</definition>
+        <argsstring></argsstring>
+        <name>visible</name>
+        <qualifiedname>castor3d::RenderInfo::visible</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Les comptes d&apos;objets visibles. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderInfo.hpp" line="15" column="14" bodyfile="Castor3D/Render/RenderInfo.hpp" bodystart="15" bodyend="15"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d9c/a06419_1a75b626aacb294e9bf3a888d40e02da63" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::particlesCount</definition>
+        <argsstring></argsstring>
+        <name>particlesCount</name>
+        <qualifiedname>castor3d::RenderInfo::particlesCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le nombre de particules. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderInfo.hpp" line="18" column="10" bodyfile="Castor3D/Render/RenderInfo.hpp" bodystart="18" bodyend="18"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d9c/a06419_1a3fc4ac2b956fcf941855bdf7f270fc0a" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::visibleOverlaysCount</definition>
+        <argsstring></argsstring>
+        <name>visibleOverlaysCount</name>
+        <qualifiedname>castor3d::RenderInfo::visibleOverlaysCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le nombre d&apos;incrustations visibles. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderInfo.hpp" line="21" column="10" bodyfile="Castor3D/Render/RenderInfo.hpp" bodystart="21" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d9c/a06419_1a43be2ddd2d842eff257ae79c60daa4de" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::visibleOverlayQuadsCount</definition>
+        <argsstring></argsstring>
+        <name>visibleOverlayQuadsCount</name>
+        <qualifiedname>castor3d::RenderInfo::visibleOverlayQuadsCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le nombre de quads d&apos;incrustations visibles. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderInfo.hpp" line="24" column="10" bodyfile="Castor3D/Render/RenderInfo.hpp" bodystart="24" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d9c/a06419_1a02ac5018430c82a92d839820810f722c" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::drawCalls</definition>
+        <argsstring></argsstring>
+        <name>drawCalls</name>
+        <qualifiedname>castor3d::RenderInfo::drawCalls</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le nombre d&apos;appels aux fonctions de dessin. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderInfo.hpp" line="27" column="10" bodyfile="Castor3D/Render/RenderInfo.hpp" bodystart="27" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d9c/a06419_1af7c91222be38ec961e4fc4b719fd84af" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::uploadSize</definition>
+        <argsstring></argsstring>
+        <name>uploadSize</name>
+        <qualifiedname>castor3d::RenderInfo::uploadSize</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La taille binaire des uploads. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderInfo.hpp" line="30" column="10" bodyfile="Castor3D/Render/RenderInfo.hpp" bodystart="30" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d9c/a06419_1a1ae1a9625f6a3195f2124c5ce419727d" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::stagingBuffersCount</definition>
+        <argsstring></argsstring>
+        <name>stagingBuffersCount</name>
+        <qualifiedname>castor3d::RenderInfo::stagingBuffersCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le nombre de staging buffers pour l&apos;upload. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/RenderInfo.hpp" line="33" column="10" bodyfile="Castor3D/Render/RenderInfo.hpp" bodystart="33" bodyend="33"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::RenderCounts</label>
+        <link refid="d9/d53/a06479"/>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderInfo</label>
+        <link refid="d3/d9c/a06419"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>visible</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/RenderInfo.hpp" line="11" column="1" bodyfile="Castor3D/Render/RenderInfo.hpp" bodystart="12" bodyend="34"/>
+    <listofallmembers>
+      <member refid="d3/d9c/a06419_1a02ac5018430c82a92d839820810f722c" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>drawCalls</name></member>
+      <member refid="d3/d9c/a06419_1a75b626aacb294e9bf3a888d40e02da63" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>particlesCount</name></member>
+      <member refid="d3/d9c/a06419_1a1ae1a9625f6a3195f2124c5ce419727d" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>stagingBuffersCount</name></member>
+      <member refid="d3/d9c/a06419_1af7c91222be38ec961e4fc4b719fd84af" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>uploadSize</name></member>
+      <member refid="d3/d9c/a06419_1a8f69c817d47e07bef95746c6ff4113ef" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>visible</name></member>
+      <member refid="d3/d9c/a06419_1a43be2ddd2d842eff257ae79c60daa4de" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>visibleOverlayQuadsCount</name></member>
+      <member refid="d3/d9c/a06419_1a3fc4ac2b956fcf941855bdf7f270fc0a" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>visibleOverlaysCount</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

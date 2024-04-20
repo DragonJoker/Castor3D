@@ -1,0 +1,1082 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d5d/a08743" kind="class" language="C++" prot="public">
+    <compoundname>castor::ColourComponent</compoundname>
+    <includes local="no">ColourComponent.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="da/d5d/a08743_1ab4409d8e00a9331d827e3e579f9ddd2c" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor::ColourComponent::m_component</definition>
+        <argsstring></argsstring>
+        <name>m_component</name>
+        <qualifiedname>castor::ColourComponent::m_component</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="527" column="7" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="527" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d5d/a08743_1aa20c7c97cc89927822467b753c435027" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::ColourComponent::ColourComponent</definition>
+        <argsstring>()=default</argsstring>
+        <name>ColourComponent</name>
+        <qualifiedname>castor::ColourComponent::ColourComponent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="14" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a7ac0eee08e02617fe35dc2ba1d1ceb8a" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::ColourComponent::ColourComponent</definition>
+        <argsstring>(HdrColourComponent const &amp;rhs, float gamma=2.2f)</argsstring>
+        <name>ColourComponent</name>
+        <qualifiedname>castor::ColourComponent::ColourComponent</qualifiedname>
+        <param>
+          <type><ref refid="de/d4d/a08935" kindref="compound">HdrColourComponent</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>gamma</declname>
+          <defval>2.2f</defval>
+        </param>
+        <briefdescription>
+<para>Constructeur depuis une componsante HDR. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la composante HDR. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gamma</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la correction gamma. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="25" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a53d5a6c3029ff295f6d6d9a15947a36c" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ColourComponent::ColourComponent</definition>
+        <argsstring>(float value)</argsstring>
+        <name>ColourComponent</name>
+        <qualifiedname>castor::ColourComponent::ColourComponent</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur spécifié </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la composante </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="35" column="10" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="35" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a1167127fed3843805b9a138c247abca3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator=</definition>
+        <argsstring>(float rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ColourComponent::operator=</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation à partir d&apos;un float. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la composante, doit être comprise entre 0.0f et 1.0f </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Référence sur cet objet </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="49" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="49" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1ac0a3721bd82b4e21810378a6a2b503f7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator=</definition>
+        <argsstring>(double rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ColourComponent::operator=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation à partir d&apos;un double. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la composante, doit être comprise entre 0.0 et 1.0 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Référence sur cet objet </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="65" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="65" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a965279acdba4d6c5d1b34cd40369aa3f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator=</definition>
+        <argsstring>(long double rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ColourComponent::operator=</qualifiedname>
+        <param>
+          <type>long double</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation à partir d&apos;un long double. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la composante, doit être comprise entre 0.0 et 1.0 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Référence sur cet objet </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="81" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="81" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a7e0422f7355761e9a12467b28c9b5362" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator=</definition>
+        <argsstring>(int8_t rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ColourComponent::operator=</qualifiedname>
+        <param>
+          <type>int8_t</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation à partir d&apos;un int8_t. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la composante </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Référence sur cet objet </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="97" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="97" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a89dbacb32ae0af03324f8bab335c9214" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator=</definition>
+        <argsstring>(uint8_t rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ColourComponent::operator=</qualifiedname>
+        <param>
+          <type>uint8_t</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation à partir d&apos;un uint8_t. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la composante </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Référence sur cet objet </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="113" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="113" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1ad8f69b002a9408a87832f59bd668800c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator=</definition>
+        <argsstring>(int16_t rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ColourComponent::operator=</qualifiedname>
+        <param>
+          <type>int16_t</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation à partir d&apos;un int16_t. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la composante, doit être comprise entre 0 et 255 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Référence sur cet objet </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="128" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="128" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a4c92fff38321fed11228a81fb4f6ed29" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator=</definition>
+        <argsstring>(uint16_t rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ColourComponent::operator=</qualifiedname>
+        <param>
+          <type>uint16_t</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation à partir d&apos;un uint16_t. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la composante, doit être comprise entre 0 et 255 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Référence sur cet objet </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="144" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="144" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a08832447455969950731296189b82ac8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator=</definition>
+        <argsstring>(int32_t rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ColourComponent::operator=</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation à partir d&apos;un int32_t. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la composante, doit être comprise entre 0 et 255 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Référence sur cet objet </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="160" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="160" bodyend="165"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a00e4b7c0f37035eb327b684e727d2a4a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator=</definition>
+        <argsstring>(uint32_t rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ColourComponent::operator=</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation à partir d&apos;un uint32_t. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la composante, doit être comprise entre 0 et 255 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Référence sur cet objet </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="176" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="176" bodyend="181"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a80eafe95c8c67a269507699f0f24ca6c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator=</definition>
+        <argsstring>(int64_t rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ColourComponent::operator=</qualifiedname>
+        <param>
+          <type>int64_t</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation à partir d&apos;un int64_t. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la composante, doit être comprise entre 0 et 255 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Référence sur cet objet </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="192" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="192" bodyend="197"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a553478a2a784dbb0dfe7addc9b84c9ff" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator=</definition>
+        <argsstring>(uint64_t rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ColourComponent::operator=</qualifiedname>
+        <param>
+          <type>uint64_t</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation à partir d&apos;un uint64_t. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur de la composante, doit être comprise entre 0 et 255 </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Référence sur cet objet </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="208" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="208" bodyend="213"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a25e886008d6b070caf0553b3f8d691a7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int8_t &amp;</type>
+        <definition>int8_t &amp; castor::ColourComponent::convertTo</definition>
+        <argsstring>(int8_t &amp;v) const</argsstring>
+        <name>convertTo</name>
+        <qualifiedname>castor::ColourComponent::convertTo</qualifiedname>
+        <param>
+          <type>int8_t &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de conversion vers int8_t. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="220" column="9" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="220" bodyend="223"/>
+        <references refid="da/d5d/a08743_1a60331acaf54f87c0c3e80d6d61334a9b" compoundref="df/d9a/a11684" startline="496" endline="499">value</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1ae9417679e9196c62201296995ceb2b36" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint8_t &amp;</type>
+        <definition>uint8_t &amp; castor::ColourComponent::convertTo</definition>
+        <argsstring>(uint8_t &amp;v) const</argsstring>
+        <name>convertTo</name>
+        <qualifiedname>castor::ColourComponent::convertTo</qualifiedname>
+        <param>
+          <type>uint8_t &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de conversion vers uint8_t. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="230" column="10" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="230" bodyend="233"/>
+        <references refid="da/d5d/a08743_1a60331acaf54f87c0c3e80d6d61334a9b" compoundref="df/d9a/a11684" startline="496" endline="499">value</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a2f39f41559cf2095593e166b888cf48a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int16_t &amp;</type>
+        <definition>int16_t &amp; castor::ColourComponent::convertTo</definition>
+        <argsstring>(int16_t &amp;v) const</argsstring>
+        <name>convertTo</name>
+        <qualifiedname>castor::ColourComponent::convertTo</qualifiedname>
+        <param>
+          <type>int16_t &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de conversion vers int16_t. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="240" column="10" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="240" bodyend="243"/>
+        <references refid="da/d5d/a08743_1a60331acaf54f87c0c3e80d6d61334a9b" compoundref="df/d9a/a11684" startline="496" endline="499">value</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1ac303826bd740c71c75ba23b48dad7d6c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint16_t &amp;</type>
+        <definition>uint16_t &amp; castor::ColourComponent::convertTo</definition>
+        <argsstring>(uint16_t &amp;v) const</argsstring>
+        <name>convertTo</name>
+        <qualifiedname>castor::ColourComponent::convertTo</qualifiedname>
+        <param>
+          <type>uint16_t &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de conversion vers uint16_t. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="250" column="11" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="250" bodyend="253"/>
+        <references refid="da/d5d/a08743_1a60331acaf54f87c0c3e80d6d61334a9b" compoundref="df/d9a/a11684" startline="496" endline="499">value</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a08f07861b8312510bf639b8c2b32a730" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int32_t &amp;</type>
+        <definition>int32_t &amp; castor::ColourComponent::convertTo</definition>
+        <argsstring>(int32_t &amp;v) const</argsstring>
+        <name>convertTo</name>
+        <qualifiedname>castor::ColourComponent::convertTo</qualifiedname>
+        <param>
+          <type>int32_t &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de conversion vers int32_t. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="260" column="10" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="260" bodyend="263"/>
+        <references refid="da/d5d/a08743_1a60331acaf54f87c0c3e80d6d61334a9b" compoundref="df/d9a/a11684" startline="496" endline="499">value</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1ac7bae9ebefad524e121a2427d011d096" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t &amp;</type>
+        <definition>uint32_t &amp; castor::ColourComponent::convertTo</definition>
+        <argsstring>(uint32_t &amp;v) const</argsstring>
+        <name>convertTo</name>
+        <qualifiedname>castor::ColourComponent::convertTo</qualifiedname>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de conversion vers uint32_t. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="270" column="11" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="270" bodyend="273"/>
+        <references refid="da/d5d/a08743_1a60331acaf54f87c0c3e80d6d61334a9b" compoundref="df/d9a/a11684" startline="496" endline="499">value</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a54bb03ba0e9b4a2f67a33429b73274aa" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int64_t &amp;</type>
+        <definition>int64_t &amp; castor::ColourComponent::convertTo</definition>
+        <argsstring>(int64_t &amp;v) const</argsstring>
+        <name>convertTo</name>
+        <qualifiedname>castor::ColourComponent::convertTo</qualifiedname>
+        <param>
+          <type>int64_t &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de conversion vers int64_t. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="280" column="10" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="280" bodyend="283"/>
+        <references refid="da/d5d/a08743_1a60331acaf54f87c0c3e80d6d61334a9b" compoundref="df/d9a/a11684" startline="496" endline="499">value</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a0d0b665f4812202b079b92984212996b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint64_t &amp;</type>
+        <definition>uint64_t &amp; castor::ColourComponent::convertTo</definition>
+        <argsstring>(uint64_t &amp;v) const</argsstring>
+        <name>convertTo</name>
+        <qualifiedname>castor::ColourComponent::convertTo</qualifiedname>
+        <param>
+          <type>uint64_t &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de conversion vers uint64_t. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="290" column="11" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="290" bodyend="293"/>
+        <references refid="da/d5d/a08743_1a60331acaf54f87c0c3e80d6d61334a9b" compoundref="df/d9a/a11684" startline="496" endline="499">value</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1addffda7db9d54e8824b75ce7b1d970e8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float &amp;</type>
+        <definition>float &amp; castor::ColourComponent::convertTo</definition>
+        <argsstring>(float &amp;v) const</argsstring>
+        <name>convertTo</name>
+        <qualifiedname>castor::ColourComponent::convertTo</qualifiedname>
+        <param>
+          <type>float &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de conversion vers float. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="300" column="8" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="300" bodyend="303"/>
+        <references refid="da/d5d/a08743_1a60331acaf54f87c0c3e80d6d61334a9b" compoundref="df/d9a/a11684" startline="496" endline="499">value</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a660d157829989dd15053156a72f48c76" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double &amp;</type>
+        <definition>double &amp; castor::ColourComponent::convertTo</definition>
+        <argsstring>(double &amp;v) const</argsstring>
+        <name>convertTo</name>
+        <qualifiedname>castor::ColourComponent::convertTo</qualifiedname>
+        <param>
+          <type>double &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de conversion vers float. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="310" column="9" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="310" bodyend="313"/>
+        <references refid="da/d5d/a08743_1a60331acaf54f87c0c3e80d6d61334a9b" compoundref="df/d9a/a11684" startline="496" endline="499">value</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a99a9e247ec0a30f33c3fcd9daee8ba70" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>long double &amp;</type>
+        <definition>long double &amp; castor::ColourComponent::convertTo</definition>
+        <argsstring>(long double &amp;v) const</argsstring>
+        <name>convertTo</name>
+        <qualifiedname>castor::ColourComponent::convertTo</qualifiedname>
+        <param>
+          <type>long double &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de conversion vers float. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="320" column="14" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="320" bodyend="323"/>
+        <references refid="da/d5d/a08743_1a60331acaf54f87c0c3e80d6d61334a9b" compoundref="df/d9a/a11684" startline="496" endline="499">value</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a824e26a7c06b3d5a5f8a290e6719c4c2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator+=</definition>
+        <argsstring>(ColourComponent const &amp;rhs)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::ColourComponent::operator+=</qualifiedname>
+        <param>
+          <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par addition. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Clampe le résultat </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à ajouter </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this + rhs </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="336" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="336" bodyend="341"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1ac853b2896358d528464119c43cc694f4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator-=</definition>
+        <argsstring>(ColourComponent const &amp;rhs)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::ColourComponent::operator-=</qualifiedname>
+        <param>
+          <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par soustraction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Clampe le résultat </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à soustraire </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this - rhs </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="354" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="354" bodyend="359"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a182f9c49616ab19faebdb94c18512900" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator*=</definition>
+        <argsstring>(ColourComponent const &amp;rhs)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::ColourComponent::operator*=</qualifiedname>
+        <param>
+          <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par multiplication. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Clampe le résultat </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à multiplier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this * rhs </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="372" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="372" bodyend="377"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1ad2b5db13ec03209e354d5cf9da13d326" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator/=</definition>
+        <argsstring>(ColourComponent const &amp;rhs)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::ColourComponent::operator/=</qualifiedname>
+        <param>
+          <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par division. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Clampe le résultat </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à diviser </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this / rhs </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="390" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="390" bodyend="395"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a36d69b86077dd8897aecff2ec9a9b4c2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator+=</definition>
+        <argsstring>(T const &amp;rhs)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::ColourComponent::operator+=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par addition. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à ajouter </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this + rhs </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="407" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="407" bodyend="415"/>
+        <references refid="da/d5d/a08743_1a60331acaf54f87c0c3e80d6d61334a9b" compoundref="df/d9a/a11684" startline="496" endline="499">value</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1ab99fc228378b6b640228a62d97fa34a3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator-=</definition>
+        <argsstring>(T const &amp;rhs)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::ColourComponent::operator-=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par soustraction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à soustraire </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this - rhs </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="427" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="427" bodyend="435"/>
+        <references refid="da/d5d/a08743_1a60331acaf54f87c0c3e80d6d61334a9b" compoundref="df/d9a/a11684" startline="496" endline="499">value</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a56a2d44457d770d4d76cd8333df83de8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator*=</definition>
+        <argsstring>(T const &amp;rhs)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::ColourComponent::operator*=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par multiplication. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à multiplier </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this * rhs </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="447" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="447" bodyend="455"/>
+        <references refid="da/d5d/a08743_1a60331acaf54f87c0c3e80d6d61334a9b" compoundref="df/d9a/a11684" startline="496" endline="499">value</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a8532b7d9ef610915880b3cfdc6fddc21" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="da/d5d/a08743" kindref="compound">ColourComponent</ref> &amp;</type>
+        <definition>ColourComponent &amp; castor::ColourComponent::operator/=</definition>
+        <argsstring>(T const &amp;rhs)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::ColourComponent::operator/=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affectation par division. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur à diviser </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Resultat de this / rhs </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="467" column="18" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="467" bodyend="475"/>
+        <references refid="da/d5d/a08743_1a60331acaf54f87c0c3e80d6d61334a9b" compoundref="df/d9a/a11684" startline="496" endline="499">value</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1ab29ed15545beed855c18e47c879d8edd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ColourComponent::operator float</definition>
+        <argsstring>() const</argsstring>
+        <name>operator float</name>
+        <qualifiedname>castor::ColourComponent::operator float</qualifiedname>
+        <briefdescription>
+<para>Opérateur de conversion implicite. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="484" column="1" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="484" bodyend="487"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1a60331acaf54f87c0c3e80d6d61334a9b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float const &amp;</type>
+        <definition>float const  &amp; castor::ColourComponent::value</definition>
+        <argsstring>() const</argsstring>
+        <name>value</name>
+        <qualifiedname>castor::ColourComponent::value</qualifiedname>
+        <briefdescription>
+<para>Récupère la valeur de la composante. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="496" column="14" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="496" bodyend="499"/>
+        <referencedby refid="da/d5d/a08743_1a660d157829989dd15053156a72f48c76" compoundref="df/d9a/a11684" startline="310" endline="313">convertTo</referencedby>
+        <referencedby refid="da/d5d/a08743_1addffda7db9d54e8824b75ce7b1d970e8" compoundref="df/d9a/a11684" startline="300" endline="303">convertTo</referencedby>
+        <referencedby refid="da/d5d/a08743_1a2f39f41559cf2095593e166b888cf48a" compoundref="df/d9a/a11684" startline="240" endline="243">convertTo</referencedby>
+        <referencedby refid="da/d5d/a08743_1a08f07861b8312510bf639b8c2b32a730" compoundref="df/d9a/a11684" startline="260" endline="263">convertTo</referencedby>
+        <referencedby refid="da/d5d/a08743_1a54bb03ba0e9b4a2f67a33429b73274aa" compoundref="df/d9a/a11684" startline="280" endline="283">convertTo</referencedby>
+        <referencedby refid="da/d5d/a08743_1a25e886008d6b070caf0553b3f8d691a7" compoundref="df/d9a/a11684" startline="220" endline="223">convertTo</referencedby>
+        <referencedby refid="da/d5d/a08743_1a99a9e247ec0a30f33c3fcd9daee8ba70" compoundref="df/d9a/a11684" startline="320" endline="323">convertTo</referencedby>
+        <referencedby refid="da/d5d/a08743_1ac303826bd740c71c75ba23b48dad7d6c" compoundref="df/d9a/a11684" startline="250" endline="253">convertTo</referencedby>
+        <referencedby refid="da/d5d/a08743_1ac7bae9ebefad524e121a2427d011d096" compoundref="df/d9a/a11684" startline="270" endline="273">convertTo</referencedby>
+        <referencedby refid="da/d5d/a08743_1a0d0b665f4812202b079b92984212996b" compoundref="df/d9a/a11684" startline="290" endline="293">convertTo</referencedby>
+        <referencedby refid="da/d5d/a08743_1ae9417679e9196c62201296995ceb2b36" compoundref="df/d9a/a11684" startline="230" endline="233">convertTo</referencedby>
+        <referencedby refid="da/d5d/a08743_1a56a2d44457d770d4d76cd8333df83de8" compoundref="df/d9a/a11684" startline="447" endline="455">operator*=</referencedby>
+        <referencedby refid="da/d5d/a08743_1a36d69b86077dd8897aecff2ec9a9b4c2" compoundref="df/d9a/a11684" startline="407" endline="415">operator+=</referencedby>
+        <referencedby refid="da/d5d/a08743_1ab99fc228378b6b640228a62d97fa34a3" compoundref="df/d9a/a11684" startline="427" endline="435">operator-=</referencedby>
+        <referencedby refid="da/d5d/a08743_1a8532b7d9ef610915880b3cfdc6fddc21" compoundref="df/d9a/a11684" startline="467" endline="475">operator/=</referencedby>
+        <referencedby refid="d9/dba/a02278_1a4fc68de12338fd3a4ca4362246f502ba" compoundref="d6/d7d/a00161" startline="1127" endline="1130">castor3d::prepareChunkData</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d5d/a08743_1ab64f88ac1a3a5ba49f050a9f5a36a0b0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>float &amp;</type>
+        <definition>float &amp; castor::ColourComponent::value</definition>
+        <argsstring>()</argsstring>
+        <name>value</name>
+        <qualifiedname>castor::ColourComponent::value</qualifiedname>
+        <briefdescription>
+<para>Récupère la valeur de la composante. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="508" column="8" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="508" bodyend="511"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="da/d5d/a08743_1ac687c6a7e8b65cd2f707ff2523c3d2af" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ColourComponent::doClamp</definition>
+        <argsstring>()</argsstring>
+        <name>doClamp</name>
+        <qualifiedname>castor::ColourComponent::doClamp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ColourComponent.hpp" line="514" column="6" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="514" bodyend="524"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/ColourComponent.hpp" line="11" column="1" bodyfile="CastorUtils/Graphics/ColourComponent.hpp" bodystart="12" bodyend="528"/>
+    <listofallmembers>
+      <member refid="da/d5d/a08743_1aa20c7c97cc89927822467b753c435027" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>ColourComponent</name></member>
+      <member refid="da/d5d/a08743_1a7ac0eee08e02617fe35dc2ba1d1ceb8a" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>ColourComponent</name></member>
+      <member refid="da/d5d/a08743_1a53d5a6c3029ff295f6d6d9a15947a36c" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>ColourComponent</name></member>
+      <member refid="da/d5d/a08743_1a25e886008d6b070caf0553b3f8d691a7" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>convertTo</name></member>
+      <member refid="da/d5d/a08743_1ae9417679e9196c62201296995ceb2b36" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>convertTo</name></member>
+      <member refid="da/d5d/a08743_1a2f39f41559cf2095593e166b888cf48a" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>convertTo</name></member>
+      <member refid="da/d5d/a08743_1ac303826bd740c71c75ba23b48dad7d6c" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>convertTo</name></member>
+      <member refid="da/d5d/a08743_1a08f07861b8312510bf639b8c2b32a730" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>convertTo</name></member>
+      <member refid="da/d5d/a08743_1ac7bae9ebefad524e121a2427d011d096" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>convertTo</name></member>
+      <member refid="da/d5d/a08743_1a54bb03ba0e9b4a2f67a33429b73274aa" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>convertTo</name></member>
+      <member refid="da/d5d/a08743_1a0d0b665f4812202b079b92984212996b" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>convertTo</name></member>
+      <member refid="da/d5d/a08743_1addffda7db9d54e8824b75ce7b1d970e8" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>convertTo</name></member>
+      <member refid="da/d5d/a08743_1a660d157829989dd15053156a72f48c76" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>convertTo</name></member>
+      <member refid="da/d5d/a08743_1a99a9e247ec0a30f33c3fcd9daee8ba70" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>convertTo</name></member>
+      <member refid="da/d5d/a08743_1ac687c6a7e8b65cd2f707ff2523c3d2af" prot="private" virt="non-virtual"><scope>castor::ColourComponent</scope><name>doClamp</name></member>
+      <member refid="da/d5d/a08743_1ab4409d8e00a9331d827e3e579f9ddd2c" prot="private" virt="non-virtual"><scope>castor::ColourComponent</scope><name>m_component</name></member>
+      <member refid="da/d5d/a08743_1ab29ed15545beed855c18e47c879d8edd" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator float</name></member>
+      <member refid="da/d5d/a08743_1a182f9c49616ab19faebdb94c18512900" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator*=</name></member>
+      <member refid="da/d5d/a08743_1a56a2d44457d770d4d76cd8333df83de8" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator*=</name></member>
+      <member refid="da/d5d/a08743_1a824e26a7c06b3d5a5f8a290e6719c4c2" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator+=</name></member>
+      <member refid="da/d5d/a08743_1a36d69b86077dd8897aecff2ec9a9b4c2" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator+=</name></member>
+      <member refid="da/d5d/a08743_1ac853b2896358d528464119c43cc694f4" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator-=</name></member>
+      <member refid="da/d5d/a08743_1ab99fc228378b6b640228a62d97fa34a3" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator-=</name></member>
+      <member refid="da/d5d/a08743_1ad2b5db13ec03209e354d5cf9da13d326" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator/=</name></member>
+      <member refid="da/d5d/a08743_1a8532b7d9ef610915880b3cfdc6fddc21" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator/=</name></member>
+      <member refid="da/d5d/a08743_1a1167127fed3843805b9a138c247abca3" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator=</name></member>
+      <member refid="da/d5d/a08743_1ac0a3721bd82b4e21810378a6a2b503f7" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator=</name></member>
+      <member refid="da/d5d/a08743_1a965279acdba4d6c5d1b34cd40369aa3f" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator=</name></member>
+      <member refid="da/d5d/a08743_1a7e0422f7355761e9a12467b28c9b5362" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator=</name></member>
+      <member refid="da/d5d/a08743_1a89dbacb32ae0af03324f8bab335c9214" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator=</name></member>
+      <member refid="da/d5d/a08743_1ad8f69b002a9408a87832f59bd668800c" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator=</name></member>
+      <member refid="da/d5d/a08743_1a4c92fff38321fed11228a81fb4f6ed29" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator=</name></member>
+      <member refid="da/d5d/a08743_1a08832447455969950731296189b82ac8" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator=</name></member>
+      <member refid="da/d5d/a08743_1a00e4b7c0f37035eb327b684e727d2a4a" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator=</name></member>
+      <member refid="da/d5d/a08743_1a80eafe95c8c67a269507699f0f24ca6c" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator=</name></member>
+      <member refid="da/d5d/a08743_1a553478a2a784dbb0dfe7addc9b84c9ff" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>operator=</name></member>
+      <member refid="da/d5d/a08743_1a60331acaf54f87c0c3e80d6d61334a9b" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>value</name></member>
+      <member refid="da/d5d/a08743_1ab64f88ac1a3a5ba49f050a9f5a36a0b0" prot="public" virt="non-virtual"><scope>castor::ColourComponent</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,23 @@
+<map id="castor3d::GBufferT&lt; TextureEnumT &gt;" name="castor3d::GBufferT&lt; TextureEnumT &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="364,107,495,147"/>
+<area shape="rect" id="Node000004" href="$d0/d22/a05963.html" title=" " alt="" coords="635,5,765,45"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="477,98,518,79,634,40,635,45,520,84,479,103"/>
+<area shape="rect" id="Node000006" href="$d0/d22/a05963.html" title=" " alt="" coords="635,69,765,109"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="508,113,634,96,635,101,508,119"/>
+<area shape="rect" id="Node000008" href="$d0/d22/a05963.html" title=" " alt="" coords="635,133,765,173"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="509,135,519,136,635,146,634,152,518,141,508,140"/>
+<area shape="rect" id="Node000010" href="$d0/d22/a05963.html" title=" " alt="" coords="635,197,765,237"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="485,150,520,164,635,199,634,204,518,169,483,155"/>
+<area shape="rect" id="Node000002" href="$d8/d33/a05959.html" title=" " alt="" coords="161,114,315,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="328,124,364,124,364,129,328,129"/>
+<area shape="rect" id="Node000003" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="5,114,112,139"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="126,124,161,124,161,129,126,129"/>
+<area shape="rect" id="Node000005" href="$dc/d72/a06019.html" title=" " alt="" coords="817,5,1000,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="779,23,817,23,817,28,779,28"/>
+<area shape="rect" id="Node000007" href="$de/da2/a06375.html" title=" " alt="" coords="826,77,991,102"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="779,87,826,87,826,92,779,92"/>
+<area shape="rect" id="Node000009" href="$d1/d15/a06659.html" title=" " alt="" coords="815,141,1003,166"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="779,151,815,151,815,156,779,156"/>
+<area shape="rect" id="Node000011" href="$df/de9/a06791.html" title=" " alt="" coords="819,197,998,237"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="779,215,819,215,819,220,779,220"/>
+</map>

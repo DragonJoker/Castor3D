@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/db6/a07219" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::SceneImporter::AnimObjects</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/db6/a07219_1ac902ba775b1842fdca1288eb7ca914aa" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; SkeletonRPtr &gt;</type>
+        <definition>castor::Vector&lt; SkeletonRPtr &gt; castor3d::SceneImporter::AnimObjects::skeletons</definition>
+        <argsstring></argsstring>
+        <name>skeletons</name>
+        <qualifiedname>castor3d::SceneImporter::AnimObjects::skeletons</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="128" column="16" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/db6/a07219_1affb2c84093c9588c0d3b1c6cec6e2425" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; MeshRPtr &gt;</type>
+        <definition>castor::Vector&lt; MeshRPtr &gt; castor3d::SceneImporter::AnimObjects::meshes</definition>
+        <argsstring></argsstring>
+        <name>meshes</name>
+        <qualifiedname>castor3d::SceneImporter::AnimObjects::meshes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="129" column="16" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/db6/a07219_1a73bce24dd8ba84dcdaa41bfb04a5304f" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; SceneNodeRPtr &gt;</type>
+        <definition>castor::Vector&lt; SceneNodeRPtr &gt; castor3d::SceneImporter::AnimObjects::nodes</definition>
+        <argsstring></argsstring>
+        <name>nodes</name>
+        <qualifiedname>castor3d::SceneImporter::AnimObjects::nodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="130" column="16" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="130" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/db6/a07219_1a7c2176eb26599d357562c088841c34ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::SceneImporter::AnimObjects::AnimObjects</definition>
+        <argsstring>()=default</argsstring>
+        <name>AnimObjects</name>
+        <qualifiedname>castor3d::SceneImporter::AnimObjects::AnimObjects</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/SceneImporter.hpp" line="127" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Scene/SceneImporter.hpp" line="125" column="1" bodyfile="Castor3D/Scene/SceneImporter.hpp" bodystart="126" bodyend="131"/>
+    <listofallmembers>
+      <member refid="db/db6/a07219_1a7c2176eb26599d357562c088841c34ad" prot="public" virt="non-virtual"><scope>castor3d::SceneImporter::AnimObjects</scope><name>AnimObjects</name></member>
+      <member refid="db/db6/a07219_1affb2c84093c9588c0d3b1c6cec6e2425" prot="public" virt="non-virtual"><scope>castor3d::SceneImporter::AnimObjects</scope><name>meshes</name></member>
+      <member refid="db/db6/a07219_1a73bce24dd8ba84dcdaa41bfb04a5304f" prot="public" virt="non-virtual"><scope>castor3d::SceneImporter::AnimObjects</scope><name>nodes</name></member>
+      <member refid="db/db6/a07219_1ac902ba775b1842fdca1288eb7ca914aa" prot="public" virt="non-virtual"><scope>castor3d::SceneImporter::AnimObjects</scope><name>skeletons</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

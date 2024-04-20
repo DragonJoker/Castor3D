@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/dbf/a08199" kind="struct" language="C++" prot="public">
+    <compoundname>castor::FlagIteratorTraitsT</compoundname>
+    <includes local="no">DesignModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class FlagTypeT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="df/dbf/a08199_1ad1f8becb959ac49a0411c0e1414741dc" prot="public" static="no">
+        <type>std::ptrdiff_t</type>
+        <definition>using castor::FlagIteratorTraitsT&lt; FlagTypeT &gt;::difference_type =  std::ptrdiff_t</definition>
+        <argsstring></argsstring>
+        <name>difference_type</name>
+        <qualifiedname>castor::FlagIteratorTraitsT::difference_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DesignModule.hpp" line="163" column="1" bodyfile="CastorUtils/Design/DesignModule.hpp" bodystart="163" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="df/dbf/a08199_1a41856f9b516d18391020c22f82dcedbf" prot="public" static="no">
+        <type>FlagTypeT</type>
+        <definition>using castor::FlagIteratorTraitsT&lt; FlagTypeT &gt;::value_type =  FlagTypeT</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>castor::FlagIteratorTraitsT::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DesignModule.hpp" line="164" column="1" bodyfile="CastorUtils/Design/DesignModule.hpp" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="df/dbf/a08199_1a1ba055fdd1fdb861ad6525f8f3ed84cd" prot="public" static="no">
+        <type><ref refid="df/dbf/a08199_1a41856f9b516d18391020c22f82dcedbf" kindref="member">value_type</ref> *</type>
+        <definition>using castor::FlagIteratorTraitsT&lt; FlagTypeT &gt;::pointer =  value_type *</definition>
+        <argsstring></argsstring>
+        <name>pointer</name>
+        <qualifiedname>castor::FlagIteratorTraitsT::pointer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DesignModule.hpp" line="165" column="1" bodyfile="CastorUtils/Design/DesignModule.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="df/dbf/a08199_1a2af2d013ce6968442b9925340af65a76" prot="public" static="no">
+        <type><ref refid="df/dbf/a08199_1a41856f9b516d18391020c22f82dcedbf" kindref="member">value_type</ref> &amp;</type>
+        <definition>using castor::FlagIteratorTraitsT&lt; FlagTypeT &gt;::reference =  value_type &amp;</definition>
+        <argsstring></argsstring>
+        <name>reference</name>
+        <qualifiedname>castor::FlagIteratorTraitsT::reference</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DesignModule.hpp" line="166" column="1" bodyfile="CastorUtils/Design/DesignModule.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="df/dbf/a08199_1a0aa92db49fa1ec3a353cde368742554a" prot="public" static="no">
+        <type>std::forward_iterator_tag</type>
+        <definition>using castor::FlagIteratorTraitsT&lt; FlagTypeT &gt;::iterator_category =  std::forward_iterator_tag</definition>
+        <argsstring></argsstring>
+        <name>iterator_category</name>
+        <qualifiedname>castor::FlagIteratorTraitsT::iterator_category</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DesignModule.hpp" line="167" column="1" bodyfile="CastorUtils/Design/DesignModule.hpp" bodystart="167" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Template iterator traits class on a binary combination of flags. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>FlagType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scoped enum type. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+    </detaileddescription>
+    <location file="CastorUtils/Design/DesignModule.hpp" line="161" column="1" bodyfile="CastorUtils/Design/DesignModule.hpp" bodystart="162" bodyend="168"/>
+    <listofallmembers>
+      <member refid="df/dbf/a08199_1ad1f8becb959ac49a0411c0e1414741dc" prot="public" virt="non-virtual"><scope>castor::FlagIteratorTraitsT</scope><name>difference_type</name></member>
+      <member refid="df/dbf/a08199_1a0aa92db49fa1ec3a353cde368742554a" prot="public" virt="non-virtual"><scope>castor::FlagIteratorTraitsT</scope><name>iterator_category</name></member>
+      <member refid="df/dbf/a08199_1a1ba055fdd1fdb861ad6525f8f3ed84cd" prot="public" virt="non-virtual"><scope>castor::FlagIteratorTraitsT</scope><name>pointer</name></member>
+      <member refid="df/dbf/a08199_1a2af2d013ce6968442b9925340af65a76" prot="public" virt="non-virtual"><scope>castor::FlagIteratorTraitsT</scope><name>reference</name></member>
+      <member refid="df/dbf/a08199_1a41856f9b516d18391020c22f82dcedbf" prot="public" virt="non-virtual"><scope>castor::FlagIteratorTraitsT</scope><name>value_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

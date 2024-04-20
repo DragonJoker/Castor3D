@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/d51/a08983" kind="struct" language="C++" prot="public">
+    <compoundname>castor::PxBufferConvertOptions</compoundname>
+    <basecompoundref refid="da/d87/a08319" prot="public" virt="non-virtual">castor::NonMovable</basecompoundref>
+    <includes local="no">PixelBufferBase.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d51/a08983_1ab76b142deb790313520c9e7f2a25afcf" prot="public" static="no" mutable="no">
+        <type><ref refid="de/d58/a08979" kindref="compound">PxCompressionSupport</ref></type>
+        <definition>PxCompressionSupport castor::PxBufferConvertOptions::support</definition>
+        <argsstring></argsstring>
+        <name>support</name>
+        <qualifiedname>castor::PxBufferConvertOptions::support</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="37" column="22" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d51/a08983_1a26c955f42e1a4c46dbdabd0e11ba0568" prot="public" static="no" mutable="no">
+        <type>void *</type>
+        <definition>void* castor::PxBufferConvertOptions::additionalOptions</definition>
+        <argsstring></argsstring>
+        <name>additionalOptions</name>
+        <qualifiedname>castor::PxBufferConvertOptions::additionalOptions</qualifiedname>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="38" column="7" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="38" bodyend="38"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/d51/a08983_1a401bfc52fa87ec6b1e68d041a645fe7d" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::PxBufferConvertOptions::PxBufferConvertOptions</definition>
+        <argsstring>(PxCompressionSupport support)</argsstring>
+        <name>PxBufferConvertOptions</name>
+        <qualifiedname>castor::PxBufferConvertOptions::PxBufferConvertOptions</qualifiedname>
+        <param>
+          <type><ref refid="de/d58/a08979" kindref="compound">PxCompressionSupport</ref></type>
+          <declname>support</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="31" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d51/a08983_1a6365747704063089303d6985a10c5e5e" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::PxBufferConvertOptions::~PxBufferConvertOptions</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~PxBufferConvertOptions</name>
+        <qualifiedname>castor::PxBufferConvertOptions::~PxBufferConvertOptions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="32" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d51/a08983_1aeb1223b8af3e58c08fb935ec4cae74b7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+        <definition>CU_API PixelFormat castor::PxBufferConvertOptions::getCompressed</definition>
+        <argsstring>(PixelFormat format) const</argsstring>
+        <name>getCompressed</name>
+        <qualifiedname>castor::PxBufferConvertOptions::getCompressed</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>format</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="34" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d51/a08983_1ae05d243ae5a31cbe07a1e53e09e948cb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> uint32_t</type>
+        <definition>CU_API uint32_t castor::PxBufferConvertOptions::getAdditionalAlign</definition>
+        <argsstring>(PixelFormat format) const</argsstring>
+        <name>getAdditionalAlign</name>
+        <qualifiedname>castor::PxBufferConvertOptions::getAdditionalAlign</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>format</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="35" column="17"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="1">
+        <label>castor::PxBufferConvertOptions</label>
+        <link refid="d4/d51/a08983"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="1">
+        <label>castor::PxBufferConvertOptions</label>
+        <link refid="d4/d51/a08983"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>support</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::PxCompressionSupport</label>
+        <link refid="de/d58/a08979"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/PixelBufferBase.hpp" line="28" column="1" bodyfile="CastorUtils/Graphics/PixelBufferBase.hpp" bodystart="30" bodyend="39"/>
+    <listofallmembers>
+      <member refid="d4/d51/a08983_1a26c955f42e1a4c46dbdabd0e11ba0568" prot="public" virt="non-virtual"><scope>castor::PxBufferConvertOptions</scope><name>additionalOptions</name></member>
+      <member refid="d4/d51/a08983_1ae05d243ae5a31cbe07a1e53e09e948cb" prot="public" virt="non-virtual"><scope>castor::PxBufferConvertOptions</scope><name>getAdditionalAlign</name></member>
+      <member refid="d4/d51/a08983_1aeb1223b8af3e58c08fb935ec4cae74b7" prot="public" virt="non-virtual"><scope>castor::PxBufferConvertOptions</scope><name>getCompressed</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::PxBufferConvertOptions</scope><name>NonMovable</name></member>
+      <member refid="d4/d51/a08983_1a401bfc52fa87ec6b1e68d041a645fe7d" prot="public" virt="non-virtual"><scope>castor::PxBufferConvertOptions</scope><name>PxBufferConvertOptions</name></member>
+      <member refid="d4/d51/a08983_1ab76b142deb790313520c9e7f2a25afcf" prot="public" virt="non-virtual"><scope>castor::PxBufferConvertOptions</scope><name>support</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::PxBufferConvertOptions</scope><name>~NonMovable</name></member>
+      <member refid="d4/d51/a08983_1a6365747704063089303d6985a10c5e5e" prot="public" virt="non-virtual"><scope>castor::PxBufferConvertOptions</scope><name>~PxBufferConvertOptions</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

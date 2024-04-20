@@ -1,0 +1,410 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/de9/a09211" kind="class" language="C++" prot="public">
+    <compoundname>castor::RangedValue</compoundname>
+    <includes local="no">RangedValue.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="user-defined">
+      <header>Opérateurs arithmétiques.</header>
+      <memberdef kind="function" id="d8/de9/a09211_1af29ca6455dff137385ccc78b7b1adfe0" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/de9/a09211" kindref="compound">RangedValue</ref>&lt; T &gt; &amp;</type>
+        <definition>RangedValue&lt; T &gt; &amp; castor::RangedValue&lt; T &gt;::operator+=</definition>
+        <argsstring>(RangedValue&lt; T &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::RangedValue::operator+=</qualifiedname>
+        <param>
+          <type><ref refid="d8/de9/a09211" kindref="compound">RangedValue</ref>&lt; T &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangedValue.hpp" line="101" column="14" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="101" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/de9/a09211_1af5c3414128a1c893b87445b854f0a830" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/de9/a09211" kindref="compound">RangedValue</ref>&lt; T &gt; &amp;</type>
+        <definition>RangedValue&lt; T &gt; &amp; castor::RangedValue&lt; T &gt;::operator-=</definition>
+        <argsstring>(RangedValue&lt; T &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::RangedValue::operator-=</qualifiedname>
+        <param>
+          <type><ref refid="d8/de9/a09211" kindref="compound">RangedValue</ref>&lt; T &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangedValue.hpp" line="107" column="14" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="107" bodyend="111"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/de9/a09211_1a9ce06235e6638221d2fc39a9036477f5" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/de9/a09211" kindref="compound">RangedValue</ref>&lt; T &gt; &amp;</type>
+        <definition>RangedValue&lt; T &gt; &amp; castor::RangedValue&lt; T &gt;::operator*=</definition>
+        <argsstring>(RangedValue&lt; T &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::RangedValue::operator*=</qualifiedname>
+        <param>
+          <type><ref refid="d8/de9/a09211" kindref="compound">RangedValue</ref>&lt; T &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangedValue.hpp" line="113" column="14" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="113" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/de9/a09211_1ac45b2972b3e3c34063a7920dce2b588b" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/de9/a09211" kindref="compound">RangedValue</ref>&lt; T &gt; &amp;</type>
+        <definition>RangedValue&lt; T &gt; &amp; castor::RangedValue&lt; T &gt;::operator/=</definition>
+        <argsstring>(RangedValue&lt; T &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::RangedValue::operator/=</qualifiedname>
+        <param>
+          <type><ref refid="d8/de9/a09211" kindref="compound">RangedValue</ref>&lt; T &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangedValue.hpp" line="119" column="14" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="119" bodyend="123"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/de9/a09211_1ad2c967b184dafbb4ef25859940cde8b8" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/de9/a09211" kindref="compound">RangedValue</ref>&lt; T &gt; &amp;</type>
+        <definition>RangedValue&lt; T &gt; &amp; castor::RangedValue&lt; T &gt;::operator+=</definition>
+        <argsstring>(T const &amp;rhs) noexcept</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::RangedValue::operator+=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangedValue.hpp" line="125" column="14" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="125" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/de9/a09211_1a9b0907f43bad1fbb2f04b2723106a463" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/de9/a09211" kindref="compound">RangedValue</ref>&lt; T &gt; &amp;</type>
+        <definition>RangedValue&lt; T &gt; &amp; castor::RangedValue&lt; T &gt;::operator-=</definition>
+        <argsstring>(T const &amp;rhs) noexcept</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::RangedValue::operator-=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangedValue.hpp" line="131" column="14" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="131" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/de9/a09211_1adf3d34a289337912a42e72e4e12ea2a3" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/de9/a09211" kindref="compound">RangedValue</ref>&lt; T &gt; &amp;</type>
+        <definition>RangedValue&lt; T &gt; &amp; castor::RangedValue&lt; T &gt;::operator*=</definition>
+        <argsstring>(T const &amp;rhs) noexcept</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::RangedValue::operator*=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangedValue.hpp" line="137" column="14" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="137" bodyend="141"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/de9/a09211_1a0dcd680dccfa55bb52949118f99590a7" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/de9/a09211" kindref="compound">RangedValue</ref>&lt; T &gt; &amp;</type>
+        <definition>RangedValue&lt; T &gt; &amp; castor::RangedValue&lt; T &gt;::operator/=</definition>
+        <argsstring>(T const &amp;rhs) noexcept</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::RangedValue::operator/=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangedValue.hpp" line="143" column="14" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="143" bodyend="147"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d8/de9/a09211_1a02583cb51b2aafdde1e69c81624e6db3" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/da8/a09207" kindref="compound">Range</ref>&lt; T &gt;</type>
+        <definition>Range&lt; T &gt; castor::RangedValue&lt; T &gt;::m_range</definition>
+        <argsstring></argsstring>
+        <name>m_range</name>
+        <qualifiedname>castor::RangedValue::m_range</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>L&apos;intervalle. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangedValue.hpp" line="153" column="7" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/de9/a09211_1a57b88ed4708b4cdfe0b233599259e762" prot="private" static="no" mutable="no">
+        <type>T</type>
+        <definition>T castor::RangedValue&lt; T &gt;::m_value</definition>
+        <argsstring></argsstring>
+        <name>m_value</name>
+        <qualifiedname>castor::RangedValue::m_value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La valeur. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangedValue.hpp" line="156" column="3" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="156" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/de9/a09211_1ad575b34fb4448a790a50911390fef2ba" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::RangedValue&lt; T &gt;::RangedValue</definition>
+        <argsstring>(T const &amp;value, Range&lt; T &gt; const &amp;range) noexcept</argsstring>
+        <name>RangedValue</name>
+        <qualifiedname>castor::RangedValue::RangedValue</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/da8/a09207" kindref="compound">Range</ref>&lt; T &gt; const &amp;</type>
+          <declname>range</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">range</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Son intervalle. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangedValue.hpp" line="26" column="1" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="26" bodyend="31"/>
+        <references refid="d8/de9/a09211_1adca5a77d7bb08a92533b815b9f5a0735" compoundref="d7/d26/a02162" startline="90" endline="93">castor::RangedValue&lt; T &gt;::range</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/de9/a09211_1a83afdc58152d07c86c607d3f39dfa831" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/de9/a09211" kindref="compound">RangedValue</ref> &amp;</type>
+        <definition>RangedValue &amp; castor::RangedValue&lt; T &gt;::operator=</definition>
+        <argsstring>(T const &amp;value) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::RangedValue::operator=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Affectation depuis une valeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangedValue.hpp" line="40" column="14" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="40" bodyend="44"/>
+        <references refid="d8/de9/a09211_1aed9106239f340cad4350db539476623c" compoundref="d7/d26/a02162" startline="80" endline="83">castor::RangedValue&lt; T &gt;::value</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/de9/a09211_1a8d8b348f27010b9a140b58bc5767fdca" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::RangedValue&lt; T &gt;::updateRange</definition>
+        <argsstring>(Range&lt; T &gt; const &amp;range) noexcept</argsstring>
+        <name>updateRange</name>
+        <qualifiedname>castor::RangedValue::updateRange</qualifiedname>
+        <param>
+          <type><ref refid="d9/da8/a09207" kindref="compound">Range</ref>&lt; T &gt; const &amp;</type>
+          <declname>range</declname>
+        </param>
+        <briefdescription>
+<para>Redéfinit l&apos;intervalle. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">range</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nouvel intervalle. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangedValue.hpp" line="53" column="6" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="53" bodyend="57"/>
+        <references refid="d8/de9/a09211_1adca5a77d7bb08a92533b815b9f5a0735" compoundref="d7/d26/a02162" startline="90" endline="93">castor::RangedValue&lt; T &gt;::range</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/de9/a09211_1a43fe1fa002fd385b8c0db9d2e37fb19c" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor::RangedValue&lt; T &gt;::percent</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>percent</name>
+        <qualifiedname>castor::RangedValue::percent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>0.0 si <computeroutput>m_value</computeroutput> &lt;= <computeroutput>m_range.m_min</computeroutput>.<linebreak/>
+ 1.0 si <computeroutput>m_value</computeroutput> &gt;= <computeroutput>m_range.m_max</computeroutput>.<linebreak/>
+ Une valeur allant de 0.0 à 1.0, selon que la valeur est plus proche de <computeroutput>m_range.m_min</computeroutput> ou de <computeroutput>m_range.m_max</computeroutput>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangedValue.hpp" line="70" column="7" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="70" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/de9/a09211_1aed9106239f340cad4350db539476623c" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>T const &amp;</type>
+        <definition>T const  &amp; castor::RangedValue&lt; T &gt;::value</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>value</name>
+        <qualifiedname>castor::RangedValue::value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangedValue.hpp" line="80" column="10" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="80" bodyend="83"/>
+        <referencedby refid="d1/da3/a03835_1a7c7a1ceb9bd9a9ce4dc14709b0ab6c81" compoundref="db/ddc/a00353" startline="44" endline="47">castor3d::ProgressCtrl::getProgress</referencedby>
+        <referencedby refid="d5/d12/a03851_1aef7e72c4852177294c12f4ddb96e424b" compoundref="de/dd7/a00362" startline="73" endline="76">castor3d::SliderCtrl::getValue</referencedby>
+        <referencedby refid="d1/da3/a03835_1a4d5396f1aa7b55ca390e8fb14bb19dc2" compoundref="db/ddc/a00353" startline="49" endline="52">castor3d::ProgressCtrl::incProgress</referencedby>
+        <referencedby refid="d8/de9/a09211_1a83afdc58152d07c86c607d3f39dfa831" compoundref="d7/d26/a02162" startline="40" endline="44">castor::RangedValue&lt; T &gt;::operator=</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/de9/a09211_1adca5a77d7bb08a92533b815b9f5a0735" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d9/da8/a09207" kindref="compound">Range</ref>&lt; T &gt; const &amp;</type>
+        <definition>Range&lt; T &gt; const  &amp; castor::RangedValue&lt; T &gt;::range</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>range</name>
+        <qualifiedname>castor::RangedValue::range</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;intervalle. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/RangedValue.hpp" line="90" column="14" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="90" bodyend="93"/>
+        <referencedby refid="d5/d12/a03851_1a88e001c410fe94e754f8957624057d00" compoundref="de/dd7/a00362" startline="65" endline="68">castor3d::SliderCtrl::getRange</referencedby>
+        <referencedby refid="d1/da3/a03835_1a93cc5b8b8a6dec5a5a4a246cdcb0d990" compoundref="db/ddc/a00353" startline="39" endline="42">castor3d::ProgressCtrl::getRange</referencedby>
+        <referencedby refid="d8/de9/a09211_1ad575b34fb4448a790a50911390fef2ba" compoundref="d7/d26/a02162" startline="26" endline="31">castor::RangedValue&lt; T &gt;::RangedValue</referencedby>
+        <referencedby refid="d8/de9/a09211_1a8d8b348f27010b9a140b58bc5767fdca" compoundref="d7/d26/a02162" startline="53" endline="57">castor::RangedValue&lt; T &gt;::updateRange</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Représente une valeur dans un intervalle. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>La valeur ne peut pas sortir de son intervalle. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>castor::RangedValue&lt; float &gt;</label>
+        <link refid="d8/de9/a09211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; float &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::RangedValue&lt; int32_t &gt;</label>
+        <link refid="d8/de9/a09211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; int32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::RangedValue&lt; uint32_t &gt;</label>
+        <link refid="d8/de9/a09211"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; uint32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::RangedValue&lt; T &gt;</label>
+        <link refid="d8/de9/a09211"/>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/Math/RangedValue.hpp" line="13" column="1" bodyfile="CastorUtils/Math/RangedValue.hpp" bodystart="14" bodyend="157"/>
+    <listofallmembers>
+      <member refid="d8/de9/a09211_1a02583cb51b2aafdde1e69c81624e6db3" prot="private" virt="non-virtual"><scope>castor::RangedValue</scope><name>m_range</name></member>
+      <member refid="d8/de9/a09211_1a57b88ed4708b4cdfe0b233599259e762" prot="private" virt="non-virtual"><scope>castor::RangedValue</scope><name>m_value</name></member>
+      <member refid="d8/de9/a09211_1a9ce06235e6638221d2fc39a9036477f5" prot="public" virt="non-virtual"><scope>castor::RangedValue</scope><name>operator*=</name></member>
+      <member refid="d8/de9/a09211_1adf3d34a289337912a42e72e4e12ea2a3" prot="public" virt="non-virtual"><scope>castor::RangedValue</scope><name>operator*=</name></member>
+      <member refid="d8/de9/a09211_1af29ca6455dff137385ccc78b7b1adfe0" prot="public" virt="non-virtual"><scope>castor::RangedValue</scope><name>operator+=</name></member>
+      <member refid="d8/de9/a09211_1ad2c967b184dafbb4ef25859940cde8b8" prot="public" virt="non-virtual"><scope>castor::RangedValue</scope><name>operator+=</name></member>
+      <member refid="d8/de9/a09211_1af5c3414128a1c893b87445b854f0a830" prot="public" virt="non-virtual"><scope>castor::RangedValue</scope><name>operator-=</name></member>
+      <member refid="d8/de9/a09211_1a9b0907f43bad1fbb2f04b2723106a463" prot="public" virt="non-virtual"><scope>castor::RangedValue</scope><name>operator-=</name></member>
+      <member refid="d8/de9/a09211_1ac45b2972b3e3c34063a7920dce2b588b" prot="public" virt="non-virtual"><scope>castor::RangedValue</scope><name>operator/=</name></member>
+      <member refid="d8/de9/a09211_1a0dcd680dccfa55bb52949118f99590a7" prot="public" virt="non-virtual"><scope>castor::RangedValue</scope><name>operator/=</name></member>
+      <member refid="d8/de9/a09211_1a83afdc58152d07c86c607d3f39dfa831" prot="public" virt="non-virtual"><scope>castor::RangedValue</scope><name>operator=</name></member>
+      <member refid="d8/de9/a09211_1a43fe1fa002fd385b8c0db9d2e37fb19c" prot="public" virt="non-virtual"><scope>castor::RangedValue</scope><name>percent</name></member>
+      <member refid="d8/de9/a09211_1adca5a77d7bb08a92533b815b9f5a0735" prot="public" virt="non-virtual"><scope>castor::RangedValue</scope><name>range</name></member>
+      <member refid="d8/de9/a09211_1ad575b34fb4448a790a50911390fef2ba" prot="public" virt="non-virtual"><scope>castor::RangedValue</scope><name>RangedValue</name></member>
+      <member refid="d8/de9/a09211_1a8d8b348f27010b9a140b58bc5767fdca" prot="public" virt="non-virtual"><scope>castor::RangedValue</scope><name>updateRange</name></member>
+      <member refid="d8/de9/a09211_1aed9106239f340cad4350db539476623c" prot="public" virt="non-virtual"><scope>castor::RangedValue</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

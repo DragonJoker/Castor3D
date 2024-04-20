@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d94/a07483" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::CookTorranceBRDF</compoundname>
+    <includes local="no">GlslCookTorranceBRDF.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="da/d94/a07483_1a9bb7f57775c080a2511998f9c797f9a6" prot="private" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::CookTorranceBRDF::m_writer</definition>
+        <argsstring></argsstring>
+        <name>m_writer</name>
+        <qualifiedname>castor3d::shader::CookTorranceBRDF::m_writer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp" line="28" column="20" bodyfile="Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d94/a07483_1a3a1c54caba99ec96f6c743756fc14dd4" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/d85/a07467" kindref="compound">BRDFHelpers</ref> &amp;</type>
+        <definition>BRDFHelpers&amp; castor3d::shader::CookTorranceBRDF::m_brdf</definition>
+        <argsstring></argsstring>
+        <name>m_brdf</name>
+        <qualifiedname>castor3d::shader::CookTorranceBRDF::m_brdf</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp" line="29" column="14" bodyfile="Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d94/a07483_1a269e58e73004da7ec4ae5ca7d7c6bc66" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; sdw::Float &gt;</type>
+        <definition>castor::RawUniquePtr&lt; sdw::Float &gt; castor3d::shader::CookTorranceBRDF::m_diffuseFactor</definition>
+        <argsstring></argsstring>
+        <name>m_diffuseFactor</name>
+        <qualifiedname>castor3d::shader::CookTorranceBRDF::m_diffuseFactor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp" line="30" column="22" bodyfile="Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d94/a07483_1ab1320e002d239e99537e0a8c828419d3" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InFloat, sdw::InFloat, sdw::InVec3, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InFloat , sdw::InFloat , sdw::InFloat , sdw::InFloat , sdw::InVec3 , sdw::InFloat &gt; castor3d::shader::CookTorranceBRDF::m_computeCookTorranceSpecular</definition>
+        <argsstring></argsstring>
+        <name>m_computeCookTorranceSpecular</name>
+        <qualifiedname>castor3d::shader::CookTorranceBRDF::m_computeCookTorranceSpecular</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp" line="38" column="2" bodyfile="Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d94/a07483_1af7ab4fc886842c51fae0380a793534a3" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InFloat, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InFloat , sdw::InVec3 &gt; castor3d::shader::CookTorranceBRDF::m_computeCookTorranceDiffuse</definition>
+        <argsstring></argsstring>
+        <name>m_computeCookTorranceDiffuse</name>
+        <qualifiedname>castor3d::shader::CookTorranceBRDF::m_computeCookTorranceDiffuse</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp" line="42" column="2" bodyfile="Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d94/a07483_1af9a0b83660b45574568d89ad8d50f310" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::CookTorranceBRDF::CookTorranceBRDF</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, BRDFHelpers &amp;brdf)</argsstring>
+        <name>CookTorranceBRDF</name>
+        <qualifiedname>castor3d::shader::CookTorranceBRDF::CookTorranceBRDF</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d85/a07467" kindref="compound">BRDFHelpers</ref> &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp" line="14" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d94/a07483_1aadec339388658bddf3957262308bb42d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetVec3</type>
+        <definition>C3D_API sdw::RetVec3 castor3d::shader::CookTorranceBRDF::computeSpecular</definition>
+        <argsstring>(sdw::Vec3 const &amp;radiance, sdw::Float const &amp;intensity, sdw::Float const &amp;pNdotL, sdw::Float const &amp;pNdotH, sdw::Float const &amp;pNdotV, sdw::Vec3 const &amp;F, sdw::Float const &amp;roughness)</argsstring>
+        <name>computeSpecular</name>
+        <qualifiedname>castor3d::shader::CookTorranceBRDF::computeSpecular</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>radiance</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>intensity</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>pNdotL</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>pNdotH</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>pNdotV</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>F</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp" line="16" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d94/a07483_1a34b12d771662d3f44416555f12ca9c8f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetVec3</type>
+        <definition>C3D_API sdw::RetVec3 castor3d::shader::CookTorranceBRDF::computeDiffuse</definition>
+        <argsstring>(sdw::Vec3 const &amp;radiance, sdw::Float const &amp;intensity, sdw::Vec3 const &amp;F)</argsstring>
+        <name>computeDiffuse</name>
+        <qualifiedname>castor3d::shader::CookTorranceBRDF::computeDiffuse</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>radiance</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>intensity</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>F</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp" line="23" column="22"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp" line="11" column="1" bodyfile="Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp" bodystart="12" bodyend="43"/>
+    <listofallmembers>
+      <member refid="da/d94/a07483_1a34b12d771662d3f44416555f12ca9c8f" prot="public" virt="non-virtual"><scope>castor3d::shader::CookTorranceBRDF</scope><name>computeDiffuse</name></member>
+      <member refid="da/d94/a07483_1aadec339388658bddf3957262308bb42d" prot="public" virt="non-virtual"><scope>castor3d::shader::CookTorranceBRDF</scope><name>computeSpecular</name></member>
+      <member refid="da/d94/a07483_1af9a0b83660b45574568d89ad8d50f310" prot="public" virt="non-virtual"><scope>castor3d::shader::CookTorranceBRDF</scope><name>CookTorranceBRDF</name></member>
+      <member refid="da/d94/a07483_1a3a1c54caba99ec96f6c743756fc14dd4" prot="private" virt="non-virtual"><scope>castor3d::shader::CookTorranceBRDF</scope><name>m_brdf</name></member>
+      <member refid="da/d94/a07483_1af7ab4fc886842c51fae0380a793534a3" prot="private" virt="non-virtual"><scope>castor3d::shader::CookTorranceBRDF</scope><name>m_computeCookTorranceDiffuse</name></member>
+      <member refid="da/d94/a07483_1ab1320e002d239e99537e0a8c828419d3" prot="private" virt="non-virtual"><scope>castor3d::shader::CookTorranceBRDF</scope><name>m_computeCookTorranceSpecular</name></member>
+      <member refid="da/d94/a07483_1a269e58e73004da7ec4ae5ca7d7c6bc66" prot="private" virt="non-virtual"><scope>castor3d::shader::CookTorranceBRDF</scope><name>m_diffuseFactor</name></member>
+      <member refid="da/d94/a07483_1a9bb7f57775c080a2511998f9c797f9a6" prot="private" virt="non-virtual"><scope>castor3d::shader::CookTorranceBRDF</scope><name>m_writer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

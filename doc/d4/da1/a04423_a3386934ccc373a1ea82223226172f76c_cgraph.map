@@ -1,0 +1,11 @@
+<map id="castor3d::ClearcoatRoughnessMapComponent::Plugin::fillTextureConfiguration" name="castor3d::ClearcoatRoughnessMapComponent::Plugin::fillTextureConfiguration">
+<area shape="rect" id="Node000001" title="Fills the texture configuration for use with this component." alt="" coords="5,20,225,75"/>
+<area shape="rect" id="Node000002" href="$d9/dba/a02278.html#aca9266480e6d0378e87f784f76d6994d" title=" " alt="" coords="302,5,503,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="225,33,288,27,289,32,226,39"/>
+<area shape="rect" id="Node000003" href="$d4/da1/a04423.html#a94a3441cedcf5715feb2ce84bf7e4430" title=" " alt="" coords="273,55,532,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="226,55,260,59,259,64,225,61"/>
+<area shape="rect" id="Node000004" href="$d2/d2e/a04831.html#a3d4ca319e7c6e2dc3e40e81211846fee" title=" " alt="" coords="580,26,792,66"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="532,59,566,56,567,61,532,65"/>
+<area shape="rect" id="Node000005" href="$d9/dba/a02278.html#a813eb0a53ad6b3f96433a39acae9f59b" title=" " alt="" coords="596,91,776,116"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="532,85,583,90,582,96,532,91"/>
+</map>

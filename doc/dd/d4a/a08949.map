@@ -1,0 +1,10 @@
+<map id="castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;" name="castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="9,300,244,340"/>
+<area shape="rect" id="Node000002" href="$d8/da3/a08255.html" title=" " alt="" coords="5,211,248,251"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,265,129,300,124,300,124,265"/>
+<area shape="rect" id="Node000003" href="$d9/d93/a09063.html" title=" " alt="" coords="83,5,237,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="146,43,132,67,121,94,117,125,117,157,125,210,119,211,111,157,111,125,116,93,127,65,141,41"/>
+<area shape="rect" id="Node000004" href="$d8/da3/a08255.html" title="Base class for an element cache." alt="" coords="187,93,375,133"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="187,37,258,91,255,95,184,41"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="247,143,153,213,150,209,244,139"/>
+</map>

@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/dd4/a09179" kind="struct" language="C++" prot="public">
+    <compoundname>castor::details::MaxRecT&lt; DataT, LhsT, RhsT, ValuesT... &gt;</compoundname>
+    <includes local="no">Math.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>ValueTypeT</type>
+        <declname>DataT</declname>
+        <defname>DataT</defname>
+      </param>
+      <param>
+        <type>DataT</type>
+        <declname>LhsT</declname>
+        <defname>LhsT</defname>
+      </param>
+      <param>
+        <type>DataT</type>
+        <declname>RhsT</declname>
+        <defname>RhsT</defname>
+      </param>
+      <param>
+        <type>DataT ...</type>
+        <declname>ValuesT</declname>
+        <defname>ValuesT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="da/dd4/a09179_1a2a6d2cebe1f04637b47df0a3cdc85f73" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr DataT</type>
+        <definition>constexpr DataT castor::details::MaxRecT&lt; DataT, LhsT, RhsT, ValuesT... &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>castor::details::MaxRecT&lt; DataT, LhsT, RhsT, ValuesT... &gt;::value</qualifiedname>
+        <initializer>= <ref refid="de/d26/a09167" kindref="compound">MaxRecT</ref>&lt; DataT, std::max( LhsT, RhsT ), ValuesT... &gt;::value</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Math.hpp" line="172" column="24" bodyfile="CastorUtils/Math/Math.hpp" bodystart="172" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>DataT</label>
+      </node>
+      <node id="1">
+        <label>castor::details::MaxRecT&lt; DataT, LhsT, RhsT, ValuesT... &gt;</label>
+        <link refid="da/dd4/a09179"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>value</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Math/Math.hpp" line="170" column="1" bodyfile="CastorUtils/Math/Math.hpp" bodystart="171" bodyend="173"/>
+    <listofallmembers>
+      <member refid="da/dd4/a09179_1a2a6d2cebe1f04637b47df0a3cdc85f73" prot="public" virt="non-virtual"><scope>castor::details::MaxRecT&lt; DataT, LhsT, RhsT, ValuesT... &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

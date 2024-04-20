@@ -1,0 +1,468 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/d72/a09535" kind="class" language="C++" prot="public">
+    <compoundname>castor::format::BasicIndentBufferManager</compoundname>
+    <includes local="no">StreamIndentBufferManager.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename char_type</type>
+      </param>
+      <param>
+        <type>typename traits</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d4/d72/a09535_1abff258dfc4cf0a4caaf72942b11eecc0" prot="private" static="no">
+        <type>std::ios_base</type>
+        <definition>using castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::bos =  std::ios_base</definition>
+        <argsstring></argsstring>
+        <name>bos</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::bos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="22" column="1" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/d72/a09535_1af5289274c839ee26e4b2d64eb97efc7c" prot="private" static="no">
+        <type>std::basic_streambuf&lt; char_type, traits &gt;</type>
+        <definition>using castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::bsb =  std::basic_streambuf&lt; char_type, traits &gt;</definition>
+        <argsstring></argsstring>
+        <name>bsb</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::bsb</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="23" column="1" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/d72/a09535_1aa12d690eb3f5f5511d7758acf7a83b76" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1a93b53452a3c421817a14b649ccec1fb7" kindref="member">Map</ref>&lt; bos *, bsb * &gt;</type>
+        <definition>using castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::table_type =  Map&lt; bos *, bsb * &gt;</definition>
+        <argsstring></argsstring>
+        <name>table_type</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::table_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="24" column="1" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/d72/a09535_1af9e32b61777dfa51659ce14889e2a9eb" prot="private" static="no">
+        <type>typename table_type::value_type</type>
+        <definition>using castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::value_type =  typename table_type::value_type</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="25" column="1" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/d72/a09535_1a0927b9bd2659c7e8b51c586f36d9d460" prot="private" static="no">
+        <type>typename table_type::iterator</type>
+        <definition>using castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::iterator =  typename table_type::iterator</definition>
+        <argsstring></argsstring>
+        <name>iterator</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="26" column="1" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/d72/a09535_1aa60b910ca2fd90e9d2b3558902829d8e" prot="private" static="no">
+        <type>typename table_type::const_iterator</type>
+        <definition>using castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::const_iterator =  typename table_type::const_iterator</definition>
+        <argsstring></argsstring>
+        <name>const_iterator</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::const_iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="27" column="1" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/d72/a09535_1abbe9090ab71bae1ef2012c944b06334d" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1a388fd75dcd12a3eb9749946a99143d02" kindref="member">castor::UniqueLock</ref>&lt; <ref refid="d2/dd2/a02279_1aac3763b795438810958473f0b84908fb" kindref="member">castor::Mutex</ref> &gt;</type>
+        <definition>using castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::lock_type =  castor::UniqueLock&lt; castor::Mutex &gt;</definition>
+        <argsstring></argsstring>
+        <name>lock_type</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::lock_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="28" column="1" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="d4/d72/a09535_1a6c5b3e7cb210e66ab3e34fb8441f6731" prot="private" static="yes" mutable="no">
+        <type>std::atomic_int</type>
+        <definition>std::atomic_int castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::sm_instances</definition>
+        <argsstring></argsstring>
+        <name>sm_instances</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::sm_instances</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le compte des instances. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="171" column="24" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="171" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d4/d72/a09535_1a8bdbe685c6053b0487b94c62d36b3ade" prot="private" static="no" mutable="no">
+        <type>table_type</type>
+        <definition>table_type castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::m_list</definition>
+        <argsstring></argsstring>
+        <name>m_list</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::m_list</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="174" column="12" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d72/a09535_1a97de75d5706270597b305449cacadb0e" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aac3763b795438810958473f0b84908fb" kindref="member">castor::Mutex</ref></type>
+        <definition>castor::Mutex castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::m_mutex</definition>
+        <argsstring></argsstring>
+        <name>m_mutex</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::m_mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le mutex protégeant les éléments associés. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="177" column="15" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="177" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d4/d72/a09535_1a91390a87c0030f0a3ed80fbdb831c58a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::BasicIndentBufferManager</definition>
+        <argsstring>(BasicIndentBufferManager const &amp;)=delete</argsstring>
+        <name>BasicIndentBufferManager</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::BasicIndentBufferManager</qualifiedname>
+        <param>
+          <type><ref refid="d4/d72/a09535" kindref="compound">BasicIndentBufferManager</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="30" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d72/a09535_1a5a5ed506510be9e2f4658f5cbb8e0b43" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d4/d72/a09535" kindref="compound">BasicIndentBufferManager</ref> &amp;</type>
+        <definition>BasicIndentBufferManager &amp; castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::operator=</definition>
+        <argsstring>(BasicIndentBufferManager const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d4/d72/a09535" kindref="compound">BasicIndentBufferManager</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="31" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d72/a09535_1adfbf45433be7a7912c2ed68b0f4f1d6d" prot="private" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::BasicIndentBufferManager</definition>
+        <argsstring>(BasicIndentBufferManager &amp;&amp;) noexcept=delete</argsstring>
+        <name>BasicIndentBufferManager</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::BasicIndentBufferManager</qualifiedname>
+        <param>
+          <type><ref refid="d4/d72/a09535" kindref="compound">BasicIndentBufferManager</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="32" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d72/a09535_1a4646c242223724315c6ec17570ec74f3" prot="private" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/d72/a09535" kindref="compound">BasicIndentBufferManager</ref> &amp;</type>
+        <definition>BasicIndentBufferManager &amp; castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::operator=</definition>
+        <argsstring>(BasicIndentBufferManager &amp;&amp;) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d4/d72/a09535" kindref="compound">BasicIndentBufferManager</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="33" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d72/a09535_1a7e6aca20b90dd3ca2069941ed185a460" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::BasicIndentBufferManager</definition>
+        <argsstring>()</argsstring>
+        <name>BasicIndentBufferManager</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::BasicIndentBufferManager</qualifiedname>
+        <briefdescription>
+<para>Constructeur par défaut. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Default constructor </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="42" column="1" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="42" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d72/a09535_1a29aca2b6ca4712d145e5a13b7a76a959" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::BasicIndentBufferManager</definition>
+        <argsstring>(BasicIndentBufferManager&lt; char_type, traits &gt; &amp;obj)=delete</argsstring>
+        <name>BasicIndentBufferManager</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::BasicIndentBufferManager</qualifiedname>
+        <param>
+          <type><ref refid="d4/d72/a09535" kindref="compound">BasicIndentBufferManager</ref>&lt; char_type, traits &gt; &amp;</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur par copie. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="53" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/d72/a09535_1a7c48e6a082ef983d55e5c2ccf7a3967a" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::~BasicIndentBufferManager</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~BasicIndentBufferManager</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::~BasicIndentBufferManager</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="62" column="1" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="62" bodyend="71"/>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d72/a09535_1a2732332a1ec151f2aced3d200b2c14eb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::insert</definition>
+        <argsstring>(bos &amp;o_s, bsb *b_s)</argsstring>
+        <name>insert</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::insert</qualifiedname>
+        <param>
+          <type>bos &amp;</type>
+          <declname>o_s</declname>
+        </param>
+        <param>
+          <type>bsb *</type>
+          <declname>b_s</declname>
+        </param>
+        <briefdescription>
+<para>Insère une association flux/tampon. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">o_s</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le flux </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">b_s</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le tampon </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true si la paire a été correctement insérée </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="85" column="6" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="85" bodyend="89"/>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d72/a09535_1a5841ac129cdaf0b765d61c5af0f6d512" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::size</definition>
+        <argsstring>()</argsstring>
+        <name>size</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::size</qualifiedname>
+        <briefdescription>
+<para>Récupère le nombre d&apos;éléments. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="99" column="8" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="99" bodyend="103"/>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d72/a09535_1ae55e1eb90db9b7257f4aa3e0b5f5abcd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bsb *</type>
+        <definition>bsb * castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::getBuffer</definition>
+        <argsstring>(std::ios_base &amp;io_s)</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::getBuffer</qualifiedname>
+        <param>
+          <type>std::ios_base &amp;</type>
+          <declname>io_s</declname>
+        </param>
+        <briefdescription>
+<para>Récupère le tampon associé au flux donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">io_s</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le flux </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="113" column="6" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="113" bodyend="124"/>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+        <referencedby refid="d4/d72/a09535_1a49e2f48322086eca26d40f01311003c6" compoundref="dc/db6/a02258" startline="136" endline="141">castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::erase</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/d72/a09535_1a49e2f48322086eca26d40f01311003c6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::erase</definition>
+        <argsstring>(std::ios_base &amp;io_s)</argsstring>
+        <name>erase</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::erase</qualifiedname>
+        <param>
+          <type>std::ios_base &amp;</type>
+          <declname>io_s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="136" column="6" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="136" bodyend="141"/>
+        <references refid="d4/d72/a09535_1ae55e1eb90db9b7257f4aa3e0b5f5abcd" compoundref="dc/db6/a02258" startline="113" endline="124">castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::getBuffer</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d4/d72/a09535_1a8bb61fdbcb9f5e312c2e6c7c0a587634" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>static size_t castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::instances</definition>
+        <argsstring>()</argsstring>
+        <name>instances</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::instances</qualifiedname>
+        <briefdescription>
+<para>Récupère le nompbre d&apos;instances. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="151" column="15" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="151" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d72/a09535_1a9af195ed1d4ec17429040e764bbb8e12" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d72/a09535" kindref="compound">BasicIndentBufferManager</ref>&lt; char_type, traits &gt; *</type>
+        <definition>static BasicIndentBufferManager&lt; char_type, traits &gt; * castor::format::BasicIndentBufferManager&lt; char_type, traits &gt;::instance</definition>
+        <argsstring>()</argsstring>
+        <name>instance</name>
+        <qualifiedname>castor::format::BasicIndentBufferManager::instance</qualifiedname>
+        <briefdescription>
+<para>Récupère une instance du <ref refid="d4/d72/a09535" kindref="compound">BasicIndentBufferManager</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="162" column="34" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="162" bodyend="166"/>
+        <referencedby refid="dd/da4/a02295_1adfece89cf0c7305fca2ad98e0537e9d8" compoundref="d7/d24/a02261" startline="98" endline="121">castor::format::callback</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Garde les associations flux/tampon de flux. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Stream/StreamIndentBufferManager.hpp" line="19" column="1" bodyfile="CastorUtils/Stream/StreamIndentBufferManager.hpp" bodystart="20" bodyend="178"/>
+    <listofallmembers>
+      <member refid="d4/d72/a09535_1a91390a87c0030f0a3ed80fbdb831c58a" prot="private" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>BasicIndentBufferManager</name></member>
+      <member refid="d4/d72/a09535_1adfbf45433be7a7912c2ed68b0f4f1d6d" prot="private" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>BasicIndentBufferManager</name></member>
+      <member refid="d4/d72/a09535_1a7e6aca20b90dd3ca2069941ed185a460" prot="private" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>BasicIndentBufferManager</name></member>
+      <member refid="d4/d72/a09535_1a29aca2b6ca4712d145e5a13b7a76a959" prot="private" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>BasicIndentBufferManager</name></member>
+      <member refid="d4/d72/a09535_1abff258dfc4cf0a4caaf72942b11eecc0" prot="private" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>bos</name></member>
+      <member refid="d4/d72/a09535_1af5289274c839ee26e4b2d64eb97efc7c" prot="private" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>bsb</name></member>
+      <member refid="d4/d72/a09535_1aa60b910ca2fd90e9d2b3558902829d8e" prot="private" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>const_iterator</name></member>
+      <member refid="d4/d72/a09535_1a49e2f48322086eca26d40f01311003c6" prot="public" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>erase</name></member>
+      <member refid="d4/d72/a09535_1ae55e1eb90db9b7257f4aa3e0b5f5abcd" prot="public" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>getBuffer</name></member>
+      <member refid="d4/d72/a09535_1a2732332a1ec151f2aced3d200b2c14eb" prot="public" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>insert</name></member>
+      <member refid="d4/d72/a09535_1a9af195ed1d4ec17429040e764bbb8e12" prot="public" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>instance</name></member>
+      <member refid="d4/d72/a09535_1a8bb61fdbcb9f5e312c2e6c7c0a587634" prot="public" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>instances</name></member>
+      <member refid="d4/d72/a09535_1a0927b9bd2659c7e8b51c586f36d9d460" prot="private" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>iterator</name></member>
+      <member refid="d4/d72/a09535_1abbe9090ab71bae1ef2012c944b06334d" prot="private" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>lock_type</name></member>
+      <member refid="d4/d72/a09535_1a8bdbe685c6053b0487b94c62d36b3ade" prot="private" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>m_list</name></member>
+      <member refid="d4/d72/a09535_1a97de75d5706270597b305449cacadb0e" prot="private" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>m_mutex</name></member>
+      <member refid="d4/d72/a09535_1a5a5ed506510be9e2f4658f5cbb8e0b43" prot="private" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>operator=</name></member>
+      <member refid="d4/d72/a09535_1a4646c242223724315c6ec17570ec74f3" prot="private" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>operator=</name></member>
+      <member refid="d4/d72/a09535_1a5841ac129cdaf0b765d61c5af0f6d512" prot="public" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>size</name></member>
+      <member refid="d4/d72/a09535_1a6c5b3e7cb210e66ab3e34fb8441f6731" prot="private" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>sm_instances</name></member>
+      <member refid="d4/d72/a09535_1aa12d690eb3f5f5511d7758acf7a83b76" prot="private" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>table_type</name></member>
+      <member refid="d4/d72/a09535_1af9e32b61777dfa51659ce14889e2a9eb" prot="private" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>value_type</name></member>
+      <member refid="d4/d72/a09535_1a7c48e6a082ef983d55e5c2ccf7a3967a" prot="public" virt="non-virtual"><scope>castor::format::BasicIndentBufferManager</scope><name>~BasicIndentBufferManager</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

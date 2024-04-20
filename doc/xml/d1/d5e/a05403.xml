@@ -1,0 +1,308 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d5e/a05403" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::MeshGenerator</compoundname>
+    <derivedcompoundref refid="dd/dc9/a05355" prot="public" virt="non-virtual">castor3d::Cone</derivedcompoundref>
+    <derivedcompoundref refid="d1/dab/a05359" prot="public" virt="non-virtual">castor3d::Cube</derivedcompoundref>
+    <derivedcompoundref refid="d3/dea/a05363" prot="public" virt="non-virtual">castor3d::Cylinder</derivedcompoundref>
+    <derivedcompoundref refid="db/da4/a05367" prot="public" virt="non-virtual">castor3d::Icosahedron</derivedcompoundref>
+    <derivedcompoundref refid="df/d06/a05371" prot="public" virt="non-virtual">castor3d::Plane</derivedcompoundref>
+    <derivedcompoundref refid="d3/d97/a05375" prot="public" virt="non-virtual">castor3d::Projection</derivedcompoundref>
+    <derivedcompoundref refid="dd/d3d/a05379" prot="public" virt="non-virtual">castor3d::Sphere</derivedcompoundref>
+    <derivedcompoundref refid="db/d18/a05383" prot="public" virt="non-virtual">castor3d::SphereSection</derivedcompoundref>
+    <derivedcompoundref refid="db/de3/a05387" prot="public" virt="non-virtual">castor3d::Torus</derivedcompoundref>
+    <includes local="no">MeshGenerator.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/d5e/a05403_1ae4c4d2c67b9e8567baef9dfeb70415d1" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::MeshGenerator::m_meshType</definition>
+        <argsstring></argsstring>
+        <name>m_meshType</name>
+        <qualifiedname>castor3d::MeshGenerator::m_meshType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le type de mesh. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshGenerator.hpp" line="82" column="16" bodyfile="Castor3D/Model/Mesh/MeshGenerator.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d5e/a05403_1a3ccec3fd88667bbca33c6e81afdeff19" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MeshGenerator::MeshGenerator</definition>
+        <argsstring>(castor::String const &amp;meshType)</argsstring>
+        <name>MeshGenerator</name>
+        <qualifiedname>castor3d::MeshGenerator::MeshGenerator</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>meshType</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">meshType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type de maillage </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshGenerator.hpp" line="23" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d5e/a05403_1a2cf442c1a0d331b4b62158bbdb711b9c" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::MeshGenerator::~MeshGenerator</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~MeshGenerator</name>
+        <qualifiedname>castor3d::MeshGenerator::~MeshGenerator</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshGenerator.hpp" line="30" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d5e/a05403_1a9fdc140f2d871ca6cb81029250c346ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::MeshGenerator::generate</definition>
+        <argsstring>(Mesh &amp;mesh, Parameters const &amp;parameters)</argsstring>
+        <name>generate</name>
+        <qualifiedname>castor3d::MeshGenerator::generate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dc7/a05391" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Génère le maillage. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le maillage. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les paramètres du générateur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshGenerator.hpp" line="50" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d5e/a05403_1a3207825be521c851f6fc654751f54cf1" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::MeshGenerator::computeNormals</definition>
+        <argsstring>(Mesh &amp;mesh, bool reverted=false)</argsstring>
+        <name>computeNormals</name>
+        <qualifiedname>castor3d::MeshGenerator::computeNormals</qualifiedname>
+        <param>
+          <type><ref refid="d2/dc7/a05391" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>reverted</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Génère les normales et les tangentes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le maillage. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">reverted</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si l&apos;espace tangent généré doit être inversé. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshGenerator.hpp" line="62" column="22"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d1/d5e/a05403_1aecf5bf8c3b0b2e5dfacf45def40f8886" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>MeshGeneratorUPtr</type>
+        <definition>static MeshGeneratorUPtr castor3d::MeshGenerator::create</definition>
+        <argsstring>()</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::MeshGenerator::create</qualifiedname>
+        <briefdescription>
+<para>Fonction de création, utilisée par la Factory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Un cylindre </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshGenerator.hpp" line="39" column="26"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/d5e/a05403_1a690745122d7e670b311e317ae86c9b45" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::MeshGenerator::doGenerate</definition>
+        <argsstring>(Mesh &amp;mesh, Parameters const &amp;parameters)</argsstring>
+        <name>doGenerate</name>
+        <qualifiedname>castor3d::MeshGenerator::doGenerate</qualifiedname>
+        <reimplementedby refid="dd/dc9/a05355_1a733af1632945df0dbdd73dd928cf0e5f">doGenerate</reimplementedby>
+        <reimplementedby refid="d1/dab/a05359_1a3f6bcd646f3410ba5c37378d18fd248b">doGenerate</reimplementedby>
+        <reimplementedby refid="d3/dea/a05363_1a5f8bd74e5f85096f39d59ed5e574bbc2">doGenerate</reimplementedby>
+        <reimplementedby refid="db/da4/a05367_1a56836bcb222bc19dbf2816b9d0fff872">doGenerate</reimplementedby>
+        <reimplementedby refid="df/d06/a05371_1af4a5b8cbe090abd0036d21ccd68cbd00">doGenerate</reimplementedby>
+        <reimplementedby refid="d3/d97/a05375_1a96eea4fe0c0eb99a0491a750ee7d3b88">doGenerate</reimplementedby>
+        <reimplementedby refid="dd/d3d/a05379_1a6078546ff987de5f67085050e7a28afd">doGenerate</reimplementedby>
+        <reimplementedby refid="db/d18/a05383_1a4c85ed84ad2673bcff9566303769611f">doGenerate</reimplementedby>
+        <reimplementedby refid="db/de3/a05387_1a294b9720624f08ca8563a4d8f1612890">doGenerate</reimplementedby>
+        <param>
+          <type><ref refid="d2/dc7/a05391" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Génère le maillage. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le maillage. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les paramètres du générateur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/MeshGenerator.hpp" line="76" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::Cone</label>
+        <link refid="dd/dc9/a05355"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::Cube</label>
+        <link refid="d1/dab/a05359"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::Cylinder</label>
+        <link refid="d3/dea/a05363"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::Icosahedron</label>
+        <link refid="db/da4/a05367"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::MeshGenerator</label>
+        <link refid="d1/d5e/a05403"/>
+      </node>
+      <node id="6">
+        <label>castor3d::Plane</label>
+        <link refid="df/d06/a05371"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::Projection</label>
+        <link refid="d3/d97/a05375"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::Sphere</label>
+        <link refid="dd/d3d/a05379"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::SphereSection</label>
+        <link refid="db/d18/a05383"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::Torus</label>
+        <link refid="db/de3/a05387"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="Castor3D/Model/Mesh/MeshGenerator.hpp" line="12" column="1" bodyfile="Castor3D/Model/Mesh/MeshGenerator.hpp" bodystart="13" bodyend="83"/>
+    <listofallmembers>
+      <member refid="d1/d5e/a05403_1a3207825be521c851f6fc654751f54cf1" prot="public" virt="virtual"><scope>castor3d::MeshGenerator</scope><name>computeNormals</name></member>
+      <member refid="d1/d5e/a05403_1aecf5bf8c3b0b2e5dfacf45def40f8886" prot="public" virt="non-virtual"><scope>castor3d::MeshGenerator</scope><name>create</name></member>
+      <member refid="d1/d5e/a05403_1a690745122d7e670b311e317ae86c9b45" prot="private" virt="virtual"><scope>castor3d::MeshGenerator</scope><name>doGenerate</name></member>
+      <member refid="d1/d5e/a05403_1a9fdc140f2d871ca6cb81029250c346ae" prot="public" virt="virtual"><scope>castor3d::MeshGenerator</scope><name>generate</name></member>
+      <member refid="d1/d5e/a05403_1ae4c4d2c67b9e8567baef9dfeb70415d1" prot="private" virt="non-virtual"><scope>castor3d::MeshGenerator</scope><name>m_meshType</name></member>
+      <member refid="d1/d5e/a05403_1a3ccec3fd88667bbca33c6e81afdeff19" prot="public" virt="non-virtual"><scope>castor3d::MeshGenerator</scope><name>MeshGenerator</name></member>
+      <member refid="d1/d5e/a05403_1a2cf442c1a0d331b4b62158bbdb711b9c" prot="public" virt="virtual"><scope>castor3d::MeshGenerator</scope><name>~MeshGenerator</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

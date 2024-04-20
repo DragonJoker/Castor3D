@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_f930c21826565e108aa87271634c42eb" kind="dir">
-    <compoundname>Render/Prepass</compoundname>
+    <compoundname>Castor3D/Render/Prepass</compoundname>
     <innerfile refid="de/db5/a01181">DepthPass.hpp</innerfile>
     <innerfile refid="d1/d35/a01184">PrepassModule.hpp</innerfile>
     <innerfile refid="dc/d70/a01187">PrepassRendering.hpp</innerfile>
@@ -11,6 +11,6 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Prepass/"/>
+    <location file="Castor3D/Render/Prepass/"/>
   </compounddef>
 </doxygen>

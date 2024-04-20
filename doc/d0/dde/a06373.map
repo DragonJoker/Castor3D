@@ -1,0 +1,24 @@
+<map id="castor3d::PrepassResult" name="castor3d::PrepassResult">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1779,42,1944,67"/>
+<area shape="rect" id="Node000002" href="$da/d50/a08167.html" title=" " alt="" coords="1592,5,1729,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1743,35,1779,40,1778,45,1743,40"/>
+<area shape="rect" id="Node000003" href="$da/d50/a08167.html" title="Some data holder." alt="" coords="1309,5,1447,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1460,23,1592,23,1592,28,1460,28"/>
+<area shape="rect" id="Node000004" href="$d0/d22/a05963.html" title=" " alt="" coords="1595,69,1726,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1739,73,1787,65,1788,70,1740,78"/>
+<area shape="rect" id="Node000005" href="$d8/d33/a05959.html" title=" " alt="" coords="1107,90,1260,115"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="1274,97,1595,88,1595,94,1274,103"/>
+<area shape="rect" id="Node000011" href="$d0/d22/a05963.html" title=" " alt="" coords="1313,123,1443,163"/>
+<area shape="poly" id="edge11_Node000011_Node000005" title=" " alt="" coords="1260,116,1313,127,1312,132,1259,121"/>
+<area shape="rect" id="Node000006" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="867,69,974,94"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="988,84,1107,94,1106,99,988,89"/>
+<area shape="rect" id="Node000007" href="$dc/d32/a06415.html" title=" " alt="" coords="841,118,1000,143"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="1014,119,1082,112,1106,109,1107,115,1083,117,1014,125"/>
+<area shape="rect" id="Node000008" href="$d5/d4e/a06559.html" title=" " alt="" coords="541,118,708,143"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="722,128,841,128,841,133,722,133"/>
+<area shape="rect" id="Node000009" href="$d6/da8/a08227.html" title=" " alt="" coords="305,118,492,143"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="506,128,541,128,541,133,506,133"/>
+<area shape="rect" id="Node000010" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="5,118,188,143"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="202,128,305,128,305,133,202,133"/>
+<area shape="poly" id="edge10_Node000004_Node000011" title=" " alt="" coords="1456,133,1567,116,1602,107,1603,112,1569,121,1457,139"/>
+</map>

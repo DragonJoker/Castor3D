@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/d77/a04939" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TextureFlagConfiguration</compoundname>
+    <includes local="no">TextureConfiguration.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d77/a04939_1a8c3001caf5e4d445a2c687225cd43ebb" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref></type>
+        <definition>PassComponentTextureFlag castor3d::TextureFlagConfiguration::flag</definition>
+        <argsstring></argsstring>
+        <name>flag</name>
+        <qualifiedname>castor3d::TextureFlagConfiguration::flag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>Pour savoir à quoi cette configuration est liée. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Texture/TextureConfiguration.hpp" line="52" column="26" bodyfile="Castor3D/Material/Texture/TextureConfiguration.hpp" bodystart="52" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d77/a04939_1aa3d220cb6c4909a1a8fa228211c88b6b" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureFlagConfiguration::componentsMask</definition>
+        <argsstring></argsstring>
+        <name>componentsMask</name>
+        <qualifiedname>castor3d::TextureFlagConfiguration::componentsMask</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>Masque, utilisés avec l&apos;indice de début pour filtrer les composantes d&apos;une image (AARRGGBB). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Texture/TextureConfiguration.hpp" line="61" column="10" bodyfile="Castor3D/Material/Texture/TextureConfiguration.hpp" bodystart="61" bodyend="61"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d77/a04939_1a2cc571337eec323aab9d1fad88e715ce" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureFlagConfiguration::startIndex</definition>
+        <argsstring></argsstring>
+        <name>startIndex</name>
+        <qualifiedname>castor3d::TextureFlagConfiguration::startIndex</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>Indice de début, utilisé avec le masque pour filtrer les composantes d&apos;une image (AARRGGBB). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Texture/TextureConfiguration.hpp" line="70" column="10" bodyfile="Castor3D/Material/Texture/TextureConfiguration.hpp" bodystart="70" bodyend="70"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Material/Texture/TextureConfiguration.hpp" line="42" column="1" bodyfile="Castor3D/Material/Texture/TextureConfiguration.hpp" bodystart="43" bodyend="71"/>
+    <listofallmembers>
+      <member refid="d2/d77/a04939_1aa3d220cb6c4909a1a8fa228211c88b6b" prot="public" virt="non-virtual"><scope>castor3d::TextureFlagConfiguration</scope><name>componentsMask</name></member>
+      <member refid="d2/d77/a04939_1a8c3001caf5e4d445a2c687225cd43ebb" prot="public" virt="non-virtual"><scope>castor3d::TextureFlagConfiguration</scope><name>flag</name></member>
+      <member refid="d2/d77/a04939_1a2cc571337eec323aab9d1fad88e715ce" prot="public" virt="non-virtual"><scope>castor3d::TextureFlagConfiguration</scope><name>startIndex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

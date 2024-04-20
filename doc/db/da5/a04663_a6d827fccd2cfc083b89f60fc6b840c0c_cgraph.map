@@ -1,0 +1,11 @@
+<map id="castor3d::SpecularMapComponent::Plugin::fillTextureConfiguration" name="castor3d::SpecularMapComponent::Plugin::fillTextureConfiguration">
+<area shape="rect" id="Node000001" title="Fills the texture configuration for use with this component." alt="" coords="5,27,228,67"/>
+<area shape="rect" id="Node000002" href="$d9/dba/a02278.html#aca9266480e6d0378e87f784f76d6994d" title=" " alt="" coords="287,5,488,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="228,33,273,28,273,33,228,38"/>
+<area shape="rect" id="Node000003" href="$db/da5/a04663.html#a555b0a34db654682fc195cd256973a3b" title=" " alt="" coords="276,55,499,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="228,56,263,60,262,65,228,61"/>
+<area shape="rect" id="Node000004" href="$d2/d2e/a04831.html#a3d4ca319e7c6e2dc3e40e81211846fee" title=" " alt="" coords="547,26,759,66"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="499,60,533,57,533,62,499,66"/>
+<area shape="rect" id="Node000005" href="$d9/dba/a02278.html#a813eb0a53ad6b3f96433a39acae9f59b" title=" " alt="" coords="563,91,743,116"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="499,84,549,90,549,95,499,90"/>
+</map>

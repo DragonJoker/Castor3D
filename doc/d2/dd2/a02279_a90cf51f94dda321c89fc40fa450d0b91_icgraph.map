@@ -1,0 +1,149 @@
+<map id="castor::switchEndianness" name="castor::switchEndianness">
+<area shape="rect" id="Node000001" title="Convert from little or big endian to the other." alt="" coords="1413,1455,1584,1481"/>
+<area shape="rect" id="Node000002" href="$d2/dd2/a02279.html#a0d184ae41d5975c6c14fc8cc48df18fe" title="Convert the given value to big endian if needed." alt="" coords="1167,5,1349,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1494,1442,1484,1163,1461,722,1443,496,1421,295,1394,142,1379,90,1363,59,1348,45,1351,41,1367,56,1384,88,1400,141,1426,294,1448,495,1466,722,1489,1163,1499,1441"/>
+<area shape="rect" id="Node000003" href="$d2/dd2/a02279.html#a547f175c03da584bbcc49e7f6e4f4013" title="Convert the given value to big endian if needed." alt="" coords="1167,69,1349,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1494,1442,1483,1175,1459,754,1441,539,1419,347,1393,202,1379,153,1363,123,1348,109,1351,105,1367,120,1384,151,1398,201,1424,347,1446,538,1464,754,1488,1174,1499,1441"/>
+<area shape="rect" id="Node000004" href="$d2/dd2/a02279.html#add97d0a02fa4f84214d94adce553304e" title="Convert the given big endian value to system endian if needed." alt="" coords="1167,133,1349,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1494,1442,1482,1186,1457,786,1439,581,1417,400,1392,262,1378,215,1363,187,1348,173,1351,169,1367,184,1383,213,1397,260,1423,399,1444,581,1462,786,1487,1186,1499,1442"/>
+<area shape="rect" id="Node000005" href="$d2/dd2/a02279.html#a49a3ae83045c03ad117623890299fb1c" title="Convert the given big endian value to system endian if needed." alt="" coords="1167,197,1349,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1494,1442,1481,1197,1455,818,1437,624,1415,452,1391,322,1377,278,1363,251,1348,238,1351,233,1367,248,1382,276,1396,320,1421,452,1442,623,1460,817,1486,1197,1499,1441"/>
+<area shape="rect" id="Node000006" href="$d2/dd2/a02279.html#a69cb2659d6729cb2651ef72d69cad6d8" title="Convert the given value to big endian if needed." alt="" coords="1167,261,1349,301"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1493,1441,1480,1208,1453,850,1435,667,1414,505,1390,381,1377,340,1363,315,1348,302,1352,298,1367,312,1382,338,1395,380,1419,504,1440,666,1458,849,1485,1208,1499,1441"/>
+<area shape="rect" id="Node000007" href="$d2/dd2/a02279.html#a0e4596003b5027cb4faf7daf3febd1ab" title="Convert the given value to big endian if needed." alt="" coords="1167,325,1349,365"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1493,1442,1479,1220,1451,882,1433,709,1412,557,1388,441,1376,402,1363,379,1348,366,1352,362,1367,376,1381,400,1394,440,1417,556,1438,709,1456,881,1484,1220,1498,1441"/>
+<area shape="rect" id="Node000008" href="$d9/dba/a02278.html#a0ba2350e966f08f0eec4044fb456c598" title=" " alt="" coords="1151,389,1365,429"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1495,1442,1494,1246,1489,1103,1479,946,1463,789,1440,644,1425,580,1407,524,1386,478,1363,443,1350,431,1354,428,1367,440,1391,476,1412,523,1430,579,1445,643,1469,788,1485,946,1494,1103,1499,1246,1500,1442"/>
+<area shape="rect" id="Node000009" href="$d2/dd2/a02279.html#a423745cbe221958e708733caef7628ff" title="Convert the given value to little endian if needed." alt="" coords="1163,453,1353,493"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1495,1441,1492,1256,1486,1122,1476,976,1459,829,1436,694,1421,635,1404,583,1385,540,1363,507,1350,496,1354,492,1367,504,1390,537,1409,581,1426,633,1441,693,1465,828,1481,975,1491,1122,1497,1256,1500,1441"/>
+<area shape="rect" id="Node000010" href="$d2/dd2/a02279.html#ae43298a8041aeff0dda0e7e1001de0eb" title="Convert the given value to little endian if needed." alt="" coords="1163,517,1353,557"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1494,1441,1490,1267,1483,1142,1472,1006,1455,870,1432,744,1418,689,1402,641,1384,601,1363,571,1350,560,1354,556,1367,568,1388,599,1407,639,1423,688,1438,743,1461,869,1477,1005,1488,1142,1495,1267,1500,1441"/>
+<area shape="rect" id="Node000011" href="$d2/dd2/a02279.html#ae21f89dfd2feafe41ec98e132f9b5d9f" title="Convert the given little endian value to system endian if needed." alt="" coords="1163,581,1353,621"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1494,1442,1488,1280,1468,1037,1451,911,1429,795,1400,700,1382,663,1363,635,1350,624,1354,620,1367,632,1387,660,1405,698,1434,794,1457,910,1474,1037,1493,1279,1499,1442"/>
+<area shape="rect" id="Node000012" href="$d2/dd2/a02279.html#a2152b811d74de8f62369f62ed2995029" title="Convert the given little endian value to system endian if needed." alt="" coords="1163,645,1353,685"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1494,1442,1486,1290,1464,1067,1447,951,1425,845,1397,758,1381,725,1363,699,1350,687,1353,683,1367,696,1386,722,1402,756,1430,844,1453,951,1470,1066,1491,1290,1499,1442"/>
+<area shape="rect" id="Node000013" href="$d2/dd2/a02279.html#a90e916507e696bd93a200c94110958ea" title="Convert the given value to little endian if needed." alt="" coords="1163,709,1353,749"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="1493,1442,1483,1301,1461,1097,1443,992,1422,896,1395,817,1380,786,1363,763,1350,751,1353,747,1367,760,1384,783,1400,815,1427,894,1449,991,1466,1097,1489,1301,1499,1442"/>
+<area shape="rect" id="Node000014" href="$d2/dd2/a02279.html#ae9e015a793e5ed70ecbd0f3b25591d5e" title="Convert the given value to little endian if needed." alt="" coords="1163,773,1353,813"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="1493,1442,1481,1312,1457,1128,1439,1033,1418,946,1393,875,1378,848,1363,827,1350,816,1353,811,1367,824,1383,845,1397,873,1423,945,1444,1032,1462,1127,1486,1312,1498,1441"/>
+<area shape="rect" id="Node000015" href="$d9/dba/a02278.html#a443ec91dcec1ae4cbdbf27d54b9ca4fa" title="Sets given value to big endian." alt="" coords="1165,838,1351,863"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="1492,1442,1480,1321,1455,1150,1437,1063,1416,984,1392,919,1378,895,1363,877,1349,866,1352,861,1367,873,1382,892,1396,917,1421,982,1443,1062,1460,1149,1485,1320,1498,1441"/>
+<area shape="rect" id="Node000016" href="$d9/dba/a02278.html#a4fc68de12338fd3a4ca4362246f502ba" title="Sets given value to big endian." alt="" coords="1165,887,1351,913"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="1492,1442,1478,1330,1452,1174,1434,1095,1413,1023,1390,965,1363,926,1348,915,1351,911,1367,922,1395,962,1418,1022,1439,1094,1457,1173,1483,1329,1497,1441"/>
+<area shape="rect" id="Node000017" href="$d9/dba/a02278.html#a8c20990a4663fb276e147bb3b1bbaa74" title="Sets given value to big endian." alt="" coords="1165,937,1351,962"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="1491,1442,1476,1339,1448,1198,1431,1127,1410,1063,1388,1010,1363,975,1348,964,1351,960,1367,971,1393,1008,1415,1061,1436,1126,1454,1197,1481,1338,1497,1441"/>
+<area shape="rect" id="Node000018" href="$d9/dba/a02278.html#a87e7a551793e1998870e8b6ba1bb3a4b" title="Sets given value to big endian." alt="" coords="1165,986,1351,1011"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="1495,1441,1492,1360,1486,1306,1476,1247,1459,1186,1436,1127,1404,1072,1364,1025,1348,1014,1351,1009,1367,1021,1409,1069,1441,1125,1464,1185,1481,1246,1492,1305,1498,1359,1501,1441"/>
+<area shape="rect" id="Node000019" href="$d9/dba/a02278.html#a7f0063a8a28d970183adc8aac48992bd" title="Sets given value to big endian." alt="" coords="1165,1035,1351,1061"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="1494,1442,1488,1368,1469,1268,1453,1215,1430,1163,1401,1115,1364,1074,1347,1063,1350,1059,1367,1070,1405,1112,1435,1161,1458,1213,1474,1267,1494,1367,1500,1441"/>
+<area shape="rect" id="Node000020" href="$d9/dba/a02278.html#a57304a0182373e71acbbcb1a49086f76" title="Sets given value to big endian." alt="" coords="1165,1085,1351,1110"/>
+<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="1493,1442,1484,1377,1463,1290,1446,1244,1424,1200,1397,1159,1364,1123,1347,1112,1350,1108,1367,1119,1401,1156,1429,1197,1451,1242,1468,1289,1489,1376,1498,1441"/>
+<area shape="rect" id="Node000021" href="$d9/dba/a02278.html#a6c9799addf4313489625161731a1c8eb" title="Sets given value to big endian." alt="" coords="1165,1134,1351,1159"/>
+<area shape="poly" id="edge20_Node000001_Node000021" title=" " alt="" coords="1491,1442,1479,1385,1456,1312,1439,1274,1419,1236,1393,1202,1364,1173,1346,1162,1348,1157,1367,1169,1397,1199,1423,1234,1444,1271,1461,1310,1484,1384,1496,1441"/>
+<area shape="rect" id="Node000022" href="$d9/dba/a02278.html#adec052c5846a087dbf0d4dc2672b8f45" title="Sets given value to big endian." alt="" coords="1165,1183,1351,1209"/>
+<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="1489,1443,1474,1395,1449,1335,1413,1273,1390,1246,1364,1222,1345,1211,1347,1207,1367,1218,1394,1242,1417,1270,1454,1332,1479,1393,1494,1441"/>
+<area shape="rect" id="Node000023" href="$d9/dba/a02278.html#ac8d3bbf632e2c6081a47ff432aab51df" title="Sets given value to big endian." alt="" coords="1165,1233,1351,1258"/>
+<area shape="poly" id="edge22_Node000001_Node000023" title=" " alt="" coords="1485,1443,1468,1404,1442,1357,1407,1311,1364,1272,1343,1261,1345,1256,1367,1267,1411,1307,1446,1355,1472,1402,1490,1441"/>
+<area shape="rect" id="Node000024" href="$d9/dba/a02278.html#a430f3de9071e7d03358bb1b39d07c2b8" title="Sets given value to big endian." alt="" coords="1165,1282,1351,1307"/>
+<area shape="poly" id="edge23_Node000001_Node000024" title=" " alt="" coords="1481,1445,1434,1382,1401,1349,1364,1321,1340,1310,1342,1305,1367,1316,1405,1345,1438,1379,1485,1442"/>
+<area shape="rect" id="Node000045" href="$d9/dba/a02278.html#a64d22c03869c8db8496ef7e16733777b" title="Sets given value to big endian." alt="" coords="1165,1331,1351,1357"/>
+<area shape="poly" id="edge46_Node000001_Node000045" title=" " alt="" coords="1473,1448,1425,1408,1395,1388,1364,1370,1333,1359,1335,1354,1366,1366,1398,1383,1428,1404,1476,1444"/>
+<area shape="rect" id="Node000046" href="$d9/dba/a02278.html#a4bf10f2f11fde3269c70845bbc572fbf" title="Sets given value to big endian." alt="" coords="1165,1381,1351,1406"/>
+<area shape="poly" id="edge47_Node000001_Node000046" title=" " alt="" coords="1454,1453,1365,1420,1322,1409,1323,1403,1366,1415,1456,1448"/>
+<area shape="rect" id="Node000047" href="$d9/dba/a02278.html#a06caf74173997883bedfa6c3ff807c12" title="Sets given value to big endian." alt="" coords="1165,1430,1351,1455"/>
+<area shape="poly" id="edge48_Node000001_Node000047" title=" " alt="" coords="1399,1460,1351,1455,1352,1450,1400,1455"/>
+<area shape="rect" id="Node000048" href="$d9/dba/a02278.html#a7f70d15ea4a68c85c548cd5552619d97" title="Sets given value to big endian." alt="" coords="1165,1479,1351,1505"/>
+<area shape="poly" id="edge49_Node000001_Node000048" title=" " alt="" coords="1400,1481,1352,1485,1351,1480,1399,1475"/>
+<area shape="rect" id="Node000049" href="$d9/dba/a02278.html#a19419ebed1810e7293e390e5ec3c2d9b" title="Sets given value to big endian." alt="" coords="1165,1529,1351,1554"/>
+<area shape="poly" id="edge50_Node000001_Node000049" title=" " alt="" coords="1454,1488,1366,1519,1319,1531,1317,1526,1365,1513,1452,1483"/>
+<area shape="rect" id="Node000050" href="$d9/dba/a02278.html#aa25c32cc9e2d91e7b7d6287917c04524" title="Sets given value to big endian." alt="" coords="1165,1578,1351,1603"/>
+<area shape="poly" id="edge51_Node000001_Node000050" title=" " alt="" coords="1476,1492,1427,1531,1366,1568,1331,1580,1329,1575,1364,1563,1424,1526,1472,1488"/>
+<area shape="rect" id="Node000051" href="$d9/dba/a02278.html#a58ff625ab28b77d7933ef9517c1b632c" title="Sets given value to big endian." alt="" coords="1165,1627,1351,1653"/>
+<area shape="poly" id="edge52_Node000001_Node000051" title=" " alt="" coords="1485,1494,1437,1556,1404,1589,1367,1617,1338,1630,1336,1625,1364,1612,1401,1585,1433,1552,1480,1491"/>
+<area shape="rect" id="Node000052" href="$d9/dba/a02278.html#aaae8a1f030b081e1f156530f10e17b4b" title="Sets given value to big endian." alt="" coords="1165,1677,1351,1702"/>
+<area shape="poly" id="edge53_Node000001_Node000052" title=" " alt="" coords="1490,1495,1472,1533,1446,1580,1410,1627,1367,1666,1342,1679,1340,1674,1364,1662,1407,1623,1441,1577,1467,1531,1485,1492"/>
+<area shape="rect" id="Node000053" href="$d9/dba/a02278.html#a1281cbf080321b1041acc691028f9d97" title="Sets given value to big endian." alt="" coords="1165,1726,1351,1751"/>
+<area shape="poly" id="edge54_Node000001_Node000053" title=" " alt="" coords="1493,1495,1478,1543,1453,1603,1417,1664,1393,1691,1367,1715,1344,1728,1342,1724,1364,1711,1390,1688,1412,1661,1448,1600,1473,1541,1488,1493"/>
+<area shape="rect" id="Node000054" href="$d9/dba/a02278.html#aa728469bd8e826b18eb6c1d6e8913bf3" title="Sets given value to big endian." alt="" coords="1165,1775,1351,1801"/>
+<area shape="poly" id="edge55_Node000001_Node000054" title=" " alt="" coords="1496,1495,1484,1552,1460,1625,1443,1663,1422,1700,1397,1735,1367,1765,1346,1777,1343,1773,1364,1761,1393,1731,1418,1697,1439,1661,1455,1623,1479,1550,1491,1494"/>
+<area shape="rect" id="Node000055" href="$d9/dba/a02278.html#a241973c9a831e044ed17e61d46d1c4b7" title="Sets given value to big endian." alt="" coords="1165,1825,1351,1850"/>
+<area shape="poly" id="edge56_Node000001_Node000055" title=" " alt="" coords="1498,1495,1489,1560,1467,1646,1450,1692,1428,1737,1401,1778,1367,1814,1347,1827,1344,1822,1364,1810,1397,1775,1424,1734,1445,1690,1462,1645,1483,1559,1493,1494"/>
+<area shape="rect" id="Node000056" href="$d9/dba/a02278.html#a690e921dba7f5c14fee703d89de7565c" title="Sets given value to big endian." alt="" coords="1165,1874,1351,1899"/>
+<area shape="poly" id="edge57_Node000001_Node000056" title=" " alt="" coords="1499,1495,1493,1568,1474,1667,1457,1721,1434,1773,1405,1821,1367,1863,1348,1876,1345,1872,1364,1859,1400,1818,1430,1770,1452,1719,1469,1666,1488,1567,1494,1494"/>
+<area shape="rect" id="Node000057" href="$d9/dba/a02278.html#a41332c78f59210d8b68f9eb33e202c6c" title="Sets given value to big endian." alt="" coords="1165,1923,1351,1949"/>
+<area shape="poly" id="edge58_Node000001_Node000057" title=" " alt="" coords="1501,1495,1497,1576,1491,1630,1480,1688,1464,1749,1440,1809,1408,1864,1367,1913,1349,1925,1346,1921,1364,1909,1404,1861,1435,1806,1459,1747,1475,1687,1486,1629,1492,1575,1495,1494"/>
+<area shape="rect" id="Node000058" href="$d9/dba/a02278.html#ab8a87dce63a0ebba4c5f454eea27e7a5" title="Sets given value to big endian." alt="" coords="1165,1973,1351,1998"/>
+<area shape="poly" id="edge59_Node000001_Node000058" title=" " alt="" coords="1496,1495,1481,1597,1453,1737,1435,1808,1415,1873,1392,1926,1367,1962,1349,1975,1346,1970,1363,1958,1388,1923,1410,1871,1430,1807,1448,1736,1475,1596,1491,1494"/>
+<area shape="rect" id="Node000059" href="$d9/dba/a02278.html#a83d5b33dc01843598fc318d243ea8136" title="Sets given value to big endian." alt="" coords="1165,2022,1351,2047"/>
+<area shape="poly" id="edge60_Node000001_Node000059" title=" " alt="" coords="1497,1495,1483,1606,1457,1761,1439,1840,1418,1912,1394,1971,1367,2011,1349,2024,1346,2020,1363,2007,1390,1969,1413,1910,1434,1839,1451,1760,1478,1605,1492,1494"/>
+<area shape="rect" id="Node000060" href="$d9/dba/a02278.html#a770ba5e8e6c80ebb02e90284327877d0" title="Sets given value to big endian." alt="" coords="1165,2071,1351,2097"/>
+<area shape="poly" id="edge61_Node000001_Node000060" title=" " alt="" coords="1498,1495,1485,1615,1460,1785,1442,1872,1421,1951,1396,2016,1382,2041,1367,2061,1350,2073,1346,2069,1363,2057,1378,2038,1391,2014,1416,1950,1437,1871,1455,1784,1480,1615,1492,1494"/>
+<area shape="rect" id="Node000061" href="$d2/dd2/a02279.html#a19e109447afe72b8a1ad068cadba3627" title="Convert from little or big endian to the other." alt="" coords="1173,2121,1343,2146"/>
+<area shape="poly" id="edge62_Node000001_Node000061" title=" " alt="" coords="1498,1495,1487,1624,1463,1809,1446,1904,1424,1990,1398,2061,1383,2089,1367,2110,1345,2125,1342,2121,1363,2106,1379,2086,1393,2059,1419,1989,1440,1903,1458,1808,1482,1624,1493,1494"/>
+<area shape="rect" id="Node000062" href="$d2/dd2/a02279.html#ac0cf5e2146e104e8894be5b10788327f" title="Convert the given value to big endian if needed." alt="" coords="1167,2171,1349,2211"/>
+<area shape="poly" id="edge63_Node000001_Node000062" title=" " alt="" coords="1498,1495,1488,1633,1464,1831,1447,1934,1425,2028,1399,2105,1384,2136,1367,2159,1351,2173,1348,2169,1363,2156,1379,2133,1394,2103,1420,2026,1442,1933,1459,1831,1482,1632,1493,1495"/>
+<area shape="rect" id="Node000063" href="$d2/dd2/a02279.html#a54e460b822ffcf0964269a724df7a7b6" title="Convert the given value to big endian if needed." alt="" coords="1167,2235,1349,2275"/>
+<area shape="poly" id="edge64_Node000001_Node000063" title=" " alt="" coords="1499,1495,1490,1644,1469,1862,1452,1976,1429,2079,1402,2165,1385,2199,1367,2224,1351,2238,1348,2234,1363,2221,1381,2196,1397,2163,1424,2078,1446,1975,1463,1862,1485,1643,1494,1494"/>
+<area shape="rect" id="Node000064" href="$d2/dd2/a02279.html#a93e72f9c39ce923c9393d4f6df336175" title="Convert the given value to big endian if needed." alt="" coords="1167,2299,1349,2339"/>
+<area shape="poly" id="edge65_Node000001_Node000064" title=" " alt="" coords="1499,1495,1492,1655,1472,1893,1456,2016,1433,2130,1404,2224,1387,2260,1367,2288,1351,2302,1348,2298,1363,2285,1382,2258,1399,2222,1428,2129,1450,2015,1467,1892,1487,1655,1494,1495"/>
+<area shape="rect" id="Node000065" href="$d2/dd2/a02279.html#ad58701f180fdf6d8fc87eb0948a6fa0b" title="Convert the given value to big endian if needed." alt="" coords="1167,2363,1349,2403"/>
+<area shape="poly" id="edge66_Node000001_Node000065" title=" " alt="" coords="1500,1494,1495,1665,1488,1788,1476,1922,1460,2056,1437,2180,1406,2282,1388,2322,1367,2352,1351,2366,1348,2362,1363,2349,1383,2319,1401,2280,1432,2179,1454,2056,1471,1922,1482,1788,1489,1665,1494,1494"/>
+<area shape="rect" id="Node000066" href="$d2/dd2/a02279.html#ab4a7ba77cba814168c8a81b26370ff7e" title="Convert the given value to big endian if needed." alt="" coords="1167,2427,1349,2467"/>
+<area shape="poly" id="edge67_Node000001_Node000066" title=" " alt="" coords="1500,1494,1497,1676,1490,1809,1480,1953,1464,2097,1440,2230,1426,2289,1409,2341,1389,2383,1367,2416,1351,2430,1348,2426,1363,2413,1385,2381,1404,2339,1421,2287,1435,2229,1458,2096,1475,1952,1485,1808,1491,1676,1495,1494"/>
+<area shape="rect" id="Node000067" href="$d2/dd2/a02279.html#ae57ba897bf67e8d944d1bac129d1482e" title="Convert the given value to big endian if needed." alt="" coords="1167,2491,1349,2531"/>
+<area shape="poly" id="edge68_Node000001_Node000067" title=" " alt="" coords="1500,1494,1498,1687,1493,1828,1484,1983,1468,2138,1444,2280,1429,2344,1411,2399,1391,2445,1367,2480,1351,2494,1348,2490,1363,2477,1386,2442,1406,2397,1424,2342,1439,2279,1462,2137,1478,1982,1488,1828,1493,1687,1495,1494"/>
+<area shape="rect" id="Node000068" href="$d2/dd2/a02279.html#adee39e32672cf37d66d46ed2f9f2ea88" title="Convert the given value to little endian if needed." alt="" coords="1163,2555,1353,2595"/>
+<area shape="poly" id="edge69_Node000001_Node000068" title=" " alt="" coords="1501,1495,1500,1698,1496,1848,1487,2013,1472,2178,1448,2331,1432,2398,1414,2457,1392,2507,1367,2544,1354,2557,1350,2553,1363,2541,1387,2504,1409,2455,1427,2397,1442,2330,1466,2178,1482,2013,1491,1848,1495,1698,1495,1495"/>
+<area shape="rect" id="Node000069" href="$d2/dd2/a02279.html#aabc86afcfc7ad13fa8c773f03ef3ff87" title="Convert the given value to little endian if needed." alt="" coords="1163,2619,1353,2659"/>
+<area shape="poly" id="edge70_Node000001_Node000069" title=" " alt="" coords="1499,1494,1485,1724,1458,2078,1440,2259,1418,2419,1394,2541,1381,2582,1367,2608,1354,2621,1350,2617,1363,2605,1376,2580,1389,2539,1413,2418,1434,2258,1453,2078,1480,1724,1493,1494"/>
+<area shape="rect" id="Node000070" href="$d2/dd2/a02279.html#a192cd4b3e742a0e1f059c9edb4f63f1f" title="Convert the given value to little endian if needed." alt="" coords="1163,2683,1353,2723"/>
+<area shape="poly" id="edge71_Node000001_Node000070" title=" " alt="" coords="1499,1494,1486,1736,1460,2110,1442,2302,1420,2471,1396,2601,1382,2645,1367,2672,1354,2685,1350,2681,1363,2669,1377,2643,1390,2599,1415,2470,1436,2301,1454,2110,1481,1735,1494,1494"/>
+<area shape="rect" id="Node000071" href="$d2/dd2/a02279.html#a50871386c7d4679ca8d126622cb2c6a7" title="Convert the given value to little endian if needed." alt="" coords="1163,2747,1353,2787"/>
+<area shape="poly" id="edge72_Node000001_Node000071" title=" " alt="" coords="1499,1495,1487,1748,1462,2143,1444,2345,1422,2524,1397,2661,1383,2707,1367,2736,1354,2749,1350,2745,1363,2733,1378,2705,1392,2659,1417,2523,1438,2344,1456,2142,1482,1747,1494,1494"/>
+<area shape="rect" id="Node000072" href="$d2/dd2/a02279.html#a6a6ec649b211de12f8945624e1f29933" title="Convert the given value to little endian if needed." alt="" coords="1163,2811,1353,2851"/>
+<area shape="poly" id="edge73_Node000001_Node000072" title=" " alt="" coords="1499,1495,1488,1759,1464,2175,1446,2388,1424,2576,1398,2721,1383,2770,1367,2800,1354,2813,1350,2809,1363,2797,1378,2768,1393,2719,1419,2576,1440,2387,1458,2174,1483,1759,1494,1495"/>
+<area shape="rect" id="Node000073" href="$d2/dd2/a02279.html#ab3cacbf0e52675c7dfcf46aec7b8a083" title="Convert the given value to little endian if needed." alt="" coords="1163,2875,1353,2915"/>
+<area shape="poly" id="edge74_Node000001_Node000073" title=" " alt="" coords="1499,1495,1489,1771,1465,2207,1448,2430,1426,2629,1399,2780,1384,2832,1367,2864,1354,2877,1350,2873,1363,2861,1379,2830,1394,2779,1420,2628,1442,2430,1460,2206,1484,1771,1494,1495"/>
+<area shape="rect" id="Node000025" href="$d9/dba/a02278.html#ac8fd79a65bf3d510536e2f77797a5df7" title="Prepares chunk data for read/write." alt="" coords="908,1282,1103,1307"/>
+<area shape="poly" id="edge24_Node000024_Node000025" title=" " alt="" coords="1151,1297,1103,1297,1103,1292,1151,1292"/>
+<area shape="rect" id="Node000026" href="$d0/d87/a03399.html#ad15c5a1f67d963aaebd202df3e903042" title="Retrieves a value from a chunk." alt="" coords="705,1179,860,1219"/>
+<area shape="poly" id="edge25_Node000025_Node000026" title=" " alt="" coords="962,1279,859,1233,831,1221,833,1216,861,1228,965,1274"/>
+<area shape="rect" id="Node000027" href="$d0/d87/a03399.html#a51aa9cc211a27e96cdfbdb431808cc8f" title="Retrieves a value array from a chunk." alt="" coords="705,1243,860,1283"/>
+<area shape="poly" id="edge26_Node000025_Node000027" title=" " alt="" coords="902,1283,860,1276,861,1271,903,1277"/>
+<area shape="rect" id="Node000035" href="$d0/d4b/a03415.html#a9d1fa6f341bb8c14ae9a7c2c1bfb184b" title="Writes a subchunk value into a chunk." alt="" coords="707,1307,859,1347"/>
+<area shape="poly" id="edge35_Node000025_Node000035" title=" " alt="" coords="903,1312,859,1318,858,1313,903,1307"/>
+<area shape="rect" id="Node000036" href="$d0/d4b/a03415.html#ac4cf51584e348def2f360b81e6ec7a9a" title="Writes a subchunk value into a chunk." alt="" coords="707,1531,859,1571"/>
+<area shape="poly" id="edge36_Node000025_Node000036" title=" " alt="" coords="986,1320,803,1532,799,1529,982,1316"/>
+<area shape="rect" id="Node000028" href="$dd/de1/a03223.html#a007cca0b880e3de8b5e7200a74050262" title="Retrieves a value array from a chunk." alt="" coords="472,1083,657,1123"/>
+<area shape="poly" id="edge27_Node000027_Node000028" title=" " alt="" coords="708,1237,703,1232,686,1207,679,1183,673,1160,655,1137,639,1125,642,1121,659,1133,677,1157,684,1182,691,1205,707,1229,712,1233"/>
+<area shape="rect" id="Node000029" href="$dd/de1/a03223.html#acf26569183c5eefb4870b38087e0de55" title="Retrieves a value array from a chunk." alt="" coords="472,1147,657,1187"/>
+<area shape="poly" id="edge28_Node000027_Node000029" title=" " alt="" coords="717,1239,704,1233,680,1217,656,1201,629,1189,631,1184,659,1196,683,1212,707,1228,719,1235"/>
+<area shape="rect" id="Node000030" href="$dd/de1/a03223.html#a5fac84360102001f5e730be1927c024e" title="Retrieves a value from a chunk." alt="" coords="472,1211,657,1251"/>
+<area shape="poly" id="edge29_Node000027_Node000030" title=" " alt="" coords="691,1252,657,1247,658,1242,692,1247"/>
+<area shape="rect" id="Node000031" href="$dd/de1/a03223.html#a0e1aa917e3bf897fab03a32d20890062" title="Retrieves a value array from a chunk." alt="" coords="472,1275,657,1315"/>
+<area shape="poly" id="edge30_Node000027_Node000031" title=" " alt="" coords="692,1279,658,1284,657,1278,691,1273"/>
+<area shape="rect" id="Node000034" href="$dd/de1/a03223.html#a22ca62addb3ab167995e18f49267efcf" title="Retrieves a value array from a chunk." alt="" coords="472,1339,657,1379"/>
+<area shape="poly" id="edge34_Node000027_Node000034" title=" " alt="" coords="719,1291,707,1297,683,1313,659,1329,631,1341,629,1336,656,1324,680,1309,704,1292,717,1286"/>
+<area shape="rect" id="Node000032" href="$dd/de1/a03223.html#a035881aba2b64571b30a5efd3faaf3d9" title="Parses the header chunk." alt="" coords="239,1275,424,1315"/>
+<area shape="poly" id="edge31_Node000031_Node000032" title=" " alt="" coords="458,1297,424,1297,424,1292,458,1292"/>
+<area shape="rect" id="Node000033" href="$dd/de1/a03223.html#a5db83668684ca219f67de3a381898e64" title="From file reader function." alt="" coords="5,1275,191,1315"/>
+<area shape="poly" id="edge32_Node000032_Node000033" title=" " alt="" coords="225,1297,191,1297,191,1292,225,1292"/>
+<area shape="poly" id="edge33_Node000033_Node000033" title=" " alt="" coords="137,1263,124,1256,98,1253,76,1255,62,1260,57,1266,60,1274,55,1275,52,1265,59,1256,74,1250,98,1248,125,1251,140,1258"/>
+<area shape="rect" id="Node000037" href="$d4/d9c/a03231.html#a1cf5e80f4e1564a6fd090a607ba1b033" title="Writes a subchunk value into a chunk." alt="" coords="473,1403,656,1443"/>
+<area shape="poly" id="edge37_Node000036_Node000037" title=" " alt="" coords="748,1524,706,1489,656,1457,630,1445,633,1440,659,1452,709,1485,751,1520"/>
+<area shape="rect" id="Node000038" href="$d4/d9c/a03231.html#a5c34d6366fb3a830b669fe7116e52043" title="Writes a subchunk value into a chunk." alt="" coords="473,1467,656,1507"/>
+<area shape="poly" id="edge38_Node000036_Node000038" title=" " alt="" coords="700,1529,633,1509,634,1504,702,1524"/>
+<area shape="rect" id="Node000039" href="$d4/d9c/a03231.html#a7bdb655caf767fdde8a4267602e06191" title="Writes a subchunk value into a chunk." alt="" coords="473,1531,656,1571"/>
+<area shape="poly" id="edge39_Node000036_Node000039" title=" " alt="" coords="693,1553,656,1553,656,1548,693,1548"/>
+<area shape="rect" id="Node000040" href="$d4/d9c/a03231.html#a3bd1cb047e1f2872668a4397496bd7c4" title="Writes a subchunk value into a chunk." alt="" coords="473,1595,656,1635"/>
+<area shape="poly" id="edge40_Node000036_Node000040" title=" " alt="" coords="702,1577,634,1597,633,1592,700,1572"/>
+<area shape="rect" id="Node000041" href="$d4/d9c/a03231.html#a95685db95521fe46169767620976688c" title="Writes a subchunk value into a chunk." alt="" coords="473,1659,656,1699"/>
+<area shape="poly" id="edge41_Node000036_Node000041" title=" " alt="" coords="751,1582,709,1616,659,1649,633,1661,630,1656,656,1644,706,1612,748,1578"/>
+<area shape="rect" id="Node000044" href="$d4/d9c/a03231.html#ac978d1019caf2d37ad181911c78dde33" title="Writes a subchunk value into a chunk." alt="" coords="473,1723,656,1763"/>
+<area shape="poly" id="edge45_Node000036_Node000044" title=" " alt="" coords="766,1584,723,1649,693,1683,659,1713,638,1725,636,1720,656,1708,689,1679,719,1646,762,1581"/>
+<area shape="rect" id="Node000042" href="$d4/d9c/a03231.html#a8828d359b7a61ea2b657d5aada2dd87b" title="Writes the header chunk." alt="" coords="240,1659,423,1699"/>
+<area shape="poly" id="edge42_Node000041_Node000042" title=" " alt="" coords="459,1681,423,1681,423,1676,459,1676"/>
+<area shape="rect" id="Node000043" href="$d4/d9c/a03231.html#a21e7985d2f99ff20a6056d198aac07c5" title="Writes an object to a file." alt="" coords="7,1659,189,1699"/>
+<area shape="poly" id="edge43_Node000042_Node000043" title=" " alt="" coords="226,1681,190,1681,190,1676,226,1676"/>
+<area shape="poly" id="edge44_Node000043_Node000043" title=" " alt="" coords="137,1647,124,1640,98,1637,76,1639,62,1644,57,1650,60,1658,55,1659,52,1649,59,1640,74,1634,98,1632,125,1635,140,1642"/>
+</map>

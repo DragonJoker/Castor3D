@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/de3/a09403" kind="struct" language="C++" prot="public">
+    <compoundname>castor::hashcomb::HashCombinerT&lt; HashT, std::enable_if_t&lt; std::is_same_v&lt; HashT, uint64_t &gt; &gt; &gt;</compoundname>
+    <includes local="no">Hash.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename HashT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="da/de3/a09403_1a67fc70345bd678ec918ed08f49b8167c" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>HashT</type>
+        <definition>static HashT castor::hashcomb::HashCombinerT&lt; HashT, std::enable_if_t&lt; std::is_same_v&lt; HashT, uint64_t &gt; &gt; &gt;::combine</definition>
+        <argsstring>(HashT &amp;hash, T const &amp;rhs)</argsstring>
+        <name>combine</name>
+        <qualifiedname>castor::hashcomb::HashCombinerT&lt; HashT, std::enable_if_t&lt; std::is_same_v&lt; HashT, uint64_t &gt; &gt; &gt;::combine</qualifiedname>
+        <param>
+          <type>HashT &amp;</type>
+          <declname>hash</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Hash.hpp" line="115" column="14" bodyfile="CastorUtils/Miscellaneous/Hash.hpp" bodystart="115" bodyend="118"/>
+        <references refid="d2/dd2/a02279_1a126d45fec9687f3742d40ae9f5e90c8a" compoundref="dd/d14/a02201" startline="35" endline="50">castor::hashCombine64</references>
+      </memberdef>
+      <memberdef kind="function" id="da/de3/a09403_1acacbd250fda52207134b23d00974d664" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>HashT</type>
+        <definition>static HashT castor::hashcomb::HashCombinerT&lt; HashT, std::enable_if_t&lt; std::is_same_v&lt; HashT, uint64_t &gt; &gt; &gt;::combinePtr</definition>
+        <argsstring>(HashT &amp;hash, T const &amp;rhs)</argsstring>
+        <name>combinePtr</name>
+        <qualifiedname>castor::hashcomb::HashCombinerT&lt; HashT, std::enable_if_t&lt; std::is_same_v&lt; HashT, uint64_t &gt; &gt; &gt;::combinePtr</qualifiedname>
+        <param>
+          <type>HashT &amp;</type>
+          <declname>hash</declname>
+        </param>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Miscellaneous/Hash.hpp" line="121" column="14" bodyfile="CastorUtils/Miscellaneous/Hash.hpp" bodystart="121" bodyend="124"/>
+        <references refid="d2/dd2/a02279_1aacbab472d52d569f46859fcb543deb10" compoundref="dd/d14/a02201" startline="53" endline="68">castor::hashCombinePtr64</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Miscellaneous/Hash.hpp" line="112" column="1" bodyfile="CastorUtils/Miscellaneous/Hash.hpp" bodystart="113" bodyend="125"/>
+    <listofallmembers>
+      <member refid="da/de3/a09403_1a67fc70345bd678ec918ed08f49b8167c" prot="public" virt="non-virtual"><scope>castor::hashcomb::HashCombinerT&lt; HashT, std::enable_if_t&lt; std::is_same_v&lt; HashT, uint64_t &gt; &gt; &gt;</scope><name>combine</name></member>
+      <member refid="da/de3/a09403_1acacbd250fda52207134b23d00974d664" prot="public" virt="non-virtual"><scope>castor::hashcomb::HashCombinerT&lt; HashT, std::enable_if_t&lt; std::is_same_v&lt; HashT, uint64_t &gt; &gt; &gt;</scope><name>combinePtr</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

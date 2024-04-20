@@ -1,0 +1,1308 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d3e/a08939" kind="class" language="C++" prot="public">
+    <compoundname>castor::Image</compoundname>
+    <basecompoundref refid="d5/d3c/a08223" prot="public" virt="non-virtual">castor::NamedBaseT&lt; String &gt;</basecompoundref>
+    <includes local="no">Image.hpp</includes>
+    <sectiondef kind="user-defined">
+      <header>Construction/Destruction.</header>
+      <memberdef kind="function" id="d6/d3e/a08939_1a8fb8d1a0484faa33c4e5eb8c07d394a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Image::Image</definition>
+        <argsstring>(String const &amp;name, Path const &amp;path, Size const &amp;size, PixelFormat format, ByteArray const &amp;buffer, PixelFormat bufferFormat)</argsstring>
+        <name>Image</name>
+        <qualifiedname>castor::Image::Image</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>format</declname>
+        </param>
+        <param>
+          <type>ByteArray const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>bufferFormat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="30" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a47fb1016672c7f229ef81ead268346a2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Image::Image</definition>
+        <argsstring>(String const &amp;name, Path const &amp;path, Size const &amp;size, PixelFormat format=PixelFormat::eR8G8B8A8_UNORM, uint8_t const *buffer=nullptr, PixelFormat bufferFormat=PixelFormat::eR8G8B8A8_UNORM)</argsstring>
+        <name>Image</name>
+        <qualifiedname>castor::Image::Image</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>format</declname>
+          <defval>PixelFormat::eR8G8B8A8_UNORM</defval>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>buffer</declname>
+          <defval>nullptr</defval>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>bufferFormat</declname>
+          <defval>PixelFormat::eR8G8B8A8_UNORM</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="36" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a340b5841767afb88d9723cb0d7de0087" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Image::Image</definition>
+        <argsstring>(String const &amp;name, Path const &amp;path, PxBufferBase const &amp;buffer)</argsstring>
+        <name>Image</name>
+        <qualifiedname>castor::Image::Image</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="42" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1ad2c74e40661fd7a09df502a2ca8a15c9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Image::Image</definition>
+        <argsstring>(String const &amp;name, Path const &amp;path, ImageLayout layout, PxBufferBaseUPtr buffer=nullptr)</argsstring>
+        <name>Image</name>
+        <qualifiedname>castor::Image::Image</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d6e/a08955" kindref="compound">ImageLayout</ref></type>
+          <declname>layout</declname>
+        </param>
+        <param>
+          <type>PxBufferBaseUPtr</type>
+          <declname>buffer</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="45" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1afd56f5182544f4090dc4ae279a3a2359" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+            <declname>PFSrc</declname>
+            <defname>PFSrc</defname>
+          </param>
+          <param>
+            <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+            <declname>PFDst</declname>
+            <defname>PFDst</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::Image::Image</definition>
+        <argsstring>(String name, Path path, Size const &amp;size, uint8_t const *buffer=nullptr)</argsstring>
+        <name>Image</name>
+        <qualifiedname>castor::Image::Image</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref></type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>buffer</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="50" column="1" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="50" bodyend="59"/>
+        <references refid="df/dd8/a01943_1abda6eea530e5422c00087d75a449b0b4" compoundref="df/dd8/a01943" startline="43">CU_CheckInvariants</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a330b40ba8cb351794257b73de24c3b64" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Image::Image</definition>
+        <argsstring>(String const &amp;name, Size const &amp;size, PixelFormat format, uint8_t const *buffer, PixelFormat bufferFormat)</argsstring>
+        <name>Image</name>
+        <qualifiedname>castor::Image::Image</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>format</declname>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>bufferFormat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="61" column="1" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="61" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1ac317ea52d8565c88debec32067fec6d7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Image::Image</definition>
+        <argsstring>(String const &amp;name, Size const &amp;size, PixelFormat format, ByteArray const &amp;buffer, PixelFormat bufferFormat)</argsstring>
+        <name>Image</name>
+        <qualifiedname>castor::Image::Image</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>format</declname>
+        </param>
+        <param>
+          <type>ByteArray const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>bufferFormat</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="70" column="1" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="70" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a0125115923fb88d92f55b171dca1169f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Image::Image</definition>
+        <argsstring>(String const &amp;name, PxBufferBase const &amp;buffer)</argsstring>
+        <name>Image</name>
+        <qualifiedname>castor::Image::Image</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="79" column="1" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="79" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1aac2b58723308d62b0ed868204cf94f35" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Image::Image</definition>
+        <argsstring>(String const &amp;name, ImageLayout layout, PxBufferBaseUPtr buffer)</argsstring>
+        <name>Image</name>
+        <qualifiedname>castor::Image::Image</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d6e/a08955" kindref="compound">ImageLayout</ref></type>
+          <declname>layout</declname>
+        </param>
+        <param>
+          <type>PxBufferBaseUPtr</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="85" column="1" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="85" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a16d83b8b160a656c84aeff4d80bc9e39" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>virtual CU_API castor::Image::~Image</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~Image</name>
+        <qualifiedname>castor::Image::~Image</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="93" column="16"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <header>Copy/Move.</header>
+      <memberdef kind="function" id="d6/d3e/a08939_1aaa777d19c273f4e2c2ee997d588ff415" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Image::Image</definition>
+        <argsstring>(Image const &amp;image)</argsstring>
+        <name>Image</name>
+        <qualifiedname>castor::Image::Image</qualifiedname>
+        <param>
+          <type><ref refid="d6/d3e/a08939" kindref="compound">Image</ref> const &amp;</type>
+          <declname>image</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="99" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a75cb8ec69bc77d2b54b9078615b99ccc" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Image::Image</definition>
+        <argsstring>(Image &amp;&amp;image) noexcept=default</argsstring>
+        <name>Image</name>
+        <qualifiedname>castor::Image::Image</qualifiedname>
+        <param>
+          <type><ref refid="d6/d3e/a08939" kindref="compound">Image</ref> &amp;&amp;</type>
+          <declname>image</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="100" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1ae13dba1fbf9a4ad8c8de418d724bd3bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/d3e/a08939" kindref="compound">Image</ref> &amp;</type>
+        <definition>CU_API Image &amp; castor::Image::operator=</definition>
+        <argsstring>(Image const &amp;image)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Image::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d6/d3e/a08939" kindref="compound">Image</ref> const &amp;</type>
+          <declname>image</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="101" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a941588a42f19d6c00a4c491dacfef8a4" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/d3e/a08939" kindref="compound">Image</ref> &amp;</type>
+        <definition>CU_API Image &amp; castor::Image::operator=</definition>
+        <argsstring>(Image &amp;&amp;image) noexcept=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Image::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d6/d3e/a08939" kindref="compound">Image</ref> &amp;&amp;</type>
+          <declname>image</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="102" column="15"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <header>Modification.</header>
+      <memberdef kind="function" id="d6/d3e/a08939_1aa05335dfc0d079c7f5c2ab2b0dd7fcbd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> PxBufferBaseUPtr</type>
+        <definition>CU_API PxBufferBaseUPtr castor::Image::updateLayerLayout</definition>
+        <argsstring>(Size const &amp;extent, PixelFormat format)</argsstring>
+        <name>updateLayerLayout</name>
+        <qualifiedname>castor::Image::updateLayerLayout</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>extent</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>format</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="108" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a7063ae99fe3edec3842acec68732cf2e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/d3e/a08939" kindref="compound">Image</ref> &amp;</type>
+        <definition>CU_API Image &amp; castor::Image::resample</definition>
+        <argsstring>(Size const &amp;size)</argsstring>
+        <name>resample</name>
+        <qualifiedname>castor::Image::resample</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Redimensionne l&apos;image à la résolution donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La nouvelle résolution </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La référence de l&apos;image </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="121" column="15"/>
+        <referencedby refid="d6/d3e/a08939_1a0913bdcd5206474b08460f5dc8ea94bd" compoundref="d8/db2/a11726" startline="133" endline="138">getResampled</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a0913bdcd5206474b08460f5dc8ea94bd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/d3e/a08939" kindref="compound">Image</ref></type>
+        <definition>CU_API Image castor::Image::getResampled</definition>
+        <argsstring>(Size const &amp;size) const</argsstring>
+        <name>getResampled</name>
+        <qualifiedname>castor::Image::getResampled</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Redimensionne l&apos;image à la résolution donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La nouvelle résolution </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La référence de l&apos;image </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="133" column="14" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="133" bodyend="138"/>
+        <references refid="d6/d3e/a08939_1a7063ae99fe3edec3842acec68732cf2e">resample</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a6d280f89042edad4ef5768a9c8ac5f7f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/d3e/a08939" kindref="compound">Image</ref> &amp;</type>
+        <definition>CU_API Image &amp; castor::Image::fill</definition>
+        <argsstring>(RgbColour const &amp;colour)</argsstring>
+        <name>fill</name>
+        <qualifiedname>castor::Image::fill</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a4425e82836c5b73c4c0276ceeca8d663" kindref="member">RgbColour</ref> const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Remplit tous les pixels de l&apos;image avec la couleur donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La couleur de remplissage </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La référence de l&apos;image </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="151" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1aef78751392ac814db2a76dba25395b3b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/d3e/a08939" kindref="compound">Image</ref> &amp;</type>
+        <definition>CU_API Image &amp; castor::Image::fill</definition>
+        <argsstring>(RgbaColour const &amp;colour)</argsstring>
+        <name>fill</name>
+        <qualifiedname>castor::Image::fill</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a0248f41072abe76e8ae264325ea85a18" kindref="member">RgbaColour</ref> const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Remplit tous les pixels de l&apos;image avec la couleur donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La couleur de remplissage </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La référence de l&apos;image </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="162" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a71b4882c3ae8d4db7aa610f89ca28a91" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/d3e/a08939" kindref="compound">Image</ref> &amp;</type>
+        <definition>CU_API Image &amp; castor::Image::setPixel</definition>
+        <argsstring>(uint32_t x, uint32_t y, uint8_t const *pixel, PixelFormat format)</argsstring>
+        <name>setPixel</name>
+        <qualifiedname>castor::Image::setPixel</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>pixel</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>format</declname>
+        </param>
+        <briefdescription>
+<para>Remplit le pixel demandé avec le buffer donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les coordonnées du pixel </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pixel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le buffer </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">format</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le format de pixel du tampon </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La référence de l&apos;image </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="177" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a34128485c1483cbcf9d3725b4939abd8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/d3e/a08939" kindref="compound">Image</ref> &amp;</type>
+        <definition>CU_API Image &amp; castor::Image::setPixel</definition>
+        <argsstring>(uint32_t x, uint32_t y, RgbColour const &amp;colour)</argsstring>
+        <name>setPixel</name>
+        <qualifiedname>castor::Image::setPixel</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a4425e82836c5b73c4c0276ceeca8d663" kindref="member">RgbColour</ref> const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Définit la couleur du pixel demandé </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les coordonnées du pixel </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La couleur </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La référence de l&apos;image </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="193" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a1029ad1a0043038e7802ef005e0fc02e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/d3e/a08939" kindref="compound">Image</ref> &amp;</type>
+        <definition>CU_API Image &amp; castor::Image::setPixel</definition>
+        <argsstring>(uint32_t x, uint32_t y, RgbaColour const &amp;colour)</argsstring>
+        <name>setPixel</name>
+        <qualifiedname>castor::Image::setPixel</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a0248f41072abe76e8ae264325ea85a18" kindref="member">RgbaColour</ref> const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+<para>Définit la couleur du pixel demandé </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les coordonnées du pixel </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La couleur </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La référence de l&apos;image </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="208" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a2400872daee7da8743aee1a2bdc92d5f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+            <declname>PF</declname>
+            <defname>PF</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d6/d3e/a08939" kindref="compound">Image</ref> &amp;</type>
+        <definition>Image &amp; castor::Image::setPixel</definition>
+        <argsstring>(uint32_t x, uint32_t y, Pixel&lt; PF &gt; const &amp;pixel)</argsstring>
+        <name>setPixel</name>
+        <qualifiedname>castor::Image::setPixel</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d41/a08799" kindref="compound">Pixel</ref>&lt; PF &gt; const &amp;</type>
+          <declname>pixel</declname>
+        </param>
+        <briefdescription>
+<para>Définit le pixel demandé avec le pixel donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">x</parametername>
+<parametername direction="in">y</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les coordonnées du pixel </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pixel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le pixel </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>La référence de l&apos;image </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="224" column="8" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="224" bodyend="233"/>
+        <references refid="d2/dd2/a02279_1a42176b2179597d8c9d283d157989c3b1">castor::convertPixel</references>
+        <references refid="df/dd8/a01943_1abda6eea530e5422c00087d75a449b0b4" compoundref="df/dd8/a01943" startline="43">CU_CheckInvariants</references>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+        <references refid="d2/dd2/a02279_1a10d4ece63337492ff2696a137ddc6289">castor::getPixelFormat</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a1746b73dd21818e665c224c6c324f624" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d6/d3e/a08939" kindref="compound">Image</ref> &amp;</type>
+        <definition>CU_API Image &amp; castor::Image::flip</definition>
+        <argsstring>()</argsstring>
+        <name>flip</name>
+        <qualifiedname>castor::Image::flip</qualifiedname>
+        <briefdescription>
+<para>Retourne verticalement l&apos;image. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La référence de l&apos;image </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="242" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a6edee1090b48561aa5ad2c7ab8460eed" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::Image::getLevels</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getLevels</name>
+        <qualifiedname>castor::Image::getLevels</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Accesseurs. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="252" column="10" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="252" bodyend="255"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a7f578c7bafd0bb636a8d543eb88cf6e4" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref></type>
+        <definition>Size castor::Image::getDimensions</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getDimensions</name>
+        <qualifiedname>castor::Image::getDimensions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="257" column="6" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="257" bodyend="260"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a9e4bd4d7873c4d93fc4e1b1e9714abb9" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>std::size_t</type>
+        <definition>std::size_t castor::Image::getSize</definition>
+        <argsstring>(uint32_t level=0u) const noexcept</argsstring>
+        <name>getSize</name>
+        <qualifiedname>castor::Image::getSize</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="262" column="13" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="262" bodyend="265"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1ab2b57145256b84e300e9871c301a326b" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::Image::getWidth</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getWidth</name>
+        <qualifiedname>castor::Image::getWidth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="267" column="10" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="267" bodyend="270"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1ad8c786df6a20253e93be26fdb310dbd2" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::Image::getHeight</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getHeight</name>
+        <qualifiedname>castor::Image::getHeight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="272" column="10" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="272" bodyend="275"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1aac2deb4047c96f90b20b8da0b24ece0d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref></type>
+        <definition>Path castor::Image::getPath</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getPath</name>
+        <qualifiedname>castor::Image::getPath</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="277" column="6" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="277" bodyend="280"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1ac2e22f1ba45001a00d3d434e34f2917e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955_1a5a7b41e3ac6db006ea4b7efb4de98613" kindref="member">ImageLayout::Buffer</ref></type>
+        <definition>ImageLayout::Buffer castor::Image::getBuffer</definition>
+        <argsstring>()</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor::Image::getBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="282" column="21" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="282" bodyend="287"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+        <references refid="d2/dd2/a02279_1ae0a3e7eea924d39ca155a1fb041d37df" compoundref="d9/d7d/a01880" startline="187" endline="193">castor::makeArrayView</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1ad7c966947eaffdb1f5885782243efb65" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955_1ac161cb8db198568600b0080fe54d5dfc" kindref="member">ImageLayout::ConstBuffer</ref></type>
+        <definition>ImageLayout::ConstBuffer castor::Image::getBuffer</definition>
+        <argsstring>() const</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor::Image::getBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="289" column="26" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="289" bodyend="294"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+        <references refid="d2/dd2/a02279_1ae0a3e7eea924d39ca155a1fb041d37df" compoundref="d9/d7d/a01880" startline="187" endline="193">castor::makeArrayView</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1abfe3e3617009f361d36322e01e512eaf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955_1a5a7b41e3ac6db006ea4b7efb4de98613" kindref="member">ImageLayout::Buffer</ref></type>
+        <definition>ImageLayout::Buffer castor::Image::getBuffer</definition>
+        <argsstring>(uint32_t index)</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor::Image::getBuffer</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="296" column="21" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="296" bodyend="300"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+        <references refid="d2/dd2/a02279_1a9e50e9a9f91e2b39c949b87c5fc5708e" compoundref="df/d52/a02027" startline="283" endline="288">castor::getLayerBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a13423eca41bfe21f8cbe02e8777294d4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955_1ac161cb8db198568600b0080fe54d5dfc" kindref="member">ImageLayout::ConstBuffer</ref></type>
+        <definition>ImageLayout::ConstBuffer castor::Image::getBuffer</definition>
+        <argsstring>(uint32_t index) const</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor::Image::getBuffer</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="302" column="26" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="302" bodyend="307"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+        <references refid="d2/dd2/a02279_1a9e50e9a9f91e2b39c949b87c5fc5708e" compoundref="df/d52/a02027" startline="283" endline="288">castor::getLayerBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1ac6028f643d5681ccc96b54a5a996240d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955_1a5a7b41e3ac6db006ea4b7efb4de98613" kindref="member">ImageLayout::Buffer</ref></type>
+        <definition>ImageLayout::Buffer castor::Image::getBuffer</definition>
+        <argsstring>(uint32_t index, uint32_t level)</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor::Image::getBuffer</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="309" column="21" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="309" bodyend="314"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+        <references refid="d2/dd2/a02279_1a53ad359a330e350507fe9ed0a9c182b6" compoundref="df/d52/a02027" startline="290" endline="296">castor::getLayerMipBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a734d8e7426a7f9ab0a188604de547f9c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955_1ac161cb8db198568600b0080fe54d5dfc" kindref="member">ImageLayout::ConstBuffer</ref></type>
+        <definition>ImageLayout::ConstBuffer castor::Image::getBuffer</definition>
+        <argsstring>(uint32_t index, uint32_t level) const</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor::Image::getBuffer</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="316" column="26" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="316" bodyend="322"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+        <references refid="d2/dd2/a02279_1a53ad359a330e350507fe9ed0a9c182b6" compoundref="df/d52/a02027" startline="290" endline="296">castor::getLayerMipBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a5313ae49a24d68d4966e9c5976a05da0" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::Image::hasBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>hasBuffer</name>
+        <qualifiedname>castor::Image::hasBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="324" column="6" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="324" bodyend="327"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a7d53270027c53f46862d1b08bdac134f" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+        <definition>PxBufferBase const  &amp; castor::Image::getPxBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getPxBuffer</name>
+        <qualifiedname>castor::Image::getPxBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="329" column="21" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="329" bodyend="333"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+        <referencedby refid="da/de7/a04983_1a59ccb52f9d2ffa193417353dc035e8fc" compoundref="dc/d91/a00659" startline="95" endline="98">castor3d::TextureSource::getBuffer</referencedby>
+        <referencedby refid="da/de7/a04983_1a31e7e897e27aef354577a90f3c68829c" compoundref="dc/d91/a00659" startline="100" endline="103">castor3d::TextureSource::getBuffer</referencedby>
+        <referencedby refid="da/de7/a04983_1a92b0445737701c4ac838aa8b4604bf09" compoundref="dc/d91/a00659" startline="90" endline="93">castor3d::TextureSource::hasBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a1d1bd3d343555d18f862a5a14beb0310" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> &amp;</type>
+        <definition>PxBufferBase &amp; castor::Image::getPxBuffer</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>getPxBuffer</name>
+        <qualifiedname>castor::Image::getPxBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="335" column="15" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="335" bodyend="339"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a09240f5afab71774fb7eeab7f49aba5e" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>PxBufferBaseRPtr</type>
+        <definition>PxBufferBaseRPtr castor::Image::getPixels</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getPixels</name>
+        <qualifiedname>castor::Image::getPixels</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="341" column="18" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="341" bodyend="344"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a2fdc716fe62e337fe1047d20e4c80346" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955" kindref="compound">ImageLayout</ref> const &amp;</type>
+        <definition>ImageLayout const  &amp; castor::Image::getLayout</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getLayout</name>
+        <qualifiedname>castor::Image::getLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="346" column="20" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="346" bodyend="349"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a90fe6926a964496c95ccf920982f8629" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955" kindref="compound">ImageLayout</ref> &amp;</type>
+        <definition>ImageLayout &amp; castor::Image::getLayout</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>getLayout</name>
+        <qualifiedname>castor::Image::getLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="351" column="14" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="351" bodyend="354"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1afc1bb3b3066b7cbf40ce0e6fd6b9f88a" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+        <definition>PixelFormat castor::Image::getPixelFormat</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getPixelFormat</name>
+        <qualifiedname>castor::Image::getPixelFormat</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="356" column="13" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="356" bodyend="359"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1ab79841df8fd9e0db37c06e559e9969fb" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Image::initialise</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor::Image::initialise</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="361" column="6" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="361" bodyend="363"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1ad908d34c798b7250734ab2fe4cff294a" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Image::cleanup</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor::Image::cleanup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="365" column="6" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="365" bodyend="367"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d3e/a08939_1a22f859d5e1d0d9dbc5824186ff66a45e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> PxBufferBaseUPtr</type>
+        <definition>static CU_API PxBufferBaseUPtr castor::Image::resample</definition>
+        <argsstring>(Size const &amp;size, PxBufferBaseUPtr buffer)</argsstring>
+        <name>resample</name>
+        <qualifiedname>castor::Image::resample</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>PxBufferBaseUPtr</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="139" column="32"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="d6/d3e/a08939_1ad564b94b59dc295de3dfc4415d95cca8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class Font</definition>
+        <argsstring></argsstring>
+        <name>Font</name>
+        <qualifiedname>castor::Image::Font</qualifiedname>
+        <param>
+          <type><ref refid="d0/dbd/a08755" kindref="compound">Font</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="21" column="14" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/d3e/a08939_1a47a6f15c12196f40009c2460b5ae3f09" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref></type>
+        <definition>Path castor::Image::m_pathFile</definition>
+        <argsstring></argsstring>
+        <name>m_pathFile</name>
+        <qualifiedname>castor::Image::m_pathFile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="371" column="6" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="371" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d3e/a08939_1ac4ef3c5a3d307128c0c58e0de8f74687" prot="private" static="no" mutable="no">
+        <type>PxBufferBaseUPtr</type>
+        <definition>PxBufferBaseUPtr castor::Image::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor::Image::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="372" column="18" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="372" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d3e/a08939_1a389847af08687a41315565e0d0ca2bf0" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d6e/a08955" kindref="compound">ImageLayout</ref></type>
+        <definition>ImageLayout castor::Image::m_layout</definition>
+        <argsstring></argsstring>
+        <name>m_layout</name>
+        <qualifiedname>castor::Image::m_layout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="373" column="13" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="373" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d6/d3e/a08939_1a01e8da50ad5e26f73d7ee28908fae03d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::Image::CU_DeclareInvariantBlock</definition>
+        <argsstring>()</argsstring>
+        <name>CU_DeclareInvariantBlock</name>
+        <qualifiedname>castor::Image::CU_DeclareInvariantBlock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Image.hpp" line="23" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="1">
+        <label>castor::Image</label>
+        <link refid="d6/d3e/a08939"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+      <node id="1">
+        <label>castor::Image</label>
+        <link refid="d6/d3e/a08939"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/Image.hpp" line="17" column="1" bodyfile="CastorUtils/Graphics/Image.hpp" bodystart="19" bodyend="374"/>
+    <listofallmembers>
+      <member refid="d6/d3e/a08939_1ad908d34c798b7250734ab2fe4cff294a" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>cleanup</name></member>
+      <member refid="d6/d3e/a08939_1a01e8da50ad5e26f73d7ee28908fae03d" prot="private" virt="non-virtual"><scope>castor::Image</scope><name>CU_DeclareInvariantBlock</name></member>
+      <member refid="d6/d3e/a08939_1a6d280f89042edad4ef5768a9c8ac5f7f" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>fill</name></member>
+      <member refid="d6/d3e/a08939_1aef78751392ac814db2a76dba25395b3b" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>fill</name></member>
+      <member refid="d6/d3e/a08939_1a1746b73dd21818e665c224c6c324f624" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>flip</name></member>
+      <member refid="d6/d3e/a08939_1ad564b94b59dc295de3dfc4415d95cca8" prot="private" virt="non-virtual"><scope>castor::Image</scope><name>Font</name></member>
+      <member refid="d6/d3e/a08939_1ac2e22f1ba45001a00d3d434e34f2917e" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getBuffer</name></member>
+      <member refid="d6/d3e/a08939_1ad7c966947eaffdb1f5885782243efb65" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getBuffer</name></member>
+      <member refid="d6/d3e/a08939_1abfe3e3617009f361d36322e01e512eaf" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getBuffer</name></member>
+      <member refid="d6/d3e/a08939_1a13423eca41bfe21f8cbe02e8777294d4" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getBuffer</name></member>
+      <member refid="d6/d3e/a08939_1ac6028f643d5681ccc96b54a5a996240d" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getBuffer</name></member>
+      <member refid="d6/d3e/a08939_1a734d8e7426a7f9ab0a188604de547f9c" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getBuffer</name></member>
+      <member refid="d6/d3e/a08939_1a7f578c7bafd0bb636a8d543eb88cf6e4" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getDimensions</name></member>
+      <member refid="d6/d3e/a08939_1ad8c786df6a20253e93be26fdb310dbd2" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getHeight</name></member>
+      <member refid="d6/d3e/a08939_1a2fdc716fe62e337fe1047d20e4c80346" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getLayout</name></member>
+      <member refid="d6/d3e/a08939_1a90fe6926a964496c95ccf920982f8629" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getLayout</name></member>
+      <member refid="d6/d3e/a08939_1a6edee1090b48561aa5ad2c7ab8460eed" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getLevels</name></member>
+      <member refid="d5/d3c/a08223_1abc1fa9ec1a50d2023373baa4d4c79519" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getName</name></member>
+      <member refid="d6/d3e/a08939_1aac2deb4047c96f90b20b8da0b24ece0d" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getPath</name></member>
+      <member refid="d6/d3e/a08939_1afc1bb3b3066b7cbf40ce0e6fd6b9f88a" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getPixelFormat</name></member>
+      <member refid="d6/d3e/a08939_1a09240f5afab71774fb7eeab7f49aba5e" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getPixels</name></member>
+      <member refid="d6/d3e/a08939_1a7d53270027c53f46862d1b08bdac134f" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getPxBuffer</name></member>
+      <member refid="d6/d3e/a08939_1a1d1bd3d343555d18f862a5a14beb0310" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getPxBuffer</name></member>
+      <member refid="d6/d3e/a08939_1a0913bdcd5206474b08460f5dc8ea94bd" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getResampled</name></member>
+      <member refid="d6/d3e/a08939_1a9e4bd4d7873c4d93fc4e1b1e9714abb9" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getSize</name></member>
+      <member refid="d6/d3e/a08939_1ab2b57145256b84e300e9871c301a326b" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>getWidth</name></member>
+      <member refid="d6/d3e/a08939_1a5313ae49a24d68d4966e9c5976a05da0" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>hasBuffer</name></member>
+      <member refid="d6/d3e/a08939_1a8fb8d1a0484faa33c4e5eb8c07d394a9" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>Image</name></member>
+      <member refid="d6/d3e/a08939_1a47fb1016672c7f229ef81ead268346a2" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>Image</name></member>
+      <member refid="d6/d3e/a08939_1a340b5841767afb88d9723cb0d7de0087" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>Image</name></member>
+      <member refid="d6/d3e/a08939_1ad2c74e40661fd7a09df502a2ca8a15c9" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>Image</name></member>
+      <member refid="d6/d3e/a08939_1afd56f5182544f4090dc4ae279a3a2359" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>Image</name></member>
+      <member refid="d6/d3e/a08939_1a330b40ba8cb351794257b73de24c3b64" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>Image</name></member>
+      <member refid="d6/d3e/a08939_1ac317ea52d8565c88debec32067fec6d7" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>Image</name></member>
+      <member refid="d6/d3e/a08939_1a0125115923fb88d92f55b171dca1169f" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>Image</name></member>
+      <member refid="d6/d3e/a08939_1aac2b58723308d62b0ed868204cf94f35" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>Image</name></member>
+      <member refid="d6/d3e/a08939_1aaa777d19c273f4e2c2ee997d588ff415" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>Image</name></member>
+      <member refid="d6/d3e/a08939_1a75cb8ec69bc77d2b54b9078615b99ccc" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>Image</name></member>
+      <member refid="d6/d3e/a08939_1ab79841df8fd9e0db37c06e559e9969fb" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>initialise</name></member>
+      <member refid="d6/d3e/a08939_1ac4ef3c5a3d307128c0c58e0de8f74687" prot="private" virt="non-virtual"><scope>castor::Image</scope><name>m_buffer</name></member>
+      <member refid="d6/d3e/a08939_1a389847af08687a41315565e0d0ca2bf0" prot="private" virt="non-virtual"><scope>castor::Image</scope><name>m_layout</name></member>
+      <member refid="d5/d3c/a08223_1a869b429a7190ecf614d8221b270e6dca" prot="protected" virt="non-virtual"><scope>castor::Image</scope><name>m_name</name></member>
+      <member refid="d6/d3e/a08939_1a47a6f15c12196f40009c2460b5ae3f09" prot="private" virt="non-virtual"><scope>castor::Image</scope><name>m_pathFile</name></member>
+      <member refid="d5/d3c/a08223_1a4a6e4748603541685b04f95fb91efb26" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>NamedBaseT</name></member>
+      <member refid="d6/d3e/a08939_1ae13dba1fbf9a4ad8c8de418d724bd3bd" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>operator=</name></member>
+      <member refid="d6/d3e/a08939_1a941588a42f19d6c00a4c491dacfef8a4" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>operator=</name></member>
+      <member refid="d5/d3c/a08223_1a2d62ce1925efead03c4e0842c06b3e11" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>rename</name></member>
+      <member refid="d6/d3e/a08939_1a7063ae99fe3edec3842acec68732cf2e" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>resample</name></member>
+      <member refid="d6/d3e/a08939_1a22f859d5e1d0d9dbc5824186ff66a45e" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>resample</name></member>
+      <member refid="d6/d3e/a08939_1a71b4882c3ae8d4db7aa610f89ca28a91" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>setPixel</name></member>
+      <member refid="d6/d3e/a08939_1a34128485c1483cbcf9d3725b4939abd8" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>setPixel</name></member>
+      <member refid="d6/d3e/a08939_1a1029ad1a0043038e7802ef005e0fc02e" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>setPixel</name></member>
+      <member refid="d6/d3e/a08939_1a2400872daee7da8743aee1a2bdc92d5f" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>setPixel</name></member>
+      <member refid="d6/d3e/a08939_1aa05335dfc0d079c7f5c2ab2b0dd7fcbd" prot="public" virt="non-virtual"><scope>castor::Image</scope><name>updateLayerLayout</name></member>
+      <member refid="d6/d3e/a08939_1a16d83b8b160a656c84aeff4d80bc9e39" prot="public" virt="virtual"><scope>castor::Image</scope><name>~Image</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

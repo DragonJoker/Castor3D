@@ -1,0 +1,29 @@
+<map id="castor3d::ObjectBufferOffset::getBufferChunk" name="castor3d::ObjectBufferOffset::getBufferChunk">
+<area shape="rect" id="Node000001" title=" " alt="" coords="509,357,695,397"/>
+<area shape="rect" id="Node000002" href="$de/d3d/a03515.html#a9714f22fb459657a1cbf0c5c5dd81677" title=" " alt="" coords="243,5,457,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="593,344,580,283,555,206,537,166,516,127,490,91,460,59,443,48,446,43,463,55,494,88,520,124,542,164,560,204,585,282,598,343"/>
+<area shape="rect" id="Node000003" href="$de/d3d/a03515.html#a4cd50d597e35eab2676f16492e044235" title=" " alt="" coords="244,69,456,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="589,345,572,296,546,236,508,175,485,148,460,123,441,112,444,107,463,119,489,144,513,172,550,233,577,294,594,343"/>
+<area shape="rect" id="Node000004" href="$de/d3d/a03515.html#a1f1c87475c76dcd71f429a276e0e1ddf" title=" " alt="" coords="239,133,461,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="583,346,563,309,535,266,501,224,460,188,439,176,442,171,463,183,505,220,540,263,568,306,588,344"/>
+<area shape="rect" id="Node000005" href="$de/d3d/a03515.html#a520e2def66992e5e7e260b4e2f24f73a" title=" " alt="" coords="257,197,443,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="573,348,524,299,493,273,460,252,435,240,437,235,463,247,496,269,527,295,577,345"/>
+<area shape="rect" id="Node000006" href="$de/d3d/a03515.html#a9b7ff7a878edaeb31b5e54e3732e46b5" title=" " alt="" coords="257,261,443,301"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="548,354,460,316,425,304,427,299,462,311,550,349"/>
+<area shape="rect" id="Node000007" href="$de/d3d/a03515.html#a4d73ea8865acdf6b6981793a8d87c344" title=" " alt="" coords="257,325,443,365"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="496,367,442,360,443,354,496,361"/>
+<area shape="rect" id="Node000008" href="$de/d3d/a03515.html#a9ab4d9e3ea3a4d18f77f0df4c6715bb5" title=" " alt="" coords="257,389,443,429"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="496,393,443,400,442,395,496,388"/>
+<area shape="rect" id="Node000009" href="$de/d3d/a03515.html#a30c2f3a9e9e59af1261a448aec356760" title=" " alt="" coords="257,453,443,493"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="550,406,462,444,427,456,425,451,460,439,548,401"/>
+<area shape="rect" id="Node000010" href="$de/d3d/a03515.html#a1bd1df9eb70ccc063ee5345fcd82beaf" title=" " alt="" coords="257,517,443,557"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="577,410,527,460,496,486,463,508,437,520,435,515,460,503,493,481,524,456,573,406"/>
+<area shape="rect" id="Node000011" href="$de/d3d/a03515.html#aa7a2665263913ab33532acf686f600fd" title=" " alt="" coords="257,581,443,621"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="588,411,568,448,540,492,505,535,463,572,442,584,439,579,460,567,501,531,535,488,563,446,583,409"/>
+<area shape="rect" id="Node000012" href="$de/d3d/a03515.html#a99bcdb9f6dae14ccd01752c85a2e4f9c" title=" " alt="" coords="257,645,443,685"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="594,411,577,461,550,521,513,583,489,611,463,635,444,648,441,643,460,631,485,607,508,580,546,519,572,459,589,410"/>
+<area shape="rect" id="Node000013" href="$de/d3d/a03515.html#a1feaf2b1c14d772fca87b4c6d3a130f9" title=" " alt="" coords="257,709,443,749"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="598,412,585,473,560,550,542,591,520,630,494,667,463,699,444,712,441,708,460,695,490,664,516,628,537,589,555,549,580,472,593,410"/>
+<area shape="rect" id="Node000014" href="$de/d3d/a03515.html#a4abab85ee83943b53c1c3ff3bb6c04ac" title=" " alt="" coords="5,709,191,749"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="244,732,191,732,191,727,244,727"/>
+</map>

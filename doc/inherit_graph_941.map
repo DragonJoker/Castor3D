@@ -1,0 +1,11 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="34,20,119,45"/>
+<area shape="rect" id="Node000001" href="$d7/dfc/a09543.html" title="Stream buffer used by streams to indent lines." alt="" coords="197,5,373,60"/>
+<area shape="poly" id="edge875_Node000000_Node000001" title=" " alt="" coords="133,30,197,30,197,35,133,35"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,92,148,117"/>
+<area shape="poly" id="edge878_Node000002_Node000001" title=" " alt="" coords="127,85,205,57,207,63,128,90"/>
+<area shape="rect" id="Node000003" href="$db/d84/a09071.html" title=" " alt="" coords="200,85,371,125"/>
+<area shape="poly" id="edge876_Node000002_Node000003" title=" " alt="" coords="162,102,200,102,200,107,162,107"/>
+<area shape="rect" id="Node000004" href="$d7/d2b/a09531.html" title="Stream buffer used by streams to indent lines." alt="" coords="196,149,375,204"/>
+<area shape="poly" id="edge877_Node000002_Node000004" title=" " alt="" coords="128,119,207,147,205,152,127,124"/>
+</map>

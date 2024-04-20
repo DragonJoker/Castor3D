@@ -1,0 +1,2025 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d8e/a09047" kind="class" language="C++" prot="public">
+    <compoundname>castor::Logger</compoundname>
+    <basecompoundref refid="da/d87/a08319" prot="public" virt="non-virtual">castor::NonMovable</basecompoundref>
+    <includes local="no">Logger.hpp</includes>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="df/d8e/a09047_1a003d85261c264ba698e2fe039297e110" prot="private" static="yes" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; <ref refid="df/d8e/a09047" kindref="compound">Logger</ref> &gt;</type>
+        <definition>castor::RawUniquePtr&lt; Logger &gt; castor::Logger::m_singleton</definition>
+        <argsstring></argsstring>
+        <name>m_singleton</name>
+        <qualifiedname>castor::Logger::m_singleton</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="711" column="29" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="711" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/d8e/a09047_1aef5530eeaf4908d3c9aa860a66078756" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; <ref refid="d0/d0c/a09055" kindref="compound">ProgramConsole</ref> &gt;</type>
+        <definition>castor::RawUniquePtr&lt; ProgramConsole &gt; castor::Logger::m_console</definition>
+        <argsstring></argsstring>
+        <name>m_console</name>
+        <qualifiedname>castor::Logger::m_console</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="713" column="22" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="713" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a09047_1afbcb2d8e26c86574aba5d8a52055e0b1" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; <ref refid="d9/d93/a09063" kindref="compound">LoggerInstance</ref> &gt;</type>
+        <definition>castor::RawUniquePtr&lt; LoggerInstance &gt; castor::Logger::m_instance</definition>
+        <argsstring></argsstring>
+        <name>m_instance</name>
+        <qualifiedname>castor::Logger::m_instance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="714" column="22" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="714" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a09047_1a1d52d3e1c5502a66ab2794a0661429e7" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; std::streambuf &gt;</type>
+        <definition>castor::RawUniquePtr&lt; std::streambuf &gt; castor::Logger::m_cout</definition>
+        <argsstring></argsstring>
+        <name>m_cout</name>
+        <qualifiedname>castor::Logger::m_cout</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="715" column="22" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="715" bodyend="715"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a09047_1afa061b6ad30b9e97ce1a127d65723f04" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; std::streambuf &gt;</type>
+        <definition>castor::RawUniquePtr&lt; std::streambuf &gt; castor::Logger::m_cerr</definition>
+        <argsstring></argsstring>
+        <name>m_cerr</name>
+        <qualifiedname>castor::Logger::m_cerr</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="716" column="22" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="716" bodyend="716"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a09047_1afab5fc0a0e4ad57f9f33c09e952af42b" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; std::streambuf &gt;</type>
+        <definition>castor::RawUniquePtr&lt; std::streambuf &gt; castor::Logger::m_clog</definition>
+        <argsstring></argsstring>
+        <name>m_clog</name>
+        <qualifiedname>castor::Logger::m_clog</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="717" column="22" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="717" bodyend="717"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a09047_1a9d472497cd82760864e696fa3647ec2d" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; std::wstreambuf &gt;</type>
+        <definition>castor::RawUniquePtr&lt; std::wstreambuf &gt; castor::Logger::m_wcout</definition>
+        <argsstring></argsstring>
+        <name>m_wcout</name>
+        <qualifiedname>castor::Logger::m_wcout</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="718" column="22" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="718" bodyend="718"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a09047_1a46573172b887baf31b3640db38651b82" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; std::wstreambuf &gt;</type>
+        <definition>castor::RawUniquePtr&lt; std::wstreambuf &gt; castor::Logger::m_wcerr</definition>
+        <argsstring></argsstring>
+        <name>m_wcerr</name>
+        <qualifiedname>castor::Logger::m_wcerr</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="719" column="22" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="719" bodyend="719"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d8e/a09047_1a5c4ce3127635637aa709cf9cc13bbbb3" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; std::wstreambuf &gt;</type>
+        <definition>castor::RawUniquePtr&lt; std::wstreambuf &gt; castor::Logger::m_wclog</definition>
+        <argsstring></argsstring>
+        <name>m_wclog</name>
+        <qualifiedname>castor::Logger::m_wclog</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="720" column="22" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="720" bodyend="720"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d8e/a09047_1a8b95ab8137a739cd9d05de143b69ef51" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::Logger::Logger</definition>
+        <argsstring>(LogType level)</argsstring>
+        <name>Logger</name>
+        <qualifiedname>castor::Logger::Logger</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59" kindref="member">LogType</ref></type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="22" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a465130358a271a1cec2f775013f43c93" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/d93/a09063" kindref="compound">LoggerInstance</ref> *</type>
+        <definition>LoggerInstance * castor::Logger::getInstance</definition>
+        <argsstring>() const</argsstring>
+        <name>getInstance</name>
+        <qualifiedname>castor::Logger::getInstance</qualifiedname>
+        <briefdescription>
+<para>Retourne un pointeur sur l&apos;instance. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;instance </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="702" column="24" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="702" bodyend="705"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="df/d8e/a09047_1abf1863c8839645ef2e8b9833b3388659" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d9/d93/a09063" kindref="compound">LoggerInstance</ref> *</type>
+        <definition>static CU_API LoggerInstance * castor::Logger::initialise</definition>
+        <argsstring>(LogType logLevel)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor::Logger::initialise</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59" kindref="member">LogType</ref></type>
+          <declname>logLevel</declname>
+        </param>
+        <briefdescription>
+<para>Initialise l&apos;instance du logger avec le niveau donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">logLevel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le niveau de log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="31" column="31"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a5caea5705eebb56e7cd6866e88c98fce" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>static CU_API void castor::Logger::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor::Logger::cleanup</qualifiedname>
+        <briefdescription>
+<para>Détruit l&apos;instance du <ref refid="df/d8e/a09047" kindref="compound">Logger</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="38" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a6d141cdf697031f756a5ab06df0d1a4a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a7ad33750488d04aeaaeff625c01195ec" kindref="member">LoggerInstancePtr</ref></type>
+        <definition>static CU_API LoggerInstancePtr castor::Logger::createInstance</definition>
+        <argsstring>(LogType logLevel)</argsstring>
+        <name>createInstance</name>
+        <qualifiedname>castor::Logger::createInstance</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59" kindref="member">LogType</ref></type>
+          <declname>logLevel</declname>
+        </param>
+        <briefdescription>
+<para>Crée une instance de logger avec le niveau donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">logLevel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le niveau de log. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="47" column="33"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a222791d15c7250e5f4b314321a1866de" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>static CU_API void castor::Logger::registerCallback</definition>
+        <argsstring>(LogCallback const &amp;callback, void *caller)</argsstring>
+        <name>registerCallback</name>
+        <qualifiedname>castor::Logger::registerCallback</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a5645bcfec67b15512d704592da29ac2d" kindref="member">LogCallback</ref> const &amp;</type>
+          <declname>callback</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>caller</declname>
+        </param>
+        <briefdescription>
+<para>Enregistre un callback de log. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">callback</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le callback </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">caller</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointeur sur des données utilisateur, utilisé pour identifier le callback </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="58" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1ae154c96bbf3a58926c17d17608f60e4e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>static CU_API void castor::Logger::unregisterCallback</definition>
+        <argsstring>(void *caller)</argsstring>
+        <name>unregisterCallback</name>
+        <qualifiedname>castor::Logger::unregisterCallback</qualifiedname>
+        <param>
+          <type>void *</type>
+          <declname>caller</declname>
+        </param>
+        <briefdescription>
+<para>Désenregistre un callback de log. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">caller</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointeur sur des données utilisateur </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="67" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a023b827335ee91d25a074a28d7511b17" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>static CU_API void castor::Logger::setFileName</definition>
+        <argsstring>(Path const &amp;logFilePath, LogType logType=LogType::eCount)</argsstring>
+        <name>setFileName</name>
+        <qualifiedname>castor::Logger::setFileName</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">Path</ref> const &amp;</type>
+          <declname>logFilePath</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59" kindref="member">LogType</ref></type>
+          <declname>logType</declname>
+          <defval><ref refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59ae558bb69fadec037d9eae46601a4df8e" kindref="member">LogType::eCount</ref></defval>
+        </param>
+        <briefdescription>
+<para>Définit le chemin du fichier de log. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">logFilePath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin du fichier </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">logType</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type de log concerné </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="78" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a93d7b401870ac0b80eb65fedb63adca0" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59" kindref="member">LogType</ref></type>
+        <definition>static CU_API LogType castor::Logger::getLevel</definition>
+        <argsstring>()</argsstring>
+        <name>getLevel</name>
+        <qualifiedname>castor::Logger::getLevel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le niveau de log actuel. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="85" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1accf03005e247066d11f462dd371e8246" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logTrace</definition>
+        <argsstring>(CharT const *msg)</argsstring>
+        <name>logTrace</name>
+        <qualifiedname>castor::Logger::logTrace</qualifiedname>
+        <param>
+          <type>CharT const *</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message trace. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="95" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="95" bodyend="98"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a884fd8777b228c63388fd108895217bf">castor::eTrace</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+        <referencedby refid="df/d8e/a09047_1a72458eb134ba939130b71b0bc1432c02" compoundref="db/d95/a11696" startline="134" endline="140">logTrace</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a29aca281d00d346c12796b7d5ec94ca1" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logTrace</definition>
+        <argsstring>(std::basic_string_view&lt; CharT &gt; msg)</argsstring>
+        <name>logTrace</name>
+        <qualifiedname>castor::Logger::logTrace</qualifiedname>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message trace. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="108" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="108" bodyend="111"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a884fd8777b228c63388fd108895217bf">castor::eTrace</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a3dd4ae484579d07411219d7f505e2fed" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logTrace</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logTrace</name>
+        <qualifiedname>castor::Logger::logTrace</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message trace. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="121" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="121" bodyend="124"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a884fd8777b228c63388fd108895217bf">castor::eTrace</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a72458eb134ba939130b71b0bc1432c02" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logTrace</definition>
+        <argsstring>(std::basic_ostream&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logTrace</name>
+        <qualifiedname>castor::Logger::logTrace</qualifiedname>
+        <param>
+          <type>std::basic_ostream&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message trace. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="134" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="134" bodyend="140"/>
+        <references refid="df/d8e/a09047_1accf03005e247066d11f462dd371e8246" compoundref="db/d95/a11696" startline="95" endline="98">logTrace</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1ac7ba84cd702382daa71d3ede5e24e49e" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logTraceNoNL</definition>
+        <argsstring>(CharT const *msg)</argsstring>
+        <name>logTraceNoNL</name>
+        <qualifiedname>castor::Logger::logTraceNoNL</qualifiedname>
+        <param>
+          <type>CharT const *</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message trace. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="152" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="152" bodyend="155"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a884fd8777b228c63388fd108895217bf">castor::eTrace</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+        <referencedby refid="df/d8e/a09047_1a6d6240e9f4a986a865bf5a06c4ae3d11" compoundref="db/d95/a11696" startline="197" endline="203">logTraceNoNL</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1ad4045e046377d84ac4968b9178cd7fd7" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logTraceNoNL</definition>
+        <argsstring>(std::basic_string_view&lt; CharT &gt; msg)</argsstring>
+        <name>logTraceNoNL</name>
+        <qualifiedname>castor::Logger::logTraceNoNL</qualifiedname>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message trace. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="167" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="167" bodyend="170"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a884fd8777b228c63388fd108895217bf">castor::eTrace</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a072a3ffc0ef70176babcf9c724cb2c3f" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logTraceNoNL</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logTraceNoNL</name>
+        <qualifiedname>castor::Logger::logTraceNoNL</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message trace. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="182" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="182" bodyend="185"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a884fd8777b228c63388fd108895217bf">castor::eTrace</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a6d6240e9f4a986a865bf5a06c4ae3d11" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logTraceNoNL</definition>
+        <argsstring>(std::basic_ostream&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logTraceNoNL</name>
+        <qualifiedname>castor::Logger::logTraceNoNL</qualifiedname>
+        <param>
+          <type>std::basic_ostream&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message trace. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="197" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="197" bodyend="203"/>
+        <references refid="df/d8e/a09047_1ac7ba84cd702382daa71d3ede5e24e49e" compoundref="db/d95/a11696" startline="152" endline="155">logTraceNoNL</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1ab5f29877f7cae162e792be01f0789eef" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logDebug</definition>
+        <argsstring>(CharT const *msg)</argsstring>
+        <name>logDebug</name>
+        <qualifiedname>castor::Logger::logDebug</qualifiedname>
+        <param>
+          <type>CharT const *</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message debug. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="213" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="213" bodyend="216"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a54aa5966939e3ea8616b09cc2f635312">castor::eDebug</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+        <referencedby refid="df/d8e/a09047_1ae52de6859fade2be0cf6130e196e35cf" compoundref="db/d95/a11696" startline="252" endline="258">logDebug</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a71e27ebc4c834d82e0718ddca6d808ae" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logDebug</definition>
+        <argsstring>(std::basic_string_view&lt; CharT &gt; msg)</argsstring>
+        <name>logDebug</name>
+        <qualifiedname>castor::Logger::logDebug</qualifiedname>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message debug. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="226" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="226" bodyend="229"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a54aa5966939e3ea8616b09cc2f635312">castor::eDebug</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a750f8a3dc91c26d6b7e1c01d42fff4f6" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logDebug</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logDebug</name>
+        <qualifiedname>castor::Logger::logDebug</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message debug. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="239" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="239" bodyend="242"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a54aa5966939e3ea8616b09cc2f635312">castor::eDebug</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1ae52de6859fade2be0cf6130e196e35cf" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logDebug</definition>
+        <argsstring>(std::basic_ostream&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logDebug</name>
+        <qualifiedname>castor::Logger::logDebug</qualifiedname>
+        <param>
+          <type>std::basic_ostream&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message debug. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="252" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="252" bodyend="258"/>
+        <references refid="df/d8e/a09047_1ab5f29877f7cae162e792be01f0789eef" compoundref="db/d95/a11696" startline="213" endline="216">logDebug</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a9b963549d58bf76031c1c0ce171f8967" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logDebugNoNL</definition>
+        <argsstring>(CharT const *msg)</argsstring>
+        <name>logDebugNoNL</name>
+        <qualifiedname>castor::Logger::logDebugNoNL</qualifiedname>
+        <param>
+          <type>CharT const *</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message debug. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="270" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="270" bodyend="273"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a54aa5966939e3ea8616b09cc2f635312">castor::eDebug</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+        <referencedby refid="df/d8e/a09047_1a8676dcd967a3abbc62ce6fdaca0d9d5b" compoundref="db/d95/a11696" startline="315" endline="321">logDebugNoNL</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1ab722e669b32d644b3fa7f4342261d57d" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logDebugNoNL</definition>
+        <argsstring>(std::basic_string_view&lt; CharT &gt; msg)</argsstring>
+        <name>logDebugNoNL</name>
+        <qualifiedname>castor::Logger::logDebugNoNL</qualifiedname>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message debug. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="285" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="285" bodyend="288"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a54aa5966939e3ea8616b09cc2f635312">castor::eDebug</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a4eb31251832abdef46ef2a681741ade1" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logDebugNoNL</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logDebugNoNL</name>
+        <qualifiedname>castor::Logger::logDebugNoNL</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message debug. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="300" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="300" bodyend="303"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a54aa5966939e3ea8616b09cc2f635312">castor::eDebug</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a8676dcd967a3abbc62ce6fdaca0d9d5b" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logDebugNoNL</definition>
+        <argsstring>(std::basic_ostream&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logDebugNoNL</name>
+        <qualifiedname>castor::Logger::logDebugNoNL</qualifiedname>
+        <param>
+          <type>std::basic_ostream&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message debug. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="315" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="315" bodyend="321"/>
+        <references refid="df/d8e/a09047_1a9b963549d58bf76031c1c0ce171f8967" compoundref="db/d95/a11696" startline="270" endline="273">logDebugNoNL</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1ab496fa67503a4290ad327832e688de36" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logInfo</definition>
+        <argsstring>(CharT const *msg)</argsstring>
+        <name>logInfo</name>
+        <qualifiedname>castor::Logger::logInfo</qualifiedname>
+        <param>
+          <type>CharT const *</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="331" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="331" bodyend="334"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a63751a38ef3979cde8e8fd54844fd5e2">castor::eInfo</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+        <referencedby refid="df/d8e/a09047_1aedd573e4fc30555b03375c5567f1a2be" compoundref="db/d95/a11696" startline="370" endline="376">logInfo</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a78c5fa79f8adc8a8e3404f8606cecccb" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logInfo</definition>
+        <argsstring>(std::basic_string_view&lt; CharT &gt; msg)</argsstring>
+        <name>logInfo</name>
+        <qualifiedname>castor::Logger::logInfo</qualifiedname>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="344" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="344" bodyend="347"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a63751a38ef3979cde8e8fd54844fd5e2">castor::eInfo</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a0b43022d6d11f38abc4ca2b48398a4d7" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logInfo</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logInfo</name>
+        <qualifiedname>castor::Logger::logInfo</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="357" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="357" bodyend="360"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a63751a38ef3979cde8e8fd54844fd5e2">castor::eInfo</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1aedd573e4fc30555b03375c5567f1a2be" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logInfo</definition>
+        <argsstring>(std::basic_ostream&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logInfo</name>
+        <qualifiedname>castor::Logger::logInfo</qualifiedname>
+        <param>
+          <type>std::basic_ostream&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line to log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="370" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="370" bodyend="376"/>
+        <references refid="df/d8e/a09047_1ab496fa67503a4290ad327832e688de36" compoundref="db/d95/a11696" startline="331" endline="334">logInfo</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a595910a0d9b487d3013034af8c229832" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logInfoNoNL</definition>
+        <argsstring>(CharT const *msg)</argsstring>
+        <name>logInfoNoNL</name>
+        <qualifiedname>castor::Logger::logInfoNoNL</qualifiedname>
+        <param>
+          <type>CharT const *</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="388" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="388" bodyend="391"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a63751a38ef3979cde8e8fd54844fd5e2">castor::eInfo</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+        <referencedby refid="df/d8e/a09047_1a3366de314c5b1f4855c696b60517ba62" compoundref="db/d95/a11696" startline="433" endline="439">logInfoNoNL</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a5a12f475ebd0836b679c02779ce0c028" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logInfoNoNL</definition>
+        <argsstring>(std::basic_string_view&lt; CharT &gt; msg)</argsstring>
+        <name>logInfoNoNL</name>
+        <qualifiedname>castor::Logger::logInfoNoNL</qualifiedname>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="403" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="403" bodyend="406"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a63751a38ef3979cde8e8fd54844fd5e2">castor::eInfo</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1aded05f0321cd05b868679f15365d0af4" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logInfoNoNL</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logInfoNoNL</name>
+        <qualifiedname>castor::Logger::logInfoNoNL</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ligne a logger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="418" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="418" bodyend="421"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a63751a38ef3979cde8e8fd54844fd5e2">castor::eInfo</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a3366de314c5b1f4855c696b60517ba62" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logInfoNoNL</definition>
+        <argsstring>(std::basic_ostream&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logInfoNoNL</name>
+        <qualifiedname>castor::Logger::logInfoNoNL</qualifiedname>
+        <param>
+          <type>std::basic_ostream&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un message. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line to log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="433" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="433" bodyend="439"/>
+        <references refid="df/d8e/a09047_1a595910a0d9b487d3013034af8c229832" compoundref="db/d95/a11696" startline="388" endline="391">logInfoNoNL</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1ae7a8fcd4352a929636a874ca73510ab7" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logWarning</definition>
+        <argsstring>(CharT const *msg)</argsstring>
+        <name>logWarning</name>
+        <qualifiedname>castor::Logger::logWarning</qualifiedname>
+        <param>
+          <type>CharT const *</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un avertissement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line to log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="449" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="449" bodyend="452"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a16ef90ced71f6e8c01f2f69f429708b8">castor::eWarning</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+        <referencedby refid="df/d8e/a09047_1a933ac96fdba8e5778c84e2dd1cad2f04" compoundref="db/d95/a11696" startline="488" endline="494">logWarning</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1af6a83879602186f863a41854a3ff43b1" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logWarning</definition>
+        <argsstring>(std::basic_string_view&lt; CharT &gt; msg)</argsstring>
+        <name>logWarning</name>
+        <qualifiedname>castor::Logger::logWarning</qualifiedname>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un avertissement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line to log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="462" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="462" bodyend="465"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a16ef90ced71f6e8c01f2f69f429708b8">castor::eWarning</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1aad13cba10825e6d9577f88fa6c058c1a" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logWarning</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logWarning</name>
+        <qualifiedname>castor::Logger::logWarning</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un avertissement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line to log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="475" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="475" bodyend="478"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a16ef90ced71f6e8c01f2f69f429708b8">castor::eWarning</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a933ac96fdba8e5778c84e2dd1cad2f04" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logWarning</definition>
+        <argsstring>(std::basic_ostream&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logWarning</name>
+        <qualifiedname>castor::Logger::logWarning</qualifiedname>
+        <param>
+          <type>std::basic_ostream&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un avertissement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line to log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="488" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="488" bodyend="494"/>
+        <references refid="df/d8e/a09047_1ae7a8fcd4352a929636a874ca73510ab7" compoundref="db/d95/a11696" startline="449" endline="452">logWarning</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a55da2735e9c815168f3fda3f1b9c0f8b" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logWarningNoNL</definition>
+        <argsstring>(CharT const *msg)</argsstring>
+        <name>logWarningNoNL</name>
+        <qualifiedname>castor::Logger::logWarningNoNL</qualifiedname>
+        <param>
+          <type>CharT const *</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un avertissement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line to log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="506" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="506" bodyend="509"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a16ef90ced71f6e8c01f2f69f429708b8">castor::eWarning</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+        <referencedby refid="df/d8e/a09047_1a35b4ce8d5af462491759609c0f991ad9" compoundref="db/d95/a11696" startline="551" endline="557">logWarningNoNL</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a076fe39a9a83c2424261a33c49ac7935" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logWarningNoNL</definition>
+        <argsstring>(std::basic_string_view&lt; CharT &gt; msg)</argsstring>
+        <name>logWarningNoNL</name>
+        <qualifiedname>castor::Logger::logWarningNoNL</qualifiedname>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un avertissement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line to log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="521" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="521" bodyend="524"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a16ef90ced71f6e8c01f2f69f429708b8">castor::eWarning</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1aa10c78d71227796b50af5d2d037683b2" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logWarningNoNL</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logWarningNoNL</name>
+        <qualifiedname>castor::Logger::logWarningNoNL</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un avertissement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line to log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="536" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="536" bodyend="539"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a16ef90ced71f6e8c01f2f69f429708b8">castor::eWarning</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a35b4ce8d5af462491759609c0f991ad9" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logWarningNoNL</definition>
+        <argsstring>(std::basic_ostream&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logWarningNoNL</name>
+        <qualifiedname>castor::Logger::logWarningNoNL</qualifiedname>
+        <param>
+          <type>std::basic_ostream&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log un avertissement. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line to log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="551" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="551" bodyend="557"/>
+        <references refid="df/d8e/a09047_1a55da2735e9c815168f3fda3f1b9c0f8b" compoundref="db/d95/a11696" startline="506" endline="509">logWarningNoNL</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1af493a086fabca14d709f89dfe199673e" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logError</definition>
+        <argsstring>(CharT const *msg)</argsstring>
+        <name>logError</name>
+        <qualifiedname>castor::Logger::logError</qualifiedname>
+        <param>
+          <type>CharT const *</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log une erreur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line to log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="567" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="567" bodyend="570"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a946db550abb284f3a919132343c4d984">castor::eError</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+        <referencedby refid="df/d8e/a09047_1a4b53a810474fa7e8c208a4a038f7b451" compoundref="db/d95/a11696" startline="606" endline="612">logError</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1ac2285bdab81b1f26700a6987c3100c52" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logError</definition>
+        <argsstring>(std::basic_string_view&lt; CharT &gt; msg)</argsstring>
+        <name>logError</name>
+        <qualifiedname>castor::Logger::logError</qualifiedname>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log une erreur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line to log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="580" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="580" bodyend="583"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a946db550abb284f3a919132343c4d984">castor::eError</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a3d74d0f524b04646dc8182fedaed84d8" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logError</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logError</name>
+        <qualifiedname>castor::Logger::logError</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log une erreur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line to log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="593" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="593" bodyend="596"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a946db550abb284f3a919132343c4d984">castor::eError</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a4b53a810474fa7e8c208a4a038f7b451" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logError</definition>
+        <argsstring>(std::basic_ostream&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logError</name>
+        <qualifiedname>castor::Logger::logError</qualifiedname>
+        <param>
+          <type>std::basic_ostream&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log une erreur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line to log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="606" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="606" bodyend="612"/>
+        <references refid="df/d8e/a09047_1af493a086fabca14d709f89dfe199673e" compoundref="db/d95/a11696" startline="567" endline="570">logError</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a01dc1db48b6f59c280d27b56a3b2666b" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logErrorNoNL</definition>
+        <argsstring>(CharT const *msg)</argsstring>
+        <name>logErrorNoNL</name>
+        <qualifiedname>castor::Logger::logErrorNoNL</qualifiedname>
+        <param>
+          <type>CharT const *</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log une erreur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line to log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="624" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="624" bodyend="627"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a946db550abb284f3a919132343c4d984">castor::eError</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+        <referencedby refid="df/d8e/a09047_1a9622520c460fc3592fa49c8337b29652" compoundref="db/d95/a11696" startline="669" endline="675">logErrorNoNL</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a692d2e18a22ea75915707b6a27881fb9" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logErrorNoNL</definition>
+        <argsstring>(std::basic_string_view&lt; CharT &gt; msg)</argsstring>
+        <name>logErrorNoNL</name>
+        <qualifiedname>castor::Logger::logErrorNoNL</qualifiedname>
+        <param>
+          <type>std::basic_string_view&lt; CharT &gt;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log une erreur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line to log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="639" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="639" bodyend="642"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a946db550abb284f3a919132343c4d984">castor::eError</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a24af4357acf3fd129c46e50700025647" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logErrorNoNL</definition>
+        <argsstring>(std::basic_string&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logErrorNoNL</name>
+        <qualifiedname>castor::Logger::logErrorNoNL</qualifiedname>
+        <param>
+          <type>std::basic_string&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log une erreur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line to log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="654" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="654" bodyend="657"/>
+        <references refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59a946db550abb284f3a919132343c4d984">castor::eError</references>
+        <references refid="d2/dd2/a02279_1ab0fb14b20a64ca391cfd363dfdf2ea78">castor::toUtf8</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a9622520c460fc3592fa49c8337b29652" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor::Logger::logErrorNoNL</definition>
+        <argsstring>(std::basic_ostream&lt; CharT &gt; const &amp;msg)</argsstring>
+        <name>logErrorNoNL</name>
+        <qualifiedname>castor::Logger::logErrorNoNL</qualifiedname>
+        <param>
+          <type>std::basic_ostream&lt; CharT &gt; const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <briefdescription>
+<para>Log une erreur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>N&apos;affiche pas le caractère de nouvelle ligne. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">msg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The line to log </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="669" column="13" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="669" bodyend="675"/>
+        <references refid="df/d8e/a09047_1a01dc1db48b6f59c280d27b56a3b2666b" compoundref="db/d95/a11696" startline="624" endline="627">logErrorNoNL</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a6bb1d9a4a62ec1fd0de39799be2e7115" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="df/d8e/a09047" kindref="compound">Logger</ref> &amp;</type>
+        <definition>static CU_API Logger &amp; castor::Logger::getSingleton</definition>
+        <argsstring>()</argsstring>
+        <name>getSingleton</name>
+        <qualifiedname>castor::Logger::getSingleton</qualifiedname>
+        <briefdescription>
+<para>Retourne une référence sur l&apos;instance. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;instance </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="684" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d8e/a09047_1a92cbc7a0f5171592c6138128bed8ebcd" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="df/d8e/a09047" kindref="compound">Logger</ref> *</type>
+        <definition>static CU_API Logger * castor::Logger::getSingletonPtr</definition>
+        <argsstring>()</argsstring>
+        <name>getSingletonPtr</name>
+        <qualifiedname>castor::Logger::getSingletonPtr</qualifiedname>
+        <briefdescription>
+<para>Retourne un pointeur sur l&apos;instance. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>L&apos;instance </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="693" column="23"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="df/d8e/a09047_1a97ccf7c5cc41651319a5818d5015f821" prot="private" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void <ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>static void CU_API castor::Logger::doLogMessage</definition>
+        <argsstring>(LogType type, MbString const &amp;msg, bool addNL)</argsstring>
+        <name>doLogMessage</name>
+        <qualifiedname>castor::Logger::doLogMessage</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a2ca663b75d75cc82d9481b0c87b1cb59" kindref="member">LogType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a8f0458d7b9dee3b76b26a5441606f0c6" kindref="member">MbString</ref> const &amp;</type>
+          <declname>msg</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>addNL</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Log/Logger.hpp" line="708" column="20"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::Logger</label>
+        <link refid="df/d8e/a09047"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::Logger</label>
+        <link refid="df/d8e/a09047"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Log/Logger.hpp" line="12" column="1" bodyfile="CastorUtils/Log/Logger.hpp" bodystart="14" bodyend="721"/>
+    <listofallmembers>
+      <member refid="df/d8e/a09047_1a5caea5705eebb56e7cd6866e88c98fce" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>cleanup</name></member>
+      <member refid="df/d8e/a09047_1a6d141cdf697031f756a5ab06df0d1a4a" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>createInstance</name></member>
+      <member refid="df/d8e/a09047_1a97ccf7c5cc41651319a5818d5015f821" prot="private" virt="non-virtual"><scope>castor::Logger</scope><name>doLogMessage</name></member>
+      <member refid="df/d8e/a09047_1a465130358a271a1cec2f775013f43c93" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>getInstance</name></member>
+      <member refid="df/d8e/a09047_1a93d7b401870ac0b80eb65fedb63adca0" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>getLevel</name></member>
+      <member refid="df/d8e/a09047_1a6bb1d9a4a62ec1fd0de39799be2e7115" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>getSingleton</name></member>
+      <member refid="df/d8e/a09047_1a92cbc7a0f5171592c6138128bed8ebcd" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>getSingletonPtr</name></member>
+      <member refid="df/d8e/a09047_1abf1863c8839645ef2e8b9833b3388659" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>initialise</name></member>
+      <member refid="df/d8e/a09047_1ab5f29877f7cae162e792be01f0789eef" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logDebug</name></member>
+      <member refid="df/d8e/a09047_1a71e27ebc4c834d82e0718ddca6d808ae" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logDebug</name></member>
+      <member refid="df/d8e/a09047_1a750f8a3dc91c26d6b7e1c01d42fff4f6" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logDebug</name></member>
+      <member refid="df/d8e/a09047_1ae52de6859fade2be0cf6130e196e35cf" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logDebug</name></member>
+      <member refid="df/d8e/a09047_1a9b963549d58bf76031c1c0ce171f8967" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logDebugNoNL</name></member>
+      <member refid="df/d8e/a09047_1ab722e669b32d644b3fa7f4342261d57d" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logDebugNoNL</name></member>
+      <member refid="df/d8e/a09047_1a4eb31251832abdef46ef2a681741ade1" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logDebugNoNL</name></member>
+      <member refid="df/d8e/a09047_1a8676dcd967a3abbc62ce6fdaca0d9d5b" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logDebugNoNL</name></member>
+      <member refid="df/d8e/a09047_1af493a086fabca14d709f89dfe199673e" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logError</name></member>
+      <member refid="df/d8e/a09047_1ac2285bdab81b1f26700a6987c3100c52" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logError</name></member>
+      <member refid="df/d8e/a09047_1a3d74d0f524b04646dc8182fedaed84d8" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logError</name></member>
+      <member refid="df/d8e/a09047_1a4b53a810474fa7e8c208a4a038f7b451" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logError</name></member>
+      <member refid="df/d8e/a09047_1a01dc1db48b6f59c280d27b56a3b2666b" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logErrorNoNL</name></member>
+      <member refid="df/d8e/a09047_1a692d2e18a22ea75915707b6a27881fb9" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logErrorNoNL</name></member>
+      <member refid="df/d8e/a09047_1a24af4357acf3fd129c46e50700025647" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logErrorNoNL</name></member>
+      <member refid="df/d8e/a09047_1a9622520c460fc3592fa49c8337b29652" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logErrorNoNL</name></member>
+      <member refid="df/d8e/a09047_1a8b95ab8137a739cd9d05de143b69ef51" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>Logger</name></member>
+      <member refid="df/d8e/a09047_1ab496fa67503a4290ad327832e688de36" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logInfo</name></member>
+      <member refid="df/d8e/a09047_1a78c5fa79f8adc8a8e3404f8606cecccb" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logInfo</name></member>
+      <member refid="df/d8e/a09047_1a0b43022d6d11f38abc4ca2b48398a4d7" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logInfo</name></member>
+      <member refid="df/d8e/a09047_1aedd573e4fc30555b03375c5567f1a2be" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logInfo</name></member>
+      <member refid="df/d8e/a09047_1a595910a0d9b487d3013034af8c229832" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logInfoNoNL</name></member>
+      <member refid="df/d8e/a09047_1a5a12f475ebd0836b679c02779ce0c028" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logInfoNoNL</name></member>
+      <member refid="df/d8e/a09047_1aded05f0321cd05b868679f15365d0af4" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logInfoNoNL</name></member>
+      <member refid="df/d8e/a09047_1a3366de314c5b1f4855c696b60517ba62" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logInfoNoNL</name></member>
+      <member refid="df/d8e/a09047_1accf03005e247066d11f462dd371e8246" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logTrace</name></member>
+      <member refid="df/d8e/a09047_1a29aca281d00d346c12796b7d5ec94ca1" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logTrace</name></member>
+      <member refid="df/d8e/a09047_1a3dd4ae484579d07411219d7f505e2fed" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logTrace</name></member>
+      <member refid="df/d8e/a09047_1a72458eb134ba939130b71b0bc1432c02" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logTrace</name></member>
+      <member refid="df/d8e/a09047_1ac7ba84cd702382daa71d3ede5e24e49e" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logTraceNoNL</name></member>
+      <member refid="df/d8e/a09047_1ad4045e046377d84ac4968b9178cd7fd7" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logTraceNoNL</name></member>
+      <member refid="df/d8e/a09047_1a072a3ffc0ef70176babcf9c724cb2c3f" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logTraceNoNL</name></member>
+      <member refid="df/d8e/a09047_1a6d6240e9f4a986a865bf5a06c4ae3d11" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logTraceNoNL</name></member>
+      <member refid="df/d8e/a09047_1ae7a8fcd4352a929636a874ca73510ab7" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logWarning</name></member>
+      <member refid="df/d8e/a09047_1af6a83879602186f863a41854a3ff43b1" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logWarning</name></member>
+      <member refid="df/d8e/a09047_1aad13cba10825e6d9577f88fa6c058c1a" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logWarning</name></member>
+      <member refid="df/d8e/a09047_1a933ac96fdba8e5778c84e2dd1cad2f04" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logWarning</name></member>
+      <member refid="df/d8e/a09047_1a55da2735e9c815168f3fda3f1b9c0f8b" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logWarningNoNL</name></member>
+      <member refid="df/d8e/a09047_1a076fe39a9a83c2424261a33c49ac7935" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logWarningNoNL</name></member>
+      <member refid="df/d8e/a09047_1aa10c78d71227796b50af5d2d037683b2" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logWarningNoNL</name></member>
+      <member refid="df/d8e/a09047_1a35b4ce8d5af462491759609c0f991ad9" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>logWarningNoNL</name></member>
+      <member refid="df/d8e/a09047_1afa061b6ad30b9e97ce1a127d65723f04" prot="private" virt="non-virtual"><scope>castor::Logger</scope><name>m_cerr</name></member>
+      <member refid="df/d8e/a09047_1afab5fc0a0e4ad57f9f33c09e952af42b" prot="private" virt="non-virtual"><scope>castor::Logger</scope><name>m_clog</name></member>
+      <member refid="df/d8e/a09047_1aef5530eeaf4908d3c9aa860a66078756" prot="private" virt="non-virtual"><scope>castor::Logger</scope><name>m_console</name></member>
+      <member refid="df/d8e/a09047_1a1d52d3e1c5502a66ab2794a0661429e7" prot="private" virt="non-virtual"><scope>castor::Logger</scope><name>m_cout</name></member>
+      <member refid="df/d8e/a09047_1afbcb2d8e26c86574aba5d8a52055e0b1" prot="private" virt="non-virtual"><scope>castor::Logger</scope><name>m_instance</name></member>
+      <member refid="df/d8e/a09047_1a003d85261c264ba698e2fe039297e110" prot="private" virt="non-virtual"><scope>castor::Logger</scope><name>m_singleton</name></member>
+      <member refid="df/d8e/a09047_1a46573172b887baf31b3640db38651b82" prot="private" virt="non-virtual"><scope>castor::Logger</scope><name>m_wcerr</name></member>
+      <member refid="df/d8e/a09047_1a5c4ce3127635637aa709cf9cc13bbbb3" prot="private" virt="non-virtual"><scope>castor::Logger</scope><name>m_wclog</name></member>
+      <member refid="df/d8e/a09047_1a9d472497cd82760864e696fa3647ec2d" prot="private" virt="non-virtual"><scope>castor::Logger</scope><name>m_wcout</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::Logger</scope><name>NonMovable</name></member>
+      <member refid="df/d8e/a09047_1a222791d15c7250e5f4b314321a1866de" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>registerCallback</name></member>
+      <member refid="df/d8e/a09047_1a023b827335ee91d25a074a28d7511b17" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>setFileName</name></member>
+      <member refid="df/d8e/a09047_1ae154c96bbf3a58926c17d17608f60e4e" prot="public" virt="non-virtual"><scope>castor::Logger</scope><name>unregisterCallback</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::Logger</scope><name>~NonMovable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

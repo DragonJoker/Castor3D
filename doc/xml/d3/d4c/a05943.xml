@@ -1,0 +1,146 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/d4c/a05943" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::DebugDrawer::AABBBuffer</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d4c/a05943_1ab3f46b570ec546d389600bbc5549173e" prot="public" static="no" mutable="no">
+        <type>VkBuffer</type>
+        <definition>VkBuffer castor3d::DebugDrawer::AABBBuffer::buffer</definition>
+        <argsstring></argsstring>
+        <name>buffer</name>
+        <qualifiedname>castor3d::DebugDrawer::AABBBuffer::buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Debug/DebugDrawer.hpp" line="101" column="10" bodyfile="Castor3D/Render/Debug/DebugDrawer.hpp" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d4c/a05943_1abe4363291b4e7ca2be2eede51d7dd63e" prot="public" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::DebugDrawer::AABBBuffer::offset</definition>
+        <argsstring></argsstring>
+        <name>offset</name>
+        <qualifiedname>castor3d::DebugDrawer::AABBBuffer::offset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Debug/DebugDrawer.hpp" line="102" column="14" bodyfile="Castor3D/Render/Debug/DebugDrawer.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d4c/a05943_1a6f55ea661bfccd6974b61b8e3a6192a2" prot="public" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::DebugDrawer::AABBBuffer::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>castor3d::DebugDrawer::AABBBuffer::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Debug/DebugDrawer.hpp" line="103" column="14" bodyfile="Castor3D/Render/Debug/DebugDrawer.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d4c/a05943_1ad865595a649e8021a84982601704e5ad" prot="public" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::DebugDrawer::AABBBuffer::count</definition>
+        <argsstring></argsstring>
+        <name>count</name>
+        <qualifiedname>castor3d::DebugDrawer::AABBBuffer::count</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Debug/DebugDrawer.hpp" line="104" column="14" bodyfile="Castor3D/Render/Debug/DebugDrawer.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d4c/a05943_1a1d6dd5ce63e0e04399983723750f6b54" prot="public" static="no" mutable="no">
+        <type>Pipeline *</type>
+        <definition>Pipeline* castor3d::DebugDrawer::AABBBuffer::pipeline</definition>
+        <argsstring></argsstring>
+        <name>pipeline</name>
+        <qualifiedname>castor3d::DebugDrawer::AABBBuffer::pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Debug/DebugDrawer.hpp" line="105" column="11" bodyfile="Castor3D/Render/Debug/DebugDrawer.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d4c/a05943_1a64e21b8befc907244f86e6639ac83443" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::DebugDrawer::AABBBuffer::AABBBuffer</definition>
+        <argsstring>(VkBuffer pbuffer, VkDeviceSize poffset, VkDeviceSize psize, VkDeviceSize pcount, Pipeline *ppipeline)</argsstring>
+        <name>AABBBuffer</name>
+        <qualifiedname>castor3d::DebugDrawer::AABBBuffer::AABBBuffer</qualifiedname>
+        <param>
+          <type>VkBuffer</type>
+          <declname>pbuffer</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>poffset</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>psize</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>pcount</declname>
+        </param>
+        <param>
+          <type>Pipeline *</type>
+          <declname>ppipeline</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Debug/DebugDrawer.hpp" line="87" column="1" bodyfile="Castor3D/Render/Debug/DebugDrawer.hpp" bodystart="87" bodyend="99"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::DebugDrawer::AABBBuffer</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>pipeline</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::DebugDrawer::Pipeline</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>indices</edgelabel>
+          <edgelabel>vertices</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::ObjectBufferOffset</label>
+        <link refid="de/d3d/a03515"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/Debug/DebugDrawer.hpp" line="85" column="1" bodyfile="Castor3D/Render/Debug/DebugDrawer.hpp" bodystart="86" bodyend="106"/>
+    <listofallmembers>
+      <member refid="d3/d4c/a05943_1a64e21b8befc907244f86e6639ac83443" prot="public" virt="non-virtual"><scope>castor3d::DebugDrawer::AABBBuffer</scope><name>AABBBuffer</name></member>
+      <member refid="d3/d4c/a05943_1ab3f46b570ec546d389600bbc5549173e" prot="public" virt="non-virtual"><scope>castor3d::DebugDrawer::AABBBuffer</scope><name>buffer</name></member>
+      <member refid="d3/d4c/a05943_1ad865595a649e8021a84982601704e5ad" prot="public" virt="non-virtual"><scope>castor3d::DebugDrawer::AABBBuffer</scope><name>count</name></member>
+      <member refid="d3/d4c/a05943_1abe4363291b4e7ca2be2eede51d7dd63e" prot="public" virt="non-virtual"><scope>castor3d::DebugDrawer::AABBBuffer</scope><name>offset</name></member>
+      <member refid="d3/d4c/a05943_1a1d6dd5ce63e0e04399983723750f6b54" prot="public" virt="non-virtual"><scope>castor3d::DebugDrawer::AABBBuffer</scope><name>pipeline</name></member>
+      <member refid="d3/d4c/a05943_1a6f55ea661bfccd6974b61b8e3a6192a2" prot="public" virt="non-virtual"><scope>castor3d::DebugDrawer::AABBBuffer</scope><name>size</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

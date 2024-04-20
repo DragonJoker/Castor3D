@@ -1,0 +1,480 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/dbb/a08207" kind="class" language="C++" prot="public">
+    <compoundname>castor::FlagCombination</compoundname>
+    <includes local="no">FlagCombination.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename FlagType</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="user-defined">
+      <description><para>Construction. </para>
+</description>
+      <memberdef kind="function" id="dd/dbb/a08207_1af5cebb7a27ddc09bfd0d69490aa1ea83" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr castor::FlagCombination&lt; FlagType &gt;::FlagCombination</definition>
+        <argsstring>(FlagType value) noexcept</argsstring>
+        <name>FlagCombination</name>
+        <qualifiedname>castor::FlagCombination::FlagCombination</qualifiedname>
+        <param>
+          <type>FlagType</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="139" column="11" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="139" bodyend="144"/>
+        <references refid="dd/dbb/a08207_1a594bc14bf43332f0558f1602bce77bd5" compoundref="d5/d99/a01901" startline="167" endline="170">castor::FlagCombination&lt; FlagType &gt;::value</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/dbb/a08207_1a65d4bc019a39589c3783df2cf7f313f2" prot="public" static="no" constexpr="yes" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr castor::FlagCombination&lt; FlagType &gt;::FlagCombination</definition>
+        <argsstring>(BaseType value=BaseType{}) noexcept</argsstring>
+        <name>FlagCombination</name>
+        <qualifiedname>castor::FlagCombination::FlagCombination</qualifiedname>
+        <param>
+          <type><ref refid="dd/dbb/a08207_1a19cbbe924a1aeddb12a43e9558b229a1" kindref="member">BaseType</ref></type>
+          <declname>value</declname>
+          <defval><ref refid="dd/dbb/a08207_1a19cbbe924a1aeddb12a43e9558b229a1" kindref="member">BaseType</ref>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="146" column="20" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="146" bodyend="151"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <description><para>Conversion. </para>
+</description>
+      <memberdef kind="function" id="dd/dbb/a08207_1a6af73dbe467781456cc8756c570b0d79" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr castor::FlagCombination&lt; FlagType &gt;::operator BaseType const &amp;</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>operator BaseType const &amp;</name>
+        <qualifiedname>castor::FlagCombination::operator BaseType const &amp;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="162" column="11" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="162" bodyend="165"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dbb/a08207_1a594bc14bf43332f0558f1602bce77bd5" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr <ref refid="dd/dbb/a08207_1a19cbbe924a1aeddb12a43e9558b229a1" kindref="member">BaseType</ref></type>
+        <definition>constexpr BaseType castor::FlagCombination&lt; FlagType &gt;::value</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>value</name>
+        <qualifiedname>castor::FlagCombination::value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="167" column="20" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="167" bodyend="170"/>
+        <referencedby refid="dd/dbb/a08207_1ab0914a9d914874657d99ae9d6001652a" compoundref="d5/d99/a01901" startline="203" endline="206">castor::FlagCombination&lt; FlagType &gt;::empty</referencedby>
+        <referencedby refid="dd/dbb/a08207_1af5cebb7a27ddc09bfd0d69490aa1ea83" compoundref="d5/d99/a01901" startline="139" endline="144">castor::FlagCombination&lt; FlagType &gt;::FlagCombination</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <description><para>Itération. </para>
+</description>
+      <memberdef kind="function" id="dd/dbb/a08207_1a1f86bbf747e3a7ef087fd5dc239f188c" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr <ref refid="d4/dfd/a08203" kindref="compound">FlagIterator</ref>&lt; FlagType &gt;</type>
+        <definition>constexpr FlagIterator&lt; FlagType &gt; castor::FlagCombination&lt; FlagType &gt;::begin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::FlagCombination::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="181" column="24" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="181" bodyend="184"/>
+        <referencedby refid="dd/dbb/a08207_1a157cfdaedf2705d57a607dbb4fff9c7b" compoundref="d5/d99/a01901" startline="191" endline="201">castor::FlagCombination&lt; FlagType &gt;::size</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/dbb/a08207_1a5832afd7988feef4c5313e38b0c3c748" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr <ref refid="d4/dfd/a08203" kindref="compound">FlagIterator</ref>&lt; FlagType &gt;</type>
+        <definition>constexpr FlagIterator&lt; FlagType &gt; castor::FlagCombination&lt; FlagType &gt;::end</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::FlagCombination::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="186" column="24" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="186" bodyend="189"/>
+        <referencedby refid="dd/dbb/a08207_1a157cfdaedf2705d57a607dbb4fff9c7b" compoundref="d5/d99/a01901" startline="191" endline="201">castor::FlagCombination&lt; FlagType &gt;::size</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/dbb/a08207_1a157cfdaedf2705d57a607dbb4fff9c7b" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr size_t</type>
+        <definition>constexpr size_t castor::FlagCombination&lt; FlagType &gt;::size</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>size</name>
+        <qualifiedname>castor::FlagCombination::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="191" column="18" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="191" bodyend="201"/>
+        <references refid="dd/dbb/a08207_1a1f86bbf747e3a7ef087fd5dc239f188c" compoundref="d5/d99/a01901" startline="181" endline="184">castor::FlagCombination&lt; FlagType &gt;::begin</references>
+        <references refid="dd/dbb/a08207_1a5832afd7988feef4c5313e38b0c3c748" compoundref="d5/d99/a01901" startline="186" endline="189">castor::FlagCombination&lt; FlagType &gt;::end</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/dbb/a08207_1ab0914a9d914874657d99ae9d6001652a" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr bool</type>
+        <definition>constexpr bool castor::FlagCombination&lt; FlagType &gt;::empty</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>empty</name>
+        <qualifiedname>castor::FlagCombination::empty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="203" column="16" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="203" bodyend="206"/>
+        <references refid="dd/dbb/a08207_1a594bc14bf43332f0558f1602bce77bd5" compoundref="d5/d99/a01901" startline="167" endline="170">castor::FlagCombination&lt; FlagType &gt;::value</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <description><para>Opérateurs binaires. </para>
+</description>
+      <memberdef kind="function" id="dd/dbb/a08207_1a23a42bcc2721aef477ef980bc39d1720" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr <ref refid="dd/dbb/a08207" kindref="compound">FlagCombination</ref> &amp;</type>
+        <definition>constexpr FlagCombination &amp; castor::FlagCombination&lt; FlagType &gt;::operator&amp;=</definition>
+        <argsstring>(BaseType rhs) noexcept</argsstring>
+        <name>operator&amp;=</name>
+        <qualifiedname>castor::FlagCombination::operator&amp;=</qualifiedname>
+        <param>
+          <type><ref refid="dd/dbb/a08207_1a19cbbe924a1aeddb12a43e9558b229a1" kindref="member">BaseType</ref></type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="217" column="28" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="217" bodyend="221"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dbb/a08207_1a1d2db770da778f08e72c435f6a8c8b4c" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr <ref refid="dd/dbb/a08207" kindref="compound">FlagCombination</ref> &amp;</type>
+        <definition>constexpr FlagCombination &amp; castor::FlagCombination&lt; FlagType &gt;::operator|=</definition>
+        <argsstring>(BaseType rhs) noexcept</argsstring>
+        <name>operator|=</name>
+        <qualifiedname>castor::FlagCombination::operator|=</qualifiedname>
+        <param>
+          <type><ref refid="dd/dbb/a08207_1a19cbbe924a1aeddb12a43e9558b229a1" kindref="member">BaseType</ref></type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="223" column="28" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="223" bodyend="227"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dbb/a08207_1ae30418e02893a7d4b713d5b996ca5e2a" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr <ref refid="dd/dbb/a08207" kindref="compound">FlagCombination</ref> &amp;</type>
+        <definition>constexpr FlagCombination &amp; castor::FlagCombination&lt; FlagType &gt;::operator^=</definition>
+        <argsstring>(BaseType rhs) noexcept</argsstring>
+        <name>operator^=</name>
+        <qualifiedname>castor::FlagCombination::operator^=</qualifiedname>
+        <param>
+          <type><ref refid="dd/dbb/a08207_1a19cbbe924a1aeddb12a43e9558b229a1" kindref="member">BaseType</ref></type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="229" column="28" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="229" bodyend="233"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dbb/a08207_1acbe28b34dba9ed3a5bbe04984a96e61f" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr <ref refid="dd/dbb/a08207" kindref="compound">FlagCombination</ref> &amp;</type>
+        <definition>constexpr FlagCombination &amp; castor::FlagCombination&lt; FlagType &gt;::operator&amp;=</definition>
+        <argsstring>(FlagType rhs) noexcept</argsstring>
+        <name>operator&amp;=</name>
+        <qualifiedname>castor::FlagCombination::operator&amp;=</qualifiedname>
+        <param>
+          <type>FlagType</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="235" column="28" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="235" bodyend="239"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dbb/a08207_1a74fe38cf57720e216d9ef426c97a7da5" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr <ref refid="dd/dbb/a08207" kindref="compound">FlagCombination</ref> &amp;</type>
+        <definition>constexpr FlagCombination &amp; castor::FlagCombination&lt; FlagType &gt;::operator|=</definition>
+        <argsstring>(FlagType rhs) noexcept</argsstring>
+        <name>operator|=</name>
+        <qualifiedname>castor::FlagCombination::operator|=</qualifiedname>
+        <param>
+          <type>FlagType</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="241" column="28" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="241" bodyend="245"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dbb/a08207_1a542e3b1f7646f9b3db7f9d995007b1a7" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr <ref refid="dd/dbb/a08207" kindref="compound">FlagCombination</ref> &amp;</type>
+        <definition>constexpr FlagCombination &amp; castor::FlagCombination&lt; FlagType &gt;::operator^=</definition>
+        <argsstring>(FlagType rhs) noexcept</argsstring>
+        <name>operator^=</name>
+        <qualifiedname>castor::FlagCombination::operator^=</qualifiedname>
+        <param>
+          <type>FlagType</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="247" column="28" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="247" bodyend="251"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dbb/a08207_1a07b5fef309488dc980bf1ec6b074cdd9" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr <ref refid="dd/dbb/a08207" kindref="compound">FlagCombination</ref> &amp;</type>
+        <definition>constexpr FlagCombination &amp; castor::FlagCombination&lt; FlagType &gt;::operator&amp;=</definition>
+        <argsstring>(FlagCombination&lt; FlagType &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator&amp;=</name>
+        <qualifiedname>castor::FlagCombination::operator&amp;=</qualifiedname>
+        <param>
+          <type><ref refid="dd/dbb/a08207" kindref="compound">FlagCombination</ref>&lt; FlagType &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="253" column="28" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="253" bodyend="257"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dbb/a08207_1a99cf05c901dde4af7f5e7c3924e22c57" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr <ref refid="dd/dbb/a08207" kindref="compound">FlagCombination</ref> &amp;</type>
+        <definition>constexpr FlagCombination &amp; castor::FlagCombination&lt; FlagType &gt;::operator|=</definition>
+        <argsstring>(FlagCombination&lt; FlagType &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator|=</name>
+        <qualifiedname>castor::FlagCombination::operator|=</qualifiedname>
+        <param>
+          <type><ref refid="dd/dbb/a08207" kindref="compound">FlagCombination</ref>&lt; FlagType &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="259" column="28" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="259" bodyend="263"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dbb/a08207_1a72db1e6452ad90a9faaf6cd2310c1057" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr <ref refid="dd/dbb/a08207" kindref="compound">FlagCombination</ref> &amp;</type>
+        <definition>constexpr FlagCombination &amp; castor::FlagCombination&lt; FlagType &gt;::operator^=</definition>
+        <argsstring>(FlagCombination&lt; FlagType &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator^=</name>
+        <qualifiedname>castor::FlagCombination::operator^=</qualifiedname>
+        <param>
+          <type><ref refid="dd/dbb/a08207" kindref="compound">FlagCombination</ref>&lt; FlagType &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="265" column="28" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="265" bodyend="269"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dbb/a08207_1a7bdb6fb265c248cff3fa48e78aad0d94" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>constexpr <ref refid="dd/dbb/a08207" kindref="compound">FlagCombination</ref> &amp;</type>
+        <definition>constexpr FlagCombination &amp; castor::FlagCombination&lt; FlagType &gt;::operator~</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>operator~</name>
+        <qualifiedname>castor::FlagCombination::operator~</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="271" column="28" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="271" bodyend="275"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dd/dbb/a08207_1a19cbbe924a1aeddb12a43e9558b229a1" prot="public" static="no">
+        <type>typename std::underlying_type&lt; FlagType &gt;::type</type>
+        <definition>using castor::FlagCombination&lt; FlagType &gt;::BaseType =  typename std::underlying_type&lt; FlagType &gt;::type</definition>
+        <argsstring></argsstring>
+        <name>BaseType</name>
+        <qualifiedname>castor::FlagCombination::BaseType</qualifiedname>
+        <briefdescription>
+<para>The basic integer type. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="129" column="1" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/dbb/a08207_1a3ac0fa91dbd8f3811624537122798e20" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/dbb/a08207_1a19cbbe924a1aeddb12a43e9558b229a1" kindref="member">BaseType</ref></type>
+        <definition>BaseType castor::FlagCombination&lt; FlagType &gt;::m_value</definition>
+        <argsstring></argsstring>
+        <name>m_value</name>
+        <qualifiedname>castor::FlagCombination::m_value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/FlagCombination.hpp" line="279" column="10" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="279" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe template qui fournit une conversion implicite depuis un scoped enum vers son type entier de base. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Permet la définition de flags, au travers des opérations binaires (&amp;, |), Pour lesquels les opérandes auront la même taille binaire. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="10">
+        <label>castor::FlagCombination&lt; ComponentModeFlag &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ComponentModeFlag &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::FlagCombination&lt; ElementUsage &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ElementUsage &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::FlagCombination&lt; GpuFeature &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; GpuFeature &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::FlagCombination&lt; MorphFlag &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; MorphFlag &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor::FlagCombination&lt; OpenMode &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OpenMode &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::FlagCombination&lt; ProgramFlag &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ProgramFlag &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::FlagCombination&lt; QueueFamilyFlag &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; QueueFamilyFlag &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor::FlagCombination&lt; RenderFilter &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; RenderFilter &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::FlagCombination&lt; SceneFlag &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SceneFlag &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::FlagCombination&lt; ShaderFlag &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ShaderFlag &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::FlagCombination&lt; TextureSpace &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; TextureSpace &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::FlagCombination&lt; FlagType &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/Design/FlagCombination.hpp" line="125" column="1" bodyfile="CastorUtils/Design/FlagCombination.hpp" bodystart="126" bodyend="280"/>
+    <listofallmembers>
+      <member refid="dd/dbb/a08207_1a19cbbe924a1aeddb12a43e9558b229a1" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>BaseType</name></member>
+      <member refid="dd/dbb/a08207_1a1f86bbf747e3a7ef087fd5dc239f188c" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>begin</name></member>
+      <member refid="dd/dbb/a08207_1ab0914a9d914874657d99ae9d6001652a" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>empty</name></member>
+      <member refid="dd/dbb/a08207_1a5832afd7988feef4c5313e38b0c3c748" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>end</name></member>
+      <member refid="dd/dbb/a08207_1af5cebb7a27ddc09bfd0d69490aa1ea83" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>FlagCombination</name></member>
+      <member refid="dd/dbb/a08207_1a65d4bc019a39589c3783df2cf7f313f2" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>FlagCombination</name></member>
+      <member refid="dd/dbb/a08207_1a3ac0fa91dbd8f3811624537122798e20" prot="private" virt="non-virtual"><scope>castor::FlagCombination</scope><name>m_value</name></member>
+      <member refid="dd/dbb/a08207_1a6af73dbe467781456cc8756c570b0d79" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>operator BaseType const &amp;</name></member>
+      <member refid="dd/dbb/a08207_1a23a42bcc2721aef477ef980bc39d1720" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>operator&amp;=</name></member>
+      <member refid="dd/dbb/a08207_1acbe28b34dba9ed3a5bbe04984a96e61f" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>operator&amp;=</name></member>
+      <member refid="dd/dbb/a08207_1a07b5fef309488dc980bf1ec6b074cdd9" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>operator&amp;=</name></member>
+      <member refid="dd/dbb/a08207_1ae30418e02893a7d4b713d5b996ca5e2a" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>operator^=</name></member>
+      <member refid="dd/dbb/a08207_1a542e3b1f7646f9b3db7f9d995007b1a7" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>operator^=</name></member>
+      <member refid="dd/dbb/a08207_1a72db1e6452ad90a9faaf6cd2310c1057" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>operator^=</name></member>
+      <member refid="dd/dbb/a08207_1a1d2db770da778f08e72c435f6a8c8b4c" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>operator|=</name></member>
+      <member refid="dd/dbb/a08207_1a74fe38cf57720e216d9ef426c97a7da5" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>operator|=</name></member>
+      <member refid="dd/dbb/a08207_1a99cf05c901dde4af7f5e7c3924e22c57" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>operator|=</name></member>
+      <member refid="dd/dbb/a08207_1a7bdb6fb265c248cff3fa48e78aad0d94" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>operator~</name></member>
+      <member refid="dd/dbb/a08207_1a157cfdaedf2705d57a607dbb4fff9c7b" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>size</name></member>
+      <member refid="dd/dbb/a08207_1a594bc14bf43332f0558f1602bce77bd5" prot="public" virt="non-virtual"><scope>castor::FlagCombination</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

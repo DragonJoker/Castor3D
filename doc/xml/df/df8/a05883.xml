@@ -1,0 +1,285 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/df8/a05883" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ImporterPlugin</compoundname>
+    <basecompoundref refid="db/d5e/a05891" prot="public" virt="non-virtual">castor3d::Plugin</basecompoundref>
+    <includes local="no">ImporterPlugin.hpp</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="df/df8/a05883_1a55a2f6d92109d174ce077543da7d62fe" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a2d339222ffb89e8324291fb135b12496" kindref="member">castor::Pair</ref>&lt; <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref>, <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> &gt;</type>
+        <definition>using castor3d::ImporterPlugin::Extension =  castor::Pair&lt; castor::String, castor::String &gt;</definition>
+        <argsstring></argsstring>
+        <name>Extension</name>
+        <qualifiedname>castor3d::ImporterPlugin::Extension</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/ImporterPlugin.hpp" line="15" column="1" bodyfile="Castor3D/Plugin/ImporterPlugin.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/df8/a05883_1ad87e9245b0900398432fec4e73704908" prot="private" static="no" mutable="no">
+        <type>ExtensionArray</type>
+        <definition>ExtensionArray castor3d::ImporterPlugin::m_extensions</definition>
+        <argsstring></argsstring>
+        <name>m_extensions</name>
+        <qualifiedname>castor3d::ImporterPlugin::m_extensions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/ImporterPlugin.hpp" line="58" column="16" bodyfile="Castor3D/Plugin/ImporterPlugin.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/df8/a05883_1a91d7467f09fbcf5448b61888d33b3fc8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ImporterPlugin::CU_DeclareVector</definition>
+        <argsstring>(Extension, Extension)</argsstring>
+        <name>CU_DeclareVector</name>
+        <qualifiedname>castor3d::ImporterPlugin::CU_DeclareVector</qualifiedname>
+        <param>
+          <type><ref refid="df/df8/a05883_1a55a2f6d92109d174ce077543da7d62fe" kindref="member">Extension</ref></type>
+        </param>
+        <param>
+          <type><ref refid="df/df8/a05883_1a55a2f6d92109d174ce077543da7d62fe" kindref="member">Extension</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/ImporterPlugin.hpp" line="16" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/df8/a05883_1a0abe619147d258e41f211317e8d1363a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ImporterPlugin::ImporterPlugin</definition>
+        <argsstring>(castor::DynamicLibraryUPtr library, Engine *engine)</argsstring>
+        <name>ImporterPlugin</name>
+        <qualifiedname>castor3d::ImporterPlugin::ImporterPlugin</qualifiedname>
+        <param>
+          <type>castor::DynamicLibraryUPtr</type>
+          <declname>library</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> *</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">library</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La bibliothèque partagée contenant le plug-in </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/ImporterPlugin.hpp" line="29" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="df/df8/a05883_1a9735ce997b6dd1e3b9ea73539d40f18b" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ImporterPlugin::~ImporterPlugin</definition>
+        <argsstring>() noexcept override</argsstring>
+        <name>~ImporterPlugin</name>
+        <qualifiedname>castor3d::ImporterPlugin::~ImporterPlugin</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/ImporterPlugin.hpp" line="37" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="df/df8/a05883_1a6e9e69d8e93cc773ecd2805b7211f266" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ExtensionArray const &amp;</type>
+        <definition>C3D_API ExtensionArray const  &amp; castor3d::ImporterPlugin::getExtensions</definition>
+        <argsstring>() const</argsstring>
+        <name>getExtensions</name>
+        <qualifiedname>castor3d::ImporterPlugin::getExtensions</qualifiedname>
+        <briefdescription>
+<para>Récupère le tableau des extensions supportées. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le tableau d&apos;extensions supportées </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/ImporterPlugin.hpp" line="46" column="31"/>
+      </memberdef>
+      <memberdef kind="function" id="df/df8/a05883_1a3803088574eee82765f9054fd1d30837" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ImporterPlugin::addExtension</definition>
+        <argsstring>(Extension const &amp;extension)</argsstring>
+        <name>addExtension</name>
+        <qualifiedname>castor3d::ImporterPlugin::addExtension</qualifiedname>
+        <param>
+          <type><ref refid="df/df8/a05883_1a55a2f6d92109d174ce077543da7d62fe" kindref="member">Extension</ref> const &amp;</type>
+          <declname>extension</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute une extension supportée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">extension</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;extension. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Plugin/ImporterPlugin.hpp" line="55" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ImporterPlugin</label>
+        <link refid="df/df8/a05883"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Plugin</label>
+        <link refid="db/d5e/a05891"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::Unique&lt; Engine &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="8" relation="private-inheritance">
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d4f/a03703"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ImporterPlugin</label>
+        <link refid="df/df8/a05883"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Plugin</label>
+        <link refid="db/d5e/a05891"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_pfnGetRequiredVersion</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_pfnOnLoad</edgelabel>
+          <edgelabel>m_pfnOnUnload</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::Version</label>
+        <link refid="d5/d15/a05335"/>
+      </node>
+      <node id="8">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="9">
+        <label>castor::Unique&lt; T &gt;</label>
+        <link refid="dc/d63/a08283"/>
+        <childnode refid="8" relation="private-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Plugin/ImporterPlugin.hpp" line="11" column="1" bodyfile="Castor3D/Plugin/ImporterPlugin.hpp" bodystart="13" bodyend="59"/>
+    <listofallmembers>
+      <member refid="df/df8/a05883_1a3803088574eee82765f9054fd1d30837" prot="public" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>addExtension</name></member>
+      <member refid="df/df8/a05883_1a91d7467f09fbcf5448b61888d33b3fc8" prot="public" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>CU_DeclareVector</name></member>
+      <member refid="df/df8/a05883_1a55a2f6d92109d174ce077543da7d62fe" prot="public" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>Extension</name></member>
+      <member refid="df/df8/a05883_1a6e9e69d8e93cc773ecd2805b7211f266" prot="public" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>getExtensions</name></member>
+      <member refid="db/d5e/a05891_1a76345cfa813957198ab5a735b3bf2c84" prot="public" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>getName</name></member>
+      <member refid="db/d5e/a05891_1a9fe46462b345af39a924f8081f09002d" prot="public" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>GetNameFunction</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>getOwner</name></member>
+      <member refid="db/d5e/a05891_1a21c697a5bb64dc09df8604a595ed4ef1" prot="public" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>getRequiredVersion</name></member>
+      <member refid="db/d5e/a05891_1ac7505429b1d290b40c09fbf488c52b43" prot="public" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>GetRequiredVersionFunction</name></member>
+      <member refid="db/d5e/a05891_1adfce87274549c3458e705ec6f49f2466" prot="public" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>getType</name></member>
+      <member refid="db/d5e/a05891_1a57603a105bb12a698c4192413f6c01c0" prot="public" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>GetTypeFunction</name></member>
+      <member refid="df/df8/a05883_1a0abe619147d258e41f211317e8d1363a" prot="public" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>ImporterPlugin</name></member>
+      <member refid="db/d5e/a05891_1a6eee27fad0b4dc406af8dac993816e1e" prot="protected" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>load</name></member>
+      <member refid="df/df8/a05883_1ad87e9245b0900398432fec4e73704908" prot="private" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>m_extensions</name></member>
+      <member refid="db/d5e/a05891_1af67ef96075d71ead62f1a47cff5ac7b5" prot="protected" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>m_library</name></member>
+      <member refid="db/d5e/a05891_1a999f657823e4cbcf844a81e32b96dec4" prot="protected" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>m_pfnGetName</name></member>
+      <member refid="db/d5e/a05891_1aa2e6fc5f27975d42f1329569f37e6a3e" prot="protected" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>m_pfnGetRequiredVersion</name></member>
+      <member refid="db/d5e/a05891_1a7f9b6b8f678d6ea93023fbe76573eb92" prot="protected" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>m_pfnOnLoad</name></member>
+      <member refid="db/d5e/a05891_1ac8c60d89e2821bc824ab0150f4196989" prot="protected" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>m_pfnOnUnload</name></member>
+      <member refid="db/d5e/a05891_1ad988a5d361f28b80ba19dd2caac722e1" prot="protected" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>m_type</name></member>
+      <member refid="db/d5e/a05891_1ad9481aa690ebce52bc156c1205a6e926" prot="public" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>OnLoadFunction</name></member>
+      <member refid="db/d5e/a05891_1a270e7bcd56155a8810cdce16eb9a2af7" prot="public" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>OnUnloadFunction</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>OwnedBy</name></member>
+      <member refid="db/d5e/a05891_1a34467cc6f0925b83827b0884c5b4c496" prot="protected" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>Plugin</name></member>
+      <member refid="db/d5e/a05891_1a0d3fd522e0c2a3396428a5a97cdb0c18" prot="protected" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>unload</name></member>
+      <member refid="df/df8/a05883_1a9735ce997b6dd1e3b9ea73539d40f18b" prot="public" virt="non-virtual"><scope>castor3d::ImporterPlugin</scope><name>~ImporterPlugin</name></member>
+      <member refid="db/d5e/a05891_1a74a6dc68249b01895f5c682c6a539a6a" prot="public" virt="virtual"><scope>castor3d::ImporterPlugin</scope><name>~Plugin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

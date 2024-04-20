@@ -1,20 +1,552 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
-  <compounddef id="da/d80/a06795" kind="concept">
-    <compoundname>castor3d::ControlFlagTypeT</compoundname>
-    <includes local="no">GuiModule.hpp</includes>
-    <templateparamlist>
-      <param>
-        <type>typename TypeT</type>
-      </param>
-    </templateparamlist>
-    <initializer>template&lt;typename TypeT&gt;
-concept <ref refid="da/d80/a06795" kindref="compound">castor3d::ControlFlagTypeT</ref> =  ( std::is_same_v&lt; TypeT, ControlFlagType &gt;
-		|| std::is_same_v&lt; std::underlying_type_t&lt; TypeT &gt;, ControlFlagType &gt; )    </initializer>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d80/a06795" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::TransparentRendering</compoundname>
+    <basecompoundref refid="d6/da8/a08227" prot="public" virt="non-virtual">castor::OwnedBy&lt; RenderTechnique &gt;</basecompoundref>
+    <includes local="no">TransparentRendering.hpp</includes>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="da/d80/a06795_1a6e54630910c7c276ed7914ae27eebcbd" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> *</type>
+        <definition>C3D_API Engine * castor3d::TransparentRendering::getEngine</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getEngine</name>
+        <qualifiedname>castor3d::TransparentRendering::getEngine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Accesseurs. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="111" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d80/a06795_1a0a0a9f77c9572e35796373d3b5e4820d" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::FramePass const &amp;</type>
+        <definition>C3D_API crg::FramePass const  &amp; castor3d::TransparentRendering::getLastPass</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getLastPass</name>
+        <qualifiedname>castor3d::TransparentRendering::getLastPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="112" column="31"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="da/d80/a06795_1a7e0941bd298cd40159f418d39bcffb66" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::TransparentRendering::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::TransparentRendering::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="125" column="21" bodyfile="Castor3D/Render/Transparent/TransparentRendering.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d80/a06795_1a1849584bde4a3d907dd3366ed8397a33" prot="private" static="no" mutable="no">
+        <type>crg::FramePassGroup &amp;</type>
+        <definition>crg::FramePassGroup&amp; castor3d::TransparentRendering::m_graph</definition>
+        <argsstring></argsstring>
+        <name>m_graph</name>
+        <qualifiedname>castor3d::TransparentRendering::m_graph</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="126" column="22" bodyfile="Castor3D/Render/Transparent/TransparentRendering.hpp" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d80/a06795_1abe0691c8348d366d7f06c2b7217d44b4" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/d95/a06703" kindref="compound">Texture</ref></type>
+        <definition>Texture castor3d::TransparentRendering::m_mippedColour</definition>
+        <argsstring></argsstring>
+        <name>m_mippedColour</name>
+        <qualifiedname>castor3d::TransparentRendering::m_mippedColour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="127" column="9" bodyfile="Castor3D/Render/Transparent/TransparentRendering.hpp" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d80/a06795_1a9057f73ed82fd8930ebae7ad263c06ed" prot="private" static="no" mutable="no">
+        <type>TransparentPassResultUPtr</type>
+        <definition>TransparentPassResultUPtr castor3d::TransparentRendering::m_transparentPassResult</definition>
+        <argsstring></argsstring>
+        <name>m_transparentPassResult</name>
+        <qualifiedname>castor3d::TransparentRendering::m_transparentPassResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="128" column="27" bodyfile="Castor3D/Render/Transparent/TransparentRendering.hpp" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d80/a06795_1a9adf277ad05228a3750183afce2e94de" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::TransparentRendering::m_enabled</definition>
+        <argsstring></argsstring>
+        <name>m_enabled</name>
+        <qualifiedname>castor3d::TransparentRendering::m_enabled</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="129" column="6" bodyfile="Castor3D/Render/Transparent/TransparentRendering.hpp" bodystart="129" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d80/a06795_1a13ba70b2ab3dca069b92dff885ecedf3" prot="private" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::TransparentRendering::m_mipgenPassDesc</definition>
+        <argsstring></argsstring>
+        <name>m_mipgenPassDesc</name>
+        <qualifiedname>castor3d::TransparentRendering::m_mipgenPassDesc</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="130" column="17" bodyfile="Castor3D/Render/Transparent/TransparentRendering.hpp" bodystart="130" bodyend="130"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d80/a06795_1a80c0b8a421e2152a6c0a1bac6e0c180b" prot="private" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::TransparentRendering::m_transparentPassDesc</definition>
+        <argsstring></argsstring>
+        <name>m_transparentPassDesc</name>
+        <qualifiedname>castor3d::TransparentRendering::m_transparentPassDesc</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="131" column="17" bodyfile="Castor3D/Render/Transparent/TransparentRendering.hpp" bodystart="131" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d80/a06795_1a2e0b2da3bb42e60506a35ff708ca3a2c" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d90/a06587" kindref="compound">RenderTechniqueNodesPass</ref> *</type>
+        <definition>RenderTechniqueNodesPass* castor3d::TransparentRendering::m_transparentPass</definition>
+        <argsstring></argsstring>
+        <name>m_transparentPass</name>
+        <qualifiedname>castor3d::TransparentRendering::m_transparentPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="132" column="27" bodyfile="Castor3D/Render/Transparent/TransparentRendering.hpp" bodystart="132" bodyend="132"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d80/a06795_1adb8bd499576b20fc9152ed20a5f76907" prot="private" static="no" mutable="no">
+        <type>WeightedBlendRenderingUPtr</type>
+        <definition>WeightedBlendRenderingUPtr castor3d::TransparentRendering::m_weightedBlendRendering</definition>
+        <argsstring></argsstring>
+        <name>m_weightedBlendRendering</name>
+        <qualifiedname>castor3d::TransparentRendering::m_weightedBlendRendering</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="133" column="28" bodyfile="Castor3D/Render/Transparent/TransparentRendering.hpp" bodystart="133" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d80/a06795_1a99745977ced41b3c9cce030b6482db39" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TransparentRendering::TransparentRendering</definition>
+        <argsstring>(RenderTechnique &amp;parent, RenderDevice const &amp;device, OpaqueRendering const &amp;previous, crg::FramePassArray const &amp;previousPasses, ProgressBar *progress, bool weightedBlended)</argsstring>
+        <name>TransparentRendering</name>
+        <qualifiedname>castor3d::TransparentRendering::TransparentRendering</qualifiedname>
+        <param>
+          <type><ref refid="d8/dd8/a06575" kindref="compound">RenderTechnique</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d5c/a06127" kindref="compound">OpaqueRendering</ref> const &amp;</type>
+          <declname>previous</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray const &amp;</type>
+          <declname>previousPasses</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>weightedBlended</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La technique parente. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le device GPU. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previous</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le renderer de prépasse. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previousPasses</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les passes dont celle-ci dépend. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La barre de progression optionnelle. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">weightedBlended</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> pour activer le weighted blended rendering. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="42" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d80/a06795_1a6e25b80ed62945ebfac70055f3382ccc" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TransparentRendering::~TransparentRendering</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~TransparentRendering</name>
+        <qualifiedname>castor3d::TransparentRendering::~TransparentRendering</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="54" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d80/a06795_1a86cb55a95d1f2ece327ffa68f759aeab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TransparentRendering::listIntermediates</definition>
+        <argsstring>(castor::Vector&lt; IntermediateView &gt; &amp;intermediates)</argsstring>
+        <name>listIntermediates</name>
+        <qualifiedname>castor3d::TransparentRendering::listIntermediates</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d3/d06/a06707" kindref="compound">IntermediateView</ref> &gt; &amp;</type>
+          <declname>intermediates</declname>
+        </param>
+        <briefdescription>
+<para>Liste les vues intermédiaires utilisées par toute la technique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">intermediates</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les vues intermédiaires. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="70" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d80/a06795_1aa9c1ce21fd73756589485d062886476d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TransparentRendering::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::TransparentRendering::update</qualifiedname>
+        <param>
+          <type><ref refid="dc/d23/a06511" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour la passe de rendu, au niveau CPU. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données d&apos;update. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="79" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d80/a06795_1a9a004b8719b34db19448567f9922da32" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TransparentRendering::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::TransparentRendering::update</qualifiedname>
+        <param>
+          <type><ref refid="d9/d4b/a06519" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Met à jour la passe de rendu, au niveau GPU. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données d&apos;update. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="88" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d80/a06795_1a77d3fcea1ae9e0f6f7dd7b5609211512" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TransparentRendering::accept</definition>
+        <argsstring>(RenderTechniqueVisitor &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::TransparentRendering::accept</qualifiedname>
+        <param>
+          <type><ref refid="d1/d7f/a06591" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;acceptation de visiteur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le ... visiteur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="101" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="da/d80/a06795_1ac7a40dca83e22a5f2ec44111f8049470" prot="public" static="yes" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>static uint32_t castor3d::TransparentRendering::countInitialisationSteps</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>countInitialisationSteps</name>
+        <qualifiedname>castor3d::TransparentRendering::countInitialisationSteps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le nombre d&apos;étapes nécessaires à l&apos;initialisation, pour en montrer la progression. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="61" column="17"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="da/d80/a06795_1aadb64583e07edab81536f572c781ea8a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::TransparentRendering::doCreateMipGenPass</definition>
+        <argsstring>(ProgressBar *progress, crg::FramePass const &amp;lastPass, crg::FramePassArray previousPasses)</argsstring>
+        <name>doCreateMipGenPass</name>
+        <qualifiedname>castor3d::TransparentRendering::doCreateMipGenPass</qualifiedname>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>lastPass</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray</type>
+          <declname>previousPasses</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="116" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d80/a06795_1a7b1fb62d7a1df4cd41eb10dbb1f57cc1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::TransparentRendering::doCreateForwardTransparentPass</definition>
+        <argsstring>(ProgressBar *progress, crg::FramePass const &amp;lastPass)</argsstring>
+        <name>doCreateForwardTransparentPass</name>
+        <qualifiedname>castor3d::TransparentRendering::doCreateForwardTransparentPass</qualifiedname>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>lastPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="119" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d80/a06795_1a02758824f5ef01e377777d3494861a84" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::TransparentRendering::doCreateWBTransparentPass</definition>
+        <argsstring>(ProgressBar *progress, crg::FramePass const &amp;lastPass)</argsstring>
+        <name>doCreateWBTransparentPass</name>
+        <qualifiedname>castor3d::TransparentRendering::doCreateWBTransparentPass</qualifiedname>
+        <param>
+          <type><ref refid="d6/daf/a05323" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>lastPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="121" column="17"/>
+      </memberdef>
+    </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Gui/GuiModule.hpp" line="469" column="1"/>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderTechnique &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; RenderTechnique &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::TransparentRendering</label>
+        <link refid="da/d80/a06795"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderTechnique &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; RenderTechnique &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::TransparentRendering</label>
+        <link refid="da/d80/a06795"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/Transparent/TransparentRendering.hpp" line="20" column="1" bodyfile="Castor3D/Render/Transparent/TransparentRendering.hpp" bodystart="22" bodyend="134"/>
+    <listofallmembers>
+      <member refid="da/d80/a06795_1a77d3fcea1ae9e0f6f7dd7b5609211512" prot="public" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>accept</name></member>
+      <member refid="da/d80/a06795_1ac7a40dca83e22a5f2ec44111f8049470" prot="public" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>countInitialisationSteps</name></member>
+      <member refid="da/d80/a06795_1a7b1fb62d7a1df4cd41eb10dbb1f57cc1" prot="private" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>doCreateForwardTransparentPass</name></member>
+      <member refid="da/d80/a06795_1aadb64583e07edab81536f572c781ea8a" prot="private" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>doCreateMipGenPass</name></member>
+      <member refid="da/d80/a06795_1a02758824f5ef01e377777d3494861a84" prot="private" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>doCreateWBTransparentPass</name></member>
+      <member refid="da/d80/a06795_1a6e54630910c7c276ed7914ae27eebcbd" prot="public" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>getEngine</name></member>
+      <member refid="da/d80/a06795_1a0a0a9f77c9572e35796373d3b5e4820d" prot="public" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>getLastPass</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>getOwner</name></member>
+      <member refid="da/d80/a06795_1a86cb55a95d1f2ece327ffa68f759aeab" prot="public" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>listIntermediates</name></member>
+      <member refid="da/d80/a06795_1a7e0941bd298cd40159f418d39bcffb66" prot="private" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>m_device</name></member>
+      <member refid="da/d80/a06795_1a9adf277ad05228a3750183afce2e94de" prot="private" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>m_enabled</name></member>
+      <member refid="da/d80/a06795_1a1849584bde4a3d907dd3366ed8397a33" prot="private" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>m_graph</name></member>
+      <member refid="da/d80/a06795_1a13ba70b2ab3dca069b92dff885ecedf3" prot="private" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>m_mipgenPassDesc</name></member>
+      <member refid="da/d80/a06795_1abe0691c8348d366d7f06c2b7217d44b4" prot="private" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>m_mippedColour</name></member>
+      <member refid="da/d80/a06795_1a2e0b2da3bb42e60506a35ff708ca3a2c" prot="private" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>m_transparentPass</name></member>
+      <member refid="da/d80/a06795_1a80c0b8a421e2152a6c0a1bac6e0c180b" prot="private" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>m_transparentPassDesc</name></member>
+      <member refid="da/d80/a06795_1a9057f73ed82fd8930ebae7ad263c06ed" prot="private" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>m_transparentPassResult</name></member>
+      <member refid="da/d80/a06795_1adb8bd499576b20fc9152ed20a5f76907" prot="private" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>m_weightedBlendRendering</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>OwnedBy</name></member>
+      <member refid="da/d80/a06795_1a99745977ced41b3c9cce030b6482db39" prot="public" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>TransparentRendering</name></member>
+      <member refid="da/d80/a06795_1aa9c1ce21fd73756589485d062886476d" prot="public" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>update</name></member>
+      <member refid="da/d80/a06795_1a9a004b8719b34db19448567f9922da32" prot="public" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>update</name></member>
+      <member refid="da/d80/a06795_1a6e25b80ed62945ebfac70055f3382ccc" prot="public" virt="non-virtual"><scope>castor3d::TransparentRendering</scope><name>~TransparentRendering</name></member>
+    </listofallmembers>
   </compounddef>
 </doxygen>

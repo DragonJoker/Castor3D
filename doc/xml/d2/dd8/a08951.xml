@@ -1,0 +1,375 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/dd8/a08951" kind="class" language="C++" prot="public" final="yes">
+    <compoundname>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</compoundname>
+    <basecompoundref refid="d8/da3/a08255" prot="public" virt="non-virtual">castor::ResourceCacheBaseT&lt; Image, String, ImageCacheTraits &gt;</basecompoundref>
+    <includes local="no">ImageCache.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d2/dd8/a08951_1a7d64535d3fa97004a0823d72848d9d7e" prot="public" static="no">
+        <type><ref refid="d6/d3e/a08939" kindref="compound">Image</ref></type>
+        <definition>using castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementT =  Image</definition>
+        <argsstring></argsstring>
+        <name>ElementT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="114" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dd8/a08951_1af27ff3a52fa556b459e2b2fcfab6ddf3" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+        <definition>using castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementKeyT =  String</definition>
+        <argsstring></argsstring>
+        <name>ElementKeyT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementKeyT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="115" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dd8/a08951_1a832939fa2417a4a491c8937044e4446d" prot="public" static="no">
+        <type><ref refid="d2/dd2/a02279_1a91eacc350c18bc62d27b1a10f442c708" kindref="member">ImageCacheTraits</ref></type>
+        <definition>using castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementCacheTraitsT =  ImageCacheTraits</definition>
+        <argsstring></argsstring>
+        <name>ElementCacheTraitsT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementCacheTraitsT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="116" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dd8/a08951_1a2251af279d90081a61f398384145d897" prot="public" static="no">
+        <type><ref refid="d8/da3/a08255" kindref="compound">ResourceCacheBaseT</ref>&lt; <ref refid="d2/dd8/a08951_1a7d64535d3fa97004a0823d72848d9d7e" kindref="member">ElementT</ref>, <ref refid="d2/dd8/a08951_1af27ff3a52fa556b459e2b2fcfab6ddf3" kindref="member">ElementKeyT</ref>, <ref refid="d2/dd8/a08951_1a832939fa2417a4a491c8937044e4446d" kindref="member">ElementCacheTraitsT</ref> &gt;</type>
+        <definition>using castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementCacheT =  ResourceCacheBaseT&lt; ElementT, ElementKeyT, ElementCacheTraitsT &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementCacheT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementCacheT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="117" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dd8/a08951_1abc39357e6adc08038c4665f81bf67280" prot="public" static="no">
+        <type>typename ElementCacheT::ElementPtrT</type>
+        <definition>using castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementPtrT =  typename ElementCacheT::ElementPtrT</definition>
+        <argsstring></argsstring>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementPtrT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="118" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dd8/a08951_1a4731452dcd4b696e95f46583f09ef266" prot="public" static="no">
+        <type>typename ElementCacheT::ElementObsT</type>
+        <definition>using castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementObsT =  typename ElementCacheT::ElementObsT</definition>
+        <argsstring></argsstring>
+        <name>ElementObsT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementObsT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="119" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dd8/a08951_1a0f76288bec2a2dfb16eefd7338be60f2" prot="public" static="no">
+        <type>typename ElementCacheT::ElementContT</type>
+        <definition>using castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementContT =  typename ElementCacheT::ElementContT</definition>
+        <argsstring></argsstring>
+        <name>ElementContT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementContT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="120" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dd8/a08951_1a5765b21d9791390516a653366172ee0b" prot="public" static="no">
+        <type>typename ElementCacheT::ElementInitialiserT</type>
+        <definition>using castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementInitialiserT =  typename ElementCacheT::ElementInitialiserT</definition>
+        <argsstring></argsstring>
+        <name>ElementInitialiserT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementInitialiserT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="121" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dd8/a08951_1a9f17c3d26a02e1181d83568a0ecde5fa" prot="public" static="no">
+        <type>typename ElementCacheT::ElementCleanerT</type>
+        <definition>using castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementCleanerT =  typename ElementCacheT::ElementCleanerT</definition>
+        <argsstring></argsstring>
+        <name>ElementCleanerT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementCleanerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="122" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dd8/a08951_1a02bf67c658744e752c3b2114cde2b10e" prot="public" static="no">
+        <type>typename ElementCacheT::ElementMergerT</type>
+        <definition>using castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementMergerT =  typename ElementCacheT::ElementMergerT</definition>
+        <argsstring></argsstring>
+        <name>ElementMergerT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ElementMergerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="123" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/dd8/a08951_1a0b4b2a33a8ae6f48d7acc25698a4d90c" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d26/a08963" kindref="compound">ImageLoader</ref> const  &amp;</type>
+        <definition>ImageLoader const&amp; castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::m_loader</definition>
+        <argsstring></argsstring>
+        <name>m_loader</name>
+        <qualifiedname>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::m_loader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="138" column="20" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="138" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/dd8/a08951_1a43ae3ca21f6c42582519bf6d41aafefb" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ResourceCacheT</definition>
+        <argsstring>(LoggerInstance &amp;logger, ImageLoader const &amp;loader)</argsstring>
+        <name>ResourceCacheT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::ResourceCacheT</qualifiedname>
+        <param>
+          <type><ref refid="d9/d93/a09063" kindref="compound">LoggerInstance</ref> &amp;</type>
+          <declname>logger</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d26/a08963" kindref="compound">ImageLoader</ref> const &amp;</type>
+          <declname>loader</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="126" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dd8/a08951_1aec9860eb6c40735ed9e8685bae0a328a" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::~ResourceCacheT</definition>
+        <argsstring>() noexcept override=default</argsstring>
+        <name>~ResourceCacheT</name>
+        <qualifiedname>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::~ResourceCacheT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="128" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dd8/a08951_1ad405972bd7b5be97279655cd7594d739" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="dc/d26/a08963" kindref="compound">ImageLoader</ref> const &amp;</type>
+        <definition>ImageLoader const  &amp; castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::getLoader</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getLoader</name>
+        <qualifiedname>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::getLoader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="130" column="20" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="130" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dd8/a08951_1afebeec47159317e4c0b26dec63ae7c90" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+        <definition>CU_API PixelFormat castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::getImageFormat</definition>
+        <argsstring>(String const &amp;name) const</argsstring>
+        <name>getImageFormat</name>
+        <qualifiedname>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;::getImageFormat</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageCache.hpp" line="135" column="20"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Classe de base pour un cache d&apos;éléments. <simplesect kind="remark"><para>Spécialisation pour <ref refid="d6/d3e/a08939" kindref="compound">castor::Image</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::ResourceCacheBaseT&lt; Image, String, ImageCacheTraits &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Image, String, ImageCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;</label>
+        <link refid="d8/da3/a08255"/>
+      </node>
+      <node id="1">
+        <label>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</label>
+        <link refid="d2/dd8/a08951"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::ResourceCacheBaseT&lt; Image, String, ImageCacheTraits &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_logger</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Image, String, ImageCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::LoggerInstance</label>
+        <link refid="d9/d93/a09063"/>
+      </node>
+      <node id="4">
+        <label>castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_logger</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</label>
+        <link refid="d2/dd8/a08951"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/ImageCache.hpp" line="110" column="1" bodyfile="CastorUtils/Graphics/ImageCache.hpp" bodystart="112" bodyend="139"/>
+    <listofallmembers>
+      <member refid="d8/da3/a08255_1ae42bd6b7da6f50fdef84f04a84172313" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>add</name></member>
+      <member refid="d8/da3/a08255_1af4b3aa2cae901fb81e67007a49f01c89" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>add</name></member>
+      <member refid="d8/da3/a08255_1a1fc2571a5ea51ead9564b4cec6b31314" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>addNoLock</name></member>
+      <member refid="d8/da3/a08255_1a0a36c208871e24f543beb6d46751244b" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>addNoLock</name></member>
+      <member refid="d8/da3/a08255_1a513f7e6f476b4e383247c3e2521dab66" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>begin</name></member>
+      <member refid="d8/da3/a08255_1a50bb86447bf101e78949992c5e690204" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>begin</name></member>
+      <member refid="d8/da3/a08255_1a7b9ac51df57e111ec2af31f89a97cbac" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>cleanup</name></member>
+      <member refid="d8/da3/a08255_1a5400b3eabcf62af7df977a20e643418d" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>clear</name></member>
+      <member refid="d8/da3/a08255_1aae5b569e26955738733ba4de036629d7" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>create</name></member>
+      <member refid="d8/da3/a08255_1a63b72a3a1c306679e47426f3a270ec97" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>doAddNoLock</name></member>
+      <member refid="d8/da3/a08255_1a5fc262a8e5bbcb42d59d19b211a65203" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>doAddNoLockT</name></member>
+      <member refid="d8/da3/a08255_1a9623d8ca68e009f78e842011a9caceb4" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>doCleanupNoLock</name></member>
+      <member refid="d8/da3/a08255_1a5a950162bcc6e71f5ae81ad5f4a85f01" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>doClearNoLock</name></member>
+      <member refid="d8/da3/a08255_1adee23d182e1e5ddc942024826978b31e" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>doCreateT</name></member>
+      <member refid="d8/da3/a08255_1a6e4ca586f9ab38ecc32ba59585435d0e" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>doTryAddNoLock</name></member>
+      <member refid="d8/da3/a08255_1acfdaeba21b6d8853f0629ae9197342dd" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>doTryAddNoLockT</name></member>
+      <member refid="d8/da3/a08255_1a0186ef49bd625ae3669d94657845237f" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>doTryFindNoLock</name></member>
+      <member refid="d8/da3/a08255_1a74a35e486aa159b89451ccfb86e2dbd9" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>doTryRemoveNoLock</name></member>
+      <member refid="d8/da3/a08255_1a38cf128e704f26d2cc6d0dd1aa7997e9" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>ElementCacheBaseT</name></member>
+      <member refid="d2/dd8/a08951_1a2251af279d90081a61f398384145d897" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>ElementCacheT</name></member>
+      <member refid="d2/dd8/a08951_1a832939fa2417a4a491c8937044e4446d" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>ElementCacheTraitsT</name></member>
+      <member refid="d2/dd8/a08951_1a9f17c3d26a02e1181d83568a0ecde5fa" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>ElementCleanerT</name></member>
+      <member refid="d2/dd8/a08951_1a0f76288bec2a2dfb16eefd7338be60f2" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>ElementContT</name></member>
+      <member refid="d2/dd8/a08951_1a5765b21d9791390516a653366172ee0b" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>ElementInitialiserT</name></member>
+      <member refid="d2/dd8/a08951_1af27ff3a52fa556b459e2b2fcfab6ddf3" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>ElementKeyT</name></member>
+      <member refid="d2/dd8/a08951_1a02bf67c658744e752c3b2114cde2b10e" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>ElementMergerT</name></member>
+      <member refid="d2/dd8/a08951_1a4731452dcd4b696e95f46583f09ef266" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>ElementObsT</name></member>
+      <member refid="d2/dd8/a08951_1abc39357e6adc08038c4665f81bf67280" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>ElementPtrT</name></member>
+      <member refid="d2/dd8/a08951_1a7d64535d3fa97004a0823d72848d9d7e" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>ElementT</name></member>
+      <member refid="d8/da3/a08255_1a4da03983e4fa5f10c489e9c46f059f28" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>end</name></member>
+      <member refid="d8/da3/a08255_1a0291614751b6a31d44dbee9e1750d579" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>end</name></member>
+      <member refid="d8/da3/a08255_1ae2bc50ccc5e4f323a14a1a6f39d3ec14" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>find</name></member>
+      <member refid="d8/da3/a08255_1a4978d020ac192e539d60ce384b714753" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>findNoLock</name></member>
+      <member refid="d8/da3/a08255_1ae84da1b21345a418752dd78b0cf644ae" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>forEach</name></member>
+      <member refid="d8/da3/a08255_1ade25c114da6605836b4d9618c5236fb0" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>forEach</name></member>
+      <member refid="d2/dd8/a08951_1afebeec47159317e4c0b26dec63ae7c90" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>getImageFormat</name></member>
+      <member refid="d2/dd8/a08951_1ad405972bd7b5be97279655cd7594d739" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>getLoader</name></member>
+      <member refid="d8/da3/a08255_1a3a6c437db53c29554a44635674119d3d" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>getObjectCount</name></member>
+      <member refid="d8/da3/a08255_1a38d921d597aa752485a108e4fc1d70d7" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>getObjectCountNoLock</name></member>
+      <member refid="d8/da3/a08255_1a846eb5869a3b833ce9200edb493a3463" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>getObjectTypeName</name></member>
+      <member refid="d8/da3/a08255_1a2c7514746fa02eb850a1a274cc227732" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>has</name></member>
+      <member refid="d8/da3/a08255_1a226df2a5fa8ac0d1ab25c344d8feaf8c" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>hasNoLock</name></member>
+      <member refid="d8/da3/a08255_1a4603e9fde607cdf993adf47ba4dd307f" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>isEmpty</name></member>
+      <member refid="d8/da3/a08255_1ae9a58e21f9e7bbbd9b6d56ffd076ab50" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>isEmptyNoLock</name></member>
+      <member refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>lock</name></member>
+      <member refid="d8/da3/a08255_1acaf0ac6efbc13f391e4976d766284df2" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>m_clean</name></member>
+      <member refid="d8/da3/a08255_1a8cf6f3524574a11b8cf97f67b0c8f168" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>m_initialise</name></member>
+      <member refid="d2/dd8/a08951_1a0b4b2a33a8ae6f48d7acc25698a4d90c" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>m_loader</name></member>
+      <member refid="d8/da3/a08255_1a3ff280a88ac186050be8c57363f585e9" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>m_logger</name></member>
+      <member refid="d8/da3/a08255_1a1e3539946398fbe77bcec1c29d4084de" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>m_merge</name></member>
+      <member refid="d8/da3/a08255_1ae0f2c32510e90ebd77738c5d99aba20d" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>m_mutex</name></member>
+      <member refid="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>m_resources</name></member>
+      <member refid="d8/da3/a08255_1a107169e0364711fced26e4d512819a13" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>mergeInto</name></member>
+      <member refid="d8/da3/a08255_1a0ee0c582a59a49ecf8b68c0bb68721a1" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>MutexT</name></member>
+      <member refid="d8/da3/a08255_1a00583361ac080fd7136cf106d386b8e7" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>operator=</name></member>
+      <member refid="d8/da3/a08255_1af8fa35257e8982d727e716872de2c499" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>operator=</name></member>
+      <member refid="d8/da3/a08255_1a21d0ef274f434e61b1d0c336a8c7253a" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>remove</name></member>
+      <member refid="d8/da3/a08255_1a55752549d182d7d232c432746b6b5312" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>removeNoLock</name></member>
+      <member refid="d8/da3/a08255_1a6318e3a64926730b389ee55727eacb3e" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>rename</name></member>
+      <member refid="d8/da3/a08255_1a3f6cbb3c0ad8d6136141c4c089f7f479" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>reportAdded</name></member>
+      <member refid="d8/da3/a08255_1aa1689ccd9a406fe8dfe9ff473d226b5e" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>reportCreation</name></member>
+      <member refid="d8/da3/a08255_1aa24d9472022aa0f450529b07d9b7f743" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>reportDuplicate</name></member>
+      <member refid="d8/da3/a08255_1a9c25c01ca8f76ad4a25088101572200d" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>reportNull</name></member>
+      <member refid="d8/da3/a08255_1a6537032eaeeadaffea633743e3218e53" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>reportUnknown</name></member>
+      <member refid="d8/da3/a08255_1a2c54dbffb6da0f873564cd7523c6ca2e" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>ResourceCacheBaseT</name></member>
+      <member refid="d8/da3/a08255_1a3cc66423ca359aebe860a4cd37a16ed2" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>ResourceCacheBaseT</name></member>
+      <member refid="d8/da3/a08255_1ad1f999dc303a3929d1ce12688a7bfa82" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>ResourceCacheBaseT</name></member>
+      <member refid="d2/dd8/a08951_1a43ae3ca21f6c42582519bf6d41aafefb" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>ResourceCacheT</name></member>
+      <member refid="d8/da3/a08255_1adfe23feed932e13cb6d29207a1ccc51a" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>tryAdd</name></member>
+      <member refid="d8/da3/a08255_1ad7c855d1938539d8353d27f31f1b1a6b" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>tryAdd</name></member>
+      <member refid="d8/da3/a08255_1a455df8866f38178ee368bb82324cc5b3" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>tryAddNoLock</name></member>
+      <member refid="d8/da3/a08255_1ab193001556389344cbd6c9ae7861af7d" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>tryAddNoLock</name></member>
+      <member refid="d8/da3/a08255_1a1057aebd572ac71378ea519f7c0288ab" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>tryFind</name></member>
+      <member refid="d8/da3/a08255_1a0858d0d079fd8fa1a4506cfe2f5266b2" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>tryFindNoLock</name></member>
+      <member refid="d8/da3/a08255_1a5d16d1a42b2ea9518a97d9d8e1408140" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>tryRemove</name></member>
+      <member refid="d8/da3/a08255_1aa66962c4bd8bfec19c1d9df146349f9e" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>tryRemoveNoLock</name></member>
+      <member refid="d8/da3/a08255_1adaebf3755b5ae0a14b71d7223279b189" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>unlock</name></member>
+      <member refid="d8/da3/a08255_1a4659119e9e245b67bfc7ad3a480a97d3" prot="protected" virt="virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>~ResourceCacheBaseT</name></member>
+      <member refid="d2/dd8/a08951_1aec9860eb6c40735ed9e8685bae0a328a" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</scope><name>~ResourceCacheT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

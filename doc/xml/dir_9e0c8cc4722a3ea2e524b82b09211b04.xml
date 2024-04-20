@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dir_9e0c8cc4722a3ea2e524b82b09211b04" kind="dir">
+    <compoundname>CastorUtils/Graphics</compoundname>
+    <innerfile refid="d9/da1/a01976">BoundingBox.hpp</innerfile>
+    <innerfile refid="d6/d8e/a01979">BoundingContainer.hpp</innerfile>
+    <innerfile refid="d2/d3d/a01982">BoundingSphere.hpp</innerfile>
+    <innerfile refid="d3/def/a01985">BoxFilterKernel.hpp</innerfile>
+    <innerfile refid="da/d4f/a11720">Colour.hpp</innerfile>
+    <innerfile refid="df/d9a/a11684">ColourComponent.hpp</innerfile>
+    <innerfile refid="d5/da1/a01988">DataImageLoader.hpp</innerfile>
+    <innerfile refid="d3/d4e/a01991">ExrImageLoader.hpp</innerfile>
+    <innerfile refid="d4/dae/a01994">Font.hpp</innerfile>
+    <innerfile refid="d0/d2b/a01997">FontCache.hpp</innerfile>
+    <innerfile refid="da/d51/a02000">FreeImageLoader.hpp</innerfile>
+    <innerfile refid="d7/d98/a02003">GliImageLoader.hpp</innerfile>
+    <innerfile refid="d9/de8/a02006">GliImageWriter.hpp</innerfile>
+    <innerfile refid="d8/d98/a02009">Glyph.hpp</innerfile>
+    <innerfile refid="d5/d2c/a02012">GraphicsModule.hpp</innerfile>
+    <innerfile refid="de/d0a/a02015">Grid.hpp</innerfile>
+    <innerfile refid="da/d2d/a02018">HdrColourComponent.hpp</innerfile>
+    <innerfile refid="d8/d45/a02021">HeightMapToNormalMap.hpp</innerfile>
+    <innerfile refid="d8/db2/a11726">Image.hpp</innerfile>
+    <innerfile refid="d7/dbe/a02024">ImageCache.hpp</innerfile>
+    <innerfile refid="df/d52/a02027">ImageLayout.hpp</innerfile>
+    <innerfile refid="d8/de7/a02030">ImageLoader.hpp</innerfile>
+    <innerfile refid="d6/d94/a02033">ImageWriter.hpp</innerfile>
+    <innerfile refid="d7/db2/a02036">LanczosFilterKernel.hpp</innerfile>
+    <innerfile refid="d4/d9b/a02039">Pixel.hpp</innerfile>
+    <innerfile refid="d1/dc4/a02042">PixelBuffer.hpp</innerfile>
+    <innerfile refid="d7/d13/a02045">PixelBufferBase.hpp</innerfile>
+    <innerfile refid="d1/d39/a02048">PixelComponents.hpp</innerfile>
+    <innerfile refid="d4/d2e/a02051">PixelConstIterator.hpp</innerfile>
+    <innerfile refid="d7/d38/a02054">PixelDefinitions.hpp</innerfile>
+    <innerfile refid="d2/dea/a02057">PixelFormat.hpp</innerfile>
+    <innerfile refid="d5/d8b/a02060">PixelIterator.hpp</innerfile>
+    <innerfile refid="d2/d8a/a02063">Position.hpp</innerfile>
+    <innerfile refid="da/d14/a02066">Rectangle.hpp</innerfile>
+    <innerfile refid="d3/d48/a02069">RgbaColour.hpp</innerfile>
+    <innerfile refid="de/d9d/a02072">RgbColour.hpp</innerfile>
+    <innerfile refid="d9/d95/a02075">Size.hpp</innerfile>
+    <innerfile refid="da/dbe/a02084">stb_image.h</innerfile>
+    <innerfile refid="d2/d31/a02087">stb_image_resize.h</innerfile>
+    <innerfile refid="d7/deb/a02090">stb_image_write.h</innerfile>
+    <innerfile refid="d6/d5b/a02078">StbImageLoader.hpp</innerfile>
+    <innerfile refid="d2/d50/a02081">StbImageWriter.hpp</innerfile>
+    <innerfile refid="d3/d1e/a02093">UnsupportedFormatException.hpp</innerfile>
+    <innerfile refid="dd/d77/a02096">XpmImageLoader.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/"/>
+  </compounddef>
+</doxygen>

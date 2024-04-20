@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d31/a05327" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::ProgressBar::ProgressData</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d31/a05327_1a9c0b139e02633956651b49261ed9fb3c" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::ProgressBar::ProgressData::title</definition>
+        <argsstring></argsstring>
+        <name>title</name>
+        <qualifiedname>castor3d::ProgressBar::ProgressData::title</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="57" column="16" bodyfile="Castor3D/Miscellaneous/ProgressBar.hpp" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d31/a05327_1a67e0fdcfdefd43dd242c5293f0252d22" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::ProgressBar::ProgressData::label</definition>
+        <argsstring></argsstring>
+        <name>label</name>
+        <qualifiedname>castor3d::ProgressBar::ProgressData::label</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="58" column="16" bodyfile="Castor3D/Miscellaneous/ProgressBar.hpp" bodystart="58" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d31/a05327_1acb11950cbd05ca57d2f2b331959b28eb" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::ProgressBar::ProgressData::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>castor3d::ProgressBar::ProgressData::value</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="59" column="9" bodyfile="Castor3D/Miscellaneous/ProgressBar.hpp" bodystart="59" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d31/a05327_1a8454c3609e6e89da7131dee78a6e0953" prot="public" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::ProgressBar::ProgressData::rangeMax</definition>
+        <argsstring></argsstring>
+        <name>rangeMax</name>
+        <qualifiedname>castor3d::ProgressBar::ProgressData::rangeMax</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="60" column="9" bodyfile="Castor3D/Miscellaneous/ProgressBar.hpp" bodystart="60" bodyend="60"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ProgressBar::ProgressData</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>label</edgelabel>
+          <edgelabel>title</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Miscellaneous/ProgressBar.hpp" line="55" column="1" bodyfile="Castor3D/Miscellaneous/ProgressBar.hpp" bodystart="56" bodyend="61"/>
+    <listofallmembers>
+      <member refid="d0/d31/a05327_1a67e0fdcfdefd43dd242c5293f0252d22" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar::ProgressData</scope><name>label</name></member>
+      <member refid="d0/d31/a05327_1a8454c3609e6e89da7131dee78a6e0953" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar::ProgressData</scope><name>rangeMax</name></member>
+      <member refid="d0/d31/a05327_1a9c0b139e02633956651b49261ed9fb3c" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar::ProgressData</scope><name>title</name></member>
+      <member refid="d0/d31/a05327_1acb11950cbd05ca57d2f2b331959b28eb" prot="public" virt="non-virtual"><scope>castor3d::ProgressBar::ProgressData</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,14 @@
+<map id="castor3d::EventHandler::connect" name="castor3d::EventHandler::connect">
+<area shape="rect" id="Node000001" title="Connects a function to a mouse event." alt="" coords="221,133,377,173"/>
+<area shape="poly" id="edge3_Node000001_Node000001" title=" " alt="" coords="334,122,322,115,299,112,279,114,267,119,263,125,265,132,260,134,258,124,264,114,278,109,299,107,324,110,337,117"/>
+<area shape="rect" id="Node000002" href="$da/db0/a03747.html#a27234b5982660ef259a8e869da4e6da0" title="Connects a function to a handler event." alt="" coords="11,5,167,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="264,126,221,92,172,60,148,48,150,43,175,55,225,88,267,122"/>
+<area shape="rect" id="Node000003" href="$da/db0/a03747.html#a072131ef43a320ea20a8177f64db0199" title="Connects a function to a keyboard event." alt="" coords="11,69,167,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="219,132,155,112,156,107,221,127"/>
+<area shape="rect" id="Node000004" href="$d7/dfa/a03751.html#a766759743a229af558fbe4053692bade" title="Connects a function to a non client handler event." alt="" coords="5,133,173,173"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="207,156,173,156,173,151,207,151"/>
+<area shape="rect" id="Node000005" href="$d7/dfa/a03751.html#ab5d52b4021d688cc40caeb9fadba5458" title="Connects a function to a non client keyboard event." alt="" coords="5,197,173,237"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="221,180,156,200,155,195,219,175"/>
+<area shape="rect" id="Node000006" href="$d7/dfa/a03751.html#a7c772af5b472ac82d7a40ebe4968cfb2" title="Connects a function to a non client mouse event." alt="" coords="5,261,173,301"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="267,185,225,219,175,252,150,264,148,259,172,247,221,214,264,180"/>
+</map>

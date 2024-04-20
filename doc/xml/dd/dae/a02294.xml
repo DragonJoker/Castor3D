@@ -1,0 +1,411 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/dae/a02294" kind="namespace" language="C++">
+    <compoundname>castor::manip</compoundname>
+    <innerclass refid="da/d8e/a09527" prot="public">castor::manip::BaseNumPut</innerclass>
+    <innerclass refid="da/d35/a09499" prot="public">castor::manip::BasicBaseManip</innerclass>
+    <innerclass refid="d5/dc5/a09503" prot="public">castor::manip::DigitChars</innerclass>
+    <innerclass refid="d5/dec/a09507" prot="public">castor::manip::DigitChars&lt; char &gt;</innerclass>
+    <innerclass refid="d3/dcb/a09519" prot="public">castor::manip::DigitChars&lt; char16_t &gt;</innerclass>
+    <innerclass refid="d2/d5d/a09523" prot="public">castor::manip::DigitChars&lt; char32_t &gt;</innerclass>
+    <innerclass refid="db/d61/a09515" prot="public">castor::manip::DigitChars&lt; char8_t &gt;</innerclass>
+    <innerclass refid="db/d96/a09511" prot="public">castor::manip::DigitChars&lt; wchar_t &gt;</innerclass>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="dd/dae/a02294_1a97b3f143ec1f25e3810a5c8cf784b9cd" prot="public" static="no">
+        <type><ref refid="da/d35/a09499" kindref="compound">BasicBaseManip</ref>&lt; char &gt;</type>
+        <definition>using castor::manip::BaseManip =  BasicBaseManip&lt; char &gt;</definition>
+        <argsstring></argsstring>
+        <name>BaseManip</name>
+        <qualifiedname>castor::manip::BaseManip</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="45" column="1" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/dae/a02294_1a0ae9304b94271a7af324b4abc1394464" prot="public" static="no">
+        <type><ref refid="da/d35/a09499" kindref="compound">BasicBaseManip</ref>&lt; wchar_t &gt;</type>
+        <definition>using castor::manip::WBaseManip =  BasicBaseManip&lt; wchar_t &gt;</definition>
+        <argsstring></argsstring>
+        <name>WBaseManip</name>
+        <qualifiedname>castor::manip::WBaseManip</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="46" column="1" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/dae/a02294_1a93d351e1863d5ff5a2ca803bed384571" prot="public" static="no">
+        <type><ref refid="da/d35/a09499" kindref="compound">BasicBaseManip</ref>&lt; <ref refid="d2/dd2/a02279_1a98169622bc976df3189194c2b35fbf60" kindref="member">xchar</ref> &gt;</type>
+        <definition>using castor::manip::XBaseManip =  BasicBaseManip&lt; xchar &gt;</definition>
+        <argsstring></argsstring>
+        <name>XBaseManip</name>
+        <qualifiedname>castor::manip::XBaseManip</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="47" column="1" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/dae/a02294_1ac881af72bac44b79c52b484832d70a06" prot="public" static="no">
+        <type><ref refid="da/d35/a09499" kindref="compound">BasicBaseManip</ref>&lt; <ref refid="d2/dd2/a02279_1a17d8877464f26e03b4bdec4ee0ba0518" kindref="member">u32char</ref> &gt;</type>
+        <definition>using castor::manip::U32BaseManip =  BasicBaseManip&lt; u32char &gt;</definition>
+        <argsstring></argsstring>
+        <name>U32BaseManip</name>
+        <qualifiedname>castor::manip::U32BaseManip</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="48" column="1" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="dd/dae/a02294_1a5b067aeedc6697dca446366dcc7c9fbe" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>typename CharType</type>
+          </param>
+        </templateparamlist>
+        <type>std::basic_string_view&lt; CharType &gt; constexpr</type>
+        <definition>std::basic_string_view&lt; CharType &gt; constexpr castor::manip::digitCharLcT</definition>
+        <argsstring></argsstring>
+        <name>digitCharLcT</name>
+        <qualifiedname>castor::manip::digitCharLcT</qualifiedname>
+        <initializer>= <ref refid="d5/dc5/a09503" kindref="compound">DigitChars</ref>&lt; CharType &gt;::digitCharLc</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="219" column="41" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="219" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dae/a02294_1a7d53d6e6cd08690e33a2a1e949eac3b1" prot="public" static="no" constexpr="yes" mutable="no">
+        <templateparamlist>
+          <param>
+            <type>typename CharType</type>
+          </param>
+        </templateparamlist>
+        <type>std::basic_string_view&lt; CharType &gt; constexpr</type>
+        <definition>std::basic_string_view&lt; CharType &gt; constexpr castor::manip::digitCharUcT</definition>
+        <argsstring></argsstring>
+        <name>digitCharUcT</name>
+        <qualifiedname>castor::manip::digitCharUcT</qualifiedname>
+        <initializer>= <ref refid="d5/dc5/a09503" kindref="compound">DigitChars</ref>&lt; CharType &gt;::digitCharUc</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="221" column="41" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="221" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="dd/dae/a02294_1abfe0405df8bda3e1c8f73897f86715e6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename CharType</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="da/d35/a09499" kindref="compound">BasicBaseManip</ref>&lt; CharType &gt;</type>
+        <definition>BasicBaseManip&lt; CharType &gt; castor::manip::baseT</definition>
+        <argsstring>(int b)</argsstring>
+        <name>baseT</name>
+        <qualifiedname>castor::manip::baseT</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de flux. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Crée un manipulateur, pour l&apos;utiliser dans un flux </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">b</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="61" column="23" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="61" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dae/a02294_1a366f5a2b50ccb63d522ea341a4c8a8d9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/dae/a02294_1a97b3f143ec1f25e3810a5c8cf784b9cd" kindref="member">BaseManip</ref></type>
+        <definition>BaseManip castor::manip::base</definition>
+        <argsstring>(int b)</argsstring>
+        <name>base</name>
+        <qualifiedname>castor::manip::base</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de flux. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Crée un manipulateur, pour l&apos;utiliser dans un flux </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">b</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="76" column="18" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="76" bodyend="79"/>
+        <referencedby refid="da/d8e/a09527_1af2ee7dbf8f3f57b897571ea04e067c12" compoundref="d7/d70/a02252" startline="270" endline="337">castor::manip::BaseNumPut&lt; CharType &gt;::doPutHelper</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/dae/a02294_1a00878769f2dc1cb24c0e0ee3faa79ca9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/dae/a02294_1a0ae9304b94271a7af324b4abc1394464" kindref="member">WBaseManip</ref></type>
+        <definition>WBaseManip castor::manip::wbase</definition>
+        <argsstring>(int b)</argsstring>
+        <name>wbase</name>
+        <qualifiedname>castor::manip::wbase</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de flux. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Crée un manipulateur, pour l&apos;utiliser dans un flux </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">b</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="91" column="19" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="91" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dae/a02294_1a942709626fa20c1d6e3c941de63aa701" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/dae/a02294_1a93d351e1863d5ff5a2ca803bed384571" kindref="member">XBaseManip</ref></type>
+        <definition>XBaseManip castor::manip::xbase</definition>
+        <argsstring>(int b)</argsstring>
+        <name>xbase</name>
+        <qualifiedname>castor::manip::xbase</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de flux. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Crée un manipulateur, pour l&apos;utiliser dans un flux </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">b</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="106" column="19" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="106" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dae/a02294_1af7671f8680e904d6c165b32c95c9106e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/dae/a02294_1ac881af72bac44b79c52b484832d70a06" kindref="member">U32BaseManip</ref></type>
+        <definition>U32BaseManip castor::manip::u32base</definition>
+        <argsstring>(int b)</argsstring>
+        <name>u32base</name>
+        <qualifiedname>castor::manip::u32base</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de flux. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Crée un manipulateur, pour l&apos;utiliser dans un flux </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">b</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La base </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="121" column="21" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="121" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dae/a02294_1ab27d24a15b1647975c4214348c0c8415" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::ostream &amp;</type>
+        <definition>std::ostream &amp; castor::manip::operator&lt;&lt;</definition>
+        <argsstring>(std::ostream &amp;stream, const manip::BaseManip &amp;manip)</argsstring>
+        <name>operator&lt;&lt;</name>
+        <qualifiedname>castor::manip::operator&lt;&lt;</qualifiedname>
+        <param>
+          <type>std::ostream &amp;</type>
+          <declname>stream</declname>
+        </param>
+        <param>
+          <type>const <ref refid="dd/dae/a02294_1a97b3f143ec1f25e3810a5c8cf784b9cd" kindref="member">manip::BaseManip</ref> &amp;</type>
+          <declname>manip</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de flux. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Applique notre manipulateur au flux </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">stream</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le flux </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">manip</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le manipulateur </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="138" column="8" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="138" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dae/a02294_1a919deee9611c3649d391f7c92bad4006" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::wostream &amp;</type>
+        <definition>std::wostream &amp; castor::manip::operator&lt;&lt;</definition>
+        <argsstring>(std::wostream &amp;stream, const manip::WBaseManip &amp;manip)</argsstring>
+        <name>operator&lt;&lt;</name>
+        <qualifiedname>castor::manip::operator&lt;&lt;</qualifiedname>
+        <param>
+          <type>std::wostream &amp;</type>
+          <declname>stream</declname>
+        </param>
+        <param>
+          <type>const <ref refid="dd/dae/a02294_1a0ae9304b94271a7af324b4abc1394464" kindref="member">manip::WBaseManip</ref> &amp;</type>
+          <declname>manip</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de flux. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Applique notre manipulateur au flux </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">stream</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le flux </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">manip</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le manipulateur </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="156" column="8" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="156" bodyend="160"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dae/a02294_1a2e4525ea113050c8efc6126b184b1f7b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a63025845dbd968e642c93265197b686e" kindref="member">U32OutputStream</ref> &amp;</type>
+        <definition>U32OutputStream &amp; castor::manip::operator&lt;&lt;</definition>
+        <argsstring>(U32OutputStream &amp;stream, const manip::U32BaseManip &amp;manip)</argsstring>
+        <name>operator&lt;&lt;</name>
+        <qualifiedname>castor::manip::operator&lt;&lt;</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a63025845dbd968e642c93265197b686e" kindref="member">U32OutputStream</ref> &amp;</type>
+          <declname>stream</declname>
+        </param>
+        <param>
+          <type>const <ref refid="dd/dae/a02294_1ac881af72bac44b79c52b484832d70a06" kindref="member">manip::U32BaseManip</ref> &amp;</type>
+          <declname>manip</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur de flux. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Applique notre manipulateur au flux </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">stream</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le flux </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">manip</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le manipulateur </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="174" column="8" bodyfile="CastorUtils/Stream/StreamBaseManipulators.hpp" bodystart="174" bodyend="178"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Stream/StreamBaseManipulators.hpp" line="16" column="1"/>
+  </compounddef>
+</doxygen>

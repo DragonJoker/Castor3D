@@ -1,7 +1,5 @@
-<map id="castor3d::SpecularComponent" name="castor3d::SpecularComponent">
-<area shape="rect" id="node1" title=" " alt="" coords="28,347,225,372"/>
-<area shape="rect" id="node2" href="$d1/deb/a03418.html" title=" " alt="" coords="10,257,243,297"/>
-<area shape="rect" id="node3" href="$d2/d95/a04030.html" title=" " alt="" coords="5,80,181,105"/>
-<area shape="rect" id="node5" href="$d1/deb/a03418.html" title="Pass component holding base pass data." alt="" coords="115,155,349,195"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,5,181,31"/>
+<map id="castor3d::UploadData::ImageDataRange" name="castor3d::UploadData::ImageDataRange">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,93,152,133"/>
+<area shape="rect" id="Node000002" href="$d5/d6e/a08955.html" title=" " alt="" coords="9,5,149,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="81,44,81,93,76,93,76,44"/>
 </map>

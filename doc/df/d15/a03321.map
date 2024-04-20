@@ -1,4 +1,10 @@
-<map id="castor3d::BlendComponent::Plugin" name="castor3d::BlendComponent::Plugin">
-<area shape="rect" id="node1" title=" " alt="" coords="22,79,201,119"/>
-<area shape="rect" id="node2" href="$db/df2/a04026.html" title=" " alt="" coords="5,5,217,31"/>
+<map id="castor3d::BinaryWriter&lt; SkeletonAnimationKeyFrame &gt;" name="castor3d::BinaryWriter&lt; SkeletonAnimationKeyFrame &gt;">
+<area shape="rect" id="Node000001" title="SkeletonAnimationKeyFrame binary loader." alt="" coords="5,285,220,325"/>
+<area shape="rect" id="Node000002" href="$d4/d9c/a03231.html" title=" " alt="" coords="5,196,220,236"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,250,115,285,110,285,110,250"/>
+<area shape="rect" id="Node000003" href="$d5/d27/a03183.html" title=" " alt="" coords="67,5,222,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="131,44,117,67,107,94,103,121,104,149,111,195,105,196,98,149,98,121,102,93,112,65,126,41"/>
+<area shape="rect" id="Node000004" href="$d4/d9c/a03231.html" title="Binary data chunk writer base class." alt="" coords="173,93,356,133"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="172,37,242,91,239,95,169,41"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="226,143,143,198,140,194,223,139"/>
 </map>

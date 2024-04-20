@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/d94/a05479" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::FaceInfos::Vertex</compoundname>
+    <includes local="no">FaceInfos.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d94/a05479_1aa7ab302b9fa37265ddbc2917d203596c" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int castor3d::FaceInfos::Vertex::m_index</definition>
+        <argsstring></argsstring>
+        <name>m_index</name>
+        <qualifiedname>castor3d::FaceInfos::Vertex::m_index</qualifiedname>
+        <initializer>{ -1 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Indice du sommet. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/FaceInfos.hpp" line="24" column="5" bodyfile="Castor3D/Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="24" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d94/a05479_1a8db18e64db9db217d35e4aef94b4ccde" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; float, 3 &gt;</type>
+        <definition>castor::Array&lt; float, 3 &gt; castor3d::FaceInfos::Vertex::m_normal</definition>
+        <argsstring></argsstring>
+        <name>m_normal</name>
+        <qualifiedname>castor3d::FaceInfos::Vertex::m_normal</qualifiedname>
+        <initializer>{ { 0.0f, 0.0f, 0.0f } }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Normale du sommet. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/FaceInfos.hpp" line="27" column="15" bodyfile="Castor3D/Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="27" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d94/a05479_1aedc761cdd3b3c5c80bfec77bdfe4b378" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; float, 2 &gt;</type>
+        <definition>castor::Array&lt; float, 2 &gt; castor3d::FaceInfos::Vertex::m_texCoords</definition>
+        <argsstring></argsstring>
+        <name>m_texCoords</name>
+        <qualifiedname>castor3d::FaceInfos::Vertex::m_texCoords</qualifiedname>
+        <initializer>{ { 0.0f, 0.0f } }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>UV du sommet. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/FaceInfos.hpp" line="30" column="15" bodyfile="Castor3D/Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="30" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d94/a05479_1add49f877bb5daf9e039150fb81515e46" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::FaceInfos::Vertex::m_hasNormal</definition>
+        <argsstring></argsstring>
+        <name>m_hasNormal</name>
+        <qualifiedname>castor3d::FaceInfos::Vertex::m_hasNormal</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Dit que le sommet a une normale. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/FaceInfos.hpp" line="33" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d94/a05479_1a03be577df61646a0ccb132269ae5ef42" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::FaceInfos::Vertex::m_hasTexCoords</definition>
+        <argsstring></argsstring>
+        <name>m_hasTexCoords</name>
+        <qualifiedname>castor3d::FaceInfos::Vertex::m_hasTexCoords</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Dit que le sommet a un UV. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/FaceInfos.hpp" line="36" column="6" bodyfile="Castor3D/Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="36" bodyend="36"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Contient les informations d&apos;un sommet. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para></para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Castor3D/Model/Mesh/Submesh/Component/FaceInfos.hpp" line="20" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/Component/FaceInfos.hpp" bodystart="21" bodyend="37"/>
+    <listofallmembers>
+      <member refid="d6/d94/a05479_1add49f877bb5daf9e039150fb81515e46" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos::Vertex</scope><name>m_hasNormal</name></member>
+      <member refid="d6/d94/a05479_1a03be577df61646a0ccb132269ae5ef42" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos::Vertex</scope><name>m_hasTexCoords</name></member>
+      <member refid="d6/d94/a05479_1aa7ab302b9fa37265ddbc2917d203596c" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos::Vertex</scope><name>m_index</name></member>
+      <member refid="d6/d94/a05479_1a8db18e64db9db217d35e4aef94b4ccde" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos::Vertex</scope><name>m_normal</name></member>
+      <member refid="d6/d94/a05479_1aedc761cdd3b3c5c80bfec77bdfe4b378" prot="public" virt="non-virtual"><scope>castor3d::FaceInfos::Vertex</scope><name>m_texCoords</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

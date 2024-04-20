@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d9b/a09391" kind="struct" language="C++" prot="public">
+    <compoundname>castor::hashcomb::HashCombinerT</compoundname>
+    <templateparamlist>
+      <param>
+        <type>typename HashT</type>
+      </param>
+      <param>
+        <type>typename EnableT</type>
+        <defval>void</defval>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Miscellaneous/Hash.hpp" line="73" column="1" bodyfile="CastorUtils/Miscellaneous/Hash.hpp" bodystart="73" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

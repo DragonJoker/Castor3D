@@ -1,0 +1,9 @@
+<map id="castor::Range::percent" name="castor::Range::percent">
+<area shape="rect" id="Node000001" title="Gives the percentage matching the given value." alt="" coords="5,68,160,93"/>
+<area shape="rect" id="Node000002" href="$d9/da8/a09207.html#a1905ba672068865603e55a41343cf17d" title="Puts a value in the range." alt="" coords="208,5,355,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,65,226,32,228,37,124,71"/>
+<area shape="rect" id="Node000003" href="$d9/da8/a09207.html#a068135b0cd55ff059544f0b4f467ebe7" title="Gives the value matching the given percentage." alt="" coords="403,68,543,93"/>
+<area shape="poly" id="edge4_Node000001_Node000003" title=" " alt="" coords="160,85,389,86,389,91,160,91"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="322,28,421,61,419,66,320,33"/>
+<area shape="poly" id="edge3_Node000003_Node000001" title=" " alt="" coords="403,76,174,76,174,70,403,71"/>
+</map>

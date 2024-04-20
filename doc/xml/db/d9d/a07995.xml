@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d9d/a07995" kind="class" language="C++" prot="public">
+    <compoundname>castor::FileWriter</compoundname>
+    <basecompoundref refid="dc/d3a/a07991" prot="public" virt="non-virtual">castor::Writer&lt; DataT, FileTyper&lt; FileTypeT &gt;::Type &gt;</basecompoundref>
+    <includes local="no">Writer.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class DataT</type>
+      </param>
+      <param>
+        <type><ref refid="d2/dd2/a02279_1ac4972a01abb873aee032c3071b56cbe4" kindref="member">FileType</ref></type>
+        <declname>FileTypeT</declname>
+        <defname>FileTypeT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="protected-type">
+      <memberdef kind="typedef" id="db/d9d/a07995_1a2cd9cff64e009191dc88a09a138bea9b" prot="protected" static="no">
+        <type>typename <ref refid="de/d8a/a07983" kindref="compound">FileTyper</ref>&lt; FileTypeT &gt;::Type</type>
+        <definition>using castor::FileWriter&lt; DataT, FileTypeT &gt;::Type =  typename FileTyper&lt; FileTypeT &gt;::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor::FileWriter::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/Writer.hpp" line="46" column="1" bodyfile="CastorUtils/Data/Writer.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe de base pour les writers de ressource. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="5">
+        <label>castor::FileWriter&lt; T, FileType::eBinary &gt;</label>
+        <link refid="db/d9d/a07995"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; T, FileType::eBinary &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Writer&lt; DataT, FileTyper&lt; FileTypeT &gt;::Type &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; DataT, FileTyper&lt; FileTypeT &gt;::Type &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::BinaryWriter&lt; T &gt;</label>
+        <link refid="d5/ddf/a07979"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::FileWriter&lt; DataT, FileTypeT &gt;</label>
+        <link refid="db/d9d/a07995"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="4">
+        <label>castor::Writer&lt; DataT, StreamT &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::Writer&lt; DataT, FileTyper&lt; FileTypeT &gt;::Type &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; DataT, FileTyper&lt; FileTypeT &gt;::Type &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::FileWriter&lt; DataT, FileTypeT &gt;</label>
+        <link refid="db/d9d/a07995"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="4">
+        <label>castor::Writer&lt; DataT, StreamT &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Data/Writer.hpp" line="42" column="1" bodyfile="CastorUtils/Data/Writer.hpp" bodystart="44" bodyend="47"/>
+    <listofallmembers>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::FileWriter</scope><name>NonMovable</name></member>
+      <member refid="dc/d3a/a07991_1acce0e94bd93e1dd12b330034532ff036" prot="public" virt="virtual"><scope>castor::FileWriter</scope><name>operator()</name></member>
+      <member refid="db/d9d/a07995_1a2cd9cff64e009191dc88a09a138bea9b" prot="protected" virt="non-virtual"><scope>castor::FileWriter</scope><name>Type</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::FileWriter</scope><name>~NonMovable</name></member>
+      <member refid="dc/d3a/a07991_1a0a52e8b5ddf994f9832bf0a600342999" prot="public" virt="virtual"><scope>castor::FileWriter</scope><name>~Writer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

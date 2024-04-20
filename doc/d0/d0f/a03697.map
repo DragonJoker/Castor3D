@@ -1,5 +1,9 @@
-<map id="castor3d::ClearcoatRoughnessMapComponent::ComponentsShader" name="castor3d::ClearcoatRoughnessMapComponent::ComponentsShader">
-<area shape="rect" id="node1" title=" " alt="" coords="5,167,240,207"/>
-<area shape="rect" id="node2" href="$d7/d1d/a04018.html" title=" " alt="" coords="7,79,238,119"/>
-<area shape="rect" id="node3" href="$d0/dee/a04014.html" title=" " alt="" coords="23,5,222,31"/>
+<map id="castor3d::EngineConfig" name="castor3d::EngineConfig">
+<area shape="rect" id="Node000001" title=" " alt="" coords="95,211,251,236"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,132,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,156,126,185,157,208,154,213,123,189,93,160"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,5,132,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="71,59,71,108,66,108,66,59"/>
+<area shape="rect" id="Node000004" href="$d5/d15/a05335.html" title=" " alt="" coords="156,115,280,141"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="209,154,181,212,176,209,204,152"/>
 </map>

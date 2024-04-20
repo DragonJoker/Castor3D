@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d27/a05799" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserEnumTraits&lt; castor3d::BorderPosition &gt;</compoundname>
+    <includes local="no">Overlay.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dc/d27/a05799_1a498b0f810d5df6e360527cd0451c6b71" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref> constexpr</type>
+        <definition>StringView constexpr castor::ParserEnumTraits&lt; castor3d::BorderPosition &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::BorderPosition &gt;::Name</qualifiedname>
+        <initializer>= <ref refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" kindref="member">cuT</ref>( &quot;BorderPosition&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/Overlay.hpp" line="368" column="29" bodyfile="Castor3D/Overlay/Overlay.hpp" bodystart="368" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d27/a05799_1a30b04e698d51ad9adc2735506cb03363" prot="public" static="yes" mutable="no">
+        <type>UInt32StrMap const</type>
+        <definition>UInt32StrMap const castor::ParserEnumTraits&lt; castor3d::BorderPosition &gt;::Values</definition>
+        <argsstring></argsstring>
+        <name>Values</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::BorderPosition &gt;::Values</qualifiedname>
+        <initializer>= []()
+			{
+				UInt32StrMap result;
+				result = <ref refid="d9/dba/a02278_1a89ee8e4edb4c883ef7c66b8dc60cc430" kindref="member">castor3d::getEnumMapT</ref>&lt; <ref refid="d9/dba/a02278_1afef993d7e09be06482361f88ef4e3bf3" kindref="member">castor3d::BorderPosition</ref> &gt;();
+				return result;
+			}( )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Overlay/Overlay.hpp" line="369" column="34" bodyfile="Castor3D/Overlay/Overlay.hpp" bodystart="369" bodyend="374"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserEnumTraits&lt; castor3d::BorderPosition &gt;</label>
+        <link refid="dc/d27/a05799"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>Name</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>Values</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>UInt32StrMap</label>
+      </node>
+      <node id="2">
+        <label>std::basic_string_view&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Overlay/Overlay.hpp" line="366" column="1" bodyfile="Castor3D/Overlay/Overlay.hpp" bodystart="367" bodyend="375"/>
+    <listofallmembers>
+      <member refid="dc/d27/a05799_1a498b0f810d5df6e360527cd0451c6b71" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::BorderPosition &gt;</scope><name>Name</name></member>
+      <member refid="dc/d27/a05799_1a30b04e698d51ad9adc2735506cb03363" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::BorderPosition &gt;</scope><name>Values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

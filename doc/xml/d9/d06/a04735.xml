@@ -1,0 +1,224 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/d06/a04735" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::DefaultReflRefrComponent</compoundname>
+    <basecompoundref refid="db/db4/a04835" prot="public" virt="non-virtual">castor3d::PassComponent</basecompoundref>
+    <includes local="no">DefaultReflRefrComponent.hpp</includes>
+    <innerclass refid="dd/d07/a04743" prot="public">castor3d::DefaultReflRefrComponent::Plugin</innerclass>
+    <innerclass refid="d5/d13/a04739" prot="public">castor3d::DefaultReflRefrComponent::ReflRefrShader</innerclass>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d9/d06/a04735_1a304608f1e8c623969df750ade92b210c" prot="public" static="yes" mutable="no">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const</type>
+        <definition>C3D_API castor::String const castor3d::DefaultReflRefrComponent::TypeName</definition>
+        <argsstring></argsstring>
+        <name>TypeName</name>
+        <qualifiedname>castor3d::DefaultReflRefrComponent::TypeName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Other/DefaultReflRefrComponent.hpp" line="103" column="37" bodyfile="Castor3D/Material/Pass/Component/Other/DefaultReflRefrComponent.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d9/d06/a04735_1a824b1059225b1451645f437eced92bd3" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>PassComponentPluginUPtr</type>
+        <definition>static PassComponentPluginUPtr castor3d::DefaultReflRefrComponent::createPlugin</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponent)</argsstring>
+        <name>createPlugin</name>
+        <qualifiedname>castor3d::DefaultReflRefrComponent::createPlugin</qualifiedname>
+        <param>
+          <type><ref refid="d4/d10/a04839" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Other/DefaultReflRefrComponent.hpp" line="96" column="32" bodyfile="Castor3D/Material/Pass/Component/Other/DefaultReflRefrComponent.hpp" bodystart="96" bodyend="99"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d06/a04735_1a505b67291c60625dd8c3985c71758bcd" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::DefaultReflRefrComponent::DefaultReflRefrComponent</definition>
+        <argsstring>(Pass &amp;pass)</argsstring>
+        <name>DefaultReflRefrComponent</name>
+        <qualifiedname>castor3d::DefaultReflRefrComponent::DefaultReflRefrComponent</qualifiedname>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Other/DefaultReflRefrComponent.hpp" line="101" column="18"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d9/d06/a04735_1a8e0b648b8a88bcd9978f6f92bc3bfc5f" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>PassComponentUPtr</type>
+        <definition>PassComponentUPtr castor3d::DefaultReflRefrComponent::doClone</definition>
+        <argsstring>(Pass &amp;pass) const override</argsstring>
+        <name>doClone</name>
+        <qualifiedname>castor3d::DefaultReflRefrComponent::doClone</qualifiedname>
+        <reimplements refid="db/db4/a04835_1ad87fbb1539bb6c5004cbcb02ddfcd46f">doClone</reimplements>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Clone ce composant dans la passe donnée. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit le composant cloné. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Pass/Component/Other/DefaultReflRefrComponent.hpp" line="106" column="19"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Pass &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::DefaultReflRefrComponent</label>
+        <link refid="d9/d06/a04735"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PassComponent</label>
+        <link refid="db/db4/a04835"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Pass &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::DefaultReflRefrComponent</label>
+        <link refid="d9/d06/a04735"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>TypeName</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PassComponent</label>
+        <link refid="db/db4/a04835"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_type</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_plugin</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_materialShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="d2/d2e/a04831"/>
+      </node>
+      <node id="8">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="d6/da6/a04827"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d2/d04/a04815"/>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="6">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/Pass/Component/Other/DefaultReflRefrComponent.hpp" line="14" column="1" bodyfile="Castor3D/Material/Pass/Component/Other/DefaultReflRefrComponent.hpp" bodystart="16" bodyend="107"/>
+    <listofallmembers>
+      <member refid="db/db4/a04835_1a0a937d88f0f9cf4d9b725850764c3cd6" prot="public" virt="virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>accept</name></member>
+      <member refid="db/db4/a04835_1ae7c88041d1aae747532e537b23e41d24" prot="public" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>clone</name></member>
+      <member refid="d9/d06/a04735_1a824b1059225b1451645f437eced92bd3" prot="public" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>createPlugin</name></member>
+      <member refid="d9/d06/a04735_1a505b67291c60625dd8c3985c71758bcd" prot="public" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>DefaultReflRefrComponent</name></member>
+      <member refid="d9/d06/a04735_1a8e0b648b8a88bcd9978f6f92bc3bfc5f" prot="private" virt="virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>doClone</name></member>
+      <member refid="db/db4/a04835_1a8f6b8c698164310e2052be733834224a" prot="public" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>fillBuffer</name></member>
+      <member refid="db/db4/a04835_1aeb5762d7de650b40a394f2e8bf8f5c21" prot="public" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>fillChannel</name></member>
+      <member refid="db/db4/a04835_1a86da9ac512527402c64e66b34b50a5a7" prot="public" virt="virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>fillConfig</name></member>
+      <member refid="db/db4/a04835_1a89e385760304300908e5b308b2f1da4e" prot="public" virt="virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>getColour</name></member>
+      <member refid="db/db4/a04835_1a32748929920ba651a4c5a1d5af435e77" prot="public" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>getDependencies</name></member>
+      <member refid="db/db4/a04835_1a625adfcb001824768e8a99a3c03dcbb1" prot="public" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>getId</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>getOwner</name></member>
+      <member refid="db/db4/a04835_1af015484800f32c718d067a80b76709e9" prot="public" virt="virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>getPassFlags</name></member>
+      <member refid="db/db4/a04835_1a5da51664f6736be0199d66266779b395" prot="public" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>getPlugin</name></member>
+      <member refid="db/db4/a04835_1a6aae2659952d2e9a76caabf56d69fba5" prot="public" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>getType</name></member>
+      <member refid="db/db4/a04835_1a5af951f374ee82fd61e57f96e6193f1c" prot="public" virt="virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>hasColour</name></member>
+      <member refid="db/db4/a04835_1a7c90ef14fa9721b433d361c8492c3112" prot="protected" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>m_dependencies</name></member>
+      <member refid="db/db4/a04835_1a01ecec7d563666b63d7d888061e84ab1" prot="protected" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>m_dirty</name></member>
+      <member refid="db/db4/a04835_1a3d2b1319d92ba70ff8450c7873492b67" prot="protected" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>m_id</name></member>
+      <member refid="db/db4/a04835_1abc188311e9251e933a838a256802c4c6" prot="protected" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>m_materialShader</name></member>
+      <member refid="db/db4/a04835_1ae62babd07d3faf3014f1d0af1ab03357" prot="protected" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>m_plugin</name></member>
+      <member refid="db/db4/a04835_1ae5775b9cf42c79c375cbd4a033e6629f" prot="protected" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>m_type</name></member>
+      <member refid="db/db4/a04835_1a8f7373eec3c7769cdcd84908523d797f" prot="public" virt="virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>onAddToPass</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>OwnedBy</name></member>
+      <member refid="db/db4/a04835_1a68b747d970c85a2799fb63b6825b0fc4" prot="public" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>PassComponent</name></member>
+      <member refid="db/db4/a04835_1a2541aa58a662bd8566c602335387cb98" prot="public" virt="virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>setColour</name></member>
+      <member refid="db/db4/a04835_1ab6a5bf94fc25210c03c9bed7ddf1ae31" prot="public" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>setColour</name></member>
+      <member refid="db/db4/a04835_1a61fa7c8562281c049a874b1ebc2635e4" prot="public" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>setColour</name></member>
+      <member refid="db/db4/a04835_1a2256e542753e1f85e6812de7e6fdc261" prot="public" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>setColour</name></member>
+      <member refid="d9/d06/a04735_1a304608f1e8c623969df750ade92b210c" prot="public" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>TypeName</name></member>
+      <member refid="db/db4/a04835_1acfedf31a75536a40a891b3308083d738" prot="public" virt="virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>update</name></member>
+      <member refid="db/db4/a04835_1a967ba1259e24663e4a89352251acf841" prot="public" virt="non-virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>writeText</name></member>
+      <member refid="db/db4/a04835_1a6a3e343b81806ff616280b4eca87140b" prot="public" virt="virtual"><scope>castor3d::DefaultReflRefrComponent</scope><name>~PassComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

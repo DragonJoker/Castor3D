@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dir_773f2264828379eeee716d639257f55c" kind="dir">
+    <compoundname>CastorUtils/Multithreading</compoundname>
+    <innerfile refid="de/d8e/a02213">AsyncJobQueue.hpp</innerfile>
+    <innerfile refid="d8/d5f/a02216">MultithreadingModule.hpp</innerfile>
+    <innerfile refid="de/d59/a02219">SpinMutex.hpp</innerfile>
+    <innerfile refid="d6/d41/a02222">ThreadPool.hpp</innerfile>
+    <innerfile refid="d4/dc0/a02225">WorkerThread.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Multithreading/"/>
+  </compounddef>
+</doxygen>

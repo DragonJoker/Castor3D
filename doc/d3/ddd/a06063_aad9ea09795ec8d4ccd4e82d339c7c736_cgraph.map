@@ -1,0 +1,11 @@
+<map id="castor3d::InstantiatedBuffersNodesViewT::emplace" name="castor3d::InstantiatedBuffersNodesViewT::emplace">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,69,192,109"/>
+<area shape="rect" id="Node000002" href="$d3/ddd/a06063.html#ae29b187bfad9bdda41d9ed2e2c139568" title=" " alt="" coords="240,69,427,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,87,226,87,226,92,192,92"/>
+<area shape="rect" id="Node000003" href="$d3/ddd/a06063.html#aa0ab13a42576e9ef7bb0cafa24610fef" title=" " alt="" coords="475,5,661,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="407,67,481,46,482,51,408,72"/>
+<area shape="rect" id="Node000004" href="$d3/ddd/a06063.html#a673a1d9eed6219e41e8678635fc15f90" title=" " alt="" coords="475,69,661,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="427,87,461,87,461,92,427,92"/>
+<area shape="rect" id="Node000005" href="$d3/ddd/a06063.html#a071c510c5686fd48658d9e43f3e05b30" title=" " alt="" coords="475,133,661,173"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="408,107,482,127,481,132,407,112"/>
+</map>

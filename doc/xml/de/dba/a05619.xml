@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/dba/a05619" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::SubmeshComponentRegister::Component</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/dba/a05619_1abecf25250523ea0b9201083947a77ab9" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a94800deec9f740cb84fd6ea6865cea69" kindref="member">SubmeshComponentID</ref></type>
+        <definition>SubmeshComponentID castor3d::SubmeshComponentRegister::Component::id</definition>
+        <argsstring></argsstring>
+        <name>id</name>
+        <qualifiedname>castor3d::SubmeshComponentRegister::Component::id</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp" line="221" column="20" bodyfile="Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp" bodystart="221" bodyend="221"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dba/a05619_1acc404b68a314f3646f09621c0783b5a1" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::SubmeshComponentRegister::Component::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>castor3d::SubmeshComponentRegister::Component::name</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp" line="222" column="16" bodyfile="Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp" bodystart="222" bodyend="222"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dba/a05619_1a0d56a04facbc1f7a4c2c964ccb27c4bf" prot="public" static="no" mutable="no">
+        <type>SubmeshComponentPluginUPtr</type>
+        <definition>SubmeshComponentPluginUPtr castor3d::SubmeshComponentRegister::Component::plugin</definition>
+        <argsstring></argsstring>
+        <name>plugin</name>
+        <qualifiedname>castor3d::SubmeshComponentRegister::Component::plugin</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp" line="223" column="28" bodyfile="Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp" bodystart="223" bodyend="223"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/dba/a05619_1ad9165a641665a1f044caf30f8945809b" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::SubmeshComponentRegister::Component::Component</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>Component</name>
+        <qualifiedname>castor3d::SubmeshComponentRegister::Component::Component</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp" line="215" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dba/a05619_1a305f61f1ea5b8c135c35933c592b7e27" prot="public" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::SubmeshComponentRegister::Component::Component</definition>
+        <argsstring>(SubmeshComponentID id) noexcept</argsstring>
+        <name>Component</name>
+        <qualifiedname>castor3d::SubmeshComponentRegister::Component::Component</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a94800deec9f740cb84fd6ea6865cea69" kindref="member">SubmeshComponentID</ref></type>
+          <declname>id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp" line="216" column="10" bodyfile="Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp" bodystart="216" bodyend="219"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SubmeshComponentRegister::Component</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp" line="213" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp" bodystart="214" bodyend="224"/>
+    <listofallmembers>
+      <member refid="de/dba/a05619_1ad9165a641665a1f044caf30f8945809b" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentRegister::Component</scope><name>Component</name></member>
+      <member refid="de/dba/a05619_1a305f61f1ea5b8c135c35933c592b7e27" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentRegister::Component</scope><name>Component</name></member>
+      <member refid="de/dba/a05619_1abecf25250523ea0b9201083947a77ab9" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentRegister::Component</scope><name>id</name></member>
+      <member refid="de/dba/a05619_1acc404b68a314f3646f09621c0783b5a1" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentRegister::Component</scope><name>name</name></member>
+      <member refid="de/dba/a05619_1a0d56a04facbc1f7a4c2c964ccb27c4bf" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentRegister::Component</scope><name>plugin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

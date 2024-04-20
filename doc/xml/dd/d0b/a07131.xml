@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d0b/a07131" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::RenderedObject::Offsets</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/d0b/a07131_1ae9e19abeb5de75bed2d9f785d53fa9c4" prot="public" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::RenderedObject::Offsets::vertexOffset</definition>
+        <argsstring></argsstring>
+        <name>vertexOffset</name>
+        <qualifiedname>castor3d::RenderedObject::Offsets::vertexOffset</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/RenderedObject.hpp" line="73" column="14" bodyfile="Castor3D/Scene/RenderedObject.hpp" bodystart="73" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d0b/a07131_1a26ca6ff4798ae17e8aa3ee9bf4cbd132" prot="public" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::RenderedObject::Offsets::indexOffset</definition>
+        <argsstring></argsstring>
+        <name>indexOffset</name>
+        <qualifiedname>castor3d::RenderedObject::Offsets::indexOffset</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/RenderedObject.hpp" line="74" column="14" bodyfile="Castor3D/Scene/RenderedObject.hpp" bodystart="74" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d0b/a07131_1a97b1ba7cf5ad5f68fbf655aa2c608cba" prot="public" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::RenderedObject::Offsets::meshletOffset</definition>
+        <argsstring></argsstring>
+        <name>meshletOffset</name>
+        <qualifiedname>castor3d::RenderedObject::Offsets::meshletOffset</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/RenderedObject.hpp" line="75" column="14" bodyfile="Castor3D/Scene/RenderedObject.hpp" bodystart="75" bodyend="75"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d0b/a07131_1a117f1826835367db6c427008cd5e0291" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::RenderedObject::Offsets::Offsets</definition>
+        <argsstring>()=default</argsstring>
+        <name>Offsets</name>
+        <qualifiedname>castor3d::RenderedObject::Offsets::Offsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/RenderedObject.hpp" line="71" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Scene/RenderedObject.hpp" line="69" column="1" bodyfile="Castor3D/Scene/RenderedObject.hpp" bodystart="70" bodyend="76"/>
+    <listofallmembers>
+      <member refid="dd/d0b/a07131_1a26ca6ff4798ae17e8aa3ee9bf4cbd132" prot="public" virt="non-virtual"><scope>castor3d::RenderedObject::Offsets</scope><name>indexOffset</name></member>
+      <member refid="dd/d0b/a07131_1a97b1ba7cf5ad5f68fbf655aa2c608cba" prot="public" virt="non-virtual"><scope>castor3d::RenderedObject::Offsets</scope><name>meshletOffset</name></member>
+      <member refid="dd/d0b/a07131_1a117f1826835367db6c427008cd5e0291" prot="public" virt="non-virtual"><scope>castor3d::RenderedObject::Offsets</scope><name>Offsets</name></member>
+      <member refid="dd/d0b/a07131_1ae9e19abeb5de75bed2d9f785d53fa9c4" prot="public" virt="non-virtual"><scope>castor3d::RenderedObject::Offsets</scope><name>vertexOffset</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

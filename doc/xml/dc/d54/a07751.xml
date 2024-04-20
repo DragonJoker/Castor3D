@@ -1,0 +1,396 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d54/a07751" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ClustersUbo</compoundname>
+    <includes local="no">ClustersUbo.hpp</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dc/d54/a07751_1a98c666af0f0b0caa8a6fb5d40206e87f" prot="public" static="no">
+        <type><ref refid="d4/db3/a07883" kindref="compound">ClustersUboConfiguration</ref></type>
+        <definition>using castor3d::ClustersUbo::Configuration =  ClustersUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <qualifiedname>castor3d::ClustersUbo::Configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="103" column="1" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/d54/a07751_1a919b0cb74ea1e8e55d424d685dd0ddd9" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::ClustersUbo::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::ClustersUbo::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="172" column="21" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="172" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d54/a07751_1a716e825cdad140a2590cd0dcb33c2eee" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d63/a03459" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="dc/d54/a07751_1a98c666af0f0b0caa8a6fb5d40206e87f" kindref="member">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::ClustersUbo::m_ubo</definition>
+        <argsstring></argsstring>
+        <name>m_ubo</name>
+        <qualifiedname>castor3d::ClustersUbo::m_ubo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="173" column="22" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="173" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d54/a07751_1a119aa48b69d12e599d2ea77fb52c0881" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ClustersUbo::ClustersUbo</definition>
+        <argsstring>(ClustersUbo const &amp;rhs)=delete</argsstring>
+        <name>ClustersUbo</name>
+        <qualifiedname>castor3d::ClustersUbo::ClustersUbo</qualifiedname>
+        <param>
+          <type><ref refid="dc/d54/a07751" kindref="compound">ClustersUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="104" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d54/a07751_1a844efcf3fe9747c63add0cc0327737bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dc/d54/a07751" kindref="compound">ClustersUbo</ref> &amp;</type>
+        <definition>C3D_API ClustersUbo &amp; castor3d::ClustersUbo::operator=</definition>
+        <argsstring>(ClustersUbo const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ClustersUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dc/d54/a07751" kindref="compound">ClustersUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="105" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d54/a07751_1abc6eb0cf056ad425be4637c7bc61ab6e" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ClustersUbo::ClustersUbo</definition>
+        <argsstring>(ClustersUbo &amp;&amp;rhs) noexcept=default</argsstring>
+        <name>ClustersUbo</name>
+        <qualifiedname>castor3d::ClustersUbo::ClustersUbo</qualifiedname>
+        <param>
+          <type><ref refid="dc/d54/a07751" kindref="compound">ClustersUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="106" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d54/a07751_1ac4bfb099a8b2876cbd94d12719ae38bb" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dc/d54/a07751" kindref="compound">ClustersUbo</ref> &amp;</type>
+        <definition>C3D_API ClustersUbo &amp; castor3d::ClustersUbo::operator=</definition>
+        <argsstring>(ClustersUbo &amp;&amp;rhs) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ClustersUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dc/d54/a07751" kindref="compound">ClustersUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="107" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d54/a07751_1a9a2436d1fe77dab1003fa4cdbceb417a" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ClustersUbo::ClustersUbo</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>ClustersUbo</name>
+        <qualifiedname>castor3d::ClustersUbo::ClustersUbo</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="109" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d54/a07751_1a3120a50e92604ab4e74f768798b9b0fc" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ClustersUbo::~ClustersUbo</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~ClustersUbo</name>
+        <qualifiedname>castor3d::ClustersUbo::~ClustersUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="110" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d54/a07751_1a52ece730c77510d7d9ec0205c55e16fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ClustersUbo::cpuUpdate</definition>
+        <argsstring>(castor::Point3ui gridDim, castor::Point2ui clusterSize, float viewNear, float viewFar, uint32_t pointLightsCount, uint32_t spotLightsCount, ClusterSplitScheme splitScheme, float bias, bool enableWaveIntrinsics)</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::ClustersUbo::cpuUpdate</qualifiedname>
+        <param>
+          <type>castor::Point3ui</type>
+          <declname>gridDim</declname>
+        </param>
+        <param>
+          <type>castor::Point2ui</type>
+          <declname>clusterSize</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>viewNear</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>viewFar</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>pointLightsCount</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>spotLightsCount</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1ad1bb083d3a2a03ae413830fdb3730ace" kindref="member">ClusterSplitScheme</ref></type>
+          <declname>splitScheme</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>bias</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableWaveIntrinsics</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="112" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d54/a07751_1a52f94cb9377a9c49a084802d32df931d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ClustersUbo::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t binding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::ClustersUbo::createPassBinding</qualifiedname>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="122" column="6" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="122" bodyend="126"/>
+        <references refid="d4/d63/a03459_1a926b4f99af45e4423f45a276b7d72505" compoundref="dd/d52/a00221" startline="86" endline="94">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createPassBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d54/a07751_1ad372d3fed0cd50b33208c854c125ea7c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDescriptorSetLayoutBinding</type>
+        <definition>VkDescriptorSetLayoutBinding castor3d::ClustersUbo::createLayoutBinding</definition>
+        <argsstring>(uint32_t index, VkShaderStageFlags stages) const</argsstring>
+        <name>createLayoutBinding</name>
+        <qualifiedname>castor3d::ClustersUbo::createLayoutBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>stages</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="128" column="30" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="128" bodyend="134"/>
+        <references refid="d9/dba/a02278_1a1873720773359ddadefcb9c8dd342249" compoundref="d3/d5e/a00275" startline="141" endline="155">castor3d::makeDescriptorSetLayoutBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d54/a07751_1a3ac03dcc1a8af07cc3c4f1dcb38652b5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ClustersUbo::addLayoutBinding</definition>
+        <argsstring>(ashes::VkDescriptorSetLayoutBindingArray &amp;bindings, uint32_t &amp;index, VkShaderStageFlags stages) const</argsstring>
+        <name>addLayoutBinding</name>
+        <qualifiedname>castor3d::ClustersUbo::addLayoutBinding</qualifiedname>
+        <param>
+          <type>ashes::VkDescriptorSetLayoutBindingArray &amp;</type>
+          <declname>bindings</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>stages</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="136" column="6" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="136" bodyend="144"/>
+        <references refid="d9/dba/a02278_1ac3122065d58809920cabe7598404701a" compoundref="d3/d5e/a00275" startline="157" endline="170">castor3d::addDescriptorSetLayoutBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d54/a07751_1a5f17243a713e896822ab0330916fc181" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ClustersUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <qualifiedname>castor3d::ClustersUbo::createSizedBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="146" column="6" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="146" bodyend="150"/>
+        <references refid="d4/d63/a03459_1a2c6ad146d4910651544564c25ca7dccd" compoundref="dd/d52/a00221" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d54/a07751_1a1388c094be0c35ce61d812217a955030" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>ashes::WriteDescriptorSet castor3d::ClustersUbo::getDescriptorWrite</definition>
+        <argsstring>(uint32_t dstBinding, uint32_t dstArrayElement=0u) const</argsstring>
+        <name>getDescriptorWrite</name>
+        <qualifiedname>castor3d::ClustersUbo::getDescriptorWrite</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="152" column="27" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="152" bodyend="156"/>
+        <references refid="d4/d63/a03459_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="dd/d52/a00221" startline="107" endline="120">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</references>
+        <referencedby refid="dc/d54/a07751_1ab783a7fbfbd506ce241776e05051701f" compoundref="d3/d4c/a01724" startline="158" endline="164">addDescriptorWrite</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dc/d54/a07751_1ab783a7fbfbd506ce241776e05051701f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ClustersUbo::addDescriptorWrite</definition>
+        <argsstring>(ashes::WriteDescriptorSetArray &amp;descriptorWrites, uint32_t &amp;dstBinding, uint32_t dstArrayElement=0u) const</argsstring>
+        <name>addDescriptorWrite</name>
+        <qualifiedname>castor3d::ClustersUbo::addDescriptorWrite</qualifiedname>
+        <param>
+          <type>ashes::WriteDescriptorSetArray &amp;</type>
+          <declname>descriptorWrites</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="158" column="6" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="158" bodyend="164"/>
+        <references refid="dc/d54/a07751_1a1388c094be0c35ce61d812217a955030" compoundref="d3/d4c/a01724" startline="152" endline="156">getDescriptorWrite</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d54/a07751_1af6709b0b5b2ead32727f7bc82258b67c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d4/d63/a03459" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="dc/d54/a07751_1a98c666af0f0b0caa8a6fb5d40206e87f" kindref="member">Configuration</ref> &gt; const &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const  &amp; castor3d::ClustersUbo::getUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getUbo</name>
+        <qualifiedname>castor3d::ClustersUbo::getUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="166" column="29" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="166" bodyend="169"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="100" column="1" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="101" bodyend="174"/>
+    <listofallmembers>
+      <member refid="dc/d54/a07751_1ab783a7fbfbd506ce241776e05051701f" prot="public" virt="non-virtual"><scope>castor3d::ClustersUbo</scope><name>addDescriptorWrite</name></member>
+      <member refid="dc/d54/a07751_1a3ac03dcc1a8af07cc3c4f1dcb38652b5" prot="public" virt="non-virtual"><scope>castor3d::ClustersUbo</scope><name>addLayoutBinding</name></member>
+      <member refid="dc/d54/a07751_1a119aa48b69d12e599d2ea77fb52c0881" prot="public" virt="non-virtual"><scope>castor3d::ClustersUbo</scope><name>ClustersUbo</name></member>
+      <member refid="dc/d54/a07751_1abc6eb0cf056ad425be4637c7bc61ab6e" prot="public" virt="non-virtual"><scope>castor3d::ClustersUbo</scope><name>ClustersUbo</name></member>
+      <member refid="dc/d54/a07751_1a9a2436d1fe77dab1003fa4cdbceb417a" prot="public" virt="non-virtual"><scope>castor3d::ClustersUbo</scope><name>ClustersUbo</name></member>
+      <member refid="dc/d54/a07751_1a98c666af0f0b0caa8a6fb5d40206e87f" prot="public" virt="non-virtual"><scope>castor3d::ClustersUbo</scope><name>Configuration</name></member>
+      <member refid="dc/d54/a07751_1a52ece730c77510d7d9ec0205c55e16fc" prot="public" virt="non-virtual"><scope>castor3d::ClustersUbo</scope><name>cpuUpdate</name></member>
+      <member refid="dc/d54/a07751_1ad372d3fed0cd50b33208c854c125ea7c" prot="public" virt="non-virtual"><scope>castor3d::ClustersUbo</scope><name>createLayoutBinding</name></member>
+      <member refid="dc/d54/a07751_1a52f94cb9377a9c49a084802d32df931d" prot="public" virt="non-virtual"><scope>castor3d::ClustersUbo</scope><name>createPassBinding</name></member>
+      <member refid="dc/d54/a07751_1a5f17243a713e896822ab0330916fc181" prot="public" virt="non-virtual"><scope>castor3d::ClustersUbo</scope><name>createSizedBinding</name></member>
+      <member refid="dc/d54/a07751_1a1388c094be0c35ce61d812217a955030" prot="public" virt="non-virtual"><scope>castor3d::ClustersUbo</scope><name>getDescriptorWrite</name></member>
+      <member refid="dc/d54/a07751_1af6709b0b5b2ead32727f7bc82258b67c" prot="public" virt="non-virtual"><scope>castor3d::ClustersUbo</scope><name>getUbo</name></member>
+      <member refid="dc/d54/a07751_1a919b0cb74ea1e8e55d424d685dd0ddd9" prot="private" virt="non-virtual"><scope>castor3d::ClustersUbo</scope><name>m_device</name></member>
+      <member refid="dc/d54/a07751_1a716e825cdad140a2590cd0dcb33c2eee" prot="private" virt="non-virtual"><scope>castor3d::ClustersUbo</scope><name>m_ubo</name></member>
+      <member refid="dc/d54/a07751_1a844efcf3fe9747c63add0cc0327737bd" prot="public" virt="non-virtual"><scope>castor3d::ClustersUbo</scope><name>operator=</name></member>
+      <member refid="dc/d54/a07751_1ac4bfb099a8b2876cbd94d12719ae38bb" prot="public" virt="non-virtual"><scope>castor3d::ClustersUbo</scope><name>operator=</name></member>
+      <member refid="dc/d54/a07751_1a3120a50e92604ab4e74f768798b9b0fc" prot="public" virt="non-virtual"><scope>castor3d::ClustersUbo</scope><name>~ClustersUbo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

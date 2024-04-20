@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d4b/a07031" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::AllShadowData</compoundname>
+    <includes local="no">LightModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d4b/a07031_1ae56717c3ea506d6c3b4b6af51fef9aab" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d83/a07023" kindref="compound">DirectionalShadowData</ref></type>
+        <definition>DirectionalShadowData castor3d::AllShadowData::directional</definition>
+        <argsstring></argsstring>
+        <name>directional</name>
+        <qualifiedname>castor3d::AllShadowData::directional</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Light/LightModule.hpp" line="210" column="23" bodyfile="Castor3D/Scene/Light/LightModule.hpp" bodystart="210" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d4b/a07031_1ae4669f245bc210023de4d6bee73a7f94" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; <ref refid="d9/dba/a02278_1a7928b5f035d5086bcc73ccf73ee91adf" kindref="member">PointShadowData</ref>, <ref refid="d9/dba/a02278_1a6862d8dadddaf68daab838f73a4ef641" kindref="member">MaxPointShadowMapCount</ref> &gt;</type>
+        <definition>castor::Array&lt; PointShadowData, MaxPointShadowMapCount &gt; castor3d::AllShadowData::point</definition>
+        <argsstring></argsstring>
+        <name>point</name>
+        <qualifiedname>castor3d::AllShadowData::point</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Light/LightModule.hpp" line="211" column="15" bodyfile="Castor3D/Scene/Light/LightModule.hpp" bodystart="211" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d4b/a07031_1ac3e499e231cc8307de112f909714cc05" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; <ref refid="d2/d57/a07027" kindref="compound">SpotShadowData</ref>, <ref refid="d9/dba/a02278_1ab2042603dc836a5d1a9cf4955f2232de" kindref="member">MaxSpotShadowMapCount</ref> &gt;</type>
+        <definition>castor::Array&lt; SpotShadowData, MaxSpotShadowMapCount &gt; castor3d::AllShadowData::spot</definition>
+        <argsstring></argsstring>
+        <name>spot</name>
+        <qualifiedname>castor3d::AllShadowData::spot</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Light/LightModule.hpp" line="212" column="15" bodyfile="Castor3D/Scene/Light/LightModule.hpp" bodystart="212" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::AllShadowData</label>
+        <link refid="d1/d4b/a07031"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>directional</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BaseShadowData</label>
+        <link refid="d5/d14/a07019"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>cascadeCount</edgelabel>
+          <edgelabel>pcfSampleCount</edgelabel>
+          <edgelabel>shadowType</edgelabel>
+          <edgelabel>volumetricSteps</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>pcfFilterSize</edgelabel>
+          <edgelabel>volumetricScattering</edgelabel>
+          <edgelabel>vsmLightBleedingReduction</edgelabel>
+          <edgelabel>vsmMinVariance</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::DirectionalShadowData</label>
+        <link refid="d2/d83/a07023"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>f32</label>
+      </node>
+      <node id="4">
+        <label>u32</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/Light/LightModule.hpp" line="208" column="1" bodyfile="Castor3D/Scene/Light/LightModule.hpp" bodystart="209" bodyend="213"/>
+    <listofallmembers>
+      <member refid="d1/d4b/a07031_1ae56717c3ea506d6c3b4b6af51fef9aab" prot="public" virt="non-virtual"><scope>castor3d::AllShadowData</scope><name>directional</name></member>
+      <member refid="d1/d4b/a07031_1ae4669f245bc210023de4d6bee73a7f94" prot="public" virt="non-virtual"><scope>castor3d::AllShadowData</scope><name>point</name></member>
+      <member refid="d1/d4b/a07031_1ac3e499e231cc8307de112f909714cc05" prot="public" virt="non-virtual"><scope>castor3d::AllShadowData</scope><name>spot</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

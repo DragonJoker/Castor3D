@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d4f/a06727" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::EquirectangularToCube</compoundname>
+    <basecompoundref refid="d0/de1/a06735" prot="private" virt="non-virtual">castor3d::RenderCube</basecompoundref>
+    <includes local="no">EquirectangularToCube.hpp</includes>
+    <innerclass refid="db/dd2/a06731" prot="private">castor3d::EquirectangularToCube::FrameBuffer</innerclass>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/d4f/a06727_1a082a4cce6beb2199477f6604b55d7b11" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; FrameBuffer, 6u &gt;</type>
+        <definition>castor::Array&lt; FrameBuffer, 6u &gt; castor3d::EquirectangularToCube::m_frameBuffers</definition>
+        <argsstring></argsstring>
+        <name>m_frameBuffers</name>
+        <qualifiedname>castor3d::EquirectangularToCube::m_frameBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToTexture/EquirectangularToCube.hpp" line="31" column="15" bodyfile="Castor3D/Render/ToTexture/EquirectangularToCube.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d4f/a06727_1a38157871c0f4e721522f882af12716f9" prot="private" static="no" mutable="no">
+        <type>ashes::CommandBufferPtr</type>
+        <definition>ashes::CommandBufferPtr castor3d::EquirectangularToCube::m_commandBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_commandBuffer</name>
+        <qualifiedname>castor3d::EquirectangularToCube::m_commandBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToTexture/EquirectangularToCube.hpp" line="32" column="25" bodyfile="Castor3D/Render/ToTexture/EquirectangularToCube.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d4f/a06727_1a846628d422e5669c05fc6ace76c4fe82" prot="private" static="no" mutable="no">
+        <type>ashes::ImageView const  &amp;</type>
+        <definition>ashes::ImageView const&amp; castor3d::EquirectangularToCube::m_view</definition>
+        <argsstring></argsstring>
+        <name>m_view</name>
+        <qualifiedname>castor3d::EquirectangularToCube::m_view</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToTexture/EquirectangularToCube.hpp" line="33" column="25" bodyfile="Castor3D/Render/ToTexture/EquirectangularToCube.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d4f/a06727_1a8234017deeff5ab377fc07907362887e" prot="private" static="no" mutable="no">
+        <type>ashes::RenderPassPtr</type>
+        <definition>ashes::RenderPassPtr castor3d::EquirectangularToCube::m_renderPass</definition>
+        <argsstring></argsstring>
+        <name>m_renderPass</name>
+        <qualifiedname>castor3d::EquirectangularToCube::m_renderPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToTexture/EquirectangularToCube.hpp" line="34" column="22" bodyfile="Castor3D/Render/ToTexture/EquirectangularToCube.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d4f/a06727_1a08bb82ddda0e8dd0e0a81216032bee12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::EquirectangularToCube::EquirectangularToCube</definition>
+        <argsstring>(TextureLayout const &amp;equiRectangular, RenderDevice const &amp;device, TextureLayout const &amp;target)</argsstring>
+        <name>EquirectangularToCube</name>
+        <qualifiedname>castor3d::EquirectangularToCube::EquirectangularToCube</qualifiedname>
+        <param>
+          <type><ref refid="da/d70/a04967" kindref="compound">TextureLayout</ref> const &amp;</type>
+          <declname>equiRectangular</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d70/a04967" kindref="compound">TextureLayout</ref> const &amp;</type>
+          <declname>target</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToTexture/EquirectangularToCube.hpp" line="20" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d4f/a06727_1a2da4513144f02ad4f1814f439dd59622" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EquirectangularToCube::render</definition>
+        <argsstring>(QueueData const &amp;queueData)</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::EquirectangularToCube::render</qualifiedname>
+        <param>
+          <type><ref refid="d3/d0e/a06399" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ToTexture/EquirectangularToCube.hpp" line="23" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::EquirectangularToCube</label>
+        <link refid="dc/d4f/a06727"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::RenderCube</label>
+        <link refid="d0/de1/a06735"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::EquirectangularToCube</label>
+        <link refid="dc/d4f/a06727"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::RenderCube</label>
+        <link refid="d0/de1/a06735"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RenderDevice</label>
+        <link refid="dc/d32/a06415"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d5/d4e/a06559"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/ToTexture/EquirectangularToCube.hpp" line="16" column="1" bodyfile="Castor3D/Render/ToTexture/EquirectangularToCube.hpp" bodystart="18" bodyend="35"/>
+    <listofallmembers>
+      <member refid="dc/d4f/a06727_1a08bb82ddda0e8dd0e0a81216032bee12" prot="public" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>EquirectangularToCube</name></member>
+      <member refid="dc/d4f/a06727_1a38157871c0f4e721522f882af12716f9" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_commandBuffer</name></member>
+      <member refid="dc/d4f/a06727_1a082a4cce6beb2199477f6604b55d7b11" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_frameBuffers</name></member>
+      <member refid="dc/d4f/a06727_1a8234017deeff5ab377fc07907362887e" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_renderPass</name></member>
+      <member refid="dc/d4f/a06727_1a846628d422e5669c05fc6ace76c4fe82" prot="private" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>m_view</name></member>
+      <member refid="dc/d4f/a06727_1a2da4513144f02ad4f1814f439dd59622" prot="public" virt="non-virtual"><scope>castor3d::EquirectangularToCube</scope><name>render</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_83dd0b6e9a230a71a17985a017af57f9" kind="dir">
-    <compoundname>Material/Texture/Animation</compoundname>
-    <innerfile refid="d9/d0f/a00644">TextureAnimation.hpp</innerfile>
-    <innerfile refid="d3/d8e/a00647">TextureAnimationKeyFrame.hpp</innerfile>
-    <innerfile refid="df/d46/a14833">TextureAnimationModule.hpp</innerfile>
+    <compoundname>Castor3D/Material/Texture/Animation</compoundname>
+    <innerfile refid="d1/daa/a00638">TextureAnimation.hpp</innerfile>
+    <innerfile refid="db/d3a/a00641">TextureAnimationKeyFrame.hpp</innerfile>
+    <innerfile refid="df/d73/a11687">TextureAnimationModule.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Material/Texture/Animation/"/>
+    <location file="Castor3D/Material/Texture/Animation/"/>
   </compounddef>
 </doxygen>

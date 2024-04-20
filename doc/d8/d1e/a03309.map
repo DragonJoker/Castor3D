@@ -1,0 +1,10 @@
+<map id="castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;" name="castor3d::BinaryWriter&lt; SkeletonAnimationBone &gt;">
+<area shape="rect" id="Node000001" title="MovingBone binary loader." alt="" coords="5,285,191,325"/>
+<area shape="rect" id="Node000002" href="$d4/d9c/a03231.html" title=" " alt="" coords="5,196,191,236"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,250,101,285,95,285,95,250"/>
+<area shape="rect" id="Node000003" href="$d5/d27/a03183.html" title=" " alt="" coords="53,5,207,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="116,44,103,67,93,94,89,121,89,149,96,195,91,196,84,149,83,121,87,93,98,65,111,41"/>
+<area shape="rect" id="Node000004" href="$d4/d9c/a03231.html" title="Binary data chunk writer base class." alt="" coords="159,93,341,133"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="157,37,227,91,224,95,154,41"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="211,143,128,198,125,194,208,139"/>
+</map>

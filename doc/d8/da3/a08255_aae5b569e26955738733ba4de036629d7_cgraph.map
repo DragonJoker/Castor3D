@@ -1,0 +1,21 @@
+<map id="castor::ResourceCacheBaseT::create" name="castor::ResourceCacheBaseT::create">
+<area shape="rect" id="Node000001" title="Creates an element." alt="" coords="5,37,193,77"/>
+<area shape="rect" id="Node000002" href="$d8/da3/a08255.html#adee23d182e1e5ddc942024826978b31e" title=" " alt="" coords="241,5,429,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="193,42,227,37,228,43,194,47"/>
+<area shape="rect" id="Node000003" href="$d8/da3/a08255.html#aa1689ccd9a406fe8dfe9ff473d226b5e" title=" " alt="" coords="241,69,429,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="194,67,228,72,227,77,193,73"/>
+<area shape="rect" id="Node000004" href="$d8/da3/a08255.html#a846eb5869a3b833ce9200edb493a3463" title=" " alt="" coords="477,5,665,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="409,67,483,46,485,51,411,72"/>
+<area shape="rect" id="Node000005" href="$d9/d93/a09063.html#a8053eec12caa69c0ddad74e68e945eab" title="Logs a trace message, from a std::basic_string&lt; CharT &gt;" alt="" coords="494,69,649,109"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="430,87,480,87,480,92,430,92"/>
+<area shape="rect" id="Node000010" href="$d2/dd2/a02279.html#af41ea5b34edb8c4103f57937867ea4d6" title=" " alt="" coords="484,134,659,159"/>
+<area shape="poly" id="edge9_Node000003_Node000010" title=" " alt="" coords="419,107,506,128,504,133,418,112"/>
+<area shape="rect" id="Node000006" href="$d9/d93/a09063.html#af8c57bc4b8bfeb532f32493316e157a1" title="Pushes a message into the queue." alt="" coords="713,69,868,109"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="649,87,700,87,700,92,649,92"/>
+<area shape="rect" id="Node000007" href="$d9/d93/a09063.html#afa966debfbe3f79d0bea9cf2bc4c7889" title=" " alt="" coords="922,12,1077,52"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="863,67,912,53,914,58,865,72"/>
+<area shape="rect" id="Node000008" href="$d2/dd2/a02279.html#a58f3178234ce83e643568e48a0ed6a3f" title=" " alt="" coords="916,77,1083,102"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="868,87,903,87,903,92,868,92"/>
+<area shape="rect" id="Node000009" href="$d2/dd2/a02279.html#ab0fb14b20a64ca391cfd363dfdf2ea78" title=" " alt="" coords="949,126,1049,151"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="869,105,936,121,935,126,868,110"/>
+</map>

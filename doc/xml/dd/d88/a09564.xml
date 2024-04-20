@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/d88/a09564" kind="concept">
+    <compoundname>castor::Vector2T</compoundname>
+    <includes local="no">MathModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename TypeT</type>
+      </param>
+    </templateparamlist>
+    <initializer>template&lt;typename TypeT&gt;
+concept <ref refid="dd/d88/a09564" kindref="compound">castor::Vector2T</ref> =  ( isPoint2f&lt; TypeT &gt; || isPoint2d&lt; TypeT &gt; )    </initializer>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/MathModule.hpp" line="493" column="1"/>
+  </compounddef>
+</doxygen>

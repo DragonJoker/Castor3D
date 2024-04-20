@@ -1,0 +1,13 @@
+<map id="castor3d::TriFaceMapping" name="castor3d::TriFaceMapping">
+<area shape="rect" id="Node000001" title=" " alt="" coords="145,345,317,371"/>
+<area shape="rect" id="Node000002" href="$d1/d27/a05483.html" title=" " alt="" coords="26,250,186,275"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,281,217,343,214,347,131,286"/>
+<area shape="rect" id="Node000003" href="$d6/df6/a05611.html" title=" " alt="" coords="5,168,207,193"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="109,207,109,250,103,250,103,207"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title=" " alt="" coords="5,93,207,119"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="109,133,109,168,103,168,103,133"/>
+<area shape="rect" id="Node000005" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="15,5,197,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="109,45,109,93,103,93,103,45"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="211,243,337,283"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="262,296,239,346,234,344,257,294"/>
+</map>

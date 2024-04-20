@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/db8/a03559" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::StagedUploadData::StagingBuffer</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/db8/a03559_1a12585e2b055db61374835ae196d862b3" prot="public" static="no" mutable="no">
+        <type>GpuPackedBaseBufferUPtr</type>
+        <definition>GpuPackedBaseBufferUPtr castor3d::StagedUploadData::StagingBuffer::buffer</definition>
+        <argsstring></argsstring>
+        <name>buffer</name>
+        <qualifiedname>castor3d::StagedUploadData::StagingBuffer::buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="79" column="25" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/db8/a03559_1ab2f2324430d8bb969fe68cdf03c0e242" prot="public" static="no" mutable="no">
+        <type>u32</type>
+        <definition>u32 castor3d::StagedUploadData::StagingBuffer::lifetime</definition>
+        <argsstring></argsstring>
+        <name>lifetime</name>
+        <qualifiedname>castor3d::StagedUploadData::StagingBuffer::lifetime</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="80" column="5" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="80" bodyend="80"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/db8/a03559_1a7033b9f0af2b476a73599fa80c6a8a35" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::StagedUploadData::StagingBuffer::StagingBuffer</definition>
+        <argsstring>(GpuPackedBaseBufferUPtr buf)</argsstring>
+        <name>StagingBuffer</name>
+        <qualifiedname>castor3d::StagedUploadData::StagingBuffer::StagingBuffer</qualifiedname>
+        <param>
+          <type>GpuPackedBaseBufferUPtr</type>
+          <declname>buf</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="74" column="10" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="74" bodyend="77"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::StagedUploadData::StagingBuffer</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>lifetime</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>u32</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Buffer/StagedUploadData.hpp" line="72" column="1" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="73" bodyend="81"/>
+    <listofallmembers>
+      <member refid="d0/db8/a03559_1a12585e2b055db61374835ae196d862b3" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData::StagingBuffer</scope><name>buffer</name></member>
+      <member refid="d0/db8/a03559_1ab2f2324430d8bb969fe68cdf03c0e242" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData::StagingBuffer</scope><name>lifetime</name></member>
+      <member refid="d0/db8/a03559_1a7033b9f0af2b476a73599fa80c6a8a35" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData::StagingBuffer</scope><name>StagingBuffer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

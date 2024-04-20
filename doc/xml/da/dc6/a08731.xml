@@ -1,0 +1,321 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/dc6/a08731" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor::BoundingContainer</compoundname>
+    <derivedcompoundref refid="d6/d51/a08727" prot="public" virt="non-virtual">castor::BoundingBox</derivedcompoundref>
+    <derivedcompoundref refid="dd/d6f/a08735" prot="public" virt="non-virtual">castor::BoundingSphere</derivedcompoundref>
+    <includes local="no">BoundingContainer.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>uint8_t</type>
+        <declname>Dimension</declname>
+        <defname>Dimension</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="da/dc6/a08731_1aa459d046786830e4e3223a51e832b3cd" prot="public" static="no">
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; float, Dimension &gt;</type>
+        <definition>using castor::BoundingContainer&lt; Dimension &gt;::MyPoint =  Point&lt; float, Dimension &gt;</definition>
+        <argsstring></argsstring>
+        <name>MyPoint</name>
+        <qualifiedname>castor::BoundingContainer::MyPoint</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingContainer.hpp" line="17" column="1" bodyfile="CastorUtils/Graphics/BoundingContainer.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="da/dc6/a08731_1af03819db41a01ab52b3e167414ada10d" prot="private" static="no" mutable="no">
+        <type><ref refid="da/dc6/a08731_1aa459d046786830e4e3223a51e832b3cd" kindref="member">MyPoint</ref></type>
+        <definition>MyPoint castor::BoundingContainer&lt; Dimension &gt;::m_center</definition>
+        <argsstring></argsstring>
+        <name>m_center</name>
+        <qualifiedname>castor::BoundingContainer::m_center</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le centre de ce conteneur. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingContainer.hpp" line="78" column="9" bodyfile="CastorUtils/Graphics/BoundingContainer.hpp" bodystart="78" bodyend="78"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/dc6/a08731_1ae812b72b4c22180211ea369c47c807ec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::BoundingContainer&lt; Dimension &gt;::BoundingContainer</definition>
+        <argsstring>()=default</argsstring>
+        <name>BoundingContainer</name>
+        <qualifiedname>castor::BoundingContainer::BoundingContainer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingContainer.hpp" line="18" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dc6/a08731_1a40f770e152228f625222849ab31166fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::BoundingContainer&lt; Dimension &gt;::BoundingContainer</definition>
+        <argsstring>(BoundingContainer const &amp;)=default</argsstring>
+        <name>BoundingContainer</name>
+        <qualifiedname>castor::BoundingContainer::BoundingContainer</qualifiedname>
+        <param>
+          <type><ref refid="da/dc6/a08731" kindref="compound">BoundingContainer</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingContainer.hpp" line="19" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dc6/a08731_1a77c73fd155594406312d8fc82d84d60b" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::BoundingContainer&lt; Dimension &gt;::BoundingContainer</definition>
+        <argsstring>(BoundingContainer &amp;&amp;) noexcept=default</argsstring>
+        <name>BoundingContainer</name>
+        <qualifiedname>castor::BoundingContainer::BoundingContainer</qualifiedname>
+        <param>
+          <type><ref refid="da/dc6/a08731" kindref="compound">BoundingContainer</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingContainer.hpp" line="20" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dc6/a08731_1a426566d32bc1c42d74b188f257b3ccda" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="da/dc6/a08731" kindref="compound">BoundingContainer</ref> &amp;</type>
+        <definition>CU_API BoundingContainer &amp; castor::BoundingContainer&lt; Dimension &gt;::operator=</definition>
+        <argsstring>(BoundingContainer const &amp;)=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::BoundingContainer::operator=</qualifiedname>
+        <param>
+          <type><ref refid="da/dc6/a08731" kindref="compound">BoundingContainer</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingContainer.hpp" line="21" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dc6/a08731_1ade60d404c88a6b78c17cca7e044d9d69" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="da/dc6/a08731" kindref="compound">BoundingContainer</ref> &amp;</type>
+        <definition>CU_API BoundingContainer &amp; castor::BoundingContainer&lt; Dimension &gt;::operator=</definition>
+        <argsstring>(BoundingContainer &amp;&amp;) noexcept=default</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::BoundingContainer::operator=</qualifiedname>
+        <param>
+          <type><ref refid="da/dc6/a08731" kindref="compound">BoundingContainer</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingContainer.hpp" line="22" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dc6/a08731_1a50781789daa8a61109aae08c384a5cbf" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>virtual CU_API castor::BoundingContainer&lt; Dimension &gt;::~BoundingContainer</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~BoundingContainer</name>
+        <qualifiedname>castor::BoundingContainer::~BoundingContainer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingContainer.hpp" line="23" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dc6/a08731_1a883c22c6046853f2a64d407c8f5de458" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::BoundingContainer&lt; Dimension &gt;::BoundingContainer</definition>
+        <argsstring>(MyPoint center)</argsstring>
+        <name>BoundingContainer</name>
+        <qualifiedname>castor::BoundingContainer::BoundingContainer</qualifiedname>
+        <param>
+          <type><ref refid="da/dc6/a08731_1aa459d046786830e4e3223a51e832b3cd" kindref="member">MyPoint</ref></type>
+          <declname>center</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur à partir du centre. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">center</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le centre. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingContainer.hpp" line="32" column="10" bodyfile="CastorUtils/Graphics/BoundingContainer.hpp" bodystart="32" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dc6/a08731_1a2e7294ec987f1a067009faf3155ab402" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>virtual CU_API bool castor::BoundingContainer&lt; Dimension &gt;::isWithin</definition>
+        <argsstring>(MyPoint const &amp;point) const =0</argsstring>
+        <name>isWithin</name>
+        <qualifiedname>castor::BoundingContainer::isWithin</qualifiedname>
+        <param>
+          <type><ref refid="da/dc6/a08731_1aa459d046786830e4e3223a51e832b3cd" kindref="member">MyPoint</ref> const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Teste si un point est contenu dans le conteneur (mais pas à la limite). </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point à tester. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si le point est dans le conteneur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingContainer.hpp" line="46" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dc6/a08731_1a15b371f2c35be936aac7025e469c738f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>virtual CU_API bool castor::BoundingContainer&lt; Dimension &gt;::isOnLimits</definition>
+        <argsstring>(MyPoint const &amp;point) const =0</argsstring>
+        <name>isOnLimits</name>
+        <qualifiedname>castor::BoundingContainer::isOnLimits</qualifiedname>
+        <param>
+          <type><ref refid="da/dc6/a08731_1aa459d046786830e4e3223a51e832b3cd" kindref="member">MyPoint</ref> const &amp;</type>
+          <declname>point</declname>
+        </param>
+        <briefdescription>
+<para>Teste si un point est sur la limite du conteneur, et pas dedans. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">point</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point à tester. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> si le point est sur la limite. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingContainer.hpp" line="57" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dc6/a08731_1a3e50ad04847a8533434c6e4a59583359" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/dc6/a08731_1aa459d046786830e4e3223a51e832b3cd" kindref="member">MyPoint</ref> const &amp;</type>
+        <definition>MyPoint const  &amp; castor::BoundingContainer&lt; Dimension &gt;::getCenter</definition>
+        <argsstring>() const</argsstring>
+        <name>getCenter</name>
+        <qualifiedname>castor::BoundingContainer::getCenter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le centre de ce conteneur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingContainer.hpp" line="64" column="16" bodyfile="CastorUtils/Graphics/BoundingContainer.hpp" bodystart="64" bodyend="67"/>
+        <referencedby refid="d6/d51/a08727_1a5d8fe12e5cabeb18fa65be2f13cf04df" compoundref="d9/da1/a01976" startline="111" endline="114">castor::BoundingBox::getMax</referencedby>
+        <referencedby refid="d6/d51/a08727_1a676c9133a8cdf5ae7eb2f2d115d8f2f4" compoundref="d9/da1/a01976" startline="101" endline="104">castor::BoundingBox::getMin</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="da/dc6/a08731_1a1cb2689d6741a63bb85d722e02c56cba" prot="protected" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::BoundingContainer&lt; Dimension &gt;::setCenter</definition>
+        <argsstring>(MyPoint center) noexcept</argsstring>
+        <name>setCenter</name>
+        <qualifiedname>castor::BoundingContainer::setCenter</qualifiedname>
+        <param>
+          <type><ref refid="da/dc6/a08731_1aa459d046786830e4e3223a51e832b3cd" kindref="member">MyPoint</ref></type>
+          <declname>center</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/BoundingContainer.hpp" line="70" column="6" bodyfile="CastorUtils/Graphics/BoundingContainer.hpp" bodystart="70" bodyend="73"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe de conteneur boîte. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Un conteneur boîte est un simple objet encadrant un objet graphique (2D ou 3D). <linebreak/>
+Ce peut être un parallélépipède, une sphère ou autre. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::BoundingBox&lt; 3 &gt;</label>
+        <link refid="d6/d51/a08727"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::BoundingContainer&lt; Dimension &gt;</label>
+        <link refid="da/dc6/a08731"/>
+      </node>
+      <node id="3">
+        <label>castor::BoundingSphere&lt; 3 &gt;</label>
+        <link refid="dd/d6f/a08735"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/Graphics/BoundingContainer.hpp" line="14" column="1" bodyfile="CastorUtils/Graphics/BoundingContainer.hpp" bodystart="15" bodyend="79"/>
+    <listofallmembers>
+      <member refid="da/dc6/a08731_1ae812b72b4c22180211ea369c47c807ec" prot="public" virt="non-virtual"><scope>castor::BoundingContainer</scope><name>BoundingContainer</name></member>
+      <member refid="da/dc6/a08731_1a40f770e152228f625222849ab31166fc" prot="public" virt="non-virtual"><scope>castor::BoundingContainer</scope><name>BoundingContainer</name></member>
+      <member refid="da/dc6/a08731_1a77c73fd155594406312d8fc82d84d60b" prot="public" virt="non-virtual"><scope>castor::BoundingContainer</scope><name>BoundingContainer</name></member>
+      <member refid="da/dc6/a08731_1a883c22c6046853f2a64d407c8f5de458" prot="public" virt="non-virtual"><scope>castor::BoundingContainer</scope><name>BoundingContainer</name></member>
+      <member refid="da/dc6/a08731_1a3e50ad04847a8533434c6e4a59583359" prot="public" virt="non-virtual"><scope>castor::BoundingContainer</scope><name>getCenter</name></member>
+      <member refid="da/dc6/a08731_1a15b371f2c35be936aac7025e469c738f" prot="public" virt="pure-virtual"><scope>castor::BoundingContainer</scope><name>isOnLimits</name></member>
+      <member refid="da/dc6/a08731_1a2e7294ec987f1a067009faf3155ab402" prot="public" virt="pure-virtual"><scope>castor::BoundingContainer</scope><name>isWithin</name></member>
+      <member refid="da/dc6/a08731_1af03819db41a01ab52b3e167414ada10d" prot="private" virt="non-virtual"><scope>castor::BoundingContainer</scope><name>m_center</name></member>
+      <member refid="da/dc6/a08731_1aa459d046786830e4e3223a51e832b3cd" prot="public" virt="non-virtual"><scope>castor::BoundingContainer</scope><name>MyPoint</name></member>
+      <member refid="da/dc6/a08731_1a426566d32bc1c42d74b188f257b3ccda" prot="public" virt="non-virtual"><scope>castor::BoundingContainer</scope><name>operator=</name></member>
+      <member refid="da/dc6/a08731_1ade60d404c88a6b78c17cca7e044d9d69" prot="public" virt="non-virtual"><scope>castor::BoundingContainer</scope><name>operator=</name></member>
+      <member refid="da/dc6/a08731_1a1cb2689d6741a63bb85d722e02c56cba" prot="protected" virt="non-virtual"><scope>castor::BoundingContainer</scope><name>setCenter</name></member>
+      <member refid="da/dc6/a08731_1a50781789daa8a61109aae08c384a5cbf" prot="public" virt="virtual"><scope>castor::BoundingContainer</scope><name>~BoundingContainer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,721 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/d83/a03839" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ScrollableCtrl</compoundname>
+    <derivedcompoundref refid="d8/d73/a03799" prot="public" virt="non-virtual">castor3d::EditCtrl</derivedcompoundref>
+    <derivedcompoundref refid="d9/dc9/a03823" prot="public" virt="non-virtual">castor3d::LayoutControl</derivedcompoundref>
+    <includes local="no">CtrlScrollable.hpp</includes>
+    <innerclass refid="d5/ddd/a03843" prot="protected">castor3d::ScrollableCtrl::ScrolledControl</innerclass>
+    <sectiondef kind="protected-type">
+      <memberdef kind="typedef" id="d9/d83/a03839_1a446d11a6c8ef44f1b231030420504c63" prot="protected" static="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void(<ref refid="df/dba/a08999" kindref="compound">castor::Position</ref> const &amp;) &gt;</type>
+        <definition>using castor3d::ScrollableCtrl::OnScrollContentFunction =  castor::Function&lt; void( castor::Position const &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnScrollContentFunction</name>
+        <qualifiedname>castor3d::ScrollableCtrl::OnScrollContentFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="109" column="1" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d9/d83/a03839_1a090f038e310dcf9e5d52e9341580d447" prot="protected" static="no">
+        <type><ref refid="dc/d79/a08267" kindref="compound">castor::SignalT</ref>&lt; <ref refid="d9/d83/a03839_1a446d11a6c8ef44f1b231030420504c63" kindref="member">OnScrollContentFunction</ref> &gt;</type>
+        <definition>using castor3d::ScrollableCtrl::OnScrollContent =  castor::SignalT&lt; OnScrollContentFunction &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnScrollContent</name>
+        <qualifiedname>castor3d::ScrollableCtrl::OnScrollContent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="110" column="1" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d9/d83/a03839_1a125fdf16def9bcdf059bd8d67cf898db" prot="protected" static="no">
+        <type><ref refid="dc/d79/a08267_1aea6d41678f91c9fb0fb2334009626e4d" kindref="member">OnScrollContent::connection</ref></type>
+        <definition>using castor3d::ScrollableCtrl::OnScrollContentConnection =  OnScrollContent::connection</definition>
+        <argsstring></argsstring>
+        <name>OnScrollContentConnection</name>
+        <qualifiedname>castor3d::ScrollableCtrl::OnScrollContentConnection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="111" column="1" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d9/d83/a03839_1a01dc4891a4d1278caadde993fce3a478" prot="protected" static="no" mutable="no">
+        <type><ref refid="d9/d83/a03839_1a090f038e310dcf9e5d52e9341580d447" kindref="member">OnScrollContent</ref></type>
+        <definition>OnScrollContent castor3d::ScrollableCtrl::onScrollContent</definition>
+        <argsstring></argsstring>
+        <name>onScrollContent</name>
+        <qualifiedname>castor3d::ScrollableCtrl::onScrollContent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="113" column="17" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/d83/a03839_1a43c760241aaee0dcafee9e536b20634b" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/dee/a03795" kindref="compound">Control</ref> &amp;</type>
+        <definition>Control&amp; castor3d::ScrollableCtrl::m_target</definition>
+        <argsstring></argsstring>
+        <name>m_target</name>
+        <qualifiedname>castor3d::ScrollableCtrl::m_target</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="122" column="10" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d83/a03839_1a90b2fe06403482852e177a47648e6756" prot="private" static="no" mutable="no">
+        <type>ScrollableStyleRPtr</type>
+        <definition>ScrollableStyleRPtr castor3d::ScrollableCtrl::m_scrollableStyle</definition>
+        <argsstring></argsstring>
+        <name>m_scrollableStyle</name>
+        <qualifiedname>castor3d::ScrollableCtrl::m_scrollableStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="123" column="21" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="123" bodyend="123"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d83/a03839_1acbb063df94177b87a0fff08bb55baa90" prot="private" static="no" mutable="no">
+        <type>ScrollBarCtrlRPtr</type>
+        <definition>ScrollBarCtrlRPtr castor3d::ScrollableCtrl::m_verticalScrollBar</definition>
+        <argsstring></argsstring>
+        <name>m_verticalScrollBar</name>
+        <qualifiedname>castor3d::ScrollableCtrl::m_verticalScrollBar</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="124" column="19" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="124" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d83/a03839_1a4a78ea6cf0c64ab3dc2882660828dafd" prot="private" static="no" mutable="no">
+        <type>ScrollBarCtrlRPtr</type>
+        <definition>ScrollBarCtrlRPtr castor3d::ScrollableCtrl::m_horizontalScrollBar</definition>
+        <argsstring></argsstring>
+        <name>m_horizontalScrollBar</name>
+        <qualifiedname>castor3d::ScrollableCtrl::m_horizontalScrollBar</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="125" column="19" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="125" bodyend="125"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d83/a03839_1a4d429ace514e8a39b497e8fd602ed015" prot="private" static="no" mutable="no">
+        <type>PanelOverlayRPtr</type>
+        <definition>PanelOverlayRPtr castor3d::ScrollableCtrl::m_corner</definition>
+        <argsstring></argsstring>
+        <name>m_corner</name>
+        <qualifiedname>castor3d::ScrollableCtrl::m_corner</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="126" column="18" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="126" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d83/a03839_1acf7c1987e46e4da7e9ae924f4f7a8b16" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a93b53452a3c421817a14b649ccec1fb7" kindref="member">castor::Map</ref>&lt; ControlRPtr, <ref refid="d5/ddd/a03843" kindref="compound">ScrolledControl</ref> &gt;</type>
+        <definition>castor::Map&lt; ControlRPtr, ScrolledControl &gt; castor3d::ScrollableCtrl::m_controls</definition>
+        <argsstring></argsstring>
+        <name>m_controls</name>
+        <qualifiedname>castor3d::ScrollableCtrl::m_controls</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="127" column="13" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="127" bodyend="127"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d83/a03839_1ab0c19c91d3364a2174130ee2b139a168" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1ae0418ed311d93a1f220222c787f18fc4" kindref="member">OnScrollBarEventConnection</ref></type>
+        <definition>OnScrollBarEventConnection castor3d::ScrollableCtrl::m_onVerticalThumbRelease</definition>
+        <argsstring></argsstring>
+        <name>m_onVerticalThumbRelease</name>
+        <qualifiedname>castor3d::ScrollableCtrl::m_onVerticalThumbRelease</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="128" column="28" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="128" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d83/a03839_1a2256fbdd48081916cb927d9ac1318d8c" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1ae0418ed311d93a1f220222c787f18fc4" kindref="member">OnScrollBarEventConnection</ref></type>
+        <definition>OnScrollBarEventConnection castor3d::ScrollableCtrl::m_onHorizontalThumbRelease</definition>
+        <argsstring></argsstring>
+        <name>m_onHorizontalThumbRelease</name>
+        <qualifiedname>castor3d::ScrollableCtrl::m_onHorizontalThumbRelease</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="129" column="28" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="129" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d83/a03839_1ad081e6be4e3f22943997cbcd6144c9cf" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1ae0418ed311d93a1f220222c787f18fc4" kindref="member">OnScrollBarEventConnection</ref></type>
+        <definition>OnScrollBarEventConnection castor3d::ScrollableCtrl::m_onVerticalThumbTrack</definition>
+        <argsstring></argsstring>
+        <name>m_onVerticalThumbTrack</name>
+        <qualifiedname>castor3d::ScrollableCtrl::m_onVerticalThumbTrack</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="130" column="28" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="130" bodyend="130"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d83/a03839_1adb61feb3aa2b2902f303fbcc24607221" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1ae0418ed311d93a1f220222c787f18fc4" kindref="member">OnScrollBarEventConnection</ref></type>
+        <definition>OnScrollBarEventConnection castor3d::ScrollableCtrl::m_onHorizontalThumbTrack</definition>
+        <argsstring></argsstring>
+        <name>m_onHorizontalThumbTrack</name>
+        <qualifiedname>castor3d::ScrollableCtrl::m_onHorizontalThumbTrack</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="131" column="28" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="131" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d83/a03839_1a217bbfd35c063a409f28cdaf8f47a7b5" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::ScrollableCtrl::m_updating</definition>
+        <argsstring></argsstring>
+        <name>m_updating</name>
+        <qualifiedname>castor3d::ScrollableCtrl::m_updating</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="132" column="6" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="132" bodyend="132"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d83/a03839_1a68afd97e16432c424a2a04eb6faa4da9" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::ScrollableCtrl::~ScrollableCtrl</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~ScrollableCtrl</name>
+        <qualifiedname>castor3d::ScrollableCtrl::~ScrollableCtrl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="17" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1a772267b983302f045bdd634a402a1396" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="df/dba/a08999" kindref="compound">castor::Position</ref></type>
+        <definition>C3D_API castor::Position castor3d::ScrollableCtrl::getScrollPosition</definition>
+        <argsstring>() const</argsstring>
+        <name>getScrollPosition</name>
+        <qualifiedname>castor3d::ScrollableCtrl::getScrollPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="18" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1ae770e0ca821440bc3564e495ed6f9b14" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/da4/a03927" kindref="compound">ScrollableStyle</ref> &amp;</type>
+        <definition>ScrollableStyle &amp; castor3d::ScrollableCtrl::getStyle</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getStyle</name>
+        <qualifiedname>castor3d::ScrollableCtrl::getStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="20" column="18" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="20" bodyend="23"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d9/d83/a03839_1a13273723954d21bca4ac100ce4b52118" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ScrollableCtrl::ScrollableCtrl</definition>
+        <argsstring>(Control &amp;target, ScrollableStyleRPtr style)</argsstring>
+        <name>ScrollableCtrl</name>
+        <qualifiedname>castor3d::ScrollableCtrl::ScrollableCtrl</qualifiedname>
+        <param>
+          <type><ref refid="d6/dee/a03795" kindref="compound">Control</ref> &amp;</type>
+          <declname>target</declname>
+        </param>
+        <param>
+          <type>ScrollableStyleRPtr</type>
+          <declname>style</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">target</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The target control. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">style</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The style. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="30" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1a3b1291cf4701121926054695a1f3f3c6" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ScrollableCtrl::createScrollBars</definition>
+        <argsstring>()</argsstring>
+        <name>createScrollBars</name>
+        <qualifiedname>castor3d::ScrollableCtrl::createScrollBars</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates the scrollbars controls. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="35" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1a6bc2f9dcb648cca21b67d5408702b455" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ScrollableCtrl::destroyScrollBars</definition>
+        <argsstring>()</argsstring>
+        <name>destroyScrollBars</name>
+        <qualifiedname>castor3d::ScrollableCtrl::destroyScrollBars</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Destroys the scrollbars controls. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="39" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1a38842d6560f9bbb329607a1da6ed6643" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ScrollableCtrl::updateScrollBarsStyle</definition>
+        <argsstring>()</argsstring>
+        <name>updateScrollBarsStyle</name>
+        <qualifiedname>castor3d::ScrollableCtrl::updateScrollBarsStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the scrollbars&apos; style. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="43" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1a21b246acaf9295c15cdf17d92acbc01f" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ScrollableCtrl::checkScrollBarFlags</definition>
+        <argsstring>()</argsstring>
+        <name>checkScrollBarFlags</name>
+        <qualifiedname>castor3d::ScrollableCtrl::checkScrollBarFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Enables/Disables scrollbars, depending on control flags. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="47" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1aaf2a785346233c77031cc67362f635f7" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ScrollableCtrl::updateScrollBars</definition>
+        <argsstring>()</argsstring>
+        <name>updateScrollBars</name>
+        <qualifiedname>castor3d::ScrollableCtrl::updateScrollBars</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates scrollbars size and position. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="51" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1a4724d8983a27c60081db04c09df847ab" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Point4ui</type>
+        <definition>C3D_API castor::Point4ui castor3d::ScrollableCtrl::updateScrollableClientRect</definition>
+        <argsstring>(castor::Point4ui const &amp;clientRect) const</argsstring>
+        <name>updateScrollableClientRect</name>
+        <qualifiedname>castor3d::ScrollableCtrl::updateScrollableClientRect</qualifiedname>
+        <param>
+          <type>castor::Point4ui const &amp;</type>
+          <declname>clientRect</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the given client rect regarding scrollbars dimensions and visibility. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="55" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1a27b29c675906ed68bbc6e21c2ab63418" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ScrollableCtrl::updateScrollBarsThumb</definition>
+        <argsstring>(castor::Position const &amp;pos)</argsstring>
+        <name>updateScrollBarsThumb</name>
+        <qualifiedname>castor3d::ScrollableCtrl::updateScrollBarsThumb</qualifiedname>
+        <param>
+          <type><ref refid="df/dba/a08999" kindref="compound">castor::Position</ref> const &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates scrollbars thumb from external event. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="59" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1a9e36c2dba225280c164d7d5727a092e7" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ScrollableCtrl::setScrollBarsVisible</definition>
+        <argsstring>(bool visible)</argsstring>
+        <name>setScrollBarsVisible</name>
+        <qualifiedname>castor3d::ScrollableCtrl::setScrollBarsVisible</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>visible</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates scrollbars visibility. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="63" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1a1f1ad6fc05bfc1536f1d45535df5bdd3" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ScrollableCtrl::registerControl</definition>
+        <argsstring>(Control &amp;control)</argsstring>
+        <name>registerControl</name>
+        <qualifiedname>castor3d::ScrollableCtrl::registerControl</qualifiedname>
+        <param>
+          <type><ref refid="d6/dee/a03795" kindref="compound">Control</ref> &amp;</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates total scrollable content dimensions. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="67" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1abfdacade72fa1de2749d784b26dee3bf" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ScrollableCtrl::unregisterControl</definition>
+        <argsstring>(Control &amp;control)</argsstring>
+        <name>unregisterControl</name>
+        <qualifiedname>castor3d::ScrollableCtrl::unregisterControl</qualifiedname>
+        <param>
+          <type><ref refid="d6/dee/a03795" kindref="compound">Control</ref> &amp;</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates total scrollable content dimensions. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="71" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1aa2e25f2b5147066e2be098ec80f304f3" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ScrollableCtrl::updateTotalSize</definition>
+        <argsstring>(castor::Size const &amp;size)</argsstring>
+        <name>updateTotalSize</name>
+        <qualifiedname>castor3d::ScrollableCtrl::updateTotalSize</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd6/a09023" kindref="compound">castor::Size</ref> const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates total scrollable content dimensions. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="75" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1a635cd61e301e0c8143cb2fc6ada9966c" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ScrollableCtrl::updateScrollZIndex</definition>
+        <argsstring>(uint32_t &amp;index)</argsstring>
+        <name>updateScrollZIndex</name>
+        <qualifiedname>castor3d::ScrollableCtrl::updateScrollZIndex</qualifiedname>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the overlays Z index.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="79" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1ab329229a538e3f9286b051be73b29ba4" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ScrollableCtrl::adjustScrollZIndex</definition>
+        <argsstring>(uint32_t offset)</argsstring>
+        <name>adjustScrollZIndex</name>
+        <qualifiedname>castor3d::ScrollableCtrl::adjustScrollZIndex</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Adjusts the overlays Z index.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="83" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1a84bb253e368bb590f1b3dcfdfaaf54f6" prot="protected" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ScrollableCtrl::hasVerticalScrollBar</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>hasVerticalScrollBar</name>
+        <qualifiedname>castor3d::ScrollableCtrl::hasVerticalScrollBar</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="85" column="6" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="85" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1af885061793d951a3694562d68510bea6" prot="protected" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ScrollableCtrl::hasHorizontalScrollBar</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>hasHorizontalScrollBar</name>
+        <qualifiedname>castor3d::ScrollableCtrl::hasHorizontalScrollBar</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="90" column="6" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="90" bodyend="93"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d9/d83/a03839_1a2fdb7d09ee7bfcf715686d36118407b5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ScrollableCtrl::doUpdateControlPosition</definition>
+        <argsstring>(Control &amp;ctrl)</argsstring>
+        <name>doUpdateControlPosition</name>
+        <qualifiedname>castor3d::ScrollableCtrl::doUpdateControlPosition</qualifiedname>
+        <param>
+          <type><ref refid="d6/dee/a03795" kindref="compound">Control</ref> &amp;</type>
+          <declname>ctrl</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="116" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1a349498bc6bac4c0ed6ed5c24fea77d9b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ScrollableCtrl::doUpdateScrollableContent</definition>
+        <argsstring>()</argsstring>
+        <name>doUpdateScrollableContent</name>
+        <qualifiedname>castor3d::ScrollableCtrl::doUpdateScrollableContent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="117" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d83/a03839_1acb27eafeee879130c7a7b7263705eadc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ScrollableCtrl::doScrollContent</definition>
+        <argsstring>()</argsstring>
+        <name>doScrollContent</name>
+        <qualifiedname>castor3d::ScrollableCtrl::doScrollContent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="118" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::EditCtrl</label>
+        <link refid="d8/d73/a03799"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::LayoutControl</label>
+        <link refid="d9/dc9/a03823"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::PanelCtrl</label>
+        <link refid="dd/d89/a03831"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ScrollableCtrl</label>
+        <link refid="d9/d83/a03839"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::SignalT&lt; OnScrollContentFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; OnScrollContentFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ScrollableCtrl</label>
+        <link refid="d9/d83/a03839"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>onScrollContent</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="4">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Gui/Controls/CtrlScrollable.hpp" line="14" column="1" bodyfile="Castor3D/Gui/Controls/CtrlScrollable.hpp" bodystart="15" bodyend="133"/>
+    <listofallmembers>
+      <member refid="d9/d83/a03839_1ab329229a538e3f9286b051be73b29ba4" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>adjustScrollZIndex</name></member>
+      <member refid="d9/d83/a03839_1a21b246acaf9295c15cdf17d92acbc01f" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>checkScrollBarFlags</name></member>
+      <member refid="d9/d83/a03839_1a3b1291cf4701121926054695a1f3f3c6" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>createScrollBars</name></member>
+      <member refid="d9/d83/a03839_1a6bc2f9dcb648cca21b67d5408702b455" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>destroyScrollBars</name></member>
+      <member refid="d9/d83/a03839_1acb27eafeee879130c7a7b7263705eadc" prot="private" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>doScrollContent</name></member>
+      <member refid="d9/d83/a03839_1a2fdb7d09ee7bfcf715686d36118407b5" prot="private" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>doUpdateControlPosition</name></member>
+      <member refid="d9/d83/a03839_1a349498bc6bac4c0ed6ed5c24fea77d9b" prot="private" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>doUpdateScrollableContent</name></member>
+      <member refid="d9/d83/a03839_1a772267b983302f045bdd634a402a1396" prot="public" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>getScrollPosition</name></member>
+      <member refid="d9/d83/a03839_1ae770e0ca821440bc3564e495ed6f9b14" prot="public" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>getStyle</name></member>
+      <member refid="d9/d83/a03839_1af885061793d951a3694562d68510bea6" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>hasHorizontalScrollBar</name></member>
+      <member refid="d9/d83/a03839_1a84bb253e368bb590f1b3dcfdfaaf54f6" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>hasVerticalScrollBar</name></member>
+      <member refid="d9/d83/a03839_1acf7c1987e46e4da7e9ae924f4f7a8b16" prot="private" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>m_controls</name></member>
+      <member refid="d9/d83/a03839_1a4d429ace514e8a39b497e8fd602ed015" prot="private" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>m_corner</name></member>
+      <member refid="d9/d83/a03839_1a4a78ea6cf0c64ab3dc2882660828dafd" prot="private" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>m_horizontalScrollBar</name></member>
+      <member refid="d9/d83/a03839_1a2256fbdd48081916cb927d9ac1318d8c" prot="private" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>m_onHorizontalThumbRelease</name></member>
+      <member refid="d9/d83/a03839_1adb61feb3aa2b2902f303fbcc24607221" prot="private" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>m_onHorizontalThumbTrack</name></member>
+      <member refid="d9/d83/a03839_1ab0c19c91d3364a2174130ee2b139a168" prot="private" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>m_onVerticalThumbRelease</name></member>
+      <member refid="d9/d83/a03839_1ad081e6be4e3f22943997cbcd6144c9cf" prot="private" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>m_onVerticalThumbTrack</name></member>
+      <member refid="d9/d83/a03839_1a90b2fe06403482852e177a47648e6756" prot="private" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>m_scrollableStyle</name></member>
+      <member refid="d9/d83/a03839_1a43c760241aaee0dcafee9e536b20634b" prot="private" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>m_target</name></member>
+      <member refid="d9/d83/a03839_1a217bbfd35c063a409f28cdaf8f47a7b5" prot="private" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>m_updating</name></member>
+      <member refid="d9/d83/a03839_1acbb063df94177b87a0fff08bb55baa90" prot="private" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>m_verticalScrollBar</name></member>
+      <member refid="d9/d83/a03839_1a090f038e310dcf9e5d52e9341580d447" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>OnScrollContent</name></member>
+      <member refid="d9/d83/a03839_1a01dc4891a4d1278caadde993fce3a478" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>onScrollContent</name></member>
+      <member refid="d9/d83/a03839_1a125fdf16def9bcdf059bd8d67cf898db" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>OnScrollContentConnection</name></member>
+      <member refid="d9/d83/a03839_1a446d11a6c8ef44f1b231030420504c63" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>OnScrollContentFunction</name></member>
+      <member refid="d9/d83/a03839_1a1f1ad6fc05bfc1536f1d45535df5bdd3" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>registerControl</name></member>
+      <member refid="d9/d83/a03839_1a13273723954d21bca4ac100ce4b52118" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>ScrollableCtrl</name></member>
+      <member refid="d9/d83/a03839_1a9e36c2dba225280c164d7d5727a092e7" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>setScrollBarsVisible</name></member>
+      <member refid="d9/d83/a03839_1abfdacade72fa1de2749d784b26dee3bf" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>unregisterControl</name></member>
+      <member refid="d9/d83/a03839_1a4724d8983a27c60081db04c09df847ab" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>updateScrollableClientRect</name></member>
+      <member refid="d9/d83/a03839_1aaf2a785346233c77031cc67362f635f7" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>updateScrollBars</name></member>
+      <member refid="d9/d83/a03839_1a38842d6560f9bbb329607a1da6ed6643" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>updateScrollBarsStyle</name></member>
+      <member refid="d9/d83/a03839_1a27b29c675906ed68bbc6e21c2ab63418" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>updateScrollBarsThumb</name></member>
+      <member refid="d9/d83/a03839_1a635cd61e301e0c8143cb2fc6ada9966c" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>updateScrollZIndex</name></member>
+      <member refid="d9/d83/a03839_1aa2e25f2b5147066e2be098ec80f304f3" prot="protected" virt="non-virtual"><scope>castor3d::ScrollableCtrl</scope><name>updateTotalSize</name></member>
+      <member refid="d9/d83/a03839_1a68afd97e16432c424a2a04eb6faa4da9" prot="public" virt="virtual"><scope>castor3d::ScrollableCtrl</scope><name>~ScrollableCtrl</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

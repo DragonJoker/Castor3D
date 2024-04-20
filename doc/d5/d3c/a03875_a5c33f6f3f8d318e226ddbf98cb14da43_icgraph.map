@@ -1,0 +1,15 @@
+<map id="castor3d::Layout::Item::flags" name="castor3d::Layout::Item::flags">
+<area shape="rect" id="Node000001" title=" " alt="" coords="208,165,360,205"/>
+<area shape="rect" id="Node000002" href="$d5/d3c/a03875.html#abc3f3964b4397eaacbe712d9b21801eb" title=" " alt="" coords="7,5,159,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="257,156,214,107,158,60,138,48,141,43,162,55,218,104,261,153"/>
+<area shape="rect" id="Node000003" href="$d5/d3c/a03875.html#a7ab1ee960fe18adeb9452a8c9cad8181" title=" " alt="" coords="7,69,159,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="233,161,159,124,132,112,134,107,161,119,235,156"/>
+<area shape="rect" id="Node000004" href="$d5/d3c/a03875.html#abb8de4cd084787c9aa8230980a7217c7" title=" " alt="" coords="7,133,159,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="194,174,159,168,160,163,194,168"/>
+<area shape="rect" id="Node000005" href="$d5/d3c/a03875.html#a9740dbc3d2729dd1471c4ca1077af564" title=" " alt="" coords="7,197,159,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="194,202,160,208,159,203,194,197"/>
+<area shape="rect" id="Node000006" href="$d5/d3c/a03875.html#aad79a5386cbc71e3ff701f93ecc14645" title=" " alt="" coords="5,261,160,301"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="235,214,161,252,134,264,132,259,159,247,233,209"/>
+<area shape="rect" id="Node000007" href="$d5/d3c/a03875.html#ab0e79c0ba6166db29b7fb28e6583aa72" title=" " alt="" coords="7,325,159,365"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="261,218,218,267,162,316,141,328,138,323,158,311,214,263,257,214"/>
+</map>

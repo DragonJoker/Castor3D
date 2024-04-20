@@ -1,6 +1,4 @@
-<map id="castor3d::shader::BackgroundModel" name="castor3d::shader::BackgroundModel">
-<area shape="rect" id="node1" title=" " alt="" coords="5,69,201,109"/>
-<area shape="rect" id="node2" href="$d2/ddb/a05898.html" title=" " alt="" coords="257,5,467,45"/>
-<area shape="rect" id="node3" href="$d7/de6/a05902.html" title=" " alt="" coords="253,69,471,109"/>
-<area shape="rect" id="node4" href="$d0/dba/a05906.html" title=" " alt="" coords="249,133,475,173"/>
+<map id="castor3d::VkStructure" name="castor3d::VkStructure">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,155,31"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="169,12,181,18,155,25,154,20,176,18,168,17"/>
 </map>

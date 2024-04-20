@@ -1,4 +1,16 @@
-<map id="castor3d::MaterialImporter" name="castor3d::MaterialImporter">
-<area shape="rect" id="node1" title=" " alt="" coords="12,79,185,104"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,31"/>
+<map id="castor3d::BinaryParser&lt; SkeletonAnimation &gt;" name="castor3d::BinaryParser&lt; SkeletonAnimation &gt;">
+<area shape="rect" id="Node000001" title="SkeletonAnimation binary loader." alt="" coords="896,89,1051,129"/>
+<area shape="rect" id="Node000002" href="$dd/de1/a03223.html" title=" " alt="" coords="661,89,847,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="861,107,896,107,896,112,861,112"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="19,5,146,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="160,20,257,20,377,26,508,39,638,64,706,87,704,92,637,69,507,45,377,31,257,26,160,26"/>
+<area shape="rect" id="Node000006" href="$dd/de1/a03223.html" title="Binary data chunk reader base class." alt="" coords="291,56,476,96"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="160,36,291,58,290,63,159,41"/>
+<area shape="rect" id="Node000004" href="$d5/d27/a03183.html" title=" " alt="" coords="5,107,160,133"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="174,119,291,120,476,120,661,112,661,118,476,125,291,125,174,124"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="173,104,290,87,291,92,174,109"/>
+<area shape="rect" id="Node000005" href="$d5/d15/a05335.html" title=" " alt="" coords="21,171,145,197"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="158,175,373,154,637,124,660,121,661,126,638,129,374,159,159,180"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="138,165,266,122,334,94,336,99,268,126,139,170"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="490,83,661,98,661,104,489,88"/>
 </map>

@@ -1,5 +1,10 @@
-<map id="castor3d::TransmissionComponent::ComponentsShader" name="castor3d::TransmissionComponent::ComponentsShader">
-<area shape="rect" id="node1" title=" " alt="" coords="9,167,232,207"/>
-<area shape="rect" id="node2" href="$d7/d1d/a04018.html" title=" " alt="" coords="5,79,236,119"/>
-<area shape="rect" id="node3" href="$d0/dee/a04014.html" title=" " alt="" coords="21,5,220,31"/>
+<map id="castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;" name="castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;">
+<area shape="rect" id="Node000001" title="Material collection, with additional functions." alt="" coords="911,5,1120,75"/>
+<area shape="rect" id="Node000002" href="$d8/da3/a08255.html" title=" " alt="" coords="652,5,861,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="875,37,911,37,911,43,875,43"/>
+<area shape="rect" id="Node000003" href="$d9/d93/a09063.html" title=" " alt="" coords="5,19,160,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="174,24,381,18,505,18,628,23,652,24,652,30,628,28,505,24,381,24,174,30"/>
+<area shape="rect" id="Node000004" href="$d8/da3/a08255.html" title="Base class for an element cache." alt="" coords="265,55,453,95"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="174,43,265,58,265,63,173,49"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="467,75,546,73,628,67,651,63,652,68,628,72,546,79,467,80"/>
 </map>

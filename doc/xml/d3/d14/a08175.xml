@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/d14/a08175" kind="struct" language="C++" prot="public">
+    <compoundname>castor::IteratorTraits&lt; TypeT * &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::iterator_traits&lt; TypeT * &gt;</basecompoundref>
+    <includes local="no">DesignModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>class TypeT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d3/d14/a08175_1abd96bd43034f66f54623fb2029adc486" prot="public" static="no">
+        <type>TypeT</type>
+        <definition>using castor::IteratorTraits&lt; TypeT * &gt;::value_type =  TypeT</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>castor::IteratorTraits&lt; TypeT * &gt;::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/DesignModule.hpp" line="36" column="1" bodyfile="CastorUtils/Design/DesignModule.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::IteratorTraits&lt; TypeT * &gt;</label>
+        <link refid="d3/d14/a08175"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::iterator_traits&lt; TypeT * &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::IteratorTraits&lt; TypeT * &gt;</label>
+        <link refid="d3/d14/a08175"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::iterator_traits&lt; TypeT * &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Design/DesignModule.hpp" line="34" column="1" bodyfile="CastorUtils/Design/DesignModule.hpp" bodystart="35" bodyend="37"/>
+    <listofallmembers>
+      <member refid="d3/d14/a08175_1abd96bd43034f66f54623fb2029adc486" prot="public" virt="non-virtual"><scope>castor::IteratorTraits&lt; TypeT * &gt;</scope><name>value_type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

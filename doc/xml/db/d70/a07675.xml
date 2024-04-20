@@ -1,0 +1,470 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d70/a07675" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::SurfaceT</compoundname>
+    <basecompoundref refid="d9/d03/a04095" prot="public" virt="non-virtual">castor3d::shader::SurfaceBaseT&lt; Position3T, Position4T, NormalT &gt;</basecompoundref>
+    <includes local="no">GlslSurface.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename Position3T</type>
+      </param>
+      <param>
+        <type>typename Position4T</type>
+      </param>
+      <param>
+        <type>typename NormalT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d70/a07675_1a890f17436aeac8e90fdccd0418f0e9ef" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::SurfaceT&lt; Position3T, Position4T, NormalT &gt;::texCoord</definition>
+        <argsstring></argsstring>
+        <name>texCoord</name>
+        <qualifiedname>castor3d::shader::SurfaceT::texCoord</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSurface.hpp" line="163" column="11" bodyfile="Castor3D/Shader/Shaders/GlslSurface.hpp" bodystart="163" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d70/a07675_1a02d7421d9263ed4e022a4b68c7f5e6f3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::SurfaceT&lt; Position3T, Position4T, NormalT &gt;::SurfaceT</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>SurfaceT</name>
+        <qualifiedname>castor3d::shader::SurfaceT::SurfaceT</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSurface.hpp" line="134" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d70/a07675_1a2d7a0762a2e4470bd6061d474bdd8160" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::SurfaceT&lt; Position3T, Position4T, NormalT &gt;::SurfaceT</definition>
+        <argsstring>(sdw::Vec3 clip, Position4T view, Position4T world, NormalT normal, sdw::Vec3 texCoord)</argsstring>
+        <name>SurfaceT</name>
+        <qualifiedname>castor3d::shader::SurfaceT::SurfaceT</qualifiedname>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>clip</declname>
+        </param>
+        <param>
+          <type>Position4T</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>Position4T</type>
+          <declname>world</declname>
+        </param>
+        <param>
+          <type>NormalT</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>texCoord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSurface.hpp" line="137" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d70/a07675_1aba7cf5b1171b960983a4297bfde6753f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::SurfaceT&lt; Position3T, Position4T, NormalT &gt;::SurfaceT</definition>
+        <argsstring>(sdw::Vec3 clip, Position3T view, Position3T world, NormalT normal, sdw::Vec3 texCoord)</argsstring>
+        <name>SurfaceT</name>
+        <qualifiedname>castor3d::shader::SurfaceT::SurfaceT</qualifiedname>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>clip</declname>
+        </param>
+        <param>
+          <type>Position3T</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>Position3T</type>
+          <declname>world</declname>
+        </param>
+        <param>
+          <type>NormalT</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>texCoord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSurface.hpp" line="142" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d70/a07675_1ad352826b7eb36d35e149f00215162a0c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::SurfaceT&lt; Position3T, Position4T, NormalT &gt;::SurfaceT</definition>
+        <argsstring>(sdw::Vec3 clip, Position4T view, Position4T world, NormalT normal)</argsstring>
+        <name>SurfaceT</name>
+        <qualifiedname>castor3d::shader::SurfaceT::SurfaceT</qualifiedname>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>clip</declname>
+        </param>
+        <param>
+          <type>Position4T</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>Position4T</type>
+          <declname>world</declname>
+        </param>
+        <param>
+          <type>NormalT</type>
+          <declname>normal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSurface.hpp" line="147" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d70/a07675_1af7ae6c69ed302cbfbd77483f6be632e8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::SurfaceT&lt; Position3T, Position4T, NormalT &gt;::SurfaceT</definition>
+        <argsstring>(sdw::Vec3 clip, Position3T view, Position3T world, NormalT normal)</argsstring>
+        <name>SurfaceT</name>
+        <qualifiedname>castor3d::shader::SurfaceT::SurfaceT</qualifiedname>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>clip</declname>
+        </param>
+        <param>
+          <type>Position3T</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>Position3T</type>
+          <declname>world</declname>
+        </param>
+        <param>
+          <type>NormalT</type>
+          <declname>normal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSurface.hpp" line="151" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d70/a07675_1aeeec5f7cf7d2aebdcd4ae794f9d65e62" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::SurfaceT&lt; Position3T, Position4T, NormalT &gt;::SurfaceT</definition>
+        <argsstring>(NormalT world, NormalT normal)</argsstring>
+        <name>SurfaceT</name>
+        <qualifiedname>castor3d::shader::SurfaceT::SurfaceT</qualifiedname>
+        <param>
+          <type>NormalT</type>
+          <declname>world</declname>
+        </param>
+        <param>
+          <type>NormalT</type>
+          <declname>normal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSurface.hpp" line="155" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d70/a07675_1ac8e8e9cccec88b021ee251d67b611dfe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::SurfaceT&lt; Position3T, Position4T, NormalT &gt;::SDW_DeclStructInstance</definition>
+        <argsstring>(, SurfaceT)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::SurfaceT::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="db/d70/a07675" kindref="compound">SurfaceT</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSurface.hpp" line="157" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="db/d70/a07675_1a42d0e23f225b293c2b9a95038a9cce18" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::type::BaseStructPtr</type>
+        <definition>static sdw::type::BaseStructPtr castor3d::shader::SurfaceT&lt; Position3T, Position4T, NormalT &gt;::makeType</definition>
+        <argsstring>(sdw::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::SurfaceT::makeType</qualifiedname>
+        <param>
+          <type>sdw::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSurface.hpp" line="159" column="33"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d70/a07675_1aafc9e2cf2e38e880051044122f089487" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::type::BaseStructPtr</type>
+        <definition>static sdw::type::BaseStructPtr castor3d::shader::SurfaceT&lt; Position3T, Position4T, NormalT &gt;::makeType</definition>
+        <argsstring>(sdw::type::TypesCache &amp;cache, PipelineFlags const &amp;flags)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::SurfaceT::makeType</qualifiedname>
+        <param>
+          <type>sdw::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSurface.hpp" line="160" column="33"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="db/d70/a07675_1a35d714f2aecbd26d89df5a4a13aaa213" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor3d::shader::SurfaceT&lt; Position3T, Position4T, NormalT &gt;::fillType</definition>
+        <argsstring>(sdw::type::BaseStruct &amp;type)</argsstring>
+        <name>fillType</name>
+        <qualifiedname>castor3d::shader::SurfaceT::fillType</qualifiedname>
+        <param>
+          <type>sdw::type::BaseStruct &amp;</type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSurface.hpp" line="166" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d70/a07675_1adc358aa05d11a1422523baae8e490ef6" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor3d::shader::SurfaceT&lt; Position3T, Position4T, NormalT &gt;::fillType</definition>
+        <argsstring>(sdw::type::BaseStruct &amp;type, PipelineFlags const &amp;flags)</argsstring>
+        <name>fillType</name>
+        <qualifiedname>castor3d::shader::SurfaceT::fillType</qualifiedname>
+        <param>
+          <type>sdw::type::BaseStruct &amp;</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSurface.hpp" line="167" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d70/a07675_1a6319a28f50787dcfdfd9faa8ec4c5dc5" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor3d::shader::SurfaceT&lt; Position3T, Position4T, NormalT &gt;::fillInit</definition>
+        <argsstring>(sdw::expr::ExprList &amp;init, sdw::Vec3 clip, Position4T view, Position4T world, NormalT normal, sdw::Vec3 texCoord)</argsstring>
+        <name>fillInit</name>
+        <qualifiedname>castor3d::shader::SurfaceT::fillInit</qualifiedname>
+        <param>
+          <type>sdw::expr::ExprList &amp;</type>
+          <declname>init</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>clip</declname>
+        </param>
+        <param>
+          <type>Position4T</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>Position4T</type>
+          <declname>world</declname>
+        </param>
+        <param>
+          <type>NormalT</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>texCoord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSurface.hpp" line="169" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d70/a07675_1af606f0f9297fb692f15f11677b10b0ea" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor3d::shader::SurfaceT&lt; Position3T, Position4T, NormalT &gt;::fillInit</definition>
+        <argsstring>(sdw::expr::ExprList &amp;init, PipelineFlags const &amp;flags, sdw::Vec3 clip, Position4T view, Position4T world, NormalT normal, sdw::Vec3 texCoord)</argsstring>
+        <name>fillInit</name>
+        <qualifiedname>castor3d::shader::SurfaceT::fillInit</qualifiedname>
+        <param>
+          <type>sdw::expr::ExprList &amp;</type>
+          <declname>init</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/da0/a06359" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>clip</declname>
+        </param>
+        <param>
+          <type>Position4T</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>Position4T</type>
+          <declname>world</declname>
+        </param>
+        <param>
+          <type>NormalT</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>texCoord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslSurface.hpp" line="175" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::shader::SurfaceBaseT&lt; Position3T, Position4T, NormalT &gt;</label>
+        <link refid="d9/d03/a04095"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::SurfaceT&lt; Position3T, Position4T, NormalT &gt;</label>
+        <link refid="db/d70/a07675"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::shader::SurfaceBaseT&lt; Position3T, Position4T, NormalT &gt;</label>
+        <link refid="d9/d03/a04095"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::SurfaceT&lt; Position3T, Position4T, NormalT &gt;</label>
+        <link refid="db/d70/a07675"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslSurface.hpp" line="131" column="1" bodyfile="Castor3D/Shader/Shaders/GlslSurface.hpp" bodystart="133" bodyend="182"/>
+    <listofallmembers>
+      <member refid="d9/d03/a04095_1a112d9dfe8f7b466f389557640a731826" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>clipPosition</name></member>
+      <member refid="db/d70/a07675_1a6319a28f50787dcfdfd9faa8ec4c5dc5" prot="protected" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>fillInit</name></member>
+      <member refid="db/d70/a07675_1af606f0f9297fb692f15f11677b10b0ea" prot="protected" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>fillInit</name></member>
+      <member refid="d9/d03/a04095_1abaff9cd434c47c903ae0a205f3bc5da1" prot="protected" virt="non-virtual" ambiguityscope="castor3d::shader::SurfaceBaseT::"><scope>castor3d::shader::SurfaceT</scope><name>fillInit</name></member>
+      <member refid="d9/d03/a04095_1acda90daba4acdb127f89714815ba3e79" prot="protected" virt="non-virtual" ambiguityscope="castor3d::shader::SurfaceBaseT::"><scope>castor3d::shader::SurfaceT</scope><name>fillInit</name></member>
+      <member refid="d9/d03/a04095_1a5cd383d36fb022d23b01c4208ff81636" prot="protected" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>fillIOType</name></member>
+      <member refid="db/d70/a07675_1a35d714f2aecbd26d89df5a4a13aaa213" prot="protected" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>fillType</name></member>
+      <member refid="db/d70/a07675_1adc358aa05d11a1422523baae8e490ef6" prot="protected" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>fillType</name></member>
+      <member refid="d9/d03/a04095_1aa1ee46eabe8218674e6d1653588dac1f" prot="protected" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>makeNormal</name></member>
+      <member refid="d9/d03/a04095_1aafeaaade2b1ebe6edc8a86813b71cbab" prot="protected" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>makeNormal</name></member>
+      <member refid="d9/d03/a04095_1a595883f2056a1028ae454f73c54e8f28" prot="protected" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>makeNormal</name></member>
+      <member refid="d9/d03/a04095_1ae0567ea6ead05be3c173e217320ce54e" prot="protected" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>makePosition3</name></member>
+      <member refid="d9/d03/a04095_1a77e1a632cfdbee838bf9837c7764b441" prot="protected" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>makePosition3</name></member>
+      <member refid="d9/d03/a04095_1a890b6aea4a07cdf4b5f81f85977bf610" prot="protected" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>makePosition3</name></member>
+      <member refid="d9/d03/a04095_1a66c0305c47b29b0b660b90de76d071c7" prot="protected" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>makePosition4</name></member>
+      <member refid="d9/d03/a04095_1a8cd5cb1470f004db0e4997ffe8d0f33e" prot="protected" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>makePosition4</name></member>
+      <member refid="d9/d03/a04095_1afb8a7280be23e31c1747bb6e0220cc12" prot="protected" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>makePosition4</name></member>
+      <member refid="d9/d03/a04095_1a7653963d7472647995ea73931b1b5463" prot="protected" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>makePosition4</name></member>
+      <member refid="d9/d03/a04095_1a9f30cd2b3af0ccf99632e65f7f724258" prot="protected" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>makePosition4</name></member>
+      <member refid="d9/d03/a04095_1a6ad6e58c23251039c1f789dc82c813a3" prot="protected" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>makePosition4</name></member>
+      <member refid="d9/d03/a04095_1a1adf6f0d57187c9063475245bc9590bd" prot="protected" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>makePosition4</name></member>
+      <member refid="db/d70/a07675_1a42d0e23f225b293c2b9a95038a9cce18" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>makeType</name></member>
+      <member refid="db/d70/a07675_1aafc9e2cf2e38e880051044122f089487" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>makeType</name></member>
+      <member refid="d9/d03/a04095_1afaa1e909553049719c5401d628a01280" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>normal</name></member>
+      <member refid="db/d70/a07675_1ac8e8e9cccec88b021ee251d67b611dfe" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d9/d03/a04095_1a82b39b44cf4d1030f22b12c5a407f14a" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>SurfaceBaseT</name></member>
+      <member refid="db/d70/a07675_1a02d7421d9263ed4e022a4b68c7f5e6f3" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>SurfaceT</name></member>
+      <member refid="db/d70/a07675_1a2d7a0762a2e4470bd6061d474bdd8160" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>SurfaceT</name></member>
+      <member refid="db/d70/a07675_1aba7cf5b1171b960983a4297bfde6753f" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>SurfaceT</name></member>
+      <member refid="db/d70/a07675_1ad352826b7eb36d35e149f00215162a0c" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>SurfaceT</name></member>
+      <member refid="db/d70/a07675_1af7ae6c69ed302cbfbd77483f6be632e8" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>SurfaceT</name></member>
+      <member refid="db/d70/a07675_1aeeec5f7cf7d2aebdcd4ae794f9d65e62" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>SurfaceT</name></member>
+      <member refid="db/d70/a07675_1a890f17436aeac8e90fdccd0418f0e9ef" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>texCoord</name></member>
+      <member refid="d9/d03/a04095_1a39e570ece8c671575e16a694795afdbc" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>viewPosition</name></member>
+      <member refid="d9/d03/a04095_1ae9f17b10ad79aecc3d31d3d2f0f0ab3d" prot="public" virt="non-virtual"><scope>castor3d::shader::SurfaceT</scope><name>worldPosition</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,307 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/def/a03475" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::DirectUploadData</compoundname>
+    <basecompoundref refid="da/d50/a08167" prot="private" virt="non-virtual">castor::DataHolderT&lt; ashes::CommandBufferPtr &gt;</basecompoundref>
+    <basecompoundref refid="d7/d12/a03583" prot="public" virt="non-virtual">castor3d::UploadData</basecompoundref>
+    <includes local="no">DirectUploadData.hpp</includes>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d1/def/a03475_1a10e37008620d5efdb48cbec6687aa445" prot="private" static="no">
+        <type><ref refid="da/d50/a08167" kindref="compound">castor::DataHolderT</ref>&lt; ashes::CommandBufferPtr &gt;</type>
+        <definition>using castor3d::DirectUploadData::CommandBufferHolder =  castor::DataHolderT&lt; ashes::CommandBufferPtr &gt;</definition>
+        <argsstring></argsstring>
+        <name>CommandBufferHolder</name>
+        <qualifiedname>castor3d::DirectUploadData::CommandBufferHolder</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/DirectUploadData.hpp" line="17" column="1" bodyfile="Castor3D/Buffer/DirectUploadData.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/def/a03475_1acc676bb7a867e8e113258e0a1470a2cf" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; ashes::BufferBasePtr &gt;</type>
+        <definition>castor::Vector&lt; ashes::BufferBasePtr &gt; castor3d::DirectUploadData::m_buffers</definition>
+        <argsstring></argsstring>
+        <name>m_buffers</name>
+        <qualifiedname>castor3d::DirectUploadData::m_buffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/DirectUploadData.hpp" line="35" column="16" bodyfile="Castor3D/Buffer/DirectUploadData.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/def/a03475_1ad730d9346a67c156d276c658fcdf0ebd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::DirectUploadData::DirectUploadData</definition>
+        <argsstring>(RenderDevice const &amp;device, castor::String debugName, ashes::CommandBuffer const &amp;commandBuffer)</argsstring>
+        <name>DirectUploadData</name>
+        <qualifiedname>castor3d::DirectUploadData::DirectUploadData</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>debugName</declname>
+        </param>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/DirectUploadData.hpp" line="20" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/def/a03475_1a22b677f22c34dc0be8ef69c25d890974" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::DirectUploadData::DirectUploadData</definition>
+        <argsstring>(RenderDevice const &amp;device, castor::String debugName, ashes::CommandPool const &amp;commandPool)</argsstring>
+        <name>DirectUploadData</name>
+        <qualifiedname>castor3d::DirectUploadData::DirectUploadData</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>debugName</declname>
+        </param>
+        <param>
+          <type>ashes::CommandPool const &amp;</type>
+          <declname>commandPool</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/DirectUploadData.hpp" line="23" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/def/a03475_1ad44e878a04c4a886aa8c299532c6d1e7" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::DirectUploadData::doBegin</definition>
+        <argsstring>() override</argsstring>
+        <name>doBegin</name>
+        <qualifiedname>castor3d::DirectUploadData::doBegin</qualifiedname>
+        <reimplements refid="d7/d12/a03583_1a33afbcb7bcb30955b6ac6be534d41fb7">doBegin</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/DirectUploadData.hpp" line="28" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/def/a03475_1ad48d4c6b1a440cd2153d9bbd212e156b" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::DirectUploadData::doUpload</definition>
+        <argsstring>(BufferDataRange &amp;data) override</argsstring>
+        <name>doUpload</name>
+        <qualifiedname>castor3d::DirectUploadData::doUpload</qualifiedname>
+        <reimplements refid="d7/d12/a03583_1a58f2f40c9d14f9f36624de9699997552">doUpload</reimplements>
+        <param>
+          <type><ref refid="d1/dd1/a03591" kindref="compound">BufferDataRange</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/DirectUploadData.hpp" line="29" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/def/a03475_1a46f1f3e1715d548950fa54026fc8cd10" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::DirectUploadData::doUpload</definition>
+        <argsstring>(ImageDataRange &amp;data) override</argsstring>
+        <name>doUpload</name>
+        <qualifiedname>castor3d::DirectUploadData::doUpload</qualifiedname>
+        <reimplements refid="d7/d12/a03583_1a44820abdb3083afe79bfda3a1e8c41c1">doUpload</reimplements>
+        <param>
+          <type><ref refid="d2/db0/a03595" kindref="compound">ImageDataRange</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/DirectUploadData.hpp" line="30" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/def/a03475_1a78132818b4a088a649daaefced765e1e" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="df/d38/a03587" kindref="compound">SemaphoreUsed</ref></type>
+        <definition>SemaphoreUsed castor3d::DirectUploadData::doEnd</definition>
+        <argsstring>(ashes::Queue const &amp;queue, ashes::Fence const *fence, castor::Milliseconds timeout) override</argsstring>
+        <name>doEnd</name>
+        <qualifiedname>castor3d::DirectUploadData::doEnd</qualifiedname>
+        <reimplements refid="d7/d12/a03583_1ac1479a2981ec5ecbd63eac48fc86ce51">doEnd</reimplements>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <param>
+          <type>ashes::Fence const *</type>
+          <declname>fence</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a9bbae2d5d564fa58ccbb16ec1d0ed7a1" kindref="member">castor::Milliseconds</ref></type>
+          <declname>timeout</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/DirectUploadData.hpp" line="31" column="15"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::DataHolderT&lt; ashes::CommandBufferPtr &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; ashes::CommandBufferPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::DirectUploadData</label>
+        <link refid="d1/def/a03475"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::UploadData</label>
+        <link refid="d7/d12/a03583"/>
+      </node>
+      <node id="3">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::DataHolderT&lt; ashes::CommandBufferPtr &gt;</label>
+        <link refid="da/d50/a08167"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; ashes::CommandBufferPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::DirectUploadData</label>
+        <link refid="d1/def/a03475"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::RenderDevice</label>
+        <link refid="dc/d32/a06415"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d5/d4e/a06559"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::UploadData</label>
+        <link refid="d7/d12/a03583"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_debugName</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::DataHolderT&lt; Data, Index &gt;</label>
+        <link refid="da/d50/a08167"/>
+      </node>
+      <node id="8">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="10">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Buffer/DirectUploadData.hpp" line="13" column="1" bodyfile="Castor3D/Buffer/DirectUploadData.hpp" bodystart="16" bodyend="36"/>
+    <listofallmembers>
+      <member refid="d7/d12/a03583_1ada13fa011737375b3c65a5a9d7bcb509" prot="public" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>begin</name></member>
+      <member refid="d1/def/a03475_1a10e37008620d5efdb48cbec6687aa445" prot="private" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>CommandBufferHolder</name></member>
+      <member refid="d1/def/a03475_1ad730d9346a67c156d276c658fcdf0ebd" prot="public" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>DirectUploadData</name></member>
+      <member refid="d1/def/a03475_1a22b677f22c34dc0be8ef69c25d890974" prot="public" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>DirectUploadData</name></member>
+      <member refid="d1/def/a03475_1ad44e878a04c4a886aa8c299532c6d1e7" prot="private" virt="virtual"><scope>castor3d::DirectUploadData</scope><name>doBegin</name></member>
+      <member refid="d7/d12/a03583_1ade325eb70d1106305c8610e651e571bf" prot="protected" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>doCopyData</name></member>
+      <member refid="d1/def/a03475_1a78132818b4a088a649daaefced765e1e" prot="private" virt="virtual"><scope>castor3d::DirectUploadData</scope><name>doEnd</name></member>
+      <member refid="d1/def/a03475_1ad48d4c6b1a440cd2153d9bbd212e156b" prot="private" virt="virtual"><scope>castor3d::DirectUploadData</scope><name>doUpload</name></member>
+      <member refid="d1/def/a03475_1a46f1f3e1715d548950fa54026fc8cd10" prot="private" virt="virtual"><scope>castor3d::DirectUploadData</scope><name>doUpload</name></member>
+      <member refid="d7/d12/a03583_1a766f67254869bed6d5d94dcd0caa9d59" prot="protected" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>doUploadBuffer</name></member>
+      <member refid="d7/d12/a03583_1a8d995aa3f03f793f65201bf8ff74f335" prot="protected" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>doUploadImage</name></member>
+      <member refid="d7/d12/a03583_1aaf99041fb33234d4dfdb5c3894ebcd88" prot="public" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>end</name></member>
+      <member refid="d7/d12/a03583_1a81951fb371b5784f075c2e035694b17e" prot="public" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>getCommandBuffer</name></member>
+      <member refid="d7/d12/a03583_1a9beb7dbe51db3350f5898d507945662d" prot="public" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>getDevice</name></member>
+      <member refid="d7/d12/a03583_1a3a4d974ee93c78456cec1a80f3ddbe2f" prot="public" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>getName</name></member>
+      <member refid="d1/def/a03475_1acc676bb7a867e8e113258e0a1470a2cf" prot="private" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>m_buffers</name></member>
+      <member refid="d7/d12/a03583_1a5011b4b7b9942916ddbf4cab177c1700" prot="protected" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>m_commandBuffer</name></member>
+      <member refid="d7/d12/a03583_1a759027762b8c86e6635978f0a13a0001" prot="protected" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>m_debugName</name></member>
+      <member refid="d7/d12/a03583_1a8694a94c6cc36d03cc4302e4370d534d" prot="protected" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>m_device</name></member>
+      <member refid="d7/d12/a03583_1ae56bc7c19c635ee4506b463cef221809" prot="protected" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>m_pendingBuffers</name></member>
+      <member refid="d7/d12/a03583_1ad3c4398bcfaff9e44bf7a45202b8f42e" prot="protected" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>m_pendingImages</name></member>
+      <member refid="d7/d12/a03583_1a7853e1d0c795246023731dc638abfa42" prot="public" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>operator=</name></member>
+      <member refid="d7/d12/a03583_1ab1f052fb97be3fd560a72cc3860d3f77" prot="public" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>operator=</name></member>
+      <member refid="d7/d12/a03583_1a71946f5b8920bec702c4e8f9b33aecc7" prot="public" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>process</name></member>
+      <member refid="d7/d12/a03583_1a8fa864671ae7dd28863787c504a757b1" prot="public" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>pushUpload</name></member>
+      <member refid="d7/d12/a03583_1ad15efbed98d72ca1ead30b05a258fae5" prot="public" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>pushUpload</name></member>
+      <member refid="d7/d12/a03583_1a1cf95b9c5ad123d1f1cb390e6df74770" prot="public" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>pushUpload</name></member>
+      <member refid="d7/d12/a03583_1a9cf933bce34d1758b583a41707d5a524" prot="public" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>pushUpload</name></member>
+      <member refid="d7/d12/a03583_1a59ca6e8aced50e70feac109042b9adb6" prot="public" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>pushUpload</name></member>
+      <member refid="d7/d12/a03583_1a00f87e2e00d112299e44b89082fc6e4d" prot="public" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>pushUpload</name></member>
+      <member refid="d7/d12/a03583_1ab40296897ee1e35cd8829a3209191ad9" prot="public" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>UploadData</name></member>
+      <member refid="d7/d12/a03583_1ad0d0512983442ca61a5facb8aa6ddfd5" prot="public" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>UploadData</name></member>
+      <member refid="d7/d12/a03583_1a06072251d0492aa411f74500082d1b69" prot="protected" virt="non-virtual"><scope>castor3d::DirectUploadData</scope><name>UploadData</name></member>
+      <member refid="d7/d12/a03583_1ab497295895553f3e7c1ed868801b2ab4" prot="public" virt="virtual"><scope>castor3d::DirectUploadData</scope><name>~UploadData</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

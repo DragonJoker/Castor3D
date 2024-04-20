@@ -1,0 +1,20 @@
+<map id="castor::TextWriter&lt; QuaternionT&lt; ValueT &gt; &gt;" name="castor::TextWriter&lt; QuaternionT&lt; ValueT &gt; &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="61,475,241,515"/>
+<area shape="rect" id="Node000002" href="$de/d30/a07987.html" title=" " alt="" coords="61,385,241,425"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,439,154,475,149,475,149,439"/>
+<area shape="rect" id="Node000003" href="$da/d1b/a08083.html" title=" " alt="" coords="112,215,268,241"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="187,255,158,386,153,385,182,253"/>
+<area shape="rect" id="Node000006" href="$de/d30/a07987.html" title="Partial castor::Writer specialisation for text files." alt="" coords="189,297,353,323"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="213,248,262,295,258,299,210,252"/>
+<area shape="rect" id="Node000004" href="$dc/d3a/a07991.html" title="Main resource writer class." alt="" coords="5,144,156,184"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="90,197,102,247,147,384,142,386,97,249,85,198"/>
+<area shape="rect" id="Node000005" href="$da/d87/a08319.html" title=" " alt="" coords="146,5,282,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="182,40,154,59,128,82,106,114,90,145,86,143,101,111,124,78,151,54,179,35"/>
+<area shape="rect" id="Node000007" href="$dc/d3a/a07991.html" title=" " alt="" coords="292,208,416,248"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="249,36,277,54,303,78,324,110,339,146,354,207,349,208,334,147,320,113,299,82,273,59,246,40"/>
+<area shape="rect" id="Node000008" href="$dc/d3a/a07991.html" title="Main resource writer class." alt="" coords="139,80,289,120"/>
+<area shape="poly" id="edge10_Node000008_Node000005" title=" " alt="" coords="217,44,217,80,211,80,211,44"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="247,333,177,387,174,383,244,329"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="326,260,285,299,282,295,323,256"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="209,134,209,159,217,182,243,194,293,209,291,214,242,199,213,186,203,160,203,134"/>
+</map>

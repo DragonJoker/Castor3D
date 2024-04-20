@@ -1,0 +1,239 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d01/a05531" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::MeshletComponent</compoundname>
+    <basecompoundref refid="d6/df6/a05611" prot="public" virt="non-virtual">castor3d::SubmeshComponent</basecompoundref>
+    <includes local="no">MeshletComponent.hpp</includes>
+    <innerclass refid="d7/dbb/a05535" prot="public">castor3d::MeshletComponent::ComponentData</innerclass>
+    <innerclass refid="d6/d15/a05539" prot="public">castor3d::MeshletComponent::Plugin</innerclass>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d1/d01/a05531_1ac5a195cce5acf832a1f7ebc11adf0f4b" prot="public" static="yes" mutable="no">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const</type>
+        <definition>C3D_API castor::String const castor3d::MeshletComponent::TypeName</definition>
+        <argsstring></argsstring>
+        <name>TypeName</name>
+        <qualifiedname>castor3d::MeshletComponent::TypeName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp" line="156" column="37" bodyfile="Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp" bodystart="156" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d1/d01/a05531_1a9e1c4dde2fbce9cd0c53669fa9e2b98d" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>SubmeshComponentPluginUPtr</type>
+        <definition>static SubmeshComponentPluginUPtr castor3d::MeshletComponent::createPlugin</definition>
+        <argsstring>(SubmeshComponentRegister const &amp;submeshComponents)</argsstring>
+        <name>createPlugin</name>
+        <qualifiedname>castor3d::MeshletComponent::createPlugin</qualifiedname>
+        <param>
+          <type><ref refid="da/d5c/a05615" kindref="compound">SubmeshComponentRegister</ref> const &amp;</type>
+          <declname>submeshComponents</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp" line="128" column="35" bodyfile="Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp" bodystart="128" bodyend="131"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d01/a05531_1a39820dc58495da8adc9a016e8c716ddf" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MeshletComponent::MeshletComponent</definition>
+        <argsstring>(Submesh &amp;submesh)</argsstring>
+        <name>MeshletComponent</name>
+        <qualifiedname>castor3d::MeshletComponent::MeshletComponent</qualifiedname>
+        <param>
+          <type><ref refid="dd/df1/a05635" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le sous-maillage parent. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp" line="140" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d01/a05531_1aa05fb6562342fbf9f2ba1296933be6cb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> SubmeshComponentUPtr</type>
+        <definition>C3D_API SubmeshComponentUPtr castor3d::MeshletComponent::clone</definition>
+        <argsstring>(Submesh &amp;submesh) const override</argsstring>
+        <name>clone</name>
+        <qualifiedname>castor3d::MeshletComponent::clone</qualifiedname>
+        <reimplements refid="d6/df6/a05611_1a224e17a10afdbc9ed8479c034b21aca3">clone</reimplements>
+        <param>
+          <type><ref refid="dd/df1/a05635" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+<para>Clone ce composant dans le submesh donné.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit le composant cloné.   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp" line="144" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d01/a05531_1acc891fbc3fb9158f203fb1ebe32a1c0f" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dba/a02278_1af5a65b91a7a6659a75e289b1fdc8822e" kindref="member">ProgramFlags</ref></type>
+        <definition>C3D_API ProgramFlags castor3d::MeshletComponent::getProgramFlags</definition>
+        <argsstring>(Pass const &amp;pass) const noexcept override</argsstring>
+        <name>getProgramFlags</name>
+        <qualifiedname>castor3d::MeshletComponent::getProgramFlags</qualifiedname>
+        <reimplements refid="d6/df6/a05611_1aa17497af9514861bedd026fc39c0bf24">getProgramFlags</reimplements>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Les indicateurs de programme. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La passe de matériau.   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp" line="148" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d01/a05531_1afd063481f459706f2e2fe1a6ec191217" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d7/dbb/a05535" kindref="compound">ComponentData</ref> &amp;</type>
+        <definition>ComponentData &amp; castor3d::MeshletComponent::getData</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::MeshletComponent::getData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp" line="150" column="16" bodyfile="Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp" bodystart="150" bodyend="153"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::MeshletComponent</label>
+        <link refid="d1/d01/a05531"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SubmeshComponent</label>
+        <link refid="d6/df6/a05611"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::MeshletComponent</label>
+        <link refid="d1/d01/a05531"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>TypeName</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SubmeshComponent</label>
+        <link refid="d6/df6/a05611"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="5">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp" line="23" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp" bodystart="25" bodyend="157"/>
+    <listofallmembers>
+      <member refid="d6/df6/a05611_1afccdadca13f33adf739b7cd593130dc6" prot="public" virt="virtual"><scope>castor3d::MeshletComponent</scope><name>accept</name></member>
+      <member refid="d1/d01/a05531_1aa05fb6562342fbf9f2ba1296933be6cb" prot="public" virt="virtual"><scope>castor3d::MeshletComponent</scope><name>clone</name></member>
+      <member refid="d1/d01/a05531_1a9e1c4dde2fbce9cd0c53669fa9e2b98d" prot="public" virt="non-virtual"><scope>castor3d::MeshletComponent</scope><name>createPlugin</name></member>
+      <member refid="d6/df6/a05611_1ad360da8b6205b1f52e2ab4ad16829483" prot="public" virt="non-virtual"><scope>castor3d::MeshletComponent</scope><name>getBaseData</name></member>
+      <member refid="d1/d01/a05531_1afd063481f459706f2e2fe1a6ec191217" prot="public" virt="non-virtual"><scope>castor3d::MeshletComponent</scope><name>getData</name></member>
+      <member refid="d6/df6/a05611_1a74c236198ac0330d4af2e318b2dab8eb" prot="public" virt="non-virtual"><scope>castor3d::MeshletComponent</scope><name>getDataT</name></member>
+      <member refid="d6/df6/a05611_1a927bf2897f158a69b9e43f3d4084692a" prot="public" virt="non-virtual"><scope>castor3d::MeshletComponent</scope><name>getDependencies</name></member>
+      <member refid="d6/df6/a05611_1a9685bcd15e1882d93daa63b0c31a8c92" prot="public" virt="non-virtual"><scope>castor3d::MeshletComponent</scope><name>getId</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::MeshletComponent</scope><name>getOwner</name></member>
+      <member refid="d6/df6/a05611_1a0b00d7bb6a4ae2d465cb1b69bfe62edb" prot="public" virt="non-virtual"><scope>castor3d::MeshletComponent</scope><name>getPlugin</name></member>
+      <member refid="d1/d01/a05531_1acc891fbc3fb9158f203fb1ebe32a1c0f" prot="public" virt="virtual"><scope>castor3d::MeshletComponent</scope><name>getProgramFlags</name></member>
+      <member refid="d6/df6/a05611_1a7f99899e65f9cbad88ee17b96874eb69" prot="public" virt="non-virtual"><scope>castor3d::MeshletComponent</scope><name>getRenderData</name></member>
+      <member refid="d6/df6/a05611_1af976b217cbb63fe1c0a929f9e917da08" prot="public" virt="non-virtual"><scope>castor3d::MeshletComponent</scope><name>getRenderDataT</name></member>
+      <member refid="d6/df6/a05611_1aee9f0bcf21dd6ac63bd8c29329376aec" prot="public" virt="virtual"><scope>castor3d::MeshletComponent</scope><name>getSubmeshFlags</name></member>
+      <member refid="d6/df6/a05611_1ae55cef384a41ade6fb2a3570eea35fca" prot="public" virt="non-virtual"><scope>castor3d::MeshletComponent</scope><name>getType</name></member>
+      <member refid="d6/df6/a05611_1a12c193675ee85f12ff61bee5f59593c9" prot="public" virt="non-virtual"><scope>castor3d::MeshletComponent</scope><name>initialiseRenderData</name></member>
+      <member refid="d6/df6/a05611_1aaf5f04eb5b927528d0af706ef91ff3f1" prot="protected" virt="non-virtual"><scope>castor3d::MeshletComponent</scope><name>m_data</name></member>
+      <member refid="d6/df6/a05611_1a1f08e2ca2b28d7e35afe6c19b431dd4e" prot="protected" virt="non-virtual"><scope>castor3d::MeshletComponent</scope><name>m_renderData</name></member>
+      <member refid="d1/d01/a05531_1a39820dc58495da8adc9a016e8c716ddf" prot="public" virt="non-virtual"><scope>castor3d::MeshletComponent</scope><name>MeshletComponent</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::MeshletComponent</scope><name>OwnedBy</name></member>
+      <member refid="d6/df6/a05611_1ad694c20183dd5aca617f4e602d49d722" prot="public" virt="non-virtual"><scope>castor3d::MeshletComponent</scope><name>SubmeshComponent</name></member>
+      <member refid="d1/d01/a05531_1ac5a195cce5acf832a1f7ebc11adf0f4b" prot="public" virt="non-virtual"><scope>castor3d::MeshletComponent</scope><name>TypeName</name></member>
+      <member refid="d6/df6/a05611_1a16a32c6196f9a4a70f24f18e537af89c" prot="public" virt="virtual"><scope>castor3d::MeshletComponent</scope><name>writeText</name></member>
+      <member refid="d6/df6/a05611_1a30231a167367ba38b41f9bf5b3bcd005" prot="public" virt="virtual"><scope>castor3d::MeshletComponent</scope><name>~SubmeshComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

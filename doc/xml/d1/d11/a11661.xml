@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d11/a11661" kind="page">
+    <compoundname>md_Z_1_2Projets_2C_09_09_2Castor3D_2doc_2Castor3D_2Utils-French</compoundname>
+    <title>Bibliothèque CastorUtils</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><anchor id="d1/d11/a11661_1autotoc_md218"/> </para>
+<sect1 id="d1/d11/a11661_1autotoc_md219">
+<title>Alignement</title><para><itemizedlist>
+<listitem><para>alignedAlloc/alignedFree.</para>
+</listitem><listitem><para>AlignedMemoryAllocator/NonAlignedMemoryAllocator.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d1/d11/a11661_1autotoc_md220">
+<title>Données</title><para><itemizedlist>
+<listitem><para>Gestion de fichiers, binaires ou texte (BinaryFile et TextFile).</para>
+</listitem><listitem><para>FileParser, un analayseur de brace file, avec son FileParserContext et ses writers/parsers.</para>
+</listitem><listitem><para>Classes de chargement de données binaires ou texte (BinaryLoader et TextLoader).</para>
+</listitem><listitem><para>ZipArchive</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d1/d11/a11661_1autotoc_md221">
+<title>Concepts</title><para><itemizedlist>
+<listitem><para>Implémentation d&apos;ArrayView.</para>
+</listitem><listitem><para>Implémentation de BlockGuard.</para>
+</listitem><listitem><para>Concepts de ChangeTracked et GroupChangeTracked.</para>
+</listitem><listitem><para>Collection, un conteneur thread-safe.</para>
+</listitem><listitem><para>Factory.</para>
+</listitem><listitem><para>Named.</para>
+</listitem><listitem><para>NonCopyable.</para>
+</listitem><listitem><para>Unique.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d1/d11/a11661_1autotoc_md222">
+<title>Graphisme</title><para><itemizedlist>
+<listitem><para>RgbColour/RgbaColour et ColourComponent/HdrColourComponent.</para>
+</listitem><listitem><para>BoundingContainer, BoundingCube et BoundingSphere.</para>
+</listitem><listitem><para>Font, Glyph.</para>
+</listitem><listitem><para>Image ainsi que ses loaders/writers.</para>
+</listitem><listitem><para>PixelFormat, Pixel et PxBuffer, pour les conversions de pixels.</para>
+</listitem><listitem><para>Position, Size.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d1/d11/a11661_1autotoc_md223">
+<title>Mathématiques</title><para><itemizedlist>
+<listitem><para>Conversions d&apos;angle.</para>
+</listitem><listitem><para>Conversions de longueurs.</para>
+</listitem><listitem><para>Point, une classe de point propriétaire de ses données.</para>
+</listitem><listitem><para>Coords, une classe de vue sur un point.</para>
+</listitem><listitem><para>Equations de droites (2D et 3D).</para>
+</listitem><listitem><para>Equations de plans.</para>
+</listitem><listitem><para>Matrix et SquareMatrix.</para>
+</listitem><listitem><para>Quaternion.</para>
+</listitem><listitem><para>SphericalVertex.</para>
+</listitem><listitem><para>Rectangle.</para>
+</listitem><listitem><para>Fonctions de math template.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="d1/d11/a11661_1autotoc_md224">
+<title>Divers</title><para><itemizedlist>
+<listitem><para>BlockTracker et BlockTimer.</para>
+</listitem><listitem><para>Console et Logger.</para>
+</listitem><listitem><para>PreciseTimer.</para>
+</listitem><listitem><para>DynamicLibrary.</para>
+</listitem><listitem><para>Resource. </para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+    </detaileddescription>
+    <location file="Z:/Projets/C++/Castor3D/doc/Castor3D/Utils-French.md"/>
+  </compounddef>
+</doxygen>

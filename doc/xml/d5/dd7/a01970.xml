@@ -1,0 +1,511 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/dd7/a01970" kind="file" language="C++">
+    <compoundname>ParserParameterHelpers.hpp</compoundname>
+    <includes refid="de/d46/a01967" local="yes">CastorUtils/FileParser/ParserParameterBase.hpp</includes>
+    <includedby refid="d6/d90/a01964" local="yes">CastorUtils/FileParser/ParserParameter.hpp</includedby>
+    <includedby refid="d3/d59/a01973" local="yes">CastorUtils/FileParser/ParserParameterTypeException.hpp</includedby>
+    <incdepgraph>
+      <node id="47">
+        <label>CastorUtils/Graphics/PixelFormat.enum</label>
+      </node>
+      <node id="6">
+        <label>CastorUtils/config.hpp</label>
+      </node>
+      <node id="52">
+        <label>ParserParameterBase.inl</label>
+      </node>
+      <node id="4">
+        <label>CastorUtils/CastorUtils.hpp</label>
+        <link refid="d6/d3d/a01784"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>CastorUtils/Config/BeginExternHeaderGuard.hpp</label>
+        <link refid="d4/dc6/a01793"/>
+      </node>
+      <node id="7">
+        <label>CastorUtils/Config/CompilerConfig.hpp</label>
+        <link refid="d3/d92/a01796"/>
+      </node>
+      <node id="5">
+        <label>CastorUtils/Config/ConfigModule.hpp</label>
+        <link refid="d5/d12/a01799"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>CastorUtils/Config/EndExternHeaderGuard.hpp</label>
+        <link refid="dd/ddc/a01802"/>
+      </node>
+      <node id="8">
+        <label>CastorUtils/Config/Macros.hpp</label>
+        <link refid="d7/d62/a01805"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>CastorUtils/Config/MultiThreadConfig.hpp</label>
+        <link refid="d7/d02/a01808"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>CastorUtils/Config/PlatformConfig.hpp</label>
+        <link refid="d2/d31/a01811"/>
+      </node>
+      <node id="11">
+        <label>CastorUtils/Config/SmartPtr.hpp</label>
+        <link refid="d6/dfc/a01814"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>CastorUtils/Data/DataModule.hpp</label>
+        <link refid="d9/d88/a01823"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>CastorUtils/Design/DesignModule.hpp</label>
+        <link refid="dc/d31/a01892"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+        <link refid="d5/d99/a01901"/>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>CastorUtils/FileParser/FileParserModule.hpp</label>
+        <link refid="d2/d23/a01961"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>CastorUtils/FileParser/ParserParameterBase.hpp</label>
+        <link refid="de/d46/a01967"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>CastorUtils/FileParser/ParserParameterHelpers.hpp</label>
+        <link refid="d5/dd7/a01970"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+        <link refid="d5/d2c/a02012"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+      </node>
+      <node id="49">
+        <label>ELogType.hpp</label>
+        <link refid="d9/dff/a02099"/>
+      </node>
+      <node id="48">
+        <label>CastorUtils/Log/LogModule.hpp</label>
+        <link refid="d0/d79/a02117"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>Math.hpp</label>
+        <link refid="df/daa/a02135"/>
+      </node>
+      <node id="50">
+        <label>CastorUtils/Math/MathModule.hpp</label>
+        <link refid="db/df6/a02138"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+      </node>
+      <node id="39">
+        <label>CastorUtils/Miscellaneous/Debug.hpp</label>
+        <link refid="df/d0e/a02195"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>array</label>
+      </node>
+      <node id="21">
+        <label>atomic</label>
+      </node>
+      <node id="20">
+        <label>cassert</label>
+      </node>
+      <node id="25">
+        <label>chrono</label>
+      </node>
+      <node id="24">
+        <label>condition_variable</label>
+      </node>
+      <node id="35">
+        <label>cstdarg</label>
+      </node>
+      <node id="36">
+        <label>cstdint</label>
+      </node>
+      <node id="26">
+        <label>deque</label>
+      </node>
+      <node id="27">
+        <label>functional</label>
+      </node>
+      <node id="28">
+        <label>iostream</label>
+      </node>
+      <node id="45">
+        <label>iterator</label>
+      </node>
+      <node id="18">
+        <label>list</label>
+      </node>
+      <node id="37">
+        <label>locale</label>
+      </node>
+      <node id="14">
+        <label>map</label>
+      </node>
+      <node id="12">
+        <label>memory</label>
+      </node>
+      <node id="23">
+        <label>mutex</label>
+      </node>
+      <node id="40">
+        <label>ostream</label>
+      </node>
+      <node id="38">
+        <label>regex</label>
+      </node>
+      <node id="15">
+        <label>set</label>
+      </node>
+      <node id="29">
+        <label>sstream</label>
+      </node>
+      <node id="30">
+        <label>stack</label>
+      </node>
+      <node id="31">
+        <label>string</label>
+      </node>
+      <node id="32">
+        <label>string_view</label>
+      </node>
+      <node id="22">
+        <label>thread</label>
+      </node>
+      <node id="46">
+        <label>type_traits</label>
+      </node>
+      <node id="33">
+        <label>unordered_map</label>
+      </node>
+      <node id="34">
+        <label>unordered_set</label>
+      </node>
+      <node id="16">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="3">
+        <label>Castor3D/Castor3DPch.hpp</label>
+        <link refid="dc/d5d/a00278"/>
+      </node>
+      <node id="5">
+        <label>Castor3D/Gui/Gui_Parsers.hpp</label>
+        <link refid="d5/db5/a00374"/>
+      </node>
+      <node id="6">
+        <label>Castor3D/Scene/SceneFileParser.hpp</label>
+        <link refid="da/d0a/a01526"/>
+      </node>
+      <node id="7">
+        <label>Castor3D/Scene/SceneFileParser_Parsers.hpp</label>
+        <link refid="dc/d0c/a01532"/>
+      </node>
+      <node id="4">
+        <label>CastorUtils/FileParser/FileParser.hpp</label>
+        <link refid="d4/d93/a01955"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>CastorUtils/FileParser/ParserParameter.hpp</label>
+        <link refid="d6/d90/a01964"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>CastorUtils/FileParser/ParserParameterHelpers.hpp</label>
+        <link refid="d5/dd7/a01970"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>CastorUtils/FileParser/ParserParameterTypeException.hpp</label>
+        <link refid="d3/d59/a01973"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="dc/d34/a08451" prot="public">castor::RegexFormat&lt; uint8_t &gt;</innerclass>
+    <innerclass refid="d5/dac/a08455" prot="public">castor::RegexFormat&lt; int8_t &gt;</innerclass>
+    <innerclass refid="d1/d9d/a08459" prot="public">castor::RegexFormat&lt; uint16_t &gt;</innerclass>
+    <innerclass refid="d9/da0/a08463" prot="public">castor::RegexFormat&lt; int16_t &gt;</innerclass>
+    <innerclass refid="d5/d25/a08467" prot="public">castor::RegexFormat&lt; uint32_t &gt;</innerclass>
+    <innerclass refid="d5/d6c/a08471" prot="public">castor::RegexFormat&lt; int32_t &gt;</innerclass>
+    <innerclass refid="de/d08/a08475" prot="public">castor::RegexFormat&lt; uint64_t &gt;</innerclass>
+    <innerclass refid="d1/d05/a08479" prot="public">castor::RegexFormat&lt; int64_t &gt;</innerclass>
+    <innerclass refid="d8/d0e/a08483" prot="public">castor::RegexFormat&lt; float &gt;</innerclass>
+    <innerclass refid="d0/d81/a08487" prot="public">castor::RegexFormat&lt; double &gt;</innerclass>
+    <innerclass refid="dd/d5b/a08491" prot="public">castor::RegexFormat&lt; long double &gt;</innerclass>
+    <innerclass refid="d5/d3f/a08495" prot="public">castor::RegexFormat&lt; RgbColour &gt;</innerclass>
+    <innerclass refid="da/d1b/a08499" prot="public">castor::RegexFormat&lt; RgbaColour &gt;</innerclass>
+    <innerclass refid="d7/d2f/a08503" prot="public">castor::RegexFormat&lt; HdrRgbColour &gt;</innerclass>
+    <innerclass refid="d8/d97/a08507" prot="public">castor::RegexFormat&lt; HdrRgbaColour &gt;</innerclass>
+    <innerclass refid="d1/dab/a08511" prot="public">castor::ParserParameterHelper&lt; ParameterType::eText &gt;</innerclass>
+    <innerclass refid="da/dde/a08515" prot="public">castor::ParserParameterHelper&lt; ParameterType::eName &gt;</innerclass>
+    <innerclass refid="d5/dca/a08519" prot="public">castor::ParserParameterHelper&lt; ParameterType::ePath &gt;</innerclass>
+    <innerclass refid="d1/d86/a08523" prot="public">castor::ParserParameterHelper&lt; ParameterType::eCheckedText &gt;</innerclass>
+    <innerclass refid="d4/d06/a08527" prot="public">castor::ParserParameterHelper&lt; ParameterType::eBitwiseOred32BitsCheckedText &gt;</innerclass>
+    <innerclass refid="d4/dbc/a08531" prot="public">castor::ParserParameterHelper&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;</innerclass>
+    <innerclass refid="d1/ddc/a08535" prot="public">castor::ParserParameterHelper&lt; ParameterType::eBool &gt;</innerclass>
+    <innerclass refid="d2/d4c/a08539" prot="public">castor::ParserParameterHelper&lt; ParameterType::eInt8 &gt;</innerclass>
+    <innerclass refid="d8/dc0/a08543" prot="public">castor::ParserParameterHelper&lt; ParameterType::eInt16 &gt;</innerclass>
+    <innerclass refid="d0/d98/a08547" prot="public">castor::ParserParameterHelper&lt; ParameterType::eInt32 &gt;</innerclass>
+    <innerclass refid="d8/dae/a08551" prot="public">castor::ParserParameterHelper&lt; ParameterType::eInt64 &gt;</innerclass>
+    <innerclass refid="d4/dfe/a08555" prot="public">castor::ParserParameterHelper&lt; ParameterType::eUInt8 &gt;</innerclass>
+    <innerclass refid="dd/d1d/a08559" prot="public">castor::ParserParameterHelper&lt; ParameterType::eUInt16 &gt;</innerclass>
+    <innerclass refid="db/dcd/a08563" prot="public">castor::ParserParameterHelper&lt; ParameterType::eUInt32 &gt;</innerclass>
+    <innerclass refid="d7/dae/a08567" prot="public">castor::ParserParameterHelper&lt; ParameterType::eUInt64 &gt;</innerclass>
+    <innerclass refid="d2/d17/a08571" prot="public">castor::ParserParameterHelper&lt; ParameterType::eFloat &gt;</innerclass>
+    <innerclass refid="d4/db4/a08575" prot="public">castor::ParserParameterHelper&lt; ParameterType::eDouble &gt;</innerclass>
+    <innerclass refid="d1/dce/a08579" prot="public">castor::ParserParameterHelper&lt; ParameterType::eLongDouble &gt;</innerclass>
+    <innerclass refid="d2/d95/a08583" prot="public">castor::ParserParameterHelper&lt; ParameterType::ePixelFormat &gt;</innerclass>
+    <innerclass refid="d7/dbe/a08587" prot="public">castor::ParserParameterHelper&lt; ParameterType::ePoint2I &gt;</innerclass>
+    <innerclass refid="d5/d8c/a08591" prot="public">castor::ParserParameterHelper&lt; ParameterType::ePoint3I &gt;</innerclass>
+    <innerclass refid="d4/dd0/a08595" prot="public">castor::ParserParameterHelper&lt; ParameterType::ePoint4I &gt;</innerclass>
+    <innerclass refid="d6/d49/a08599" prot="public">castor::ParserParameterHelper&lt; ParameterType::ePoint2U &gt;</innerclass>
+    <innerclass refid="d7/d6a/a08603" prot="public">castor::ParserParameterHelper&lt; ParameterType::ePoint3U &gt;</innerclass>
+    <innerclass refid="d2/d25/a08607" prot="public">castor::ParserParameterHelper&lt; ParameterType::ePoint4U &gt;</innerclass>
+    <innerclass refid="d8/d73/a08611" prot="public">castor::ParserParameterHelper&lt; ParameterType::ePoint2F &gt;</innerclass>
+    <innerclass refid="db/dd6/a08615" prot="public">castor::ParserParameterHelper&lt; ParameterType::ePoint3F &gt;</innerclass>
+    <innerclass refid="d7/d39/a08619" prot="public">castor::ParserParameterHelper&lt; ParameterType::ePoint4F &gt;</innerclass>
+    <innerclass refid="d5/d4e/a08623" prot="public">castor::ParserParameterHelper&lt; ParameterType::ePoint2D &gt;</innerclass>
+    <innerclass refid="d9/da4/a08627" prot="public">castor::ParserParameterHelper&lt; ParameterType::ePoint3D &gt;</innerclass>
+    <innerclass refid="dd/d2c/a08631" prot="public">castor::ParserParameterHelper&lt; ParameterType::ePoint4D &gt;</innerclass>
+    <innerclass refid="d1/d58/a08635" prot="public">castor::ParserParameterHelper&lt; ParameterType::eSize &gt;</innerclass>
+    <innerclass refid="d6/ddb/a08639" prot="public">castor::ParserParameterHelper&lt; ParameterType::ePosition &gt;</innerclass>
+    <innerclass refid="de/d15/a08643" prot="public">castor::ParserParameterHelper&lt; ParameterType::eRectangle &gt;</innerclass>
+    <innerclass refid="d4/da7/a08647" prot="public">castor::ParserParameterHelper&lt; ParameterType::eRgbColour &gt;</innerclass>
+    <innerclass refid="d7/d00/a08651" prot="public">castor::ParserParameterHelper&lt; ParameterType::eRgbaColour &gt;</innerclass>
+    <innerclass refid="d6/d1f/a08655" prot="public">castor::ParserParameterHelper&lt; ParameterType::eHdrRgbColour &gt;</innerclass>
+    <innerclass refid="d0/dbb/a08659" prot="public">castor::ParserParameterHelper&lt; ParameterType::eHdrRgbaColour &gt;</innerclass>
+    <innerclass refid="d4/d78/a08663" prot="public">castor::HasBaseParameterType&lt; ParameterType::eName &gt;</innerclass>
+    <innerclass refid="d0/df5/a08667" prot="public">castor::HasBaseParameterType&lt; ParameterType::eCheckedText &gt;</innerclass>
+    <innerclass refid="db/d3b/a08671" prot="public">castor::HasBaseParameterType&lt; ParameterType::eBitwiseOred32BitsCheckedText &gt;</innerclass>
+    <innerclass refid="d5/d37/a08675" prot="public">castor::HasBaseParameterType&lt; ParameterType::eBitwiseOred64BitsCheckedText &gt;</innerclass>
+    <innerclass refid="d5/d41/a08679" prot="public">castor::IsArithmeticType</innerclass>
+    <innerclass refid="de/d61/a08683" prot="public">castor::IsArithmeticType&lt; ParameterType::eInt8 &gt;</innerclass>
+    <innerclass refid="dc/d0c/a08687" prot="public">castor::IsArithmeticType&lt; ParameterType::eInt16 &gt;</innerclass>
+    <innerclass refid="db/d9f/a08691" prot="public">castor::IsArithmeticType&lt; ParameterType::eInt32 &gt;</innerclass>
+    <innerclass refid="df/dff/a08695" prot="public">castor::IsArithmeticType&lt; ParameterType::eInt64 &gt;</innerclass>
+    <innerclass refid="de/db0/a08699" prot="public">castor::IsArithmeticType&lt; ParameterType::eUInt8 &gt;</innerclass>
+    <innerclass refid="dd/d1a/a08703" prot="public">castor::IsArithmeticType&lt; ParameterType::eUInt16 &gt;</innerclass>
+    <innerclass refid="df/db3/a08707" prot="public">castor::IsArithmeticType&lt; ParameterType::eUInt32 &gt;</innerclass>
+    <innerclass refid="d6/db8/a08711" prot="public">castor::IsArithmeticType&lt; ParameterType::eUInt64 &gt;</innerclass>
+    <innerclass refid="dd/d58/a08715" prot="public">castor::IsArithmeticType&lt; ParameterType::eFloat &gt;</innerclass>
+    <innerclass refid="db/d05/a08719" prot="public">castor::IsArithmeticType&lt; ParameterType::eDouble &gt;</innerclass>
+    <innerclass refid="d5/d74/a08723" prot="public">castor::IsArithmeticType&lt; ParameterType::eLongDouble &gt;</innerclass>
+    <innernamespace refid="d2/dd2/a02279">castor</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/FileParser/ParserParameterHelpers.hpp"/>
+  </compounddef>
+</doxygen>

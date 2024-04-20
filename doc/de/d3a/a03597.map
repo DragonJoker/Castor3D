@@ -1,5 +1,14 @@
-<map id="castor3d::SpecularComponent::ComponentsShader" name="castor3d::SpecularComponent::ComponentsShader">
-<area shape="rect" id="node1" title=" " alt="" coords="22,167,219,207"/>
-<area shape="rect" id="node2" href="$d7/d1d/a04018.html" title=" " alt="" coords="5,79,236,119"/>
-<area shape="rect" id="node3" href="$d0/dee/a04014.html" title=" " alt="" coords="21,5,220,31"/>
+<map id="castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;" name="castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;">
+<area shape="rect" id="Node000001" title="AnimatedObjectGroup cache." alt="" coords="1023,25,1277,95"/>
+<area shape="rect" id="Node000002" href="$d6/da8/a08227.html" title=" " alt="" coords="754,5,938,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="952,35,1023,43,1022,48,951,40"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="268,13,451,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="465,23,754,23,754,28,465,28"/>
+<area shape="rect" id="Node000004" href="$d8/da3/a08255.html" title=" " alt="" coords="719,69,973,139"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="986,81,1022,76,1023,81,987,86"/>
+<area shape="rect" id="Node000005" href="$d9/d93/a09063.html" title=" " alt="" coords="5,103,160,129"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="174,110,184,109,719,102,719,107,184,115,174,115"/>
+<area shape="rect" id="Node000006" href="$d8/da3/a08255.html" title="Base class for an element cache." alt="" coords="265,139,453,179"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="174,127,265,142,265,147,173,133"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="467,162,577,162,636,158,694,151,753,136,754,141,695,156,637,163,577,167,467,168"/>
 </map>

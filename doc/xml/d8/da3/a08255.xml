@@ -1,0 +1,2394 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/da3/a08255" kind="class" language="C++" prot="public">
+    <compoundname>castor::ResourceCacheBaseT</compoundname>
+    <derivedcompoundref refid="d8/d07/a03627" prot="public" virt="non-virtual">castor3d::ObjectCacheBaseT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d8/d07/a03627" prot="public" virt="non-virtual">castor3d::ObjectCacheBaseT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d8/d07/a03627" prot="public" virt="non-virtual">castor3d::ObjectCacheBaseT&lt; Light, castor::String, LightCacheTraits &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d8/d07/a03627" prot="public" virt="non-virtual">castor3d::ObjectCacheBaseT&lt; SceneNode, castor::String, SceneNodeCacheTraits &gt;</derivedcompoundref>
+    <derivedcompoundref refid="d7/df3/a08259" prot="public" virt="non-virtual">castor::ResourceCacheT&lt; ResT, KeyT, TraitsT &gt;</derivedcompoundref>
+    <includes local="no">ResourceCacheBase.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ResT</type>
+      </param>
+      <param>
+        <type>typename KeyT</type>
+      </param>
+      <param>
+        <type>typename TraitsT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="user-defined">
+      <header>Boucle verrouillée.</header>
+      <memberdef kind="function" id="d8/da3/a08255_1ae84da1b21345a418752dd78b0cf644ae" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncType</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::forEach</definition>
+        <argsstring>(FuncType func) const</argsstring>
+        <name>forEach</name>
+        <qualifiedname>castor::ResourceCacheBaseT::forEach</qualifiedname>
+        <param>
+          <type>FuncType</type>
+          <declname>func</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="503" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="503" bodyend="511"/>
+        <references refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" compoundref="dd/d19/a01922" startline="574" endline="577">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::lock</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1ade25c114da6605836b4d9618c5236fb0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename FuncType</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::forEach</definition>
+        <argsstring>(FuncType func)</argsstring>
+        <name>forEach</name>
+        <qualifiedname>castor::ResourceCacheBaseT::forEach</qualifiedname>
+        <param>
+          <type>FuncType</type>
+          <declname>func</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="514" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="514" bodyend="522"/>
+        <references refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" compoundref="dd/d19/a01922" startline="574" endline="577">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::lock</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <header>Accesseurs.</header>
+      <memberdef kind="function" id="d8/da3/a08255_1a3a6c437db53c29554a44635674119d3d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::getObjectCount</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getObjectCount</name>
+        <qualifiedname>castor::ResourceCacheBaseT::getObjectCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="530" column="10" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="530" bodyend="534"/>
+        <references refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" compoundref="dd/d19/a01922" startline="574" endline="577">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::lock</references>
+        <references refid="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" compoundref="dd/d19/a01922" startline="824">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_resources</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a38d921d597aa752485a108e4fc1d70d7" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::getObjectCountNoLock</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getObjectCountNoLock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::getObjectCountNoLock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="536" column="10" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="536" bodyend="539"/>
+        <references refid="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" compoundref="dd/d19/a01922" startline="824">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_resources</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a846eb5869a3b833ce9200edb493a3463" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+        <definition>String const  &amp; castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::getObjectTypeName</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getObjectTypeName</name>
+        <qualifiedname>castor::ResourceCacheBaseT::getObjectTypeName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="541" column="15" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="541" bodyend="544"/>
+        <referencedby refid="d8/da3/a08255_1a3f6cbb3c0ad8d6136141c4c089f7f479" compoundref="dd/d19/a01922" startline="624" endline="631">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportAdded</referencedby>
+        <referencedby refid="d8/da3/a08255_1aa1689ccd9a406fe8dfe9ff473d226b5e" compoundref="dd/d19/a01922" startline="615" endline="622">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportCreation</referencedby>
+        <referencedby refid="d8/da3/a08255_1aa24d9472022aa0f450529b07d9b7f743" compoundref="dd/d19/a01922" startline="633" endline="640">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportDuplicate</referencedby>
+        <referencedby refid="d8/da3/a08255_1a9c25c01ca8f76ad4a25088101572200d" compoundref="dd/d19/a01922" startline="642" endline="647">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportNull</referencedby>
+        <referencedby refid="d8/da3/a08255_1a6537032eaeeadaffea633743e3218e53" compoundref="dd/d19/a01922" startline="649" endline="656">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportUnknown</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a2c7514746fa02eb850a1a274cc227732" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::has</definition>
+        <argsstring>(ElementKeyT const &amp;name) const noexcept</argsstring>
+        <name>has</name>
+        <qualifiedname>castor::ResourceCacheBaseT::has</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="546" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="546" bodyend="549"/>
+        <references refid="d8/da3/a08255_1a1057aebd572ac71378ea519f7c0288ab" compoundref="dd/d19/a01922" startline="411" endline="415">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryFind</references>
+        <referencedby refid="d8/d4f/a03703_1ab139accf9826d7cb5103af76aab1ec15" compoundref="db/dc3/a00284" startline="1093" endline="1096">castor3d::Engine::hasFont</referencedby>
+        <referencedby refid="d8/d4f/a03703_1ae7e13a16cf5c75af931f9e3f3ef0968d" compoundref="db/dc3/a00284" startline="1142" endline="1145">castor3d::Engine::hasImage</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a226df2a5fa8ac0d1ab25c344d8feaf8c" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::hasNoLock</definition>
+        <argsstring>(ElementKeyT const &amp;name) const noexcept</argsstring>
+        <name>hasNoLock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::hasNoLock</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="551" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="551" bodyend="554"/>
+        <references refid="d8/da3/a08255_1a0858d0d079fd8fa1a4506cfe2f5266b2" compoundref="dd/d19/a01922" startline="426" endline="429">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryFindNoLock</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a4603e9fde607cdf993adf47ba4dd307f" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::isEmpty</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isEmpty</name>
+        <qualifiedname>castor::ResourceCacheBaseT::isEmpty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="556" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="556" bodyend="560"/>
+        <references refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" compoundref="dd/d19/a01922" startline="574" endline="577">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::lock</references>
+        <references refid="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" compoundref="dd/d19/a01922" startline="824">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_resources</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1ae9a58e21f9e7bbbd9b6d56ffd076ab50" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::isEmptyNoLock</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isEmptyNoLock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::isEmptyNoLock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="562" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="562" bodyend="565"/>
+        <references refid="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" compoundref="dd/d19/a01922" startline="824">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_resources</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <header>Verrouillage de mutex.</header>
+      <memberdef kind="function" id="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::lock</definition>
+        <argsstring>() const</argsstring>
+        <name>lock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::lock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="574" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="574" bodyend="577"/>
+        <references refid="d8/da3/a08255_1ae0f2c32510e90ebd77738c5d99aba20d" compoundref="dd/d19/a01922" startline="821">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_mutex</references>
+        <referencedby refid="d8/da3/a08255_1ae42bd6b7da6f50fdef84f04a84172313" compoundref="dd/d19/a01922" startline="165" endline="173">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::add</referencedby>
+        <referencedby refid="d8/da3/a08255_1af4b3aa2cae901fb81e67007a49f01c89" compoundref="dd/d19/a01922" startline="264" endline="270">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::add</referencedby>
+        <referencedby refid="d8/da3/a08255_1a7b9ac51df57e111ec2af31f89a97cbac" compoundref="dd/d19/a01922" startline="70" endline="74">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::cleanup</referencedby>
+        <referencedby refid="d8/da3/a08255_1a5400b3eabcf62af7df977a20e643418d" compoundref="dd/d19/a01922" startline="81" endline="85">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::clear</referencedby>
+        <referencedby refid="d8/da3/a08255_1ae2bc50ccc5e4f323a14a1a6f39d3ec14" compoundref="dd/d19/a01922" startline="440" endline="451">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::find</referencedby>
+        <referencedby refid="d8/da3/a08255_1ade25c114da6605836b4d9618c5236fb0" compoundref="dd/d19/a01922" startline="514" endline="522">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::forEach</referencedby>
+        <referencedby refid="d8/da3/a08255_1ae84da1b21345a418752dd78b0cf644ae" compoundref="dd/d19/a01922" startline="503" endline="511">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::forEach</referencedby>
+        <referencedby refid="d8/da3/a08255_1a3a6c437db53c29554a44635674119d3d" compoundref="dd/d19/a01922" startline="530" endline="534">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::getObjectCount</referencedby>
+        <referencedby refid="d8/da3/a08255_1a4603e9fde607cdf993adf47ba4dd307f" compoundref="dd/d19/a01922" startline="556" endline="560">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::isEmpty</referencedby>
+        <referencedby refid="d8/da3/a08255_1a107169e0364711fced26e4d512819a13" compoundref="dd/d19/a01922" startline="481" endline="495">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::mergeInto</referencedby>
+        <referencedby refid="d8/da3/a08255_1a21d0ef274f434e61b1d0c336a8c7253a" compoundref="dd/d19/a01922" startline="331" endline="343">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::remove</referencedby>
+        <referencedby refid="d8/da3/a08255_1a6318e3a64926730b389ee55727eacb3e" compoundref="dd/d19/a01922" startline="376" endline="400">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::rename</referencedby>
+        <referencedby refid="d8/da3/a08255_1ad7c855d1938539d8353d27f31f1b1a6b" compoundref="dd/d19/a01922" startline="213" endline="223">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryAdd</referencedby>
+        <referencedby refid="d8/da3/a08255_1adfe23feed932e13cb6d29207a1ccc51a" compoundref="dd/d19/a01922" startline="120" endline="128">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryAdd</referencedby>
+        <referencedby refid="d8/da3/a08255_1a1057aebd572ac71378ea519f7c0288ab" compoundref="dd/d19/a01922" startline="411" endline="415">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryFind</referencedby>
+        <referencedby refid="d8/da3/a08255_1a5d16d1a42b2ea9518a97d9d8e1408140" compoundref="dd/d19/a01922" startline="300" endline="305">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryRemove</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1adaebf3755b5ae0a14b71d7223279b189" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::unlock</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>unlock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::unlock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="579" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="579" bodyend="582"/>
+        <references refid="d8/da3/a08255_1ae0f2c32510e90ebd77738c5d99aba20d" compoundref="dd/d19/a01922" startline="821">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_mutex</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <header>Itération.</header>
+      <memberdef kind="function" id="d8/da3/a08255_1a513f7e6f476b4e383247c3e2521dab66" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::begin</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::ResourceCacheBaseT::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="591" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="591" bodyend="594"/>
+        <references refid="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" compoundref="dd/d19/a01922" startline="824">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_resources</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a50bb86447bf101e78949992c5e690204" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::begin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::ResourceCacheBaseT::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="596" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="596" bodyend="599"/>
+        <references refid="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" compoundref="dd/d19/a01922" startline="824">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_resources</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a4da03983e4fa5f10c489e9c46f059f28" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::end</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::ResourceCacheBaseT::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="601" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="601" bodyend="604"/>
+        <references refid="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" compoundref="dd/d19/a01922" startline="824">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_resources</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a0291614751b6a31d44dbee9e1750d579" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::end</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::ResourceCacheBaseT::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="606" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="606" bodyend="609"/>
+        <references refid="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" compoundref="dd/d19/a01922" startline="824">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_resources</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <header>Logging.</header>
+      <memberdef kind="function" id="d8/da3/a08255_1aa1689ccd9a406fe8dfe9ff473d226b5e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportCreation</definition>
+        <argsstring>(String const &amp;name) const</argsstring>
+        <name>reportCreation</name>
+        <qualifiedname>castor::ResourceCacheBaseT::reportCreation</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="615" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="615" bodyend="622"/>
+        <references refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" compoundref="d5/d12/a01799" startline="51">cuT</references>
+        <references refid="d8/da3/a08255_1a846eb5869a3b833ce9200edb493a3463" compoundref="dd/d19/a01922" startline="541" endline="544">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::getObjectTypeName</references>
+        <references refid="d9/d93/a09063_1a8053eec12caa69c0ddad74e68e945eab" compoundref="d8/dd8/a02108" startline="114" endline="117">castor::LoggerInstance::logTrace</references>
+        <references refid="d8/da3/a08255_1a3ff280a88ac186050be8c57363f585e9" compoundref="dd/d19/a01922" startline="820">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_logger</references>
+        <references refid="d2/dd2/a02279_1af41ea5b34edb8c4103f57937867ea4d6" compoundref="d5/d12/a01799" startline="197" endline="200">castor::makeStringStream</references>
+        <referencedby refid="d8/da3/a08255_1aae5b569e26955738733ba4de036629d7" compoundref="dd/d19/a01922" startline="99" endline="105">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::create</referencedby>
+        <referencedby refid="d8/da3/a08255_1a5fc262a8e5bbcb42d59d19b211a65203" compoundref="dd/d19/a01922" startline="761" endline="780">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doAddNoLockT</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a3f6cbb3c0ad8d6136141c4c089f7f479" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportAdded</definition>
+        <argsstring>(String const &amp;name) const</argsstring>
+        <name>reportAdded</name>
+        <qualifiedname>castor::ResourceCacheBaseT::reportAdded</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="624" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="624" bodyend="631"/>
+        <references refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" compoundref="d5/d12/a01799" startline="51">cuT</references>
+        <references refid="d8/da3/a08255_1a846eb5869a3b833ce9200edb493a3463" compoundref="dd/d19/a01922" startline="541" endline="544">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::getObjectTypeName</references>
+        <references refid="d9/d93/a09063_1a8053eec12caa69c0ddad74e68e945eab" compoundref="d8/dd8/a02108" startline="114" endline="117">castor::LoggerInstance::logTrace</references>
+        <references refid="d8/da3/a08255_1a3ff280a88ac186050be8c57363f585e9" compoundref="dd/d19/a01922" startline="820">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_logger</references>
+        <references refid="d2/dd2/a02279_1af41ea5b34edb8c4103f57937867ea4d6" compoundref="d5/d12/a01799" startline="197" endline="200">castor::makeStringStream</references>
+        <referencedby refid="d8/da3/a08255_1a63b72a3a1c306679e47426f3a270ec97" compoundref="dd/d19/a01922" startline="705" endline="733">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doAddNoLock</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1aa24d9472022aa0f450529b07d9b7f743" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportDuplicate</definition>
+        <argsstring>(String const &amp;name) const</argsstring>
+        <name>reportDuplicate</name>
+        <qualifiedname>castor::ResourceCacheBaseT::reportDuplicate</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="633" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="633" bodyend="640"/>
+        <references refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" compoundref="d5/d12/a01799" startline="51">cuT</references>
+        <references refid="d8/da3/a08255_1a846eb5869a3b833ce9200edb493a3463" compoundref="dd/d19/a01922" startline="541" endline="544">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::getObjectTypeName</references>
+        <references refid="d9/d93/a09063_1a7fb14049e4aa52e127cb89e73f63a0a3" compoundref="d8/dd8/a02108" startline="366" endline="369">castor::LoggerInstance::logWarning</references>
+        <references refid="d8/da3/a08255_1a3ff280a88ac186050be8c57363f585e9" compoundref="dd/d19/a01922" startline="820">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_logger</references>
+        <references refid="d2/dd2/a02279_1af41ea5b34edb8c4103f57937867ea4d6" compoundref="d5/d12/a01799" startline="197" endline="200">castor::makeStringStream</references>
+        <referencedby refid="d8/da3/a08255_1a63b72a3a1c306679e47426f3a270ec97" compoundref="dd/d19/a01922" startline="705" endline="733">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doAddNoLock</referencedby>
+        <referencedby refid="d8/da3/a08255_1a5fc262a8e5bbcb42d59d19b211a65203" compoundref="dd/d19/a01922" startline="761" endline="780">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doAddNoLockT</referencedby>
+        <referencedby refid="d8/da3/a08255_1a6318e3a64926730b389ee55727eacb3e" compoundref="dd/d19/a01922" startline="376" endline="400">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::rename</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a9c25c01ca8f76ad4a25088101572200d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportNull</definition>
+        <argsstring>() const</argsstring>
+        <name>reportNull</name>
+        <qualifiedname>castor::ResourceCacheBaseT::reportNull</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="642" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="642" bodyend="647"/>
+        <references refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" compoundref="d5/d12/a01799" startline="51">cuT</references>
+        <references refid="d8/da3/a08255_1a846eb5869a3b833ce9200edb493a3463" compoundref="dd/d19/a01922" startline="541" endline="544">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::getObjectTypeName</references>
+        <references refid="d9/d93/a09063_1a7fb14049e4aa52e127cb89e73f63a0a3" compoundref="d8/dd8/a02108" startline="366" endline="369">castor::LoggerInstance::logWarning</references>
+        <references refid="d8/da3/a08255_1a3ff280a88ac186050be8c57363f585e9" compoundref="dd/d19/a01922" startline="820">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_logger</references>
+        <references refid="d2/dd2/a02279_1af41ea5b34edb8c4103f57937867ea4d6" compoundref="d5/d12/a01799" startline="197" endline="200">castor::makeStringStream</references>
+        <referencedby refid="d8/da3/a08255_1a63b72a3a1c306679e47426f3a270ec97" compoundref="dd/d19/a01922" startline="705" endline="733">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doAddNoLock</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a6537032eaeeadaffea633743e3218e53" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportUnknown</definition>
+        <argsstring>(String const &amp;name) const</argsstring>
+        <name>reportUnknown</name>
+        <qualifiedname>castor::ResourceCacheBaseT::reportUnknown</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="649" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="649" bodyend="656"/>
+        <references refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" compoundref="d5/d12/a01799" startline="51">cuT</references>
+        <references refid="d8/da3/a08255_1a846eb5869a3b833ce9200edb493a3463" compoundref="dd/d19/a01922" startline="541" endline="544">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::getObjectTypeName</references>
+        <references refid="d9/d93/a09063_1a7fb14049e4aa52e127cb89e73f63a0a3" compoundref="d8/dd8/a02108" startline="366" endline="369">castor::LoggerInstance::logWarning</references>
+        <references refid="d8/da3/a08255_1a3ff280a88ac186050be8c57363f585e9" compoundref="dd/d19/a01922" startline="820">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_logger</references>
+        <references refid="d2/dd2/a02279_1af41ea5b34edb8c4103f57937867ea4d6" compoundref="d5/d12/a01799" startline="197" endline="200">castor::makeStringStream</references>
+        <referencedby refid="d8/da3/a08255_1ae2bc50ccc5e4f323a14a1a6f39d3ec14" compoundref="dd/d19/a01922" startline="440" endline="451">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::find</referencedby>
+        <referencedby refid="d8/da3/a08255_1a4978d020ac192e539d60ce384b714753" compoundref="dd/d19/a01922" startline="462" endline="472">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::findNoLock</referencedby>
+        <referencedby refid="d8/da3/a08255_1a21d0ef274f434e61b1d0c336a8c7253a" compoundref="dd/d19/a01922" startline="331" endline="343">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::remove</referencedby>
+        <referencedby refid="d8/da3/a08255_1a55752549d182d7d232c432746b6b5312" compoundref="dd/d19/a01922" startline="354" endline="365">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::removeNoLock</referencedby>
+        <referencedby refid="d8/da3/a08255_1a6318e3a64926730b389ee55727eacb3e" compoundref="dd/d19/a01922" startline="376" endline="400">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::rename</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d8/da3/a08255_1ad1f999dc303a3929d1ce12688a7bfa82" prot="protected" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::ResourceCacheBaseT</definition>
+        <argsstring>(LoggerInstance &amp;logger, ElementInitialiserT initialise=ElementInitialiserT{}, ElementCleanerT clean=ElementCleanerT{}, ElementMergerT merge=ElementMergerT{})</argsstring>
+        <name>ResourceCacheBaseT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::ResourceCacheBaseT</qualifiedname>
+        <param>
+          <type><ref refid="d9/d93/a09063" kindref="compound">LoggerInstance</ref> &amp;</type>
+          <declname>logger</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a3051db82021f48e14c8a2fa7edac730d" kindref="member">ElementInitialiserT</ref></type>
+          <declname>initialise</declname>
+          <defval><ref refid="d8/da3/a08255_1a3051db82021f48e14c8a2fa7edac730d" kindref="member">ElementInitialiserT</ref>{}</defval>
+        </param>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1cfcc6e1586468a1acc793837102990b" kindref="member">ElementCleanerT</ref></type>
+          <declname>clean</declname>
+          <defval><ref refid="d8/da3/a08255_1a1cfcc6e1586468a1acc793837102990b" kindref="member">ElementCleanerT</ref>{}</defval>
+        </param>
+        <param>
+          <type><ref refid="d8/da3/a08255_1abe561e40c075f4c5b23ae93d7bc8e74b" kindref="member">ElementMergerT</ref></type>
+          <declname>merge</declname>
+          <defval><ref refid="d8/da3/a08255_1abe561e40c075f4c5b23ae93d7bc8e74b" kindref="member">ElementMergerT</ref>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Construction/Desctruction. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="49" column="10" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="49" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a4659119e9e245b67bfc7ad3a480a97d3" prot="protected" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type></type>
+        <definition>virtual castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::~ResourceCacheBaseT</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~ResourceCacheBaseT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::~ResourceCacheBaseT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="60" column="9"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d8/da3/a08255_1a0f3ba9501fcd6a250dbe3f7805866eb7" prot="public" static="no">
+        <type>ResT</type>
+        <definition>using castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::ElementT =  ResT</definition>
+        <argsstring></argsstring>
+        <name>ElementT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::ElementT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="26" column="1" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" prot="public" static="no">
+        <type>KeyT</type>
+        <definition>using castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::ElementKeyT =  KeyT</definition>
+        <argsstring></argsstring>
+        <name>ElementKeyT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::ElementKeyT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="27" column="1" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d8/da3/a08255_1a76bb4c912e63e8f8a0f9ee22c5d2b4ef" prot="public" static="no">
+        <type>TraitsT</type>
+        <definition>using castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::ElementCacheTraitsT =  TraitsT</definition>
+        <argsstring></argsstring>
+        <name>ElementCacheTraitsT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::ElementCacheTraitsT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="28" column="1" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d8/da3/a08255_1a38cf128e704f26d2cc6d0dd1aa7997e9" prot="public" static="no">
+        <type><ref refid="d8/da3/a08255" kindref="compound">ResourceCacheBaseT</ref>&lt; <ref refid="d8/da3/a08255_1a0f3ba9501fcd6a250dbe3f7805866eb7" kindref="member">ElementT</ref>, <ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref>, <ref refid="d8/da3/a08255_1a76bb4c912e63e8f8a0f9ee22c5d2b4ef" kindref="member">ElementCacheTraitsT</ref> &gt;</type>
+        <definition>using castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::ElementCacheBaseT =  ResourceCacheBaseT&lt; ElementT, ElementKeyT, ElementCacheTraitsT &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementCacheBaseT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::ElementCacheBaseT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="29" column="1" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d8/da3/a08255_1a7a9a1aebfebcffd6ed6c083334c1068c" prot="public" static="no">
+        <type>typename ElementCacheTraitsT::ElementCacheT</type>
+        <definition>using castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::ElementCacheT =  typename ElementCacheTraitsT::ElementCacheT</definition>
+        <argsstring></argsstring>
+        <name>ElementCacheT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::ElementCacheT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="30" column="1" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d8/da3/a08255_1a96311923d5ee6f15e3bc3dc8ec3db4d7" prot="public" static="no">
+        <type>typename ElementCacheTraitsT::ElementPtrT</type>
+        <definition>using castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::ElementPtrT =  typename ElementCacheTraitsT::ElementPtrT</definition>
+        <argsstring></argsstring>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::ElementPtrT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="31" column="1" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" prot="public" static="no">
+        <type>typename ElementCacheTraitsT::ElementObsT</type>
+        <definition>using castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::ElementObsT =  typename ElementCacheTraitsT::ElementObsT</definition>
+        <argsstring></argsstring>
+        <name>ElementObsT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::ElementObsT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="32" column="1" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d8/da3/a08255_1ac9cc8e58b0bb9a4efd80921161ffa80c" prot="public" static="no">
+        <type>typename ElementCacheTraitsT::ElementContT</type>
+        <definition>using castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::ElementContT =  typename ElementCacheTraitsT::ElementContT</definition>
+        <argsstring></argsstring>
+        <name>ElementContT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::ElementContT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="33" column="1" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d8/da3/a08255_1a3051db82021f48e14c8a2fa7edac730d" prot="public" static="no">
+        <type>typename ElementCacheTraitsT::ElementInitialiserT</type>
+        <definition>using castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::ElementInitialiserT =  typename ElementCacheTraitsT::ElementInitialiserT</definition>
+        <argsstring></argsstring>
+        <name>ElementInitialiserT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::ElementInitialiserT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="34" column="1" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d8/da3/a08255_1a1cfcc6e1586468a1acc793837102990b" prot="public" static="no">
+        <type>typename ElementCacheTraitsT::ElementCleanerT</type>
+        <definition>using castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::ElementCleanerT =  typename ElementCacheTraitsT::ElementCleanerT</definition>
+        <argsstring></argsstring>
+        <name>ElementCleanerT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::ElementCleanerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="35" column="1" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d8/da3/a08255_1abe561e40c075f4c5b23ae93d7bc8e74b" prot="public" static="no">
+        <type>typename ElementCacheTraitsT::ElementMergerT</type>
+        <definition>using castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::ElementMergerT =  typename ElementCacheTraitsT::ElementMergerT</definition>
+        <argsstring></argsstring>
+        <name>ElementMergerT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::ElementMergerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="36" column="1" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-type">
+      <memberdef kind="typedef" id="d8/da3/a08255_1a0ee0c582a59a49ecf8b68c0bb68721a1" prot="protected" static="no">
+        <type><ref refid="d2/dd2/a02279_1a606c2c78804885010d3c95a99c9b4b1d" kindref="member">castor::RecursiveMutex</ref></type>
+        <definition>using castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::MutexT =  castor::RecursiveMutex</definition>
+        <argsstring></argsstring>
+        <name>MutexT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::MutexT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="818" column="1" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="818" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d8/da3/a08255_1a3ff280a88ac186050be8c57363f585e9" prot="protected" static="no" mutable="no">
+        <type><ref refid="d9/d93/a09063" kindref="compound">LoggerInstance</ref> &amp;</type>
+        <definition>LoggerInstance&amp; castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_logger</definition>
+        <argsstring></argsstring>
+        <name>m_logger</name>
+        <qualifiedname>castor::ResourceCacheBaseT::m_logger</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="820" column="17" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="820" bodyend="-1"/>
+        <referencedby refid="d8/da3/a08255_1a3f6cbb3c0ad8d6136141c4c089f7f479" compoundref="dd/d19/a01922" startline="624" endline="631">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportAdded</referencedby>
+        <referencedby refid="d8/da3/a08255_1aa1689ccd9a406fe8dfe9ff473d226b5e" compoundref="dd/d19/a01922" startline="615" endline="622">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportCreation</referencedby>
+        <referencedby refid="d8/da3/a08255_1aa24d9472022aa0f450529b07d9b7f743" compoundref="dd/d19/a01922" startline="633" endline="640">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportDuplicate</referencedby>
+        <referencedby refid="d8/da3/a08255_1a9c25c01ca8f76ad4a25088101572200d" compoundref="dd/d19/a01922" startline="642" endline="647">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportNull</referencedby>
+        <referencedby refid="d8/da3/a08255_1a6537032eaeeadaffea633743e3218e53" compoundref="dd/d19/a01922" startline="649" endline="656">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportUnknown</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/da3/a08255_1ae0f2c32510e90ebd77738c5d99aba20d" prot="protected" static="no" mutable="no">
+        <type><ref refid="db/d36/a07959" kindref="compound">CheckedMutexT</ref>&lt; <ref refid="d8/da3/a08255_1a0ee0c582a59a49ecf8b68c0bb68721a1" kindref="member">MutexT</ref> &gt;</type>
+        <definition>CheckedMutexT&lt; MutexT &gt; castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_mutex</definition>
+        <argsstring></argsstring>
+        <name>m_mutex</name>
+        <qualifiedname>castor::ResourceCacheBaseT::m_mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="821" column="15" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="821" bodyend="-1"/>
+        <referencedby refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" compoundref="dd/d19/a01922" startline="574" endline="577">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::lock</referencedby>
+        <referencedby refid="d8/da3/a08255_1adaebf3755b5ae0a14b71d7223279b189" compoundref="dd/d19/a01922" startline="579" endline="582">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::unlock</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" prot="protected" static="no" mutable="yes">
+        <type><ref refid="d8/da3/a08255_1ac9cc8e58b0bb9a4efd80921161ffa80c" kindref="member">ElementContT</ref></type>
+        <definition>ElementContT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_resources</definition>
+        <argsstring></argsstring>
+        <name>m_resources</name>
+        <qualifiedname>castor::ResourceCacheBaseT::m_resources</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>La collection d&apos;éléments. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="824" column="22" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="824" bodyend="-1"/>
+        <referencedby refid="d8/da3/a08255_1a50bb86447bf101e78949992c5e690204" compoundref="dd/d19/a01922" startline="596" endline="599">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::begin</referencedby>
+        <referencedby refid="d8/da3/a08255_1a513f7e6f476b4e383247c3e2521dab66" compoundref="dd/d19/a01922" startline="591" endline="594">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::begin</referencedby>
+        <referencedby refid="d8/da3/a08255_1a9623d8ca68e009f78e842011a9caceb4" compoundref="dd/d19/a01922" startline="660" endline="669">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doCleanupNoLock</referencedby>
+        <referencedby refid="d8/da3/a08255_1a5a950162bcc6e71f5ae81ad5f4a85f01" compoundref="dd/d19/a01922" startline="671" endline="674">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doClearNoLock</referencedby>
+        <referencedby refid="d8/da3/a08255_1a6e4ca586f9ab38ecc32ba59585435d0e" compoundref="dd/d19/a01922" startline="685" endline="703">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryAddNoLock</referencedby>
+        <referencedby refid="d8/da3/a08255_1acfdaeba21b6d8853f0629ae9197342dd" compoundref="dd/d19/a01922" startline="736" endline="758">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryAddNoLockT</referencedby>
+        <referencedby refid="d8/da3/a08255_1a0186ef49bd625ae3669d94657845237f" compoundref="dd/d19/a01922" startline="803" endline="815">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryFindNoLock</referencedby>
+        <referencedby refid="d8/da3/a08255_1a74a35e486aa159b89451ccfb86e2dbd9" compoundref="dd/d19/a01922" startline="782" endline="801">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryRemoveNoLock</referencedby>
+        <referencedby refid="d8/da3/a08255_1a0291614751b6a31d44dbee9e1750d579" compoundref="dd/d19/a01922" startline="606" endline="609">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::end</referencedby>
+        <referencedby refid="d8/da3/a08255_1a4da03983e4fa5f10c489e9c46f059f28" compoundref="dd/d19/a01922" startline="601" endline="604">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::end</referencedby>
+        <referencedby refid="d8/da3/a08255_1a3a6c437db53c29554a44635674119d3d" compoundref="dd/d19/a01922" startline="530" endline="534">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::getObjectCount</referencedby>
+        <referencedby refid="d8/da3/a08255_1a38d921d597aa752485a108e4fc1d70d7" compoundref="dd/d19/a01922" startline="536" endline="539">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::getObjectCountNoLock</referencedby>
+        <referencedby refid="d8/da3/a08255_1a4603e9fde607cdf993adf47ba4dd307f" compoundref="dd/d19/a01922" startline="556" endline="560">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::isEmpty</referencedby>
+        <referencedby refid="d8/da3/a08255_1ae9a58e21f9e7bbbd9b6d56ffd076ab50" compoundref="dd/d19/a01922" startline="562" endline="565">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::isEmptyNoLock</referencedby>
+        <referencedby refid="d8/da3/a08255_1a6318e3a64926730b389ee55727eacb3e" compoundref="dd/d19/a01922" startline="376" endline="400">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::rename</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/da3/a08255_1a8cf6f3524574a11b8cf97f67b0c8f168" prot="protected" static="no" mutable="no">
+        <type><ref refid="d8/da3/a08255_1a3051db82021f48e14c8a2fa7edac730d" kindref="member">ElementInitialiserT</ref></type>
+        <definition>ElementInitialiserT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_initialise</definition>
+        <argsstring></argsstring>
+        <name>m_initialise</name>
+        <qualifiedname>castor::ResourceCacheBaseT::m_initialise</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>L&apos;initaliseur d&apos;éléments. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="827" column="21" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="827" bodyend="-1"/>
+        <referencedby refid="d8/da3/a08255_1a6e4ca586f9ab38ecc32ba59585435d0e" compoundref="dd/d19/a01922" startline="685" endline="703">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryAddNoLock</referencedby>
+        <referencedby refid="d8/da3/a08255_1acfdaeba21b6d8853f0629ae9197342dd" compoundref="dd/d19/a01922" startline="736" endline="758">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryAddNoLockT</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/da3/a08255_1acaf0ac6efbc13f391e4976d766284df2" prot="protected" static="no" mutable="no">
+        <type><ref refid="d8/da3/a08255_1a1cfcc6e1586468a1acc793837102990b" kindref="member">ElementCleanerT</ref></type>
+        <definition>ElementCleanerT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_clean</definition>
+        <argsstring></argsstring>
+        <name>m_clean</name>
+        <qualifiedname>castor::ResourceCacheBaseT::m_clean</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le nettoyeur d&apos;éléments. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="830" column="17" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="830" bodyend="-1"/>
+        <referencedby refid="d8/da3/a08255_1a9623d8ca68e009f78e842011a9caceb4" compoundref="dd/d19/a01922" startline="660" endline="669">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doCleanupNoLock</referencedby>
+        <referencedby refid="d8/da3/a08255_1a74a35e486aa159b89451ccfb86e2dbd9" compoundref="dd/d19/a01922" startline="782" endline="801">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryRemoveNoLock</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/da3/a08255_1a1e3539946398fbe77bcec1c29d4084de" prot="protected" static="no" mutable="no">
+        <type><ref refid="d8/da3/a08255_1abe561e40c075f4c5b23ae93d7bc8e74b" kindref="member">ElementMergerT</ref></type>
+        <definition>ElementMergerT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_merge</definition>
+        <argsstring></argsstring>
+        <name>m_merge</name>
+        <qualifiedname>castor::ResourceCacheBaseT::m_merge</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Le fusionneur de collection d&apos;éléments. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="833" column="16" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="833" bodyend="-1"/>
+        <referencedby refid="d8/da3/a08255_1a107169e0364711fced26e4d512819a13" compoundref="dd/d19/a01922" startline="481" endline="495">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::mergeInto</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/da3/a08255_1a2c54dbffb6da0f873564cd7523c6ca2e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::ResourceCacheBaseT</definition>
+        <argsstring>(ResourceCacheBaseT const &amp;)=delete</argsstring>
+        <name>ResourceCacheBaseT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::ResourceCacheBaseT</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255" kindref="compound">ResourceCacheBaseT</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="38" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a00583361ac080fd7136cf106d386b8e7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d8/da3/a08255" kindref="compound">ResourceCacheBaseT</ref> &amp;</type>
+        <definition>ResourceCacheBaseT &amp; castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::operator=</definition>
+        <argsstring>(ResourceCacheBaseT const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ResourceCacheBaseT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255" kindref="compound">ResourceCacheBaseT</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="39" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a3cc66423ca359aebe860a4cd37a16ed2" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::ResourceCacheBaseT</definition>
+        <argsstring>(ResourceCacheBaseT &amp;&amp;) noexcept=delete</argsstring>
+        <name>ResourceCacheBaseT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::ResourceCacheBaseT</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255" kindref="compound">ResourceCacheBaseT</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="40" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1af8fa35257e8982d727e716872de2c499" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/da3/a08255" kindref="compound">ResourceCacheBaseT</ref> &amp;</type>
+        <definition>ResourceCacheBaseT &amp; castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::operator=</definition>
+        <argsstring>(ResourceCacheBaseT &amp;&amp;) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ResourceCacheBaseT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255" kindref="compound">ResourceCacheBaseT</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="41" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a7b9ac51df57e111ec2af31f89a97cbac" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::cleanup</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor::ResourceCacheBaseT::cleanup</qualifiedname>
+        <briefdescription>
+<para>Met tous les éléments à nettoyer. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="70" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="70" bodyend="74"/>
+        <references refid="d8/da3/a08255_1a9623d8ca68e009f78e842011a9caceb4" compoundref="dd/d19/a01922" startline="660" endline="669">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doCleanupNoLock</references>
+        <references refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" compoundref="dd/d19/a01922" startline="574" endline="577">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::lock</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+        <referencedby refid="d8/da3/a08255_1a74a35e486aa159b89451ccfb86e2dbd9" compoundref="dd/d19/a01922" startline="782" endline="801">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryRemoveNoLock</referencedby>
+        <referencedby refid="d8/da3/a08255_1a21d0ef274f434e61b1d0c336a8c7253a" compoundref="dd/d19/a01922" startline="331" endline="343">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::remove</referencedby>
+        <referencedby refid="d8/da3/a08255_1a55752549d182d7d232c432746b6b5312" compoundref="dd/d19/a01922" startline="354" endline="365">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::removeNoLock</referencedby>
+        <referencedby refid="d8/da3/a08255_1a5d16d1a42b2ea9518a97d9d8e1408140" compoundref="dd/d19/a01922" startline="300" endline="305">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryRemove</referencedby>
+        <referencedby refid="d8/da3/a08255_1aa66962c4bd8bfec19c1d9df146349f9e" compoundref="dd/d19/a01922" startline="316" endline="320">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryRemoveNoLock</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a5400b3eabcf62af7df977a20e643418d" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::clear</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>clear</name>
+        <qualifiedname>castor::ResourceCacheBaseT::clear</qualifiedname>
+        <briefdescription>
+<para>Vide la collection. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="81" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="81" bodyend="85"/>
+        <references refid="d8/da3/a08255_1a5a950162bcc6e71f5ae81ad5f4a85f01" compoundref="dd/d19/a01922" startline="671" endline="674">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doClearNoLock</references>
+        <references refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" compoundref="dd/d19/a01922" startline="574" endline="577">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::lock</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1aae5b569e26955738733ba4de036629d7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParametersT</declname>
+            <defname>ParametersT</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d8/da3/a08255_1a96311923d5ee6f15e3bc3dc8ec3db4d7" kindref="member">ElementPtrT</ref></type>
+        <definition>ElementPtrT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::create</definition>
+        <argsstring>(ElementKeyT const &amp;name, ParametersT &amp;&amp;... parameters) const</argsstring>
+        <name>create</name>
+        <qualifiedname>castor::ResourceCacheBaseT::create</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ParametersT &amp;&amp;...</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Crée un élément. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom d&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les autres paramètres de construction. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;élément créé. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="99" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="99" bodyend="105"/>
+        <references refid="d8/da3/a08255_1adee23d182e1e5ddc942024826978b31e" compoundref="dd/d19/a01922" startline="677" endline="683">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doCreateT</references>
+        <references refid="d8/da3/a08255_1aa1689ccd9a406fe8dfe9ff473d226b5e" compoundref="dd/d19/a01922" startline="615" endline="622">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportCreation</references>
+        <referencedby refid="d8/d4f/a03703_1a0705231fef20a697973ac71b36bd0b57" compoundref="db/dc3/a00284" startline="1060" endline="1065">castor3d::Engine::createFont</referencedby>
+        <referencedby refid="d8/d4f/a03703_1af92ce0a62bfeb2923bf0a32c1094e9d4" compoundref="db/dc3/a00284" startline="1109" endline="1114">castor3d::Engine::createImage</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1adfe23feed932e13cb6d29207a1ccc51a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryAdd</definition>
+        <argsstring>(ElementKeyT const &amp;name, ElementPtrT &amp;element, bool initialise=false)</argsstring>
+        <name>tryAdd</name>
+        <qualifiedname>castor::ResourceCacheBaseT::tryAdd</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a96311923d5ee6f15e3bc3dc8ec3db4d7" kindref="member">ElementPtrT</ref> &amp;</type>
+          <declname>element</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>initialise</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Ajoute un élément. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom d&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">element</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ressource, vidée en cas d&apos;ajout (le cache en prend la responsabilité). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">initialise</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> pour initialiser l&apos;élément ajouté (aucun effect sur les doublons). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;élément réel (ajouté, ou original du doublon). </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="120" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="120" bodyend="128"/>
+        <references refid="d8/da3/a08255_1a6e4ca586f9ab38ecc32ba59585435d0e" compoundref="dd/d19/a01922" startline="685" endline="703">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryAddNoLock</references>
+        <references refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" compoundref="dd/d19/a01922" startline="574" endline="577">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::lock</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+        <referencedby refid="d8/d4f/a03703_1ab079a7d5c089864cd6eb28d8ccaf83ea" compoundref="db/dc3/a00284" startline="1153" endline="1162">castor3d::Engine::tryAddImage</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a455df8866f38178ee368bb82324cc5b3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryAddNoLock</definition>
+        <argsstring>(ElementKeyT const &amp;name, ElementPtrT &amp;element, bool initialise=false)</argsstring>
+        <name>tryAddNoLock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::tryAddNoLock</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a96311923d5ee6f15e3bc3dc8ec3db4d7" kindref="member">ElementPtrT</ref> &amp;</type>
+          <declname>element</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>initialise</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Ajoute un élément. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom d&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">element</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ressource, vidée en cas d&apos;ajout (le cache en prend la responsabilité). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">initialise</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> pour initialiser l&apos;élément ajouté (aucun effect sur les doublons). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;élément réel (ajouté, ou original du doublon). </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="143" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="143" bodyend="150"/>
+        <references refid="d8/da3/a08255_1a6e4ca586f9ab38ecc32ba59585435d0e" compoundref="dd/d19/a01922" startline="685" endline="703">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryAddNoLock</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1ae42bd6b7da6f50fdef84f04a84172313" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::add</definition>
+        <argsstring>(ElementKeyT const &amp;name, ElementPtrT &amp;element, bool initialise=true)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor::ResourceCacheBaseT::add</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a96311923d5ee6f15e3bc3dc8ec3db4d7" kindref="member">ElementPtrT</ref> &amp;</type>
+          <declname>element</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>initialise</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>Version journalisante de tryAdd. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de la ressource. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">element</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ressource, vidée en cas d&apos;ajout (le cache en prend la responsabilité). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">initialise</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> pour initialiser l&apos;élément ajouté (aucun effect sur les doublons). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;élément réel (ajouté, ou original du doublon). </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="165" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="165" bodyend="173"/>
+        <references refid="d8/da3/a08255_1a63b72a3a1c306679e47426f3a270ec97" compoundref="dd/d19/a01922" startline="705" endline="733">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doAddNoLock</references>
+        <references refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" compoundref="dd/d19/a01922" startline="574" endline="577">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::lock</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+        <referencedby refid="d8/d4f/a03703_1ac9abab737dc2b11ac9ee6f6ef31045c1" compoundref="db/dc3/a00284" startline="1075" endline="1080">castor3d::Engine::addFont</referencedby>
+        <referencedby refid="d8/d4f/a03703_1a1f26b1f69ade47399e32ee596ed77756" compoundref="db/dc3/a00284" startline="1124" endline="1129">castor3d::Engine::addImage</referencedby>
+        <referencedby refid="d8/d4f/a03703_1a52cc49e29ffe7b2da28de2c4622913a6" compoundref="db/dc3/a00284" startline="1068" endline="1073">castor3d::Engine::addNewFont</referencedby>
+        <referencedby refid="d8/d4f/a03703_1a8e7137f1ee10104cab15245472a4dbeb" compoundref="db/dc3/a00284" startline="1117" endline="1122">castor3d::Engine::addNewImage</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a1fc2571a5ea51ead9564b4cec6b31314" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::addNoLock</definition>
+        <argsstring>(ElementKeyT const &amp;name, ElementPtrT &amp;element, bool initialise=true)</argsstring>
+        <name>addNoLock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::addNoLock</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a96311923d5ee6f15e3bc3dc8ec3db4d7" kindref="member">ElementPtrT</ref> &amp;</type>
+          <declname>element</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>initialise</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>Version journalisante de tryAdd. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de la ressource. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">element</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La ressource, vidée en cas d&apos;ajout (le cache en prend la responsabilité). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">initialise</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> pour initialiser l&apos;élément ajouté (aucun effect sur les doublons). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;élément réel (ajouté, ou original du doublon). </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="188" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="188" bodyend="195"/>
+        <references refid="d8/da3/a08255_1a63b72a3a1c306679e47426f3a270ec97" compoundref="dd/d19/a01922" startline="705" endline="733">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doAddNoLock</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1ad7c855d1938539d8353d27f31f1b1a6b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParametersT</declname>
+            <defname>ParametersT</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryAdd</definition>
+        <argsstring>(ElementKeyT const &amp;name, bool initialise, ElementObsT &amp;created, ParametersT &amp;&amp;... parameters)</argsstring>
+        <name>tryAdd</name>
+        <qualifiedname>castor::ResourceCacheBaseT::tryAdd</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>initialise</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref> &amp;</type>
+          <declname>created</declname>
+        </param>
+        <param>
+          <type>ParametersT &amp;&amp;...</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute un élément, construict sur place. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom d&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">initialise</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> pour initialiser l&apos;élément ajouté (aucun effect sur les doublons). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">created</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;élément créé. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les autres paramètres de construction. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;élément réel (ajouté, ou original du doublon). </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="213" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="213" bodyend="223"/>
+        <references refid="d8/da3/a08255_1acfdaeba21b6d8853f0629ae9197342dd" compoundref="dd/d19/a01922" startline="736" endline="758">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryAddNoLockT</references>
+        <references refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" compoundref="dd/d19/a01922" startline="574" endline="577">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::lock</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1ab193001556389344cbd6c9ae7861af7d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParametersT</declname>
+            <defname>ParametersT</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryAddNoLock</definition>
+        <argsstring>(ElementKeyT const &amp;name, bool initialise, ElementObsT &amp;created, ParametersT &amp;&amp;... parameters)</argsstring>
+        <name>tryAddNoLock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::tryAddNoLock</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>initialise</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref> &amp;</type>
+          <declname>created</declname>
+        </param>
+        <param>
+          <type>ParametersT &amp;&amp;...</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute un élément, construict sur place. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom d&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">initialise</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> pour initialiser l&apos;élément ajouté (aucun effect sur les doublons). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">created</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;élément créé. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les autres paramètres de construction. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;élément réel (ajouté, ou original du doublon). </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="241" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="241" bodyend="250"/>
+        <references refid="d8/da3/a08255_1acfdaeba21b6d8853f0629ae9197342dd" compoundref="dd/d19/a01922" startline="736" endline="758">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryAddNoLockT</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1af4b3aa2cae901fb81e67007a49f01c89" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParametersT</declname>
+            <defname>ParametersT</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::add</definition>
+        <argsstring>(ElementKeyT const &amp;name, ParametersT &amp;&amp;... parameters)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor::ResourceCacheBaseT::add</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ParametersT &amp;&amp;...</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Version journalisante de tryAdd. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom d&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les autres paramètres de construction. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;élément réel (ajouté, ou original du doublon). </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="264" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="264" bodyend="270"/>
+        <references refid="d8/da3/a08255_1a5fc262a8e5bbcb42d59d19b211a65203" compoundref="dd/d19/a01922" startline="761" endline="780">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doAddNoLockT</references>
+        <references refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" compoundref="dd/d19/a01922" startline="574" endline="577">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::lock</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a0a36c208871e24f543beb6d46751244b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParametersT</declname>
+            <defname>ParametersT</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::addNoLock</definition>
+        <argsstring>(ElementKeyT const &amp;name, ParametersT &amp;&amp;... parameters)</argsstring>
+        <name>addNoLock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::addNoLock</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ParametersT &amp;&amp;...</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Version journalisante de tryAdd. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom d&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les autres paramètres de construction. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;élément réel (ajouté, ou original du doublon). </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="284" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="284" bodyend="289"/>
+        <references refid="d8/da3/a08255_1a5fc262a8e5bbcb42d59d19b211a65203" compoundref="dd/d19/a01922" startline="761" endline="780">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doAddNoLockT</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a5d16d1a42b2ea9518a97d9d8e1408140" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/da3/a08255_1a96311923d5ee6f15e3bc3dc8ec3db4d7" kindref="member">ElementPtrT</ref></type>
+        <definition>ElementPtrT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryRemove</definition>
+        <argsstring>(ElementKeyT const &amp;name, bool cleanup=false) noexcept</argsstring>
+        <name>tryRemove</name>
+        <qualifiedname>castor::ResourceCacheBaseT::tryRemove</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>cleanup</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Retire un élément à partir d&apos;un nom. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom d&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cleanup</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> si l&apos;évènement doit être nettoyé. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="300" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="300" bodyend="305"/>
+        <references refid="d8/da3/a08255_1a7b9ac51df57e111ec2af31f89a97cbac" compoundref="dd/d19/a01922" startline="70" endline="74">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::cleanup</references>
+        <references refid="d8/da3/a08255_1a74a35e486aa159b89451ccfb86e2dbd9" compoundref="dd/d19/a01922" startline="782" endline="801">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryRemoveNoLock</references>
+        <references refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" compoundref="dd/d19/a01922" startline="574" endline="577">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::lock</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1aa66962c4bd8bfec19c1d9df146349f9e" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/da3/a08255_1a96311923d5ee6f15e3bc3dc8ec3db4d7" kindref="member">ElementPtrT</ref></type>
+        <definition>ElementPtrT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryRemoveNoLock</definition>
+        <argsstring>(ElementKeyT const &amp;name, bool cleanup=false) noexcept</argsstring>
+        <name>tryRemoveNoLock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::tryRemoveNoLock</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>cleanup</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Retire un élément à partir d&apos;un nom. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom d&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cleanup</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> si l&apos;évènement doit être nettoyé. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="316" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="316" bodyend="320"/>
+        <references refid="d8/da3/a08255_1a7b9ac51df57e111ec2af31f89a97cbac" compoundref="dd/d19/a01922" startline="70" endline="74">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::cleanup</references>
+        <references refid="d8/da3/a08255_1a74a35e486aa159b89451ccfb86e2dbd9" compoundref="dd/d19/a01922" startline="782" endline="801">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryRemoveNoLock</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a21d0ef274f434e61b1d0c336a8c7253a" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/da3/a08255_1a96311923d5ee6f15e3bc3dc8ec3db4d7" kindref="member">ElementPtrT</ref></type>
+        <definition>ElementPtrT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::remove</definition>
+        <argsstring>(ElementKeyT const &amp;name, bool cleanup=false) noexcept</argsstring>
+        <name>remove</name>
+        <qualifiedname>castor::ResourceCacheBaseT::remove</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>cleanup</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Version journalisante de tryAdd. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom d&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cleanup</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> si l&apos;évènement doit être nettoyé. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="331" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="331" bodyend="343"/>
+        <references refid="d8/da3/a08255_1a7b9ac51df57e111ec2af31f89a97cbac" compoundref="dd/d19/a01922" startline="70" endline="74">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::cleanup</references>
+        <references refid="d8/da3/a08255_1a74a35e486aa159b89451ccfb86e2dbd9" compoundref="dd/d19/a01922" startline="782" endline="801">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryRemoveNoLock</references>
+        <references refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" compoundref="dd/d19/a01922" startline="574" endline="577">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::lock</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+        <references refid="d8/da3/a08255_1a6537032eaeeadaffea633743e3218e53" compoundref="dd/d19/a01922" startline="649" endline="656">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportUnknown</references>
+        <referencedby refid="d8/d4f/a03703_1addc711e1060765415a0812574efb17a7" compoundref="db/dc3/a00284" startline="1082" endline="1086">castor3d::Engine::removeFont</referencedby>
+        <referencedby refid="d8/d4f/a03703_1a5df7c3836acec8a82912d16172ef0b01" compoundref="db/dc3/a00284" startline="1131" endline="1135">castor3d::Engine::removeImage</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a55752549d182d7d232c432746b6b5312" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/da3/a08255_1a96311923d5ee6f15e3bc3dc8ec3db4d7" kindref="member">ElementPtrT</ref></type>
+        <definition>ElementPtrT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::removeNoLock</definition>
+        <argsstring>(ElementKeyT const &amp;name, bool cleanup=false) noexcept</argsstring>
+        <name>removeNoLock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::removeNoLock</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>cleanup</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Version journalisante de tryAdd. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom d&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cleanup</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> si l&apos;évènement doit être nettoyé. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="354" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="354" bodyend="365"/>
+        <references refid="d8/da3/a08255_1a7b9ac51df57e111ec2af31f89a97cbac" compoundref="dd/d19/a01922" startline="70" endline="74">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::cleanup</references>
+        <references refid="d8/da3/a08255_1a74a35e486aa159b89451ccfb86e2dbd9" compoundref="dd/d19/a01922" startline="782" endline="801">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryRemoveNoLock</references>
+        <references refid="d8/da3/a08255_1a6537032eaeeadaffea633743e3218e53" compoundref="dd/d19/a01922" startline="649" endline="656">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportUnknown</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a6318e3a64926730b389ee55727eacb3e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::rename</definition>
+        <argsstring>(ElementKeyT const &amp;oldName, ElementKeyT const &amp;newName)</argsstring>
+        <name>rename</name>
+        <qualifiedname>castor::ResourceCacheBaseT::rename</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>oldName</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>newName</declname>
+        </param>
+        <briefdescription>
+<para>Renomme une ressource. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">oldName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom actuel de l&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">newName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nouveau nom de l&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="376" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="376" bodyend="400"/>
+        <references refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" compoundref="dd/d19/a01922" startline="574" endline="577">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::lock</references>
+        <references refid="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" compoundref="dd/d19/a01922" startline="824">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_resources</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+        <references refid="d8/da3/a08255_1aa24d9472022aa0f450529b07d9b7f743" compoundref="dd/d19/a01922" startline="633" endline="640">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportDuplicate</references>
+        <references refid="d8/da3/a08255_1a6537032eaeeadaffea633743e3218e53" compoundref="dd/d19/a01922" startline="649" endline="656">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportUnknown</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a1057aebd572ac71378ea519f7c0288ab" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryFind</definition>
+        <argsstring>(ElementKeyT const &amp;name) const noexcept</argsstring>
+        <name>tryFind</name>
+        <qualifiedname>castor::ResourceCacheBaseT::tryFind</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Cherche un élément par son nom. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom d&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;élément trouvé, nullptr si non trouvé. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="411" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="411" bodyend="415"/>
+        <references refid="d8/da3/a08255_1a0186ef49bd625ae3669d94657845237f" compoundref="dd/d19/a01922" startline="803" endline="815">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryFindNoLock</references>
+        <references refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" compoundref="dd/d19/a01922" startline="574" endline="577">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::lock</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+        <referencedby refid="d8/da3/a08255_1a2c7514746fa02eb850a1a274cc227732" compoundref="dd/d19/a01922" startline="546" endline="549">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::has</referencedby>
+        <referencedby refid="d8/d4f/a03703_1ad1e115ab10d0a0a64bedd07035cbe6b2" compoundref="db/dc3/a00284" startline="1098" endline="1101">castor3d::Engine::tryFindFont</referencedby>
+        <referencedby refid="d8/d4f/a03703_1aecd56700ba7c78ec10e419a872b1eab7" compoundref="db/dc3/a00284" startline="1147" endline="1150">castor3d::Engine::tryFindImage</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a0858d0d079fd8fa1a4506cfe2f5266b2" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryFindNoLock</definition>
+        <argsstring>(ElementKeyT const &amp;name) const noexcept</argsstring>
+        <name>tryFindNoLock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::tryFindNoLock</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Cherche un élément par son nom. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom d&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;élément trouvé, nullptr si non trouvé. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="426" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="426" bodyend="429"/>
+        <references refid="d8/da3/a08255_1a0186ef49bd625ae3669d94657845237f" compoundref="dd/d19/a01922" startline="803" endline="815">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryFindNoLock</references>
+        <referencedby refid="d8/da3/a08255_1a226df2a5fa8ac0d1ab25c344d8feaf8c" compoundref="dd/d19/a01922" startline="551" endline="554">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::hasNoLock</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1ae2bc50ccc5e4f323a14a1a6f39d3ec14" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::find</definition>
+        <argsstring>(ElementKeyT const &amp;name) const</argsstring>
+        <name>find</name>
+        <qualifiedname>castor::ResourceCacheBaseT::find</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Version journalisante de tryAdd. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom d&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;élément trouvé, nullptr si non trouvé. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="440" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="440" bodyend="451"/>
+        <references refid="d8/da3/a08255_1a0186ef49bd625ae3669d94657845237f" compoundref="dd/d19/a01922" startline="803" endline="815">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryFindNoLock</references>
+        <references refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" compoundref="dd/d19/a01922" startline="574" endline="577">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::lock</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+        <references refid="d8/da3/a08255_1a6537032eaeeadaffea633743e3218e53" compoundref="dd/d19/a01922" startline="649" endline="656">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportUnknown</references>
+        <referencedby refid="d8/d4f/a03703_1ad1ce4f92f240c0fa3c1c4ede63942bac" compoundref="db/dc3/a00284" startline="1088" endline="1091">castor3d::Engine::findFont</referencedby>
+        <referencedby refid="d8/d4f/a03703_1a0e3cae5eb336c27b42a7225bdbd1b38f" compoundref="db/dc3/a00284" startline="1137" endline="1140">castor3d::Engine::findImage</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a4978d020ac192e539d60ce384b714753" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::findNoLock</definition>
+        <argsstring>(ElementKeyT const &amp;name) const</argsstring>
+        <name>findNoLock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::findNoLock</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Version journalisante de tryAdd. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom d&apos;élément. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;élément trouvé, nullptr si non trouvé. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="462" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="462" bodyend="472"/>
+        <references refid="d8/da3/a08255_1a0186ef49bd625ae3669d94657845237f" compoundref="dd/d19/a01922" startline="803" endline="815">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryFindNoLock</references>
+        <references refid="d8/da3/a08255_1a6537032eaeeadaffea633743e3218e53" compoundref="dd/d19/a01922" startline="649" endline="656">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportUnknown</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a107169e0364711fced26e4d512819a13" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::mergeInto</definition>
+        <argsstring>(ElementCacheBaseT &amp;destination)</argsstring>
+        <name>mergeInto</name>
+        <qualifiedname>castor::ResourceCacheBaseT::mergeInto</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a38cf128e704f26d2cc6d0dd1aa7997e9" kindref="member">ElementCacheBaseT</ref> &amp;</type>
+          <declname>destination</declname>
+        </param>
+        <briefdescription>
+<para>Met les éléments de ce cache dans ceux de celui donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">destination</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le cache de destination. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="481" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="481" bodyend="495"/>
+        <references refid="d8/da3/a08255_1a5a950162bcc6e71f5ae81ad5f4a85f01" compoundref="dd/d19/a01922" startline="671" endline="674">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doClearNoLock</references>
+        <references refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" compoundref="dd/d19/a01922" startline="574" endline="577">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::lock</references>
+        <references refid="d8/da3/a08255_1a1e3539946398fbe77bcec1c29d4084de" compoundref="dd/d19/a01922" startline="833">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_merge</references>
+        <references refid="d2/dd2/a02279_1a58f3178234ce83e643568e48a0ed6a3f" compoundref="d7/d02/a01808" startline="26" endline="29">castor::makeUniqueLock</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d8/da3/a08255_1a9623d8ca68e009f78e842011a9caceb4" prot="protected" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doCleanupNoLock</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>doCleanupNoLock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::doCleanupNoLock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="660" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="660" bodyend="669"/>
+        <references refid="d8/da3/a08255_1acaf0ac6efbc13f391e4976d766284df2" compoundref="dd/d19/a01922" startline="830">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_clean</references>
+        <references refid="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" compoundref="dd/d19/a01922" startline="824">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_resources</references>
+        <referencedby refid="d8/da3/a08255_1a7b9ac51df57e111ec2af31f89a97cbac" compoundref="dd/d19/a01922" startline="70" endline="74">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::cleanup</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a5a950162bcc6e71f5ae81ad5f4a85f01" prot="protected" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doClearNoLock</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>doClearNoLock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::doClearNoLock</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="671" column="6" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="671" bodyend="674"/>
+        <references refid="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" compoundref="dd/d19/a01922" startline="824">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_resources</references>
+        <referencedby refid="d8/da3/a08255_1a5400b3eabcf62af7df977a20e643418d" compoundref="dd/d19/a01922" startline="81" endline="85">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::clear</referencedby>
+        <referencedby refid="d8/da3/a08255_1a107169e0364711fced26e4d512819a13" compoundref="dd/d19/a01922" startline="481" endline="495">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::mergeInto</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1adee23d182e1e5ddc942024826978b31e" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParametersT</declname>
+            <defname>ParametersT</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d8/da3/a08255_1a96311923d5ee6f15e3bc3dc8ec3db4d7" kindref="member">ElementPtrT</ref></type>
+        <definition>ElementPtrT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doCreateT</definition>
+        <argsstring>(ElementKeyT const &amp;name, ParametersT &amp;&amp;... parameters) const</argsstring>
+        <name>doCreateT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::doCreateT</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ParametersT &amp;&amp;...</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="677" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="677" bodyend="683"/>
+        <referencedby refid="d8/da3/a08255_1aae5b569e26955738733ba4de036629d7" compoundref="dd/d19/a01922" startline="99" endline="105">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::create</referencedby>
+        <referencedby refid="d8/da3/a08255_1acfdaeba21b6d8853f0629ae9197342dd" compoundref="dd/d19/a01922" startline="736" endline="758">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryAddNoLockT</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a6e4ca586f9ab38ecc32ba59585435d0e" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryAddNoLock</definition>
+        <argsstring>(ElementKeyT const &amp;name, ElementPtrT &amp;element, bool initialise=true)</argsstring>
+        <name>doTryAddNoLock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::doTryAddNoLock</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a96311923d5ee6f15e3bc3dc8ec3db4d7" kindref="member">ElementPtrT</ref> &amp;</type>
+          <declname>element</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>initialise</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="685" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="685" bodyend="703"/>
+        <references refid="d8/da3/a08255_1a8cf6f3524574a11b8cf97f67b0c8f168" compoundref="dd/d19/a01922" startline="827">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_initialise</references>
+        <references refid="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" compoundref="dd/d19/a01922" startline="824">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_resources</references>
+        <referencedby refid="d8/da3/a08255_1a63b72a3a1c306679e47426f3a270ec97" compoundref="dd/d19/a01922" startline="705" endline="733">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doAddNoLock</referencedby>
+        <referencedby refid="d8/da3/a08255_1adfe23feed932e13cb6d29207a1ccc51a" compoundref="dd/d19/a01922" startline="120" endline="128">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryAdd</referencedby>
+        <referencedby refid="d8/da3/a08255_1a455df8866f38178ee368bb82324cc5b3" compoundref="dd/d19/a01922" startline="143" endline="150">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryAddNoLock</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a63b72a3a1c306679e47426f3a270ec97" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doAddNoLock</definition>
+        <argsstring>(ElementKeyT const &amp;name, ElementPtrT &amp;element, bool initialise=true)</argsstring>
+        <name>doAddNoLock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::doAddNoLock</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a96311923d5ee6f15e3bc3dc8ec3db4d7" kindref="member">ElementPtrT</ref> &amp;</type>
+          <declname>element</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>initialise</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="705" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="705" bodyend="733"/>
+        <references refid="d8/da3/a08255_1a6e4ca586f9ab38ecc32ba59585435d0e" compoundref="dd/d19/a01922" startline="685" endline="703">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryAddNoLock</references>
+        <references refid="d8/da3/a08255_1a3f6cbb3c0ad8d6136141c4c089f7f479" compoundref="dd/d19/a01922" startline="624" endline="631">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportAdded</references>
+        <references refid="d8/da3/a08255_1aa24d9472022aa0f450529b07d9b7f743" compoundref="dd/d19/a01922" startline="633" endline="640">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportDuplicate</references>
+        <references refid="d8/da3/a08255_1a9c25c01ca8f76ad4a25088101572200d" compoundref="dd/d19/a01922" startline="642" endline="647">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportNull</references>
+        <referencedby refid="d8/da3/a08255_1ae42bd6b7da6f50fdef84f04a84172313" compoundref="dd/d19/a01922" startline="165" endline="173">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::add</referencedby>
+        <referencedby refid="d8/da3/a08255_1a1fc2571a5ea51ead9564b4cec6b31314" compoundref="dd/d19/a01922" startline="188" endline="195">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::addNoLock</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1acfdaeba21b6d8853f0629ae9197342dd" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParametersT</declname>
+            <defname>ParametersT</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryAddNoLockT</definition>
+        <argsstring>(ElementKeyT const &amp;name, bool initialise, ElementObsT &amp;created, ParametersT &amp;&amp;... parameters)</argsstring>
+        <name>doTryAddNoLockT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::doTryAddNoLockT</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>initialise</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref> &amp;</type>
+          <declname>created</declname>
+        </param>
+        <param>
+          <type>ParametersT &amp;&amp;...</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="736" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="736" bodyend="758"/>
+        <references refid="d8/da3/a08255_1adee23d182e1e5ddc942024826978b31e" compoundref="dd/d19/a01922" startline="677" endline="683">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doCreateT</references>
+        <references refid="d8/da3/a08255_1a8cf6f3524574a11b8cf97f67b0c8f168" compoundref="dd/d19/a01922" startline="827">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_initialise</references>
+        <references refid="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" compoundref="dd/d19/a01922" startline="824">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_resources</references>
+        <referencedby refid="d8/da3/a08255_1a5fc262a8e5bbcb42d59d19b211a65203" compoundref="dd/d19/a01922" startline="761" endline="780">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doAddNoLockT</referencedby>
+        <referencedby refid="d8/da3/a08255_1ad7c855d1938539d8353d27f31f1b1a6b" compoundref="dd/d19/a01922" startline="213" endline="223">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryAdd</referencedby>
+        <referencedby refid="d8/da3/a08255_1ab193001556389344cbd6c9ae7861af7d" compoundref="dd/d19/a01922" startline="241" endline="250">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryAddNoLock</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a5fc262a8e5bbcb42d59d19b211a65203" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParametersT</declname>
+            <defname>ParametersT</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doAddNoLockT</definition>
+        <argsstring>(ElementKeyT const &amp;name, ParametersT &amp;&amp;... parameters)</argsstring>
+        <name>doAddNoLockT</name>
+        <qualifiedname>castor::ResourceCacheBaseT::doAddNoLockT</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ParametersT &amp;&amp;...</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="761" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="761" bodyend="780"/>
+        <references refid="d8/da3/a08255_1acfdaeba21b6d8853f0629ae9197342dd" compoundref="dd/d19/a01922" startline="736" endline="758">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryAddNoLockT</references>
+        <references refid="d8/da3/a08255_1aa1689ccd9a406fe8dfe9ff473d226b5e" compoundref="dd/d19/a01922" startline="615" endline="622">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportCreation</references>
+        <references refid="d8/da3/a08255_1aa24d9472022aa0f450529b07d9b7f743" compoundref="dd/d19/a01922" startline="633" endline="640">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::reportDuplicate</references>
+        <referencedby refid="d8/da3/a08255_1af4b3aa2cae901fb81e67007a49f01c89" compoundref="dd/d19/a01922" startline="264" endline="270">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::add</referencedby>
+        <referencedby refid="d8/da3/a08255_1a0a36c208871e24f543beb6d46751244b" compoundref="dd/d19/a01922" startline="284" endline="289">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::addNoLock</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a74a35e486aa159b89451ccfb86e2dbd9" prot="protected" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/da3/a08255_1a96311923d5ee6f15e3bc3dc8ec3db4d7" kindref="member">ElementPtrT</ref></type>
+        <definition>ElementPtrT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryRemoveNoLock</definition>
+        <argsstring>(ElementKeyT const &amp;name, bool cleanup=false) noexcept</argsstring>
+        <name>doTryRemoveNoLock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::doTryRemoveNoLock</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>cleanup</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="782" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="782" bodyend="801"/>
+        <references refid="d8/da3/a08255_1a7b9ac51df57e111ec2af31f89a97cbac" compoundref="dd/d19/a01922" startline="70" endline="74">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::cleanup</references>
+        <references refid="d8/da3/a08255_1acaf0ac6efbc13f391e4976d766284df2" compoundref="dd/d19/a01922" startline="830">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_clean</references>
+        <references refid="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" compoundref="dd/d19/a01922" startline="824">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_resources</references>
+        <referencedby refid="d8/da3/a08255_1a21d0ef274f434e61b1d0c336a8c7253a" compoundref="dd/d19/a01922" startline="331" endline="343">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::remove</referencedby>
+        <referencedby refid="d8/da3/a08255_1a55752549d182d7d232c432746b6b5312" compoundref="dd/d19/a01922" startline="354" endline="365">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::removeNoLock</referencedby>
+        <referencedby refid="d8/da3/a08255_1a5d16d1a42b2ea9518a97d9d8e1408140" compoundref="dd/d19/a01922" startline="300" endline="305">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryRemove</referencedby>
+        <referencedby refid="d8/da3/a08255_1aa66962c4bd8bfec19c1d9df146349f9e" compoundref="dd/d19/a01922" startline="316" endline="320">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryRemoveNoLock</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/da3/a08255_1a0186ef49bd625ae3669d94657845237f" prot="protected" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" kindref="member">ElementObsT</ref></type>
+        <definition>ElementObsT castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::doTryFindNoLock</definition>
+        <argsstring>(ElementKeyT const &amp;name) const noexcept</argsstring>
+        <name>doTryFindNoLock</name>
+        <qualifiedname>castor::ResourceCacheBaseT::doTryFindNoLock</qualifiedname>
+        <param>
+          <type><ref refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" kindref="member">ElementKeyT</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="803" column="13" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="803" bodyend="815"/>
+        <references refid="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" compoundref="dd/d19/a01922" startline="824">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::m_resources</references>
+        <referencedby refid="d8/da3/a08255_1ae2bc50ccc5e4f323a14a1a6f39d3ec14" compoundref="dd/d19/a01922" startline="440" endline="451">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::find</referencedby>
+        <referencedby refid="d8/da3/a08255_1a4978d020ac192e539d60ce384b714753" compoundref="dd/d19/a01922" startline="462" endline="472">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::findNoLock</referencedby>
+        <referencedby refid="d8/da3/a08255_1a1057aebd572ac71378ea519f7c0288ab" compoundref="dd/d19/a01922" startline="411" endline="415">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryFind</referencedby>
+        <referencedby refid="d8/da3/a08255_1a0858d0d079fd8fa1a4506cfe2f5266b2" compoundref="dd/d19/a01922" startline="426" endline="429">castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;::tryFindNoLock</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe de base pour un cache d&apos;éléments. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ObjectCacheBaseT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</label>
+        <link refid="d8/d07/a03627"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::ObjectCacheBaseT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</label>
+        <link refid="d8/d07/a03627"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; Geometry, castor::String, GeometryCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::ObjectCacheBaseT&lt; Light, castor::String, LightCacheTraits &gt;</label>
+        <link refid="d8/d07/a03627"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; Light, castor::String, LightCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::ObjectCacheBaseT&lt; SceneNode, castor::String, SceneNodeCacheTraits &gt;</label>
+        <link refid="d8/d07/a03627"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; SceneNode, castor::String, SceneNodeCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor::ResourceCacheBaseT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor::ResourceCacheBaseT&lt; Font, String, FontCacheTraits &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Font, String, FontCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor::ResourceCacheBaseT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Geometry, castor::String, GeometryCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor::ResourceCacheBaseT&lt; Image, String, ImageCacheTraits &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Image, String, ImageCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor::ResourceCacheBaseT&lt; Light, castor::String, LightCacheTraits &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Light, castor::String, LightCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::ResourceCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ObjT, KeyT, TraitsT &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor::ResourceCacheBaseT&lt; SceneNode, castor::String, SceneNodeCacheTraits &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SceneNode, castor::String, SceneNodeCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor::ResourceCacheBaseT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor::ResourceCacheBaseT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor::ResourceCacheBaseT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="28">
+        <label>castor::ResourceCacheBaseT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
+        <link refid="d8/d07/a03627"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;</label>
+        <link refid="d0/d50/a03611"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</label>
+        <link refid="dc/d6c/a03635"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::ObjectCacheT&lt; Light, castor::String, LightCacheTraits &gt;</label>
+        <link refid="d6/d38/a03643"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;</label>
+        <link refid="d0/db0/a03631"/>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::ObjectCacheT&lt; SceneNode, castor::String, SceneNodeCacheTraits &gt;</label>
+        <link refid="d6/da4/a03663"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;</label>
+        <link refid="d8/da3/a08255"/>
+      </node>
+      <node id="19">
+        <label>castor::ResourceCacheT&lt; Font, String, FontCacheTraits &gt;</label>
+        <link refid="d2/d3b/a08767"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor::ResourceCacheT&lt; Image, String, ImageCacheTraits &gt;</label>
+        <link refid="d2/dd8/a08951"/>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor::ResourceCacheT&lt; ResT, KeyT, TraitsT &gt;</label>
+        <link refid="d7/df3/a08259"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;</label>
+        <link refid="d4/dd9/a03599"/>
+        <childnode refid="22" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</label>
+        <link refid="d4/dc4/a03647"/>
+        <childnode refid="24" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</label>
+        <link refid="de/de4/a03655"/>
+        <childnode refid="26" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</label>
+        <link refid="dd/d77/a03659"/>
+        <childnode refid="28" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::LoggerInstance</label>
+        <link refid="d9/d93/a09063"/>
+      </node>
+      <node id="1">
+        <label>castor::ResourceCacheBaseT&lt; ResT, KeyT, TraitsT &gt;</label>
+        <link refid="d8/da3/a08255"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_logger</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Design/ResourceCacheBase.hpp" line="23" column="1" bodyfile="CastorUtils/Design/ResourceCacheBase.hpp" bodystart="24" bodyend="834"/>
+    <listofallmembers>
+      <member refid="d8/da3/a08255_1ae42bd6b7da6f50fdef84f04a84172313" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>add</name></member>
+      <member refid="d8/da3/a08255_1af4b3aa2cae901fb81e67007a49f01c89" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>add</name></member>
+      <member refid="d8/da3/a08255_1a1fc2571a5ea51ead9564b4cec6b31314" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>addNoLock</name></member>
+      <member refid="d8/da3/a08255_1a0a36c208871e24f543beb6d46751244b" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>addNoLock</name></member>
+      <member refid="d8/da3/a08255_1a513f7e6f476b4e383247c3e2521dab66" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>begin</name></member>
+      <member refid="d8/da3/a08255_1a50bb86447bf101e78949992c5e690204" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>begin</name></member>
+      <member refid="d8/da3/a08255_1a7b9ac51df57e111ec2af31f89a97cbac" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>cleanup</name></member>
+      <member refid="d8/da3/a08255_1a5400b3eabcf62af7df977a20e643418d" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>clear</name></member>
+      <member refid="d8/da3/a08255_1aae5b569e26955738733ba4de036629d7" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>create</name></member>
+      <member refid="d8/da3/a08255_1a63b72a3a1c306679e47426f3a270ec97" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>doAddNoLock</name></member>
+      <member refid="d8/da3/a08255_1a5fc262a8e5bbcb42d59d19b211a65203" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>doAddNoLockT</name></member>
+      <member refid="d8/da3/a08255_1a9623d8ca68e009f78e842011a9caceb4" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>doCleanupNoLock</name></member>
+      <member refid="d8/da3/a08255_1a5a950162bcc6e71f5ae81ad5f4a85f01" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>doClearNoLock</name></member>
+      <member refid="d8/da3/a08255_1adee23d182e1e5ddc942024826978b31e" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>doCreateT</name></member>
+      <member refid="d8/da3/a08255_1a6e4ca586f9ab38ecc32ba59585435d0e" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>doTryAddNoLock</name></member>
+      <member refid="d8/da3/a08255_1acfdaeba21b6d8853f0629ae9197342dd" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>doTryAddNoLockT</name></member>
+      <member refid="d8/da3/a08255_1a0186ef49bd625ae3669d94657845237f" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>doTryFindNoLock</name></member>
+      <member refid="d8/da3/a08255_1a74a35e486aa159b89451ccfb86e2dbd9" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>doTryRemoveNoLock</name></member>
+      <member refid="d8/da3/a08255_1a38cf128e704f26d2cc6d0dd1aa7997e9" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>ElementCacheBaseT</name></member>
+      <member refid="d8/da3/a08255_1a7a9a1aebfebcffd6ed6c083334c1068c" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>ElementCacheT</name></member>
+      <member refid="d8/da3/a08255_1a76bb4c912e63e8f8a0f9ee22c5d2b4ef" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>ElementCacheTraitsT</name></member>
+      <member refid="d8/da3/a08255_1a1cfcc6e1586468a1acc793837102990b" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>ElementCleanerT</name></member>
+      <member refid="d8/da3/a08255_1ac9cc8e58b0bb9a4efd80921161ffa80c" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>ElementContT</name></member>
+      <member refid="d8/da3/a08255_1a3051db82021f48e14c8a2fa7edac730d" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>ElementInitialiserT</name></member>
+      <member refid="d8/da3/a08255_1a1030ea53431f55431a373961b63acf6d" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>ElementKeyT</name></member>
+      <member refid="d8/da3/a08255_1abe561e40c075f4c5b23ae93d7bc8e74b" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>ElementMergerT</name></member>
+      <member refid="d8/da3/a08255_1a8eb7d9d87ece43d3c6c55bd1a81512a6" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>ElementObsT</name></member>
+      <member refid="d8/da3/a08255_1a96311923d5ee6f15e3bc3dc8ec3db4d7" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>ElementPtrT</name></member>
+      <member refid="d8/da3/a08255_1a0f3ba9501fcd6a250dbe3f7805866eb7" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>ElementT</name></member>
+      <member refid="d8/da3/a08255_1a4da03983e4fa5f10c489e9c46f059f28" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>end</name></member>
+      <member refid="d8/da3/a08255_1a0291614751b6a31d44dbee9e1750d579" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>end</name></member>
+      <member refid="d8/da3/a08255_1ae2bc50ccc5e4f323a14a1a6f39d3ec14" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>find</name></member>
+      <member refid="d8/da3/a08255_1a4978d020ac192e539d60ce384b714753" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>findNoLock</name></member>
+      <member refid="d8/da3/a08255_1ae84da1b21345a418752dd78b0cf644ae" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>forEach</name></member>
+      <member refid="d8/da3/a08255_1ade25c114da6605836b4d9618c5236fb0" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>forEach</name></member>
+      <member refid="d8/da3/a08255_1a3a6c437db53c29554a44635674119d3d" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>getObjectCount</name></member>
+      <member refid="d8/da3/a08255_1a38d921d597aa752485a108e4fc1d70d7" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>getObjectCountNoLock</name></member>
+      <member refid="d8/da3/a08255_1a846eb5869a3b833ce9200edb493a3463" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>getObjectTypeName</name></member>
+      <member refid="d8/da3/a08255_1a2c7514746fa02eb850a1a274cc227732" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>has</name></member>
+      <member refid="d8/da3/a08255_1a226df2a5fa8ac0d1ab25c344d8feaf8c" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>hasNoLock</name></member>
+      <member refid="d8/da3/a08255_1a4603e9fde607cdf993adf47ba4dd307f" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>isEmpty</name></member>
+      <member refid="d8/da3/a08255_1ae9a58e21f9e7bbbd9b6d56ffd076ab50" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>isEmptyNoLock</name></member>
+      <member refid="d8/da3/a08255_1a16408750c3e49683268744e1f35761df" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>lock</name></member>
+      <member refid="d8/da3/a08255_1acaf0ac6efbc13f391e4976d766284df2" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>m_clean</name></member>
+      <member refid="d8/da3/a08255_1a8cf6f3524574a11b8cf97f67b0c8f168" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>m_initialise</name></member>
+      <member refid="d8/da3/a08255_1a3ff280a88ac186050be8c57363f585e9" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>m_logger</name></member>
+      <member refid="d8/da3/a08255_1a1e3539946398fbe77bcec1c29d4084de" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>m_merge</name></member>
+      <member refid="d8/da3/a08255_1ae0f2c32510e90ebd77738c5d99aba20d" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>m_mutex</name></member>
+      <member refid="d8/da3/a08255_1ab5815ee45b6b9b603c7cfc3d1ecd9bfc" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>m_resources</name></member>
+      <member refid="d8/da3/a08255_1a107169e0364711fced26e4d512819a13" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>mergeInto</name></member>
+      <member refid="d8/da3/a08255_1a0ee0c582a59a49ecf8b68c0bb68721a1" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>MutexT</name></member>
+      <member refid="d8/da3/a08255_1a00583361ac080fd7136cf106d386b8e7" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>operator=</name></member>
+      <member refid="d8/da3/a08255_1af8fa35257e8982d727e716872de2c499" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>operator=</name></member>
+      <member refid="d8/da3/a08255_1a21d0ef274f434e61b1d0c336a8c7253a" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>remove</name></member>
+      <member refid="d8/da3/a08255_1a55752549d182d7d232c432746b6b5312" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>removeNoLock</name></member>
+      <member refid="d8/da3/a08255_1a6318e3a64926730b389ee55727eacb3e" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>rename</name></member>
+      <member refid="d8/da3/a08255_1a3f6cbb3c0ad8d6136141c4c089f7f479" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>reportAdded</name></member>
+      <member refid="d8/da3/a08255_1aa1689ccd9a406fe8dfe9ff473d226b5e" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>reportCreation</name></member>
+      <member refid="d8/da3/a08255_1aa24d9472022aa0f450529b07d9b7f743" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>reportDuplicate</name></member>
+      <member refid="d8/da3/a08255_1a9c25c01ca8f76ad4a25088101572200d" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>reportNull</name></member>
+      <member refid="d8/da3/a08255_1a6537032eaeeadaffea633743e3218e53" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>reportUnknown</name></member>
+      <member refid="d8/da3/a08255_1a2c54dbffb6da0f873564cd7523c6ca2e" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>ResourceCacheBaseT</name></member>
+      <member refid="d8/da3/a08255_1a3cc66423ca359aebe860a4cd37a16ed2" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>ResourceCacheBaseT</name></member>
+      <member refid="d8/da3/a08255_1ad1f999dc303a3929d1ce12688a7bfa82" prot="protected" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>ResourceCacheBaseT</name></member>
+      <member refid="d8/da3/a08255_1adfe23feed932e13cb6d29207a1ccc51a" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>tryAdd</name></member>
+      <member refid="d8/da3/a08255_1ad7c855d1938539d8353d27f31f1b1a6b" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>tryAdd</name></member>
+      <member refid="d8/da3/a08255_1a455df8866f38178ee368bb82324cc5b3" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>tryAddNoLock</name></member>
+      <member refid="d8/da3/a08255_1ab193001556389344cbd6c9ae7861af7d" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>tryAddNoLock</name></member>
+      <member refid="d8/da3/a08255_1a1057aebd572ac71378ea519f7c0288ab" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>tryFind</name></member>
+      <member refid="d8/da3/a08255_1a0858d0d079fd8fa1a4506cfe2f5266b2" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>tryFindNoLock</name></member>
+      <member refid="d8/da3/a08255_1a5d16d1a42b2ea9518a97d9d8e1408140" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>tryRemove</name></member>
+      <member refid="d8/da3/a08255_1aa66962c4bd8bfec19c1d9df146349f9e" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>tryRemoveNoLock</name></member>
+      <member refid="d8/da3/a08255_1adaebf3755b5ae0a14b71d7223279b189" prot="public" virt="non-virtual"><scope>castor::ResourceCacheBaseT</scope><name>unlock</name></member>
+      <member refid="d8/da3/a08255_1a4659119e9e245b67bfc7ad3a480a97d3" prot="protected" virt="virtual"><scope>castor::ResourceCacheBaseT</scope><name>~ResourceCacheBaseT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

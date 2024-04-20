@@ -1,5 +1,7 @@
-<map id="castor3d::ExpandablePanelStyle" name="castor3d::ExpandablePanelStyle">
-<area shape="rect" id="node1" title=" " alt="" coords="5,152,187,192"/>
-<area shape="rect" id="node2" href="$d5/de7/a03234.html" title=" " alt="" coords="21,79,171,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="43,5,149,31"/>
+<map id="castor3d::OldInterleavedVertexT&lt; T &gt;" name="castor3d::OldInterleavedVertexT&lt; T &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="13,240,174,280"/>
+<area shape="rect" id="Node000002" href="$db/dcf/a09187.html" title=" " alt="" coords="30,93,157,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,132,96,240,91,240,91,132"/>
+<area shape="rect" id="Node000003" href="$db/dcf/a09187.html" title="Templated static dimensions point representation." alt="" coords="5,5,181,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="96,45,96,93,91,93,91,45"/>
 </map>

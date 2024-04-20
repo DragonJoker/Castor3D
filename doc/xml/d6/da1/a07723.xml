@@ -1,0 +1,204 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/da1/a07723" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::ShadowOptions</compoundname>
+    <includes local="no">SdwModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/da1/a07723_1a492435485188f965bae92189bd0b6ca6" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1ab99114b4423d4510b6ad76df8f6eec2a" kindref="member">SceneFlags</ref></type>
+        <definition>SceneFlags castor3d::shader::ShadowOptions::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>castor3d::shader::ShadowOptions::type</qualifiedname>
+        <initializer>= <ref refid="d9/dba/a02278_1ab99114b4423d4510b6ad76df8f6eec2a" kindref="member">SceneFlags</ref>( 0 )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/SdwModule.hpp" line="38" column="12" bodyfile="Castor3D/Shader/Shaders/SdwModule.hpp" bodystart="38" bodyend="-1"/>
+        <referencedby refid="d9/d89/a07651_1a3aa6edff6c310180d759361177cb2238" compoundref="de/d3e/a01676" startline="218" endline="221">castor3d::shader::Shadow::isEnabled</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d6/da1/a07723_1a148561e553d3beb8a0337fca0ca52119" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::shader::ShadowOptions::vsm</definition>
+        <argsstring></argsstring>
+        <name>vsm</name>
+        <qualifiedname>castor3d::shader::ShadowOptions::vsm</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/SdwModule.hpp" line="40" column="6" bodyfile="Castor3D/Shader/Shaders/SdwModule.hpp" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/da1/a07723_1aabcb52861512522256fcaf1f9acb9068" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::shader::ShadowOptions::rsm</definition>
+        <argsstring></argsstring>
+        <name>rsm</name>
+        <qualifiedname>castor3d::shader::ShadowOptions::rsm</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/SdwModule.hpp" line="42" column="6" bodyfile="Castor3D/Shader/Shaders/SdwModule.hpp" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/da1/a07723_1a5e8edcf3ccc9bc1d751b5addcf8527be" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::shader::ShadowOptions::reserveIds</definition>
+        <argsstring></argsstring>
+        <name>reserveIds</name>
+        <qualifiedname>castor3d::shader::ShadowOptions::reserveIds</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/SdwModule.hpp" line="44" column="6" bodyfile="Castor3D/Shader/Shaders/SdwModule.hpp" bodystart="44" bodyend="44"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/da1/a07723_1a8b68f406fe4da58809924e1686f37671" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::ShadowOptions::ShadowOptions</definition>
+        <argsstring>()</argsstring>
+        <name>ShadowOptions</name>
+        <qualifiedname>castor3d::shader::ShadowOptions::ShadowOptions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/SdwModule.hpp" line="46" column="1" bodyfile="Castor3D/Shader/Shaders/SdwModule.hpp" bodystart="46" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/da1/a07723_1afa4bfb9c9f2632c733d141c2baf9d551" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::ShadowOptions::ShadowOptions</definition>
+        <argsstring>(bool vsm, bool rsm)</argsstring>
+        <name>ShadowOptions</name>
+        <qualifiedname>castor3d::shader::ShadowOptions::ShadowOptions</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>vsm</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>rsm</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/SdwModule.hpp" line="53" column="10" bodyfile="Castor3D/Shader/Shaders/SdwModule.hpp" bodystart="53" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/da1/a07723_1a0c3ce384753a8fc300022ad2d89b5dde" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::ShadowOptions::ShadowOptions</definition>
+        <argsstring>(bool enabled, LightType lightType, bool vsm, bool rsm)</argsstring>
+        <name>ShadowOptions</name>
+        <qualifiedname>castor3d::shader::ShadowOptions::ShadowOptions</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>lightType</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>vsm</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>rsm</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/SdwModule.hpp" line="61" column="1" bodyfile="Castor3D/Shader/Shaders/SdwModule.hpp" bodystart="61" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/da1/a07723_1a41ecfff0db885e5e28d30c05ccb86f49" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::ShadowOptions::ShadowOptions</definition>
+        <argsstring>(SceneFlags sceneFlags, bool vsm, bool rsm, bool reserveIds=false)</argsstring>
+        <name>ShadowOptions</name>
+        <qualifiedname>castor3d::shader::ShadowOptions::ShadowOptions</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1ab99114b4423d4510b6ad76df8f6eec2a" kindref="member">SceneFlags</ref></type>
+          <declname>sceneFlags</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>vsm</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>rsm</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>reserveIds</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/SdwModule.hpp" line="73" column="1" bodyfile="Castor3D/Shader/Shaders/SdwModule.hpp" bodystart="73" bodyend="82"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::FlagCombination&lt; SceneFlag &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; SceneFlag &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::ShadowOptions</label>
+        <link refid="d6/da1/a07723"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>type</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::FlagCombination&lt; FlagType &gt;</label>
+        <link refid="dd/dbb/a08207"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/SdwModule.hpp" line="36" column="1" bodyfile="Castor3D/Shader/Shaders/SdwModule.hpp" bodystart="37" bodyend="83"/>
+    <listofallmembers>
+      <member refid="d6/da1/a07723_1a5e8edcf3ccc9bc1d751b5addcf8527be" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowOptions</scope><name>reserveIds</name></member>
+      <member refid="d6/da1/a07723_1aabcb52861512522256fcaf1f9acb9068" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowOptions</scope><name>rsm</name></member>
+      <member refid="d6/da1/a07723_1a8b68f406fe4da58809924e1686f37671" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowOptions</scope><name>ShadowOptions</name></member>
+      <member refid="d6/da1/a07723_1afa4bfb9c9f2632c733d141c2baf9d551" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowOptions</scope><name>ShadowOptions</name></member>
+      <member refid="d6/da1/a07723_1a0c3ce384753a8fc300022ad2d89b5dde" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowOptions</scope><name>ShadowOptions</name></member>
+      <member refid="d6/da1/a07723_1a41ecfff0db885e5e28d30c05ccb86f49" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowOptions</scope><name>ShadowOptions</name></member>
+      <member refid="d6/da1/a07723_1a492435485188f965bae92189bd0b6ca6" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowOptions</scope><name>type</name></member>
+      <member refid="d6/da1/a07723_1a148561e553d3beb8a0337fca0ca52119" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowOptions</scope><name>vsm</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

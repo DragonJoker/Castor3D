@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/dda/a04947" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PassTextureConfig</compoundname>
+    <includes local="no">TextureConfiguration.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/dda/a04947_1a50e25ebfd91df326f75b06baa1ec23bc" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1abe0b15c7ba5724eff47db8e94150b201" kindref="member">SamplerObs</ref></type>
+        <definition>SamplerObs castor3d::PassTextureConfig::sampler</definition>
+        <argsstring></argsstring>
+        <name>sampler</name>
+        <qualifiedname>castor3d::PassTextureConfig::sampler</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Texture/TextureConfiguration.hpp" line="225" column="12" bodyfile="Castor3D/Material/Texture/TextureConfiguration.hpp" bodystart="225" bodyend="225"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/dda/a04947_1ac99ddf5e088c5868b65a8f4c8b8e8680" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::PassTextureConfig::texcoordSet</definition>
+        <argsstring></argsstring>
+        <name>texcoordSet</name>
+        <qualifiedname>castor3d::PassTextureConfig::texcoordSet</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/Texture/TextureConfiguration.hpp" line="226" column="10" bodyfile="Castor3D/Material/Texture/TextureConfiguration.hpp" bodystart="226" bodyend="226"/>
+        <referencedby refid="d9/d7c/a04999_1a21794b3fa61fdfafc635cbcb5eb2a331" compoundref="da/d46/a00665" startline="243" endline="246">castor3d::TextureUnit::getTexcoordSet</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Material/Texture/TextureConfiguration.hpp" line="223" column="1" bodyfile="Castor3D/Material/Texture/TextureConfiguration.hpp" bodystart="224" bodyend="227"/>
+    <listofallmembers>
+      <member refid="d7/dda/a04947_1a50e25ebfd91df326f75b06baa1ec23bc" prot="public" virt="non-virtual"><scope>castor3d::PassTextureConfig</scope><name>sampler</name></member>
+      <member refid="d7/dda/a04947_1ac99ddf5e088c5868b65a8f4c8b8e8680" prot="public" virt="non-virtual"><scope>castor3d::PassTextureConfig</scope><name>texcoordSet</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

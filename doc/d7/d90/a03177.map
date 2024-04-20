@@ -1,0 +1,19 @@
+<map id="castor3d::BinaryParser&lt; BoneNode &gt;" name="castor3d::BinaryParser&lt; BoneNode &gt;">
+<area shape="rect" id="Node000001" title="Animable binary loader." alt="" coords="885,77,1040,117"/>
+<area shape="rect" id="Node000002" href="$dd/de1/a03223.html" title=" " alt="" coords="651,128,836,168"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="843,122,884,113,886,118,844,127"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="19,51,146,91"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="160,77,651,135,650,140,160,82"/>
+<area shape="rect" id="Node000006" href="$dd/de1/a03223.html" title="Binary data chunk reader base class." alt="" coords="291,196,476,236"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="134,95,292,175,333,193,331,198,290,180,132,100"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="500,5,627,45"/>
+<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="159,53,184,49,355,33,499,25,500,30,355,38,184,55,160,58"/>
+<area shape="rect" id="Node000004" href="$d5/d27/a03183.html" title=" " alt="" coords="5,229,160,254"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="163,254,230,263,309,269,393,269,476,260,542,243,607,218,708,166,710,170,609,222,544,248,476,265,393,274,309,274,230,268,162,259"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="173,233,266,225,290,223,290,228,267,231,174,238"/>
+<area shape="rect" id="Node000005" href="$d5/d15/a05335.html" title=" " alt="" coords="21,159,145,185"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="158,166,184,165,651,148,651,154,184,171,158,172"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="159,180,291,200,290,205,158,186"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="490,202,626,179,678,166,679,171,627,184,491,207"/>
+<area shape="poly" id="edge9_Node000001_Node000007" title=" " alt="" coords="641,36,886,81,885,86,640,42"/>
+</map>

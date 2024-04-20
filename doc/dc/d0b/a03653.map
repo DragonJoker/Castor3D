@@ -1,4 +1,10 @@
-<map id="castor3d::TransmissionComponent::Plugin" name="castor3d::TransmissionComponent::Plugin">
-<area shape="rect" id="node1" title=" " alt="" coords="5,79,228,119"/>
-<area shape="rect" id="node2" href="$db/df2/a04026.html" title=" " alt="" coords="11,5,223,31"/>
+<map id="castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;" name="castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;">
+<area shape="rect" id="Node000001" title="Overlay collection, with additional add and remove functions to manage Z&#45;Index." alt="" coords="907,11,1115,66"/>
+<area shape="rect" id="Node000002" href="$d8/da3/a08255.html" title=" " alt="" coords="649,11,857,66"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="871,36,907,36,907,41,871,41"/>
+<area shape="rect" id="Node000003" href="$d9/d93/a09063.html" title=" " alt="" coords="5,18,160,43"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="174,23,380,17,503,17,625,21,649,23,649,28,625,27,503,22,380,22,174,28"/>
+<area shape="rect" id="Node000004" href="$d8/da3/a08255.html" title="Base class for an element cache." alt="" coords="265,53,453,93"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="174,42,265,56,265,61,173,47"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="467,74,545,72,625,65,649,62,650,67,626,71,545,77,467,79"/>
 </map>

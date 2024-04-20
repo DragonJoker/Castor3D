@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dir_2b63c8c8a8bc0f17541f0115e68db690" kind="dir">
+    <compoundname>Shader/Shaders</compoundname>
+    <innerfile refid="da/dd5/a01580">GlslBackground.hpp</innerfile>
+    <innerfile refid="d9/d1b/a01583">GlslBlendComponents.hpp</innerfile>
+    <innerfile refid="d2/d2f/a01586">GlslBRDFHelpers.hpp</innerfile>
+    <innerfile refid="d7/d29/a01589">GlslBuffer.hpp</innerfile>
+    <innerfile refid="de/d40/a01592">GlslCookTorranceBRDF.hpp</innerfile>
+    <innerfile refid="dc/dbf/a01595">GlslCullData.hpp</innerfile>
+    <innerfile refid="d3/da5/a01598">GlslFog.hpp</innerfile>
+    <innerfile refid="d7/d82/a01601">GlslFont.hpp</innerfile>
+    <innerfile refid="dc/dd2/a01604">GlslGlobalIllumination.hpp</innerfile>
+    <innerfile refid="d6/d82/a01607">GlslLight.hpp</innerfile>
+    <innerfile refid="d9/dfd/a01610">GlslLighting.hpp</innerfile>
+    <innerfile refid="d3/da1/a01613">GlslLightSurface.hpp</innerfile>
+    <innerfile refid="db/dad/a01616">GlslMaterial.hpp</innerfile>
+    <innerfile refid="d3/deb/a01619">GlslMeshlet.hpp</innerfile>
+    <innerfile refid="d1/d3a/a01622">GlslOutputComponents.hpp</innerfile>
+    <innerfile refid="d3/d2d/a01625">GlslOverlaySurface.hpp</innerfile>
+    <innerfile refid="dd/deb/a01628">GlslPassShaders.hpp</innerfile>
+    <innerfile refid="d0/da4/a01631">GlslRay.hpp</innerfile>
+    <innerfile refid="d4/d99/a01634">GlslReflection.hpp</innerfile>
+    <innerfile refid="db/d95/a01637">GlslShadow.hpp</innerfile>
+    <innerfile refid="de/d14/a01640">GlslSheenBRDF.hpp</innerfile>
+    <innerfile refid="d4/d49/a01643">GlslSssProfile.hpp</innerfile>
+    <innerfile refid="df/dee/a01646">GlslSssTransmittance.hpp</innerfile>
+    <innerfile refid="dc/d87/a01649">GlslSurface.hpp</innerfile>
+    <innerfile refid="d0/dc0/a01652">GlslTaskPayload.hpp</innerfile>
+    <innerfile refid="df/ddd/a01655">GlslTextureAnimation.hpp</innerfile>
+    <innerfile refid="d9/d79/a01658">GlslTextureConfiguration.hpp</innerfile>
+    <innerfile refid="d4/d41/a01661">GlslUtils.hpp</innerfile>
+    <innerfile refid="dc/d71/a01664">GlslVoxel.hpp</innerfile>
+    <innerfile refid="dd/d8d/a01667">SdwModule.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Shaders/"/>
+  </compounddef>
+</doxygen>

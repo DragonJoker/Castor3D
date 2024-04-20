@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/dcc/a08179" kind="struct" language="C++" prot="public">
+    <compoundname>castor::CallTraits</compoundname>
+    <includes local="no">Templates.hpp</includes>
+    <innerclass refid="df/dd4/a08323" prot="private">castor::CallTraits::CallTraitsHelper</innerclass>
+    <innerclass refid="d5/d2f/a08331" prot="private">castor::CallTraits::CallTraitsHelper&lt; U, false &gt;</innerclass>
+    <innerclass refid="de/dfe/a08327" prot="private">castor::CallTraits::CallTraitsHelper&lt; U, true &gt;</innerclass>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dc/dcc/a08179_1a585d342ddde65aa9f36cf3c5b5957200" prot="public" static="no">
+        <type>typename CallTraitsHelper&lt; T,(sizeof(T) &gt; sizeof(void *)) &gt;::ConstParamType</type>
+        <definition>using castor::CallTraits&lt; T &gt;::ConstParamType =  typename CallTraitsHelper &lt; T, ( sizeof( T ) &gt; sizeof( void * ) ) &gt;::ConstParamType</definition>
+        <argsstring></argsstring>
+        <name>ConstParamType</name>
+        <qualifiedname>castor::CallTraits::ConstParamType</qualifiedname>
+        <briefdescription>
+<para>Typedef sur la meilleure façon de passer T en paramètre : valeur ou référence constante. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Templates.hpp" line="43" column="1" bodyfile="CastorUtils/Design/Templates.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dc/dcc/a08179_1ad36bd9ddd49004d72a2cd440d3d6e38d" prot="public" static="no">
+        <type>typename CallTraitsHelper&lt; T,(sizeof(T) &gt; sizeof(void *)) &gt;::ParamType</type>
+        <definition>using castor::CallTraits&lt; T &gt;::ParamType =  typename CallTraitsHelper &lt; T, ( sizeof( T ) &gt; sizeof( void * ) ) &gt;::ParamType</definition>
+        <argsstring></argsstring>
+        <name>ParamType</name>
+        <qualifiedname>castor::CallTraits::ParamType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/Templates.hpp" line="44" column="1" bodyfile="CastorUtils/Design/Templates.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Structure utilisée pour récupéerer la meilleure façon de passer T en paramètre : valeur ou référence constante. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Design/Templates.hpp" line="19" column="1" bodyfile="CastorUtils/Design/Templates.hpp" bodystart="20" bodyend="45"/>
+    <listofallmembers>
+      <member refid="dc/dcc/a08179_1a585d342ddde65aa9f36cf3c5b5957200" prot="public" virt="non-virtual"><scope>castor::CallTraits</scope><name>ConstParamType</name></member>
+      <member refid="dc/dcc/a08179_1ad36bd9ddd49004d72a2cd440d3d6e38d" prot="public" virt="non-virtual"><scope>castor::CallTraits</scope><name>ParamType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,6 +1,9 @@
-<map id="castor3d::UserInputListener" name="castor3d::UserInputListener">
-<area shape="rect" id="node1" title=" " alt="" coords="103,79,284,104"/>
-<area shape="rect" id="node3" href="$d9/dc1/a03194.html" title=" " alt="" coords="5,159,184,185"/>
-<area shape="rect" id="node4" href="$dc/d69/a05614.html" title=" " alt="" coords="209,152,375,192"/>
-<area shape="rect" id="node2" title=" " alt="" coords="100,5,287,31"/>
+<map id="castor3d::AnimationT&lt; AnimableHandlerT &gt;" name="castor3d::AnimationT&lt; AnimableHandlerT &gt;">
+<area shape="rect" id="Node000001" title="Animation base class." alt="" coords="34,183,185,223"/>
+<area shape="rect" id="Node000002" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="5,101,112,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,137,101,181,96,184,70,139"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="137,93,325,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,144,137,185,134,180,192,139"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="139,5,322,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="233,44,233,93,228,93,228,44"/>
 </map>

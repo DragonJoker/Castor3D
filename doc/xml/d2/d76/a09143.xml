@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/d76/a09143" kind="struct" language="C++" prot="public">
+    <compoundname>castor::LogN&lt; 0, T &gt;</compoundname>
+    <includes local="no">Math.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d76/a09143_1a799ffa210e1ca21069b6946e5368981d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double castor::LogN&lt; 0, T &gt;::operator()</definition>
+        <argsstring>(T x) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::LogN&lt; 0, T &gt;::operator()</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>x</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Math.hpp" line="98" column="15" bodyfile="CastorUtils/Math/Math.hpp" bodystart="98" bodyend="101"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Cas d&apos;arrêt pour Logarithme Népérien. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/Math.hpp" line="96" column="13" bodyfile="CastorUtils/Math/Math.hpp" bodystart="97" bodyend="102"/>
+    <listofallmembers>
+      <member refid="d2/d76/a09143_1a799ffa210e1ca21069b6946e5368981d" prot="public" virt="non-virtual"><scope>castor::LogN&lt; 0, T &gt;</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d9/d7e/a09555" kind="struct" language="C++" prot="public">
+    <compoundname>castor::format::BasicPrefixTraits</compoundname>
+    <includes local="no">StreamPrefixManipulators.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename char_type</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d7e/a09555_1a36c3b1ef699fcf5fbf08f2b45b6478a4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::basic_string&lt; char_type &gt;</type>
+        <definition>std::basic_string&lt; char_type &gt; castor::format::BasicPrefixTraits&lt; char_type &gt;::toString</definition>
+        <argsstring>()</argsstring>
+        <name>toString</name>
+        <qualifiedname>castor::format::BasicPrefixTraits::toString</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Stream/StreamPrefixManipulators.hpp" line="27" column="19" bodyfile="CastorUtils/Stream/StreamPrefixManipulators.hpp" bodystart="27" bodyend="30"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe de traits par défaut pour les préfixes. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Stream/StreamPrefixManipulators.hpp" line="25" column="1" bodyfile="CastorUtils/Stream/StreamPrefixManipulators.hpp" bodystart="26" bodyend="31"/>
+    <listofallmembers>
+      <member refid="d9/d7e/a09555_1a36c3b1ef699fcf5fbf08f2b45b6478a4" prot="public" virt="non-virtual"><scope>castor::format::BasicPrefixTraits</scope><name>toString</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

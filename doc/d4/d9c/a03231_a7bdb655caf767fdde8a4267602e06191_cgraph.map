@@ -1,0 +1,19 @@
+<map id="castor3d::BinaryWriterBase::doWriteChunk" name="castor3d::BinaryWriterBase::doWriteChunk">
+<area shape="rect" id="Node000001" title="Writes a subchunk value into a chunk." alt="" coords="5,95,188,135"/>
+<area shape="rect" id="Node000002" href="$d0/d4b/a03415.html#ac4cf51584e348def2f360b81e6ec7a9a" title="Writes a subchunk value into a chunk." alt="" coords="236,95,388,135"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,113,222,113,222,118,188,118"/>
+<area shape="rect" id="Node000003" href="$d9/dba/a02278.html#ac8fd79a65bf3d510536e2f77797a5df7" title="Prepares chunk data for read/write." alt="" coords="436,68,631,93"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="388,101,438,93,439,98,389,106"/>
+<area shape="rect" id="Node000008" href="$d3/d74/a03411.html#abe80518993510ab4c19bc4f9e67d32a8" title="Writes a subchunk value into a chunk." alt="" coords="442,130,625,170"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="389,125,429,131,428,136,388,130"/>
+<area shape="rect" id="Node000004" href="$d2/dd2/a02279.html#aa4e7623135b28fcbdeb6f2d423df6746" title="Detects if the current system is little endian." alt="" coords="700,5,844,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="581,65,678,39,708,32,709,37,679,45,583,70"/>
+<area shape="rect" id="Node000005" href="$d9/dba/a02278.html#a18b75386e45b81504fc6c5e9ece3d006" title=" " alt="" coords="693,55,851,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="631,73,679,70,679,75,631,78"/>
+<area shape="rect" id="Node000006" href="$d9/dba/a02278.html#a430f3de9071e7d03358bb1b39d07c2b8" title="Sets given value to big endian." alt="" coords="679,104,865,129"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="618,91,674,99,674,105,617,96"/>
+<area shape="rect" id="Node000007" href="$d2/dd2/a02279.html#a90cf51f94dda321c89fc40fa450d0b91" title="Convert from little or big endian to the other." alt="" coords="913,104,1084,129"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="866,114,899,114,899,119,866,119"/>
+<area shape="rect" id="Node000009" href="$d5/d27/a03183.html#aa21722c40ca9e697b02b6612e81e41c9" title="Sets the chunk&#39;s data." alt="" coords="695,154,849,194"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="625,157,681,162,680,167,625,162"/>
+</map>

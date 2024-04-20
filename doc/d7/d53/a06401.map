@@ -1,0 +1,12 @@
+<map id="castor3d::QueueDataWrapper" name="castor3d::QueueDataWrapper">
+<area shape="rect" id="Node000001" title=" " alt="" coords="13,387,208,412"/>
+<area shape="rect" id="Node000002" href="$db/de7/a06407.html" title=" " alt="" coords="11,211,163,236"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,250,78,285,80,323,92,358,106,385,101,388,87,360,75,325,72,285,77,250"/>
+<area shape="rect" id="Node000005" href="$d3/d0e/a06399.html" title=" " alt="" coords="131,299,277,324"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="115,242,190,296,186,301,112,246"/>
+<area shape="rect" id="Node000003" href="$dd/dbb/a08207.html" title=" " alt="" coords="5,108,168,148"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="89,162,89,210,84,210,84,162"/>
+<area shape="rect" id="Node000004" href="$dd/dbb/a08207.html" title="Template class providing implicit conversion from a scoped enum to its integral base type." alt="" coords="5,5,168,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="89,59,89,108,84,108,84,59"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="183,336,125,388,122,384,179,332"/>
+</map>

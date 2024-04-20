@@ -1,0 +1,276 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/dc8/a03895" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ComboBoxStyle</compoundname>
+    <basecompoundref refid="d0/d33/a03899" prot="public" virt="non-virtual">castor3d::ControlStyle</basecompoundref>
+    <includes local="no">StyleComboBox.hpp</includes>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d1/dc8/a03895_1afe48f3fa0a2e3830168eedb15ca2d0b9" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d9/dba/a02278_1ac80f9441f3591ef5f0b85f0608c7725d" kindref="member">ControlType</ref> constexpr</type>
+        <definition>ControlType constexpr castor3d::ComboBoxStyle::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::ComboBoxStyle::Type</qualifiedname>
+        <initializer>= <ref refid="d9/dba/a02278_1ac80f9441f3591ef5f0b85f0608c7725da996626b5ba32d9b7b324eab4af4b75cf" kindref="member">ControlType::eComboBox</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleComboBox.hpp" line="16" column="30" bodyfile="Castor3D/Gui/Theme/StyleComboBox.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/dc8/a03895_1a3de029fadbb585f27b4b1b22f798dd26" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/d12/a03891" kindref="compound">ButtonStyle</ref></type>
+        <definition>ButtonStyle castor3d::ComboBoxStyle::m_buttonStyle</definition>
+        <argsstring></argsstring>
+        <name>m_buttonStyle</name>
+        <qualifiedname>castor3d::ComboBoxStyle::m_buttonStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleComboBox.hpp" line="71" column="13" bodyfile="Castor3D/Gui/Theme/StyleComboBox.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dc8/a03895_1a3df43f725fde8930f34c5027095a872f" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/dfd/a03915" kindref="compound">ListBoxStyle</ref></type>
+        <definition>ListBoxStyle castor3d::ComboBoxStyle::m_listBoxStyle</definition>
+        <argsstring></argsstring>
+        <name>m_listBoxStyle</name>
+        <qualifiedname>castor3d::ComboBoxStyle::m_listBoxStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleComboBox.hpp" line="72" column="14" bodyfile="Castor3D/Gui/Theme/StyleComboBox.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/dc8/a03895_1a3fcf18300ea31435c76b7af72540b5e2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ComboBoxStyle::ComboBoxStyle</definition>
+        <argsstring>(castor::String const &amp;name, Scene *scene, Engine &amp;engine, castor::String const &amp;fontName)</argsstring>
+        <name>ComboBoxStyle</name>
+        <qualifiedname>castor3d::ComboBoxStyle::ComboBoxStyle</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>fontName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleComboBox.hpp" line="18" column="1" bodyfile="Castor3D/Gui/Theme/StyleComboBox.hpp" bodystart="18" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dc8/a03895_1ab6c2061b02b53872774f0eebd8658e62" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ComboBoxStyle::ComboBoxStyle</definition>
+        <argsstring>(castor::String const &amp;name, Engine &amp;engine, castor::String const &amp;fontName)</argsstring>
+        <name>ComboBoxStyle</name>
+        <qualifiedname>castor3d::ComboBoxStyle::ComboBoxStyle</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>fontName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleComboBox.hpp" line="31" column="1" bodyfile="Castor3D/Gui/Theme/StyleComboBox.hpp" bodystart="31" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dc8/a03895_1ac3130f2c6ca07eee3dfb2093f0111a51" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/d12/a03891" kindref="compound">ButtonStyle</ref> const &amp;</type>
+        <definition>ButtonStyle const  &amp; castor3d::ComboBoxStyle::getExpandStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getExpandStyle</name>
+        <qualifiedname>castor3d::ComboBoxStyle::getExpandStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleComboBox.hpp" line="38" column="20" bodyfile="Castor3D/Gui/Theme/StyleComboBox.hpp" bodystart="38" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dc8/a03895_1ae2e5ad82ced088eef85e7cddcf29304e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/dfd/a03915" kindref="compound">ListBoxStyle</ref> const &amp;</type>
+        <definition>ListBoxStyle const  &amp; castor3d::ComboBoxStyle::getElementsStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getElementsStyle</name>
+        <qualifiedname>castor3d::ComboBoxStyle::getElementsStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleComboBox.hpp" line="43" column="21" bodyfile="Castor3D/Gui/Theme/StyleComboBox.hpp" bodystart="43" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dc8/a03895_1a0838e3c8d624f4e6e057ad2d4f3c1e09" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/d12/a03891" kindref="compound">ButtonStyle</ref> &amp;</type>
+        <definition>ButtonStyle &amp; castor3d::ComboBoxStyle::getExpandStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getExpandStyle</name>
+        <qualifiedname>castor3d::ComboBoxStyle::getExpandStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleComboBox.hpp" line="48" column="14" bodyfile="Castor3D/Gui/Theme/StyleComboBox.hpp" bodystart="48" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dc8/a03895_1aa142750e720ebde2dbc24546e824a73d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/dfd/a03915" kindref="compound">ListBoxStyle</ref> &amp;</type>
+        <definition>ListBoxStyle &amp; castor3d::ComboBoxStyle::getElementsStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getElementsStyle</name>
+        <qualifiedname>castor3d::ComboBoxStyle::getElementsStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleComboBox.hpp" line="53" column="15" bodyfile="Castor3D/Gui/Theme/StyleComboBox.hpp" bodystart="53" bodyend="56"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/dc8/a03895_1a76b81002d426ce346d2cd1a08b8349a3" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ComboBoxStyle::doUpdateBackgroundMaterial</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateBackgroundMaterial</name>
+        <qualifiedname>castor3d::ComboBoxStyle::doUpdateBackgroundMaterial</qualifiedname>
+        <reimplements refid="d0/d33/a03899_1a3ad976d6b6f857af4c296154b044ff8c">doUpdateBackgroundMaterial</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleComboBox.hpp" line="59" column="6" bodyfile="Castor3D/Gui/Theme/StyleComboBox.hpp" bodystart="59" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/dc8/a03895_1aa50e7b5805e44ebb6062d1da40b2ee08" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ComboBoxStyle::doUpdateForegroundMaterial</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateForegroundMaterial</name>
+        <qualifiedname>castor3d::ComboBoxStyle::doUpdateForegroundMaterial</qualifiedname>
+        <reimplements refid="d0/d33/a03899_1a045cd8c44048c2e75eb9a6c07851ec7f">doUpdateForegroundMaterial</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleComboBox.hpp" line="64" column="6" bodyfile="Castor3D/Gui/Theme/StyleComboBox.hpp" bodystart="64" bodyend="68"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::ComboBoxStyle</label>
+        <link refid="d1/dc8/a03895"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ControlStyle</label>
+        <link refid="d0/d33/a03899"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::ComboBoxStyle</label>
+        <link refid="d1/dc8/a03895"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ControlStyle</label>
+        <link refid="d0/d33/a03899"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Gui/Theme/StyleComboBox.hpp" line="12" column="1" bodyfile="Castor3D/Gui/Theme/StyleComboBox.hpp" bodystart="14" bodyend="73"/>
+    <listofallmembers>
+      <member refid="d1/dc8/a03895_1a3fcf18300ea31435c76b7af72540b5e2" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>ComboBoxStyle</name></member>
+      <member refid="d1/dc8/a03895_1ab6c2061b02b53872774f0eebd8658e62" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>ComboBoxStyle</name></member>
+      <member refid="d0/d33/a03899_1a098fe55fee12aa4aeb0b037944f835f2" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>ControlStyle</name></member>
+      <member refid="d0/d33/a03899_1a064762eaae9407ceea58131d50a350f9" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>doCreateMaterial</name></member>
+      <member refid="d1/dc8/a03895_1a76b81002d426ce346d2cd1a08b8349a3" prot="private" virt="virtual"><scope>castor3d::ComboBoxStyle</scope><name>doUpdateBackgroundMaterial</name></member>
+      <member refid="d1/dc8/a03895_1aa50e7b5805e44ebb6062d1da40b2ee08" prot="private" virt="virtual"><scope>castor3d::ComboBoxStyle</scope><name>doUpdateForegroundMaterial</name></member>
+      <member refid="d0/d33/a03899_1ac613ecdff78b6790736de078aa5e3150" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>getBackgroundMaterial</name></member>
+      <member refid="d0/d33/a03899_1a344a49f21217d799892e5c8a3037428a" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>getCursor</name></member>
+      <member refid="d1/dc8/a03895_1ae2e5ad82ced088eef85e7cddcf29304e" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>getElementsStyle</name></member>
+      <member refid="d1/dc8/a03895_1aa142750e720ebde2dbc24546e824a73d" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>getElementsStyle</name></member>
+      <member refid="d0/d33/a03899_1a3ff11fb205d455ddc07b6986c4a804f2" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>getEngine</name></member>
+      <member refid="d1/dc8/a03895_1ac3130f2c6ca07eee3dfb2093f0111a51" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>getExpandStyle</name></member>
+      <member refid="d1/dc8/a03895_1a0838e3c8d624f4e6e057ad2d4f3c1e09" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>getExpandStyle</name></member>
+      <member refid="d0/d33/a03899_1a8e2484376c900533284daa8c190e41d6" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>getForegroundMaterial</name></member>
+      <member refid="d5/d3c/a08223_1abc1fa9ec1a50d2023373baa4d4c79519" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>getName</name></member>
+      <member refid="d0/d33/a03899_1ab2b7e540ca276b82d78cdadc9665b59a" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>getScene</name></member>
+      <member refid="d0/d33/a03899_1a96622f93682e623c3dd57c8afd186aeb" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>getType</name></member>
+      <member refid="d0/d33/a03899_1a1ea4620ff83eb868e5e89aad17d4bdb1" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>hasScene</name></member>
+      <member refid="d0/d33/a03899_1a1b1654f46a2779f9606f6511e4c75b68" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>isBackgroundInvisible</name></member>
+      <member refid="d0/d33/a03899_1abef953a375da7b02e11eab1e7fb95731" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>isForegroundInvisible</name></member>
+      <member refid="d1/dc8/a03895_1a3de029fadbb585f27b4b1b22f798dd26" prot="private" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>m_buttonStyle</name></member>
+      <member refid="d1/dc8/a03895_1a3df43f725fde8930f34c5027095a872f" prot="private" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>m_listBoxStyle</name></member>
+      <member refid="d5/d3c/a08223_1a869b429a7190ecf614d8221b270e6dca" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>m_name</name></member>
+      <member refid="d5/d3c/a08223_1a4a6e4748603541685b04f95fb91efb26" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>NamedBaseT</name></member>
+      <member refid="d5/d3c/a08223_1a2d62ce1925efead03c4e0842c06b3e11" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>rename</name></member>
+      <member refid="d0/d33/a03899_1abb0c1b1b69b9dcd950c95c49e6a0907b" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>setBackgroundInvisible</name></member>
+      <member refid="d0/d33/a03899_1a71c2539b67ee882ff7e4682aa8d984c2" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>setBackgroundMaterial</name></member>
+      <member refid="d0/d33/a03899_1a8e2de50c9bf082cc93a63d7d8adcdf08" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>setCursor</name></member>
+      <member refid="d0/d33/a03899_1abdf3d22a6c22445a800f47abe1a00545" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>setForegroundInvisible</name></member>
+      <member refid="d0/d33/a03899_1a83d21de1ca65b10b0d94193920d40614" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>setForegroundMaterial</name></member>
+      <member refid="d1/dc8/a03895_1afe48f3fa0a2e3830168eedb15ca2d0b9" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxStyle</scope><name>Type</name></member>
+      <member refid="d0/d33/a03899_1a6170f2465de931fc0221e4b10e7e8f7f" prot="public" virt="virtual"><scope>castor3d::ComboBoxStyle</scope><name>~ControlStyle</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

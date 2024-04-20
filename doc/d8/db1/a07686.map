@@ -1,0 +1,12 @@
+<map id="castor3d::shader::RasterizerSurfaceT&lt; Position3T, Position4T, Normal3T, Normal4T, TexcoordT, FlagT &gt;" name="castor3d::shader::RasterizerSurfaceT&lt; Position3T, Position4T, Normal3T, Normal4T, TexcoordT, FlagT &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1125,5,1352,75"/>
+<area shape="rect" id="Node000002" href="$d0/d33/a07679.html" title=" " alt="" coords="851,13,1076,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1090,37,1125,37,1125,43,1090,43"/>
+<area shape="rect" id="Node000003" href="$d9/d03/a04095.html" title=" " alt="" coords="596,13,801,67"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="815,37,850,37,850,43,815,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,23,143,49"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="156,29,346,24,572,27,596,28,596,33,572,32,346,30,156,35"/>
+<area shape="rect" id="Node000005" href="$d9/d03/a04095.html" title=" " alt="" coords="192,49,397,103"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="157,48,192,55,192,60,156,54"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="411,68,572,56,596,53,596,59,572,61,412,74"/>
+</map>

@@ -1,0 +1,1202 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/df4/a09099" kind="class" language="C++" prot="public">
+    <compoundname>castor::AngleT</compoundname>
+    <includes local="no">Angle.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename Type</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d4/df4/a09099_1a36bee62a5172e0c16eec0c57e8bf9325" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> constexpr Type</type>
+        <definition>CU_API constexpr Type castor::AngleT&lt; Type &gt;::TurnToRadian</definition>
+        <argsstring></argsstring>
+        <name>TurnToRadian</name>
+        <qualifiedname>castor::AngleT::TurnToRadian</qualifiedname>
+        <initializer>{ Type( <ref refid="d2/dd2/a02279_1acd6259789df41c0b75c4e58f6f00a8b4" kindref="member">Tau</ref>&lt; double &gt; ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constante de conversion de tour vers radian. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="17" column="30" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="17" bodyend="17"/>
+        <referencedby refid="d4/df4/a09099_1a9d8c71426847dd5d9cd606cb2c61f79c" compoundref="d3/d23/a02120" startline="79" endline="82">castor::AngleT&lt; Type &gt;::fromTurns</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d4/df4/a09099_1a9b857651be568fb184358be6451b7dc7" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> constexpr Type</type>
+        <definition>CU_API constexpr Type castor::AngleT&lt; Type &gt;::TurnToDegree</definition>
+        <argsstring></argsstring>
+        <name>TurnToDegree</name>
+        <qualifiedname>castor::AngleT::TurnToDegree</qualifiedname>
+        <initializer>{ Type( 360.0 ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constante de conversion de tour vers degré. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="20" column="30" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="20" bodyend="20"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/df4/a09099_1ac8ffa623f717f451a024ab451c7a295c" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> constexpr Type</type>
+        <definition>CU_API constexpr Type castor::AngleT&lt; Type &gt;::TurnToGrad</definition>
+        <argsstring></argsstring>
+        <name>TurnToGrad</name>
+        <qualifiedname>castor::AngleT::TurnToGrad</qualifiedname>
+        <initializer>{ Type( 400.0 ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constante de conversion de tour vers gradient. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="23" column="30" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="23" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/df4/a09099_1a3d8458964a0a06e6a071143e249e7ce5" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> constexpr Type</type>
+        <definition>CU_API constexpr Type castor::AngleT&lt; Type &gt;::RadianToTurn</definition>
+        <argsstring></argsstring>
+        <name>RadianToTurn</name>
+        <qualifiedname>castor::AngleT::RadianToTurn</qualifiedname>
+        <initializer>{ Type( 1.0 / <ref refid="d2/dd2/a02279_1acd6259789df41c0b75c4e58f6f00a8b4" kindref="member">Tau</ref>&lt; double &gt; ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constante de conversion de radian vers tour. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="26" column="30" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="26" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/df4/a09099_1a5111e610dcb5836e9cb06f504eed7c56" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> constexpr Type</type>
+        <definition>CU_API constexpr Type castor::AngleT&lt; Type &gt;::RadianToDegree</definition>
+        <argsstring></argsstring>
+        <name>RadianToDegree</name>
+        <qualifiedname>castor::AngleT::RadianToDegree</qualifiedname>
+        <initializer>{ Type( 57.295779513082320876798154814105 ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constante de conversion de radian vers degré. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="29" column="30" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="29" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/df4/a09099_1a083ce7756922f68b85baaa60302ee723" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> constexpr Type</type>
+        <definition>CU_API constexpr Type castor::AngleT&lt; Type &gt;::RadianToGrad</definition>
+        <argsstring></argsstring>
+        <name>RadianToGrad</name>
+        <qualifiedname>castor::AngleT::RadianToGrad</qualifiedname>
+        <initializer>{ 200 / <ref refid="d2/dd2/a02279_1ab131203085aeb88ada68c9eb6003c6fc" kindref="member">Pi</ref>&lt; Type &gt; }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constante de conversion de radian vers gradient. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="32" column="30" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/df4/a09099_1a77ef7d8dbbb25c57a54466555ae9bd00" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> constexpr Type</type>
+        <definition>CU_API constexpr Type castor::AngleT&lt; Type &gt;::DegreeToTurn</definition>
+        <argsstring></argsstring>
+        <name>DegreeToTurn</name>
+        <qualifiedname>castor::AngleT::DegreeToTurn</qualifiedname>
+        <initializer>{ Type( 1.0 / 360.0 ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constante de conversion de degré vers tour. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="35" column="30" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/df4/a09099_1ad14d2687e5853bdd862d14c7de3279cb" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> constexpr Type</type>
+        <definition>CU_API constexpr Type castor::AngleT&lt; Type &gt;::DegreeToRadian</definition>
+        <argsstring></argsstring>
+        <name>DegreeToRadian</name>
+        <qualifiedname>castor::AngleT::DegreeToRadian</qualifiedname>
+        <initializer>{ Type( 0.01745329251994329576923690768489 ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constante de conversion de degré vers radian. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="38" column="30" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="38" bodyend="38"/>
+        <referencedby refid="d4/df4/a09099_1aefcac2e926627babd4ff18a8107dd95d" compoundref="d3/d23/a02120" startline="94" endline="97">castor::AngleT&lt; Type &gt;::fromDegrees</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d4/df4/a09099_1adc5b4a290c70fd0164f9fdbd4312ea16" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> constexpr Type</type>
+        <definition>CU_API constexpr Type castor::AngleT&lt; Type &gt;::DegreeToGrad</definition>
+        <argsstring></argsstring>
+        <name>DegreeToGrad</name>
+        <qualifiedname>castor::AngleT::DegreeToGrad</qualifiedname>
+        <initializer>{ Type( 200 ) / 180 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constante de conversion de degré vers gradient. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="41" column="30" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/df4/a09099_1a9a7d65ae7259c598f435ab6e725f2b67" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> constexpr Type</type>
+        <definition>CU_API constexpr Type castor::AngleT&lt; Type &gt;::GradToTurn</definition>
+        <argsstring></argsstring>
+        <name>GradToTurn</name>
+        <qualifiedname>castor::AngleT::GradToTurn</qualifiedname>
+        <initializer>{ Type( 1 ) / 400 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constante de conversion de gradient vers tour. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="44" column="30" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/df4/a09099_1a06ba959f4b0cf1cb237379be80b5db25" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> constexpr Type</type>
+        <definition>CU_API constexpr Type castor::AngleT&lt; Type &gt;::GradToDegree</definition>
+        <argsstring></argsstring>
+        <name>GradToDegree</name>
+        <qualifiedname>castor::AngleT::GradToDegree</qualifiedname>
+        <initializer>{ Type( 180 ) / 200 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constante de conversion de gradient vers degré. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="47" column="30" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/df4/a09099_1a06319ea6f807fb6a5fedc46481ba993a" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> constexpr Type</type>
+        <definition>CU_API constexpr Type castor::AngleT&lt; Type &gt;::GradToRadian</definition>
+        <argsstring></argsstring>
+        <name>GradToRadian</name>
+        <qualifiedname>castor::AngleT::GradToRadian</qualifiedname>
+        <initializer>{ 180 / Type( 200 ) }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constante de conversion de gradient vers radian. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="50" column="30" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="50" bodyend="50"/>
+        <referencedby refid="d4/df4/a09099_1abd6648ba14c5fa84424d93eed0852776" compoundref="d3/d23/a02120" startline="124" endline="127">castor::AngleT&lt; Type &gt;::fromGrads</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d4/df4/a09099_1adaba420a44711bec44f6a598a9212dad" prot="private" static="no" mutable="no">
+        <type>Type</type>
+        <definition>Type castor::AngleT&lt; Type &gt;::m_radians</definition>
+        <argsstring></argsstring>
+        <name>m_radians</name>
+        <qualifiedname>castor::AngleT::m_radians</qualifiedname>
+        <briefdescription>
+<para>La valeur de l&apos;angle. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="403" column="6" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="403" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d4/df4/a09099_1a2e71bc07dc134b1dad06583b203019ee" prot="private" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::AngleT&lt; Type &gt;::AngleT</definition>
+        <argsstring>(T radians) noexcept</argsstring>
+        <name>AngleT</name>
+        <qualifiedname>castor::AngleT::AngleT</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>radians</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur spécifié </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Privé afin que la construction spécifiée ne soit accessible qu&apos;à partir des constructeurs nommés </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="62" column="10" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="62" bodyend="65"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d4/df4/a09099_1a9d8c71426847dd5d9cd606cb2c61f79c" prot="public" static="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; Type &gt;</type>
+        <definition>static AngleT&lt; Type &gt; castor::AngleT&lt; Type &gt;::fromTurns</definition>
+        <argsstring>(T turns) noexcept</argsstring>
+        <name>fromTurns</name>
+        <qualifiedname>castor::AngleT::fromTurns</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>turns</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur nommé, à partir d&apos;un angle en tours. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">turns</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;angle, exprimé en tours </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;angle construit </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="79" column="15" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="79" bodyend="82"/>
+        <references refid="d4/df4/a09099_1a9bbe17dd09480903ac118f7f4cf446fe">castor::AngleT&lt; Type &gt;::turns</references>
+        <references refid="d4/df4/a09099_1a36bee62a5172e0c16eec0c57e8bf9325" compoundref="d3/d23/a02120" startline="17" endline="17">castor::AngleT&lt; Type &gt;::TurnToRadian</references>
+        <referencedby refid="d3/d23/a02120_1a867de9919a653f8493d895f7c0d01f32" compoundref="d3/d23/a02120" startline="668" endline="671">operator&quot;&quot;_turns</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1aefcac2e926627babd4ff18a8107dd95d" prot="public" static="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; Type &gt;</type>
+        <definition>static AngleT&lt; Type &gt; castor::AngleT&lt; Type &gt;::fromDegrees</definition>
+        <argsstring>(T degrees) noexcept</argsstring>
+        <name>fromDegrees</name>
+        <qualifiedname>castor::AngleT::fromDegrees</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>degrees</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur nommé, à partir d&apos;un angle en degrés. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">degrees</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;angle, exprimé en degrés </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;angle construit </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="94" column="15" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="94" bodyend="97"/>
+        <references refid="d4/df4/a09099_1af7688fc59b6d9605330f2a808f446214">castor::AngleT&lt; Type &gt;::degrees</references>
+        <references refid="d4/df4/a09099_1ad14d2687e5853bdd862d14c7de3279cb" compoundref="d3/d23/a02120" startline="38" endline="38">castor::AngleT&lt; Type &gt;::DegreeToRadian</references>
+        <referencedby refid="d3/d23/a02120_1a540c219fd41d0df12d7a70b6cf178f6c" compoundref="d3/d23/a02120" startline="673" endline="676">operator&quot;&quot;_degrees</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1ace4bb05b475a91b50d6b0034af964cbe" prot="public" static="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; Type &gt;</type>
+        <definition>static AngleT&lt; Type &gt; castor::AngleT&lt; Type &gt;::fromRadians</definition>
+        <argsstring>(T radians) noexcept</argsstring>
+        <name>fromRadians</name>
+        <qualifiedname>castor::AngleT::fromRadians</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>radians</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur nommé, à partir d&apos;un angle en radians. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">radians</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;angle, exprimé en radians </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;angle construit </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="109" column="15" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="109" bodyend="112"/>
+        <references refid="d4/df4/a09099_1a4492cc06960078dbb37462eac83359a7">castor::AngleT&lt; Type &gt;::radians</references>
+        <referencedby refid="dc/d0e/a09335_1ac8cf9b863dca0be49d6af27297b1bda5" compoundref="d6/d1e/a02171" startline="51" endline="54">castor::SpeedTraitsT&lt; AngleT&lt; ValueT &gt; &gt;::convert</referencedby>
+        <referencedby refid="d3/d23/a02120_1a1def40d766076dc62121f6764b1932ff" compoundref="d3/d23/a02120" startline="678" endline="681">operator&quot;&quot;_radians</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1abd6648ba14c5fa84424d93eed0852776" prot="public" static="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; Type &gt;</type>
+        <definition>static AngleT&lt; Type &gt; castor::AngleT&lt; Type &gt;::fromGrads</definition>
+        <argsstring>(T grads) noexcept</argsstring>
+        <name>fromGrads</name>
+        <qualifiedname>castor::AngleT::fromGrads</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>grads</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur nommé, à partir d&apos;un angle en gradients. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">grads</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;angle, exprimé en gradients </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;angle construit </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="124" column="15" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="124" bodyend="127"/>
+        <references refid="d4/df4/a09099_1abf026a60a528da672152a7e8aecc8d8a">castor::AngleT&lt; Type &gt;::grads</references>
+        <references refid="d4/df4/a09099_1a06319ea6f807fb6a5fedc46481ba993a" compoundref="d3/d23/a02120" startline="50" endline="50">castor::AngleT&lt; Type &gt;::GradToRadian</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/df4/a09099_1a07356e585687e46ed733b976a633ce35" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::AngleT&lt; Type &gt;::AngleT</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>AngleT</name>
+        <qualifiedname>castor::AngleT::AngleT</qualifiedname>
+        <briefdescription>
+<para>Constructeur par défaut. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="134" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1a9bbe17dd09480903ac118f7f4cf446fe" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>Type</type>
+        <definition>Type castor::AngleT&lt; Type &gt;::turns</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>turns</name>
+        <qualifiedname>castor::AngleT::turns</qualifiedname>
+        <briefdescription>
+<para>Conversion en tours. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de l&apos;angle, en tours </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="143" column="6"/>
+        <referencedby refid="d4/df4/a09099_1a9d8c71426847dd5d9cd606cb2c61f79c" compoundref="d3/d23/a02120" startline="79" endline="82">castor::AngleT&lt; Type &gt;::fromTurns</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1af7688fc59b6d9605330f2a808f446214" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>Type</type>
+        <definition>Type castor::AngleT&lt; Type &gt;::degrees</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>degrees</name>
+        <qualifiedname>castor::AngleT::degrees</qualifiedname>
+        <briefdescription>
+<para>Conversion en degrés. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de l&apos;angle, en degrés </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="152" column="6"/>
+        <referencedby refid="d4/df4/a09099_1aefcac2e926627babd4ff18a8107dd95d" compoundref="d3/d23/a02120" startline="94" endline="97">castor::AngleT&lt; Type &gt;::fromDegrees</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1a4492cc06960078dbb37462eac83359a7" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>Type</type>
+        <definition>Type castor::AngleT&lt; Type &gt;::radians</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>radians</name>
+        <qualifiedname>castor::AngleT::radians</qualifiedname>
+        <briefdescription>
+<para>Conversion en radians. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de l&apos;angle, en radians </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="161" column="6"/>
+        <referencedby refid="d4/df4/a09099_1ace4bb05b475a91b50d6b0034af964cbe" compoundref="d3/d23/a02120" startline="109" endline="112">castor::AngleT&lt; Type &gt;::fromRadians</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1abf026a60a528da672152a7e8aecc8d8a" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>Type</type>
+        <definition>Type castor::AngleT&lt; Type &gt;::grads</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>grads</name>
+        <qualifiedname>castor::AngleT::grads</qualifiedname>
+        <briefdescription>
+<para>Conversion en gradients. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de l&apos;angle, en gradients </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="170" column="6"/>
+        <referencedby refid="d4/df4/a09099_1abd6648ba14c5fa84424d93eed0852776" compoundref="d3/d23/a02120" startline="124" endline="127">castor::AngleT&lt; Type &gt;::fromGrads</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1a1b1c2cae065ffa498c2ca822b7f093f6" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::AngleT&lt; Type &gt;::turns</definition>
+        <argsstring>(double value) noexcept</argsstring>
+        <name>turns</name>
+        <qualifiedname>castor::AngleT::turns</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Définit la valeur de cet angle à partir de tours. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;angle exprimé en tours </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="179" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1ac42403cb65c7de02982b2c2630e51bbf" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::AngleT&lt; Type &gt;::degrees</definition>
+        <argsstring>(double value) noexcept</argsstring>
+        <name>degrees</name>
+        <qualifiedname>castor::AngleT::degrees</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Définit la valeur de cet angle à partir de degrés. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;angle exprimé en degrés </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="188" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1af030650036b4a3f1a07a1e225ed22232" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::AngleT&lt; Type &gt;::radians</definition>
+        <argsstring>(double value) noexcept</argsstring>
+        <name>radians</name>
+        <qualifiedname>castor::AngleT::radians</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Définit la valeur de cet angle à partir de radians. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;angle exprimé en radians </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="197" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1a018020298ad7f0f0b9be7407132a3b95" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::AngleT&lt; Type &gt;::grads</definition>
+        <argsstring>(double value) noexcept</argsstring>
+        <name>grads</name>
+        <qualifiedname>castor::AngleT::grads</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Définit la valeur de cet angle à partir de gradients. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;angle exprimé en gradients </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="206" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1a5e1acde9f9f4b6259ec70eda885c2d18" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Type</type>
+        <definition>Type castor::AngleT&lt; Type &gt;::cos</definition>
+        <argsstring>() const</argsstring>
+        <name>cos</name>
+        <qualifiedname>castor::AngleT::cos</qualifiedname>
+        <briefdescription>
+<para>Cosinus trigonométrique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le cosinus de cet angle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="215" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1a6d9aeda8132fe6f86917536e0e5a8089" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Type</type>
+        <definition>Type castor::AngleT&lt; Type &gt;::sin</definition>
+        <argsstring>() const</argsstring>
+        <name>sin</name>
+        <qualifiedname>castor::AngleT::sin</qualifiedname>
+        <briefdescription>
+<para>Sinus trigonométrique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le sinus de cet angle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="224" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1a17ca3fc588cb9795304b283823a9523b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Type</type>
+        <definition>Type castor::AngleT&lt; Type &gt;::tan</definition>
+        <argsstring>() const</argsstring>
+        <name>tan</name>
+        <qualifiedname>castor::AngleT::tan</qualifiedname>
+        <briefdescription>
+<para>Tangente trigonométrique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La tangente de cet angle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="233" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1a387259229f028c955cc6bbe4cfaf7a2e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor::AngleT&lt; Type &gt;::cosf</definition>
+        <argsstring>() const</argsstring>
+        <name>cosf</name>
+        <qualifiedname>castor::AngleT::cosf</qualifiedname>
+        <briefdescription>
+<para>Cosinus trigonométrique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le cosinus de cet angle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="242" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1aa49bce9b6cb8ea68aeaf774bb0de34b8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor::AngleT&lt; Type &gt;::sinf</definition>
+        <argsstring>() const</argsstring>
+        <name>sinf</name>
+        <qualifiedname>castor::AngleT::sinf</qualifiedname>
+        <briefdescription>
+<para>Sinus trigonométrique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le sinus de cet angle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="251" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1a35d38a082d8d3d5bc5ded7066109afae" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor::AngleT&lt; Type &gt;::tanf</definition>
+        <argsstring>() const</argsstring>
+        <name>tanf</name>
+        <qualifiedname>castor::AngleT::tanf</qualifiedname>
+        <briefdescription>
+<para>Tangente trigonométrique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La tangente de cet angle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="260" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1aca7d14f8cdd6ccc1ba1e67285dd3a33a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double castor::AngleT&lt; Type &gt;::cosd</definition>
+        <argsstring>() const</argsstring>
+        <name>cosd</name>
+        <qualifiedname>castor::AngleT::cosd</qualifiedname>
+        <briefdescription>
+<para>Cosinus trigonométrique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le cosinus de cet angle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="269" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1a1bea0aa74ad09b37f4f6667ac7e0d961" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double castor::AngleT&lt; Type &gt;::sind</definition>
+        <argsstring>() const</argsstring>
+        <name>sind</name>
+        <qualifiedname>castor::AngleT::sind</qualifiedname>
+        <briefdescription>
+<para>Sinus trigonométrique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le sinus de cet angle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="278" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1ac509c26c7604616e175dfed10be10fdf" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double castor::AngleT&lt; Type &gt;::tand</definition>
+        <argsstring>() const</argsstring>
+        <name>tand</name>
+        <qualifiedname>castor::AngleT::tand</qualifiedname>
+        <briefdescription>
+<para>Tangente trigonométrique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La tangente de cet angle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="287" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1ab6e1b975f2e3a953d9114e0996e1a039" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Type</type>
+        <definition>Type castor::AngleT&lt; Type &gt;::cosh</definition>
+        <argsstring>() const</argsstring>
+        <name>cosh</name>
+        <qualifiedname>castor::AngleT::cosh</qualifiedname>
+        <briefdescription>
+<para>Cosinus hyperbolique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le cosinus hyperbolique de cet angle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="296" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1abda28f8233b73b489ea0b57e95beb8e2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Type</type>
+        <definition>Type castor::AngleT&lt; Type &gt;::sinh</definition>
+        <argsstring>() const</argsstring>
+        <name>sinh</name>
+        <qualifiedname>castor::AngleT::sinh</qualifiedname>
+        <briefdescription>
+<para>Sinus hyperbolique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le sinus hyperbolique de cet angle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="305" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1a67b3dc08cc85bfe61b1397f021470259" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Type</type>
+        <definition>Type castor::AngleT&lt; Type &gt;::tanh</definition>
+        <argsstring>() const</argsstring>
+        <name>tanh</name>
+        <qualifiedname>castor::AngleT::tanh</qualifiedname>
+        <briefdescription>
+<para>Tangente hyperbolique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La tangente hyperbolique de cet angle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="314" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1ada6783ada8280f6c189b78e75da78801" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; Type &gt;</type>
+        <definition>AngleT&lt; Type &gt; castor::AngleT&lt; Type &gt;::operator-</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>operator-</name>
+        <qualifiedname>castor::AngleT::operator-</qualifiedname>
+        <briefdescription>
+<para>Opérateur de négation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Une référence sur cet angle. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="323" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1ac8c428881efe8e9f4f69b40911b9ab20" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; Type &gt; &amp;</type>
+        <definition>AngleT&lt; Type &gt; &amp; castor::AngleT&lt; Type &gt;::operator+=</definition>
+        <argsstring>(AngleT&lt; Type &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::AngleT::operator+=</qualifiedname>
+        <param>
+          <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; Type &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affection par addition. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;angle à ajouter à celui-ci </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet angle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="334" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1a44fc0ef8e076ceeecb945398d8efbb9a" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; Type &gt; &amp;</type>
+        <definition>AngleT&lt; Type &gt; &amp; castor::AngleT&lt; Type &gt;::operator-=</definition>
+        <argsstring>(AngleT&lt; Type &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::AngleT::operator-=</qualifiedname>
+        <param>
+          <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; Type &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affection par soustraction. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;angle à soustraire de celui-ci </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet angle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="345" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1afce3fb97b5d3f8f9772f3e319e6b8015" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; Type &gt; &amp;</type>
+        <definition>AngleT&lt; Type &gt; &amp; castor::AngleT&lt; Type &gt;::operator*=</definition>
+        <argsstring>(AngleT&lt; Type &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::AngleT::operator*=</qualifiedname>
+        <param>
+          <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; Type &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affection par multiplication. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;angle à multiplier à celui-ci </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet angle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="356" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1a7b7bc5a66aa956b2a5f4017d9be0ff70" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; Type &gt; &amp;</type>
+        <definition>AngleT&lt; Type &gt; &amp; castor::AngleT&lt; Type &gt;::operator/=</definition>
+        <argsstring>(AngleT&lt; Type &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::AngleT::operator/=</qualifiedname>
+        <param>
+          <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; Type &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affection par division. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;angle diviseur de celui-ci </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet angle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="367" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1aeed719eded465abeab05f4b8d37a8aa4" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; Type &gt; &amp;</type>
+        <definition>AngleT&lt; Type &gt; &amp; castor::AngleT&lt; Type &gt;::operator*=</definition>
+        <argsstring>(double rhs) noexcept</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::AngleT::operator*=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affection par multiplication. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le scalaire à multiplier à celui-ci </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet angle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="378" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1ad9c771551de4929ac08eac26aa705eec" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; Type &gt; &amp;</type>
+        <definition>AngleT&lt; Type &gt; &amp; castor::AngleT&lt; Type &gt;::operator/=</definition>
+        <argsstring>(double rhs) noexcept</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::AngleT::operator/=</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Opérateur d&apos;affection par division. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le scalaire diviseur de celui-ci </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Une référence sur cet angle </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="389" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/df4/a09099_1ac7cacb357808cbb263f7bfb403c497b3" prot="public" static="no" const="yes" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::AngleT&lt; Type &gt;::operator Type</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>operator Type</name>
+        <qualifiedname>castor::AngleT::operator Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>La valeur de l&apos;angle, en radians. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="396" column="10" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="396" bodyend="399"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="d4/df4/a09099_1a947a67ec54dca91a8ac82c38affc56df" prot="private" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool operator==</definition>
+        <argsstring>(AngleT&lt; T &gt; const &amp;lhs, AngleT&lt; T &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator==</name>
+        <qualifiedname>castor::AngleT::operator==</qualifiedname>
+        <param>
+          <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; T &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; T &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="406" column="13"/>
+      </memberdef>
+      <memberdef kind="friend" id="d4/df4/a09099_1a73a912ad4505148f8952dea57a8ef185" prot="private" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool operator&lt;</definition>
+        <argsstring>(AngleT&lt; T &gt; const &amp;lhs, AngleT&lt; T &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator&lt;</name>
+        <qualifiedname>castor::AngleT::operator&lt;</qualifiedname>
+        <param>
+          <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; T &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; T &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="408" column="8"/>
+      </memberdef>
+      <memberdef kind="friend" id="d4/df4/a09099_1ad37bfb566378092fbd59edcdf7135af6" prot="private" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool operator&gt;</definition>
+        <argsstring>(AngleT&lt; T &gt; const &amp;lhs, AngleT&lt; T &gt; const &amp;rhs) noexcept</argsstring>
+        <name>operator&gt;</name>
+        <qualifiedname>castor::AngleT::operator&gt;</qualifiedname>
+        <param>
+          <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; T &gt; const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/df4/a09099" kindref="compound">AngleT</ref>&lt; T &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Angle.hpp" line="410" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe d&apos;angle. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Gère les conversions d&apos;unités d&apos;angles. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="CastorUtils/Math/Angle.hpp" line="12" column="1" bodyfile="CastorUtils/Math/Angle.hpp" bodystart="13" bodyend="411"/>
+    <listofallmembers>
+      <member refid="d4/df4/a09099_1a2e71bc07dc134b1dad06583b203019ee" prot="private" virt="non-virtual"><scope>castor::AngleT</scope><name>AngleT</name></member>
+      <member refid="d4/df4/a09099_1a07356e585687e46ed733b976a633ce35" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>AngleT</name></member>
+      <member refid="d4/df4/a09099_1a5e1acde9f9f4b6259ec70eda885c2d18" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>cos</name></member>
+      <member refid="d4/df4/a09099_1aca7d14f8cdd6ccc1ba1e67285dd3a33a" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>cosd</name></member>
+      <member refid="d4/df4/a09099_1a387259229f028c955cc6bbe4cfaf7a2e" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>cosf</name></member>
+      <member refid="d4/df4/a09099_1ab6e1b975f2e3a953d9114e0996e1a039" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>cosh</name></member>
+      <member refid="d4/df4/a09099_1af7688fc59b6d9605330f2a808f446214" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>degrees</name></member>
+      <member refid="d4/df4/a09099_1ac42403cb65c7de02982b2c2630e51bbf" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>degrees</name></member>
+      <member refid="d4/df4/a09099_1adc5b4a290c70fd0164f9fdbd4312ea16" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>DegreeToGrad</name></member>
+      <member refid="d4/df4/a09099_1ad14d2687e5853bdd862d14c7de3279cb" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>DegreeToRadian</name></member>
+      <member refid="d4/df4/a09099_1a77ef7d8dbbb25c57a54466555ae9bd00" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>DegreeToTurn</name></member>
+      <member refid="d4/df4/a09099_1aefcac2e926627babd4ff18a8107dd95d" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>fromDegrees</name></member>
+      <member refid="d4/df4/a09099_1abd6648ba14c5fa84424d93eed0852776" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>fromGrads</name></member>
+      <member refid="d4/df4/a09099_1ace4bb05b475a91b50d6b0034af964cbe" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>fromRadians</name></member>
+      <member refid="d4/df4/a09099_1a9d8c71426847dd5d9cd606cb2c61f79c" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>fromTurns</name></member>
+      <member refid="d4/df4/a09099_1abf026a60a528da672152a7e8aecc8d8a" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>grads</name></member>
+      <member refid="d4/df4/a09099_1a018020298ad7f0f0b9be7407132a3b95" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>grads</name></member>
+      <member refid="d4/df4/a09099_1a06ba959f4b0cf1cb237379be80b5db25" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>GradToDegree</name></member>
+      <member refid="d4/df4/a09099_1a06319ea6f807fb6a5fedc46481ba993a" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>GradToRadian</name></member>
+      <member refid="d4/df4/a09099_1a9a7d65ae7259c598f435ab6e725f2b67" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>GradToTurn</name></member>
+      <member refid="d4/df4/a09099_1adaba420a44711bec44f6a598a9212dad" prot="private" virt="non-virtual"><scope>castor::AngleT</scope><name>m_radians</name></member>
+      <member refid="d4/df4/a09099_1ac7cacb357808cbb263f7bfb403c497b3" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>operator Type</name></member>
+      <member refid="d4/df4/a09099_1afce3fb97b5d3f8f9772f3e319e6b8015" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>operator*=</name></member>
+      <member refid="d4/df4/a09099_1aeed719eded465abeab05f4b8d37a8aa4" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>operator*=</name></member>
+      <member refid="d4/df4/a09099_1ac8c428881efe8e9f4f69b40911b9ab20" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>operator+=</name></member>
+      <member refid="d4/df4/a09099_1ada6783ada8280f6c189b78e75da78801" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>operator-</name></member>
+      <member refid="d4/df4/a09099_1a44fc0ef8e076ceeecb945398d8efbb9a" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>operator-=</name></member>
+      <member refid="d4/df4/a09099_1a7b7bc5a66aa956b2a5f4017d9be0ff70" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>operator/=</name></member>
+      <member refid="d4/df4/a09099_1ad9c771551de4929ac08eac26aa705eec" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>operator/=</name></member>
+      <member refid="d4/df4/a09099_1a73a912ad4505148f8952dea57a8ef185" prot="private" virt="non-virtual"><scope>castor::AngleT</scope><name>operator&lt;</name></member>
+      <member refid="d4/df4/a09099_1a947a67ec54dca91a8ac82c38affc56df" prot="private" virt="non-virtual"><scope>castor::AngleT</scope><name>operator==</name></member>
+      <member refid="d4/df4/a09099_1ad37bfb566378092fbd59edcdf7135af6" prot="private" virt="non-virtual"><scope>castor::AngleT</scope><name>operator&gt;</name></member>
+      <member refid="d4/df4/a09099_1a4492cc06960078dbb37462eac83359a7" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>radians</name></member>
+      <member refid="d4/df4/a09099_1af030650036b4a3f1a07a1e225ed22232" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>radians</name></member>
+      <member refid="d4/df4/a09099_1a5111e610dcb5836e9cb06f504eed7c56" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>RadianToDegree</name></member>
+      <member refid="d4/df4/a09099_1a083ce7756922f68b85baaa60302ee723" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>RadianToGrad</name></member>
+      <member refid="d4/df4/a09099_1a3d8458964a0a06e6a071143e249e7ce5" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>RadianToTurn</name></member>
+      <member refid="d4/df4/a09099_1a6d9aeda8132fe6f86917536e0e5a8089" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>sin</name></member>
+      <member refid="d4/df4/a09099_1a1bea0aa74ad09b37f4f6667ac7e0d961" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>sind</name></member>
+      <member refid="d4/df4/a09099_1aa49bce9b6cb8ea68aeaf774bb0de34b8" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>sinf</name></member>
+      <member refid="d4/df4/a09099_1abda28f8233b73b489ea0b57e95beb8e2" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>sinh</name></member>
+      <member refid="d4/df4/a09099_1a17ca3fc588cb9795304b283823a9523b" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>tan</name></member>
+      <member refid="d4/df4/a09099_1ac509c26c7604616e175dfed10be10fdf" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>tand</name></member>
+      <member refid="d4/df4/a09099_1a35d38a082d8d3d5bc5ded7066109afae" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>tanf</name></member>
+      <member refid="d4/df4/a09099_1a67b3dc08cc85bfe61b1397f021470259" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>tanh</name></member>
+      <member refid="d4/df4/a09099_1a9bbe17dd09480903ac118f7f4cf446fe" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>turns</name></member>
+      <member refid="d4/df4/a09099_1a1b1c2cae065ffa498c2ca822b7f093f6" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>turns</name></member>
+      <member refid="d4/df4/a09099_1a9b857651be568fb184358be6451b7dc7" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>TurnToDegree</name></member>
+      <member refid="d4/df4/a09099_1ac8ffa623f717f451a024ab451c7a295c" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>TurnToGrad</name></member>
+      <member refid="d4/df4/a09099_1a36bee62a5172e0c16eec0c57e8bf9325" prot="public" virt="non-virtual"><scope>castor::AngleT</scope><name>TurnToRadian</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

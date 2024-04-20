@@ -1,0 +1,214 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/dac/a07043" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SpotLight::LightData</compoundname>
+    <basecompoundref refid="d7/d3b/a07003" prot="public" virt="non-virtual">castor3d::LightCategory::LightData</basecompoundref>
+    <includes local="no">SpotLight.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/dac/a07043_1ac29865c8ebe21ad1706892647be975b1" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d91/a07343_1aca810ed114fa8e305ca7be0d6062bb7b" kindref="member">Float3</ref></type>
+        <definition>Float3 castor3d::SpotLight::LightData::direction</definition>
+        <argsstring></argsstring>
+        <name>direction</name>
+        <qualifiedname>castor3d::SpotLight::LightData::direction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Light/SpotLight.hpp" line="27" column="8" bodyfile="Castor3D/Scene/Light/SpotLight.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dac/a07043_1a9c81daf6bd734639944bdf27e2d50956" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d91/a07343_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::SpotLight::LightData::outerCutoffCos</definition>
+        <argsstring></argsstring>
+        <name>outerCutoffCos</name>
+        <qualifiedname>castor3d::SpotLight::LightData::outerCutoffCos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Light/SpotLight.hpp" line="28" column="8" bodyfile="Castor3D/Scene/Light/SpotLight.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dac/a07043_1a64b71610e9c3b89cf1b89e85b85b7cc1" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d91/a07343_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::SpotLight::LightData::innerCutoff</definition>
+        <argsstring></argsstring>
+        <name>innerCutoff</name>
+        <qualifiedname>castor3d::SpotLight::LightData::innerCutoff</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Light/SpotLight.hpp" line="29" column="8" bodyfile="Castor3D/Scene/Light/SpotLight.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dac/a07043_1a21c600c6c65bb24aee458cfbb6ff36fa" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d91/a07343_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::SpotLight::LightData::outerCutoff</definition>
+        <argsstring></argsstring>
+        <name>outerCutoff</name>
+        <qualifiedname>castor3d::SpotLight::LightData::outerCutoff</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Light/SpotLight.hpp" line="30" column="8" bodyfile="Castor3D/Scene/Light/SpotLight.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dac/a07043_1abd9e7d1a54816929373077a2d4c1ee8b" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d91/a07343_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::SpotLight::LightData::innerCutoffSin</definition>
+        <argsstring></argsstring>
+        <name>innerCutoffSin</name>
+        <qualifiedname>castor3d::SpotLight::LightData::innerCutoffSin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Light/SpotLight.hpp" line="31" column="8" bodyfile="Castor3D/Scene/Light/SpotLight.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dac/a07043_1a4a2b426f4bc26a9d634a89e87168b38f" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d91/a07343_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::SpotLight::LightData::outerCutoffSin</definition>
+        <argsstring></argsstring>
+        <name>outerCutoffSin</name>
+        <qualifiedname>castor3d::SpotLight::LightData::outerCutoffSin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Light/SpotLight.hpp" line="32" column="8" bodyfile="Castor3D/Scene/Light/SpotLight.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dac/a07043_1aa6bd830787eb5864a1c783902ad2db04" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d91/a07343_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::SpotLight::LightData::innerCutoffCos</definition>
+        <argsstring></argsstring>
+        <name>innerCutoffCos</name>
+        <qualifiedname>castor3d::SpotLight::LightData::innerCutoffCos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Light/SpotLight.hpp" line="33" column="8" bodyfile="Castor3D/Scene/Light/SpotLight.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dac/a07043_1a4aeb586ef10f602b44044d1854e96c9a" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d91/a07343_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::SpotLight::LightData::outerCutOffTan</definition>
+        <argsstring></argsstring>
+        <name>outerCutOffTan</name>
+        <qualifiedname>castor3d::SpotLight::LightData::outerCutOffTan</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Light/SpotLight.hpp" line="34" column="8" bodyfile="Castor3D/Scene/Light/SpotLight.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dac/a07043_1a63446af880374e1c3d85bf7f5a5aa856" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d91/a07343_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::SpotLight::LightData::pad0</definition>
+        <argsstring></argsstring>
+        <name>pad0</name>
+        <qualifiedname>castor3d::SpotLight::LightData::pad0</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Light/SpotLight.hpp" line="35" column="8" bodyfile="Castor3D/Scene/Light/SpotLight.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dac/a07043_1ae430dcda2165d25a212efae228644411" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d91/a07343_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::SpotLight::LightData::pad1</definition>
+        <argsstring></argsstring>
+        <name>pad1</name>
+        <qualifiedname>castor3d::SpotLight::LightData::pad1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Scene/Light/SpotLight.hpp" line="36" column="8" bodyfile="Castor3D/Scene/Light/SpotLight.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::LightCategory::LightData</label>
+        <link refid="d7/d3b/a07003"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::ShaderBufferTypes</label>
+        <link refid="d2/d91/a07343"/>
+      </node>
+      <node id="1">
+        <label>castor3d::SpotLight::LightData</label>
+        <link refid="d0/dac/a07043"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::LightCategory::LightData</label>
+        <link refid="d7/d3b/a07003"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::ShaderBufferTypes</label>
+        <link refid="d2/d91/a07343"/>
+      </node>
+      <node id="1">
+        <label>castor3d::SpotLight::LightData</label>
+        <link refid="d0/dac/a07043"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Scene/Light/SpotLight.hpp" line="24" column="1" bodyfile="Castor3D/Scene/Light/SpotLight.hpp" bodystart="26" bodyend="37"/>
+    <listofallmembers>
+      <member refid="d7/d3b/a07003_1aaf8b4f84c17444575e460d6a6a0e4c9a" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>cascadeCount</name></member>
+      <member refid="d7/d3b/a07003_1a5e00322b1a0bf4bc06a5ce9873b810f4" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>colour</name></member>
+      <member refid="d0/dac/a07043_1ac29865c8ebe21ad1706892647be975b1" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>direction</name></member>
+      <member refid="d7/d3b/a07003_1aa0b44b8af054710a1ac3929abe053533" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>exponent</name></member>
+      <member refid="d2/d91/a07343_1a12bb5f307e322111792e60895ada0270" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>Float1</name></member>
+      <member refid="d2/d91/a07343_1a0ca9b111d9796a558d0d7d47dbcc961c" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>Float2</name></member>
+      <member refid="d2/d91/a07343_1aca810ed114fa8e305ca7be0d6062bb7b" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>Float3</name></member>
+      <member refid="d2/d91/a07343_1ab2c49973a254b6944d2e1bc802dcf643" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>Float4</name></member>
+      <member refid="d0/dac/a07043_1a64b71610e9c3b89cf1b89e85b85b7cc1" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>innerCutoff</name></member>
+      <member refid="d0/dac/a07043_1aa6bd830787eb5864a1c783902ad2db04" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>innerCutoffCos</name></member>
+      <member refid="d0/dac/a07043_1abd9e7d1a54816929373077a2d4c1ee8b" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>innerCutoffSin</name></member>
+      <member refid="d7/d3b/a07003_1ad3fde27984234899fa7032e37901179d" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>intensity</name></member>
+      <member refid="d0/dac/a07043_1a21c600c6c65bb24aee458cfbb6ff36fa" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>outerCutoff</name></member>
+      <member refid="d0/dac/a07043_1a9c81daf6bd734639944bdf27e2d50956" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>outerCutoffCos</name></member>
+      <member refid="d0/dac/a07043_1a4a2b426f4bc26a9d634a89e87168b38f" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>outerCutoffSin</name></member>
+      <member refid="d0/dac/a07043_1a4aeb586ef10f602b44044d1854e96c9a" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>outerCutOffTan</name></member>
+      <member refid="d0/dac/a07043_1a63446af880374e1c3d85bf7f5a5aa856" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>pad0</name></member>
+      <member refid="d0/dac/a07043_1ae430dcda2165d25a212efae228644411" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>pad1</name></member>
+      <member refid="d7/d3b/a07003_1ae9afaa3abda7df1ff055796c01c10ea2" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>posDir</name></member>
+      <member refid="d7/d3b/a07003_1a5d0e235878d1a38dc5c6ba86dacfd1e4" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>range</name></member>
+      <member refid="d7/d3b/a07003_1a81889621737af3d1028d2680956ce112" prot="public" virt="non-virtual"><scope>castor3d::SpotLight::LightData</scope><name>shadowMapIndex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

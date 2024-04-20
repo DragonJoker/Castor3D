@@ -1,0 +1,9 @@
+<map id="castor3d::Frustum::isVisible" name="castor3d::Frustum::isVisible">
+<area shape="rect" id="Node000001" title="Checks if given BoundingBox is in the view frustum." alt="" coords="236,47,372,87"/>
+<area shape="rect" id="Node000002" href="$d2/dc3/a06951.html#a4b024cf5dd96bcf933c8b90a70d2c183" title=" " alt="" coords="5,5,188,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,51,150,33,152,28,223,45"/>
+<area shape="rect" id="Node000003" href="$d2/dc3/a06951.html#a280f2138072e46efb3985c004be52bcc" title=" " alt="" coords="5,55,188,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="222,70,188,70,188,65,222,65"/>
+<area shape="rect" id="Node000004" href="$d2/dc3/a06951.html#a14d86d5d44e0415b042e80f52d4a015e" title=" " alt="" coords="5,104,188,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="223,89,152,107,150,101,222,84"/>
+</map>

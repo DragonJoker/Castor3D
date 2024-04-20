@@ -1,0 +1,539 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/def/a08159" kind="class" language="C++" prot="public">
+    <compoundname>castor::ChangeTrackedT</compoundname>
+    <includes local="no">ChangeTracked.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ValueT</type>
+      </param>
+      <param>
+        <type>typename ControlT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/def/a08159_1a2d65e79c417aaa259d7c7ceebce2f8c7" prot="private" static="no" mutable="no">
+        <type>ValueT</type>
+        <definition>ValueT castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::m_value</definition>
+        <argsstring></argsstring>
+        <name>m_value</name>
+        <qualifiedname>castor::ChangeTrackedT::m_value</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="167" column="8" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="167" bodyend="167"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/def/a08159_1ad7dc502fa0868c3298f87685772479e0" prot="private" static="no" mutable="no">
+        <type>ControlT</type>
+        <definition>ControlT castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::m_dirty</definition>
+        <argsstring></argsstring>
+        <name>m_dirty</name>
+        <qualifiedname>castor::ChangeTrackedT::m_dirty</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="168" column="10" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="168" bodyend="168"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/def/a08159_1aaed408dc312ed30c6dff489114e9d94f" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void() &gt;</type>
+        <definition>castor::Function&lt; void() &gt; castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::m_callback</definition>
+        <argsstring></argsstring>
+        <name>m_callback</name>
+        <qualifiedname>castor::ChangeTrackedT::m_callback</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="169" column="18" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="169" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/def/a08159_1ac7fcc313a688f543317721d2278958a0" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::ChangeTrackedT</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>ChangeTrackedT</name>
+        <qualifiedname>castor::ChangeTrackedT::ChangeTrackedT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="17" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1a2e785a58a4dedd4eef42e13c667172c2" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::~ChangeTrackedT</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~ChangeTrackedT</name>
+        <qualifiedname>castor::ChangeTrackedT::~ChangeTrackedT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1af77b615d4c9e2d1b017763791492d69a" prot="public" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::ChangeTrackedT</definition>
+        <argsstring>(castor::Function&lt; void() &gt; callback) noexcept</argsstring>
+        <name>ChangeTrackedT</name>
+        <qualifiedname>castor::ChangeTrackedT::ChangeTrackedT</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void() &gt;</type>
+          <declname>callback</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="20" column="10" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="20" bodyend="23"/>
+        <references refid="d2/def/a08159_1afe00338863fb1e4ad701eb34335e20c3" compoundref="d9/dd5/a01886" startline="91" endline="94">castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::callback</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1ae55f9eae221b62c832c465bd1d30e927" prot="public" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::ChangeTrackedT</definition>
+        <argsstring>(ValueT const &amp;rhs) noexcept</argsstring>
+        <name>ChangeTrackedT</name>
+        <qualifiedname>castor::ChangeTrackedT::ChangeTrackedT</qualifiedname>
+        <param>
+          <type>ValueT const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="25" column="10" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="25" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1a933c45f3b691f08a1c2c8fcb00068fcd" prot="public" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::ChangeTrackedT</definition>
+        <argsstring>(ValueT const &amp;rhs, castor::Function&lt; void() &gt; callback) noexcept</argsstring>
+        <name>ChangeTrackedT</name>
+        <qualifiedname>castor::ChangeTrackedT::ChangeTrackedT</qualifiedname>
+        <param>
+          <type>ValueT const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void() &gt;</type>
+          <declname>callback</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="30" column="10" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="30" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1a7566784bf2643bb02940b01a5aab0ccb" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::ChangeTrackedT</definition>
+        <argsstring>(ChangeTrackedT &amp;&amp;rhs) noexcept</argsstring>
+        <name>ChangeTrackedT</name>
+        <qualifiedname>castor::ChangeTrackedT::ChangeTrackedT</qualifiedname>
+        <param>
+          <type><ref refid="d2/def/a08159" kindref="compound">ChangeTrackedT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="37" column="1" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="37" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1a38f9eb7b0a79b4ffae4f4cc9737f5d41" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::ChangeTrackedT</definition>
+        <argsstring>(ChangeTrackedT const &amp;rhs) noexcept</argsstring>
+        <name>ChangeTrackedT</name>
+        <qualifiedname>castor::ChangeTrackedT::ChangeTrackedT</qualifiedname>
+        <param>
+          <type><ref refid="d2/def/a08159" kindref="compound">ChangeTrackedT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="44" column="1" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="44" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1a563cf58ee57394bf8251828021185fc2" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/def/a08159" kindref="compound">ChangeTrackedT</ref> &amp;</type>
+        <definition>ChangeTrackedT &amp; castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::operator=</definition>
+        <argsstring>(ValueT const &amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ChangeTrackedT::operator=</qualifiedname>
+        <param>
+          <type>ValueT const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="50" column="17" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="50" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1aa696fdd967bc8d61c2712c31086ede18" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/def/a08159" kindref="compound">ChangeTrackedT</ref> &amp;</type>
+        <definition>ChangeTrackedT &amp; castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::operator=</definition>
+        <argsstring>(ChangeTrackedT const &amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ChangeTrackedT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d2/def/a08159" kindref="compound">ChangeTrackedT</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="57" column="17" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="57" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1a38bf1627b82b4c6121f89d67b7e6976b" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/def/a08159" kindref="compound">ChangeTrackedT</ref> &amp;</type>
+        <definition>ChangeTrackedT &amp; castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::operator=</definition>
+        <argsstring>(ChangeTrackedT &amp;&amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::ChangeTrackedT::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d2/def/a08159" kindref="compound">ChangeTrackedT</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="64" column="17" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="64" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1a53fe94fb572f3536073d7de45f2984bb" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::reset</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>reset</name>
+        <qualifiedname>castor::ChangeTrackedT::reset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="71" column="6" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="71" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1aaf9800274230ff9be2989db7445f006f" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ValueT &amp;</type>
+        <definition>ValueT &amp; castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::naked</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>naked</name>
+        <qualifiedname>castor::ChangeTrackedT::naked</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="76" column="9" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="76" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1ab956f64e96ea76a3fc85a07c362b8be1" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ValueT const &amp;</type>
+        <definition>ValueT const  &amp; castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::value</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>value</name>
+        <qualifiedname>castor::ChangeTrackedT::value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="81" column="15" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="81" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1a340260eca058f76251b05f8f2ba08896" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ControlT &amp;</type>
+        <definition>ControlT &amp; castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::control</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>control</name>
+        <qualifiedname>castor::ChangeTrackedT::control</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="86" column="11" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="86" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1afe00338863fb1e4ad701eb34335e20c3" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a171f0ae06cbbe361277eaab9ed92ec74" kindref="member">castor::Function</ref>&lt; void() &gt;</type>
+        <definition>castor::Function&lt; void() &gt; castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::callback</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>callback</name>
+        <qualifiedname>castor::ChangeTrackedT::callback</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="91" column="18" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="91" bodyend="94"/>
+        <referencedby refid="d2/def/a08159_1af77b615d4c9e2d1b017763791492d69a" compoundref="d9/dd5/a01886" startline="20" endline="23">castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::ChangeTrackedT</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1a46f36d9780c80ed53a34fd2984d27006" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::isDirty</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isDirty</name>
+        <qualifiedname>castor::ChangeTrackedT::isDirty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="96" column="6" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="96" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1a5e5254c1de758be3aedfe95095d77503" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::operator ValueT const &amp;</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>operator ValueT const &amp;</name>
+        <qualifiedname>castor::ChangeTrackedT::operator ValueT const &amp;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="101" column="1" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="101" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1a31ebb04a46185ffc4ce4ebfc1d3d391c" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::operator ValueT &amp;</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>operator ValueT &amp;</name>
+        <qualifiedname>castor::ChangeTrackedT::operator ValueT &amp;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="106" column="1" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="106" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1a2bd725c79b025ab866807461c1d026a5" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ValueT const &amp;</type>
+        <definition>ValueT const  &amp; castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::operator*</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>operator*</name>
+        <qualifiedname>castor::ChangeTrackedT::operator*</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="111" column="15" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="111" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1a8ec364ea9926b2a5d357698df99cb1f6" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ValueT &amp;</type>
+        <definition>ValueT &amp; castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::operator*</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>operator*</name>
+        <qualifiedname>castor::ChangeTrackedT::operator*</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="116" column="9" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="116" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1ab1083d39b7ab37453586ec00d6f6335a" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ValueT const *</type>
+        <definition>ValueT const  * castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::operator-&gt;</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>operator-&gt;</name>
+        <qualifiedname>castor::ChangeTrackedT::operator-&gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="122" column="15" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="122" bodyend="125"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1aae8e3794938eba000e2bab0098c75dd6" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ValueT *</type>
+        <definition>ValueT * castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::operator-&gt;</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>operator-&gt;</name>
+        <qualifiedname>castor::ChangeTrackedT::operator-&gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="127" column="9" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="127" bodyend="131"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/def/a08159_1aa26a4d8e3f732350e811a988bb64c420" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::doCopy</definition>
+        <argsstring>(std::atomic_bool &amp;lhs, std::atomic_bool const &amp;rhs) const</argsstring>
+        <name>doCopy</name>
+        <qualifiedname>castor::ChangeTrackedT::doCopy</qualifiedname>
+        <param>
+          <type>std::atomic_bool &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>std::atomic_bool const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="134" column="6" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="134" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1af78e34507bb468873991ead0c45d2cdb" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::doCopy</definition>
+        <argsstring>(bool &amp;lhs, bool const &amp;rhs) const</argsstring>
+        <name>doCopy</name>
+        <qualifiedname>castor::ChangeTrackedT::doCopy</qualifiedname>
+        <param>
+          <type>bool &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type>bool const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="145" column="6" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="145" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/def/a08159_1a84b70d9c7c97c98db717263e03a8a263" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ChangeTrackedT&lt; ValueT, ControlT &gt;::doMakeDirty</definition>
+        <argsstring>()</argsstring>
+        <name>doMakeDirty</name>
+        <qualifiedname>castor::ChangeTrackedT::doMakeDirty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Design/ChangeTracked.hpp" line="156" column="6" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="156" bodyend="164"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe template qui fournit une vue sur un tampon, à la manière d&apos;un std::array. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::ChangeTrackedT&lt; castor::Point3f &gt;</label>
+        <link refid="d2/def/a08159"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::Point3f &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::ChangeTrackedT&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</label>
+        <link refid="d2/def/a08159"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::RangedValue&lt; uint32_t &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::ChangeTrackedT&lt; float &gt;</label>
+        <link refid="d2/def/a08159"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; float &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::ChangeTrackedT&lt; uint32_t &gt;</label>
+        <link refid="d2/def/a08159"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; uint32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::ChangeTrackedT&lt; ValueT, ControlT &gt;</label>
+        <link refid="d2/def/a08159"/>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/Design/ChangeTracked.hpp" line="14" column="1" bodyfile="CastorUtils/Design/ChangeTracked.hpp" bodystart="15" bodyend="170"/>
+    <listofallmembers>
+      <member refid="d2/def/a08159_1afe00338863fb1e4ad701eb34335e20c3" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>callback</name></member>
+      <member refid="d2/def/a08159_1ac7fcc313a688f543317721d2278958a0" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>ChangeTrackedT</name></member>
+      <member refid="d2/def/a08159_1af77b615d4c9e2d1b017763791492d69a" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>ChangeTrackedT</name></member>
+      <member refid="d2/def/a08159_1ae55f9eae221b62c832c465bd1d30e927" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>ChangeTrackedT</name></member>
+      <member refid="d2/def/a08159_1a933c45f3b691f08a1c2c8fcb00068fcd" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>ChangeTrackedT</name></member>
+      <member refid="d2/def/a08159_1a7566784bf2643bb02940b01a5aab0ccb" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>ChangeTrackedT</name></member>
+      <member refid="d2/def/a08159_1a38f9eb7b0a79b4ffae4f4cc9737f5d41" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>ChangeTrackedT</name></member>
+      <member refid="d2/def/a08159_1a340260eca058f76251b05f8f2ba08896" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>control</name></member>
+      <member refid="d2/def/a08159_1aa26a4d8e3f732350e811a988bb64c420" prot="private" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>doCopy</name></member>
+      <member refid="d2/def/a08159_1af78e34507bb468873991ead0c45d2cdb" prot="private" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>doCopy</name></member>
+      <member refid="d2/def/a08159_1a84b70d9c7c97c98db717263e03a8a263" prot="private" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>doMakeDirty</name></member>
+      <member refid="d2/def/a08159_1a46f36d9780c80ed53a34fd2984d27006" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>isDirty</name></member>
+      <member refid="d2/def/a08159_1aaed408dc312ed30c6dff489114e9d94f" prot="private" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>m_callback</name></member>
+      <member refid="d2/def/a08159_1ad7dc502fa0868c3298f87685772479e0" prot="private" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>m_dirty</name></member>
+      <member refid="d2/def/a08159_1a2d65e79c417aaa259d7c7ceebce2f8c7" prot="private" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>m_value</name></member>
+      <member refid="d2/def/a08159_1aaf9800274230ff9be2989db7445f006f" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>naked</name></member>
+      <member refid="d2/def/a08159_1a31ebb04a46185ffc4ce4ebfc1d3d391c" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>operator ValueT &amp;</name></member>
+      <member refid="d2/def/a08159_1a5e5254c1de758be3aedfe95095d77503" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>operator ValueT const &amp;</name></member>
+      <member refid="d2/def/a08159_1a2bd725c79b025ab866807461c1d026a5" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>operator*</name></member>
+      <member refid="d2/def/a08159_1a8ec364ea9926b2a5d357698df99cb1f6" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>operator*</name></member>
+      <member refid="d2/def/a08159_1ab1083d39b7ab37453586ec00d6f6335a" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>operator-&gt;</name></member>
+      <member refid="d2/def/a08159_1aae8e3794938eba000e2bab0098c75dd6" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>operator-&gt;</name></member>
+      <member refid="d2/def/a08159_1a563cf58ee57394bf8251828021185fc2" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>operator=</name></member>
+      <member refid="d2/def/a08159_1aa696fdd967bc8d61c2712c31086ede18" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>operator=</name></member>
+      <member refid="d2/def/a08159_1a38bf1627b82b4c6121f89d67b7e6976b" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>operator=</name></member>
+      <member refid="d2/def/a08159_1a53fe94fb572f3536073d7de45f2984bb" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>reset</name></member>
+      <member refid="d2/def/a08159_1ab956f64e96ea76a3fc85a07c362b8be1" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>value</name></member>
+      <member refid="d2/def/a08159_1a2e785a58a4dedd4eef42e13c667172c2" prot="public" virt="non-virtual"><scope>castor::ChangeTrackedT</scope><name>~ChangeTrackedT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

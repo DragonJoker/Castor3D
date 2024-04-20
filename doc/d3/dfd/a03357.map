@@ -1,4 +1,10 @@
-<map id="castor3d::PassHeaderComponent::Plugin" name="castor3d::PassHeaderComponent::Plugin">
-<area shape="rect" id="node1" title=" " alt="" coords="5,79,223,119"/>
-<area shape="rect" id="node2" href="$db/df2/a04026.html" title=" " alt="" coords="8,5,220,31"/>
+<map id="castor3d::BinaryWriter&lt; SkeletonNode &gt;" name="castor3d::BinaryWriter&lt; SkeletonNode &gt;">
+<area shape="rect" id="Node000001" title="Animable binary loader." alt="" coords="21,285,173,325"/>
+<area shape="rect" id="Node000002" href="$d4/d9c/a03231.html" title=" " alt="" coords="5,196,188,236"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,250,99,285,94,285,94,250"/>
+<area shape="rect" id="Node000003" href="$d5/d27/a03183.html" title=" " alt="" coords="51,5,206,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="115,44,101,67,91,94,87,121,88,149,95,195,89,196,82,149,82,121,86,93,96,65,110,41"/>
+<area shape="rect" id="Node000004" href="$d4/d9c/a03231.html" title="Binary data chunk writer base class." alt="" coords="157,93,340,133"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="156,37,226,91,223,95,153,41"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="210,143,127,198,124,194,207,139"/>
 </map>

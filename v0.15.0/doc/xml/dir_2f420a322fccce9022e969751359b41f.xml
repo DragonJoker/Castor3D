@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dir_2f420a322fccce9022e969751359b41f" kind="dir">
+    <compoundname>Render/ToneMapping</compoundname>
+    <innerfile refid="d2/d68/a01295">HdrConfig.hpp</innerfile>
+    <innerfile refid="d4/d34/a01298">ToneMapping.hpp</innerfile>
+    <innerfile refid="d3/d07/a01301">ToneMappingFactory.hpp</innerfile>
+    <innerfile refid="d6/dae/a01304">ToneMappingModule.hpp</innerfile>
+    <innerfile refid="d2/d4c/a01307">ToneMappingVisitor.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/ToneMapping/"/>
+  </compounddef>
+</doxygen>

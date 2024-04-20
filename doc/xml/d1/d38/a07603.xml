@@ -1,0 +1,220 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d38/a07603" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::ShadowsOutputT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GlslOutputs.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>sdw::var::Flag</type>
+        <declname>FlagT</declname>
+        <defname>FlagT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d38/a07603_1adcb92ffec4402e1ae93bf71389957dcc" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::ShadowsOutputT&lt; FlagT &gt;::linear</definition>
+        <argsstring></argsstring>
+        <name>linear</name>
+        <qualifiedname>castor3d::shader::ShadowsOutputT::linear</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputs.hpp" line="50" column="12" bodyfile="Castor3D/Shader/Shaders/GlslOutputs.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d38/a07603_1a0ad3de8009950093fc1a6d1424dac2a7" prot="public" static="no" mutable="no">
+        <type>sdw::Vec2</type>
+        <definition>sdw::Vec2 castor3d::shader::ShadowsOutputT&lt; FlagT &gt;::variance</definition>
+        <argsstring></argsstring>
+        <name>variance</name>
+        <qualifiedname>castor3d::shader::ShadowsOutputT::variance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputs.hpp" line="51" column="11" bodyfile="Castor3D/Shader/Shaders/GlslOutputs.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d38/a07603_1acd779b278df25ebbd5559c46587e6865" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::ShadowsOutputT&lt; FlagT &gt;::normal</definition>
+        <argsstring></argsstring>
+        <name>normal</name>
+        <qualifiedname>castor3d::shader::ShadowsOutputT::normal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputs.hpp" line="52" column="11" bodyfile="Castor3D/Shader/Shaders/GlslOutputs.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d38/a07603_1a65523ddcd9368e85a8194be51c016a05" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::ShadowsOutputT&lt; FlagT &gt;::position</definition>
+        <argsstring></argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::shader::ShadowsOutputT::position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputs.hpp" line="53" column="11" bodyfile="Castor3D/Shader/Shaders/GlslOutputs.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d38/a07603_1abd82ed973b6f464cb745f0bc69339215" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::ShadowsOutputT&lt; FlagT &gt;::flux</definition>
+        <argsstring></argsstring>
+        <name>flux</name>
+        <qualifiedname>castor3d::shader::ShadowsOutputT::flux</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputs.hpp" line="54" column="11" bodyfile="Castor3D/Shader/Shaders/GlslOutputs.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d38/a07603_1aac78a8a1c4f7f980b20db3f709cf6287" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::ShadowsOutputT&lt; FlagT &gt;::ShadowsOutputT</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>ShadowsOutputT</name>
+        <qualifiedname>castor3d::shader::ShadowsOutputT::ShadowsOutputT</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputs.hpp" line="38" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d38/a07603_1af4a63add4d9830a92ba1740d444343cd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::ShadowsOutputT&lt; FlagT &gt;::SDW_DeclStructInstance</definition>
+        <argsstring>(, ShadowsOutputT)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::ShadowsOutputT::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d1/d38/a07603" kindref="compound">ShadowsOutputT</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputs.hpp" line="42" column="1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d1/d38/a07603_1a15c2dde74d623a828383945b1b620bb6" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::type::IOStructPtr</type>
+        <definition>static sdw::type::IOStructPtr castor3d::shader::ShadowsOutputT&lt; FlagT &gt;::makeIOType</definition>
+        <argsstring>(sdw::type::TypesCache &amp;cache, sdw::EntryPoint entryPoint, bool needsVsm, bool needsRsm)</argsstring>
+        <name>makeIOType</name>
+        <qualifiedname>castor3d::shader::ShadowsOutputT::makeIOType</qualifiedname>
+        <param>
+          <type>sdw::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type>sdw::EntryPoint</type>
+          <declname>entryPoint</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>needsVsm</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>needsRsm</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputs.hpp" line="44" column="31"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d38/a07603_1a12162e6d2f494398df8660c619ce2845" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::type::BaseStructPtr</type>
+        <definition>static sdw::type::BaseStructPtr castor3d::shader::ShadowsOutputT&lt; FlagT &gt;::makeType</definition>
+        <argsstring>(sdw::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::ShadowsOutputT::makeType</qualifiedname>
+        <param>
+          <type>sdw::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslOutputs.hpp" line="48" column="33"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::ShadowsOutputT&lt; FlagT &gt;</label>
+        <link refid="d1/d38/a07603"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::ShadowsOutputT&lt; FlagT &gt;</label>
+        <link refid="d1/d38/a07603"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslOutputs.hpp" line="35" column="1" bodyfile="Castor3D/Shader/Shaders/GlslOutputs.hpp" bodystart="37" bodyend="55"/>
+    <listofallmembers>
+      <member refid="d1/d38/a07603_1abd82ed973b6f464cb745f0bc69339215" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowsOutputT</scope><name>flux</name></member>
+      <member refid="d1/d38/a07603_1adcb92ffec4402e1ae93bf71389957dcc" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowsOutputT</scope><name>linear</name></member>
+      <member refid="d1/d38/a07603_1a15c2dde74d623a828383945b1b620bb6" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowsOutputT</scope><name>makeIOType</name></member>
+      <member refid="d1/d38/a07603_1a12162e6d2f494398df8660c619ce2845" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowsOutputT</scope><name>makeType</name></member>
+      <member refid="d1/d38/a07603_1acd779b278df25ebbd5559c46587e6865" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowsOutputT</scope><name>normal</name></member>
+      <member refid="d1/d38/a07603_1a65523ddcd9368e85a8194be51c016a05" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowsOutputT</scope><name>position</name></member>
+      <member refid="d1/d38/a07603_1af4a63add4d9830a92ba1740d444343cd" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowsOutputT</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d1/d38/a07603_1aac78a8a1c4f7f980b20db3f709cf6287" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowsOutputT</scope><name>ShadowsOutputT</name></member>
+      <member refid="d1/d38/a07603_1a0ad3de8009950093fc1a6d1424dac2a7" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowsOutputT</scope><name>variance</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

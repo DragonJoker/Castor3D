@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/d87/a03963" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ImporterFile::MeshData</compoundname>
+    <includes local="no">ImporterFile.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d87/a03963_1a837e62a941f46246697648e12370d5a8" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::ImporterFile::MeshData::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>castor3d::ImporterFile::MeshData::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/ImporterFile.hpp" line="76" column="16" bodyfile="Castor3D/ImporterFile.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d87/a03963_1ab07c1c33f41c44b2035b00de4e013860" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+        <definition>castor::String castor3d::ImporterFile::MeshData::skeleton</definition>
+        <argsstring></argsstring>
+        <name>skeleton</name>
+        <qualifiedname>castor3d::ImporterFile::MeshData::skeleton</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/ImporterFile.hpp" line="77" column="16" bodyfile="Castor3D/ImporterFile.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/d87/a03963_1addbbf02c4859836e81f606a8a7a4f1ae" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ImporterFile::MeshData::MeshData</definition>
+        <argsstring>(castor::String pname, castor::String pskeleton)</argsstring>
+        <name>MeshData</name>
+        <qualifiedname>castor3d::ImporterFile::MeshData::MeshData</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>pname</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>pskeleton</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/ImporterFile.hpp" line="69" column="1" bodyfile="Castor3D/ImporterFile.hpp" bodystart="69" bodyend="74"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>std::basic_string&lt; xchar &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; xchar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ImporterFile::MeshData</label>
+        <link refid="d4/d87/a03963"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>name</edgelabel>
+          <edgelabel>skeleton</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/ImporterFile.hpp" line="67" column="1" bodyfile="Castor3D/ImporterFile.hpp" bodystart="68" bodyend="78"/>
+    <listofallmembers>
+      <member refid="d4/d87/a03963_1addbbf02c4859836e81f606a8a7a4f1ae" prot="public" virt="non-virtual"><scope>castor3d::ImporterFile::MeshData</scope><name>MeshData</name></member>
+      <member refid="d4/d87/a03963_1a837e62a941f46246697648e12370d5a8" prot="public" virt="non-virtual"><scope>castor3d::ImporterFile::MeshData</scope><name>name</name></member>
+      <member refid="d4/d87/a03963_1ab07c1c33f41c44b2035b00de4e013860" prot="public" virt="non-virtual"><scope>castor3d::ImporterFile::MeshData</scope><name>skeleton</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

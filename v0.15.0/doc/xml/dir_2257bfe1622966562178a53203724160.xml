@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dir_2257bfe1622966562178a53203724160" kind="dir">
+    <compoundname>Render/Node</compoundname>
+    <innerfile refid="db/daf/a01019">BillboardRenderNode.hpp</innerfile>
+    <innerfile refid="d1/dd8/a01022">QueueCulledRenderNodes.hpp</innerfile>
+    <innerfile refid="db/d23/a01025">QueueRenderNodes.hpp</innerfile>
+    <innerfile refid="db/d08/a01028">RenderNodeModule.hpp</innerfile>
+    <innerfile refid="d6/dcf/a01031">SceneRenderNodes.hpp</innerfile>
+    <innerfile refid="de/d91/a01034">SubmeshRenderNode.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Node/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d54/a08991" kind="union" language="C++" prot="public">
+    <compoundname>castor::PositionData</compoundname>
+    <includes local="no">Position.hpp</includes>
+    <innerclass refid="da/d31/a08995" prot="public">castor::PositionData::Pos</innerclass>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d54/a08991_1af21f0bf53dc21cec8e16128779db2c1b" prot="public" static="no" mutable="no">
+        <type><ref refid="da/d31/a08995" kindref="compound">Pos</ref></type>
+        <definition>Pos castor::PositionData::position</definition>
+        <argsstring></argsstring>
+        <name>position</name>
+        <qualifiedname>castor::PositionData::position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Position.hpp" line="21" column="5" bodyfile="CastorUtils/Graphics/Position.hpp" bodystart="21" bodyend="-1"/>
+        <referencedby refid="df/dba/a08999_1a84fae4c7d8c4867fff0128be91a8c223" compoundref="d2/d8a/a02063" startline="151" endline="154">castor::Position::x</referencedby>
+        <referencedby refid="df/dba/a08999_1a1833e6a16b03d0bad7ce71ad604b69df" compoundref="d2/d8a/a02063" startline="139" endline="142">castor::Position::x</referencedby>
+        <referencedby refid="df/dba/a08999_1a6ed2d33d5d75dda499ef41fed13d147b" compoundref="d2/d8a/a02063" startline="127" endline="130">castor::Position::y</referencedby>
+        <referencedby refid="df/dba/a08999_1a9e2fbb6a0f6fab757a7e2e6e4a3fde6e" compoundref="d2/d8a/a02063" startline="115" endline="118">castor::Position::y</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d54/a08991_1a38e311b0a7e3a0bf475d30236079ec20" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">Array</ref>&lt; int32_t, 2u &gt;</type>
+        <definition>Array&lt; int32_t, 2u &gt; castor::PositionData::buffer</definition>
+        <argsstring></argsstring>
+        <name>buffer</name>
+        <qualifiedname>castor::PositionData::buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/Position.hpp" line="22" column="7" bodyfile="CastorUtils/Graphics/Position.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::PositionData</label>
+        <link refid="d1/d54/a08991"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>position</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::PositionData::Pos</label>
+        <link refid="da/d31/a08995"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/Position.hpp" line="14" column="1" bodyfile="CastorUtils/Graphics/Position.hpp" bodystart="15" bodyend="23"/>
+    <listofallmembers>
+      <member refid="d1/d54/a08991_1a38e311b0a7e3a0bf475d30236079ec20" prot="public" virt="non-virtual"><scope>castor::PositionData</scope><name>buffer</name></member>
+      <member refid="d1/d54/a08991_1af21f0bf53dc21cec8e16128779db2c1b" prot="public" virt="non-virtual"><scope>castor::PositionData</scope><name>position</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

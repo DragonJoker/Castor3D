@@ -1,0 +1,250 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d27/a05483" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::IndexMapping</compoundname>
+    <basecompoundref refid="d6/df6/a05611" prot="public" virt="non-virtual">castor3d::SubmeshComponent</basecompoundref>
+    <derivedcompoundref refid="de/d01/a05519" prot="public" virt="non-virtual">castor3d::LinesMapping</derivedcompoundref>
+    <derivedcompoundref refid="d3/d4e/a05623" prot="public" virt="non-virtual">castor3d::TriFaceMapping</derivedcompoundref>
+    <includes local="no">IndexMapping.hpp</includes>
+    <innerclass refid="d6/ddb/a05487" prot="protected">castor3d::IndexMapping::ComponentData</innerclass>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d27/a05483_1a57f2114d7761dde6e246a688bef93be5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::IndexMapping::IndexMapping</definition>
+        <argsstring>(Submesh &amp;submesh, castor::String const &amp;type, SubmeshComponentDataUPtr data)</argsstring>
+        <name>IndexMapping</name>
+        <qualifiedname>castor3d::IndexMapping::IndexMapping</qualifiedname>
+        <param>
+          <type><ref refid="dd/df1/a05635" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a9c5550e727a2c3bc3224d98789207a59" kindref="member">SubmeshComponentDataUPtr</ref></type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le sous-maillage parent. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type de composant. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données du composant. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp" line="28" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d27/a05483_1a0fb15d1b3d6cea8907affb64e235b698" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>virtual C3D_API uint32_t castor3d::IndexMapping::getCount</definition>
+        <argsstring>() const =0</argsstring>
+        <name>getCount</name>
+        <qualifiedname>castor3d::IndexMapping::getCount</qualifiedname>
+        <reimplementedby refid="de/d01/a05519_1a3ecc8f95dbc715da28b4d5848671c3bd">getCount</reimplementedby>
+        <reimplementedby refid="d3/d4e/a05623_1adfb71fd0c8a6c5526100c09c304c165d">getCount</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le nombre d&apos;éléments. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp" line="37" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d27/a05483_1a3962862bad288beb93936541cf128e88" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>virtual C3D_API uint32_t castor3d::IndexMapping::getComponentsCount</definition>
+        <argsstring>() const =0</argsstring>
+        <name>getComponentsCount</name>
+        <qualifiedname>castor3d::IndexMapping::getComponentsCount</qualifiedname>
+        <reimplementedby refid="de/d01/a05519_1a4d3ebec1a1fc007bb98a819ef98a1edd">getComponentsCount</reimplementedby>
+        <reimplementedby refid="d3/d4e/a05623_1a7ade6d9d5e5b8980fb52bbc5ce1b7840">getComponentsCount</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le nombre de composantes d&apos;un élément. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp" line="44" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d27/a05483_1a6f19747b6795855d0048b85952e54521" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::IndexMapping::computeNormals</definition>
+        <argsstring>(bool reverted=false)=0</argsstring>
+        <name>computeNormals</name>
+        <qualifiedname>castor3d::IndexMapping::computeNormals</qualifiedname>
+        <reimplementedby refid="de/d01/a05519_1a30d5ab7ad31c300da3d08dc7b36fdb73">computeNormals</reimplementedby>
+        <reimplementedby refid="d3/d4e/a05623_1ac9057e5d18c8e160e78d09b8da5253f3">computeNormals</reimplementedby>
+        <param>
+          <type>bool</type>
+          <declname>reverted</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Génère les normales. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">reverted</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dit si les normales sont inversées. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp" line="53" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d27/a05483_1aa5ba1af157f5cc1cd14d2fc1248aecfb" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::IndexMapping::computeTangents</definition>
+        <argsstring>()=0</argsstring>
+        <name>computeTangents</name>
+        <qualifiedname>castor3d::IndexMapping::computeTangents</qualifiedname>
+        <reimplementedby refid="de/d01/a05519_1a22b6d21de832652d856661f4838f64c2">computeTangents</reimplementedby>
+        <reimplementedby refid="d3/d4e/a05623_1a2f3a6a810044d2d6935bd47576c456c5">computeTangents</reimplementedby>
+        <briefdescription>
+<para>Génère les tangentes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Cette fonction suppose que les normales sont définies. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp" line="62" column="22"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::IndexMapping</label>
+        <link refid="d1/d27/a05483"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::LinesMapping</label>
+        <link refid="de/d01/a05519"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SubmeshComponent</label>
+        <link refid="d6/df6/a05611"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::TriFaceMapping</label>
+        <link refid="d3/d4e/a05623"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::IndexMapping</label>
+        <link refid="d1/d27/a05483"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SubmeshComponent</label>
+        <link refid="d6/df6/a05611"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp" line="12" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp" bodystart="14" bodyend="104"/>
+    <listofallmembers>
+      <member refid="d6/df6/a05611_1afccdadca13f33adf739b7cd593130dc6" prot="public" virt="virtual"><scope>castor3d::IndexMapping</scope><name>accept</name></member>
+      <member refid="d6/df6/a05611_1a224e17a10afdbc9ed8479c034b21aca3" prot="public" virt="pure-virtual"><scope>castor3d::IndexMapping</scope><name>clone</name></member>
+      <member refid="d1/d27/a05483_1a6f19747b6795855d0048b85952e54521" prot="public" virt="pure-virtual"><scope>castor3d::IndexMapping</scope><name>computeNormals</name></member>
+      <member refid="d1/d27/a05483_1aa5ba1af157f5cc1cd14d2fc1248aecfb" prot="public" virt="pure-virtual"><scope>castor3d::IndexMapping</scope><name>computeTangents</name></member>
+      <member refid="d6/df6/a05611_1ad360da8b6205b1f52e2ab4ad16829483" prot="public" virt="non-virtual"><scope>castor3d::IndexMapping</scope><name>getBaseData</name></member>
+      <member refid="d1/d27/a05483_1a3962862bad288beb93936541cf128e88" prot="public" virt="pure-virtual"><scope>castor3d::IndexMapping</scope><name>getComponentsCount</name></member>
+      <member refid="d1/d27/a05483_1a0fb15d1b3d6cea8907affb64e235b698" prot="public" virt="pure-virtual"><scope>castor3d::IndexMapping</scope><name>getCount</name></member>
+      <member refid="d6/df6/a05611_1a74c236198ac0330d4af2e318b2dab8eb" prot="public" virt="non-virtual"><scope>castor3d::IndexMapping</scope><name>getDataT</name></member>
+      <member refid="d6/df6/a05611_1a927bf2897f158a69b9e43f3d4084692a" prot="public" virt="non-virtual"><scope>castor3d::IndexMapping</scope><name>getDependencies</name></member>
+      <member refid="d6/df6/a05611_1a9685bcd15e1882d93daa63b0c31a8c92" prot="public" virt="non-virtual"><scope>castor3d::IndexMapping</scope><name>getId</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::IndexMapping</scope><name>getOwner</name></member>
+      <member refid="d6/df6/a05611_1a0b00d7bb6a4ae2d465cb1b69bfe62edb" prot="public" virt="non-virtual"><scope>castor3d::IndexMapping</scope><name>getPlugin</name></member>
+      <member refid="d6/df6/a05611_1aa17497af9514861bedd026fc39c0bf24" prot="public" virt="virtual"><scope>castor3d::IndexMapping</scope><name>getProgramFlags</name></member>
+      <member refid="d6/df6/a05611_1a7f99899e65f9cbad88ee17b96874eb69" prot="public" virt="non-virtual"><scope>castor3d::IndexMapping</scope><name>getRenderData</name></member>
+      <member refid="d6/df6/a05611_1af976b217cbb63fe1c0a929f9e917da08" prot="public" virt="non-virtual"><scope>castor3d::IndexMapping</scope><name>getRenderDataT</name></member>
+      <member refid="d6/df6/a05611_1aee9f0bcf21dd6ac63bd8c29329376aec" prot="public" virt="virtual"><scope>castor3d::IndexMapping</scope><name>getSubmeshFlags</name></member>
+      <member refid="d6/df6/a05611_1ae55cef384a41ade6fb2a3570eea35fca" prot="public" virt="non-virtual"><scope>castor3d::IndexMapping</scope><name>getType</name></member>
+      <member refid="d1/d27/a05483_1a57f2114d7761dde6e246a688bef93be5" prot="public" virt="non-virtual"><scope>castor3d::IndexMapping</scope><name>IndexMapping</name></member>
+      <member refid="d6/df6/a05611_1a12c193675ee85f12ff61bee5f59593c9" prot="public" virt="non-virtual"><scope>castor3d::IndexMapping</scope><name>initialiseRenderData</name></member>
+      <member refid="d6/df6/a05611_1aaf5f04eb5b927528d0af706ef91ff3f1" prot="protected" virt="non-virtual"><scope>castor3d::IndexMapping</scope><name>m_data</name></member>
+      <member refid="d6/df6/a05611_1a1f08e2ca2b28d7e35afe6c19b431dd4e" prot="protected" virt="non-virtual"><scope>castor3d::IndexMapping</scope><name>m_renderData</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::IndexMapping</scope><name>OwnedBy</name></member>
+      <member refid="d6/df6/a05611_1ad694c20183dd5aca617f4e602d49d722" prot="public" virt="non-virtual"><scope>castor3d::IndexMapping</scope><name>SubmeshComponent</name></member>
+      <member refid="d6/df6/a05611_1a16a32c6196f9a4a70f24f18e537af89c" prot="public" virt="virtual"><scope>castor3d::IndexMapping</scope><name>writeText</name></member>
+      <member refid="d6/df6/a05611_1a30231a167367ba38b41f9bf5b3bcd005" prot="public" virt="virtual"><scope>castor3d::IndexMapping</scope><name>~SubmeshComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

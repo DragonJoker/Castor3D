@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/d42/a08311" kind="struct" language="C++" prot="public">
+    <compoundname>castor::IsGroupChangeTrackedT&lt; GroupChangeTrackedT&lt; ValueT, ControlT &gt; &gt;</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">std::true_type</basecompoundref>
+    <includes local="no">GroupChangeTracked.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ValueT</type>
+      </param>
+      <param>
+        <type>typename ControlT</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::IsGroupChangeTrackedT&lt; GroupChangeTrackedT&lt; ValueT, ControlT &gt; &gt;</label>
+        <link refid="db/d42/a08311"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::true_type</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::IsGroupChangeTrackedT&lt; GroupChangeTrackedT&lt; ValueT, ControlT &gt; &gt;</label>
+        <link refid="db/d42/a08311"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::true_type</label>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Design/GroupChangeTracked.hpp" line="230" column="1" bodyfile="CastorUtils/Design/GroupChangeTracked.hpp" bodystart="231" bodyend="232"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

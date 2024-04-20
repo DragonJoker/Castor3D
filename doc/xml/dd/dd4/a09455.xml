@@ -1,0 +1,352 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/dd4/a09455" kind="class" language="C++" prot="public">
+    <compoundname>castor::ThreadPool</compoundname>
+    <basecompoundref refid="da/d87/a08319" prot="public" virt="non-virtual">castor::NonMovable</basecompoundref>
+    <includes local="no">ThreadPool.hpp</includes>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="dd/dd4/a09455_1a1c9c10278ed8cad2fcc622847cba0f35" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; <ref refid="df/d28/a09459" kindref="compound">WorkerThread</ref> &gt;</type>
+        <definition>using castor::ThreadPool::WorkerPtr =  castor::RawUniquePtr&lt; WorkerThread &gt;</definition>
+        <argsstring></argsstring>
+        <name>WorkerPtr</name>
+        <qualifiedname>castor::ThreadPool::WorkerPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/ThreadPool.hpp" line="15" column="1" bodyfile="CastorUtils/Multithreading/ThreadPool.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="dd/dd4/a09455_1ade0b486d0fa220307a1055e78bdcbd15" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; WorkerPtr &gt;</type>
+        <definition>using castor::ThreadPool::WorkerArray =  Vector&lt; WorkerPtr &gt;</definition>
+        <argsstring></argsstring>
+        <name>WorkerArray</name>
+        <qualifiedname>castor::ThreadPool::WorkerArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/ThreadPool.hpp" line="16" column="1" bodyfile="CastorUtils/Multithreading/ThreadPool.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/dd4/a09455_1ae55351db6ee5c5c22c090fc5d4c55758" prot="private" static="no" mutable="no">
+        <type>size_t const</type>
+        <definition>size_t const castor::ThreadPool::m_count</definition>
+        <argsstring></argsstring>
+        <name>m_count</name>
+        <qualifiedname>castor::ThreadPool::m_count</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/ThreadPool.hpp" line="87" column="14" bodyfile="CastorUtils/Multithreading/ThreadPool.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dd4/a09455_1ac9b03faa0d5d1f966e416cabaf82e897" prot="private" static="no" mutable="no">
+        <type>WorkerArray</type>
+        <definition>WorkerArray castor::ThreadPool::m_available</definition>
+        <argsstring></argsstring>
+        <name>m_available</name>
+        <qualifiedname>castor::ThreadPool::m_available</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/ThreadPool.hpp" line="88" column="13" bodyfile="CastorUtils/Multithreading/ThreadPool.hpp" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dd4/a09455_1a879ab39893f9ba97c74170aa2b470ea0" prot="private" static="no" mutable="no">
+        <type>WorkerArray</type>
+        <definition>WorkerArray castor::ThreadPool::m_busy</definition>
+        <argsstring></argsstring>
+        <name>m_busy</name>
+        <qualifiedname>castor::ThreadPool::m_busy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/ThreadPool.hpp" line="89" column="13" bodyfile="CastorUtils/Multithreading/ThreadPool.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dd4/a09455_1ac72ec798d423e1abd8e1a00aaa393055" prot="private" static="no" mutable="yes">
+        <type><ref refid="d2/dd2/a02279_1aac3763b795438810958473f0b84908fb" kindref="member">castor::Mutex</ref></type>
+        <definition>castor::Mutex castor::ThreadPool::m_mutex</definition>
+        <argsstring></argsstring>
+        <name>m_mutex</name>
+        <qualifiedname>castor::ThreadPool::m_mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/ThreadPool.hpp" line="90" column="23" bodyfile="CastorUtils/Multithreading/ThreadPool.hpp" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dd4/a09455_1aac9e4867cde1af600e0898d5410866a1" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">Vector</ref>&lt; <ref refid="dc/d79/a08267_1aea6d41678f91c9fb0fb2334009626e4d" kindref="member">WorkerThread::OnEnded::connection</ref> &gt;</type>
+        <definition>Vector&lt; WorkerThread::OnEnded::connection &gt; castor::ThreadPool::m_endConnections</definition>
+        <argsstring></argsstring>
+        <name>m_endConnections</name>
+        <qualifiedname>castor::ThreadPool::m_endConnections</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/ThreadPool.hpp" line="91" column="8" bodyfile="CastorUtils/Multithreading/ThreadPool.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/dd4/a09455_1ac9aed481dcae11ad09214e1e70fddd93" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::ThreadPool::ThreadPool</definition>
+        <argsstring>(size_t count)</argsstring>
+        <name>ThreadPool</name>
+        <qualifiedname>castor::ThreadPool::ThreadPool</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur, initialise le pool au nombre de threads donné. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre de threads du pool. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/ThreadPool.hpp" line="27" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd4/a09455_1af1f00b77b3d2fe58ea5bb9e21b0c8a37" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::ThreadPool::~ThreadPool</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>~ThreadPool</name>
+        <qualifiedname>castor::ThreadPool::~ThreadPool</qualifiedname>
+        <briefdescription>
+<para>Destructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/ThreadPool.hpp" line="34" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd4/a09455_1aad43171a4c738d89ebe466f2389e1396" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::ThreadPool::isEmpty</definition>
+        <argsstring>() const</argsstring>
+        <name>isEmpty</name>
+        <qualifiedname>castor::ThreadPool::isEmpty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> si tous les threads sont occupés. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/ThreadPool.hpp" line="41" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd4/a09455_1afee9d142aa2a73e5ec02e6aff916f447" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::ThreadPool::isFull</definition>
+        <argsstring>() const</argsstring>
+        <name>isFull</name>
+        <qualifiedname>castor::ThreadPool::isFull</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> si tous les threads sont inoccupés. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/ThreadPool.hpp" line="48" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd4/a09455_1a47a8c79425326eec4f46af1969c53f48" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::ThreadPool::waitAll</definition>
+        <argsstring>(Milliseconds const &amp;timeout) const</argsstring>
+        <name>waitAll</name>
+        <qualifiedname>castor::ThreadPool::waitAll</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a9bbae2d5d564fa58ccbb16ec1d0ed7a1" kindref="member">Milliseconds</ref> const &amp;</type>
+          <declname>timeout</declname>
+        </param>
+        <briefdescription>
+<para>Attend que tous les threads aient terminé leur tâche. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">timeout</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le temps d&apos;attente maximum. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> Si tous les threads on terminé. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/ThreadPool.hpp" line="59" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd4/a09455_1a6c100f6cff6ae7951539003883f59217" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>CU_API void castor::ThreadPool::pushJob</definition>
+        <argsstring>(WorkerThread::Job job)</argsstring>
+        <name>pushJob</name>
+        <qualifiedname>castor::ThreadPool::pushJob</qualifiedname>
+        <param>
+          <type><ref refid="df/d28/a09459_1a3d9c7f1ff45805829d5547ed965f61a6" kindref="member">WorkerThread::Job</ref></type>
+          <declname>job</declname>
+        </param>
+        <briefdescription>
+<para>donne à un thread de travail la tâche donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Si aucun thread n&apos;est disponible, attend que l&apos;un d&apos;eux finisse sa tâche. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">job</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La tâche. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/ThreadPool.hpp" line="70" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd4/a09455_1a45040b189732141d7687c1904fadd6ed" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor::ThreadPool::getCount</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getCount</name>
+        <qualifiedname>castor::ThreadPool::getCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le nombre de threads. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/ThreadPool.hpp" line="77" column="8" bodyfile="CastorUtils/Multithreading/ThreadPool.hpp" bodystart="77" bodyend="80"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="dd/dd4/a09455_1a465ebb643233ce33c29deed668c53735" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="df/d28/a09459" kindref="compound">WorkerThread</ref> &amp;</type>
+        <definition>WorkerThread &amp; castor::ThreadPool::doReserveWorker</definition>
+        <argsstring>()</argsstring>
+        <name>doReserveWorker</name>
+        <qualifiedname>castor::ThreadPool::doReserveWorker</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/ThreadPool.hpp" line="83" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/dd4/a09455_1a83ac137e59fea24bdf75b726d6a4ed71" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ThreadPool::doFreeWorker</definition>
+        <argsstring>(WorkerThread const &amp;worker)</argsstring>
+        <name>doFreeWorker</name>
+        <qualifiedname>castor::ThreadPool::doFreeWorker</qualifiedname>
+        <param>
+          <type><ref refid="df/d28/a09459" kindref="compound">WorkerThread</ref> const &amp;</type>
+          <declname>worker</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Multithreading/ThreadPool.hpp" line="84" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="1">
+        <label>castor::ThreadPool</label>
+        <link refid="dd/dd4/a09455"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="1">
+        <label>castor::ThreadPool</label>
+        <link refid="dd/dd4/a09455"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Multithreading/ThreadPool.hpp" line="12" column="1" bodyfile="CastorUtils/Multithreading/ThreadPool.hpp" bodystart="14" bodyend="92"/>
+    <listofallmembers>
+      <member refid="dd/dd4/a09455_1a83ac137e59fea24bdf75b726d6a4ed71" prot="private" virt="non-virtual"><scope>castor::ThreadPool</scope><name>doFreeWorker</name></member>
+      <member refid="dd/dd4/a09455_1a465ebb643233ce33c29deed668c53735" prot="private" virt="non-virtual"><scope>castor::ThreadPool</scope><name>doReserveWorker</name></member>
+      <member refid="dd/dd4/a09455_1a45040b189732141d7687c1904fadd6ed" prot="public" virt="non-virtual"><scope>castor::ThreadPool</scope><name>getCount</name></member>
+      <member refid="dd/dd4/a09455_1aad43171a4c738d89ebe466f2389e1396" prot="public" virt="non-virtual"><scope>castor::ThreadPool</scope><name>isEmpty</name></member>
+      <member refid="dd/dd4/a09455_1afee9d142aa2a73e5ec02e6aff916f447" prot="public" virt="non-virtual"><scope>castor::ThreadPool</scope><name>isFull</name></member>
+      <member refid="dd/dd4/a09455_1ac9b03faa0d5d1f966e416cabaf82e897" prot="private" virt="non-virtual"><scope>castor::ThreadPool</scope><name>m_available</name></member>
+      <member refid="dd/dd4/a09455_1a879ab39893f9ba97c74170aa2b470ea0" prot="private" virt="non-virtual"><scope>castor::ThreadPool</scope><name>m_busy</name></member>
+      <member refid="dd/dd4/a09455_1ae55351db6ee5c5c22c090fc5d4c55758" prot="private" virt="non-virtual"><scope>castor::ThreadPool</scope><name>m_count</name></member>
+      <member refid="dd/dd4/a09455_1aac9e4867cde1af600e0898d5410866a1" prot="private" virt="non-virtual"><scope>castor::ThreadPool</scope><name>m_endConnections</name></member>
+      <member refid="dd/dd4/a09455_1ac72ec798d423e1abd8e1a00aaa393055" prot="private" virt="non-virtual"><scope>castor::ThreadPool</scope><name>m_mutex</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::ThreadPool</scope><name>NonMovable</name></member>
+      <member refid="dd/dd4/a09455_1a6c100f6cff6ae7951539003883f59217" prot="public" virt="non-virtual"><scope>castor::ThreadPool</scope><name>pushJob</name></member>
+      <member refid="dd/dd4/a09455_1ac9aed481dcae11ad09214e1e70fddd93" prot="public" virt="non-virtual"><scope>castor::ThreadPool</scope><name>ThreadPool</name></member>
+      <member refid="dd/dd4/a09455_1a47a8c79425326eec4f46af1969c53f48" prot="public" virt="non-virtual"><scope>castor::ThreadPool</scope><name>waitAll</name></member>
+      <member refid="dd/dd4/a09455_1ade0b486d0fa220307a1055e78bdcbd15" prot="private" virt="non-virtual"><scope>castor::ThreadPool</scope><name>WorkerArray</name></member>
+      <member refid="dd/dd4/a09455_1a1c9c10278ed8cad2fcc622847cba0f35" prot="private" virt="non-virtual"><scope>castor::ThreadPool</scope><name>WorkerPtr</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::ThreadPool</scope><name>~NonMovable</name></member>
+      <member refid="dd/dd4/a09455_1af1f00b77b3d2fe58ea5bb9e21b0c8a37" prot="public" virt="non-virtual"><scope>castor::ThreadPool</scope><name>~ThreadPool</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

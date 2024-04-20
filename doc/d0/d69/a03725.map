@@ -1,5 +1,9 @@
-<map id="castor3d::EmissiveMapComponent::Plugin" name="castor3d::EmissiveMapComponent::Plugin">
-<area shape="rect" id="node1" title=" " alt="" coords="5,167,228,207"/>
-<area shape="rect" id="node2" href="$d9/d2c/a04042.html" title=" " alt="" coords="16,79,217,119"/>
-<area shape="rect" id="node3" href="$db/df2/a04026.html" title=" " alt="" coords="11,5,223,31"/>
+<map id="castor3d::GpuEventInitialiserT&lt; CacheT &gt;" name="castor3d::GpuEventInitialiserT&lt; CacheT &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="40,181,227,221"/>
+<area shape="rect" id="Node000002" href="$dd/d3c/a03735.html" title=" " alt="" coords="52,93,215,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,132,136,181,131,181,131,132"/>
+<area shape="rect" id="Node000003" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="5,5,112,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="80,39,125,91,121,95,76,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="137,5,279,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="191,43,146,95,142,91,187,39"/>
 </map>

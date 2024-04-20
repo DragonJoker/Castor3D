@@ -1,0 +1,474 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/df1/a07747" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::ClustersData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_ClustersData&quot;, sdw::type::MemoryLayout::eStd140, sdw::U32Vec3Field&lt; &quot;dimensions&quot; &gt;, sdw::UIntField&lt; &quot;splitScheme&quot; &gt;, sdw::U32Vec2Field&lt; &quot;clusterSize&quot; &gt;, sdw::Vec2Field&lt; &quot;viewNearFar&quot; &gt;, sdw::UIntField&lt; &quot;pointLightLevels&quot; &gt;, sdw::UIntField&lt; &quot;spotLightLevels&quot; &gt;, sdw::UIntField&lt; &quot;pointLightCount&quot; &gt;, sdw::UIntField&lt; &quot;spotLightCount&quot; &gt;, sdw::FloatField&lt; &quot;bias&quot; &gt;, sdw::UIntField&lt; &quot;enableWaveIntrinsics&quot; &gt;, sdw::FloatField&lt; &quot;pad1&quot; &gt;, sdw::FloatField&lt; &quot;pad2&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">ClustersUbo.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/df1/a07747_1a60af3280f1cddc5a978fe119c98ed7db" prot="private" static="no" mutable="no">
+        <type><ref refid="db/da7/a05911" kindref="compound">ClustersConfig</ref> const  *</type>
+        <definition>ClustersConfig const* castor3d::shader::ClustersData::m_config</definition>
+        <argsstring></argsstring>
+        <name>m_config</name>
+        <qualifiedname>castor3d::shader::ClustersData::m_config</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="77" column="23" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="77" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/df1/a07747_1a32d42971018ad6650803328afe9895fa" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::U32Vec3, sdw::InUInt32 &gt;</type>
+        <definition>sdw::Function&lt; sdw::U32Vec3 , sdw::InUInt32 &gt; castor3d::shader::ClustersData::m_computeClusterIndex3DIdx</definition>
+        <argsstring></argsstring>
+        <name>m_computeClusterIndex3DIdx</name>
+        <qualifiedname>castor3d::shader::ClustersData::m_computeClusterIndex3DIdx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="79" column="2" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/df1/a07747_1a48931812c048ec7df2dea2a6f93a8d5d" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::U32Vec3, sdw::InVec2, sdw::InFloat, sdw::InVec4 &gt;</type>
+        <definition>sdw::Function&lt; sdw::U32Vec3 , sdw::InVec2 , sdw::InFloat , sdw::InVec4 &gt; castor3d::shader::ClustersData::m_computeClusterIndex3DPos</definition>
+        <argsstring></argsstring>
+        <name>m_computeClusterIndex3DPos</name>
+        <qualifiedname>castor3d::shader::ClustersData::m_computeClusterIndex3DPos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="83" column="2" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/df1/a07747_1a2920c91cb65358d90f9635f183b6c906" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::UInt32, sdw::InU32Vec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::UInt32 , sdw::InU32Vec3 &gt; castor3d::shader::ClustersData::m_computeClusterIndex1D</definition>
+        <argsstring></argsstring>
+        <name>m_computeClusterIndex1D</name>
+        <qualifiedname>castor3d::shader::ClustersData::m_computeClusterIndex1D</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="85" column="2" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/df1/a07747_1a124dc3d6ec3f9e9f786abf4c40496012" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec2, sdw::InU32Vec3, sdw::InVec4, sdw::InVec4 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec2 , sdw::InU32Vec3 , sdw::InVec4 , sdw::InVec4 &gt; castor3d::shader::ClustersData::m_getClusterDepthBounds</definition>
+        <argsstring></argsstring>
+        <name>m_getClusterDepthBounds</name>
+        <qualifiedname>castor3d::shader::ClustersData::m_getClusterDepthBounds</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="89" column="2" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/df1/a07747_1a13ba92ed96debf9790f2849a8aa51808" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, sdw::PVec4, sdw::PVec4, sdw::InFloat, sdw::InFloat, sdw::OutVec4, sdw::OutVec4 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::PVec4 , sdw::PVec4 , sdw::InFloat , sdw::InFloat , sdw::OutVec4 , sdw::OutVec4 &gt; castor3d::shader::ClustersData::m_computeGlobalLightsData</definition>
+        <argsstring></argsstring>
+        <name>m_computeGlobalLightsData</name>
+        <qualifiedname>castor3d::shader::ClustersData::m_computeGlobalLightsData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="96" column="2" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="96" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/df1/a07747_1a65fb77c8061baf91c56abac26e9c6f86" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::ClustersData::ClustersData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>ClustersData</name>
+        <qualifiedname>castor3d::shader::ClustersData::ClustersData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="37" column="1" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="37" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/df1/a07747_1adfe57e3a888dffbb45089a8da147727c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::ClustersData::setConfig</definition>
+        <argsstring>(ClustersConfig const *config)</argsstring>
+        <name>setConfig</name>
+        <qualifiedname>castor3d::shader::ClustersData::setConfig</qualifiedname>
+        <param>
+          <type><ref refid="db/da7/a05911" kindref="compound">ClustersConfig</ref> const *</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="44" column="6" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="44" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/df1/a07747_1a203d1a570794883a2adb965e4e275642" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ClustersData::dimensions</definition>
+        <argsstring>() const</argsstring>
+        <name>dimensions</name>
+        <qualifiedname>castor3d::shader::ClustersData::dimensions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="49" column="6" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/df1/a07747_1ac9c65bb74371d89084899898b39acb13" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ClustersData::clusterSize</definition>
+        <argsstring>() const</argsstring>
+        <name>clusterSize</name>
+        <qualifiedname>castor3d::shader::ClustersData::clusterSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="50" column="6" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="50" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/df1/a07747_1a19060026ca551b1e4de0762c3206e35e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ClustersData::viewNear</definition>
+        <argsstring>() const</argsstring>
+        <name>viewNear</name>
+        <qualifiedname>castor3d::shader::ClustersData::viewNear</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="51" column="6" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="51" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/df1/a07747_1af5e293ce37fe38c16631fc937053fe87" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ClustersData::viewFar</definition>
+        <argsstring>() const</argsstring>
+        <name>viewFar</name>
+        <qualifiedname>castor3d::shader::ClustersData::viewFar</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="52" column="6" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="52" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/df1/a07747_1a40c413f75e72375ac163270707b9d6b7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ClustersData::pointLightLevels</definition>
+        <argsstring>() const</argsstring>
+        <name>pointLightLevels</name>
+        <qualifiedname>castor3d::shader::ClustersData::pointLightLevels</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="53" column="6" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="53" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/df1/a07747_1a7e882242e2606ebbdcc53174736f5fd4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ClustersData::spotLightLevels</definition>
+        <argsstring>() const</argsstring>
+        <name>spotLightLevels</name>
+        <qualifiedname>castor3d::shader::ClustersData::spotLightLevels</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="54" column="6" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="54" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/df1/a07747_1a979b12d1cb738772d6efef9d5f8c0771" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ClustersData::pointLightCount</definition>
+        <argsstring>() const</argsstring>
+        <name>pointLightCount</name>
+        <qualifiedname>castor3d::shader::ClustersData::pointLightCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="55" column="6" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="55" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/df1/a07747_1a6f2bcbe86aee1f24b0929f4ca7379db1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ClustersData::spotLightCount</definition>
+        <argsstring>() const</argsstring>
+        <name>spotLightCount</name>
+        <qualifiedname>castor3d::shader::ClustersData::spotLightCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="56" column="6" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="56" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/df1/a07747_1a770b127eea54d292f3bace97fa3de048" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ClustersData::splitScheme</definition>
+        <argsstring>() const</argsstring>
+        <name>splitScheme</name>
+        <qualifiedname>castor3d::shader::ClustersData::splitScheme</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="57" column="6" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/df1/a07747_1a8d14a570a0def4d3b7abd04a14ffc8a6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ClustersData::bias</definition>
+        <argsstring>() const</argsstring>
+        <name>bias</name>
+        <qualifiedname>castor3d::shader::ClustersData::bias</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="58" column="6" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="58" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/df1/a07747_1a421ce97fb40b3e4ea9f1e780770bde36" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ClustersData::enableWaveIntrinsics</definition>
+        <argsstring>() const</argsstring>
+        <name>enableWaveIntrinsics</name>
+        <qualifiedname>castor3d::shader::ClustersData::enableWaveIntrinsics</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="59" column="6" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="59" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/df1/a07747_1a2e24d770799dd04bfa1cc7de78bba3fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetU32Vec3</type>
+        <definition>C3D_API sdw::RetU32Vec3 castor3d::shader::ClustersData::computeClusterIndex3D</definition>
+        <argsstring>(sdw::UInt32 const index)</argsstring>
+        <name>computeClusterIndex3D</name>
+        <qualifiedname>castor3d::shader::ClustersData::computeClusterIndex3D</qualifiedname>
+        <param>
+          <type>sdw::UInt32 const</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="61" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/df1/a07747_1ab7a7990b6332908715f19da53fd182f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetU32Vec3</type>
+        <definition>C3D_API sdw::RetU32Vec3 castor3d::shader::ClustersData::computeClusterIndex3D</definition>
+        <argsstring>(sdw::Vec2 const screenPos, sdw::Float viewZ, sdw::Vec4 const clustersLightsData)</argsstring>
+        <name>computeClusterIndex3D</name>
+        <qualifiedname>castor3d::shader::ClustersData::computeClusterIndex3D</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const</type>
+          <declname>screenPos</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>viewZ</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const</type>
+          <declname>clustersLightsData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="62" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/df1/a07747_1ad0080416d45623336e5c9d667693c40c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetUInt32</type>
+        <definition>C3D_API sdw::RetUInt32 castor3d::shader::ClustersData::computeClusterIndex1D</definition>
+        <argsstring>(sdw::U32Vec3 const clusterIndex3D)</argsstring>
+        <name>computeClusterIndex1D</name>
+        <qualifiedname>castor3d::shader::ClustersData::computeClusterIndex1D</qualifiedname>
+        <param>
+          <type>sdw::U32Vec3 const</type>
+          <declname>clusterIndex3D</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="65" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/df1/a07747_1a284e78f15d3d4a45c051d20b8b86d070" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetVec2</type>
+        <definition>C3D_API sdw::RetVec2 castor3d::shader::ClustersData::getClusterDepthBounds</definition>
+        <argsstring>(sdw::U32Vec3 const clusterIndex3D, sdw::Vec4 const clustersLightsData, sdw::Vec4 const lightsAABBRange)</argsstring>
+        <name>getClusterDepthBounds</name>
+        <qualifiedname>castor3d::shader::ClustersData::getClusterDepthBounds</qualifiedname>
+        <param>
+          <type>sdw::U32Vec3 const</type>
+          <declname>clusterIndex3D</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const</type>
+          <declname>clustersLightsData</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const</type>
+          <declname>lightsAABBRange</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="66" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/df1/a07747_1a9ce82d722f93e34e7ad06244491aa171" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetVoid</type>
+        <definition>C3D_API sdw::RetVoid castor3d::shader::ClustersData::computeGlobalLightsData</definition>
+        <argsstring>(sdw::Vec4 const lightsMin, sdw::Vec4 const lightsMax, sdw::Float const nearPlane, sdw::Float const farPlane, sdw::Vec4 &amp;clustersLightsData, sdw::Vec4 &amp;lightsAABBRange)</argsstring>
+        <name>computeGlobalLightsData</name>
+        <qualifiedname>castor3d::shader::ClustersData::computeGlobalLightsData</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const</type>
+          <declname>lightsMin</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const</type>
+          <declname>lightsMax</declname>
+        </param>
+        <param>
+          <type>sdw::Float const</type>
+          <declname>nearPlane</declname>
+        </param>
+        <param>
+          <type>sdw::Float const</type>
+          <declname>farPlane</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>clustersLightsData</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>lightsAABBRange</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="69" column="22"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::ClustersData</label>
+        <link refid="dc/df1/a07747"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_ClustersData&quot;, sdw::type::MemoryLayout::eStd140, sdw::U32Vec3Field&lt; &quot;dimensions&quot; &gt;, sdw::UIntField&lt; &quot;splitScheme&quot; &gt;, sdw::U32Vec2Field&lt; &quot;clusterSize&quot; &gt;, sdw::Vec2Field&lt; &quot;viewNearFar&quot; &gt;, sdw::UIntField&lt; &quot;pointLightLevels&quot; &gt;, sdw::UIntField&lt; &quot;spotLightLevels&quot; &gt;, sdw::UIntField&lt; &quot;pointLightCount&quot; &gt;, sdw::UIntField&lt; &quot;spotLightCount&quot; &gt;, sdw::FloatField&lt; &quot;bias&quot; &gt;, sdw::UIntField&lt; &quot;enableWaveIntrinsics&quot; &gt;, sdw::FloatField&lt; &quot;pad1&quot; &gt;, sdw::FloatField&lt; &quot;pad2&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::ClustersData</label>
+        <link refid="dc/df1/a07747"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_ClustersData&quot;, sdw::type::MemoryLayout::eStd140, sdw::U32Vec3Field&lt; &quot;dimensions&quot; &gt;, sdw::UIntField&lt; &quot;splitScheme&quot; &gt;, sdw::U32Vec2Field&lt; &quot;clusterSize&quot; &gt;, sdw::Vec2Field&lt; &quot;viewNearFar&quot; &gt;, sdw::UIntField&lt; &quot;pointLightLevels&quot; &gt;, sdw::UIntField&lt; &quot;spotLightLevels&quot; &gt;, sdw::UIntField&lt; &quot;pointLightCount&quot; &gt;, sdw::UIntField&lt; &quot;spotLightCount&quot; &gt;, sdw::FloatField&lt; &quot;bias&quot; &gt;, sdw::UIntField&lt; &quot;enableWaveIntrinsics&quot; &gt;, sdw::FloatField&lt; &quot;pad1&quot; &gt;, sdw::FloatField&lt; &quot;pad2&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Ubos/ClustersUbo.hpp" line="21" column="1" bodyfile="Castor3D/Shader/Ubos/ClustersUbo.hpp" bodystart="36" bodyend="97"/>
+    <listofallmembers>
+      <member refid="dc/df1/a07747_1a8d14a570a0def4d3b7abd04a14ffc8a6" prot="public" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>bias</name></member>
+      <member refid="dc/df1/a07747_1a65fb77c8061baf91c56abac26e9c6f86" prot="public" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>ClustersData</name></member>
+      <member refid="dc/df1/a07747_1ac9c65bb74371d89084899898b39acb13" prot="public" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>clusterSize</name></member>
+      <member refid="dc/df1/a07747_1ad0080416d45623336e5c9d667693c40c" prot="public" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>computeClusterIndex1D</name></member>
+      <member refid="dc/df1/a07747_1a2e24d770799dd04bfa1cc7de78bba3fd" prot="public" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>computeClusterIndex3D</name></member>
+      <member refid="dc/df1/a07747_1ab7a7990b6332908715f19da53fd182f0" prot="public" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>computeClusterIndex3D</name></member>
+      <member refid="dc/df1/a07747_1a9ce82d722f93e34e7ad06244491aa171" prot="public" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>computeGlobalLightsData</name></member>
+      <member refid="dc/df1/a07747_1a203d1a570794883a2adb965e4e275642" prot="public" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>dimensions</name></member>
+      <member refid="dc/df1/a07747_1a421ce97fb40b3e4ea9f1e780770bde36" prot="public" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>enableWaveIntrinsics</name></member>
+      <member refid="dc/df1/a07747_1a284e78f15d3d4a45c051d20b8b86d070" prot="public" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>getClusterDepthBounds</name></member>
+      <member refid="dc/df1/a07747_1a2920c91cb65358d90f9635f183b6c906" prot="private" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>m_computeClusterIndex1D</name></member>
+      <member refid="dc/df1/a07747_1a32d42971018ad6650803328afe9895fa" prot="private" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>m_computeClusterIndex3DIdx</name></member>
+      <member refid="dc/df1/a07747_1a48931812c048ec7df2dea2a6f93a8d5d" prot="private" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>m_computeClusterIndex3DPos</name></member>
+      <member refid="dc/df1/a07747_1a13ba92ed96debf9790f2849a8aa51808" prot="private" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>m_computeGlobalLightsData</name></member>
+      <member refid="dc/df1/a07747_1a60af3280f1cddc5a978fe119c98ed7db" prot="private" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>m_config</name></member>
+      <member refid="dc/df1/a07747_1a124dc3d6ec3f9e9f786abf4c40496012" prot="private" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>m_getClusterDepthBounds</name></member>
+      <member refid="dc/df1/a07747_1a979b12d1cb738772d6efef9d5f8c0771" prot="public" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>pointLightCount</name></member>
+      <member refid="dc/df1/a07747_1a40c413f75e72375ac163270707b9d6b7" prot="public" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>pointLightLevels</name></member>
+      <member refid="dc/df1/a07747_1adfe57e3a888dffbb45089a8da147727c" prot="public" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>setConfig</name></member>
+      <member refid="dc/df1/a07747_1a770b127eea54d292f3bace97fa3de048" prot="public" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>splitScheme</name></member>
+      <member refid="dc/df1/a07747_1a6f2bcbe86aee1f24b0929f4ca7379db1" prot="public" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>spotLightCount</name></member>
+      <member refid="dc/df1/a07747_1a7e882242e2606ebbdcc53174736f5fd4" prot="public" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>spotLightLevels</name></member>
+      <member refid="dc/df1/a07747_1af5e293ce37fe38c16631fc937053fe87" prot="public" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>viewFar</name></member>
+      <member refid="dc/df1/a07747_1a19060026ca551b1e4de0762c3206e35e" prot="public" virt="non-virtual"><scope>castor3d::shader::ClustersData</scope><name>viewNear</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

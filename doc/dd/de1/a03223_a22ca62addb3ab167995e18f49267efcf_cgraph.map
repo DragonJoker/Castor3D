@@ -1,0 +1,21 @@
+<map id="castor3d::BinaryParserBase::doParseChunk" name="castor3d::BinaryParserBase::doParseChunk">
+<area shape="rect" id="Node000001" title="Retrieves a value array from a chunk." alt="" coords="5,92,191,132"/>
+<area shape="rect" id="Node000002" href="$d0/d87/a03399.html#a51aa9cc211a27e96cdfbdb431808cc8f" title="Retrieves a value array from a chunk." alt="" coords="239,92,393,132"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="191,109,225,109,225,115,191,115"/>
+<area shape="rect" id="Node000003" href="$d6/d0e/a03395.html#a062463121032ba679336be2382c508d0" title="Retrieves a value array from a chunk." alt="" coords="446,63,631,103"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="393,99,432,94,433,99,394,104"/>
+<area shape="rect" id="Node000006" href="$d9/dba/a02278.html#ac8fd79a65bf3d510536e2f77797a5df7" title="Prepares chunk data for read/write." alt="" coords="441,149,636,174"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="394,127,468,143,467,148,393,132"/>
+<area shape="rect" id="Node000004" href="$d5/d27/a03183.html#af711032d94753cb2d482fe2bcf3afb17" title="Checks that the remaining place can hold the given size." alt="" coords="700,5,855,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="622,60,686,45,687,50,623,65"/>
+<area shape="rect" id="Node000005" href="$d5/d27/a03183.html#a7c1bb3cf53d6b4a6856c9964c54fac11" title="Retrieves data from the chunk." alt="" coords="687,70,867,95"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="632,80,674,80,674,85,632,85"/>
+<area shape="rect" id="Node000007" href="$d2/dd2/a02279.html#aa4e7623135b28fcbdeb6f2d423df6746" title="Detects if the current system is little endian." alt="" coords="705,119,849,145"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="636,147,691,140,692,145,637,152"/>
+<area shape="rect" id="Node000008" href="$d9/dba/a02278.html#a18b75386e45b81504fc6c5e9ece3d006" title=" " alt="" coords="698,169,857,194"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="637,167,684,171,684,176,636,172"/>
+<area shape="rect" id="Node000009" href="$d9/dba/a02278.html#a430f3de9071e7d03358bb1b39d07c2b8" title="Sets given value to big endian." alt="" coords="684,218,871,243"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="580,172,685,204,712,212,711,217,683,209,578,177"/>
+<area shape="rect" id="Node000010" href="$d2/dd2/a02279.html#a90cf51f94dda321c89fc40fa450d0b91" title="Convert from little or big endian to the other." alt="" coords="919,218,1089,243"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="871,228,905,228,905,233,871,233"/>
+</map>

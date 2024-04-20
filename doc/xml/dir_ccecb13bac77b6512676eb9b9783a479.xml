@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dir_ccecb13bac77b6512676eb9b9783a479" kind="dir">
+    <compoundname>CastorUtils/Math</compoundname>
+    <innerfile refid="d3/d23/a02120">Angle.hpp</innerfile>
+    <innerfile refid="d5/d63/a02123">Coords.hpp</innerfile>
+    <innerfile refid="da/da0/a02126">Length.hpp</innerfile>
+    <innerfile refid="db/d26/a02129">Line2D.hpp</innerfile>
+    <innerfile refid="dd/d07/a02132">Line3D.hpp</innerfile>
+    <innerfile refid="df/daa/a02135">Math.hpp</innerfile>
+    <innerfile refid="db/df6/a02138">MathModule.hpp</innerfile>
+    <innerfile refid="d5/d88/a02141">Matrix.hpp</innerfile>
+    <innerfile refid="dc/d29/a02144">PlaneEquation.hpp</innerfile>
+    <innerfile refid="d3/d28/a02147">Point.hpp</innerfile>
+    <innerfile refid="d4/d5d/a02150">PointData.hpp</innerfile>
+    <innerfile refid="df/de9/a02153">PointOperators.hpp</innerfile>
+    <innerfile refid="dd/d3f/a02156">Quaternion.hpp</innerfile>
+    <innerfile refid="d4/d9b/a02159">Range.hpp</innerfile>
+    <innerfile refid="d7/d26/a02162">RangedValue.hpp</innerfile>
+    <innerfile refid="d7/d4c/a02165">RangeSequence.hpp</innerfile>
+    <innerfile refid="d1/dce/a02168">Simd.hpp</innerfile>
+    <innerfile refid="d6/d1e/a02171">Speed.hpp</innerfile>
+    <innerfile refid="d6/d6e/a02174">SphericalVertex.hpp</innerfile>
+    <innerfile refid="d3/d90/a02177">SquareMatrix.hpp</innerfile>
+    <innerfile refid="dd/d09/a02180">TransformationMatrix.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Math/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d6/dcd/a06631" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ShadowMap::AllPasses</compoundname>
+    <includes local="no">ShadowMap.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/dcd/a06631_1ab138e65fe4aafacbcdcfe6768f9aa73d" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; <ref refid="d2/dd2/a02279_1a1703e7c907eb1f09166a4dfb4d39985b" kindref="member">castor::RawUniquePtr</ref>&lt; <ref refid="d1/ddf/a07743" kindref="compound">CameraUbo</ref> &gt; &gt;</type>
+        <definition>castor::Vector&lt; castor::RawUniquePtr&lt; CameraUbo &gt; &gt; castor3d::ShadowMap::AllPasses::cameraUbos</definition>
+        <argsstring></argsstring>
+        <name>cameraUbos</name>
+        <qualifiedname>castor3d::ShadowMap::AllPasses::cameraUbos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ShadowMap/ShadowMap.hpp" line="67" column="16" bodyfile="Castor3D/Render/ShadowMap/ShadowMap.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/dcd/a06631_1affab785319fcc5bbb53b5ca56018f9af" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; CameraUPtr &gt;</type>
+        <definition>castor::Vector&lt; CameraUPtr &gt; castor3d::ShadowMap::AllPasses::cameras</definition>
+        <argsstring></argsstring>
+        <name>cameras</name>
+        <qualifiedname>castor3d::ShadowMap::AllPasses::cameras</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ShadowMap/ShadowMap.hpp" line="68" column="16" bodyfile="Castor3D/Render/ShadowMap/ShadowMap.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/dcd/a06631_1a1ab32add2999caa01535aec77e9b9464" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/d38/a06627" kindref="compound">Passes</ref></type>
+        <definition>Passes castor3d::ShadowMap::AllPasses::staticNodes</definition>
+        <argsstring></argsstring>
+        <name>staticNodes</name>
+        <qualifiedname>castor3d::ShadowMap::AllPasses::staticNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ShadowMap/ShadowMap.hpp" line="69" column="8" bodyfile="Castor3D/Render/ShadowMap/ShadowMap.hpp" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/dcd/a06631_1a04192141737614c5171acb84c2a0b513" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/d38/a06627" kindref="compound">Passes</ref></type>
+        <definition>Passes castor3d::ShadowMap::AllPasses::otherNodes</definition>
+        <argsstring></argsstring>
+        <name>otherNodes</name>
+        <qualifiedname>castor3d::ShadowMap::AllPasses::otherNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/ShadowMap/ShadowMap.hpp" line="70" column="8" bodyfile="Castor3D/Render/ShadowMap/ShadowMap.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::ShadowMap::AllPasses</label>
+        <link refid="d6/dcd/a06631"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>otherNodes</edgelabel>
+          <edgelabel>staticNodes</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ShadowMap::Passes</label>
+        <link refid="d4/d38/a06627"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/ShadowMap/ShadowMap.hpp" line="65" column="1" bodyfile="Castor3D/Render/ShadowMap/ShadowMap.hpp" bodystart="66" bodyend="71"/>
+    <listofallmembers>
+      <member refid="d6/dcd/a06631_1affab785319fcc5bbb53b5ca56018f9af" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::AllPasses</scope><name>cameras</name></member>
+      <member refid="d6/dcd/a06631_1ab138e65fe4aafacbcdcfe6768f9aa73d" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::AllPasses</scope><name>cameraUbos</name></member>
+      <member refid="d6/dcd/a06631_1a04192141737614c5171acb84c2a0b513" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::AllPasses</scope><name>otherNodes</name></member>
+      <member refid="d6/dcd/a06631_1a1ab32add2999caa01535aec77e9b9464" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::AllPasses</scope><name>staticNodes</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

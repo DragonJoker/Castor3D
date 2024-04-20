@@ -1,8 +1,9 @@
-<map id="castor3d::SceneNodeAnimation" name="castor3d::SceneNodeAnimation">
-<area shape="rect" id="node1" title=" " alt="" coords="69,272,275,297"/>
-<area shape="rect" id="node2" href="$d7/da8/a02522.html" title=" " alt="" coords="132,197,212,223"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,13,112,38"/>
-<area shape="rect" id="node5" href="$d7/da8/a02522.html" title="Animation base class." alt="" coords="97,95,247,135"/>
-<area shape="rect" id="node4" title=" " alt="" coords="272,102,459,127"/>
-<area shape="rect" id="node6" title=" " alt="" coords="137,5,325,45"/>
+<map id="castor3d::PtrCacheTraitsT&lt; Overlay, castor::String &gt;" name="castor3d::PtrCacheTraitsT&lt; Overlay, castor::String &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="585,60,768,100"/>
+<area shape="rect" id="Node000002" href="$d7/d6e/a03615.html" title=" " alt="" coords="332,7,499,62"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="513,49,586,62,585,67,512,54"/>
+<area shape="rect" id="Node000003" href="$d7/d6e/a03615.html" title=" " alt="" coords="5,15,172,55"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="186,32,332,32,332,37,186,37"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="352,87,479,127"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="492,96,585,87,585,92,493,101"/>
 </map>

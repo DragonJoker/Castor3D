@@ -1,0 +1,1464 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/d77/a05915" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::FrustumClusters</compoundname>
+    <includes local="no">FrustumClusters.hpp</includes>
+    <innerclass refid="da/dc6/a05919" prot="private">castor3d::FrustumClusters::AABB</innerclass>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d77/a05915_1a4c781aab125268e0977e5baa5f002a30" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1a56c19ebe2d8680169212c1ad3980aa6a" kindref="member">OnClustersBuffersChanged</ref></type>
+        <definition>OnClustersBuffersChanged castor3d::FrustumClusters::onClusterBuffersChanged</definition>
+        <argsstring></argsstring>
+        <name>onClusterBuffersChanged</name>
+        <qualifiedname>castor3d::FrustumClusters::onClusterBuffersChanged</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="288" column="26" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="288" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/d77/a05915_1acab0fd8e71976a6119764888a9a0bad2" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::FrustumClusters::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::FrustumClusters::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="301" column="21" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="301" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a1ac3a0f872deeb13b81ad2b081ba79a3" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dc3/a06951" kindref="compound">Camera</ref> const  &amp;</type>
+        <definition>Camera const&amp; castor3d::FrustumClusters::m_camera</definition>
+        <argsstring></argsstring>
+        <name>m_camera</name>
+        <qualifiedname>castor3d::FrustumClusters::m_camera</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="302" column="15" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="302" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a19bcc9dc8488c31bd74e76b148af9d86" prot="private" static="no" mutable="no">
+        <type><ref refid="db/da7/a05911" kindref="compound">ClustersConfig</ref> const  &amp;</type>
+        <definition>ClustersConfig const&amp; castor3d::FrustumClusters::m_config</definition>
+        <argsstring></argsstring>
+        <name>m_config</name>
+        <qualifiedname>castor3d::FrustumClusters::m_config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="303" column="23" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="303" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1aa9efcbeb7b4cebe73ab380beb0999969" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::FrustumClusters::m_clustersDirty</definition>
+        <argsstring></argsstring>
+        <name>m_clustersDirty</name>
+        <qualifiedname>castor3d::FrustumClusters::m_clustersDirty</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="304" column="6" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="304" bodyend="304"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a5640a0cf1b79a8f561bf4523bbc740ba" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::FrustumClusters::m_lightsDirty</definition>
+        <argsstring></argsstring>
+        <name>m_lightsDirty</name>
+        <qualifiedname>castor3d::FrustumClusters::m_lightsDirty</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="305" column="6" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="305" bodyend="305"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1ad6bd84f1200225648dbbc43ee8eb4d98" prot="private" static="no" mutable="no">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::FrustumClusters::m_first</definition>
+        <argsstring></argsstring>
+        <name>m_first</name>
+        <qualifiedname>castor3d::FrustumClusters::m_first</qualifiedname>
+        <initializer>{ 5 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="306" column="9" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="306" bodyend="306"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a6b15e13fd6f58a9c9ecd00e5d43d43df" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::FrustumClusters::m_pointLightMortonIndicesInput</definition>
+        <argsstring></argsstring>
+        <name>m_pointLightMortonIndicesInput</name>
+        <qualifiedname>castor3d::FrustumClusters::m_pointLightMortonIndicesInput</qualifiedname>
+        <initializer>{ 1u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="307" column="10" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="307" bodyend="307"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a663043077e6a902ce862486609e538fa" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::FrustumClusters::m_spotLightMortonIndicesInput</definition>
+        <argsstring></argsstring>
+        <name>m_spotLightMortonIndicesInput</name>
+        <qualifiedname>castor3d::FrustumClusters::m_spotLightMortonIndicesInput</qualifiedname>
+        <initializer>{ 1u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="308" column="10" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="308" bodyend="308"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a1a82c47592be89942173b5d55b1fd803" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a04236f6601235ad5003d429f544c5e0e" kindref="member">castor::GroupChangeTracked</ref>&lt; castor::Point3ui &gt;</type>
+        <definition>castor::GroupChangeTracked&lt; castor::Point3ui &gt; castor3d::FrustumClusters::m_dimensions</definition>
+        <argsstring></argsstring>
+        <name>m_dimensions</name>
+        <qualifiedname>castor3d::FrustumClusters::m_dimensions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="309" column="28" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="309" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1ad119fdc43417d250687af578ad5d7d4a" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a04236f6601235ad5003d429f544c5e0e" kindref="member">castor::GroupChangeTracked</ref>&lt; castor::Point2ui &gt;</type>
+        <definition>castor::GroupChangeTracked&lt; castor::Point2ui &gt; castor3d::FrustumClusters::m_clusterSize</definition>
+        <argsstring></argsstring>
+        <name>m_clusterSize</name>
+        <qualifiedname>castor3d::FrustumClusters::m_clusterSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="310" column="28" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="310" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a483f52095697ae751fbf84db7242c6b5" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a04236f6601235ad5003d429f544c5e0e" kindref="member">castor::GroupChangeTracked</ref>&lt; castor::Matrix4x4f &gt;</type>
+        <definition>castor::GroupChangeTracked&lt; castor::Matrix4x4f &gt; castor3d::FrustumClusters::m_cameraProjection</definition>
+        <argsstring></argsstring>
+        <name>m_cameraProjection</name>
+        <qualifiedname>castor3d::FrustumClusters::m_cameraProjection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="311" column="28" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="311" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a58623b4e79167535524a8c7aed8c52ce" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a04236f6601235ad5003d429f544c5e0e" kindref="member">castor::GroupChangeTracked</ref>&lt; castor::Matrix4x4f &gt;</type>
+        <definition>castor::GroupChangeTracked&lt; castor::Matrix4x4f &gt; castor3d::FrustumClusters::m_cameraView</definition>
+        <argsstring></argsstring>
+        <name>m_cameraView</name>
+        <qualifiedname>castor3d::FrustumClusters::m_cameraView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="312" column="28" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="312" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a94594e8dfa81ddfbfab18677318b1b76" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d54/a07751" kindref="compound">ClustersUbo</ref></type>
+        <definition>ClustersUbo castor3d::FrustumClusters::m_clustersUbo</definition>
+        <argsstring></argsstring>
+        <name>m_clustersUbo</name>
+        <qualifiedname>castor3d::FrustumClusters::m_clustersUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="313" column="13" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="313" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a8319029f381fe3ecdbe1fbbc57f362c0" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; VkDispatchIndirectCommand &gt;</type>
+        <definition>ashes::BufferPtr&lt; VkDispatchIndirectCommand &gt; castor3d::FrustumClusters::m_clustersIndirect</definition>
+        <argsstring></argsstring>
+        <name>m_clustersIndirect</name>
+        <qualifiedname>castor3d::FrustumClusters::m_clustersIndirect</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="314" column="18" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="314" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a74997d6ea496267f781be1977326bb1d" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; AABB &gt;</type>
+        <definition>ashes::BufferPtr&lt; AABB &gt; castor3d::FrustumClusters::m_allLightsAABBBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_allLightsAABBBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::m_allLightsAABBBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="317" column="18" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="317" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a414a712e7b2e232266560108fcbf1bee" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; AABB &gt;</type>
+        <definition>ashes::BufferPtr&lt; AABB &gt; castor3d::FrustumClusters::m_reducedLightsAABBBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_reducedLightsAABBBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::m_reducedLightsAABBBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="318" column="18" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="318" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a9b8a32944e775ca614d454d196f33926" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; ashes::BufferPtr&lt; u32 &gt;, 2u &gt;</type>
+        <definition>castor::Array&lt; ashes::BufferPtr&lt; u32 &gt;, 2u &gt; castor3d::FrustumClusters::m_pointMortonCodesBuffers</definition>
+        <argsstring></argsstring>
+        <name>m_pointMortonCodesBuffers</name>
+        <qualifiedname>castor3d::FrustumClusters::m_pointMortonCodesBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="319" column="15" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="319" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1ab70456c583f276e4916273aeb8f5616e" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; ashes::BufferPtr&lt; u32 &gt;, 2u &gt;</type>
+        <definition>castor::Array&lt; ashes::BufferPtr&lt; u32 &gt;, 2u &gt; castor3d::FrustumClusters::m_spotMortonCodesBuffers</definition>
+        <argsstring></argsstring>
+        <name>m_spotMortonCodesBuffers</name>
+        <qualifiedname>castor3d::FrustumClusters::m_spotMortonCodesBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="320" column="15" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="320" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a75e2cf954bb33988c3b35750536c8799" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; ashes::BufferPtr&lt; u32 &gt;, 2u &gt;</type>
+        <definition>castor::Array&lt; ashes::BufferPtr&lt; u32 &gt;, 2u &gt; castor3d::FrustumClusters::m_pointIndicesBuffers</definition>
+        <argsstring></argsstring>
+        <name>m_pointIndicesBuffers</name>
+        <qualifiedname>castor3d::FrustumClusters::m_pointIndicesBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="321" column="15" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="321" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a2075688733d81ccb040e0884b341e9d0" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; ashes::BufferPtr&lt; u32 &gt;, 2u &gt;</type>
+        <definition>castor::Array&lt; ashes::BufferPtr&lt; u32 &gt;, 2u &gt; castor3d::FrustumClusters::m_spotIndicesBuffers</definition>
+        <argsstring></argsstring>
+        <name>m_spotIndicesBuffers</name>
+        <qualifiedname>castor3d::FrustumClusters::m_spotIndicesBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="322" column="15" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="322" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a61e484f4eb843609b4a72d14256ba107" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; AABB &gt;</type>
+        <definition>ashes::BufferPtr&lt; AABB &gt; castor3d::FrustumClusters::m_pointBVHBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_pointBVHBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::m_pointBVHBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="323" column="18" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="323" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1af6ccd781bd00f5905b74787e2a61fae6" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; AABB &gt;</type>
+        <definition>ashes::BufferPtr&lt; AABB &gt; castor3d::FrustumClusters::m_spotBVHBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_spotBVHBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::m_spotBVHBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="324" column="18" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="324" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a84dccf26983dd08b1d03b9f29f573836" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; s32 &gt;</type>
+        <definition>ashes::BufferPtr&lt; s32 &gt; castor3d::FrustumClusters::m_mergePathPartitionsBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_mergePathPartitionsBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::m_mergePathPartitionsBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="325" column="18" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="325" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1affba0b6daadfddb48e3085a436f1eab7" prot="private" static="no" mutable="no">
+        <type>ashes::BufferBasePtr</type>
+        <definition>ashes::BufferBasePtr castor3d::FrustumClusters::m_aabbBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_aabbBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::m_aabbBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="328" column="22" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="328" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a7ed3169929ce8a7d29e98dfd9588897a" prot="private" static="no" mutable="no">
+        <type>ashes::BufferBasePtr</type>
+        <definition>ashes::BufferBasePtr castor3d::FrustumClusters::m_pointLightClusterGridBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_pointLightClusterGridBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::m_pointLightClusterGridBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="329" column="22" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="329" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a5d9f114ef6d7395fca6cda03d7fe3435" prot="private" static="no" mutable="no">
+        <type>ashes::BufferBasePtr</type>
+        <definition>ashes::BufferBasePtr castor3d::FrustumClusters::m_spotLightClusterGridBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_spotLightClusterGridBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::m_spotLightClusterGridBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="330" column="22" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="330" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a85cdb4da0104dbb6439c4d30e92ef960" prot="private" static="no" mutable="no">
+        <type>ashes::BufferBasePtr</type>
+        <definition>ashes::BufferBasePtr castor3d::FrustumClusters::m_pointLightClusterIndexBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_pointLightClusterIndexBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::m_pointLightClusterIndexBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="331" column="22" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="331" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a40f86761370bff7f82ce11e639cd94cd" prot="private" static="no" mutable="no">
+        <type>ashes::BufferBasePtr</type>
+        <definition>ashes::BufferBasePtr castor3d::FrustumClusters::m_spotLightClusterIndexBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_spotLightClusterIndexBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::m_spotLightClusterIndexBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="332" column="22" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="332" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1ade39b055a7b95eed6e90e75b1a115f40" prot="private" static="no" mutable="no">
+        <type>ashes::BufferBasePtr</type>
+        <definition>ashes::BufferBasePtr castor3d::FrustumClusters::m_clusterFlags</definition>
+        <argsstring></argsstring>
+        <name>m_clusterFlags</name>
+        <qualifiedname>castor3d::FrustumClusters::m_clusterFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="333" column="22" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="333" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a59b3ce83630aa9b73167e90594b20f74" prot="private" static="no" mutable="no">
+        <type>ashes::BufferBasePtr</type>
+        <definition>ashes::BufferBasePtr castor3d::FrustumClusters::m_uniqueClusters</definition>
+        <argsstring></argsstring>
+        <name>m_uniqueClusters</name>
+        <qualifiedname>castor3d::FrustumClusters::m_uniqueClusters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="334" column="22" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="334" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a05915_1a7229a1b69d78e07c78ca1e697a83c72d" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; ashes::BufferBasePtr &gt;</type>
+        <definition>castor::Vector&lt; ashes::BufferBasePtr &gt; castor3d::FrustumClusters::m_toDelete</definition>
+        <argsstring></argsstring>
+        <name>m_toDelete</name>
+        <qualifiedname>castor3d::FrustumClusters::m_toDelete</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="335" column="16" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="335" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d77/a05915_1a3c60990f6f9375b5e0f387820d5aa6e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::FrustumClusters::FrustumClusters</definition>
+        <argsstring>(FrustumClusters const &amp;)=delete</argsstring>
+        <name>FrustumClusters</name>
+        <qualifiedname>castor3d::FrustumClusters::FrustumClusters</qualifiedname>
+        <param>
+          <type><ref refid="d1/d77/a05915" kindref="compound">FrustumClusters</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="23" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a3cbf4189b8d99b4a39479749ad06d62e" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::FrustumClusters::FrustumClusters</definition>
+        <argsstring>(FrustumClusters &amp;&amp;) noexcept=delete</argsstring>
+        <name>FrustumClusters</name>
+        <qualifiedname>castor3d::FrustumClusters::FrustumClusters</qualifiedname>
+        <param>
+          <type><ref refid="d1/d77/a05915" kindref="compound">FrustumClusters</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="24" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1adac2f77dd68131dc8d67cc7060362bdc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/d77/a05915" kindref="compound">FrustumClusters</ref> &amp;</type>
+        <definition>C3D_API FrustumClusters &amp; castor3d::FrustumClusters::operator=</definition>
+        <argsstring>(FrustumClusters const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::FrustumClusters::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d1/d77/a05915" kindref="compound">FrustumClusters</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="25" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1aa1c6655b8e463d2d4e2461ceaf0f1f57" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d1/d77/a05915" kindref="compound">FrustumClusters</ref> &amp;</type>
+        <definition>C3D_API FrustumClusters &amp; castor3d::FrustumClusters::operator=</definition>
+        <argsstring>(FrustumClusters &amp;&amp;) noexcept=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::FrustumClusters::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d1/d77/a05915" kindref="compound">FrustumClusters</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="26" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1ad9efa27b56e9e506259fb60318abf064" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::FrustumClusters::~FrustumClusters</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~FrustumClusters</name>
+        <qualifiedname>castor3d::FrustumClusters::~FrustumClusters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="27" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a9cc24d6c12243edcfb5dddce87cd4044" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::FrustumClusters::FrustumClusters</definition>
+        <argsstring>(RenderDevice const &amp;device, Camera const &amp;camera, ClustersConfig const &amp;config)</argsstring>
+        <name>FrustumClusters</name>
+        <qualifiedname>castor3d::FrustumClusters::FrustumClusters</qualifiedname>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dc3/a06951" kindref="compound">Camera</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <param>
+          <type><ref refid="db/da7/a05911" kindref="compound">ClustersConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="29" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a57db3659734c89b59cc8dcfe1ab326fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::FrustumClusters::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::FrustumClusters::update</qualifiedname>
+        <param>
+          <type><ref refid="dc/d23/a06511" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Mise à jour niveau CPU. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données d&apos;update. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="40" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a373254bb7f7478d8086932da3d7b4a32" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::FramePass const &amp;</type>
+        <definition>C3D_API crg::FramePass const  &amp; castor3d::FrustumClusters::createFramePasses</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const *previousPass, RenderTechnique &amp;technique, CameraUbo const &amp;cameraUbo, RenderNodesPass *&amp;nodesPass)</argsstring>
+        <name>createFramePasses</name>
+        <qualifiedname>castor3d::FrustumClusters::createFramePasses</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const *</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dd8/a06575" kindref="compound">RenderTechnique</ref> &amp;</type>
+          <declname>technique</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/ddf/a07743" kindref="compound">CameraUbo</ref> const &amp;</type>
+          <declname>cameraUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d96/a06531" kindref="compound">RenderNodesPass</ref> *&amp;</type>
+          <declname>nodesPass</declname>
+        </param>
+        <briefdescription>
+<para>Enregistre les passes liées aux clusters. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="47" column="31"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a3c9d0f626992b2b0dd3e109244cbd924" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>castor::Point3ui const &amp;</type>
+        <definition>castor::Point3ui const  &amp; castor3d::FrustumClusters::getDimensions</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getDimensions</name>
+        <qualifiedname>castor3d::FrustumClusters::getDimensions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="80" column="25" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="80" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a5a5eb93df7c5a0067e6237a2a7a54195" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool const &amp;</type>
+        <definition>bool const  &amp; castor3d::FrustumClusters::needsClustersUpdate</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>needsClustersUpdate</name>
+        <qualifiedname>castor3d::FrustumClusters::needsClustersUpdate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="85" column="13" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="85" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a2d2b7c9e44984f4e0b37c86bf1f2bc30" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool const &amp;</type>
+        <definition>bool const  &amp; castor3d::FrustumClusters::needsLightsUpdate</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>needsLightsUpdate</name>
+        <qualifiedname>castor3d::FrustumClusters::needsLightsUpdate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="90" column="13" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="90" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1ae7b73c391a237a5924dd30580e734a93" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::FrustumClusters::getClustersUbo</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getClustersUbo</name>
+        <qualifiedname>castor3d::FrustumClusters::getClustersUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="95" column="7" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="95" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a8a5165d406d4bf7d033ce374faac0bd5" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::FrustumClusters::getClustersAABBBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getClustersAABBBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getClustersAABBBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="100" column="7" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="100" bodyend="104"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a0e31de47db108ef1445bf4dcab3f5b00" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::FrustumClusters::getPointLightClusterGridBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getPointLightClusterGridBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getPointLightClusterGridBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="106" column="7" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="106" bodyend="110"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a22f2cbd55037a1a5af7078a4c53cff70" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::FrustumClusters::getSpotLightClusterGridBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getSpotLightClusterGridBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getSpotLightClusterGridBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="112" column="7" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="112" bodyend="116"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a271ef1ba14eba31bf030ac710600830c" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::FrustumClusters::getPointLightClusterIndexBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getPointLightClusterIndexBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getPointLightClusterIndexBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="118" column="7" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="118" bodyend="122"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1ab8d9e1cfb58553b549d6ef8e4061ecf7" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::FrustumClusters::getSpotLightClusterIndexBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getSpotLightClusterIndexBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getSpotLightClusterIndexBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="124" column="7" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="124" bodyend="128"/>
+        <references refid="df/dd8/a01943_1a7db41dab6f93d75339a43575590ee196" compoundref="df/dd8/a01943" startline="49">CU_Require</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a836fe67d822daaaa69a85a205a2638d8" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::FrustumClusters::getAllLightsAABBBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getAllLightsAABBBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getAllLightsAABBBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="130" column="7" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="130" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a234a4cd53cfa5d730c9ac38b66103f1c" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::FrustumClusters::getReducedLightsAABBBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getReducedLightsAABBBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getReducedLightsAABBBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="135" column="7" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="135" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a1fb51d6d0a58f7385950d228aaa6e041" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::FrustumClusters::getPointLightBVHBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getPointLightBVHBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getPointLightBVHBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="140" column="7" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="140" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a7f9ffd0f9b5ebd56bb23a93babedea42" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::FrustumClusters::getSpotLightBVHBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getSpotLightBVHBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getSpotLightBVHBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="145" column="7" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="145" bodyend="148"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1aa12708cad38d164d345472958d18cb7f" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::BufferBase &amp;</type>
+        <definition>ashes::BufferBase &amp; castor3d::FrustumClusters::getPointLightIndicesBuffer</definition>
+        <argsstring>(uint32_t index) const noexcept</argsstring>
+        <name>getPointLightIndicesBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getPointLightIndicesBuffer</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="150" column="20" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="150" bodyend="153"/>
+        <referencedby refid="d1/d77/a05915_1a88b6a573f0806866bc970b1f70048ac9" compoundref="d7/dd4/a00968" startline="170" endline="173">getInputPointLightIndicesBuffer</referencedby>
+        <referencedby refid="d1/d77/a05915_1ab1d5716c2a835480f6c713ebb1d9d18b" compoundref="d7/dd4/a00968" startline="192" endline="196">getInputPointLightIndicesBuffers</referencedby>
+        <referencedby refid="d1/d77/a05915_1a6dbf0b85ab1b1eac981a6a91182e5648" compoundref="d7/dd4/a00968" startline="204" endline="207">getOutputPointLightIndicesBuffer</referencedby>
+        <referencedby refid="d1/d77/a05915_1ac7b39651d6d9666866a09400ec68c394" compoundref="d7/dd4/a00968" startline="180" endline="184">getOutputPointLightIndicesBuffers</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a727499c7c102f5d80acc55275eeabfec" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::BufferBase &amp;</type>
+        <definition>ashes::BufferBase &amp; castor3d::FrustumClusters::getSpotLightIndicesBuffer</definition>
+        <argsstring>(uint32_t index) const noexcept</argsstring>
+        <name>getSpotLightIndicesBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getSpotLightIndicesBuffer</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="155" column="20" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="155" bodyend="158"/>
+        <referencedby refid="d1/d77/a05915_1a145a91ecba4a20f095e6b858139ab1fb" compoundref="d7/dd4/a00968" startline="175" endline="178">getInputSpotLightIndicesBuffer</referencedby>
+        <referencedby refid="d1/d77/a05915_1a9f392bf8738b9209ca9ad0087881e393" compoundref="d7/dd4/a00968" startline="198" endline="202">getInputSpotLightIndicesBuffers</referencedby>
+        <referencedby refid="d1/d77/a05915_1a88f40e6f72afc061658300df1875e354" compoundref="d7/dd4/a00968" startline="209" endline="212">getOutputSpotLightIndicesBuffer</referencedby>
+        <referencedby refid="d1/d77/a05915_1a1747ffc368f6c00c9cca44ad4dbe7224" compoundref="d7/dd4/a00968" startline="186" endline="190">getOutputSpotLightIndicesBuffers</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a94da0c91c88bf88a09d6705a906cb524" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::BufferBase &amp;</type>
+        <definition>ashes::BufferBase &amp; castor3d::FrustumClusters::getPointLightMortonCodesBuffer</definition>
+        <argsstring>(uint32_t index) const noexcept</argsstring>
+        <name>getPointLightMortonCodesBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getPointLightMortonCodesBuffer</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="160" column="20" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="160" bodyend="163"/>
+        <referencedby refid="d1/d77/a05915_1ab917b5a62144f2dd550999488f0636bf" compoundref="d7/dd4/a00968" startline="214" endline="217">getInputPointLightMortonCodesBuffer</referencedby>
+        <referencedby refid="d1/d77/a05915_1a7681a5b084bc7ce8c45beab43bdbb9d7" compoundref="d7/dd4/a00968" startline="236" endline="240">getInputPointLightMortonCodesBuffers</referencedby>
+        <referencedby refid="d1/d77/a05915_1a419cf9863a50f7a26896659ea36b4fa8" compoundref="d7/dd4/a00968" startline="248" endline="251">getOutputPointLightMortonCodesBuffer</referencedby>
+        <referencedby refid="d1/d77/a05915_1a4e5c188e4a9dfa387eb25a0b66b35ffa" compoundref="d7/dd4/a00968" startline="224" endline="228">getOutputPointLightMortonCodesBuffers</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1acda0442d578da381f934fb223ccd68c8" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::BufferBase &amp;</type>
+        <definition>ashes::BufferBase &amp; castor3d::FrustumClusters::getSpotLightMortonCodesBuffer</definition>
+        <argsstring>(uint32_t index) const noexcept</argsstring>
+        <name>getSpotLightMortonCodesBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getSpotLightMortonCodesBuffer</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="165" column="20" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="165" bodyend="168"/>
+        <referencedby refid="d1/d77/a05915_1ad084cf73599c80615b4310af5463ac31" compoundref="d7/dd4/a00968" startline="219" endline="222">getInputSpotLightMortonCodesBuffer</referencedby>
+        <referencedby refid="d1/d77/a05915_1ac7c4eaed08ffa4ed9f9780f3afa07a8b" compoundref="d7/dd4/a00968" startline="242" endline="246">getInputSpotLightMortonCodesBuffers</referencedby>
+        <referencedby refid="d1/d77/a05915_1aa7e5886b2d2c0bc1317eef8ce951c52b" compoundref="d7/dd4/a00968" startline="253" endline="256">getOutputSpotLightMortonCodesBuffer</referencedby>
+        <referencedby refid="d1/d77/a05915_1a6586a79dbf56807baeccb8731ef79fcc" compoundref="d7/dd4/a00968" startline="230" endline="234">getOutputSpotLightMortonCodesBuffers</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a88b6a573f0806866bc970b1f70048ac9" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::BufferBase &amp;</type>
+        <definition>ashes::BufferBase &amp; castor3d::FrustumClusters::getInputPointLightIndicesBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getInputPointLightIndicesBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getInputPointLightIndicesBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="170" column="20" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="170" bodyend="173"/>
+        <references refid="d1/d77/a05915_1aa12708cad38d164d345472958d18cb7f" compoundref="d7/dd4/a00968" startline="150" endline="153">getPointLightIndicesBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a145a91ecba4a20f095e6b858139ab1fb" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::BufferBase &amp;</type>
+        <definition>ashes::BufferBase &amp; castor3d::FrustumClusters::getInputSpotLightIndicesBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getInputSpotLightIndicesBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getInputSpotLightIndicesBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="175" column="20" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="175" bodyend="178"/>
+        <references refid="d1/d77/a05915_1a727499c7c102f5d80acc55275eeabfec" compoundref="d7/dd4/a00968" startline="155" endline="158">getSpotLightIndicesBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1ac7b39651d6d9666866a09400ec68c394" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; ashes::BufferBase const * &gt;</type>
+        <definition>castor::Vector&lt; ashes::BufferBase const * &gt; castor3d::FrustumClusters::getOutputPointLightIndicesBuffers</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getOutputPointLightIndicesBuffers</name>
+        <qualifiedname>castor3d::FrustumClusters::getOutputPointLightIndicesBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="180" column="16" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="180" bodyend="184"/>
+        <references refid="d1/d77/a05915_1aa12708cad38d164d345472958d18cb7f" compoundref="d7/dd4/a00968" startline="150" endline="153">getPointLightIndicesBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a1747ffc368f6c00c9cca44ad4dbe7224" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; ashes::BufferBase const * &gt;</type>
+        <definition>castor::Vector&lt; ashes::BufferBase const * &gt; castor3d::FrustumClusters::getOutputSpotLightIndicesBuffers</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getOutputSpotLightIndicesBuffers</name>
+        <qualifiedname>castor3d::FrustumClusters::getOutputSpotLightIndicesBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="186" column="16" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="186" bodyend="190"/>
+        <references refid="d1/d77/a05915_1a727499c7c102f5d80acc55275eeabfec" compoundref="d7/dd4/a00968" startline="155" endline="158">getSpotLightIndicesBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1ab1d5716c2a835480f6c713ebb1d9d18b" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; ashes::BufferBase const * &gt;</type>
+        <definition>castor::Vector&lt; ashes::BufferBase const * &gt; castor3d::FrustumClusters::getInputPointLightIndicesBuffers</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getInputPointLightIndicesBuffers</name>
+        <qualifiedname>castor3d::FrustumClusters::getInputPointLightIndicesBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="192" column="16" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="192" bodyend="196"/>
+        <references refid="d1/d77/a05915_1aa12708cad38d164d345472958d18cb7f" compoundref="d7/dd4/a00968" startline="150" endline="153">getPointLightIndicesBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a9f392bf8738b9209ca9ad0087881e393" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; ashes::BufferBase const * &gt;</type>
+        <definition>castor::Vector&lt; ashes::BufferBase const * &gt; castor3d::FrustumClusters::getInputSpotLightIndicesBuffers</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getInputSpotLightIndicesBuffers</name>
+        <qualifiedname>castor3d::FrustumClusters::getInputSpotLightIndicesBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="198" column="16" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="198" bodyend="202"/>
+        <references refid="d1/d77/a05915_1a727499c7c102f5d80acc55275eeabfec" compoundref="d7/dd4/a00968" startline="155" endline="158">getSpotLightIndicesBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a6dbf0b85ab1b1eac981a6a91182e5648" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::BufferBase &amp;</type>
+        <definition>ashes::BufferBase &amp; castor3d::FrustumClusters::getOutputPointLightIndicesBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getOutputPointLightIndicesBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getOutputPointLightIndicesBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="204" column="20" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="204" bodyend="207"/>
+        <references refid="d1/d77/a05915_1aa12708cad38d164d345472958d18cb7f" compoundref="d7/dd4/a00968" startline="150" endline="153">getPointLightIndicesBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a88f40e6f72afc061658300df1875e354" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::BufferBase &amp;</type>
+        <definition>ashes::BufferBase &amp; castor3d::FrustumClusters::getOutputSpotLightIndicesBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getOutputSpotLightIndicesBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getOutputSpotLightIndicesBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="209" column="20" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="209" bodyend="212"/>
+        <references refid="d1/d77/a05915_1a727499c7c102f5d80acc55275eeabfec" compoundref="d7/dd4/a00968" startline="155" endline="158">getSpotLightIndicesBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1ab917b5a62144f2dd550999488f0636bf" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::BufferBase &amp;</type>
+        <definition>ashes::BufferBase &amp; castor3d::FrustumClusters::getInputPointLightMortonCodesBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getInputPointLightMortonCodesBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getInputPointLightMortonCodesBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="214" column="20" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="214" bodyend="217"/>
+        <references refid="d1/d77/a05915_1a94da0c91c88bf88a09d6705a906cb524" compoundref="d7/dd4/a00968" startline="160" endline="163">getPointLightMortonCodesBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1ad084cf73599c80615b4310af5463ac31" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::BufferBase &amp;</type>
+        <definition>ashes::BufferBase &amp; castor3d::FrustumClusters::getInputSpotLightMortonCodesBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getInputSpotLightMortonCodesBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getInputSpotLightMortonCodesBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="219" column="20" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="219" bodyend="222"/>
+        <references refid="d1/d77/a05915_1acda0442d578da381f934fb223ccd68c8" compoundref="d7/dd4/a00968" startline="165" endline="168">getSpotLightMortonCodesBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a4e5c188e4a9dfa387eb25a0b66b35ffa" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; ashes::BufferBase const * &gt;</type>
+        <definition>castor::Vector&lt; ashes::BufferBase const * &gt; castor3d::FrustumClusters::getOutputPointLightMortonCodesBuffers</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getOutputPointLightMortonCodesBuffers</name>
+        <qualifiedname>castor3d::FrustumClusters::getOutputPointLightMortonCodesBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="224" column="16" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="224" bodyend="228"/>
+        <references refid="d1/d77/a05915_1a94da0c91c88bf88a09d6705a906cb524" compoundref="d7/dd4/a00968" startline="160" endline="163">getPointLightMortonCodesBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a6586a79dbf56807baeccb8731ef79fcc" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; ashes::BufferBase const * &gt;</type>
+        <definition>castor::Vector&lt; ashes::BufferBase const * &gt; castor3d::FrustumClusters::getOutputSpotLightMortonCodesBuffers</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getOutputSpotLightMortonCodesBuffers</name>
+        <qualifiedname>castor3d::FrustumClusters::getOutputSpotLightMortonCodesBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="230" column="16" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="230" bodyend="234"/>
+        <references refid="d1/d77/a05915_1acda0442d578da381f934fb223ccd68c8" compoundref="d7/dd4/a00968" startline="165" endline="168">getSpotLightMortonCodesBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a7681a5b084bc7ce8c45beab43bdbb9d7" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; ashes::BufferBase const * &gt;</type>
+        <definition>castor::Vector&lt; ashes::BufferBase const * &gt; castor3d::FrustumClusters::getInputPointLightMortonCodesBuffers</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getInputPointLightMortonCodesBuffers</name>
+        <qualifiedname>castor3d::FrustumClusters::getInputPointLightMortonCodesBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="236" column="16" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="236" bodyend="240"/>
+        <references refid="d1/d77/a05915_1a94da0c91c88bf88a09d6705a906cb524" compoundref="d7/dd4/a00968" startline="160" endline="163">getPointLightMortonCodesBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1ac7c4eaed08ffa4ed9f9780f3afa07a8b" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; ashes::BufferBase const * &gt;</type>
+        <definition>castor::Vector&lt; ashes::BufferBase const * &gt; castor3d::FrustumClusters::getInputSpotLightMortonCodesBuffers</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getInputSpotLightMortonCodesBuffers</name>
+        <qualifiedname>castor3d::FrustumClusters::getInputSpotLightMortonCodesBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="242" column="16" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="242" bodyend="246"/>
+        <references refid="d1/d77/a05915_1acda0442d578da381f934fb223ccd68c8" compoundref="d7/dd4/a00968" startline="165" endline="168">getSpotLightMortonCodesBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a419cf9863a50f7a26896659ea36b4fa8" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::BufferBase &amp;</type>
+        <definition>ashes::BufferBase &amp; castor3d::FrustumClusters::getOutputPointLightMortonCodesBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getOutputPointLightMortonCodesBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getOutputPointLightMortonCodesBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="248" column="20" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="248" bodyend="251"/>
+        <references refid="d1/d77/a05915_1a94da0c91c88bf88a09d6705a906cb524" compoundref="d7/dd4/a00968" startline="160" endline="163">getPointLightMortonCodesBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1aa7e5886b2d2c0bc1317eef8ce951c52b" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::BufferBase &amp;</type>
+        <definition>ashes::BufferBase &amp; castor3d::FrustumClusters::getOutputSpotLightMortonCodesBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getOutputSpotLightMortonCodesBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getOutputSpotLightMortonCodesBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="253" column="20" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="253" bodyend="256"/>
+        <references refid="d1/d77/a05915_1acda0442d578da381f934fb223ccd68c8" compoundref="d7/dd4/a00968" startline="165" endline="168">getSpotLightMortonCodesBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1ab7297c8f3d3f142254a64b37277fab18" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::BufferBase &amp;</type>
+        <definition>ashes::BufferBase &amp; castor3d::FrustumClusters::getMergePathPartitionsBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getMergePathPartitionsBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getMergePathPartitionsBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="258" column="20" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="258" bodyend="261"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a6bfaae96cd3c98ec9d2ad6272e3ef1a9" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::BufferBase &amp;</type>
+        <definition>ashes::BufferBase &amp; castor3d::FrustumClusters::getClusterFlagsBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getClusterFlagsBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getClusterFlagsBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="263" column="20" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="263" bodyend="266"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1ad8a74f5b267a1e25e91c952800e4ffb8" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::BufferBase &amp;</type>
+        <definition>ashes::BufferBase &amp; castor3d::FrustumClusters::getUniqueClustersBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getUniqueClustersBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getUniqueClustersBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="268" column="20" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="268" bodyend="271"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a6ef5acdbd050fbddbd5cfa5a32698a82" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>ashes::BufferBase &amp;</type>
+        <definition>ashes::BufferBase &amp; castor3d::FrustumClusters::getClustersIndirectBuffer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getClustersIndirectBuffer</name>
+        <qualifiedname>castor3d::FrustumClusters::getClustersIndirectBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="273" column="20" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="273" bodyend="276"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a27e21404fee9cb375efc1da6b51f7062" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::FrustumClusters::getCamera</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getCamera</name>
+        <qualifiedname>castor3d::FrustumClusters::getCamera</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="278" column="7" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="278" bodyend="281"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a030a9a715efd3e57437798b07052d6de" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::FrustumClusters::getConfig</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getConfig</name>
+        <qualifiedname>castor3d::FrustumClusters::getConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="283" column="7" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="283" bodyend="286"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d1/d77/a05915_1a66e208dbdecc55e308f6772b77517ae8" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>static C3D_API uint32_t castor3d::FrustumClusters::getNumLevelNodes</definition>
+        <argsstring>(uint32_t level)</argsstring>
+        <name>getNumLevelNodes</name>
+        <qualifiedname>castor3d::FrustumClusters::getNumLevelNodes</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">level</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le niveau du BVH. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le nombre de noeuds du niveau donné d&apos;un BVH. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="60" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1ab1363b6365192332a705ee06eeb8470a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>static C3D_API uint32_t castor3d::FrustumClusters::getNumLevels</definition>
+        <argsstring>(uint32_t numLeaves)</argsstring>
+        <name>getNumLevels</name>
+        <qualifiedname>castor3d::FrustumClusters::getNumLevels</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>numLeaves</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">numLeaves</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre de noeuds feuilles. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le nombre de niveaux nécessaire pour un BVH contenant le nombre de noeuds feuille donné. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="69" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d77/a05915_1a8e69e5654c46c61427c184ff17a89703" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>static C3D_API uint32_t castor3d::FrustumClusters::getNumNodes</definition>
+        <argsstring>(uint32_t numLeaves)</argsstring>
+        <name>getNumNodes</name>
+        <qualifiedname>castor3d::FrustumClusters::getNumNodes</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>numLeaves</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">numLeaves</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nombre de noeuds feuilles. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le nombre de noeuds (enfants) nécessaire pour un représenter un BVH contenant le nombre de noeuds feuille donné. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="78" column="25"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/d77/a05915_1a2f2f870440bb520c6054939aef437e3c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::FrustumClusters::doUpdate</definition>
+        <argsstring>()</argsstring>
+        <name>doUpdate</name>
+        <qualifiedname>castor3d::FrustumClusters::doUpdate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="298" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::SignalT&lt; ClustersBuffersChangedFunction &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; ClustersBuffersChangedFunction &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::FrustumClusters</label>
+        <link refid="d1/d77/a05915"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>onClusterBuffersChanged</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::NonCopyable</label>
+        <link refid="da/d36/a08315"/>
+      </node>
+      <node id="4">
+        <label>castor::SignalT&lt; Function &gt;</label>
+        <link refid="dc/d79/a08267"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/Clustered/FrustumClusters.hpp" line="20" column="1" bodyfile="Castor3D/Render/Clustered/FrustumClusters.hpp" bodystart="21" bodyend="336"/>
+    <listofallmembers>
+      <member refid="d1/d77/a05915_1a373254bb7f7478d8086932da3d7b4a32" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>createFramePasses</name></member>
+      <member refid="d1/d77/a05915_1a2f2f870440bb520c6054939aef437e3c" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>doUpdate</name></member>
+      <member refid="d1/d77/a05915_1a3c60990f6f9375b5e0f387820d5aa6e0" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>FrustumClusters</name></member>
+      <member refid="d1/d77/a05915_1a3cbf4189b8d99b4a39479749ad06d62e" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>FrustumClusters</name></member>
+      <member refid="d1/d77/a05915_1a9cc24d6c12243edcfb5dddce87cd4044" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>FrustumClusters</name></member>
+      <member refid="d1/d77/a05915_1a836fe67d822daaaa69a85a205a2638d8" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getAllLightsAABBBuffer</name></member>
+      <member refid="d1/d77/a05915_1a27e21404fee9cb375efc1da6b51f7062" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getCamera</name></member>
+      <member refid="d1/d77/a05915_1a6bfaae96cd3c98ec9d2ad6272e3ef1a9" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getClusterFlagsBuffer</name></member>
+      <member refid="d1/d77/a05915_1a8a5165d406d4bf7d033ce374faac0bd5" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getClustersAABBBuffer</name></member>
+      <member refid="d1/d77/a05915_1a6ef5acdbd050fbddbd5cfa5a32698a82" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getClustersIndirectBuffer</name></member>
+      <member refid="d1/d77/a05915_1ae7b73c391a237a5924dd30580e734a93" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getClustersUbo</name></member>
+      <member refid="d1/d77/a05915_1a030a9a715efd3e57437798b07052d6de" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getConfig</name></member>
+      <member refid="d1/d77/a05915_1a3c9d0f626992b2b0dd3e109244cbd924" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getDimensions</name></member>
+      <member refid="d1/d77/a05915_1a88b6a573f0806866bc970b1f70048ac9" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getInputPointLightIndicesBuffer</name></member>
+      <member refid="d1/d77/a05915_1ab1d5716c2a835480f6c713ebb1d9d18b" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getInputPointLightIndicesBuffers</name></member>
+      <member refid="d1/d77/a05915_1ab917b5a62144f2dd550999488f0636bf" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getInputPointLightMortonCodesBuffer</name></member>
+      <member refid="d1/d77/a05915_1a7681a5b084bc7ce8c45beab43bdbb9d7" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getInputPointLightMortonCodesBuffers</name></member>
+      <member refid="d1/d77/a05915_1a145a91ecba4a20f095e6b858139ab1fb" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getInputSpotLightIndicesBuffer</name></member>
+      <member refid="d1/d77/a05915_1a9f392bf8738b9209ca9ad0087881e393" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getInputSpotLightIndicesBuffers</name></member>
+      <member refid="d1/d77/a05915_1ad084cf73599c80615b4310af5463ac31" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getInputSpotLightMortonCodesBuffer</name></member>
+      <member refid="d1/d77/a05915_1ac7c4eaed08ffa4ed9f9780f3afa07a8b" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getInputSpotLightMortonCodesBuffers</name></member>
+      <member refid="d1/d77/a05915_1ab7297c8f3d3f142254a64b37277fab18" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getMergePathPartitionsBuffer</name></member>
+      <member refid="d1/d77/a05915_1a66e208dbdecc55e308f6772b77517ae8" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getNumLevelNodes</name></member>
+      <member refid="d1/d77/a05915_1ab1363b6365192332a705ee06eeb8470a" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getNumLevels</name></member>
+      <member refid="d1/d77/a05915_1a8e69e5654c46c61427c184ff17a89703" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getNumNodes</name></member>
+      <member refid="d1/d77/a05915_1a6dbf0b85ab1b1eac981a6a91182e5648" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getOutputPointLightIndicesBuffer</name></member>
+      <member refid="d1/d77/a05915_1ac7b39651d6d9666866a09400ec68c394" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getOutputPointLightIndicesBuffers</name></member>
+      <member refid="d1/d77/a05915_1a419cf9863a50f7a26896659ea36b4fa8" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getOutputPointLightMortonCodesBuffer</name></member>
+      <member refid="d1/d77/a05915_1a4e5c188e4a9dfa387eb25a0b66b35ffa" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getOutputPointLightMortonCodesBuffers</name></member>
+      <member refid="d1/d77/a05915_1a88f40e6f72afc061658300df1875e354" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getOutputSpotLightIndicesBuffer</name></member>
+      <member refid="d1/d77/a05915_1a1747ffc368f6c00c9cca44ad4dbe7224" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getOutputSpotLightIndicesBuffers</name></member>
+      <member refid="d1/d77/a05915_1aa7e5886b2d2c0bc1317eef8ce951c52b" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getOutputSpotLightMortonCodesBuffer</name></member>
+      <member refid="d1/d77/a05915_1a6586a79dbf56807baeccb8731ef79fcc" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getOutputSpotLightMortonCodesBuffers</name></member>
+      <member refid="d1/d77/a05915_1a1fb51d6d0a58f7385950d228aaa6e041" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getPointLightBVHBuffer</name></member>
+      <member refid="d1/d77/a05915_1a0e31de47db108ef1445bf4dcab3f5b00" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getPointLightClusterGridBuffer</name></member>
+      <member refid="d1/d77/a05915_1a271ef1ba14eba31bf030ac710600830c" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getPointLightClusterIndexBuffer</name></member>
+      <member refid="d1/d77/a05915_1aa12708cad38d164d345472958d18cb7f" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getPointLightIndicesBuffer</name></member>
+      <member refid="d1/d77/a05915_1a94da0c91c88bf88a09d6705a906cb524" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getPointLightMortonCodesBuffer</name></member>
+      <member refid="d1/d77/a05915_1a234a4cd53cfa5d730c9ac38b66103f1c" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getReducedLightsAABBBuffer</name></member>
+      <member refid="d1/d77/a05915_1a7f9ffd0f9b5ebd56bb23a93babedea42" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getSpotLightBVHBuffer</name></member>
+      <member refid="d1/d77/a05915_1a22f2cbd55037a1a5af7078a4c53cff70" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getSpotLightClusterGridBuffer</name></member>
+      <member refid="d1/d77/a05915_1ab8d9e1cfb58553b549d6ef8e4061ecf7" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getSpotLightClusterIndexBuffer</name></member>
+      <member refid="d1/d77/a05915_1a727499c7c102f5d80acc55275eeabfec" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getSpotLightIndicesBuffer</name></member>
+      <member refid="d1/d77/a05915_1acda0442d578da381f934fb223ccd68c8" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getSpotLightMortonCodesBuffer</name></member>
+      <member refid="d1/d77/a05915_1ad8a74f5b267a1e25e91c952800e4ffb8" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>getUniqueClustersBuffer</name></member>
+      <member refid="d1/d77/a05915_1affba0b6daadfddb48e3085a436f1eab7" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_aabbBuffer</name></member>
+      <member refid="d1/d77/a05915_1a74997d6ea496267f781be1977326bb1d" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_allLightsAABBBuffer</name></member>
+      <member refid="d1/d77/a05915_1a1ac3a0f872deeb13b81ad2b081ba79a3" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_camera</name></member>
+      <member refid="d1/d77/a05915_1a483f52095697ae751fbf84db7242c6b5" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_cameraProjection</name></member>
+      <member refid="d1/d77/a05915_1a58623b4e79167535524a8c7aed8c52ce" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_cameraView</name></member>
+      <member refid="d1/d77/a05915_1ade39b055a7b95eed6e90e75b1a115f40" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_clusterFlags</name></member>
+      <member refid="d1/d77/a05915_1aa9efcbeb7b4cebe73ab380beb0999969" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_clustersDirty</name></member>
+      <member refid="d1/d77/a05915_1a8319029f381fe3ecdbe1fbbc57f362c0" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_clustersIndirect</name></member>
+      <member refid="d1/d77/a05915_1ad119fdc43417d250687af578ad5d7d4a" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_clusterSize</name></member>
+      <member refid="d1/d77/a05915_1a94594e8dfa81ddfbfab18677318b1b76" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_clustersUbo</name></member>
+      <member refid="d1/d77/a05915_1a19bcc9dc8488c31bd74e76b148af9d86" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_config</name></member>
+      <member refid="d1/d77/a05915_1acab0fd8e71976a6119764888a9a0bad2" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_device</name></member>
+      <member refid="d1/d77/a05915_1a1a82c47592be89942173b5d55b1fd803" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_dimensions</name></member>
+      <member refid="d1/d77/a05915_1ad6bd84f1200225648dbbc43ee8eb4d98" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_first</name></member>
+      <member refid="d1/d77/a05915_1a5640a0cf1b79a8f561bf4523bbc740ba" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_lightsDirty</name></member>
+      <member refid="d1/d77/a05915_1a84dccf26983dd08b1d03b9f29f573836" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_mergePathPartitionsBuffer</name></member>
+      <member refid="d1/d77/a05915_1a61e484f4eb843609b4a72d14256ba107" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_pointBVHBuffer</name></member>
+      <member refid="d1/d77/a05915_1a75e2cf954bb33988c3b35750536c8799" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_pointIndicesBuffers</name></member>
+      <member refid="d1/d77/a05915_1a7ed3169929ce8a7d29e98dfd9588897a" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_pointLightClusterGridBuffer</name></member>
+      <member refid="d1/d77/a05915_1a85cdb4da0104dbb6439c4d30e92ef960" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_pointLightClusterIndexBuffer</name></member>
+      <member refid="d1/d77/a05915_1a6b15e13fd6f58a9c9ecd00e5d43d43df" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_pointLightMortonIndicesInput</name></member>
+      <member refid="d1/d77/a05915_1a9b8a32944e775ca614d454d196f33926" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_pointMortonCodesBuffers</name></member>
+      <member refid="d1/d77/a05915_1a414a712e7b2e232266560108fcbf1bee" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_reducedLightsAABBBuffer</name></member>
+      <member refid="d1/d77/a05915_1af6ccd781bd00f5905b74787e2a61fae6" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_spotBVHBuffer</name></member>
+      <member refid="d1/d77/a05915_1a2075688733d81ccb040e0884b341e9d0" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_spotIndicesBuffers</name></member>
+      <member refid="d1/d77/a05915_1a5d9f114ef6d7395fca6cda03d7fe3435" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_spotLightClusterGridBuffer</name></member>
+      <member refid="d1/d77/a05915_1a40f86761370bff7f82ce11e639cd94cd" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_spotLightClusterIndexBuffer</name></member>
+      <member refid="d1/d77/a05915_1a663043077e6a902ce862486609e538fa" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_spotLightMortonIndicesInput</name></member>
+      <member refid="d1/d77/a05915_1ab70456c583f276e4916273aeb8f5616e" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_spotMortonCodesBuffers</name></member>
+      <member refid="d1/d77/a05915_1a7229a1b69d78e07c78ca1e697a83c72d" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_toDelete</name></member>
+      <member refid="d1/d77/a05915_1a59b3ce83630aa9b73167e90594b20f74" prot="private" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>m_uniqueClusters</name></member>
+      <member refid="d1/d77/a05915_1a5a5eb93df7c5a0067e6237a2a7a54195" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>needsClustersUpdate</name></member>
+      <member refid="d1/d77/a05915_1a2d2b7c9e44984f4e0b37c86bf1f2bc30" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>needsLightsUpdate</name></member>
+      <member refid="d1/d77/a05915_1a4c781aab125268e0977e5baa5f002a30" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>onClusterBuffersChanged</name></member>
+      <member refid="d1/d77/a05915_1adac2f77dd68131dc8d67cc7060362bdc" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>operator=</name></member>
+      <member refid="d1/d77/a05915_1aa1c6655b8e463d2d4e2461ceaf0f1f57" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>operator=</name></member>
+      <member refid="d1/d77/a05915_1a57db3659734c89b59cc8dcfe1ab326fb" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>update</name></member>
+      <member refid="d1/d77/a05915_1ad9efa27b56e9e506259fb60318abf064" prot="public" virt="non-virtual"><scope>castor3d::FrustumClusters</scope><name>~FrustumClusters</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

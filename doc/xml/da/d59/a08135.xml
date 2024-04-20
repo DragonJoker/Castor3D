@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="da/d59/a08135" kind="class" language="C++" prot="public">
+    <compoundname>castor::TextWriter&lt; String &gt;</compoundname>
+    <basecompoundref refid="de/d30/a07987" prot="private" virt="non-virtual">castor::TextWriterT&lt; String &gt;</basecompoundref>
+    <includes local="no">TextWriter.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d59/a08135_1a273d80a8a7713dc8d159f026559c4e89" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>CU_API castor::TextWriter&lt; String &gt;::TextWriter</definition>
+        <argsstring>(String tabs)</argsstring>
+        <name>TextWriter</name>
+        <qualifiedname>castor::TextWriter&lt; String &gt;::TextWriter</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref></type>
+          <declname>tabs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextWriter.hpp" line="296" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d59/a08135_1ad3639bbc37135867dbd091bd70f8af76" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::TextWriter&lt; String &gt;::operator()</definition>
+        <argsstring>(String const &amp;value, StringStream &amp;file) override</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::TextWriter&lt; String &gt;::operator()</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ae7002b6add23b6f33bfde31351b5e8c9" kindref="member">StringStream</ref> &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Data/TextWriter.hpp" line="297" column="13"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::TextWriterT&lt; String &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::Writer&lt; T, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; T, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; String &gt;</label>
+        <link refid="da/d59/a08135"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::TextWriterBase</label>
+        <link refid="da/d1b/a08083"/>
+      </node>
+      <node id="6">
+        <label>castor::TextWriterT&lt; T &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::Writer&lt; DataT, StreamT &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Writer&lt; DataT, StreamT &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::TextWriterT&lt; String &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::Writer&lt; T, StringStream &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; T, StringStream &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+      <node id="1">
+        <label>castor::TextWriter&lt; String &gt;</label>
+        <link refid="da/d59/a08135"/>
+        <childnode refid="2" relation="private-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::TextWriterBase</label>
+        <link refid="da/d1b/a08083"/>
+      </node>
+      <node id="6">
+        <label>castor::TextWriterT&lt; T &gt;</label>
+        <link refid="de/d30/a07987"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor::Writer&lt; DataT, StreamT &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Writer&lt; DataT, StreamT &gt;</label>
+        <link refid="dc/d3a/a07991"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Data/TextWriter.hpp" line="292" column="1" bodyfile="CastorUtils/Data/TextWriter.hpp" bodystart="294" bodyend="299"/>
+    <listofallmembers>
+      <member refid="da/d59/a08135_1ad3639bbc37135867dbd091bd70f8af76" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; String &gt;</scope><name>operator()</name></member>
+      <member refid="dc/d3a/a07991_1acce0e94bd93e1dd12b330034532ff036" prot="private" virt="virtual" ambiguityscope="TextWriterT&lt; String &gt;::"><scope>castor::TextWriter&lt; String &gt;</scope><name>operator()</name></member>
+      <member refid="da/d59/a08135_1a273d80a8a7713dc8d159f026559c4e89" prot="public" virt="non-virtual"><scope>castor::TextWriter&lt; String &gt;</scope><name>TextWriter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

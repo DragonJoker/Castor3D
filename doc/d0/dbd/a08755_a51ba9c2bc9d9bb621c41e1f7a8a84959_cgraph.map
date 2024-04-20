@@ -1,0 +1,5 @@
+<map id="castor::Font::operator[]" name="castor::Font::operator[]">
+<area shape="rect" id="Node000001" title="Retrieves the glyph of wanted chaaracter." alt="" coords="5,5,160,31"/>
+<area shape="rect" id="Node000002" href="$d0/dbd/a08755.html#ab9156179ac776cedc681ad3c8af3b88b" title="Tells if the font already has load ed the wanted glyph." alt="" coords="208,5,376,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,15,194,15,194,21,160,21"/>
+</map>

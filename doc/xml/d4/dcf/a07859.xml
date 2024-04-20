@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/dcf/a07859" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::BillboardUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/dcf/a07859_1a781a63ab6c372487d2f8e4160e5942b1" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::BillboardUboConfiguration::dimensions</definition>
+        <argsstring></argsstring>
+        <name>dimensions</name>
+        <qualifiedname>castor3d::BillboardUboConfiguration::dimensions</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="85" column="17" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="85" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dcf/a07859_1ada27f32e99c0524f309b69f349b15355" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::BillboardUboConfiguration::isSpherical</definition>
+        <argsstring></argsstring>
+        <name>isSpherical</name>
+        <qualifiedname>castor3d::BillboardUboConfiguration::isSpherical</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="86" column="10" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="86" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dcf/a07859_1af299406fd155c2d59eb598f7632c051f" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::BillboardUboConfiguration::isFixedSize</definition>
+        <argsstring></argsstring>
+        <name>isFixedSize</name>
+        <qualifiedname>castor3d::BillboardUboConfiguration::isFixedSize</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="87" column="10" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="87" bodyend="87"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Données pour les billboards. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/Ubos/UbosModule.hpp" line="83" column="1" bodyfile="Castor3D/Shader/Ubos/UbosModule.hpp" bodystart="84" bodyend="88"/>
+    <listofallmembers>
+      <member refid="d4/dcf/a07859_1a781a63ab6c372487d2f8e4160e5942b1" prot="public" virt="non-virtual"><scope>castor3d::BillboardUboConfiguration</scope><name>dimensions</name></member>
+      <member refid="d4/dcf/a07859_1af299406fd155c2d59eb598f7632c051f" prot="public" virt="non-virtual"><scope>castor3d::BillboardUboConfiguration</scope><name>isFixedSize</name></member>
+      <member refid="d4/dcf/a07859_1ada27f32e99c0524f309b69f349b15355" prot="public" virt="non-virtual"><scope>castor3d::BillboardUboConfiguration</scope><name>isSpherical</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

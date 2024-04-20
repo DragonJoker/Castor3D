@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d2/d91/a07343" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ShaderBufferTypes</compoundname>
+    <derivedcompoundref refid="dd/d99/a07323" prot="public" virt="non-virtual">castor3d::FontGlyphBuffer::FontGlyphData</derivedcompoundref>
+    <derivedcompoundref refid="d7/d3b/a07003" prot="public" virt="non-virtual">castor3d::LightCategory::LightData</derivedcompoundref>
+    <includes local="no">ShaderBuffersModule.hpp</includes>
+    <innerclass refid="d1/db3/a07347" prot="public">castor3d::ShaderBufferTypes::Data2T</innerclass>
+    <innerclass refid="d5/da5/a07351" prot="public">castor3d::ShaderBufferTypes::Data3T</innerclass>
+    <innerclass refid="d5/dc4/a07355" prot="public">castor3d::ShaderBufferTypes::Data4T</innerclass>
+    <innerclass refid="de/d37/a07359" prot="public">castor3d::ShaderBufferTypes::Float4x4</innerclass>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d2/d91/a07343_1a12bb5f307e322111792e60895ada0270" prot="public" static="no">
+        <type>float</type>
+        <definition>using castor3d::ShaderBufferTypes::Float1 =  float</definition>
+        <argsstring></argsstring>
+        <name>Float1</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Float1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="100" column="1" bodyfile="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/d91/a07343_1a0ca9b111d9796a558d0d7d47dbcc961c" prot="public" static="no">
+        <type><ref refid="d1/db3/a07347" kindref="compound">Data2T</ref>&lt; <ref refid="d2/d91/a07343_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref> &gt;</type>
+        <definition>using castor3d::ShaderBufferTypes::Float2 =  Data2T&lt; Float1 &gt;</definition>
+        <argsstring></argsstring>
+        <name>Float2</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Float2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="122" column="1" bodyfile="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/d91/a07343_1aca810ed114fa8e305ca7be0d6062bb7b" prot="public" static="no">
+        <type><ref refid="d5/da5/a07351" kindref="compound">Data3T</ref>&lt; <ref refid="d2/d91/a07343_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref> &gt;</type>
+        <definition>using castor3d::ShaderBufferTypes::Float3 =  Data3T&lt; Float1 &gt;</definition>
+        <argsstring></argsstring>
+        <name>Float3</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Float3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="153" column="1" bodyfile="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/d91/a07343_1ab2c49973a254b6944d2e1bc802dcf643" prot="public" static="no">
+        <type><ref refid="d5/dc4/a07355" kindref="compound">Data4T</ref>&lt; <ref refid="d2/d91/a07343_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref> &gt;</type>
+        <definition>using castor3d::ShaderBufferTypes::Float4 =  Data4T&lt; Float1 &gt;</definition>
+        <argsstring></argsstring>
+        <name>Float4</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Float4</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="194" column="1" bodyfile="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="194" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::FontGlyphBuffer::FontGlyphData</label>
+        <link refid="dd/d99/a07323"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::LightCategory::LightData</label>
+        <link refid="d7/d3b/a07003"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ShaderBufferTypes</label>
+        <link refid="d2/d91/a07343"/>
+      </node>
+      <node id="4">
+        <label>castor3d::SpotLight::LightData</label>
+        <link refid="d0/dac/a07043"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="98" column="1" bodyfile="Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="99" bodyend="212"/>
+    <listofallmembers>
+      <member refid="d2/d91/a07343_1a12bb5f307e322111792e60895ada0270" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes</scope><name>Float1</name></member>
+      <member refid="d2/d91/a07343_1a0ca9b111d9796a558d0d7d47dbcc961c" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes</scope><name>Float2</name></member>
+      <member refid="d2/d91/a07343_1aca810ed114fa8e305ca7be0d6062bb7b" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes</scope><name>Float3</name></member>
+      <member refid="d2/d91/a07343_1ab2c49973a254b6944d2e1bc802dcf643" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes</scope><name>Float4</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

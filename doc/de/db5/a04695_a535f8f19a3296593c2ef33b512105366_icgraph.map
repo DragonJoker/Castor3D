@@ -1,0 +1,7 @@
+<map id="castor3d::TransmittanceMapComponent::Plugin::getTextureFlags" name="castor3d::TransmittanceMapComponent::Plugin::getTextureFlags">
+<area shape="rect" id="Node000001" title=" " alt="" coords="292,49,525,89"/>
+<area shape="rect" id="Node000002" href="$de/db5/a04695.html#ad23f18e85ca169a75d8316089e6585a1" title="Fills the texture configuration for use with this component." alt="" coords="27,5,222,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="278,55,222,48,223,42,278,49"/>
+<area shape="rect" id="Node000003" href="$de/db5/a04695.html#a4c2c795f68ee428c863f9bc271c97810" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="5,85,244,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="279,88,245,92,244,87,278,83"/>
+</map>

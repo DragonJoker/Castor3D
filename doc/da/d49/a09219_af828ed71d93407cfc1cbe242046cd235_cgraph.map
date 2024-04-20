@@ -1,0 +1,11 @@
+<map id="castor::RangeSequenceT::getRange" name="castor::RangeSequenceT::getRange">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,173,45"/>
+<area shape="rect" id="Node000002" href="$d9/da8/a09207.html#a068135b0cd55ff059544f0b4f467ebe7" title="Gives the value matching the given percentage." alt="" coords="221,13,361,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="173,23,208,23,208,28,173,28"/>
+<area shape="rect" id="Node000003" href="$d9/da8/a09207.html#a18a23ae9545aca1b31a8e13fbeede614" title="Gives the percentage matching the given value." alt="" coords="409,13,564,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="362,31,395,32,395,37,362,37"/>
+<area shape="poly" id="edge5_Node000003_Node000002" title=" " alt="" coords="409,19,375,19,375,14,409,14"/>
+<area shape="rect" id="Node000004" href="$d9/da8/a09207.html#a1905ba672068865603e55a41343cf17d" title="Puts a value in the range." alt="" coords="612,38,759,63"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="565,33,598,37,598,42,564,38"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="612,57,515,58,409,52,356,44,357,38,410,47,515,52,611,52"/>
+</map>

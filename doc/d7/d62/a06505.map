@@ -1,4 +1,7 @@
-<map id="castor3d::shader::Ray" name="castor3d::shader::Ray">
-<area shape="rect" id="node1" title=" " alt="" coords="285,27,436,53"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,237,75"/>
+<map id="castor3d::RenderPassRegisterInfo" name="castor3d::RenderPassRegisterInfo">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,211,224,236"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="51,108,178,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,162,117,210,112,210,112,162"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="51,5,178,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="117,59,117,108,112,108,112,59"/>
 </map>

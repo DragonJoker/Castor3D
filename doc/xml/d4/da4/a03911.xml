@@ -1,0 +1,370 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/da4/a03911" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::FrameStyle</compoundname>
+    <basecompoundref refid="d0/d33/a03899" prot="public" virt="non-virtual">castor3d::ControlStyle</basecompoundref>
+    <includes local="no">StyleFrame.hpp</includes>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="d4/da4/a03911_1af1b4ad585123a8abe5767cfd84721d30" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class FrameCtrl</definition>
+        <argsstring></argsstring>
+        <name>FrameCtrl</name>
+        <qualifiedname>castor3d::FrameStyle::FrameCtrl</qualifiedname>
+        <param>
+          <type><ref refid="d4/daf/a03819" kindref="compound">FrameCtrl</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleFrame.hpp" line="15" column="14" bodyfile="Castor3D/Gui/Theme/StyleFrame.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d4/da4/a03911_1a70866f55d893f380b915f1cc1ccfebc4" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d9/dba/a02278_1ac80f9441f3591ef5f0b85f0608c7725d" kindref="member">ControlType</ref> constexpr</type>
+        <definition>ControlType constexpr castor3d::FrameStyle::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::FrameStyle::Type</qualifiedname>
+        <initializer>= <ref refid="d9/dba/a02278_1ac80f9441f3591ef5f0b85f0608c7725dae4a597db55c712e057e4f4bc47cc2310" kindref="member">ControlType::eFrame</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleFrame.hpp" line="18" column="30" bodyfile="Castor3D/Gui/Theme/StyleFrame.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d4/da4/a03911_1aa9514e2e2e5746f3f934a015b6afd20e" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d0d/a03943" kindref="compound">StaticStyle</ref></type>
+        <definition>StaticStyle castor3d::FrameStyle::m_headerStyle</definition>
+        <argsstring></argsstring>
+        <name>m_headerStyle</name>
+        <qualifiedname>castor3d::FrameStyle::m_headerStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleFrame.hpp" line="94" column="13" bodyfile="Castor3D/Gui/Theme/StyleFrame.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/da4/a03911_1af81199fa592a0bf93483b48b76fbf9cf" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d48/a03919" kindref="compound">PanelStyle</ref></type>
+        <definition>PanelStyle castor3d::FrameStyle::m_contentStyle</definition>
+        <argsstring></argsstring>
+        <name>m_contentStyle</name>
+        <qualifiedname>castor3d::FrameStyle::m_contentStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleFrame.hpp" line="95" column="12" bodyfile="Castor3D/Gui/Theme/StyleFrame.hpp" bodystart="95" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/da4/a03911_1a3ee19384d04750d616fd3c77e104aa17" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::FrameStyle::FrameStyle</definition>
+        <argsstring>(castor::String const &amp;name, Scene *scene, Engine &amp;engine, castor::String const &amp;fontName)</argsstring>
+        <name>FrameStyle</name>
+        <qualifiedname>castor3d::FrameStyle::FrameStyle</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>fontName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleFrame.hpp" line="20" column="1" bodyfile="Castor3D/Gui/Theme/StyleFrame.hpp" bodystart="20" bodyend="34"/>
+        <references refid="d0/d33/a03899_1abb0c1b1b69b9dcd950c95c49e6a0907b" compoundref="d4/d27/a00392" startline="59" endline="62">castor3d::ControlStyle::setBackgroundInvisible</references>
+        <references refid="d0/d33/a03899_1abdf3d22a6c22445a800f47abe1a00545" compoundref="d4/d27/a00392" startline="64" endline="67">castor3d::ControlStyle::setForegroundInvisible</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da4/a03911_1af2fd5c002b86de31f4b1ab30eeb26040" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::FrameStyle::FrameStyle</definition>
+        <argsstring>(castor::String const &amp;name, Engine &amp;engine, castor::String const &amp;fontName)</argsstring>
+        <name>FrameStyle</name>
+        <qualifiedname>castor3d::FrameStyle::FrameStyle</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>fontName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleFrame.hpp" line="36" column="1" bodyfile="Castor3D/Gui/Theme/StyleFrame.hpp" bodystart="36" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da4/a03911_1a0f930f3c7a3fa7e04571cb1b1a411db0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::FrameStyle::setHeaderFont</definition>
+        <argsstring>(castor::StringView value)</argsstring>
+        <name>setHeaderFont</name>
+        <qualifiedname>castor3d::FrameStyle::setHeaderFont</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">castor::StringView</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleFrame.hpp" line="43" column="6" bodyfile="Castor3D/Gui/Theme/StyleFrame.hpp" bodystart="43" bodyend="46"/>
+        <references refid="d7/d0d/a03943_1a8165187d27eb397a0fbf1d537823c25c" compoundref="dc/d2f/a00425" startline="37" endline="40">castor3d::StaticStyle::setFont</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da4/a03911_1a4465438c968a4d7f9a23d5b7179e1b4e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::FrameStyle::setHeaderTextMaterial</definition>
+        <argsstring>(MaterialObs value)</argsstring>
+        <name>setHeaderTextMaterial</name>
+        <qualifiedname>castor3d::FrameStyle::setHeaderTextMaterial</qualifiedname>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a2d5a7b3dddf135df62427d0e6b755210" kindref="member">MaterialObs</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleFrame.hpp" line="48" column="6" bodyfile="Castor3D/Gui/Theme/StyleFrame.hpp" bodystart="48" bodyend="51"/>
+        <references refid="d7/d0d/a03943_1a04f28ecbb872637b1c671e51b1073616" compoundref="dc/d2f/a00425" startline="42" endline="45">castor3d::StaticStyle::setTextMaterial</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da4/a03911_1adef7736ca89129c4d519d60f20bf7753" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+        <definition>castor::String const  &amp; castor3d::FrameStyle::getHeaderFontName</definition>
+        <argsstring>() const</argsstring>
+        <name>getHeaderFontName</name>
+        <qualifiedname>castor3d::FrameStyle::getHeaderFontName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleFrame.hpp" line="53" column="23" bodyfile="Castor3D/Gui/Theme/StyleFrame.hpp" bodystart="53" bodyend="56"/>
+        <references refid="d7/d0d/a03943_1a5dce4943efe87658f181eba760517b83" compoundref="dc/d2f/a00425" startline="47" endline="50">castor3d::StaticStyle::getFontName</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/da4/a03911_1a4dfe9962f2f3a95929f441f8b62bda1f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d9/dba/a02278_1a2d5a7b3dddf135df62427d0e6b755210" kindref="member">MaterialObs</ref></type>
+        <definition>MaterialObs castor3d::FrameStyle::getHeaderTextMaterial</definition>
+        <argsstring>() const</argsstring>
+        <name>getHeaderTextMaterial</name>
+        <qualifiedname>castor3d::FrameStyle::getHeaderTextMaterial</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleFrame.hpp" line="58" column="13" bodyfile="Castor3D/Gui/Theme/StyleFrame.hpp" bodystart="58" bodyend="61"/>
+        <references refid="d7/d0d/a03943_1a564ca0471cad3a295d5504fca1f660e9" compoundref="dc/d2f/a00425" startline="52" endline="55">castor3d::StaticStyle::getTextMaterial</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="d4/da4/a03911_1afe17463b390616738ca7442d793d8147" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d7/d0d/a03943" kindref="compound">StaticStyle</ref> const &amp;</type>
+        <definition>StaticStyle const  &amp; castor3d::FrameStyle::getHeaderStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getHeaderStyle</name>
+        <qualifiedname>castor3d::FrameStyle::getHeaderStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleFrame.hpp" line="64" column="20" bodyfile="Castor3D/Gui/Theme/StyleFrame.hpp" bodystart="64" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da4/a03911_1a2adad1c78e6bf7ac78bee3f62e51eaf3" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d48/a03919" kindref="compound">PanelStyle</ref> const &amp;</type>
+        <definition>PanelStyle const  &amp; castor3d::FrameStyle::getContentStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getContentStyle</name>
+        <qualifiedname>castor3d::FrameStyle::getContentStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleFrame.hpp" line="69" column="19" bodyfile="Castor3D/Gui/Theme/StyleFrame.hpp" bodystart="69" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da4/a03911_1a01b4dc6cd8bec5c697801e4000b77f29" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d7/d0d/a03943" kindref="compound">StaticStyle</ref> &amp;</type>
+        <definition>StaticStyle &amp; castor3d::FrameStyle::getHeaderStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getHeaderStyle</name>
+        <qualifiedname>castor3d::FrameStyle::getHeaderStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleFrame.hpp" line="74" column="14" bodyfile="Castor3D/Gui/Theme/StyleFrame.hpp" bodystart="74" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da4/a03911_1aacf15bc5cc8689790be43e2897bc0898" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d48/a03919" kindref="compound">PanelStyle</ref> &amp;</type>
+        <definition>PanelStyle &amp; castor3d::FrameStyle::getContentStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getContentStyle</name>
+        <qualifiedname>castor3d::FrameStyle::getContentStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleFrame.hpp" line="79" column="13" bodyfile="Castor3D/Gui/Theme/StyleFrame.hpp" bodystart="79" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da4/a03911_1a5e1553f5ba6d4367c05800198bd5e9d0" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::FrameStyle::doUpdateBackgroundMaterial</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateBackgroundMaterial</name>
+        <qualifiedname>castor3d::FrameStyle::doUpdateBackgroundMaterial</qualifiedname>
+        <reimplements refid="d0/d33/a03899_1a3ad976d6b6f857af4c296154b044ff8c">doUpdateBackgroundMaterial</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleFrame.hpp" line="84" column="6" bodyfile="Castor3D/Gui/Theme/StyleFrame.hpp" bodystart="84" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da4/a03911_1afd5e9d5ce289a0b40cc640c9f9669f28" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::FrameStyle::doUpdateForegroundMaterial</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateForegroundMaterial</name>
+        <qualifiedname>castor3d::FrameStyle::doUpdateForegroundMaterial</qualifiedname>
+        <reimplements refid="d0/d33/a03899_1a045cd8c44048c2e75eb9a6c07851ec7f">doUpdateForegroundMaterial</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Gui/Theme/StyleFrame.hpp" line="88" column="6" bodyfile="Castor3D/Gui/Theme/StyleFrame.hpp" bodystart="88" bodyend="91"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ControlStyle</label>
+        <link refid="d0/d33/a03899"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::FrameStyle</label>
+        <link refid="d4/da4/a03911"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::ControlStyle</label>
+        <link refid="d0/d33/a03899"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::FrameStyle</label>
+        <link refid="d4/da4/a03911"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Gui/Theme/StyleFrame.hpp" line="12" column="1" bodyfile="Castor3D/Gui/Theme/StyleFrame.hpp" bodystart="14" bodyend="96"/>
+    <listofallmembers>
+      <member refid="d0/d33/a03899_1a098fe55fee12aa4aeb0b037944f835f2" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>ControlStyle</name></member>
+      <member refid="d0/d33/a03899_1a064762eaae9407ceea58131d50a350f9" prot="protected" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>doCreateMaterial</name></member>
+      <member refid="d4/da4/a03911_1a5e1553f5ba6d4367c05800198bd5e9d0" prot="private" virt="virtual"><scope>castor3d::FrameStyle</scope><name>doUpdateBackgroundMaterial</name></member>
+      <member refid="d4/da4/a03911_1afd5e9d5ce289a0b40cc640c9f9669f28" prot="private" virt="virtual"><scope>castor3d::FrameStyle</scope><name>doUpdateForegroundMaterial</name></member>
+      <member refid="d4/da4/a03911_1af1b4ad585123a8abe5767cfd84721d30" prot="private" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>FrameCtrl</name></member>
+      <member refid="d4/da4/a03911_1a3ee19384d04750d616fd3c77e104aa17" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>FrameStyle</name></member>
+      <member refid="d4/da4/a03911_1af2fd5c002b86de31f4b1ab30eeb26040" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>FrameStyle</name></member>
+      <member refid="d0/d33/a03899_1ac613ecdff78b6790736de078aa5e3150" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>getBackgroundMaterial</name></member>
+      <member refid="d4/da4/a03911_1a2adad1c78e6bf7ac78bee3f62e51eaf3" prot="private" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>getContentStyle</name></member>
+      <member refid="d4/da4/a03911_1aacf15bc5cc8689790be43e2897bc0898" prot="private" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>getContentStyle</name></member>
+      <member refid="d0/d33/a03899_1a344a49f21217d799892e5c8a3037428a" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>getCursor</name></member>
+      <member refid="d0/d33/a03899_1a3ff11fb205d455ddc07b6986c4a804f2" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>getEngine</name></member>
+      <member refid="d0/d33/a03899_1a8e2484376c900533284daa8c190e41d6" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>getForegroundMaterial</name></member>
+      <member refid="d4/da4/a03911_1adef7736ca89129c4d519d60f20bf7753" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>getHeaderFontName</name></member>
+      <member refid="d4/da4/a03911_1afe17463b390616738ca7442d793d8147" prot="private" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>getHeaderStyle</name></member>
+      <member refid="d4/da4/a03911_1a01b4dc6cd8bec5c697801e4000b77f29" prot="private" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>getHeaderStyle</name></member>
+      <member refid="d4/da4/a03911_1a4dfe9962f2f3a95929f441f8b62bda1f" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>getHeaderTextMaterial</name></member>
+      <member refid="d5/d3c/a08223_1abc1fa9ec1a50d2023373baa4d4c79519" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>getName</name></member>
+      <member refid="d0/d33/a03899_1ab2b7e540ca276b82d78cdadc9665b59a" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>getScene</name></member>
+      <member refid="d0/d33/a03899_1a96622f93682e623c3dd57c8afd186aeb" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>getType</name></member>
+      <member refid="d0/d33/a03899_1a1ea4620ff83eb868e5e89aad17d4bdb1" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>hasScene</name></member>
+      <member refid="d0/d33/a03899_1a1b1654f46a2779f9606f6511e4c75b68" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>isBackgroundInvisible</name></member>
+      <member refid="d0/d33/a03899_1abef953a375da7b02e11eab1e7fb95731" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>isForegroundInvisible</name></member>
+      <member refid="d4/da4/a03911_1af81199fa592a0bf93483b48b76fbf9cf" prot="private" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>m_contentStyle</name></member>
+      <member refid="d4/da4/a03911_1aa9514e2e2e5746f3f934a015b6afd20e" prot="private" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>m_headerStyle</name></member>
+      <member refid="d5/d3c/a08223_1a869b429a7190ecf614d8221b270e6dca" prot="protected" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>m_name</name></member>
+      <member refid="d5/d3c/a08223_1a4a6e4748603541685b04f95fb91efb26" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>NamedBaseT</name></member>
+      <member refid="d5/d3c/a08223_1a2d62ce1925efead03c4e0842c06b3e11" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>rename</name></member>
+      <member refid="d0/d33/a03899_1abb0c1b1b69b9dcd950c95c49e6a0907b" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>setBackgroundInvisible</name></member>
+      <member refid="d0/d33/a03899_1a71c2539b67ee882ff7e4682aa8d984c2" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>setBackgroundMaterial</name></member>
+      <member refid="d0/d33/a03899_1a8e2de50c9bf082cc93a63d7d8adcdf08" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>setCursor</name></member>
+      <member refid="d0/d33/a03899_1abdf3d22a6c22445a800f47abe1a00545" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>setForegroundInvisible</name></member>
+      <member refid="d0/d33/a03899_1a83d21de1ca65b10b0d94193920d40614" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>setForegroundMaterial</name></member>
+      <member refid="d4/da4/a03911_1a0f930f3c7a3fa7e04571cb1b1a411db0" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>setHeaderFont</name></member>
+      <member refid="d4/da4/a03911_1a4465438c968a4d7f9a23d5b7179e1b4e" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>setHeaderTextMaterial</name></member>
+      <member refid="d4/da4/a03911_1a70866f55d893f380b915f1cc1ccfebc4" prot="public" virt="non-virtual"><scope>castor3d::FrameStyle</scope><name>Type</name></member>
+      <member refid="d0/d33/a03899_1a6170f2465de931fc0221e4b10e7e8f7f" prot="public" virt="virtual"><scope>castor3d::FrameStyle</scope><name>~ControlStyle</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

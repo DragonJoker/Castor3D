@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d84/a08371" kind="struct" language="C++" prot="public" abstract="yes">
+    <compoundname>castor::ContextDeleter</compoundname>
+    <derivedcompoundref refid="db/df1/a08375" prot="public" virt="non-virtual">castor::ContextDeleterT&lt; ContextT &gt;</derivedcompoundref>
+    <includes local="no">FileParserContext.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d84/a08371_1ac3bcc263f56d388ee6968462c5d37999" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref></type>
+        <definition>virtual CU_API castor::ContextDeleter::~ContextDeleter</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~ContextDeleter</name>
+        <qualifiedname>castor::ContextDeleter::~ContextDeleter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserContext.hpp" line="21" column="16"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d84/a08371_1aaff1059562498f409958fce6db74d401" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="pure-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>virtual CU_API void castor::ContextDeleter::destroy</definition>
+        <argsstring>(void *data) noexcept=0</argsstring>
+        <name>destroy</name>
+        <qualifiedname>castor::ContextDeleter::destroy</qualifiedname>
+        <reimplementedby refid="db/df1/a08375_1a71259832187a9ec01f6c5076a57baf1c">destroy</reimplementedby>
+        <param>
+          <type>void *</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/FileParser/FileParserContext.hpp" line="22" column="21"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::ContextDeleter</label>
+        <link refid="dc/d84/a08371"/>
+      </node>
+      <node id="2">
+        <label>castor::ContextDeleterT&lt; ContextT &gt;</label>
+        <link refid="db/df1/a08375"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/FileParser/FileParserContext.hpp" line="19" column="1" bodyfile="CastorUtils/FileParser/FileParserContext.hpp" bodystart="20" bodyend="23"/>
+    <listofallmembers>
+      <member refid="dc/d84/a08371_1aaff1059562498f409958fce6db74d401" prot="public" virt="pure-virtual"><scope>castor::ContextDeleter</scope><name>destroy</name></member>
+      <member refid="dc/d84/a08371_1ac3bcc263f56d388ee6968462c5d37999" prot="public" virt="virtual"><scope>castor::ContextDeleter</scope><name>~ContextDeleter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

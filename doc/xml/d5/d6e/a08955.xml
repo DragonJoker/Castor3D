@@ -1,0 +1,1209 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d5/d6e/a08955" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ImageLayout</compoundname>
+    <includes local="no">ImageLayout.hpp</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="enum" id="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550" prot="public" static="no" strong="no">
+        <type>uint8_t</type>
+        <name>Type</name>
+        <qualifiedname>castor::ImageLayout::Type</qualifiedname>
+        <enumvalue id="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a58236eea7c7c3f593d70c6f10d732ca9" prot="public">
+          <name>e1D</name>
+          <initializer>= 0</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a79894a835782f594c696116f05ed2734" prot="public">
+          <name>e2D</name>
+          <initializer>= 1</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a01d0366b9d581e96ffe4c4445fc01339" prot="public">
+          <name>e3D</name>
+          <initializer>= 2</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a31e6b24b502646582cf388537c089a60" prot="public">
+          <name>eCube</name>
+          <initializer>= 3</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a72bdedeecbc94d153b6335973e1ff69d" prot="public">
+          <name>e1DArray</name>
+          <initializer>= 4</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550afabbdd43f2d3479acee9fa0b677526c7" prot="public">
+          <name>e2DArray</name>
+          <initializer>= 5</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a79da8c962d88cb2cac19bafcd6880f2d" prot="public">
+          <name>eCubeArray</name>
+          <initializer>= 6</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a10f386a04db583f0c76552c0acea828b" prot="public">
+          <name>Type_COUNT</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550abaa02a23053f2544f31f5df74a4adc16" prot="public">
+          <name>Type_MIN</name>
+          <initializer>=  e1D</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="16" column="1" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="18" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d5/d6e/a08955_1a5a7b41e3ac6db006ea4b7efb4de98613" prot="public" static="no">
+        <type>ByteArrayView</type>
+        <definition>using castor::ImageLayout::Buffer =  ByteArrayView</definition>
+        <argsstring></argsstring>
+        <name>Buffer</name>
+        <qualifiedname>castor::ImageLayout::Buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="54" column="1" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d5/d6e/a08955_1ac161cb8db198568600b0080fe54d5dfc" prot="public" static="no">
+        <type>ConstByteArrayView</type>
+        <definition>using castor::ImageLayout::ConstBuffer =  ConstByteArrayView</definition>
+        <argsstring></argsstring>
+        <name>ConstBuffer</name>
+        <qualifiedname>castor::ImageLayout::ConstBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="55" column="1" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d5/d6e/a08955_1af1a3c7e291fc2daee94189dc6c349a99" prot="public" static="no">
+        <type>uint64_t</type>
+        <definition>using castor::ImageLayout::DeviceSize =  uint64_t</definition>
+        <argsstring></argsstring>
+        <name>DeviceSize</name>
+        <qualifiedname>castor::ImageLayout::DeviceSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="56" column="1" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d5/d6e/a08955_1a59503d0f8a8ff6fd3d26c72376034b8f" prot="public" static="no">
+        <type><ref refid="d9/da8/a09207" kindref="compound">Range</ref>&lt; <ref refid="d5/d6e/a08955_1af1a3c7e291fc2daee94189dc6c349a99" kindref="member">DeviceSize</ref> &gt;</type>
+        <definition>using castor::ImageLayout::SubresourceRange =  Range&lt; DeviceSize &gt;</definition>
+        <argsstring></argsstring>
+        <name>SubresourceRange</name>
+        <qualifiedname>castor::ImageLayout::SubresourceRange</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="57" column="1" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/d6e/a08955_1a91854a60fdc9b13aea074ae3aa3665b0" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550" kindref="member">Type</ref></type>
+        <definition>Type castor::ImageLayout::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <qualifiedname>castor::ImageLayout::type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="213" column="6" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="213" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d6e/a08955_1ad944871d62c483562483714f647efee1" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+        <definition>PixelFormat castor::ImageLayout::format</definition>
+        <argsstring></argsstring>
+        <name>format</name>
+        <qualifiedname>castor::ImageLayout::format</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="214" column="13" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="214" bodyend="-1"/>
+        <referencedby refid="da/de7/a04983_1ac06cbc307ec31a52bcbe986a865b2371" compoundref="dc/d91/a00659" startline="41" endline="52">castor3d::TextureSource::update</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d6e/a08955_1a661d0f78e91a87117d257a6225b5f2c6" prot="public" static="no" mutable="no">
+        <type>Point3ui</type>
+        <definition>Point3ui castor::ImageLayout::extent</definition>
+        <argsstring></argsstring>
+        <name>extent</name>
+        <qualifiedname>castor::ImageLayout::extent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="215" column="10" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="215" bodyend="-1"/>
+        <referencedby refid="d5/d6e/a08955_1a521ecdab24d790e363b4cbcf66863e48" compoundref="df/d52/a02027" startline="113" endline="116">depthLayers</referencedby>
+        <referencedby refid="d5/d6e/a08955_1ae72ff51ad96becf34296dd5ddbb14239" compoundref="df/d52/a02027" startline="103" endline="106">dimensions</referencedby>
+        <referencedby refid="da/de7/a04983_1afab3369d80a977902ed234db6dbf5f71" compoundref="dc/d91/a00659" startline="85" endline="88">castor3d::TextureSource::getDepth</referencedby>
+        <referencedby refid="da/de7/a04983_1ac06cbc307ec31a52bcbe986a865b2371" compoundref="dc/d91/a00659" startline="41" endline="52">castor3d::TextureSource::update</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d6e/a08955_1ad6e84233c155a0129d3f23229fbd478a" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::ImageLayout::baseLayer</definition>
+        <argsstring></argsstring>
+        <name>baseLayer</name>
+        <qualifiedname>castor::ImageLayout::baseLayer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="216" column="10" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="216" bodyend="-1"/>
+        <referencedby refid="da/de7/a04983_1a1959afc9884dcaec9528d65d8fd1e5e5" compoundref="dc/d91/a00659" startline="65" endline="68">castor3d::TextureSource::getBaseLayer</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d6e/a08955_1a9b4aa919ca99120bccb4a364f255a890" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::ImageLayout::layers</definition>
+        <argsstring></argsstring>
+        <name>layers</name>
+        <qualifiedname>castor::ImageLayout::layers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="217" column="10" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="217" bodyend="-1"/>
+        <referencedby refid="d5/d6e/a08955_1a521ecdab24d790e363b4cbcf66863e48" compoundref="df/d52/a02027" startline="113" endline="116">depthLayers</referencedby>
+        <referencedby refid="da/de7/a04983_1af9968ec9458a43cfad68fa2c7ce79c2c" compoundref="dc/d91/a00659" startline="70" endline="73">castor3d::TextureSource::getLayerCount</referencedby>
+        <referencedby refid="da/de7/a04983_1ac06cbc307ec31a52bcbe986a865b2371" compoundref="dc/d91/a00659" startline="41" endline="52">castor3d::TextureSource::update</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d6e/a08955_1ad9aaa59eb43782ef7f45a9b7a878aa38" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::ImageLayout::baseLevel</definition>
+        <argsstring></argsstring>
+        <name>baseLevel</name>
+        <qualifiedname>castor::ImageLayout::baseLevel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="218" column="10" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="218" bodyend="-1"/>
+        <referencedby refid="da/de7/a04983_1a1ca6dec88e81c8853c345096fd0f4dd5" compoundref="dc/d91/a00659" startline="75" endline="78">castor3d::TextureSource::getBaseLevel</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d6e/a08955_1a04a142ab04b495b313555c6714f4f294" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::ImageLayout::levels</definition>
+        <argsstring></argsstring>
+        <name>levels</name>
+        <qualifiedname>castor::ImageLayout::levels</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="219" column="10" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="219" bodyend="-1"/>
+        <referencedby refid="da/de7/a04983_1afe281edd332c31aeca2ec417b60e9668" compoundref="dc/d91/a00659" startline="80" endline="83">castor3d::TextureSource::getLevelCount</referencedby>
+        <referencedby refid="da/de7/a04983_1ac06cbc307ec31a52bcbe986a865b2371" compoundref="dc/d91/a00659" startline="41" endline="52">castor3d::TextureSource::update</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d6e/a08955_1a03b46ff9fba9be4f1a2ca92cd8f162d6" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::ImageLayout::alignment</definition>
+        <argsstring></argsstring>
+        <name>alignment</name>
+        <qualifiedname>castor::ImageLayout::alignment</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="220" column="10" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="220" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d5/d6e/a08955_1a8812bb624039b0be27a3c7e59c2ea6a0" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dd2/a02279_1a7fc5aca9eb8d35e69abfe9df07e365e3" kindref="member">StringView</ref></type>
+        <definition>static StringView castor::ImageLayout::getName</definition>
+        <argsstring>(Type t)</argsstring>
+        <name>getName</name>
+        <qualifiedname>castor::ImageLayout::getName</qualifiedname>
+        <param>
+          <type><ref refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550" kindref="member">Type</ref></type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="31" column="19" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="31" bodyend="52"/>
+        <references refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" compoundref="d5/d12/a01799" startline="51">cuT</references>
+        <references refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a58236eea7c7c3f593d70c6f10d732ca9" compoundref="df/d52/a02027" startline="21">e1D</references>
+        <references refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a72bdedeecbc94d153b6335973e1ff69d" compoundref="df/d52/a02027" startline="25">e1DArray</references>
+        <references refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a79894a835782f594c696116f05ed2734" compoundref="df/d52/a02027" startline="22">e2D</references>
+        <references refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550afabbdd43f2d3479acee9fa0b677526c7" compoundref="df/d52/a02027" startline="26">e2DArray</references>
+        <references refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a01d0366b9d581e96ffe4c4445fc01339" compoundref="df/d52/a02027" startline="23">e3D</references>
+        <references refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a31e6b24b502646582cf388537c089a60" compoundref="df/d52/a02027" startline="24">eCube</references>
+        <references refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a79da8c962d88cb2cac19bafcd6880f2d" compoundref="df/d52/a02027" startline="27">eCubeArray</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a2aca319cf871e52fd51a8178e1e0472e" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550" kindref="member">Type</ref></type>
+        <definition>static Type castor::ImageLayout::getType</definition>
+        <argsstring>(PxBufferBase const &amp;buffer)</argsstring>
+        <name>getType</name>
+        <qualifiedname>castor::ImageLayout::getType</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="96" column="13" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="96" bodyend="101"/>
+        <references refid="d5/d6e/a08955_1af1b2c4738e3b18bd36b90455d63b74e8">buffer</references>
+        <references refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a58236eea7c7c3f593d70c6f10d732ca9" compoundref="df/d52/a02027" startline="21">e1D</references>
+        <references refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a72bdedeecbc94d153b6335973e1ff69d" compoundref="df/d52/a02027" startline="25">e1DArray</references>
+        <references refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a79894a835782f594c696116f05ed2734" compoundref="df/d52/a02027" startline="22">e2D</references>
+        <references refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550afabbdd43f2d3479acee9fa0b677526c7" compoundref="df/d52/a02027" startline="26">e2DArray</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d6e/a08955_1a71a9aba2d25f232b5e53b425d374af64" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ImageLayout::ImageLayout</definition>
+        <argsstring>(Type type=e2D, PixelFormat format=PixelFormat::eR8G8B8A8_UNORM, Point3ui extent={ 1u, 1u, 1u }, uint32_t baseLayer=0u, uint32_t layers=1u, uint32_t baseLevel=0u, uint32_t levels=1u, uint32_t alignment=1u)</argsstring>
+        <name>ImageLayout</name>
+        <qualifiedname>castor::ImageLayout::ImageLayout</qualifiedname>
+        <param>
+          <type><ref refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550" kindref="member">Type</ref></type>
+          <declname>type</declname>
+          <defval><ref refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a79894a835782f594c696116f05ed2734" kindref="member">e2D</ref></defval>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1ab7ddacfc1253b707a0048b8425b0f055" kindref="member">PixelFormat</ref></type>
+          <declname>format</declname>
+          <defval>PixelFormat::eR8G8B8A8_UNORM</defval>
+        </param>
+        <param>
+          <type>Point3ui</type>
+          <declname>extent</declname>
+          <defval>{ 1u, 1u, 1u }</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>baseLayer</declname>
+          <defval>0u</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>layers</declname>
+          <defval>1u</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>baseLevel</declname>
+          <defval>0u</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>levels</declname>
+          <defval>1u</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>alignment</declname>
+          <defval>1u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="59" column="10" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="59" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1aef8c8a5506cc1a5e8ceabb4fa4a1ae60" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ImageLayout::ImageLayout</definition>
+        <argsstring>(PxBufferBase const &amp;buffer)</argsstring>
+        <name>ImageLayout</name>
+        <qualifiedname>castor::ImageLayout::ImageLayout</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="78" column="10" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="78" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a00d40169261e71d67644abf563c540aa" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::ImageLayout::ImageLayout</definition>
+        <argsstring>(Type type, PxBufferBase const &amp;buffer)</argsstring>
+        <name>ImageLayout</name>
+        <qualifiedname>castor::ImageLayout::ImageLayout</qualifiedname>
+        <param>
+          <type><ref refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550" kindref="member">Type</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="83" column="10" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="83" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1ae72ff51ad96becf34296dd5ddbb14239" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref></type>
+        <definition>Size castor::ImageLayout::dimensions</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>dimensions</name>
+        <qualifiedname>castor::ImageLayout::dimensions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="103" column="6" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="103" bodyend="106"/>
+        <references refid="d5/d6e/a08955_1a661d0f78e91a87117d257a6225b5f2c6" compoundref="df/d52/a02027" startline="215">extent</references>
+        <referencedby refid="d5/d6e/a08955_1a26ca4a7fb90e982d0a427d2130002dad" compoundref="df/d52/a02027" startline="108" endline="111">dimensions</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a26ca4a7fb90e982d0a427d2130002dad" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d4/dd6/a09023" kindref="compound">Size</ref></type>
+        <definition>Size castor::ImageLayout::dimensions</definition>
+        <argsstring>(uint32_t level) const noexcept</argsstring>
+        <name>dimensions</name>
+        <qualifiedname>castor::ImageLayout::dimensions</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="108" column="6" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="108" bodyend="111"/>
+        <references refid="d5/d6e/a08955_1ae72ff51ad96becf34296dd5ddbb14239" compoundref="df/d52/a02027" startline="103" endline="106">dimensions</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a521ecdab24d790e363b4cbcf66863e48" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor::ImageLayout::depthLayers</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>depthLayers</name>
+        <qualifiedname>castor::ImageLayout::depthLayers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="113" column="10" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="113" bodyend="116"/>
+        <references refid="d5/d6e/a08955_1a661d0f78e91a87117d257a6225b5f2c6" compoundref="df/d52/a02027" startline="215">extent</references>
+        <references refid="d5/d6e/a08955_1a9b4aa919ca99120bccb4a364f255a890" compoundref="df/d52/a02027" startline="217">layers</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a6a489452466ecb274f7a6a93679f6c68" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d5/d6e/a08955_1a59503d0f8a8ff6fd3d26c72376034b8f" kindref="member">SubresourceRange</ref></type>
+        <definition>CU_API SubresourceRange castor::ImageLayout::range</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>range</name>
+        <qualifiedname>castor::ImageLayout::range</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="118" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1af6aa0de2038fadc65d680e65daea4bac" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d5/d6e/a08955_1a59503d0f8a8ff6fd3d26c72376034b8f" kindref="member">SubresourceRange</ref></type>
+        <definition>CU_API SubresourceRange castor::ImageLayout::slice</definition>
+        <argsstring>(uint32_t index) const noexcept</argsstring>
+        <name>slice</name>
+        <qualifiedname>castor::ImageLayout::slice</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="119" column="25"/>
+        <referencedby refid="d5/d6e/a08955_1a8a7ff9d30e4cf05a92ec5a70629fe0d3" compoundref="df/d52/a02027" startline="142" endline="145">layer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a9c2b7e40ec543871a55c8e1e575ffdf6" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d5/d6e/a08955_1a59503d0f8a8ff6fd3d26c72376034b8f" kindref="member">SubresourceRange</ref></type>
+        <definition>CU_API SubresourceRange castor::ImageLayout::sliceMip</definition>
+        <argsstring>(uint32_t index, uint32_t level) const noexcept</argsstring>
+        <name>sliceMip</name>
+        <qualifiedname>castor::ImageLayout::sliceMip</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="120" column="25"/>
+        <referencedby refid="d5/d6e/a08955_1a54029cae4636485a0023a99ba66678fe" compoundref="df/d52/a02027" startline="147" endline="151">layerMip</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a8237fe20b712bc846601e0494d82495d" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d5/d6e/a08955_1af1a3c7e291fc2daee94189dc6c349a99" kindref="member">DeviceSize</ref></type>
+        <definition>CU_API DeviceSize castor::ImageLayout::size</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>size</name>
+        <qualifiedname>castor::ImageLayout::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="122" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1aed82bb4d5ef65528f8e2958d6f9a1210" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d5/d6e/a08955_1af1a3c7e291fc2daee94189dc6c349a99" kindref="member">DeviceSize</ref></type>
+        <definition>CU_API DeviceSize castor::ImageLayout::sliceSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>sliceSize</name>
+        <qualifiedname>castor::ImageLayout::sliceSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="123" column="19"/>
+        <referencedby refid="d2/dd2/a02279_1aa0d94c5bb4f20c1d9a6b6274de7e6d79" compoundref="df/d52/a02027" startline="223" endline="226">castor::getSliceSize</referencedby>
+        <referencedby refid="d5/d6e/a08955_1a69db422d4c3656f19889b72492a4cf2f" compoundref="df/d52/a02027" startline="153" endline="156">layerSize</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1aeeaa15c89964a63592988574c6574f11" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d5/d6e/a08955_1af1a3c7e291fc2daee94189dc6c349a99" kindref="member">DeviceSize</ref></type>
+        <definition>CU_API DeviceSize castor::ImageLayout::sliceMipSize</definition>
+        <argsstring>(uint32_t level) const noexcept</argsstring>
+        <name>sliceMipSize</name>
+        <qualifiedname>castor::ImageLayout::sliceMipSize</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="124" column="19"/>
+        <referencedby refid="d2/dd2/a02279_1ac9e8c4ae1a600124a5f35c5be6373f1d" compoundref="df/d52/a02027" startline="228" endline="232">castor::getSliceMipSize</referencedby>
+        <referencedby refid="d5/d6e/a08955_1afee2d833a31fcb074f62b02d3bafb974" compoundref="df/d52/a02027" startline="158" endline="161">layerMipSize</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a44e445730965270d6fbed30e2cadf0bb" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d5/d6e/a08955_1af1a3c7e291fc2daee94189dc6c349a99" kindref="member">DeviceSize</ref></type>
+        <definition>CU_API DeviceSize castor::ImageLayout::offset</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>offset</name>
+        <qualifiedname>castor::ImageLayout::offset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="126" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a10834e4841717c1569148c98e02c08f5" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d5/d6e/a08955_1af1a3c7e291fc2daee94189dc6c349a99" kindref="member">DeviceSize</ref></type>
+        <definition>CU_API DeviceSize castor::ImageLayout::sliceOffset</definition>
+        <argsstring>(uint32_t index) const noexcept</argsstring>
+        <name>sliceOffset</name>
+        <qualifiedname>castor::ImageLayout::sliceOffset</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="127" column="19"/>
+        <referencedby refid="d2/dd2/a02279_1a7e659f1bf0b6205d362a73060b07ee35" compoundref="df/d52/a02027" startline="245" endline="249">castor::getSliceOffset</referencedby>
+        <referencedby refid="d5/d6e/a08955_1aa9aa9c18bbaf361620bab0a8812fec69" compoundref="df/d52/a02027" startline="163" endline="166">layerOffset</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1ac98035e5a690579e61691f0520c385dd" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d5/d6e/a08955_1af1a3c7e291fc2daee94189dc6c349a99" kindref="member">DeviceSize</ref></type>
+        <definition>CU_API DeviceSize castor::ImageLayout::sliceMipOffset</definition>
+        <argsstring>(uint32_t index, uint32_t level) const noexcept</argsstring>
+        <name>sliceMipOffset</name>
+        <qualifiedname>castor::ImageLayout::sliceMipOffset</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="128" column="19"/>
+        <referencedby refid="d2/dd2/a02279_1a2dab883cc8d36041de75caef265afe00" compoundref="df/d52/a02027" startline="251" endline="256">castor::getSliceMipOffset</referencedby>
+        <referencedby refid="d5/d6e/a08955_1a730d72b3e9f1e462e98d3f152e4b5bfb" compoundref="df/d52/a02027" startline="168" endline="172">layerMipOffset</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1af1b2c4738e3b18bd36b90455d63b74e8" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d5/d6e/a08955_1a5a7b41e3ac6db006ea4b7efb4de98613" kindref="member">Buffer</ref></type>
+        <definition>CU_API Buffer castor::ImageLayout::buffer</definition>
+        <argsstring>(PxBufferBase &amp;buffer) const noexcept</argsstring>
+        <name>buffer</name>
+        <qualifiedname>castor::ImageLayout::buffer</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="130" column="15"/>
+        <referencedby refid="da/de7/a04983_1a59ccb52f9d2ffa193417353dc035e8fc" compoundref="dc/d91/a00659" startline="95" endline="98">castor3d::TextureSource::getBuffer</referencedby>
+        <referencedby refid="da/de7/a04983_1a31e7e897e27aef354577a90f3c68829c" compoundref="dc/d91/a00659" startline="100" endline="103">castor3d::TextureSource::getBuffer</referencedby>
+        <referencedby refid="d2/dd2/a02279_1afd95c6aa18eaa5e18cc4295704c05722" compoundref="df/d52/a02027" startline="271" endline="275">castor::getBuffer</referencedby>
+        <referencedby refid="d2/dd2/a02279_1aaab9ecf9ba281913553e3cff80aaa565" compoundref="df/d52/a02027" startline="277" endline="281">castor::getBuffer</referencedby>
+        <referencedby refid="d5/d6e/a08955_1a2aca319cf871e52fd51a8178e1e0472e" compoundref="df/d52/a02027" startline="96" endline="101">getType</referencedby>
+        <referencedby refid="d5/d6e/a08955_1a883000a295f4679f38209c03394ab29c" compoundref="df/d52/a02027" startline="200" endline="204">hasLayerBuffer</referencedby>
+        <referencedby refid="d5/d6e/a08955_1a78218d99fbaecefe10b5239f244f22d7" compoundref="df/d52/a02027" startline="206" endline="211">hasLayerMipBuffer</referencedby>
+        <referencedby refid="d5/d6e/a08955_1a0734f25a076401ad9cc5bc72afa72c4c" compoundref="df/d52/a02027" startline="174" endline="178">layerBuffer</referencedby>
+        <referencedby refid="d5/d6e/a08955_1a9ab7837983b17778e0483f0729928c53" compoundref="df/d52/a02027" startline="187" endline="191">layerBuffer</referencedby>
+        <referencedby refid="d5/d6e/a08955_1a4c4b4eacbdf4a67193a4d3ecc2d914e0" compoundref="df/d52/a02027" startline="180" endline="185">layerMipBuffer</referencedby>
+        <referencedby refid="d5/d6e/a08955_1a41b0ed5e425958fb41250a66e46b3f3e" compoundref="df/d52/a02027" startline="193" endline="198">layerMipBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1ac98e43b350aa2e3d640e77964e7ccb49" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d5/d6e/a08955_1a5a7b41e3ac6db006ea4b7efb4de98613" kindref="member">Buffer</ref></type>
+        <definition>CU_API Buffer castor::ImageLayout::sliceBuffer</definition>
+        <argsstring>(PxBufferBase &amp;buffer, uint32_t index) const noexcept</argsstring>
+        <name>sliceBuffer</name>
+        <qualifiedname>castor::ImageLayout::sliceBuffer</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="131" column="15"/>
+        <referencedby refid="d2/dd2/a02279_1a94bd28a97ae7e154fe72334ec64aa4c6" compoundref="df/d52/a02027" startline="328" endline="333">castor::getSliceBuffer</referencedby>
+        <referencedby refid="d2/dd2/a02279_1a08b68d29867469f4d7710e50a4d15e47" compoundref="df/d52/a02027" startline="343" endline="348">castor::getSliceBuffer</referencedby>
+        <referencedby refid="d5/d6e/a08955_1a0734f25a076401ad9cc5bc72afa72c4c" compoundref="df/d52/a02027" startline="174" endline="178">layerBuffer</referencedby>
+        <referencedby refid="d5/d6e/a08955_1a9ab7837983b17778e0483f0729928c53" compoundref="df/d52/a02027" startline="187" endline="191">layerBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1aa1a3102a42d400f710d092e8226df2aa" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d5/d6e/a08955_1a5a7b41e3ac6db006ea4b7efb4de98613" kindref="member">Buffer</ref></type>
+        <definition>CU_API Buffer castor::ImageLayout::sliceMipBuffer</definition>
+        <argsstring>(PxBufferBase &amp;buffer, uint32_t index, uint32_t level) const noexcept</argsstring>
+        <name>sliceMipBuffer</name>
+        <qualifiedname>castor::ImageLayout::sliceMipBuffer</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="132" column="15"/>
+        <referencedby refid="d2/dd2/a02279_1a235f1ba77928962922cd89104c5c2c05" compoundref="df/d52/a02027" startline="335" endline="341">castor::getSliceMipBuffer</referencedby>
+        <referencedby refid="d2/dd2/a02279_1af0f4938b9b1da6e730471b7ebbae3b03" compoundref="df/d52/a02027" startline="350" endline="356">castor::getSliceMipBuffer</referencedby>
+        <referencedby refid="d5/d6e/a08955_1a4c4b4eacbdf4a67193a4d3ecc2d914e0" compoundref="df/d52/a02027" startline="180" endline="185">layerMipBuffer</referencedby>
+        <referencedby refid="d5/d6e/a08955_1a41b0ed5e425958fb41250a66e46b3f3e" compoundref="df/d52/a02027" startline="193" endline="198">layerMipBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a4bcdef3c56aae2bad9cab16c98147dc8" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d5/d6e/a08955_1ac161cb8db198568600b0080fe54d5dfc" kindref="member">ConstBuffer</ref></type>
+        <definition>CU_API ConstBuffer castor::ImageLayout::buffer</definition>
+        <argsstring>(PxBufferBase const &amp;buffer) const noexcept</argsstring>
+        <name>buffer</name>
+        <qualifiedname>castor::ImageLayout::buffer</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="134" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1aacd4de8b3f68336593b4b4633df6bee7" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d5/d6e/a08955_1ac161cb8db198568600b0080fe54d5dfc" kindref="member">ConstBuffer</ref></type>
+        <definition>CU_API ConstBuffer castor::ImageLayout::sliceBuffer</definition>
+        <argsstring>(PxBufferBase const &amp;buffer, uint32_t index) const noexcept</argsstring>
+        <name>sliceBuffer</name>
+        <qualifiedname>castor::ImageLayout::sliceBuffer</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="135" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a5af0e9b6679b0ab89a42b64728c4dfb4" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d5/d6e/a08955_1ac161cb8db198568600b0080fe54d5dfc" kindref="member">ConstBuffer</ref></type>
+        <definition>CU_API ConstBuffer castor::ImageLayout::sliceMipBuffer</definition>
+        <argsstring>(PxBufferBase const &amp;buffer, uint32_t index, uint32_t level) const noexcept</argsstring>
+        <name>sliceMipBuffer</name>
+        <qualifiedname>castor::ImageLayout::sliceMipBuffer</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="136" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1ac22f42ef54981da335e84263d5f07065" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::ImageLayout::hasBuffer</definition>
+        <argsstring>(PxBufferBase const &amp;buffer) const noexcept</argsstring>
+        <name>hasBuffer</name>
+        <qualifiedname>castor::ImageLayout::hasBuffer</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="138" column="13"/>
+        <referencedby refid="da/de7/a04983_1a92b0445737701c4ac838aa8b4604bf09" compoundref="dc/d91/a00659" startline="90" endline="93">castor3d::TextureSource::hasBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a4c16cfe50d5dbc4b3268643df4445b9f" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::ImageLayout::hasSliceBuffer</definition>
+        <argsstring>(PxBufferBase const &amp;buffer, uint32_t index) const noexcept</argsstring>
+        <name>hasSliceBuffer</name>
+        <qualifiedname>castor::ImageLayout::hasSliceBuffer</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="139" column="13"/>
+        <referencedby refid="d5/d6e/a08955_1a883000a295f4679f38209c03394ab29c" compoundref="df/d52/a02027" startline="200" endline="204">hasLayerBuffer</referencedby>
+        <referencedby refid="d2/dd2/a02279_1a206c66d02d57bc2b8a1a5b0dead8d39a" compoundref="df/d52/a02027" startline="358" endline="363">castor::hasSliceBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1ae35b73740452e8cebd7de05ed0909929" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> bool</type>
+        <definition>CU_API bool castor::ImageLayout::hasSliceMipBuffer</definition>
+        <argsstring>(PxBufferBase const &amp;buffer, uint32_t index, uint32_t level) const noexcept</argsstring>
+        <name>hasSliceMipBuffer</name>
+        <qualifiedname>castor::ImageLayout::hasSliceMipBuffer</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="140" column="13"/>
+        <referencedby refid="d5/d6e/a08955_1a78218d99fbaecefe10b5239f244f22d7" compoundref="df/d52/a02027" startline="206" endline="211">hasLayerMipBuffer</referencedby>
+        <referencedby refid="d2/dd2/a02279_1a6e00973fbcf52e02858f1fdcc8d16e68" compoundref="df/d52/a02027" startline="365" endline="371">castor::hasSliceMipBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a8a7ff9d30e4cf05a92ec5a70629fe0d3" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955_1a59503d0f8a8ff6fd3d26c72376034b8f" kindref="member">SubresourceRange</ref></type>
+        <definition>SubresourceRange castor::ImageLayout::layer</definition>
+        <argsstring>(uint32_t index) const noexcept</argsstring>
+        <name>layer</name>
+        <qualifiedname>castor::ImageLayout::layer</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="142" column="18" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="142" bodyend="145"/>
+        <references refid="d5/d6e/a08955_1af6aa0de2038fadc65d680e65daea4bac">slice</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a54029cae4636485a0023a99ba66678fe" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955_1a59503d0f8a8ff6fd3d26c72376034b8f" kindref="member">SubresourceRange</ref></type>
+        <definition>SubresourceRange castor::ImageLayout::layerMip</definition>
+        <argsstring>(uint32_t index, uint32_t level) const noexcept</argsstring>
+        <name>layerMip</name>
+        <qualifiedname>castor::ImageLayout::layerMip</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="147" column="18" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="147" bodyend="151"/>
+        <references refid="d5/d6e/a08955_1a9c2b7e40ec543871a55c8e1e575ffdf6">sliceMip</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a69db422d4c3656f19889b72492a4cf2f" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955_1af1a3c7e291fc2daee94189dc6c349a99" kindref="member">DeviceSize</ref></type>
+        <definition>DeviceSize castor::ImageLayout::layerSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>layerSize</name>
+        <qualifiedname>castor::ImageLayout::layerSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="153" column="12" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="153" bodyend="156"/>
+        <references refid="d5/d6e/a08955_1aed82bb4d5ef65528f8e2958d6f9a1210">sliceSize</references>
+        <referencedby refid="d2/dd2/a02279_1abc2788522efc399fa5609b36f46176e9" compoundref="df/d52/a02027" startline="234" endline="237">castor::getLayerSize</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1afee2d833a31fcb074f62b02d3bafb974" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955_1af1a3c7e291fc2daee94189dc6c349a99" kindref="member">DeviceSize</ref></type>
+        <definition>DeviceSize castor::ImageLayout::layerMipSize</definition>
+        <argsstring>(uint32_t level) const noexcept</argsstring>
+        <name>layerMipSize</name>
+        <qualifiedname>castor::ImageLayout::layerMipSize</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="158" column="12" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="158" bodyend="161"/>
+        <references refid="d5/d6e/a08955_1aeeaa15c89964a63592988574c6574f11">sliceMipSize</references>
+        <referencedby refid="d2/dd2/a02279_1a73ef76598c879aab2e0c5afdc28ec1a7" compoundref="df/d52/a02027" startline="239" endline="243">castor::getLayerMipSize</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1aa9aa9c18bbaf361620bab0a8812fec69" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955_1af1a3c7e291fc2daee94189dc6c349a99" kindref="member">DeviceSize</ref></type>
+        <definition>DeviceSize castor::ImageLayout::layerOffset</definition>
+        <argsstring>(uint32_t index) const noexcept</argsstring>
+        <name>layerOffset</name>
+        <qualifiedname>castor::ImageLayout::layerOffset</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="163" column="12" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="163" bodyend="166"/>
+        <references refid="d5/d6e/a08955_1a10834e4841717c1569148c98e02c08f5">sliceOffset</references>
+        <referencedby refid="d2/dd2/a02279_1a0ef3c728a32b30d2f3b325b343cc1870" compoundref="df/d52/a02027" startline="258" endline="262">castor::getLayerOffset</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a730d72b3e9f1e462e98d3f152e4b5bfb" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955_1af1a3c7e291fc2daee94189dc6c349a99" kindref="member">DeviceSize</ref></type>
+        <definition>DeviceSize castor::ImageLayout::layerMipOffset</definition>
+        <argsstring>(uint32_t index, uint32_t level) const noexcept</argsstring>
+        <name>layerMipOffset</name>
+        <qualifiedname>castor::ImageLayout::layerMipOffset</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="168" column="12" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="168" bodyend="172"/>
+        <references refid="d5/d6e/a08955_1ac98035e5a690579e61691f0520c385dd">sliceMipOffset</references>
+        <referencedby refid="d2/dd2/a02279_1a53ddff8eb3ab1536bee78d2a1ca08538" compoundref="df/d52/a02027" startline="264" endline="269">castor::getLayerMipOffset</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a0734f25a076401ad9cc5bc72afa72c4c" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955_1a5a7b41e3ac6db006ea4b7efb4de98613" kindref="member">Buffer</ref></type>
+        <definition>Buffer castor::ImageLayout::layerBuffer</definition>
+        <argsstring>(PxBufferBase &amp;buffer, uint32_t index) const noexcept</argsstring>
+        <name>layerBuffer</name>
+        <qualifiedname>castor::ImageLayout::layerBuffer</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="174" column="8" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="174" bodyend="178"/>
+        <references refid="d5/d6e/a08955_1af1b2c4738e3b18bd36b90455d63b74e8">buffer</references>
+        <references refid="d5/d6e/a08955_1ac98e43b350aa2e3d640e77964e7ccb49">sliceBuffer</references>
+        <referencedby refid="d2/dd2/a02279_1a9e50e9a9f91e2b39c949b87c5fc5708e" compoundref="df/d52/a02027" startline="283" endline="288">castor::getLayerBuffer</referencedby>
+        <referencedby refid="d2/dd2/a02279_1acdeb87024d7be0442b664e8bf76e375f" compoundref="df/d52/a02027" startline="298" endline="303">castor::getLayerBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a4c4b4eacbdf4a67193a4d3ecc2d914e0" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955_1a5a7b41e3ac6db006ea4b7efb4de98613" kindref="member">Buffer</ref></type>
+        <definition>Buffer castor::ImageLayout::layerMipBuffer</definition>
+        <argsstring>(PxBufferBase &amp;buffer, uint32_t index, uint32_t level) const noexcept</argsstring>
+        <name>layerMipBuffer</name>
+        <qualifiedname>castor::ImageLayout::layerMipBuffer</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="180" column="8" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="180" bodyend="185"/>
+        <references refid="d5/d6e/a08955_1af1b2c4738e3b18bd36b90455d63b74e8">buffer</references>
+        <references refid="d5/d6e/a08955_1aa1a3102a42d400f710d092e8226df2aa">sliceMipBuffer</references>
+        <referencedby refid="d2/dd2/a02279_1a53ad359a330e350507fe9ed0a9c182b6" compoundref="df/d52/a02027" startline="290" endline="296">castor::getLayerMipBuffer</referencedby>
+        <referencedby refid="d2/dd2/a02279_1a23449a1c1a04f6b565d740c50828bbcd" compoundref="df/d52/a02027" startline="305" endline="311">castor::getLayerMipBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a9ab7837983b17778e0483f0729928c53" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955_1ac161cb8db198568600b0080fe54d5dfc" kindref="member">ConstBuffer</ref></type>
+        <definition>ConstBuffer castor::ImageLayout::layerBuffer</definition>
+        <argsstring>(PxBufferBase const &amp;buffer, uint32_t index) const noexcept</argsstring>
+        <name>layerBuffer</name>
+        <qualifiedname>castor::ImageLayout::layerBuffer</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="187" column="13" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="187" bodyend="191"/>
+        <references refid="d5/d6e/a08955_1af1b2c4738e3b18bd36b90455d63b74e8">buffer</references>
+        <references refid="d5/d6e/a08955_1ac98e43b350aa2e3d640e77964e7ccb49">sliceBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a41b0ed5e425958fb41250a66e46b3f3e" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d5/d6e/a08955_1ac161cb8db198568600b0080fe54d5dfc" kindref="member">ConstBuffer</ref></type>
+        <definition>ConstBuffer castor::ImageLayout::layerMipBuffer</definition>
+        <argsstring>(PxBufferBase const &amp;buffer, uint32_t index, uint32_t level) const noexcept</argsstring>
+        <name>layerMipBuffer</name>
+        <qualifiedname>castor::ImageLayout::layerMipBuffer</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="193" column="13" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="193" bodyend="198"/>
+        <references refid="d5/d6e/a08955_1af1b2c4738e3b18bd36b90455d63b74e8">buffer</references>
+        <references refid="d5/d6e/a08955_1aa1a3102a42d400f710d092e8226df2aa">sliceMipBuffer</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a883000a295f4679f38209c03394ab29c" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::ImageLayout::hasLayerBuffer</definition>
+        <argsstring>(PxBufferBase const &amp;buffer, uint32_t index) const noexcept</argsstring>
+        <name>hasLayerBuffer</name>
+        <qualifiedname>castor::ImageLayout::hasLayerBuffer</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="200" column="6" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="200" bodyend="204"/>
+        <references refid="d5/d6e/a08955_1af1b2c4738e3b18bd36b90455d63b74e8">buffer</references>
+        <references refid="d5/d6e/a08955_1a4c16cfe50d5dbc4b3268643df4445b9f">hasSliceBuffer</references>
+        <referencedby refid="d2/dd2/a02279_1a58befdb6854455daf5194a6167457447" compoundref="df/d52/a02027" startline="313" endline="318">castor::hasLayerBuffer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d6e/a08955_1a78218d99fbaecefe10b5239f244f22d7" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::ImageLayout::hasLayerMipBuffer</definition>
+        <argsstring>(PxBufferBase const &amp;buffer, uint32_t index, uint32_t level) const noexcept</argsstring>
+        <name>hasLayerMipBuffer</name>
+        <qualifiedname>castor::ImageLayout::hasLayerMipBuffer</qualifiedname>
+        <param>
+          <type><ref refid="dd/df9/a08987" kindref="compound">PxBufferBase</ref> const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/ImageLayout.hpp" line="206" column="6" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="206" bodyend="211"/>
+        <references refid="d5/d6e/a08955_1af1b2c4738e3b18bd36b90455d63b74e8">buffer</references>
+        <references refid="d5/d6e/a08955_1ae35b73740452e8cebd7de05ed0909929">hasSliceMipBuffer</references>
+        <referencedby refid="d2/dd2/a02279_1af9c1bf11f43eb6799b29db4935509397" compoundref="df/d52/a02027" startline="320" endline="326">castor::hasLayerMipBuffer</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/ImageLayout.hpp" line="14" column="1" bodyfile="CastorUtils/Graphics/ImageLayout.hpp" bodystart="15" bodyend="221"/>
+    <listofallmembers>
+      <member refid="d5/d6e/a08955_1a03b46ff9fba9be4f1a2ca92cd8f162d6" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>alignment</name></member>
+      <member refid="d5/d6e/a08955_1ad6e84233c155a0129d3f23229fbd478a" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>baseLayer</name></member>
+      <member refid="d5/d6e/a08955_1ad9aaa59eb43782ef7f45a9b7a878aa38" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>baseLevel</name></member>
+      <member refid="d5/d6e/a08955_1a5a7b41e3ac6db006ea4b7efb4de98613" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>Buffer</name></member>
+      <member refid="d5/d6e/a08955_1af1b2c4738e3b18bd36b90455d63b74e8" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>buffer</name></member>
+      <member refid="d5/d6e/a08955_1a4bcdef3c56aae2bad9cab16c98147dc8" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>buffer</name></member>
+      <member refid="d5/d6e/a08955_1ac161cb8db198568600b0080fe54d5dfc" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>ConstBuffer</name></member>
+      <member refid="d5/d6e/a08955_1a521ecdab24d790e363b4cbcf66863e48" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>depthLayers</name></member>
+      <member refid="d5/d6e/a08955_1af1a3c7e291fc2daee94189dc6c349a99" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>DeviceSize</name></member>
+      <member refid="d5/d6e/a08955_1ae72ff51ad96becf34296dd5ddbb14239" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>dimensions</name></member>
+      <member refid="d5/d6e/a08955_1a26ca4a7fb90e982d0a427d2130002dad" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>dimensions</name></member>
+      <member refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a58236eea7c7c3f593d70c6f10d732ca9" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>e1D</name></member>
+      <member refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a72bdedeecbc94d153b6335973e1ff69d" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>e1DArray</name></member>
+      <member refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a79894a835782f594c696116f05ed2734" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>e2D</name></member>
+      <member refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550afabbdd43f2d3479acee9fa0b677526c7" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>e2DArray</name></member>
+      <member refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a01d0366b9d581e96ffe4c4445fc01339" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>e3D</name></member>
+      <member refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a31e6b24b502646582cf388537c089a60" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>eCube</name></member>
+      <member refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a79da8c962d88cb2cac19bafcd6880f2d" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>eCubeArray</name></member>
+      <member refid="d5/d6e/a08955_1a661d0f78e91a87117d257a6225b5f2c6" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>extent</name></member>
+      <member refid="d5/d6e/a08955_1ad944871d62c483562483714f647efee1" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>format</name></member>
+      <member refid="d5/d6e/a08955_1a8812bb624039b0be27a3c7e59c2ea6a0" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>getName</name></member>
+      <member refid="d5/d6e/a08955_1a2aca319cf871e52fd51a8178e1e0472e" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>getType</name></member>
+      <member refid="d5/d6e/a08955_1ac22f42ef54981da335e84263d5f07065" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>hasBuffer</name></member>
+      <member refid="d5/d6e/a08955_1a883000a295f4679f38209c03394ab29c" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>hasLayerBuffer</name></member>
+      <member refid="d5/d6e/a08955_1a78218d99fbaecefe10b5239f244f22d7" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>hasLayerMipBuffer</name></member>
+      <member refid="d5/d6e/a08955_1a4c16cfe50d5dbc4b3268643df4445b9f" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>hasSliceBuffer</name></member>
+      <member refid="d5/d6e/a08955_1ae35b73740452e8cebd7de05ed0909929" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>hasSliceMipBuffer</name></member>
+      <member refid="d5/d6e/a08955_1a71a9aba2d25f232b5e53b425d374af64" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>ImageLayout</name></member>
+      <member refid="d5/d6e/a08955_1aef8c8a5506cc1a5e8ceabb4fa4a1ae60" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>ImageLayout</name></member>
+      <member refid="d5/d6e/a08955_1a00d40169261e71d67644abf563c540aa" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>ImageLayout</name></member>
+      <member refid="d5/d6e/a08955_1a8a7ff9d30e4cf05a92ec5a70629fe0d3" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>layer</name></member>
+      <member refid="d5/d6e/a08955_1a0734f25a076401ad9cc5bc72afa72c4c" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>layerBuffer</name></member>
+      <member refid="d5/d6e/a08955_1a9ab7837983b17778e0483f0729928c53" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>layerBuffer</name></member>
+      <member refid="d5/d6e/a08955_1a54029cae4636485a0023a99ba66678fe" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>layerMip</name></member>
+      <member refid="d5/d6e/a08955_1a4c4b4eacbdf4a67193a4d3ecc2d914e0" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>layerMipBuffer</name></member>
+      <member refid="d5/d6e/a08955_1a41b0ed5e425958fb41250a66e46b3f3e" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>layerMipBuffer</name></member>
+      <member refid="d5/d6e/a08955_1a730d72b3e9f1e462e98d3f152e4b5bfb" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>layerMipOffset</name></member>
+      <member refid="d5/d6e/a08955_1afee2d833a31fcb074f62b02d3bafb974" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>layerMipSize</name></member>
+      <member refid="d5/d6e/a08955_1aa9aa9c18bbaf361620bab0a8812fec69" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>layerOffset</name></member>
+      <member refid="d5/d6e/a08955_1a9b4aa919ca99120bccb4a364f255a890" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>layers</name></member>
+      <member refid="d5/d6e/a08955_1a69db422d4c3656f19889b72492a4cf2f" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>layerSize</name></member>
+      <member refid="d5/d6e/a08955_1a04a142ab04b495b313555c6714f4f294" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>levels</name></member>
+      <member refid="d5/d6e/a08955_1a44e445730965270d6fbed30e2cadf0bb" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>offset</name></member>
+      <member refid="d5/d6e/a08955_1a6a489452466ecb274f7a6a93679f6c68" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>range</name></member>
+      <member refid="d5/d6e/a08955_1a8237fe20b712bc846601e0494d82495d" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>size</name></member>
+      <member refid="d5/d6e/a08955_1af6aa0de2038fadc65d680e65daea4bac" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>slice</name></member>
+      <member refid="d5/d6e/a08955_1ac98e43b350aa2e3d640e77964e7ccb49" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>sliceBuffer</name></member>
+      <member refid="d5/d6e/a08955_1aacd4de8b3f68336593b4b4633df6bee7" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>sliceBuffer</name></member>
+      <member refid="d5/d6e/a08955_1a9c2b7e40ec543871a55c8e1e575ffdf6" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>sliceMip</name></member>
+      <member refid="d5/d6e/a08955_1aa1a3102a42d400f710d092e8226df2aa" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>sliceMipBuffer</name></member>
+      <member refid="d5/d6e/a08955_1a5af0e9b6679b0ab89a42b64728c4dfb4" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>sliceMipBuffer</name></member>
+      <member refid="d5/d6e/a08955_1ac98035e5a690579e61691f0520c385dd" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>sliceMipOffset</name></member>
+      <member refid="d5/d6e/a08955_1aeeaa15c89964a63592988574c6574f11" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>sliceMipSize</name></member>
+      <member refid="d5/d6e/a08955_1a10834e4841717c1569148c98e02c08f5" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>sliceOffset</name></member>
+      <member refid="d5/d6e/a08955_1aed82bb4d5ef65528f8e2958d6f9a1210" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>sliceSize</name></member>
+      <member refid="d5/d6e/a08955_1a59503d0f8a8ff6fd3d26c72376034b8f" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>SubresourceRange</name></member>
+      <member refid="d5/d6e/a08955_1a91854a60fdc9b13aea074ae3aa3665b0" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>type</name></member>
+      <member refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>Type</name></member>
+      <member refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550a10f386a04db583f0c76552c0acea828b" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>Type_COUNT</name></member>
+      <member refid="d5/d6e/a08955_1a453c20fabd992789adb9eb6f8bc30550abaa02a23053f2544f31f5df74a4adc16" prot="public" virt="non-virtual"><scope>castor::ImageLayout</scope><name>Type_MIN</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

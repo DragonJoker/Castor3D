@@ -1,0 +1,169 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d20/a08771" kind="class" language="C++" prot="public">
+    <compoundname>castor::FreeImageLoader</compoundname>
+    <basecompoundref refid="d6/ded/a08959" prot="public" virt="non-virtual">castor::ImageLoaderImpl</basecompoundref>
+    <includes local="no">FreeImageLoader.hpp</includes>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="df/d20/a08771_1a4753ebfdc57dc46d86e7675af3aeee06" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>static CU_API void castor::FreeImageLoader::registerLoader</definition>
+        <argsstring>(ImageLoader &amp;reg)</argsstring>
+        <name>registerLoader</name>
+        <qualifiedname>castor::FreeImageLoader::registerLoader</qualifiedname>
+        <param>
+          <type><ref refid="dc/d26/a08963" kindref="compound">ImageLoader</ref> &amp;</type>
+          <declname>reg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/FreeImageLoader.hpp" line="21" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d20/a08771_1ad22114771c4d506c019ebf4876c3d0a3" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> void</type>
+        <definition>static CU_API void castor::FreeImageLoader::unregisterLoader</definition>
+        <argsstring>(ImageLoader &amp;reg)</argsstring>
+        <name>unregisterLoader</name>
+        <qualifiedname>castor::FreeImageLoader::unregisterLoader</qualifiedname>
+        <param>
+          <type><ref refid="dc/d26/a08963" kindref="compound">ImageLoader</ref> &amp;</type>
+          <declname>reg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/FreeImageLoader.hpp" line="22" column="20"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d20/a08771_1ac8c3fe5ab9f83fe912dfed5ad9c8c2b4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d2/d31/a01811_1a85ca3bafa261a7f2ece738b559d8bbb7" kindref="member">CU_API</ref> <ref refid="d5/d6e/a08955" kindref="compound">ImageLayout</ref></type>
+        <definition>CU_API ImageLayout castor::FreeImageLoader::load</definition>
+        <argsstring>(String const &amp;imageFormat, uint8_t const *data, uint32_t size, PxBufferBaseUPtr &amp;buffer) const override</argsstring>
+        <name>load</name>
+        <qualifiedname>castor::FreeImageLoader::load</qualifiedname>
+        <reimplements refid="d6/ded/a08959_1ac826ebbbab22231d7c739d14f110a735">load</reimplements>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">String</ref> const &amp;</type>
+          <declname>imageFormat</declname>
+        </param>
+        <param>
+          <type>uint8_t const *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>PxBufferBaseUPtr &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Charge les données d&apos;un fichier image.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">imageFormat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le format de l&apos;image, niveau loader. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La taille des données de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit le buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Le layout de l&apos;image.   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/FreeImageLoader.hpp" line="26" column="20"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para><ref refid="d3/d77/a07999" kindref="compound">Loader</ref> d&apos;image basé sur stb_image. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor::FreeImageLoader</label>
+        <link refid="df/d20/a08771"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::ImageLoaderImpl</label>
+        <link refid="d6/ded/a08959"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::FreeImageLoader</label>
+        <link refid="df/d20/a08771"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::ImageLoaderImpl</label>
+        <link refid="d6/ded/a08959"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::NonMovable</label>
+        <link refid="da/d87/a08319"/>
+      </node>
+    </collaborationgraph>
+    <location file="CastorUtils/Graphics/FreeImageLoader.hpp" line="17" column="1" bodyfile="CastorUtils/Graphics/FreeImageLoader.hpp" bodystart="19" bodyend="30"/>
+    <listofallmembers>
+      <member refid="df/d20/a08771_1ac8c3fe5ab9f83fe912dfed5ad9c8c2b4" prot="public" virt="virtual"><scope>castor::FreeImageLoader</scope><name>load</name></member>
+      <member refid="d6/ded/a08959_1ab37e767ffe6ec23ac1047b7995830208" prot="public" virt="non-virtual" ambiguityscope="castor::ImageLoaderImpl::"><scope>castor::FreeImageLoader</scope><name>load</name></member>
+      <member refid="d6/ded/a08959_1aa80ea31b6f074e83fef9a0406cec1143" prot="public" virt="non-virtual" ambiguityscope="castor::ImageLoaderImpl::"><scope>castor::FreeImageLoader</scope><name>load</name></member>
+      <member refid="d6/ded/a08959_1a98936d29fd9174c3ac890b21dc33cadc" prot="public" virt="non-virtual" ambiguityscope="castor::ImageLoaderImpl::"><scope>castor::FreeImageLoader</scope><name>load</name></member>
+      <member refid="da/d87/a08319_1a96b2c94661bcced223d0eb013a82d7f9" prot="protected" virt="non-virtual"><scope>castor::FreeImageLoader</scope><name>NonMovable</name></member>
+      <member refid="df/d20/a08771_1a4753ebfdc57dc46d86e7675af3aeee06" prot="public" virt="non-virtual"><scope>castor::FreeImageLoader</scope><name>registerLoader</name></member>
+      <member refid="df/d20/a08771_1ad22114771c4d506c019ebf4876c3d0a3" prot="public" virt="non-virtual"><scope>castor::FreeImageLoader</scope><name>unregisterLoader</name></member>
+      <member refid="d6/ded/a08959_1ad8e17e4a4722252cc358f10ccb4c1b14" prot="public" virt="virtual"><scope>castor::FreeImageLoader</scope><name>~ImageLoaderImpl</name></member>
+      <member refid="da/d87/a08319_1a299bc742afd9bf89f64eb2b59e2ae216" prot="protected" virt="non-virtual"><scope>castor::FreeImageLoader</scope><name>~NonMovable</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

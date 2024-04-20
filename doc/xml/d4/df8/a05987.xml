@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d4/df8/a05987" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LayeredLightPropagationVolumesT</compoundname>
+    <basecompoundref refid="d6/d0c/a05979" prot="public" virt="non-virtual">castor3d::LayeredLightPropagationVolumesBase</basecompoundref>
+    <includes local="no">LayeredLightPropagationVolumes.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>bool</type>
+        <declname>GeometryVolumesT</declname>
+        <defname>GeometryVolumesT</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/df8/a05987_1afaf616e8c4982e2ee5bb610dee714772" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::LayeredLightPropagationVolumesT&lt; GeometryVolumesT &gt;::LayeredLightPropagationVolumesT</definition>
+        <argsstring>(crg::ResourcesCache &amp;resources, Scene const &amp;scene, LightType lightType, RenderDevice const &amp;device, ShadowMapResult const &amp;smResult, LightVolumePassResultArray const &amp;lpvResult, LayeredLpvGridConfigUbo &amp;lpvGridConfigUbo)</argsstring>
+        <name>LayeredLightPropagationVolumesT</name>
+        <qualifiedname>castor3d::LayeredLightPropagationVolumesT::LayeredLightPropagationVolumesT</qualifiedname>
+        <param>
+          <type>crg::ResourcesCache &amp;</type>
+          <declname>resources</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/dc2/a07135" kindref="compound">Scene</ref> const &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>lightType</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d32/a06415" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d15/a06659" kindref="compound">ShadowMapResult</ref> const &amp;</type>
+          <declname>smResult</declname>
+        </param>
+        <param>
+          <type>LightVolumePassResultArray const &amp;</type>
+          <declname>lpvResult</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d47/a07775" kindref="compound">LayeredLpvGridConfigUbo</ref> &amp;</type>
+          <declname>lpvGridConfigUbo</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="144" column="1" bodyfile="Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="144" bodyend="160"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d4/df8/a05987_1a403e7af0b1c59ea3d6f9b0b73197e8a6" prot="public" static="yes" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>static uint32_t castor3d::LayeredLightPropagationVolumesT&lt; GeometryVolumesT &gt;::countInitialisationSteps</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>countInitialisationSteps</name>
+        <qualifiedname>castor3d::LayeredLightPropagationVolumesT::countInitialisationSteps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="162" column="17" bodyfile="Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="162" bodyend="174"/>
+        <references refid="d9/dba/a02278_1a569177dd5bfdc441c123583687d5315e" compoundref="d1/d7e/a00434" startline="83">castor3d::LpvMaxPropagationSteps</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Passe de génération des light propagation volumes. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::LayeredLightPropagationVolumesBase</label>
+        <link refid="d6/d0c/a05979"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::LayeredLightPropagationVolumesT&lt; GeometryVolumesT &gt;</label>
+        <link refid="d4/df8/a05987"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::LayeredLightPropagationVolumesBase</label>
+        <link refid="d6/d0c/a05979"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::LayeredLightPropagationVolumesT&lt; GeometryVolumesT &gt;</label>
+        <link refid="d4/df8/a05987"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+        <link refid="d5/d3c/a08223"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" line="140" column="1" bodyfile="Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp" bodystart="142" bodyend="175"/>
+    <listofallmembers>
+      <member refid="d6/d0c/a05979_1aee0f6580730e041431c3bfe6df9c6560" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>accept</name></member>
+      <member refid="d6/d0c/a05979_1adb9c43ae3f73056532774aae06ce03bd" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>cleanup</name></member>
+      <member refid="d4/df8/a05987_1a403e7af0b1c59ea3d6f9b0b73197e8a6" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>countInitialisationSteps</name></member>
+      <member refid="d5/d3c/a08223_1abc1fa9ec1a50d2023373baa4d4c79519" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>getName</name></member>
+      <member refid="d6/d0c/a05979_1a7bf255beebc904d215228abae9dbe85b" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>initialise</name></member>
+      <member refid="d6/d0c/a05979_1aa9a1a354615ba03c6cc0b6015a5afd50" prot="protected" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>LayeredLightPropagationVolumesBase</name></member>
+      <member refid="d4/df8/a05987_1afaf616e8c4982e2ee5bb610dee714772" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>LayeredLightPropagationVolumesT</name></member>
+      <member refid="d5/d3c/a08223_1a869b429a7190ecf614d8221b270e6dca" prot="protected" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>m_name</name></member>
+      <member refid="d5/d3c/a08223_1a4a6e4748603541685b04f95fb91efb26" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>NamedBaseT</name></member>
+      <member refid="d6/d0c/a05979_1af37c2625f18ab6ea20303569e42770e9" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>registerLight</name></member>
+      <member refid="d5/d3c/a08223_1a2d62ce1925efead03c4e0842c06b3e11" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>rename</name></member>
+      <member refid="d6/d0c/a05979_1a7da87880b990de1ab7be55be2e5343d2" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>render</name></member>
+      <member refid="d6/d0c/a05979_1a865d60aba3a9298653d229e54f8d51fb" prot="public" virt="non-virtual"><scope>castor3d::LayeredLightPropagationVolumesT</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

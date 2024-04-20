@@ -1,0 +1,465 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/deb/a02090" kind="file" language="C++">
+    <compoundname>stb_image_write.h</compoundname>
+    <sectiondef kind="define">
+      <memberdef kind="define" id="d7/deb/a02090_1a1d964457ebf7cc898b8cb14e66cbfaa8" prot="public" static="no">
+        <name>STBIWDEF</name>
+        <initializer>extern</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_write.h" line="159" column="11" bodyfile="CastorUtils/Graphics/stb_image_write.h" bodystart="159" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="d7/deb/a02090_1a2326fd2fd79095b9ef34695a0bda114f" prot="public" static="no">
+        <type>void</type>
+        <definition>typedef void stbi_write_func(void *context, void *data, int size)</definition>
+        <argsstring>(void *context, void *data, int size)</argsstring>
+        <name>stbi_write_func</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_write.h" line="178" column="14" bodyfile="CastorUtils/Graphics/stb_image_write.h" bodystart="178" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="d7/deb/a02090_1a7aa69838d830bd1e917b2a20d2030e0c" prot="public" static="no" extern="yes" mutable="no">
+        <type>int</type>
+        <definition>int stbi_write_tga_with_rle</definition>
+        <argsstring></argsstring>
+        <name>stbi_write_tga_with_rle</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_write.h" line="165" column="12" declfile="CastorUtils/Graphics/stb_image_write.h" declline="165" declcolumn="12"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/deb/a02090_1ac40d349d241f781ed7b621259ce2b3c2" prot="public" static="no" extern="yes" mutable="no">
+        <type>int</type>
+        <definition>int stbi_write_png_compression_level</definition>
+        <argsstring></argsstring>
+        <name>stbi_write_png_compression_level</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_write.h" line="166" column="12" declfile="CastorUtils/Graphics/stb_image_write.h" declline="166" declcolumn="12"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/deb/a02090_1acfc7bbb01f0c4f6079727cfa1b086912" prot="public" static="no" extern="yes" mutable="no">
+        <type>int</type>
+        <definition>int stbi_write_force_png_filter</definition>
+        <argsstring></argsstring>
+        <name>stbi_write_force_png_filter</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_write.h" line="167" column="12" declfile="CastorUtils/Graphics/stb_image_write.h" declline="167" declcolumn="12"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="d7/deb/a02090_1aace2f6525144ac808cec21600cfe4498" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_write_png</definition>
+        <argsstring>(char const *filename, int w, int h, int comp, const void *data, int stride_in_bytes)</argsstring>
+        <name>stbi_write_png</name>
+        <param>
+          <type>char const *</type>
+          <declname>filename</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>comp</declname>
+        </param>
+        <param>
+          <type>const void *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>stride_in_bytes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_write.h" line="171" column="14" declfile="CastorUtils/Graphics/stb_image_write.h" declline="171" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/deb/a02090_1adb12037a58d9e12e7a58c479b8e0ab8e" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_write_bmp</definition>
+        <argsstring>(char const *filename, int w, int h, int comp, const void *data)</argsstring>
+        <name>stbi_write_bmp</name>
+        <param>
+          <type>char const *</type>
+          <declname>filename</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>comp</declname>
+        </param>
+        <param>
+          <type>const void *</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_write.h" line="172" column="14" declfile="CastorUtils/Graphics/stb_image_write.h" declline="172" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/deb/a02090_1a3ae29b478d6da0d99705825591f6d20b" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_write_tga</definition>
+        <argsstring>(char const *filename, int w, int h, int comp, const void *data)</argsstring>
+        <name>stbi_write_tga</name>
+        <param>
+          <type>char const *</type>
+          <declname>filename</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>comp</declname>
+        </param>
+        <param>
+          <type>const void *</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_write.h" line="173" column="14" declfile="CastorUtils/Graphics/stb_image_write.h" declline="173" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/deb/a02090_1a023b416084712e734500e5fff03568da" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_write_hdr</definition>
+        <argsstring>(char const *filename, int w, int h, int comp, const float *data)</argsstring>
+        <name>stbi_write_hdr</name>
+        <param>
+          <type>char const *</type>
+          <declname>filename</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>comp</declname>
+        </param>
+        <param>
+          <type>const float *</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_write.h" line="174" column="14" declfile="CastorUtils/Graphics/stb_image_write.h" declline="174" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/deb/a02090_1af9fea74052e737358fe4a6e911c9c2a1" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_write_jpg</definition>
+        <argsstring>(char const *filename, int x, int y, int comp, const void *data, int quality)</argsstring>
+        <name>stbi_write_jpg</name>
+        <param>
+          <type>char const *</type>
+          <declname>filename</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>comp</declname>
+        </param>
+        <param>
+          <type>const void *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>quality</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_write.h" line="175" column="14" declfile="CastorUtils/Graphics/stb_image_write.h" declline="175" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/deb/a02090_1a960a85427af7f5b19c97d884f4110854" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_write_png_to_func</definition>
+        <argsstring>(stbi_write_func *func, void *context, int w, int h, int comp, const void *data, int stride_in_bytes)</argsstring>
+        <name>stbi_write_png_to_func</name>
+        <param>
+          <type><ref refid="d7/deb/a02090_1a2326fd2fd79095b9ef34695a0bda114f" kindref="member">stbi_write_func</ref> *</type>
+          <declname>func</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>comp</declname>
+        </param>
+        <param>
+          <type>const void *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>stride_in_bytes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_write.h" line="180" column="14" declfile="CastorUtils/Graphics/stb_image_write.h" declline="180" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/deb/a02090_1a829108c2bd26508d2255da2645bd7c2e" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_write_bmp_to_func</definition>
+        <argsstring>(stbi_write_func *func, void *context, int w, int h, int comp, const void *data)</argsstring>
+        <name>stbi_write_bmp_to_func</name>
+        <param>
+          <type><ref refid="d7/deb/a02090_1a2326fd2fd79095b9ef34695a0bda114f" kindref="member">stbi_write_func</ref> *</type>
+          <declname>func</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>comp</declname>
+        </param>
+        <param>
+          <type>const void *</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_write.h" line="181" column="14" declfile="CastorUtils/Graphics/stb_image_write.h" declline="181" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/deb/a02090_1afffbf9c171942139935f871320f70e1c" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_write_tga_to_func</definition>
+        <argsstring>(stbi_write_func *func, void *context, int w, int h, int comp, const void *data)</argsstring>
+        <name>stbi_write_tga_to_func</name>
+        <param>
+          <type><ref refid="d7/deb/a02090_1a2326fd2fd79095b9ef34695a0bda114f" kindref="member">stbi_write_func</ref> *</type>
+          <declname>func</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>comp</declname>
+        </param>
+        <param>
+          <type>const void *</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_write.h" line="182" column="14" declfile="CastorUtils/Graphics/stb_image_write.h" declline="182" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/deb/a02090_1a85a66ad13fb4086d4419df08d70be4d0" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_write_hdr_to_func</definition>
+        <argsstring>(stbi_write_func *func, void *context, int w, int h, int comp, const float *data)</argsstring>
+        <name>stbi_write_hdr_to_func</name>
+        <param>
+          <type><ref refid="d7/deb/a02090_1a2326fd2fd79095b9ef34695a0bda114f" kindref="member">stbi_write_func</ref> *</type>
+          <declname>func</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>comp</declname>
+        </param>
+        <param>
+          <type>const float *</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_write.h" line="183" column="14" declfile="CastorUtils/Graphics/stb_image_write.h" declline="183" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/deb/a02090_1ae4e92d28f8f923861defecb29c33f78b" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int stbi_write_jpg_to_func</definition>
+        <argsstring>(stbi_write_func *func, void *context, int x, int y, int comp, const void *data, int quality)</argsstring>
+        <name>stbi_write_jpg_to_func</name>
+        <param>
+          <type><ref refid="d7/deb/a02090_1a2326fd2fd79095b9ef34695a0bda114f" kindref="member">stbi_write_func</ref> *</type>
+          <declname>func</declname>
+        </param>
+        <param>
+          <type>void *</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>comp</declname>
+        </param>
+        <param>
+          <type>const void *</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>quality</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_write.h" line="184" column="14" declfile="CastorUtils/Graphics/stb_image_write.h" declline="184" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/deb/a02090_1ab6555bbfd2ab53f9db7a948994122375" prot="public" static="no" extern="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void stbi_flip_vertically_on_write</definition>
+        <argsstring>(int flip_boolean)</argsstring>
+        <name>stbi_flip_vertically_on_write</name>
+        <param>
+          <type>int</type>
+          <declname>flip_boolean</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Graphics/stb_image_write.h" line="186" column="15" declfile="CastorUtils/Graphics/stb_image_write.h" declline="186" declcolumn="15"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Graphics/stb_image_write.h"/>
+  </compounddef>
+</doxygen>

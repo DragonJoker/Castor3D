@@ -1,0 +1,27 @@
+<map id="castor3d::SubmeshComponent" name="castor3d::SubmeshComponent">
+<area shape="rect" id="Node000001" title=" " alt="" coords="571,194,772,219"/>
+<area shape="rect" id="Node000004" href="$d7/d4f/a05431.html" title="Submesh component holding base submesh data." alt="" coords="833,5,1036,45"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="688,181,742,119,779,85,820,56,848,43,850,48,823,61,783,90,746,123,692,185"/>
+<area shape="rect" id="Node000005" href="$d3/dd4/a05455.html" title=" " alt="" coords="821,70,1048,95"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="697,183,751,144,820,106,858,93,860,98,822,110,754,148,700,188"/>
+<area shape="rect" id="Node000006" href="$d1/d27/a05483.html" title=" " alt="" coords="855,119,1015,145"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="720,187,821,155,871,142,873,147,822,160,721,192"/>
+<area shape="rect" id="Node000009" href="$db/d0d/a05495.html" title=" " alt="" coords="827,169,1043,194"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="785,193,826,189,827,194,786,198"/>
+<area shape="rect" id="Node000010" href="$d1/d01/a05531.html" title=" " alt="" coords="839,218,1031,243"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="786,214,839,219,838,225,785,220"/>
+<area shape="rect" id="Node000011" href="$d1/d0f/a05543.html" title=" " alt="" coords="843,267,1026,293"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="721,221,822,253,869,265,867,270,821,259,720,227"/>
+<area shape="rect" id="Node000012" href="$dd/df2/a05555.html" title=" " alt="" coords="827,317,1042,342"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="700,226,754,265,822,303,856,314,855,319,820,308,751,270,697,230"/>
+<area shape="rect" id="Node000013" href="$d6/d3f/a05571.html" title=" " alt="" coords="849,366,1021,391"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="691,229,745,291,782,325,823,352,849,363,847,368,820,357,778,329,741,295,687,232"/>
+<area shape="rect" id="Node000002" href="$d6/da8/a08227.html" title=" " alt="" coords="320,194,521,219"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="535,204,571,204,571,209,535,209"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="5,194,188,219"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="202,204,319,204,319,209,202,209"/>
+<area shape="rect" id="Node000007" href="$de/d01/a05519.html" title=" " alt="" coords="1103,94,1263,119"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="1028,120,1103,112,1103,117,1029,125"/>
+<area shape="rect" id="Node000008" href="$d3/d4e/a05623.html" title=" " alt="" coords="1097,143,1269,169"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="1029,138,1097,145,1097,150,1028,144"/>
+</map>

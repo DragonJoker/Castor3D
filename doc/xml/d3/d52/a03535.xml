@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d3/d52/a03535" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::IndexBufferPool::ModelBuffers</compoundname>
+    <includes local="no">ObjectBufferPool.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d52/a03535_1ad4d974c28f8d2bdb4d9fb3b09ac39e00" prot="public" static="no" mutable="no">
+        <type>GpuPackedBaseBufferUPtr</type>
+        <definition>GpuPackedBaseBufferUPtr castor3d::IndexBufferPool::ModelBuffers::vertex</definition>
+        <argsstring></argsstring>
+        <name>vertex</name>
+        <qualifiedname>castor3d::IndexBufferPool::ModelBuffers::vertex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferPool.hpp" line="95" column="25" bodyfile="Castor3D/Buffer/ObjectBufferPool.hpp" bodystart="95" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d52/a03535_1a09a5c1ad380d73f07886747dc81f736e" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::IndexBufferPool::ModelBuffers::ModelBuffers</definition>
+        <argsstring>(GpuPackedBaseBufferUPtr vtx)</argsstring>
+        <name>ModelBuffers</name>
+        <qualifiedname>castor3d::IndexBufferPool::ModelBuffers::ModelBuffers</qualifiedname>
+        <param>
+          <type>GpuPackedBaseBufferUPtr</type>
+          <declname>vtx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/ObjectBufferPool.hpp" line="90" column="10" bodyfile="Castor3D/Buffer/ObjectBufferPool.hpp" bodystart="90" bodyend="93"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Buffer/ObjectBufferPool.hpp" line="88" column="1" bodyfile="Castor3D/Buffer/ObjectBufferPool.hpp" bodystart="89" bodyend="96"/>
+    <listofallmembers>
+      <member refid="d3/d52/a03535_1a09a5c1ad380d73f07886747dc81f736e" prot="public" virt="non-virtual"><scope>castor3d::IndexBufferPool::ModelBuffers</scope><name>ModelBuffers</name></member>
+      <member refid="d3/d52/a03535_1ad4d974c28f8d2bdb4d9fb3b09ac39e00" prot="public" virt="non-virtual"><scope>castor3d::IndexBufferPool::ModelBuffers</scope><name>vertex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

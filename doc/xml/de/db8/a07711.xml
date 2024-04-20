@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="de/db8/a07711" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::TextureTransformData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_TextureTransformData&quot;, ast::type::MemoryLayout::eStd430, sdw::Vec3Field&lt; &quot;translate&quot; &gt;, sdw::FloatField&lt; &quot;rotateU&quot; &gt;, sdw::Vec3Field&lt; &quot;scale&quot; &gt;, sdw::FloatField&lt; &quot;rotateV&quot; &gt;, sdw::Vec4Field&lt; &quot;tileSet&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">GlslTextureTransform.hpp</includes>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/db8/a07711_1a32d008cc51c70e5fb131dfc4a58ec508" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::TextureTransformData::TextureTransformData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>TextureTransformData</name>
+        <qualifiedname>castor3d::shader::TextureTransformData::TextureTransformData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslTextureTransform.hpp" line="24" column="1" bodyfile="Castor3D/Shader/Shaders/GlslTextureTransform.hpp" bodystart="24" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="de/db8/a07711_1a390f34c2df02c835fa8bc1c31756a47e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::TextureTransformData::translate</definition>
+        <argsstring>() const</argsstring>
+        <name>translate</name>
+        <qualifiedname>castor3d::shader::TextureTransformData::translate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslTextureTransform.hpp" line="31" column="6" bodyfile="Castor3D/Shader/Shaders/GlslTextureTransform.hpp" bodystart="31" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="function" id="de/db8/a07711_1a5bd96e4e928fdac844f1e96255948cc1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::TextureTransformData::rotateU</definition>
+        <argsstring>() const</argsstring>
+        <name>rotateU</name>
+        <qualifiedname>castor3d::shader::TextureTransformData::rotateU</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslTextureTransform.hpp" line="32" column="6" bodyfile="Castor3D/Shader/Shaders/GlslTextureTransform.hpp" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="de/db8/a07711_1a6d1986a0ba0ba394a2c04d870fd89d0e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::TextureTransformData::rotateV</definition>
+        <argsstring>() const</argsstring>
+        <name>rotateV</name>
+        <qualifiedname>castor3d::shader::TextureTransformData::rotateV</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslTextureTransform.hpp" line="33" column="6" bodyfile="Castor3D/Shader/Shaders/GlslTextureTransform.hpp" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="de/db8/a07711_1ac509facd43eac4ab9098b3b03c1a09d5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::TextureTransformData::scale</definition>
+        <argsstring>() const</argsstring>
+        <name>scale</name>
+        <qualifiedname>castor3d::shader::TextureTransformData::scale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslTextureTransform.hpp" line="34" column="6" bodyfile="Castor3D/Shader/Shaders/GlslTextureTransform.hpp" bodystart="34" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="de/db8/a07711_1a81b600214c5007e6429e415774628eb8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::TextureTransformData::tileSet</definition>
+        <argsstring>() const</argsstring>
+        <name>tileSet</name>
+        <qualifiedname>castor3d::shader::TextureTransformData::tileSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/Shaders/GlslTextureTransform.hpp" line="35" column="6" bodyfile="Castor3D/Shader/Shaders/GlslTextureTransform.hpp" bodystart="35" bodyend="35"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::TextureTransformData</label>
+        <link refid="de/db8/a07711"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_TextureTransformData&quot;, ast::type::MemoryLayout::eStd430, sdw::Vec3Field&lt; &quot;translate&quot; &gt;, sdw::FloatField&lt; &quot;rotateU&quot; &gt;, sdw::Vec3Field&lt; &quot;scale&quot; &gt;, sdw::FloatField&lt; &quot;rotateV&quot; &gt;, sdw::Vec4Field&lt; &quot;tileSet&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::TextureTransformData</label>
+        <link refid="de/db8/a07711"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_TextureTransformData&quot;, ast::type::MemoryLayout::eStd430, sdw::Vec3Field&lt; &quot;translate&quot; &gt;, sdw::FloatField&lt; &quot;rotateU&quot; &gt;, sdw::Vec3Field&lt; &quot;scale&quot; &gt;, sdw::FloatField&lt; &quot;rotateV&quot; &gt;, sdw::Vec4Field&lt; &quot;tileSet&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Shader/Shaders/GlslTextureTransform.hpp" line="14" column="1" bodyfile="Castor3D/Shader/Shaders/GlslTextureTransform.hpp" bodystart="22" bodyend="36"/>
+    <listofallmembers>
+      <member refid="de/db8/a07711_1a5bd96e4e928fdac844f1e96255948cc1" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureTransformData</scope><name>rotateU</name></member>
+      <member refid="de/db8/a07711_1a6d1986a0ba0ba394a2c04d870fd89d0e" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureTransformData</scope><name>rotateV</name></member>
+      <member refid="de/db8/a07711_1ac509facd43eac4ab9098b3b03c1a09d5" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureTransformData</scope><name>scale</name></member>
+      <member refid="de/db8/a07711_1a32d008cc51c70e5fb131dfc4a58ec508" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureTransformData</scope><name>TextureTransformData</name></member>
+      <member refid="de/db8/a07711_1a81b600214c5007e6429e415774628eb8" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureTransformData</scope><name>tileSet</name></member>
+      <member refid="de/db8/a07711_1a390f34c2df02c835fa8bc1c31756a47e" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureTransformData</scope><name>translate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,830 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d0/d45/a05315" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ParametersT</compoundname>
+    <includes local="no">Parameter.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename KeyT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d0/d45/a05315_1ab96329f18ae97e9a5df50baf2cc7c3a5" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1a57d18b0d40cd54921270bcf33d0aadc5" kindref="member">castor::Vector</ref>&lt; uint8_t &gt;</type>
+        <definition>using castor3d::ParametersT&lt; KeyT &gt;::ByteArray =  castor::Vector&lt; uint8_t &gt;</definition>
+        <argsstring></argsstring>
+        <name>ByteArray</name>
+        <qualifiedname>castor3d::ParametersT::ByteArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="372" column="1" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="372" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d45/a05315_1aa7dfe07c8c39e330ef814fc1a2d0728c" prot="private" static="no">
+        <type><ref refid="d2/dd2/a02279_1a93b53452a3c421817a14b649ccec1fb7" kindref="member">castor::Map</ref>&lt; KeyT, ByteArray, std::less&lt;&gt; &gt;</type>
+        <definition>using castor3d::ParametersT&lt; KeyT &gt;::ParamNameMap =  castor::Map&lt; KeyT, ByteArray, std::less&lt;&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>ParamNameMap</name>
+        <qualifiedname>castor3d::ParametersT::ParamNameMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="373" column="1" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="373" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d45/a05315_1a0b6c14c5ab579f8725c3f0588987eda9" prot="private" static="no" mutable="no">
+        <type>ParamNameMap</type>
+        <definition>ParamNameMap castor3d::ParametersT&lt; KeyT &gt;::m_values</definition>
+        <argsstring></argsstring>
+        <name>m_values</name>
+        <qualifiedname>castor3d::ParametersT::m_values</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="374" column="14" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="374" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d45/a05315_1a8931865d7c80848f6f6026361c097e92" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ParametersT&lt; KeyT &gt;::ParametersT</definition>
+        <argsstring>()=default</argsstring>
+        <name>ParametersT</name>
+        <qualifiedname>castor3d::ParametersT::ParametersT</qualifiedname>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="25" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a05315_1a96cb2145223019c28b190229001f6be5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ParametersT&lt; KeyT &gt;::parse</definition>
+        <argsstring>(castor::String const &amp;text)</argsstring>
+        <name>parse</name>
+        <qualifiedname>castor3d::ParametersT::parse</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+<para>Analyse le texte donné en une liste de paramètres. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">text</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le texte source. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="34" column="6" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="34" bodyend="59"/>
+        <references refid="d0/d45/a05315_1ad5db1be40b7fb695857dd9e36c1fcbff" compoundref="df/dbb/a00698" startline="77" endline="93">castor3d::ParametersT&lt; KeyT &gt;::add</references>
+        <references refid="d5/d12/a01799_1a3564792a496e57dd35e9121d9bb5fe98" compoundref="d5/d12/a01799" startline="51">cuT</references>
+        <references refid="d7/da1/a02290_1abd0f267fedc5d640cd8158e76f86a51c">castor::string::split</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a05315_1ad5db1be40b7fb695857dd9e36c1fcbff" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ValueT</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::add</definition>
+        <argsstring>(KeyT const &amp;name, ValueT *values, uint32_t count)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor3d::ParametersT::add</qualifiedname>
+        <param>
+          <type>KeyT const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ValueT *</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute un paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Si un paramètre avec le nom donné existe déjà, rien n&apos;est fait </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du paramètre </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs du paramètre </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le compte des valeurs </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un paramètre avec le nom donné existe déjà </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="77" column="6" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="77" bodyend="93"/>
+        <referencedby refid="d0/d45/a05315_1a66fa9451528ce319135398c8ac239cf8" compoundref="df/dbb/a00698" startline="194" endline="198">castor3d::ParametersT&lt; KeyT &gt;::add</referencedby>
+        <referencedby refid="d0/d45/a05315_1ae41f7406dafca84065a61cc27b6fc986" compoundref="df/dbb/a00698" startline="144" endline="148">castor3d::ParametersT&lt; KeyT &gt;::add</referencedby>
+        <referencedby refid="d0/d45/a05315_1a308156a2a8619c89a52f64b2c391efc3" compoundref="df/dbb/a00698" startline="124" endline="128">castor3d::ParametersT&lt; KeyT &gt;::add</referencedby>
+        <referencedby refid="d0/d45/a05315_1a96cb2145223019c28b190229001f6be5" compoundref="df/dbb/a00698" startline="34" endline="59">castor3d::ParametersT&lt; KeyT &gt;::parse</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a05315_1a752ae446e1a04e0bc407260458af0ab8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ParametersT&lt; KeyT &gt;::add</definition>
+        <argsstring>(ParametersT const &amp;parameters)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor3d::ParametersT::add</qualifiedname>
+        <param>
+          <type><ref refid="d0/d45/a05315" kindref="compound">ParametersT</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute une liste de paramètres. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La liste de paramètres. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="102" column="6" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="102" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a05315_1a308156a2a8619c89a52f64b2c391efc3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ValueT</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>N</declname>
+            <defname>N</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::add</definition>
+        <argsstring>(KeyT const &amp;name, ValueT const(&amp;values)[N])</argsstring>
+        <name>add</name>
+        <qualifiedname>castor3d::ParametersT::add</qualifiedname>
+        <param>
+          <type>KeyT const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ValueT const(&amp;)</type>
+          <declname>values</declname>
+          <array>[N]</array>
+        </param>
+        <briefdescription>
+<para>Ajoute un paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Si un paramètre avec le nom donné existe déjà, rien n&apos;est fait </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du paramètre </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs du paramètre </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un paramètre avec le nom donné existe déjà </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="124" column="6" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="124" bodyend="128"/>
+        <references refid="d0/d45/a05315_1ad5db1be40b7fb695857dd9e36c1fcbff" compoundref="df/dbb/a00698" startline="77" endline="93">castor3d::ParametersT&lt; KeyT &gt;::add</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a05315_1ae41f7406dafca84065a61cc27b6fc986" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ValueT</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::add</definition>
+        <argsstring>(KeyT const &amp;name, ValueT const &amp;value)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor3d::ParametersT::add</qualifiedname>
+        <param>
+          <type>KeyT const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ValueT const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute un paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Si un paramètre avec le nom donné existe déjà, rien n&apos;est fait </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du paramètre </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur du paramètre </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un paramètre avec le nom donné existe déjà </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="144" column="6" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="144" bodyend="148"/>
+        <references refid="d0/d45/a05315_1ad5db1be40b7fb695857dd9e36c1fcbff" compoundref="df/dbb/a00698" startline="77" endline="93">castor3d::ParametersT&lt; KeyT &gt;::add</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a05315_1aa632d31dbf2ec8449dc4ad022c2fac0c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::add</definition>
+        <argsstring>(KeyT const &amp;name, castor::String const &amp;value)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor3d::ParametersT::add</qualifiedname>
+        <param>
+          <type>KeyT const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute un paramètre chaîne de caractères. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Si un paramètre avec le nom donné existe déjà, rien n&apos;est fait </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du paramètre </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur du paramètre </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un paramètre avec le nom donné existe déjà </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="163" column="6" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="163" bodyend="179"/>
+        <references refid="d0/d45/a05315_1a788809b2719ae6bd194e186572157ccb" compoundref="df/dbb/a00698" startline="356" endline="359">castor3d::ParametersT&lt; KeyT &gt;::size</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a05315_1a66fa9451528ce319135398c8ac239cf8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::add</definition>
+        <argsstring>(KeyT const &amp;name, castor::Path const &amp;value)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor3d::ParametersT::add</qualifiedname>
+        <param>
+          <type>KeyT const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Ajoute un paramètre chaîne de caractères. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>Si un paramètre avec le nom donné existe déjà, rien n&apos;est fait </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du paramètre </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur du paramètre </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un paramètre avec le nom donné existe déjà </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="194" column="6" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="194" bodyend="198"/>
+        <references refid="d0/d45/a05315_1ad5db1be40b7fb695857dd9e36c1fcbff" compoundref="df/dbb/a00698" startline="77" endline="93">castor3d::ParametersT&lt; KeyT &gt;::add</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a05315_1a77dfeca82fa204f525df3fd314fbf9a9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ValueT</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::set</definition>
+        <argsstring>(KeyT const &amp;name, ValueT const &amp;value)</argsstring>
+        <name>set</name>
+        <qualifiedname>castor3d::ParametersT::set</qualifiedname>
+        <param>
+          <type>KeyT const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ValueT const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Définit la valeur d&apos;un paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du paramètre </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur du paramètre </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> s&apos;il n&apos;y a pas de paramètre avec le nom donné </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="212" column="6" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="212" bodyend="225"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a05315_1ad96af3a75d355cbb66a288d3c5776117" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ValueT</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::get</definition>
+        <argsstring>(KeyT const &amp;name, ValueT *values, uint32_t count) const</argsstring>
+        <name>get</name>
+        <qualifiedname>castor3d::ParametersT::get</qualifiedname>
+        <param>
+          <type>KeyT const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ValueT *</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur d&apos;un paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du paramètre </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs du paramètre </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La nombre disponible de valeurs </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> s&apos;il n&apos;y a pas de paramètre avec le nom donné </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="241" column="6" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="241" bodyend="259"/>
+        <references refid="d0/d45/a05315_1ab6e1178e176b49c58f26fbb49b968343" compoundref="df/dbb/a00698" startline="361" endline="364">castor3d::ParametersT&lt; KeyT &gt;::begin</references>
+        <referencedby refid="d0/d45/a05315_1ad57408a3beec0e65cac1ad1076c08e99" compoundref="df/dbb/a00698" startline="349" endline="354">castor3d::ParametersT&lt; KeyT &gt;::get</referencedby>
+        <referencedby refid="d0/d45/a05315_1a5f2d2f6a4c53605530c18144ce255f99" compoundref="df/dbb/a00698" startline="335" endline="339">castor3d::ParametersT&lt; KeyT &gt;::get</referencedby>
+        <referencedby refid="d0/d45/a05315_1ab2b2cb427182b47fde46cbbec82a2578" compoundref="df/dbb/a00698" startline="273" endline="277">castor3d::ParametersT&lt; KeyT &gt;::get</referencedby>
+        <referencedby refid="d0/d45/a05315_1a11ebc07545b4a4c273f4ee8f0c04d661" compoundref="df/dbb/a00698" startline="291" endline="295">castor3d::ParametersT&lt; KeyT &gt;::get</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a05315_1ab2b2cb427182b47fde46cbbec82a2578" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ValueT</type>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::get</definition>
+        <argsstring>(KeyT const &amp;name, ValueT &amp;value) const</argsstring>
+        <name>get</name>
+        <qualifiedname>castor3d::ParametersT::get</qualifiedname>
+        <param>
+          <type>KeyT const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ValueT &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur d&apos;un paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du paramètre </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur du paramètre </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> s&apos;il n&apos;y a pas de paramètre avec le nom donné </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="273" column="6" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="273" bodyend="277"/>
+        <references refid="d0/d45/a05315_1ad96af3a75d355cbb66a288d3c5776117" compoundref="df/dbb/a00698" startline="241" endline="259">castor3d::ParametersT&lt; KeyT &gt;::get</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a05315_1a11ebc07545b4a4c273f4ee8f0c04d661" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ValueT</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>N</declname>
+            <defname>N</defname>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::get</definition>
+        <argsstring>(KeyT const &amp;name, ValueT(&amp;values)[N]) const</argsstring>
+        <name>get</name>
+        <qualifiedname>castor3d::ParametersT::get</qualifiedname>
+        <param>
+          <type>KeyT const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ValueT(&amp;)</type>
+          <declname>values</declname>
+          <array>[N]</array>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur d&apos;un paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du paramètre </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les valeurs du paramètre </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> s&apos;il n&apos;y a pas de paramètre avec le nom donné </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="291" column="6" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="291" bodyend="295"/>
+        <references refid="d0/d45/a05315_1ad96af3a75d355cbb66a288d3c5776117" compoundref="df/dbb/a00698" startline="241" endline="259">castor3d::ParametersT&lt; KeyT &gt;::get</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a05315_1ad29b8a638f6c203ca2198f6efebd990b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::get</definition>
+        <argsstring>(KeyT const &amp;name, castor::String &amp;value) const</argsstring>
+        <name>get</name>
+        <qualifiedname>castor3d::ParametersT::get</qualifiedname>
+        <param>
+          <type>KeyT const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur d&apos;un paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du paramètre </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur du paramètre </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> s&apos;il n&apos;y a pas de paramètre avec le nom donné </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="308" column="6" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="308" bodyend="322"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a05315_1a5f2d2f6a4c53605530c18144ce255f99" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ParametersT&lt; KeyT &gt;::get</definition>
+        <argsstring>(KeyT const &amp;name, castor::Path &amp;value) const</argsstring>
+        <name>get</name>
+        <qualifiedname>castor3d::ParametersT::get</qualifiedname>
+        <param>
+          <type>KeyT const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur d&apos;un paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du paramètre </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La valeur du paramètre </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> s&apos;il n&apos;y a pas de paramètre avec le nom donné </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="335" column="6" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="335" bodyend="339"/>
+        <references refid="d0/d45/a05315_1ad96af3a75d355cbb66a288d3c5776117" compoundref="df/dbb/a00698" startline="241" endline="259">castor3d::ParametersT&lt; KeyT &gt;::get</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a05315_1ad57408a3beec0e65cac1ad1076c08e99" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ValueT</type>
+          </param>
+        </templateparamlist>
+        <type>ValueT</type>
+        <definition>ValueT castor3d::ParametersT&lt; KeyT &gt;::get</definition>
+        <argsstring>(KeyT const &amp;name) const</argsstring>
+        <name>get</name>
+        <qualifiedname>castor3d::ParametersT::get</qualifiedname>
+        <param>
+          <type>KeyT const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Récupère la valeur d&apos;un paramètre. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom du paramètre </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="349" column="8" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="349" bodyend="354"/>
+        <references refid="d0/d45/a05315_1ad96af3a75d355cbb66a288d3c5776117" compoundref="df/dbb/a00698" startline="241" endline="259">castor3d::ParametersT&lt; KeyT &gt;::get</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a05315_1a788809b2719ae6bd194e186572157ccb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t castor3d::ParametersT&lt; KeyT &gt;::size</definition>
+        <argsstring>() const</argsstring>
+        <name>size</name>
+        <qualifiedname>castor3d::ParametersT::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="356" column="8" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="356" bodyend="359"/>
+        <referencedby refid="d0/d45/a05315_1aa632d31dbf2ec8449dc4ad022c2fac0c" compoundref="df/dbb/a00698" startline="163" endline="179">castor3d::ParametersT&lt; KeyT &gt;::add</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a05315_1ab6e1178e176b49c58f26fbb49b968343" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::ParametersT&lt; KeyT &gt;::begin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::ParametersT::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="361" column="6" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="361" bodyend="364"/>
+        <referencedby refid="d0/d45/a05315_1ad96af3a75d355cbb66a288d3c5776117" compoundref="df/dbb/a00698" startline="241" endline="259">castor3d::ParametersT&lt; KeyT &gt;::get</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/d45/a05315_1ab2d5c678eb4ac26f2a91707b455a7385" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::ParametersT&lt; KeyT &gt;::end</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::ParametersT::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Miscellaneous/Parameter.hpp" line="366" column="6" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="366" bodyend="369"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Paramètres de configuration. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Couple nom/données binaires. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ParametersT&lt; castor::String &gt;</label>
+        <link refid="d0/d45/a05315"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ParametersT&lt; KeyT &gt;</label>
+        <link refid="d0/d45/a05315"/>
+      </node>
+    </inheritancegraph>
+    <location file="Castor3D/Miscellaneous/Parameter.hpp" line="16" column="1" bodyfile="Castor3D/Miscellaneous/Parameter.hpp" bodystart="17" bodyend="375"/>
+    <listofallmembers>
+      <member refid="d0/d45/a05315_1ad5db1be40b7fb695857dd9e36c1fcbff" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>add</name></member>
+      <member refid="d0/d45/a05315_1a752ae446e1a04e0bc407260458af0ab8" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>add</name></member>
+      <member refid="d0/d45/a05315_1a308156a2a8619c89a52f64b2c391efc3" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>add</name></member>
+      <member refid="d0/d45/a05315_1ae41f7406dafca84065a61cc27b6fc986" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>add</name></member>
+      <member refid="d0/d45/a05315_1aa632d31dbf2ec8449dc4ad022c2fac0c" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>add</name></member>
+      <member refid="d0/d45/a05315_1a66fa9451528ce319135398c8ac239cf8" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>add</name></member>
+      <member refid="d0/d45/a05315_1ab6e1178e176b49c58f26fbb49b968343" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>begin</name></member>
+      <member refid="d0/d45/a05315_1ab96329f18ae97e9a5df50baf2cc7c3a5" prot="private" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>ByteArray</name></member>
+      <member refid="d0/d45/a05315_1ab2d5c678eb4ac26f2a91707b455a7385" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>end</name></member>
+      <member refid="d0/d45/a05315_1ad96af3a75d355cbb66a288d3c5776117" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>get</name></member>
+      <member refid="d0/d45/a05315_1ab2b2cb427182b47fde46cbbec82a2578" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>get</name></member>
+      <member refid="d0/d45/a05315_1a11ebc07545b4a4c273f4ee8f0c04d661" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>get</name></member>
+      <member refid="d0/d45/a05315_1ad29b8a638f6c203ca2198f6efebd990b" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>get</name></member>
+      <member refid="d0/d45/a05315_1a5f2d2f6a4c53605530c18144ce255f99" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>get</name></member>
+      <member refid="d0/d45/a05315_1ad57408a3beec0e65cac1ad1076c08e99" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>get</name></member>
+      <member refid="d0/d45/a05315_1a0b6c14c5ab579f8725c3f0588987eda9" prot="private" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>m_values</name></member>
+      <member refid="d0/d45/a05315_1a8931865d7c80848f6f6026361c097e92" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>ParametersT</name></member>
+      <member refid="d0/d45/a05315_1aa7dfe07c8c39e330ef814fc1a2d0728c" prot="private" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>ParamNameMap</name></member>
+      <member refid="d0/d45/a05315_1a96cb2145223019c28b190229001f6be5" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>parse</name></member>
+      <member refid="d0/d45/a05315_1a77dfeca82fa204f525df3fd314fbf9a9" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>set</name></member>
+      <member refid="d0/d45/a05315_1a788809b2719ae6bd194e186572157ccb" prot="public" virt="non-virtual"><scope>castor3d::ParametersT</scope><name>size</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

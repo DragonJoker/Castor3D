@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d1/df9/a03555" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::StagedUploadData::GpuBufferOffset</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/df9/a03555_1a81efb984a72df2afe2659f82bbb8f5bf" prot="public" static="no" mutable="no">
+        <type>ashes::BufferBase *</type>
+        <definition>ashes::BufferBase* castor3d::StagedUploadData::GpuBufferOffset::buffer</definition>
+        <argsstring></argsstring>
+        <name>buffer</name>
+        <qualifiedname>castor3d::StagedUploadData::GpuBufferOffset::buffer</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="31" column="20" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="31" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/df9/a03555_1ad108dbe2bbb1162861b5b675168ef9ea" prot="public" static="no" mutable="no">
+        <type><ref refid="db/db8/a03471" kindref="compound">MemChunk</ref></type>
+        <definition>MemChunk castor3d::StagedUploadData::GpuBufferOffset::chunk</definition>
+        <argsstring></argsstring>
+        <name>chunk</name>
+        <qualifiedname>castor3d::StagedUploadData::GpuBufferOffset::chunk</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="32" column="10" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="32" bodyend="32"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/df9/a03555_1a961831cc7ff99f067f6067d7936db6bc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::StagedUploadData::GpuBufferOffset::getAskedSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getAskedSize</name>
+        <qualifiedname>castor3d::StagedUploadData::GpuBufferOffset::getAskedSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="34" column="14" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="34" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/df9/a03555_1afe0ed4066575dc21ac87443c7aed9b1e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::StagedUploadData::GpuBufferOffset::getAllocSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getAllocSize</name>
+        <qualifiedname>castor3d::StagedUploadData::GpuBufferOffset::getAllocSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="39" column="14" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="39" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/df9/a03555_1a719338798addae2179a9699a6b173339" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::StagedUploadData::GpuBufferOffset::getOffset</definition>
+        <argsstring>() const</argsstring>
+        <name>getOffset</name>
+        <qualifiedname>castor3d::StagedUploadData::GpuBufferOffset::getOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Buffer/StagedUploadData.hpp" line="44" column="14" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="44" bodyend="47"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::MemChunk</label>
+        <link refid="db/db8/a03471"/>
+      </node>
+      <node id="1">
+        <label>castor3d::StagedUploadData::GpuBufferOffset</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Buffer/StagedUploadData.hpp" line="29" column="1" bodyfile="Castor3D/Buffer/StagedUploadData.hpp" bodystart="30" bodyend="48"/>
+    <listofallmembers>
+      <member refid="d1/df9/a03555_1a81efb984a72df2afe2659f82bbb8f5bf" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData::GpuBufferOffset</scope><name>buffer</name></member>
+      <member refid="d1/df9/a03555_1ad108dbe2bbb1162861b5b675168ef9ea" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData::GpuBufferOffset</scope><name>chunk</name></member>
+      <member refid="d1/df9/a03555_1afe0ed4066575dc21ac87443c7aed9b1e" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData::GpuBufferOffset</scope><name>getAllocSize</name></member>
+      <member refid="d1/df9/a03555_1a961831cc7ff99f067f6067d7936db6bc" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData::GpuBufferOffset</scope><name>getAskedSize</name></member>
+      <member refid="d1/df9/a03555_1a719338798addae2179a9699a6b173339" prot="public" virt="non-virtual"><scope>castor3d::StagedUploadData::GpuBufferOffset</scope><name>getOffset</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

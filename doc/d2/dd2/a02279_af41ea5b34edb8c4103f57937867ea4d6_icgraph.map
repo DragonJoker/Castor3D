@@ -1,0 +1,72 @@
+<map id="castor::makeStringStream" name="castor::makeStringStream">
+<area shape="rect" id="Node000001" title=" " alt="" coords="968,269,1143,294"/>
+<area shape="rect" id="Node000002" href="$d4/ddb/a08183.html#ac2c906e2a0bc035bfc901295e45fa52b" title="Constructor." alt="" coords="757,5,895,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1043,256,1026,214,999,161,963,106,942,81,918,59,894,45,897,40,922,55,946,78,968,103,1004,158,1030,212,1048,254"/>
+<area shape="rect" id="Node000003" href="$d4/d9c/a03231.html#a8828d359b7a61ea2b657d5aada2dd87b" title="Writes the header chunk." alt="" coords="735,69,917,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1037,258,990,191,956,155,918,124,897,112,900,107,922,119,960,151,994,188,1042,255"/>
+<area shape="rect" id="Node000005" href="$d2/d96/a08355.html#ada321c02ff8fd2e8084701084961b3f2" title="Specified constructor." alt="" coords="760,133,892,173"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="1027,262,979,225,919,188,891,175,893,171,921,183,982,220,1031,258"/>
+<area shape="rect" id="Node000006" href="$d8/da3/a08255.html#a3f6cbb3c0ad8d6136141c4c089f7f479" title=" " alt="" coords="732,261,920,301"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="954,284,920,284,920,279,954,279"/>
+<area shape="rect" id="Node000014" href="$d8/da3/a08255.html#aa1689ccd9a406fe8dfe9ff473d226b5e" title=" " alt="" coords="732,389,920,429"/>
+<area shape="poly" id="edge14_Node000001_Node000014" title=" " alt="" coords="1031,305,982,342,921,380,894,392,892,387,919,375,979,338,1027,301"/>
+<area shape="rect" id="Node000021" href="$d8/da3/a08255.html#aa24d9472022aa0f450529b07d9b7f743" title=" " alt="" coords="732,325,920,365"/>
+<area shape="poly" id="edge21_Node000001_Node000021" title=" " alt="" coords="996,300,899,328,898,323,995,295"/>
+<area shape="rect" id="Node000023" href="$d8/da3/a08255.html#a9c25c01ca8f76ad4a25088101572200d" title=" " alt="" coords="732,197,920,237"/>
+<area shape="poly" id="edge25_Node000001_Node000023" title=" " alt="" coords="995,267,898,240,899,235,996,262"/>
+<area shape="rect" id="Node000024" href="$d8/da3/a08255.html#a6537032eaeeadaffea633743e3218e53" title=" " alt="" coords="732,453,920,493"/>
+<area shape="poly" id="edge27_Node000001_Node000024" title=" " alt="" coords="1042,308,994,375,960,411,922,444,900,456,897,451,918,439,956,408,990,371,1037,304"/>
+<area shape="rect" id="Node000033" href="$d2/df4/a08275.html#a5136cd1e55e53e66d851b0db40dcdacd" title="Constructor." alt="" coords="749,517,903,557"/>
+<area shape="poly" id="edge37_Node000001_Node000033" title=" " alt="" coords="1048,308,1030,351,1004,405,968,460,946,485,922,507,903,520,900,515,918,503,942,481,963,456,999,402,1026,349,1043,306"/>
+<area shape="rect" id="Node000004" href="$d4/d9c/a03231.html#a21e7985d2f99ff20a6056d198aac07c5" title="Writes an object to a file." alt="" coords="499,69,681,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="721,92,682,92,682,87,721,87"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="630,58,616,51,590,48,567,50,554,55,549,61,551,68,546,70,544,60,551,50,566,45,590,43,617,46,632,53"/>
+<area shape="rect" id="Node000007" href="$d8/da3/a08255.html#a63b72a3a1c306679e47426f3a270ec97" title=" " alt="" coords="496,197,684,237"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="738,260,664,240,665,235,739,255"/>
+<area shape="rect" id="Node000008" href="$d8/da3/a08255.html#ae42bd6b7da6f50fdef84f04a84172313" title="Logging version of tryAdd." alt="" coords="257,133,445,173"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="501,196,425,176,427,171,502,191"/>
+<area shape="rect" id="Node000013" href="$d8/da3/a08255.html#a1fc2571a5ea51ead9564b4cec6b31314" title="Logging version of tryAdd." alt="" coords="257,197,445,237"/>
+<area shape="poly" id="edge13_Node000007_Node000013" title=" " alt="" coords="482,220,445,220,445,215,482,215"/>
+<area shape="rect" id="Node000009" href="$d8/d4f/a03703.html#ac9abab737dc2b11ac9ee6f6ef31045c1" title=" " alt="" coords="18,66,193,91"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="281,131,205,107,159,94,160,89,206,101,282,126"/>
+<area shape="rect" id="Node000010" href="$d8/d4f/a03703.html#a1f26b1f69ade47399e32ee596ed77756" title=" " alt="" coords="13,115,197,141"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="243,145,197,140,198,135,244,140"/>
+<area shape="rect" id="Node000011" href="$d8/d4f/a03703.html#a52cc49e29ffe7b2da28de2c4622913a6" title=" " alt="" coords="5,165,205,190"/>
+<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="243,166,206,170,205,165,243,161"/>
+<area shape="rect" id="Node000012" href="$d8/d4f/a03703.html#a8e7137f1ee10104cab15245472a4dbeb" title=" " alt="" coords="18,215,193,255"/>
+<area shape="poly" id="edge12_Node000008_Node000012" title=" " alt="" coords="277,180,254,188,206,205,170,217,169,212,204,200,252,183,275,175"/>
+<area shape="rect" id="Node000015" href="$d8/da3/a08255.html#aae5b569e26955738733ba4de036629d7" title="Creates an element." alt="" coords="496,389,684,429"/>
+<area shape="poly" id="edge15_Node000014_Node000015" title=" " alt="" coords="718,412,684,412,684,407,718,407"/>
+<area shape="rect" id="Node000018" href="$d8/da3/a08255.html#a5fc262a8e5bbcb42d59d19b211a65203" title=" " alt="" coords="496,261,684,301"/>
+<area shape="poly" id="edge18_Node000014_Node000018" title=" " alt="" coords="738,385,730,379,714,363,706,347,697,331,682,315,662,304,665,299,686,311,702,328,710,344,719,360,734,375,741,380"/>
+<area shape="rect" id="Node000016" href="$d8/d4f/a03703.html#a0705231fef20a697973ac71b36bd0b57" title=" " alt="" coords="255,393,446,418"/>
+<area shape="poly" id="edge16_Node000015_Node000016" title=" " alt="" coords="482,410,446,410,446,404,482,405"/>
+<area shape="rect" id="Node000017" href="$d8/d4f/a03703.html#af92ce0a62bfeb2923bf0a32c1094e9d4" title=" " alt="" coords="269,443,433,483"/>
+<area shape="poly" id="edge17_Node000015_Node000017" title=" " alt="" coords="487,435,433,447,432,442,486,430"/>
+<area shape="rect" id="Node000019" href="$d8/da3/a08255.html#af4b3aa2cae901fb81e67007a49f01c89" title="Logging version of tryAdd." alt="" coords="257,261,445,301"/>
+<area shape="poly" id="edge19_Node000018_Node000019" title=" " alt="" coords="482,284,445,284,445,279,482,279"/>
+<area shape="rect" id="Node000020" href="$d8/da3/a08255.html#a0a36c208871e24f543beb6d46751244b" title="Logging version of tryAdd." alt="" coords="257,325,445,365"/>
+<area shape="poly" id="edge20_Node000018_Node000020" title=" " alt="" coords="502,308,427,328,425,323,501,302"/>
+<area shape="poly" id="edge22_Node000021_Node000007" title=" " alt="" coords="738,321,730,315,714,299,706,283,697,267,682,251,662,240,665,235,686,247,702,264,710,280,719,296,734,311,741,316"/>
+<area shape="poly" id="edge23_Node000021_Node000018" title=" " alt="" coords="738,324,664,304,665,299,739,319"/>
+<area shape="rect" id="Node000022" href="$d8/da3/a08255.html#a6318e3a64926730b389ee55727eacb3e" title="Renames a resource." alt="" coords="496,325,684,365"/>
+<area shape="poly" id="edge24_Node000021_Node000022" title=" " alt="" coords="718,348,684,348,684,343,718,343"/>
+<area shape="poly" id="edge26_Node000023_Node000007" title=" " alt="" coords="718,220,684,220,684,215,718,215"/>
+<area shape="poly" id="edge36_Node000024_Node000022" title=" " alt="" coords="738,449,730,443,714,427,706,411,697,395,682,379,662,368,665,363,686,375,702,392,710,408,719,424,734,439,741,444"/>
+<area shape="rect" id="Node000025" href="$d8/da3/a08255.html#ae2bc50ccc5e4f323a14a1a6f39d3ec14" title="Logging version of tryRemove." alt="" coords="496,645,684,685"/>
+<area shape="poly" id="edge28_Node000024_Node000025" title=" " alt="" coords="738,503,734,507,722,523,715,538,711,570,706,602,699,619,686,635,670,647,666,643,682,631,694,616,701,601,705,569,710,537,717,520,730,503,735,499"/>
+<area shape="rect" id="Node000028" href="$d8/da3/a08255.html#a4978d020ac192e539d60ce384b714753" title="Logging version of tryRemove." alt="" coords="496,453,684,493"/>
+<area shape="poly" id="edge31_Node000024_Node000028" title=" " alt="" coords="718,476,684,476,684,471,718,471"/>
+<area shape="rect" id="Node000029" href="$d8/da3/a08255.html#a21d0ef274f434e61b1d0c336a8c7253a" title="Logging version of tryRemove." alt="" coords="496,517,684,557"/>
+<area shape="poly" id="edge32_Node000024_Node000029" title=" " alt="" coords="739,500,665,520,664,515,738,494"/>
+<area shape="rect" id="Node000032" href="$d8/da3/a08255.html#a55752549d182d7d232c432746b6b5312" title="Logging version of tryRemove." alt="" coords="496,581,684,621"/>
+<area shape="poly" id="edge35_Node000024_Node000032" title=" " alt="" coords="741,502,734,507,719,523,710,539,702,555,686,571,665,583,662,579,682,567,697,552,706,536,714,520,730,503,738,498"/>
+<area shape="rect" id="Node000026" href="$d8/d4f/a03703.html#ad1ce4f92f240c0fa3c1c4ede63942bac" title=" " alt="" coords="263,646,438,671"/>
+<area shape="poly" id="edge29_Node000025_Node000026" title=" " alt="" coords="482,665,438,664,438,658,482,660"/>
+<area shape="rect" id="Node000027" href="$d8/d4f/a03703.html#a0e3cae5eb336c27b42a7225bdbd1b38f" title=" " alt="" coords="259,695,442,721"/>
+<area shape="poly" id="edge30_Node000025_Node000027" title=" " alt="" coords="483,687,423,698,422,693,482,682"/>
+<area shape="rect" id="Node000030" href="$d8/d4f/a03703.html#addc711e1060765415a0812574efb17a7" title=" " alt="" coords="253,515,448,541"/>
+<area shape="poly" id="edge33_Node000029_Node000030" title=" " alt="" coords="482,536,448,534,448,529,483,530"/>
+<area shape="rect" id="Node000031" href="$d8/d4f/a03703.html#a5df7c3836acec8a82912d16172ef0b01" title=" " alt="" coords="266,565,435,605"/>
+<area shape="poly" id="edge34_Node000029_Node000031" title=" " alt="" coords="483,561,436,571,435,566,482,556"/>
+</map>

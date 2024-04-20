@@ -1,0 +1,292 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d8/d7a/a06083" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::NodesViewT</compoundname>
+    <includes local="no">PipelinesNodes.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename NodeT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d8/d7a/a06083_1aebf603d17d61f7df7ec3c0dd7ad1e49d" prot="public" static="no">
+        <type><ref refid="d9/db8/a06079" kindref="compound">RenderedNodeT</ref>&lt; NodeT &gt;</type>
+        <definition>using castor3d::NodesViewT&lt; NodeT &gt;::RenderedNode =  RenderedNodeT&lt; NodeT &gt;</definition>
+        <argsstring></argsstring>
+        <name>RenderedNode</name>
+        <qualifiedname>castor3d::NodesViewT::RenderedNode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="39" column="1" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d8/d7a/a06083_1a989651523f4961be2c48a60b02f524c0" prot="public" static="no">
+        <type><ref refid="d9/dba/a02278_1af390d8ccc969693dcd4de27d3281439b" kindref="member">NodeArrayT</ref>&lt; NodeT, <ref refid="d9/db8/a06079" kindref="compound">RenderedNodeT</ref> &gt;</type>
+        <definition>using castor3d::NodesViewT&lt; NodeT &gt;::NodeArray =  NodeArrayT&lt; NodeT, RenderedNodeT &gt;</definition>
+        <argsstring></argsstring>
+        <name>NodeArray</name>
+        <qualifiedname>castor3d::NodesViewT::NodeArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="40" column="1" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d8/d7a/a06083_1adc031ab24247836ec4eb0e133c94e64f" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint64_t constexpr</type>
+        <definition>uint64_t constexpr castor3d::NodesViewT&lt; NodeT &gt;::maxNodes</definition>
+        <argsstring></argsstring>
+        <name>maxNodes</name>
+        <qualifiedname>castor3d::NodesViewT::maxNodes</qualifiedname>
+        <initializer>= 1024ULL</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="42" column="27" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="42" bodyend="-1"/>
+        <referencedby refid="d8/d7a/a06083_1ac7606c4e831e538e655c40c871b22a91" compoundref="d5/d67/a01070" startline="45" endline="60">castor3d::NodesViewT&lt; NodeT &gt;::emplace</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7a/a06083_1a3e31489bafa8e9e1aa28c32ae74a6d06" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>uint64_t constexpr</type>
+        <definition>uint64_t constexpr castor3d::NodesViewT&lt; NodeT &gt;::maxCount</definition>
+        <argsstring></argsstring>
+        <name>maxCount</name>
+        <qualifiedname>castor3d::NodesViewT::maxCount</qualifiedname>
+        <initializer>= <ref refid="d8/d7a/a06083_1adc031ab24247836ec4eb0e133c94e64f" kindref="member">maxNodes</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="43" column="27" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d8/d7a/a06083_1a94af0d19521b69f92e5d205e20b5c4b5" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d7a/a06083_1a989651523f4961be2c48a60b02f524c0" kindref="member">NodeArray</ref></type>
+        <definition>NodeArray castor3d::NodesViewT&lt; NodeT &gt;::m_nodes</definition>
+        <argsstring></argsstring>
+        <name>m_nodes</name>
+        <qualifiedname>castor3d::NodesViewT::m_nodes</qualifiedname>
+        <initializer>{ <ref refid="d8/d7a/a06083_1a3e31489bafa8e9e1aa28c32ae74a6d06" kindref="member">maxCount</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="108" column="11" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="108" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7a/a06083_1a86df55ee69fa8799db9d8bb481ec029c" prot="private" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t castor3d::NodesViewT&lt; NodeT &gt;::m_count</definition>
+        <argsstring></argsstring>
+        <name>m_count</name>
+        <qualifiedname>castor3d::NodesViewT::m_count</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="109" column="8" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="109" bodyend="109"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d7a/a06083_1ac7606c4e831e538e655c40c871b22a91" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/d7a/a06083_1aebf603d17d61f7df7ec3c0dd7ad1e49d" kindref="member">RenderedNode</ref> *</type>
+        <definition>RenderedNode * castor3d::NodesViewT&lt; NodeT &gt;::emplace</definition>
+        <argsstring>(RenderedNode node)</argsstring>
+        <name>emplace</name>
+        <qualifiedname>castor3d::NodesViewT::emplace</qualifiedname>
+        <param>
+          <type><ref refid="d8/d7a/a06083_1aebf603d17d61f7df7ec3c0dd7ad1e49d" kindref="member">RenderedNode</ref></type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="45" column="15" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="45" bodyend="60"/>
+        <references refid="d9/dba/a02278_1aa5d0e08e3d32217300c69bebd3b3832b" compoundref="d5/d67/a01070" startline="15">castor3d::C3D_EnsureNodesCounts</references>
+        <references refid="df/dd8/a01943_1a6f1be0ac8b18dade90c83cb2d4db3566" compoundref="df/dd8/a01943" startline="38">CU_Assert</references>
+        <references refid="d0/dce/a01946_1ab9410fa9a6a0a8fa4bce2bebc9d2edaf" compoundref="d0/dce/a01946" startline="203" endline="204">CU_Exception</references>
+        <references refid="d8/d7a/a06083_1adc031ab24247836ec4eb0e133c94e64f" compoundref="d5/d67/a01070" startline="42">castor3d::NodesViewT&lt; NodeT &gt;::maxNodes</references>
+        <references refid="d8/d7a/a06083_1ad51aee3ae5448f5e755264285c3e60e3" compoundref="d5/d67/a01070" startline="97" endline="100">castor3d::NodesViewT&lt; NodeT &gt;::size</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7a/a06083_1ae2d43a9db00da1b11cb670bec02a8253" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::NodesViewT&lt; NodeT &gt;::clear</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>clear</name>
+        <qualifiedname>castor3d::NodesViewT::clear</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="62" column="6" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="62" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7a/a06083_1a1b5a0e094d80c67d3ef0d85b9528b0e5" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::NodesViewT&lt; NodeT &gt;::begin</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::NodesViewT::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="67" column="6" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="67" bodyend="70"/>
+        <referencedby refid="d8/d7a/a06083_1a9e285864f91f4970c610f18a1446fca0" compoundref="d5/d67/a01070" startline="82" endline="85">castor3d::NodesViewT&lt; NodeT &gt;::end</referencedby>
+        <referencedby refid="d8/d7a/a06083_1a205fdec4379b0995c8b1a7fa4ed34832" compoundref="d5/d67/a01070" startline="77" endline="80">castor3d::NodesViewT&lt; NodeT &gt;::end</referencedby>
+        <referencedby refid="d8/d7a/a06083_1adf8f50ef308192b5da0c41b619a027a7" compoundref="d5/d67/a01070" startline="92" endline="95">castor3d::NodesViewT&lt; NodeT &gt;::front</referencedby>
+        <referencedby refid="d8/d7a/a06083_1a0f2eef48cc43e6197cecd1cdfe2503bb" compoundref="d5/d67/a01070" startline="87" endline="90">castor3d::NodesViewT&lt; NodeT &gt;::front</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7a/a06083_1a755f830f69cd7821a4dcc0e4955218d9" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::NodesViewT&lt; NodeT &gt;::begin</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::NodesViewT::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="72" column="6" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="72" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7a/a06083_1a205fdec4379b0995c8b1a7fa4ed34832" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::NodesViewT&lt; NodeT &gt;::end</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::NodesViewT::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="77" column="6" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="77" bodyend="80"/>
+        <references refid="d8/d7a/a06083_1a1b5a0e094d80c67d3ef0d85b9528b0e5" compoundref="d5/d67/a01070" startline="67" endline="70">castor3d::NodesViewT&lt; NodeT &gt;::begin</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7a/a06083_1a9e285864f91f4970c610f18a1446fca0" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::NodesViewT&lt; NodeT &gt;::end</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::NodesViewT::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="82" column="6" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="82" bodyend="85"/>
+        <references refid="d8/d7a/a06083_1a1b5a0e094d80c67d3ef0d85b9528b0e5" compoundref="d5/d67/a01070" startline="67" endline="70">castor3d::NodesViewT&lt; NodeT &gt;::begin</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7a/a06083_1a0f2eef48cc43e6197cecd1cdfe2503bb" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::NodesViewT&lt; NodeT &gt;::front</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>front</name>
+        <qualifiedname>castor3d::NodesViewT::front</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="87" column="7" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="87" bodyend="90"/>
+        <references refid="d8/d7a/a06083_1a1b5a0e094d80c67d3ef0d85b9528b0e5" compoundref="d5/d67/a01070" startline="67" endline="70">castor3d::NodesViewT&lt; NodeT &gt;::begin</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7a/a06083_1adf8f50ef308192b5da0c41b619a027a7" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::NodesViewT&lt; NodeT &gt;::front</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>front</name>
+        <qualifiedname>castor3d::NodesViewT::front</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="92" column="7" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="92" bodyend="95"/>
+        <references refid="d8/d7a/a06083_1a1b5a0e094d80c67d3ef0d85b9528b0e5" compoundref="d5/d67/a01070" startline="67" endline="70">castor3d::NodesViewT&lt; NodeT &gt;::begin</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7a/a06083_1ad51aee3ae5448f5e755264285c3e60e3" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::NodesViewT&lt; NodeT &gt;::size</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>size</name>
+        <qualifiedname>castor3d::NodesViewT::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="97" column="6" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="97" bodyend="100"/>
+        <referencedby refid="d8/d7a/a06083_1ac7606c4e831e538e655c40c871b22a91" compoundref="d5/d67/a01070" startline="45" endline="60">castor3d::NodesViewT&lt; NodeT &gt;::emplace</referencedby>
+        <referencedby refid="d8/d7a/a06083_1a2935ef06b26d4be2812686591f40a586" compoundref="d5/d67/a01070" startline="102" endline="105">castor3d::NodesViewT&lt; NodeT &gt;::empty</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7a/a06083_1a2935ef06b26d4be2812686591f40a586" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::NodesViewT&lt; NodeT &gt;::empty</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>empty</name>
+        <qualifiedname>castor3d::NodesViewT::empty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="102" column="6" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="102" bodyend="105"/>
+        <references refid="d8/d7a/a06083_1ad51aee3ae5448f5e755264285c3e60e3" compoundref="d5/d67/a01070" startline="97" endline="100">castor3d::NodesViewT&lt; NodeT &gt;::size</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Render/Node/PipelinesNodes.hpp" line="37" column="1" bodyfile="Castor3D/Render/Node/PipelinesNodes.hpp" bodystart="38" bodyend="110"/>
+    <listofallmembers>
+      <member refid="d8/d7a/a06083_1a1b5a0e094d80c67d3ef0d85b9528b0e5" prot="public" virt="non-virtual"><scope>castor3d::NodesViewT</scope><name>begin</name></member>
+      <member refid="d8/d7a/a06083_1a755f830f69cd7821a4dcc0e4955218d9" prot="public" virt="non-virtual"><scope>castor3d::NodesViewT</scope><name>begin</name></member>
+      <member refid="d8/d7a/a06083_1ae2d43a9db00da1b11cb670bec02a8253" prot="public" virt="non-virtual"><scope>castor3d::NodesViewT</scope><name>clear</name></member>
+      <member refid="d8/d7a/a06083_1ac7606c4e831e538e655c40c871b22a91" prot="public" virt="non-virtual"><scope>castor3d::NodesViewT</scope><name>emplace</name></member>
+      <member refid="d8/d7a/a06083_1a2935ef06b26d4be2812686591f40a586" prot="public" virt="non-virtual"><scope>castor3d::NodesViewT</scope><name>empty</name></member>
+      <member refid="d8/d7a/a06083_1a205fdec4379b0995c8b1a7fa4ed34832" prot="public" virt="non-virtual"><scope>castor3d::NodesViewT</scope><name>end</name></member>
+      <member refid="d8/d7a/a06083_1a9e285864f91f4970c610f18a1446fca0" prot="public" virt="non-virtual"><scope>castor3d::NodesViewT</scope><name>end</name></member>
+      <member refid="d8/d7a/a06083_1a0f2eef48cc43e6197cecd1cdfe2503bb" prot="public" virt="non-virtual"><scope>castor3d::NodesViewT</scope><name>front</name></member>
+      <member refid="d8/d7a/a06083_1adf8f50ef308192b5da0c41b619a027a7" prot="public" virt="non-virtual"><scope>castor3d::NodesViewT</scope><name>front</name></member>
+      <member refid="d8/d7a/a06083_1a86df55ee69fa8799db9d8bb481ec029c" prot="private" virt="non-virtual"><scope>castor3d::NodesViewT</scope><name>m_count</name></member>
+      <member refid="d8/d7a/a06083_1a94af0d19521b69f92e5d205e20b5c4b5" prot="private" virt="non-virtual"><scope>castor3d::NodesViewT</scope><name>m_nodes</name></member>
+      <member refid="d8/d7a/a06083_1a3e31489bafa8e9e1aa28c32ae74a6d06" prot="public" virt="non-virtual"><scope>castor3d::NodesViewT</scope><name>maxCount</name></member>
+      <member refid="d8/d7a/a06083_1adc031ab24247836ec4eb0e133c94e64f" prot="public" virt="non-virtual"><scope>castor3d::NodesViewT</scope><name>maxNodes</name></member>
+      <member refid="d8/d7a/a06083_1a989651523f4961be2c48a60b02f524c0" prot="public" virt="non-virtual"><scope>castor3d::NodesViewT</scope><name>NodeArray</name></member>
+      <member refid="d8/d7a/a06083_1aebf603d17d61f7df7ec3c0dd7ad1e49d" prot="public" virt="non-virtual"><scope>castor3d::NodesViewT</scope><name>RenderedNode</name></member>
+      <member refid="d8/d7a/a06083_1ad51aee3ae5448f5e755264285c3e60e3" prot="public" virt="non-virtual"><scope>castor3d::NodesViewT</scope><name>size</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

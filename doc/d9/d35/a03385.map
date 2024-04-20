@@ -1,5 +1,16 @@
-<map id="castor3d::TexturesComponent::MaterialShader" name="castor3d::TexturesComponent::MaterialShader">
-<area shape="rect" id="node1" title=" " alt="" coords="9,167,205,207"/>
-<area shape="rect" id="node2" href="$dc/d86/a04022.html" title=" " alt="" coords="5,79,208,119"/>
-<area shape="rect" id="node3" href="$d0/dee/a04014.html" title=" " alt="" coords="7,5,206,31"/>
+<map id="castor3d::BinaryParser&lt; Submesh &gt;" name="castor3d::BinaryParser&lt; Submesh &gt;">
+<area shape="rect" id="Node000001" title="MovableObject loader." alt="" coords="843,89,997,129"/>
+<area shape="rect" id="Node000002" href="$dd/de1/a03223.html" title=" " alt="" coords="608,89,793,129"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="808,107,842,107,842,112,808,112"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="19,5,146,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="160,20,247,21,355,26,471,40,585,65,648,87,647,92,583,71,470,46,354,32,247,26,160,25"/>
+<area shape="rect" id="Node000006" href="$dd/de1/a03223.html" title="Binary data chunk reader base class." alt="" coords="291,56,476,96"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="160,36,291,58,290,63,159,41"/>
+<area shape="rect" id="Node000004" href="$d5/d27/a03183.html" title=" " alt="" coords="5,107,160,133"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="174,119,291,120,476,120,607,113,608,119,476,125,291,125,174,124"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="173,104,290,87,291,92,174,109"/>
+<area shape="rect" id="Node000005" href="$d5/d15/a05335.html" title=" " alt="" coords="21,171,145,197"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="158,174,476,140,584,124,607,121,608,126,584,129,476,145,159,180"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="138,165,266,122,334,94,336,99,268,126,139,170"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="490,84,608,97,607,102,489,90"/>
 </map>

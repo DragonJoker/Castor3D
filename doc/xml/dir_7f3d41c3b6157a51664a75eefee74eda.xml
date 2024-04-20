@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_7f3d41c3b6157a51664a75eefee74eda" kind="dir">
-    <compoundname>Scene/Background/Shaders</compoundname>
+    <compoundname>Castor3D/Scene/Background/Shaders</compoundname>
     <innerfile refid="d2/d9b/a01433">GlslIblBackground.hpp</innerfile>
     <innerfile refid="dc/d85/a01436">GlslImgBackground.hpp</innerfile>
     <innerfile refid="d7/dfd/a01439">GlslNoIblBackground.hpp</innerfile>
@@ -9,6 +9,6 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Scene/Background/Shaders/"/>
+    <location file="Castor3D/Scene/Background/Shaders/"/>
   </compounddef>
 </doxygen>

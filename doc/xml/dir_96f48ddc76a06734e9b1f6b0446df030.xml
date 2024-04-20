@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
   <compounddef id="dir_96f48ddc76a06734e9b1f6b0446df030" kind="dir">
-    <compoundname>Render/Ssao</compoundname>
+    <compoundname>Castor3D/Render/Ssao</compoundname>
     <innerfile refid="d2/d1d/a01277">SsaoBlurPass.hpp</innerfile>
     <innerfile refid="d8/d0d/a01280">SsaoConfig.hpp</innerfile>
     <innerfile refid="d5/da7/a01283">SsaoModule.hpp</innerfile>
@@ -11,6 +11,6 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Render/Ssao/"/>
+    <location file="Castor3D/Render/Ssao/"/>
   </compounddef>
 </doxygen>

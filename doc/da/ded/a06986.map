@@ -1,0 +1,11 @@
+<map id="castor3d::Light" name="castor3d::Light">
+<area shape="rect" id="Node000001" title=" " alt="" coords="169,243,277,268"/>
+<area shape="rect" id="Node000002" href="$da/d09/a07047.html" title=" " alt="" coords="141,168,306,193"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="226,208,226,242,221,242,221,208"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title=" " alt="" coords="5,93,188,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="130,123,204,165,202,170,128,128"/>
+<area shape="rect" id="Node000004" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="5,5,188,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="99,45,99,93,94,93,94,45"/>
+<area shape="rect" id="Node000005" href="$d5/d3c/a08223.html" title="Class for named elements." alt="" coords="213,93,319,119"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="254,132,233,169,228,166,250,130"/>
+</map>

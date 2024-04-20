@@ -1,0 +1,267 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dd/df2/a05555" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::PassMasksComponent</compoundname>
+    <basecompoundref refid="d6/df6/a05611" prot="public" virt="non-virtual">castor3d::SubmeshComponent</basecompoundref>
+    <includes local="no">PassMasksComponent.hpp</includes>
+    <innerclass refid="d5/d7e/a05563" prot="public">castor3d::PassMasksComponent::ComponentData</innerclass>
+    <innerclass refid="d2/d72/a05567" prot="public">castor3d::PassMasksComponent::Plugin</innerclass>
+    <innerclass refid="d6/d63/a05559" prot="public">castor3d::PassMasksComponent::SurfaceShader</innerclass>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dd/df2/a05555_1aaf6696635bd686713e5e56758cd4d1b6" prot="public" static="yes" mutable="no">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const</type>
+        <definition>C3D_API castor::String const castor3d::PassMasksComponent::TypeName</definition>
+        <argsstring></argsstring>
+        <name>TypeName</name>
+        <qualifiedname>castor3d::PassMasksComponent::TypeName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp" line="164" column="37" bodyfile="Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp" bodystart="164" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="dd/df2/a05555_1a80ec935599fe8ac9045c1d387287961c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryWriter&lt; PassMasksComponent &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryWriter&lt; PassMasksComponent &gt;</name>
+        <qualifiedname>castor3d::PassMasksComponent::BinaryWriter&lt; PassMasksComponent &gt;</qualifiedname>
+        <param>
+          <type><ref refid="dd/d87/a03235" kindref="compound">BinaryWriter</ref>&lt; <ref refid="dd/df2/a05555" kindref="compound">PassMasksComponent</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp" line="164" column="37" bodyfile="Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp" bodystart="167" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="dd/df2/a05555_1a69d3fd9b58cee735cc4406a9591b850f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryParser&lt; PassMasksComponent &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryParser&lt; PassMasksComponent &gt;</name>
+        <qualifiedname>castor3d::PassMasksComponent::BinaryParser&lt; PassMasksComponent &gt;</qualifiedname>
+        <param>
+          <type><ref refid="d3/d1b/a03227" kindref="compound">BinaryParser</ref>&lt; <ref refid="dd/df2/a05555" kindref="compound">PassMasksComponent</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp" line="164" column="37" bodyfile="Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp" bodystart="168" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dd/df2/a05555_1ac1fd630a2195c7530b47ef4dd9559b3a" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>SubmeshComponentPluginUPtr</type>
+        <definition>static SubmeshComponentPluginUPtr castor3d::PassMasksComponent::createPlugin</definition>
+        <argsstring>(SubmeshComponentRegister const &amp;submeshComponents)</argsstring>
+        <name>createPlugin</name>
+        <qualifiedname>castor3d::PassMasksComponent::createPlugin</qualifiedname>
+        <param>
+          <type><ref refid="da/d5c/a05615" kindref="compound">SubmeshComponentRegister</ref> const &amp;</type>
+          <declname>submeshComponents</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp" line="133" column="35" bodyfile="Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp" bodystart="133" bodyend="136"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/df2/a05555_1a7b62e0816082ebc755ad9d3f1a54f721" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PassMasksComponent::PassMasksComponent</definition>
+        <argsstring>(Submesh &amp;submesh)</argsstring>
+        <name>PassMasksComponent</name>
+        <qualifiedname>castor3d::PassMasksComponent::PassMasksComponent</qualifiedname>
+        <param>
+          <type><ref refid="dd/df1/a05635" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le sous-maillage parent. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp" line="145" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df2/a05555_1a2a0e73c891ba3544b5c49767e6600267" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> SubmeshComponentUPtr</type>
+        <definition>C3D_API SubmeshComponentUPtr castor3d::PassMasksComponent::clone</definition>
+        <argsstring>(Submesh &amp;submesh) const override</argsstring>
+        <name>clone</name>
+        <qualifiedname>castor3d::PassMasksComponent::clone</qualifiedname>
+        <reimplements refid="d6/df6/a05611_1a224e17a10afdbc9ed8479c034b21aca3">clone</reimplements>
+        <param>
+          <type><ref refid="dd/df1/a05635" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+<para>Clone ce composant dans le submesh donné.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit le composant cloné.   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp" line="149" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/df2/a05555_1ac0aa8e0e300efb4ec07a41034d08986e" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="virtual">
+        <type><ref refid="d9/dba/a02278_1af0f2b6cb91a8d84eb40f3d6d11c054d4" kindref="member">SubmeshComponentFlag</ref></type>
+        <definition>SubmeshComponentFlag castor3d::PassMasksComponent::getSubmeshFlags</definition>
+        <argsstring>() const noexcept override</argsstring>
+        <name>getSubmeshFlags</name>
+        <qualifiedname>castor3d::PassMasksComponent::getSubmeshFlags</qualifiedname>
+        <reimplements refid="d6/df6/a05611_1aee9f0bcf21dd6ac63bd8c29329376aec">getSubmeshFlags</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Les indicateurs de submesh.   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp" line="153" column="22" bodyfile="Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp" bodystart="153" bodyend="156"/>
+        <references refid="d6/df6/a05611_1a9685bcd15e1882d93daa63b0c31a8c92" compoundref="d8/d2d/a00815" startline="692" endline="695">castor3d::SubmeshComponent::getId</references>
+        <references refid="d9/dba/a02278_1a872c9be759087f14433ab8b163bf73d0" compoundref="dc/d1b/a00827" startline="151" endline="154">castor3d::makeSubmeshComponentFlag</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/df2/a05555_1afc559aa3fea0cdd42fa552a3853d5939" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d5/d7e/a05563" kindref="compound">ComponentData</ref> &amp;</type>
+        <definition>ComponentData &amp; castor3d::PassMasksComponent::getData</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::PassMasksComponent::getData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp" line="158" column="16" bodyfile="Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp" bodystart="158" bodyend="161"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PassMasksComponent</label>
+        <link refid="dd/df2/a05555"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SubmeshComponent</label>
+        <link refid="d6/df6/a05611"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Submesh &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PassMasksComponent</label>
+        <link refid="dd/df2/a05555"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>TypeName</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SubmeshComponent</label>
+        <link refid="d6/df6/a05611"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+      <node id="5">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp" line="15" column="1" bodyfile="Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp" bodystart="17" bodyend="169"/>
+    <listofallmembers>
+      <member refid="d6/df6/a05611_1afccdadca13f33adf739b7cd593130dc6" prot="public" virt="virtual"><scope>castor3d::PassMasksComponent</scope><name>accept</name></member>
+      <member refid="dd/df2/a05555_1a69d3fd9b58cee735cc4406a9591b850f" prot="private" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>BinaryParser&lt; PassMasksComponent &gt;</name></member>
+      <member refid="dd/df2/a05555_1a80ec935599fe8ac9045c1d387287961c" prot="private" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>BinaryWriter&lt; PassMasksComponent &gt;</name></member>
+      <member refid="dd/df2/a05555_1a2a0e73c891ba3544b5c49767e6600267" prot="public" virt="virtual"><scope>castor3d::PassMasksComponent</scope><name>clone</name></member>
+      <member refid="dd/df2/a05555_1ac1fd630a2195c7530b47ef4dd9559b3a" prot="public" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>createPlugin</name></member>
+      <member refid="d6/df6/a05611_1ad360da8b6205b1f52e2ab4ad16829483" prot="public" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>getBaseData</name></member>
+      <member refid="dd/df2/a05555_1afc559aa3fea0cdd42fa552a3853d5939" prot="public" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>getData</name></member>
+      <member refid="d6/df6/a05611_1a74c236198ac0330d4af2e318b2dab8eb" prot="public" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>getDataT</name></member>
+      <member refid="d6/df6/a05611_1a927bf2897f158a69b9e43f3d4084692a" prot="public" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>getDependencies</name></member>
+      <member refid="d6/df6/a05611_1a9685bcd15e1882d93daa63b0c31a8c92" prot="public" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>getId</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>getOwner</name></member>
+      <member refid="d6/df6/a05611_1a0b00d7bb6a4ae2d465cb1b69bfe62edb" prot="public" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>getPlugin</name></member>
+      <member refid="d6/df6/a05611_1aa17497af9514861bedd026fc39c0bf24" prot="public" virt="virtual"><scope>castor3d::PassMasksComponent</scope><name>getProgramFlags</name></member>
+      <member refid="d6/df6/a05611_1a7f99899e65f9cbad88ee17b96874eb69" prot="public" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>getRenderData</name></member>
+      <member refid="d6/df6/a05611_1af976b217cbb63fe1c0a929f9e917da08" prot="public" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>getRenderDataT</name></member>
+      <member refid="dd/df2/a05555_1ac0aa8e0e300efb4ec07a41034d08986e" prot="public" virt="virtual"><scope>castor3d::PassMasksComponent</scope><name>getSubmeshFlags</name></member>
+      <member refid="d6/df6/a05611_1ae55cef384a41ade6fb2a3570eea35fca" prot="public" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>getType</name></member>
+      <member refid="d6/df6/a05611_1a12c193675ee85f12ff61bee5f59593c9" prot="public" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>initialiseRenderData</name></member>
+      <member refid="d6/df6/a05611_1aaf5f04eb5b927528d0af706ef91ff3f1" prot="protected" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>m_data</name></member>
+      <member refid="d6/df6/a05611_1a1f08e2ca2b28d7e35afe6c19b431dd4e" prot="protected" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>m_renderData</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>OwnedBy</name></member>
+      <member refid="dd/df2/a05555_1a7b62e0816082ebc755ad9d3f1a54f721" prot="public" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>PassMasksComponent</name></member>
+      <member refid="d6/df6/a05611_1ad694c20183dd5aca617f4e602d49d722" prot="public" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>SubmeshComponent</name></member>
+      <member refid="dd/df2/a05555_1aaf6696635bd686713e5e56758cd4d1b6" prot="public" virt="non-virtual"><scope>castor3d::PassMasksComponent</scope><name>TypeName</name></member>
+      <member refid="d6/df6/a05611_1a16a32c6196f9a4a70f24f18e537af89c" prot="public" virt="virtual"><scope>castor3d::PassMasksComponent</scope><name>writeText</name></member>
+      <member refid="d6/df6/a05611_1a30231a167367ba38b41f9bf5b3bcd005" prot="public" virt="virtual"><scope>castor3d::PassMasksComponent</scope><name>~SubmeshComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

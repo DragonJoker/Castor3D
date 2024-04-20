@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="d7/dbd/a07963" kind="struct" language="C++" prot="public">
+    <compoundname>castor::Deleter</compoundname>
+    <includes local="no">SmartPtr.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename TypeT</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/dbd/a07963_1a031ffda9c01e3a95bc21921c2ca9b0bb" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Deleter&lt; TypeT &gt;::operator()</definition>
+        <argsstring>(TypeT *pointer) noexcept</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::Deleter::operator()</qualifiedname>
+        <param>
+          <type>TypeT *</type>
+          <declname>pointer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Config/SmartPtr.hpp" line="18" column="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="CastorUtils/Config/SmartPtr.hpp" line="16" column="1" bodyfile="CastorUtils/Config/SmartPtr.hpp" bodystart="17" bodyend="19"/>
+    <listofallmembers>
+      <member refid="d7/dbd/a07963_1a031ffda9c01e3a95bc21921c2ca9b0bb" prot="public" virt="non-virtual"><scope>castor::Deleter</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

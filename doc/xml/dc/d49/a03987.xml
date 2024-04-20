@@ -1,0 +1,835 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="dc/d49/a03987" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::MaterialImporter</compoundname>
+    <basecompoundref refid="d6/da8/a08227" prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">MaterialImporter.hpp</includes>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="dc/d49/a03987_1ab9aee040bb95291e4e18c0e76cb24b20" prot="protected" static="no" mutable="no">
+        <type><ref refid="db/df9/a03951" kindref="compound">ImporterFile</ref> *</type>
+        <definition>ImporterFile* castor3d::MaterialImporter::m_file</definition>
+        <argsstring></argsstring>
+        <name>m_file</name>
+        <qualifiedname>castor3d::MaterialImporter::m_file</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialImporter.hpp" line="229" column="15" bodyfile="Castor3D/Material/MaterialImporter.hpp" bodystart="229" bodyend="229"/>
+        <referencedby refid="dc/d49/a03987_1a79f56b416380a474fe2ee5b57d483cb2" compoundref="de/df8/a00440" startline="220" endline="223">getImporterFile</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d49/a03987_1a0550f49d2355aad3bbc92214b47f4315" prot="protected" static="no" mutable="no">
+        <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref></type>
+        <definition>Parameters castor3d::MaterialImporter::m_parameters</definition>
+        <argsstring></argsstring>
+        <name>m_parameters</name>
+        <qualifiedname>castor3d::MaterialImporter::m_parameters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialImporter.hpp" line="230" column="12" bodyfile="Castor3D/Material/MaterialImporter.hpp" bodystart="230" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d49/a03987_1a59c9e1125159f22861c6eca565476cd1" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1a93b53452a3c421817a14b649ccec1fb7" kindref="member">castor::Map</ref>&lt; <ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref>, <ref refid="d5/dc1/a04943" kindref="compound">TextureConfiguration</ref> &gt;</type>
+        <definition>castor::Map&lt; PassComponentTextureFlag, TextureConfiguration &gt; castor3d::MaterialImporter::m_textureRemaps</definition>
+        <argsstring></argsstring>
+        <name>m_textureRemaps</name>
+        <qualifiedname>castor3d::MaterialImporter::m_textureRemaps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialImporter.hpp" line="231" column="13" bodyfile="Castor3D/Material/MaterialImporter.hpp" bodystart="231" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d49/a03987_1a0f6e60067791a1a7f194c4ed5f13393e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual castor3d::MaterialImporter::~MaterialImporter</definition>
+        <argsstring>()=default</argsstring>
+        <name>~MaterialImporter</name>
+        <qualifiedname>castor3d::MaterialImporter::~MaterialImporter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialImporter.hpp" line="25" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d49/a03987_1ab0b8345e55598d3ad84110039a09f01a" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MaterialImporter::MaterialImporter</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>MaterialImporter</name>
+        <qualifiedname>castor3d::MaterialImporter::MaterialImporter</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialImporter.hpp" line="34" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d49/a03987_1a7228fba1254f80dcc5ad52c465d7cb31" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MaterialImporter::MaterialImporter</definition>
+        <argsstring>(Engine &amp;engine, ImporterFile *file)</argsstring>
+        <name>MaterialImporter</name>
+        <qualifiedname>castor3d::MaterialImporter::MaterialImporter</qualifiedname>
+        <param>
+          <type><ref refid="d8/d4f/a03703" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="db/df9/a03951" kindref="compound">ImporterFile</ref> *</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+<para>Constructeur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le moteur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le fichier à importer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialImporter.hpp" line="45" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d49/a03987_1a98c28d933a0f33331e5502107c1ed8ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::MaterialImporter::import</definition>
+        <argsstring>(Material &amp;material, ImporterFile *file, Parameters const &amp;parameters, castor::Map&lt; PassComponentTextureFlag, TextureConfiguration &gt; const &amp;textureRemaps)</argsstring>
+        <name>import</name>
+        <qualifiedname>castor3d::MaterialImporter::import</qualifiedname>
+        <param>
+          <type><ref refid="d1/d42/a03979" kindref="compound">Material</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="db/df9/a03951" kindref="compound">ImporterFile</ref> *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a93b53452a3c421817a14b649ccec1fb7" kindref="member">castor::Map</ref>&lt; <ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref>, <ref refid="d5/dc1/a04943" kindref="compound">TextureConfiguration</ref> &gt; const &amp;</type>
+          <declname>textureRemaps</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;import de <ref refid="dc/dc2/a07135" kindref="compound">Scene</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">material</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les données importées. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le fichier à importer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Paramètres de configuration de l&apos;import. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">textureRemaps</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les paramètres de reaffectation des textures importées. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un problème quelconque est survenu. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialImporter.hpp" line="63" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d49/a03987_1a91640d1be210846aff980d09df42a75e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::ImageRPtr</type>
+        <definition>C3D_API castor::ImageRPtr castor3d::MaterialImporter::loadImage</definition>
+        <argsstring>(castor::String const &amp;name, castor::ImageCreateParams const &amp;params) const</argsstring>
+        <name>loadImage</name>
+        <qualifiedname>castor3d::MaterialImporter::loadImage</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/da4/a08943" kindref="compound">castor::ImageCreateParams</ref> const &amp;</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+<para>Charge une image. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les paramètres de création de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;image. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialImporter.hpp" line="99" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d49/a03987_1a6742b45527a2f2c142b064a9a3d85a2e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::ImageRPtr</type>
+        <definition>C3D_API castor::ImageRPtr castor3d::MaterialImporter::loadImage</definition>
+        <argsstring>(castor::Path const &amp;path) const</argsstring>
+        <name>loadImage</name>
+        <qualifiedname>castor3d::MaterialImporter::loadImage</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <briefdescription>
+<para>Charge une image depuis un fichier. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin vers l&apos;image (peut être relatif ou absolu). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;image. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialImporter.hpp" line="111" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d49/a03987_1aff2987539588587dbaad09ad23f9c107" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::ImageRPtr</type>
+        <definition>C3D_API castor::ImageRPtr castor3d::MaterialImporter::loadImage</definition>
+        <argsstring>(castor::String const &amp;name, castor::String type, castor::ByteArray data) const</argsstring>
+        <name>loadImage</name>
+        <qualifiedname>castor3d::MaterialImporter::loadImage</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref> const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>castor::ByteArray</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Charge une texture. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type des données de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;unité de texture. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialImporter.hpp" line="126" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d49/a03987_1aac0fc00f44fd489e62287a5bfa8275f2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/d40/a04987" kindref="compound">TextureSourceInfo</ref></type>
+        <definition>C3D_API TextureSourceInfo castor3d::MaterialImporter::loadTexture</definition>
+        <argsstring>(castor::Path const &amp;path, TextureConfiguration const &amp;config) const</argsstring>
+        <name>loadTexture</name>
+        <qualifiedname>castor3d::MaterialImporter::loadTexture</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/dc1/a04943" kindref="compound">TextureConfiguration</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+<para>Charge une texture. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin vers l&apos;image (peut être relatif ou absolu). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La configuration de la texture. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;unité de texture. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialImporter.hpp" line="141" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d49/a03987_1affc3b2c6ed3b1a8ec8b5b90baf78daa8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="db/d40/a04987" kindref="compound">TextureSourceInfo</ref></type>
+        <definition>C3D_API TextureSourceInfo castor3d::MaterialImporter::loadTexture</definition>
+        <argsstring>(castor::String name, castor::String type, castor::ByteArray data, TextureConfiguration const &amp;config) const</argsstring>
+        <name>loadTexture</name>
+        <qualifiedname>castor3d::MaterialImporter::loadTexture</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>castor::ByteArray</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/dc1/a04943" kindref="compound">TextureConfiguration</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+<para>Charge une texture. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type des données de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La configuration de la texture. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>L&apos;unité de texture. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialImporter.hpp" line="159" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d49/a03987_1a0fb9767789b03fc7526b0b6f2d0ec4a1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MaterialImporter::loadTexture</definition>
+        <argsstring>(castor::Path const &amp;path, TextureConfiguration const &amp;config, PassTextureConfig const &amp;passConfig, Pass &amp;pass) const</argsstring>
+        <name>loadTexture</name>
+        <qualifiedname>castor3d::MaterialImporter::loadTexture</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/dc1/a04943" kindref="compound">TextureConfiguration</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/dda/a04947" kindref="compound">PassTextureConfig</ref> const &amp;</type>
+          <declname>passConfig</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+<para>Charge une texture et l&apos;ajoute à la passe donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin vers l&apos;image (peut être relatif ou absolu). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La configuration de la texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">passConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La configuration de l&apos;unité de texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit l&apos;image chargée. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialImporter.hpp" line="177" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d49/a03987_1a0118b5f9392f7073eb811d31c5ca6af5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MaterialImporter::loadTexture</definition>
+        <argsstring>(castor::String name, castor::String type, castor::ByteArray data, TextureConfiguration const &amp;config, PassTextureConfig const &amp;passConfig, Pass &amp;pass) const</argsstring>
+        <name>loadTexture</name>
+        <qualifiedname>castor3d::MaterialImporter::loadTexture</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1af78b89ba78c07da21e45ef90d4686c4c" kindref="member">castor::String</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>castor::ByteArray</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/dc1/a04943" kindref="compound">TextureConfiguration</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/dda/a04947" kindref="compound">PassTextureConfig</ref> const &amp;</type>
+          <declname>passConfig</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d6c/a04863" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+<para>Charge une texture et l&apos;ajoute à la passe donnée. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le nom de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le type des données de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les données de l&apos;image. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La configuration de la texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">passConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La configuration de l&apos;unité de texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit l&apos;image chargée. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialImporter.hpp" line="199" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d49/a03987_1a9437e8764d73d3adb128c07b1916f59a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::MaterialImporter::convertToNormalMap</definition>
+        <argsstring>(castor::Path &amp;path, castor3d::TextureConfiguration &amp;config) const</argsstring>
+        <name>convertToNormalMap</name>
+        <qualifiedname>castor3d::MaterialImporter::convertToNormalMap</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/dc1/a04943" kindref="compound">castor3d::TextureConfiguration</ref> &amp;</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+<para>Convertit le fichier d&apos;image de hauteur en une image normale+hauteur. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin vers l&apos;image (peut être relatif ou absolu), reçoit le chemin de l&apos;image normale+hauteur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>La configuration de la texture. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> en cas d&apos;erreur. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialImporter.hpp" line="217" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d49/a03987_1a79f56b416380a474fe2ee5b57d483cb2" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="db/df9/a03951" kindref="compound">ImporterFile</ref> const *</type>
+        <definition>ImporterFile const  * castor3d::MaterialImporter::getImporterFile</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getImporterFile</name>
+        <qualifiedname>castor3d::MaterialImporter::getImporterFile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialImporter.hpp" line="220" column="21" bodyfile="Castor3D/Material/MaterialImporter.hpp" bodystart="220" bodyend="223"/>
+        <references refid="dc/d49/a03987_1ab9aee040bb95291e4e18c0e76cb24b20" compoundref="de/df8/a00440" startline="229" endline="229">m_file</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dc/d49/a03987_1a2d39b61b4b53f0ce57a5a3b9bdb87d46" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d3/d5e/a00275_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>static C3D_API bool castor3d::MaterialImporter::import</definition>
+        <argsstring>(Material &amp;material, castor::Path const &amp;pathFile, Parameters const &amp;parameters, castor::Map&lt; PassComponentTextureFlag, TextureConfiguration &gt; const &amp;textureRemaps)</argsstring>
+        <name>import</name>
+        <qualifiedname>castor3d::MaterialImporter::import</qualifiedname>
+        <param>
+          <type><ref refid="d1/d42/a03979" kindref="compound">Material</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/de1/a08011" kindref="compound">castor::Path</ref> const &amp;</type>
+          <declname>pathFile</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/dba/a02278_1aa3fa62c45d6d39bf1209299592992b5f" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dd2/a02279_1a93b53452a3c421817a14b649ccec1fb7" kindref="member">castor::Map</ref>&lt; <ref refid="d9/dba/a02278_1a0940e712754880ad51d00a19855eab42" kindref="member">PassComponentTextureFlag</ref>, <ref refid="d5/dc1/a04943" kindref="compound">TextureConfiguration</ref> &gt; const &amp;</type>
+          <declname>textureRemaps</declname>
+        </param>
+        <briefdescription>
+<para>Fonction d&apos;import de <ref refid="dc/dc2/a07135" kindref="compound">Scene</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">material</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Reçoit les données importées. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pathFile</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le chemin vers le fichier à importer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Paramètres de configuration de l&apos;import. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">textureRemaps</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Les paramètres de reaffectation des textures importées. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> si un problème quelconque est survenu. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialImporter.hpp" line="83" column="21"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="dc/d49/a03987_1a2ee140100ca78252db4ab7bea56e553d" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>bool</type>
+        <definition>virtual bool castor3d::MaterialImporter::doImportMaterial</definition>
+        <argsstring>(Material &amp;material)=0</argsstring>
+        <name>doImportMaterial</name>
+        <qualifiedname>castor3d::MaterialImporter::doImportMaterial</qualifiedname>
+        <param>
+          <type><ref refid="d1/d42/a03979" kindref="compound">Material</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Material/MaterialImporter.hpp" line="226" column="14"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::MaterialImporter</label>
+        <link refid="dc/d49/a03987"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+        <link refid="d6/da8/a08227"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::ParametersT&lt; castor::String &gt;</label>
+        <link refid="d0/d45/a05315"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::ImporterFile</label>
+        <link refid="db/df9/a03951"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::MaterialImporter</label>
+        <link refid="dc/d49/a03987"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_file</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_parameters</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::ParametersT&lt; KeyT &gt;</label>
+        <link refid="d0/d45/a05315"/>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Owner &gt;</label>
+        <link refid="d6/da8/a08227"/>
+      </node>
+    </collaborationgraph>
+    <location file="Castor3D/Material/MaterialImporter.hpp" line="21" column="1" bodyfile="Castor3D/Material/MaterialImporter.hpp" bodystart="23" bodyend="232"/>
+    <listofallmembers>
+      <member refid="dc/d49/a03987_1a9437e8764d73d3adb128c07b1916f59a" prot="public" virt="non-virtual"><scope>castor3d::MaterialImporter</scope><name>convertToNormalMap</name></member>
+      <member refid="dc/d49/a03987_1a2ee140100ca78252db4ab7bea56e553d" prot="private" virt="pure-virtual"><scope>castor3d::MaterialImporter</scope><name>doImportMaterial</name></member>
+      <member refid="dc/d49/a03987_1a79f56b416380a474fe2ee5b57d483cb2" prot="public" virt="non-virtual"><scope>castor3d::MaterialImporter</scope><name>getImporterFile</name></member>
+      <member refid="d6/da8/a08227_1ae200b1c3bde17ab092b0d0b37095ff76" prot="public" virt="non-virtual"><scope>castor3d::MaterialImporter</scope><name>getOwner</name></member>
+      <member refid="dc/d49/a03987_1a98c28d933a0f33331e5502107c1ed8ed" prot="public" virt="non-virtual"><scope>castor3d::MaterialImporter</scope><name>import</name></member>
+      <member refid="dc/d49/a03987_1a2d39b61b4b53f0ce57a5a3b9bdb87d46" prot="public" virt="non-virtual"><scope>castor3d::MaterialImporter</scope><name>import</name></member>
+      <member refid="dc/d49/a03987_1a91640d1be210846aff980d09df42a75e" prot="public" virt="non-virtual"><scope>castor3d::MaterialImporter</scope><name>loadImage</name></member>
+      <member refid="dc/d49/a03987_1a6742b45527a2f2c142b064a9a3d85a2e" prot="public" virt="non-virtual"><scope>castor3d::MaterialImporter</scope><name>loadImage</name></member>
+      <member refid="dc/d49/a03987_1aff2987539588587dbaad09ad23f9c107" prot="public" virt="non-virtual"><scope>castor3d::MaterialImporter</scope><name>loadImage</name></member>
+      <member refid="dc/d49/a03987_1aac0fc00f44fd489e62287a5bfa8275f2" prot="public" virt="non-virtual"><scope>castor3d::MaterialImporter</scope><name>loadTexture</name></member>
+      <member refid="dc/d49/a03987_1affc3b2c6ed3b1a8ec8b5b90baf78daa8" prot="public" virt="non-virtual"><scope>castor3d::MaterialImporter</scope><name>loadTexture</name></member>
+      <member refid="dc/d49/a03987_1a0fb9767789b03fc7526b0b6f2d0ec4a1" prot="public" virt="non-virtual"><scope>castor3d::MaterialImporter</scope><name>loadTexture</name></member>
+      <member refid="dc/d49/a03987_1a0118b5f9392f7073eb811d31c5ca6af5" prot="public" virt="non-virtual"><scope>castor3d::MaterialImporter</scope><name>loadTexture</name></member>
+      <member refid="dc/d49/a03987_1ab9aee040bb95291e4e18c0e76cb24b20" prot="protected" virt="non-virtual"><scope>castor3d::MaterialImporter</scope><name>m_file</name></member>
+      <member refid="dc/d49/a03987_1a0550f49d2355aad3bbc92214b47f4315" prot="protected" virt="non-virtual"><scope>castor3d::MaterialImporter</scope><name>m_parameters</name></member>
+      <member refid="dc/d49/a03987_1a59c9e1125159f22861c6eca565476cd1" prot="protected" virt="non-virtual"><scope>castor3d::MaterialImporter</scope><name>m_textureRemaps</name></member>
+      <member refid="dc/d49/a03987_1ab0b8345e55598d3ad84110039a09f01a" prot="public" virt="non-virtual"><scope>castor3d::MaterialImporter</scope><name>MaterialImporter</name></member>
+      <member refid="dc/d49/a03987_1a7228fba1254f80dcc5ad52c465d7cb31" prot="public" virt="non-virtual"><scope>castor3d::MaterialImporter</scope><name>MaterialImporter</name></member>
+      <member refid="d6/da8/a08227_1a5efafa99a79dd1036a6ae3f3242a366b" prot="protected" virt="non-virtual"><scope>castor3d::MaterialImporter</scope><name>OwnedBy</name></member>
+      <member refid="dc/d49/a03987_1a0f6e60067791a1a7f194c4ed5f13393e" prot="public" virt="virtual"><scope>castor3d::MaterialImporter</scope><name>~MaterialImporter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="df/d46/a07375" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SssProfileBuffer::SssProfileData</compoundname>
+    <includes local="no">SssProfileBuffer.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/d46/a07375_1af79ae8dbcf8f1582111e714a0e16bcc4" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::SssProfileBuffer::SssProfileData::transmittanceProfileSize</definition>
+        <argsstring></argsstring>
+        <name>transmittanceProfileSize</name>
+        <qualifiedname>castor3d::SssProfileBuffer::SssProfileData::transmittanceProfileSize</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp" line="37" column="10" bodyfile="Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d46/a07375_1a4bc9b9493040ba6b744fefc3544f8dea" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SssProfileBuffer::SssProfileData::gaussianWidth</definition>
+        <argsstring></argsstring>
+        <name>gaussianWidth</name>
+        <qualifiedname>castor3d::SssProfileBuffer::SssProfileData::gaussianWidth</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp" line="38" column="7" bodyfile="Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="38" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d46/a07375_1acc55ca8170f523ad6697617f2917332a" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SssProfileBuffer::SssProfileData::subsurfaceScatteringStrength</definition>
+        <argsstring></argsstring>
+        <name>subsurfaceScatteringStrength</name>
+        <qualifiedname>castor3d::SssProfileBuffer::SssProfileData::subsurfaceScatteringStrength</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp" line="39" column="7" bodyfile="Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="39" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d46/a07375_1a667bc5c242a6e79fb8f6084aa6a561d2" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SssProfileBuffer::SssProfileData::thicknessScale</definition>
+        <argsstring></argsstring>
+        <name>thicknessScale</name>
+        <qualifiedname>castor3d::SssProfileBuffer::SssProfileData::thicknessScale</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp" line="40" column="7" bodyfile="Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d46/a07375_1afdbf92e5661253ea287f46439fd08e64" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">castor::Array</ref>&lt; <ref refid="db/d98/a07371" kindref="compound">Data</ref>, <ref refid="d9/dba/a02278_1a6997a7cbd1bcd2dcfe33012c661a45dc" kindref="member">TransmittanceProfileSize</ref> &gt;</type>
+        <definition>castor::Array&lt; Data, TransmittanceProfileSize &gt; castor3d::SssProfileBuffer::SssProfileData::transmittanceProfile</definition>
+        <argsstring></argsstring>
+        <name>transmittanceProfile</name>
+        <qualifiedname>castor3d::SssProfileBuffer::SssProfileData::transmittanceProfile</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp" line="41" column="15" bodyfile="Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="41" bodyend="41"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp" line="35" column="1" bodyfile="Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="36" bodyend="42"/>
+    <listofallmembers>
+      <member refid="df/d46/a07375_1a4bc9b9493040ba6b744fefc3544f8dea" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::SssProfileData</scope><name>gaussianWidth</name></member>
+      <member refid="df/d46/a07375_1acc55ca8170f523ad6697617f2917332a" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::SssProfileData</scope><name>subsurfaceScatteringStrength</name></member>
+      <member refid="df/d46/a07375_1a667bc5c242a6e79fb8f6084aa6a561d2" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::SssProfileData</scope><name>thicknessScale</name></member>
+      <member refid="df/d46/a07375_1afdbf92e5661253ea287f46439fd08e64" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::SssProfileData</scope><name>transmittanceProfile</name></member>
+      <member refid="df/d46/a07375_1af79ae8dbcf8f1582111e714a0e16bcc4" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer::SssProfileData</scope><name>transmittanceProfileSize</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

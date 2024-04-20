@@ -1,0 +1,1301 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.10.0" xml:lang="fr">
+  <compounddef id="db/dcf/a09187" kind="class" language="C++" prot="public">
+    <compoundname>castor::Point</compoundname>
+    <includes local="no">Point.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+      <param>
+        <type>uint32_t</type>
+        <declname>TCount</declname>
+        <defname>TCount</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="user-defined">
+      <header>Construction / Destruction.</header>
+      <memberdef kind="function" id="db/dcf/a09187_1a84dc4d24c337394c9c5b023ccecee7af" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr castor::Point&lt; T, TCount &gt;::Point</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>Point</name>
+        <qualifiedname>castor::Point::Point</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="53" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1abb6c9a2b834ea641ea29bbfeda47e414" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr castor::Point&lt; T, TCount &gt;::~Point</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~Point</name>
+        <qualifiedname>castor::Point::~Point</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="54" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a9b7893e9d66571bb329cf1e6a076d6d8" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr castor::Point&lt; T, TCount &gt;::Point</definition>
+        <argsstring>(Point const &amp;rhs) noexcept</argsstring>
+        <name>Point</name>
+        <qualifiedname>castor::Point::Point</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="55" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1ab107971dbbc07fc79c2d508a049f36fb" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>constexpr castor::Point&lt; T, TCount &gt;::Point</definition>
+        <argsstring>(Point &amp;&amp;rhs) noexcept</argsstring>
+        <name>Point</name>
+        <qualifiedname>castor::Point::Point</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="56" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1ad7fbdaaa8fdb41a53d2aeae5d2adaf83" prot="public" static="no" const="no" explicit="yes" inline="no" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor::Point&lt; T, TCount &gt;::Point</definition>
+        <argsstring>(T const *rhs) noexcept</argsstring>
+        <name>Point</name>
+        <qualifiedname>castor::Point::Point</qualifiedname>
+        <param>
+          <type>T const *</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="57" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a1c5adb248fc4a0e9053f872190adf2d9" prot="public" static="no" const="no" explicit="yes" inline="no" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::Point&lt; T, TCount &gt;::Point</definition>
+        <argsstring>(Point&lt; U, UCount &gt; const &amp;rhs) noexcept</argsstring>
+        <name>Point</name>
+        <qualifiedname>castor::Point::Point</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; U, UCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="59" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1af4fdc7aacb67c15ea29fe4eb7dfb50e2" prot="public" static="no" const="no" explicit="yes" inline="no" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::Point&lt; T, TCount &gt;::Point</definition>
+        <argsstring>(Coords&lt; U, UCount &gt; const &amp;rhs) noexcept</argsstring>
+        <name>Point</name>
+        <qualifiedname>castor::Point::Point</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; U, UCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="61" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1aa1f5fdc1164daee5f9bbf06e166cb3f1" prot="public" static="no" const="no" explicit="yes" inline="no" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor::Point&lt; T, TCount &gt;::Point</definition>
+        <argsstring>(U const *rhs) noexcept</argsstring>
+        <name>Point</name>
+        <qualifiedname>castor::Point::Point</qualifiedname>
+        <param>
+          <type>U const *</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="63" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a66d1a79c219e0f9056959c265a619220" prot="public" static="no" constexpr="yes" const="no" explicit="yes" inline="no" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ValueA</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr</type>
+        <definition>constexpr castor::Point&lt; T, TCount &gt;::Point</definition>
+        <argsstring>(ValueA a) noexcept</argsstring>
+        <name>Point</name>
+        <qualifiedname>castor::Point::Point</qualifiedname>
+        <param>
+          <type>ValueA</type>
+          <declname>a</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="65" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a1a264e450f5c6214da7dcb9b2f5b90b7" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ValueA</type>
+          </param>
+          <param>
+            <type>typename ValueB</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr</type>
+        <definition>constexpr castor::Point&lt; T, TCount &gt;::Point</definition>
+        <argsstring>(ValueA a, ValueB b) noexcept</argsstring>
+        <name>Point</name>
+        <qualifiedname>castor::Point::Point</qualifiedname>
+        <param>
+          <type>ValueA</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>ValueB</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="67" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1afa5819d1394f6a9e0f8d8ffcdd4e9851" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ValueA</type>
+          </param>
+          <param>
+            <type>typename ValueB</type>
+          </param>
+          <param>
+            <type>typename ValueC</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr</type>
+        <definition>constexpr castor::Point&lt; T, TCount &gt;::Point</definition>
+        <argsstring>(ValueA a, ValueB b, ValueC c) noexcept</argsstring>
+        <name>Point</name>
+        <qualifiedname>castor::Point::Point</qualifiedname>
+        <param>
+          <type>ValueA</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>ValueB</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>ValueC</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="69" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a44943dff8d008e305e956f5a0e192576" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ValueA</type>
+          </param>
+          <param>
+            <type>typename ValueB</type>
+          </param>
+          <param>
+            <type>typename ValueC</type>
+          </param>
+          <param>
+            <type>typename ValueD</type>
+          </param>
+        </templateparamlist>
+        <type>constexpr</type>
+        <definition>constexpr castor::Point&lt; T, TCount &gt;::Point</definition>
+        <argsstring>(ValueA a, ValueB b, ValueC c, ValueD d) noexcept</argsstring>
+        <name>Point</name>
+        <qualifiedname>castor::Point::Point</qualifiedname>
+        <param>
+          <type>ValueA</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>ValueB</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>ValueC</type>
+          <declname>c</declname>
+        </param>
+        <param>
+          <type>ValueD</type>
+          <declname>d</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="71" column="11"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <header>Opérateurs d&apos;affectation.</header>
+      <memberdef kind="function" id="db/dcf/a09187_1a7255b3fd493ec04a3eff7a3796855ba3" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>constexpr <ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+        <definition>constexpr Point &amp; castor::Point&lt; T, TCount &gt;::operator=</definition>
+        <argsstring>(Point const &amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Point::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="80" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a80c472e8068dac1c08b4242d50b5cbba" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>constexpr <ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+        <definition>constexpr Point &amp; castor::Point&lt; T, TCount &gt;::operator=</definition>
+        <argsstring>(Point &amp;&amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor::Point::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="81" column="18"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <header>Opérateurs arithmétiques.</header>
+      <memberdef kind="function" id="db/dcf/a09187_1aa21ec0c73f492f5a6b55e81607e4f3c7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; castor::Point&lt; T, TCount &gt;::operator+=</definition>
+        <argsstring>(Point&lt; U, UCount &gt; const &amp;rhs)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::Point::operator+=</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; U, UCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="91" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a14f7eec029555811e89641d97cbe73fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; castor::Point&lt; T, TCount &gt;::operator-=</definition>
+        <argsstring>(Point&lt; U, UCount &gt; const &amp;rhs)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::Point::operator-=</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; U, UCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="93" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a473e11aba3404c800c7ad20471274298" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; castor::Point&lt; T, TCount &gt;::operator*=</definition>
+        <argsstring>(Point&lt; U, UCount &gt; const &amp;rhs)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::Point::operator*=</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; U, UCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="95" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1ac3b7af0fbc719ac51b8eeb0d3ba5ce8a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; castor::Point&lt; T, TCount &gt;::operator/=</definition>
+        <argsstring>(Point&lt; U, UCount &gt; const &amp;rhs)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::Point::operator/=</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; U, UCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="97" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a8d5800ad53da2ed0f8ee64445e6b465c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; castor::Point&lt; T, TCount &gt;::operator+=</definition>
+        <argsstring>(Coords&lt; U, UCount &gt; const &amp;rhs)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::Point::operator+=</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; U, UCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="100" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a84d22d1b61fe99d29555fb389e2dc291" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; castor::Point&lt; T, TCount &gt;::operator-=</definition>
+        <argsstring>(Coords&lt; U, UCount &gt; const &amp;rhs)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::Point::operator-=</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; U, UCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="102" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a1a525fe424f04abb16082e4e89e43f3d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; castor::Point&lt; T, TCount &gt;::operator*=</definition>
+        <argsstring>(Coords&lt; U, UCount &gt; const &amp;rhs)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::Point::operator*=</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; U, UCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="104" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a350622469584f86e7873771f0715562b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; castor::Point&lt; T, TCount &gt;::operator/=</definition>
+        <argsstring>(Coords&lt; U, UCount &gt; const &amp;rhs)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::Point::operator/=</qualifiedname>
+        <param>
+          <type><ref refid="d9/d6a/a09103" kindref="compound">Coords</ref>&lt; U, UCount &gt; const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="106" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a66eefeb5ae530dfaf3852dac192f1c24" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; castor::Point&lt; T, TCount &gt;::operator+=</definition>
+        <argsstring>(U const *rhs)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::Point::operator+=</qualifiedname>
+        <param>
+          <type>U const *</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="109" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a8f756e1774417fdf57580e41784f540c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; castor::Point&lt; T, TCount &gt;::operator-=</definition>
+        <argsstring>(U const *rhs)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::Point::operator-=</qualifiedname>
+        <param>
+          <type>U const *</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="111" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a0f42fb97aa3c2b1e2e24970079cd576e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; castor::Point&lt; T, TCount &gt;::operator*=</definition>
+        <argsstring>(U const *rhs)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::Point::operator*=</qualifiedname>
+        <param>
+          <type>U const *</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="113" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a4db44aa7d614082396e5c7c536b332bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; castor::Point&lt; T, TCount &gt;::operator/=</definition>
+        <argsstring>(U const *rhs)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::Point::operator/=</qualifiedname>
+        <param>
+          <type>U const *</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="115" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a24c5f722f6f4a6ff8232e20d9d3d7abc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; castor::Point&lt; T, TCount &gt;::operator+=</definition>
+        <argsstring>(T const &amp;rhs)</argsstring>
+        <name>operator+=</name>
+        <qualifiedname>castor::Point::operator+=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="117" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1accf8449d35e65d5fceab0a37660303c7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; castor::Point&lt; T, TCount &gt;::operator-=</definition>
+        <argsstring>(T const &amp;rhs)</argsstring>
+        <name>operator-=</name>
+        <qualifiedname>castor::Point::operator-=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="118" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1ae50330d1557a821affbbf9fdf257b621" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; castor::Point&lt; T, TCount &gt;::operator*=</definition>
+        <argsstring>(T const &amp;rhs)</argsstring>
+        <name>operator*=</name>
+        <qualifiedname>castor::Point::operator*=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="119" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a02c68a859bb08970f938428df9372316" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+        <definition>Point &amp; castor::Point&lt; T, TCount &gt;::operator/=</definition>
+        <argsstring>(T const &amp;rhs)</argsstring>
+        <name>operator/=</name>
+        <qualifiedname>castor::Point::operator/=</qualifiedname>
+        <param>
+          <type>T const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="120" column="8"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="user-defined">
+      <memberdef kind="function" id="db/dcf/a09187_1a455f2af117bce3822d91548ce86eeef1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>T const &amp;</type>
+        <definition>T const  &amp; castor::Point&lt; T, TCount &gt;::operator[]</definition>
+        <argsstring>(uint32_t index) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::Point::operator[]</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Accesseurs de tableau. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="174" column="10" bodyfile="CastorUtils/Math/Point.hpp" bodystart="174" bodyend="177"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1ac24f91f5562bda15e6ec227d89e0bd3e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>T &amp;</type>
+        <definition>T &amp; castor::Point&lt; T, TCount &gt;::operator[]</definition>
+        <argsstring>(uint32_t index)</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor::Point::operator[]</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="179" column="4" bodyfile="CastorUtils/Math/Point.hpp" bodystart="179" bodyend="182"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1ad9991985f5c8567d5efac54830e9a5b1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/dcf/a09187_1a6b9a009506c45f6afc969a2154ab531f" kindref="member">iterator</ref></type>
+        <definition>iterator castor::Point&lt; T, TCount &gt;::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::Point::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="184" column="10" bodyfile="CastorUtils/Math/Point.hpp" bodystart="184" bodyend="187"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a686d3d05bfaae8511c566a8fcff16fcd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/dcf/a09187_1a1d7397a5960aa428fc73aebf64574379" kindref="member">const_iterator</ref></type>
+        <definition>const_iterator castor::Point&lt; T, TCount &gt;::begin</definition>
+        <argsstring>() const</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor::Point::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="189" column="16" bodyfile="CastorUtils/Math/Point.hpp" bodystart="189" bodyend="192"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a81f17de81d65f2712a8a9b4dabde2db0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/dcf/a09187_1a1d7397a5960aa428fc73aebf64574379" kindref="member">const_iterator</ref></type>
+        <definition>const_iterator castor::Point&lt; T, TCount &gt;::end</definition>
+        <argsstring>() const</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::Point::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="194" column="16" bodyfile="CastorUtils/Math/Point.hpp" bodystart="194" bodyend="197"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1adf37808d9ecf33cfd32ffebaa897ff09" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/dcf/a09187_1a6b9a009506c45f6afc969a2154ab531f" kindref="member">iterator</ref></type>
+        <definition>iterator castor::Point&lt; T, TCount &gt;::end</definition>
+        <argsstring>()</argsstring>
+        <name>end</name>
+        <qualifiedname>castor::Point::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="199" column="10" bodyfile="CastorUtils/Math/Point.hpp" bodystart="199" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1afdbf90bc483d842b3f9bbc17d631a78d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/dc3/a09191" kindref="compound">PointData</ref>&lt; T, TCount &gt; *</type>
+        <definition>PointData&lt; T, TCount &gt; * castor::Point&lt; T, TCount &gt;::operator-&gt;</definition>
+        <argsstring>()</argsstring>
+        <name>operator-&gt;</name>
+        <qualifiedname>castor::Point::operator-&gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="204" column="12" bodyfile="CastorUtils/Math/Point.hpp" bodystart="204" bodyend="207"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a43970c2c0ae9621931dac2f81560a93b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/dc3/a09191" kindref="compound">PointData</ref>&lt; T, TCount &gt; const *</type>
+        <definition>PointData&lt; T, TCount &gt; const  * castor::Point&lt; T, TCount &gt;::operator-&gt;</definition>
+        <argsstring>() const</argsstring>
+        <name>operator-&gt;</name>
+        <qualifiedname>castor::Point::operator-&gt;</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="209" column="18" bodyfile="CastorUtils/Math/Point.hpp" bodystart="209" bodyend="212"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="db/dcf/a09187_1ac4bb778976874eed977044c27ac45848" prot="private" static="no">
+        <type>T</type>
+        <definition>using castor::Point&lt; T, TCount &gt;::value_type =  T</definition>
+        <argsstring></argsstring>
+        <name>value_type</name>
+        <qualifiedname>castor::Point::value_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="26" column="1" bodyfile="CastorUtils/Math/Point.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/dcf/a09187_1a6b34939eff750bdaf87b407786463d4a" prot="private" static="no">
+        <type>value_type &amp;</type>
+        <definition>using castor::Point&lt; T, TCount &gt;::reference =  value_type &amp;</definition>
+        <argsstring></argsstring>
+        <name>reference</name>
+        <qualifiedname>castor::Point::reference</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="27" column="1" bodyfile="CastorUtils/Math/Point.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/dcf/a09187_1a2f3bc70991616d445640cdaede570610" prot="private" static="no">
+        <type>value_type *</type>
+        <definition>using castor::Point&lt; T, TCount &gt;::pointer =  value_type *</definition>
+        <argsstring></argsstring>
+        <name>pointer</name>
+        <qualifiedname>castor::Point::pointer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="28" column="1" bodyfile="CastorUtils/Math/Point.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/dcf/a09187_1a9cd1dc5426b4e44ff0804073ba3c706c" prot="private" static="no">
+        <type>value_type const &amp;</type>
+        <definition>using castor::Point&lt; T, TCount &gt;::const_reference =  value_type const &amp;</definition>
+        <argsstring></argsstring>
+        <name>const_reference</name>
+        <qualifiedname>castor::Point::const_reference</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="29" column="1" bodyfile="CastorUtils/Math/Point.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/dcf/a09187_1a58e609e144b8193e5a3bab0ee09e1e0b" prot="private" static="no">
+        <type>value_type const *</type>
+        <definition>using castor::Point&lt; T, TCount &gt;::const_pointer =  value_type const *</definition>
+        <argsstring></argsstring>
+        <name>const_pointer</name>
+        <qualifiedname>castor::Point::const_pointer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="30" column="1" bodyfile="CastorUtils/Math/Point.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/dcf/a09187_1aa5a0ed0fded5d30d6b70f83ae72b8685" prot="private" static="no">
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; value_type, TCount &gt; &amp;</type>
+        <definition>using castor::Point&lt; T, TCount &gt;::point_reference =  Point&lt; value_type, TCount &gt; &amp;</definition>
+        <argsstring></argsstring>
+        <name>point_reference</name>
+        <qualifiedname>castor::Point::point_reference</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="31" column="1" bodyfile="CastorUtils/Math/Point.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/dcf/a09187_1a43a3cc7ffc98913dc01c171bc911ef9e" prot="private" static="no">
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; value_type, TCount &gt; *</type>
+        <definition>using castor::Point&lt; T, TCount &gt;::point_pointer =  Point&lt; value_type, TCount &gt; *</definition>
+        <argsstring></argsstring>
+        <name>point_pointer</name>
+        <qualifiedname>castor::Point::point_pointer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="32" column="1" bodyfile="CastorUtils/Math/Point.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/dcf/a09187_1ab3de46b88d66ba883efaa010ccc56132" prot="private" static="no">
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; value_type, TCount &gt; const &amp;</type>
+        <definition>using castor::Point&lt; T, TCount &gt;::const_point_reference =  Point&lt; value_type, TCount &gt; const &amp;</definition>
+        <argsstring></argsstring>
+        <name>const_point_reference</name>
+        <qualifiedname>castor::Point::const_point_reference</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="33" column="1" bodyfile="CastorUtils/Math/Point.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/dcf/a09187_1a7287eca6df02108632a6a794af505469" prot="private" static="no">
+        <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref>&lt; value_type, TCount &gt; const *</type>
+        <definition>using castor::Point&lt; T, TCount &gt;::const_point_pointer =  Point&lt; value_type, TCount &gt; const *</definition>
+        <argsstring></argsstring>
+        <name>const_point_pointer</name>
+        <qualifiedname>castor::Point::const_point_pointer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="34" column="1" bodyfile="CastorUtils/Math/Point.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="db/dcf/a09187_1a6b9a009506c45f6afc969a2154ab531f" prot="public" static="no">
+        <type>value_type *</type>
+        <definition>using castor::Point&lt; T, TCount &gt;::iterator =  value_type *</definition>
+        <argsstring></argsstring>
+        <name>iterator</name>
+        <qualifiedname>castor::Point::iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Typedef d&apos;un pointeur sur les données. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="40" column="1" bodyfile="CastorUtils/Math/Point.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="db/dcf/a09187_1a1d7397a5960aa428fc73aebf64574379" prot="public" static="no">
+        <type>value_type const *</type>
+        <definition>using castor::Point&lt; T, TCount &gt;::const_iterator =  value_type const *</definition>
+        <argsstring></argsstring>
+        <name>const_iterator</name>
+        <qualifiedname>castor::Point::const_iterator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Typedef d&apos;un pointeur constant sur les données. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="43" column="1" bodyfile="CastorUtils/Math/Point.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="friend">
+      <memberdef kind="friend" id="db/dcf/a09187_1aa8c354fab7ebd0132640433ef4abf5fd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename U</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>UCount</declname>
+            <defname>UCount</defname>
+          </param>
+        </templateparamlist>
+        <type>class</type>
+        <definition>friend class Point</definition>
+        <argsstring></argsstring>
+        <name>Point</name>
+        <qualifiedname>castor::Point::Point</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="24" column="29" bodyfile="CastorUtils/Math/Point.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="db/dcf/a09187_1a24c3ae8d3c9a7b25ca352fc0b25f3177" prot="private" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr std::size_t</type>
+        <definition>constexpr std::size_t castor::Point&lt; T, TCount &gt;::binary_size</definition>
+        <argsstring></argsstring>
+        <name>binary_size</name>
+        <qualifiedname>castor::Point::binary_size</qualifiedname>
+        <initializer>= sizeof( T ) * TCount</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="35" column="30" bodyfile="CastorUtils/Math/Point.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/dcf/a09187_1ad8df6a59321aa23d04fc723bbbf6160a" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dd2/a02279_1aeece6f8801a7db118a091f586a413edf" kindref="member">Array</ref>&lt; T, TCount &gt;</type>
+        <definition>Array&lt; T, TCount &gt; castor::Point&lt; T, TCount &gt;::coords</definition>
+        <argsstring></argsstring>
+        <name>coords</name>
+        <qualifiedname>castor::Point::coords</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="218" column="7" bodyfile="CastorUtils/Math/Point.hpp" bodystart="218" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dcf/a09187_1a26d6beaf10835245833b91e1642db01e" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/dc3/a09191" kindref="compound">PointData</ref>&lt; T, TCount &gt;</type>
+        <definition>PointData&lt; T, TCount &gt; castor::Point&lt; T, TCount &gt;::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>castor::Point::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="219" column="11" bodyfile="CastorUtils/Math/Point.hpp" bodystart="219" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/dcf/a09187_1ad4f64d5230452e23d3c4cf379c1410e2" prot="private" static="no" mutable="no">
+        <type>union <ref refid="db/dcf/a09187" kindref="compound">castor::Point</ref></type>
+        <definition>union castor::Point castor::Point&lt; T, TCount &gt;::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <qualifiedname>castor::Point::m_data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="220" column="8"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/dcf/a09187_1a1436f0bac5b002f6fbc7ab8638c3e763" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::Point&lt; T, TCount &gt;::swap</definition>
+        <argsstring>(Point &amp;rhs) noexcept</argsstring>
+        <name>swap</name>
+        <qualifiedname>castor::Point::swap</qualifiedname>
+        <param>
+          <type><ref refid="db/dcf/a09187" kindref="compound">Point</ref> &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+<para>Echange les données de c epoint avec celles du point donné </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">rhs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Le point à échanger </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="130" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a374ae3c6c6a826c2cd31a8d12241e6f9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::size_t</type>
+        <definition>std::size_t castor::Point&lt; T, TCount &gt;::size</definition>
+        <argsstring>() const</argsstring>
+        <name>size</name>
+        <qualifiedname>castor::Point::size</qualifiedname>
+        <briefdescription>
+<para>Récupère la taille totale du point. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>count * elemSize </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="139" column="12" bodyfile="CastorUtils/Math/Point.hpp" bodystart="139" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a597f5b7f992855a10c1c4856ed15ced1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>T *</type>
+        <definition>T * castor::Point&lt; T, TCount &gt;::ptr</definition>
+        <argsstring>()</argsstring>
+        <name>ptr</name>
+        <qualifiedname>castor::Point::ptr</qualifiedname>
+        <briefdescription>
+<para>Récupère le pointeur sur les données. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le pointeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="151" column="4" bodyfile="CastorUtils/Math/Point.hpp" bodystart="151" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dcf/a09187_1a32df8bbaeaf5b012121301938a5fcd0d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>T const *</type>
+        <definition>T const  * castor::Point&lt; T, TCount &gt;::constPtr</definition>
+        <argsstring>() const</argsstring>
+        <name>constPtr</name>
+        <qualifiedname>castor::Point::constPtr</qualifiedname>
+        <briefdescription>
+<para>Récupère un pointeur constant sur les données. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Le pointeur </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="CastorUtils/Math/Point.hpp" line="163" column="10" bodyfile="CastorUtils/Math/Point.hpp" bodystart="163" bodyend="166"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Classe de points à dimensions statiques. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Peut recevoir les types de données qui ont une Policy créée </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor::Point&lt; T &gt;</label>
+        <link refid="db/dcf/a09187"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; T &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::Point&lt; T, 3 &gt;</label>
+        <link refid="db/dcf/a09187"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; T, 3 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Point&lt; float, Dimension &gt;</label>
+        <link refid="db/dcf/a09187"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; float, Dimension &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor::Point&lt; T, TCount &gt;</label>
+        <link refid="db/dcf/a09187"/>
+      </node>
+    </inheritancegraph>
+    <location file="CastorUtils/Math/Point.hpp" line="21" column="1" bodyfile="CastorUtils/Math/Point.hpp" bodystart="22" bodyend="221"/>
+    <listofallmembers>
+      <member refid="db/dcf/a09187_1ad9991985f5c8567d5efac54830e9a5b1" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>begin</name></member>
+      <member refid="db/dcf/a09187_1a686d3d05bfaae8511c566a8fcff16fcd" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>begin</name></member>
+      <member refid="db/dcf/a09187_1a24c3ae8d3c9a7b25ca352fc0b25f3177" prot="private" virt="non-virtual"><scope>castor::Point</scope><name>binary_size</name></member>
+      <member refid="db/dcf/a09187_1a1d7397a5960aa428fc73aebf64574379" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>const_iterator</name></member>
+      <member refid="db/dcf/a09187_1a7287eca6df02108632a6a794af505469" prot="private" virt="non-virtual"><scope>castor::Point</scope><name>const_point_pointer</name></member>
+      <member refid="db/dcf/a09187_1ab3de46b88d66ba883efaa010ccc56132" prot="private" virt="non-virtual"><scope>castor::Point</scope><name>const_point_reference</name></member>
+      <member refid="db/dcf/a09187_1a58e609e144b8193e5a3bab0ee09e1e0b" prot="private" virt="non-virtual"><scope>castor::Point</scope><name>const_pointer</name></member>
+      <member refid="db/dcf/a09187_1a9cd1dc5426b4e44ff0804073ba3c706c" prot="private" virt="non-virtual"><scope>castor::Point</scope><name>const_reference</name></member>
+      <member refid="db/dcf/a09187_1a32df8bbaeaf5b012121301938a5fcd0d" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>constPtr</name></member>
+      <member refid="db/dcf/a09187_1ad8df6a59321aa23d04fc723bbbf6160a" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>coords</name></member>
+      <member refid="db/dcf/a09187_1a26d6beaf10835245833b91e1642db01e" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>data</name></member>
+      <member refid="db/dcf/a09187_1a81f17de81d65f2712a8a9b4dabde2db0" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>end</name></member>
+      <member refid="db/dcf/a09187_1adf37808d9ecf33cfd32ffebaa897ff09" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>end</name></member>
+      <member refid="db/dcf/a09187_1a6b9a009506c45f6afc969a2154ab531f" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>iterator</name></member>
+      <member refid="db/dcf/a09187_1ad4f64d5230452e23d3c4cf379c1410e2" prot="private" virt="non-virtual"><scope>castor::Point</scope><name>m_data</name></member>
+      <member refid="db/dcf/a09187_1a473e11aba3404c800c7ad20471274298" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator*=</name></member>
+      <member refid="db/dcf/a09187_1a1a525fe424f04abb16082e4e89e43f3d" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator*=</name></member>
+      <member refid="db/dcf/a09187_1a0f42fb97aa3c2b1e2e24970079cd576e" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator*=</name></member>
+      <member refid="db/dcf/a09187_1ae50330d1557a821affbbf9fdf257b621" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator*=</name></member>
+      <member refid="db/dcf/a09187_1aa21ec0c73f492f5a6b55e81607e4f3c7" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator+=</name></member>
+      <member refid="db/dcf/a09187_1a8d5800ad53da2ed0f8ee64445e6b465c" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator+=</name></member>
+      <member refid="db/dcf/a09187_1a66eefeb5ae530dfaf3852dac192f1c24" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator+=</name></member>
+      <member refid="db/dcf/a09187_1a24c5f722f6f4a6ff8232e20d9d3d7abc" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator+=</name></member>
+      <member refid="db/dcf/a09187_1a14f7eec029555811e89641d97cbe73fb" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator-=</name></member>
+      <member refid="db/dcf/a09187_1a84d22d1b61fe99d29555fb389e2dc291" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator-=</name></member>
+      <member refid="db/dcf/a09187_1a8f756e1774417fdf57580e41784f540c" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator-=</name></member>
+      <member refid="db/dcf/a09187_1accf8449d35e65d5fceab0a37660303c7" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator-=</name></member>
+      <member refid="db/dcf/a09187_1afdbf90bc483d842b3f9bbc17d631a78d" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator-&gt;</name></member>
+      <member refid="db/dcf/a09187_1a43970c2c0ae9621931dac2f81560a93b" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator-&gt;</name></member>
+      <member refid="db/dcf/a09187_1ac3b7af0fbc719ac51b8eeb0d3ba5ce8a" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator/=</name></member>
+      <member refid="db/dcf/a09187_1a350622469584f86e7873771f0715562b" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator/=</name></member>
+      <member refid="db/dcf/a09187_1a4db44aa7d614082396e5c7c536b332bf" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator/=</name></member>
+      <member refid="db/dcf/a09187_1a02c68a859bb08970f938428df9372316" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator/=</name></member>
+      <member refid="db/dcf/a09187_1a7255b3fd493ec04a3eff7a3796855ba3" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator=</name></member>
+      <member refid="db/dcf/a09187_1a80c472e8068dac1c08b4242d50b5cbba" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator=</name></member>
+      <member refid="db/dcf/a09187_1a455f2af117bce3822d91548ce86eeef1" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator[]</name></member>
+      <member refid="db/dcf/a09187_1ac24f91f5562bda15e6ec227d89e0bd3e" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>operator[]</name></member>
+      <member refid="db/dcf/a09187_1aa8c354fab7ebd0132640433ef4abf5fd" prot="private" virt="non-virtual"><scope>castor::Point</scope><name>Point</name></member>
+      <member refid="db/dcf/a09187_1a84dc4d24c337394c9c5b023ccecee7af" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>Point</name></member>
+      <member refid="db/dcf/a09187_1a9b7893e9d66571bb329cf1e6a076d6d8" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>Point</name></member>
+      <member refid="db/dcf/a09187_1ab107971dbbc07fc79c2d508a049f36fb" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>Point</name></member>
+      <member refid="db/dcf/a09187_1ad7fbdaaa8fdb41a53d2aeae5d2adaf83" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>Point</name></member>
+      <member refid="db/dcf/a09187_1a1c5adb248fc4a0e9053f872190adf2d9" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>Point</name></member>
+      <member refid="db/dcf/a09187_1af4fdc7aacb67c15ea29fe4eb7dfb50e2" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>Point</name></member>
+      <member refid="db/dcf/a09187_1aa1f5fdc1164daee5f9bbf06e166cb3f1" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>Point</name></member>
+      <member refid="db/dcf/a09187_1a66d1a79c219e0f9056959c265a619220" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>Point</name></member>
+      <member refid="db/dcf/a09187_1a1a264e450f5c6214da7dcb9b2f5b90b7" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>Point</name></member>
+      <member refid="db/dcf/a09187_1afa5819d1394f6a9e0f8d8ffcdd4e9851" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>Point</name></member>
+      <member refid="db/dcf/a09187_1a44943dff8d008e305e956f5a0e192576" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>Point</name></member>
+      <member refid="db/dcf/a09187_1a43a3cc7ffc98913dc01c171bc911ef9e" prot="private" virt="non-virtual"><scope>castor::Point</scope><name>point_pointer</name></member>
+      <member refid="db/dcf/a09187_1aa5a0ed0fded5d30d6b70f83ae72b8685" prot="private" virt="non-virtual"><scope>castor::Point</scope><name>point_reference</name></member>
+      <member refid="db/dcf/a09187_1a2f3bc70991616d445640cdaede570610" prot="private" virt="non-virtual"><scope>castor::Point</scope><name>pointer</name></member>
+      <member refid="db/dcf/a09187_1a597f5b7f992855a10c1c4856ed15ced1" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>ptr</name></member>
+      <member refid="db/dcf/a09187_1a6b34939eff750bdaf87b407786463d4a" prot="private" virt="non-virtual"><scope>castor::Point</scope><name>reference</name></member>
+      <member refid="db/dcf/a09187_1a374ae3c6c6a826c2cd31a8d12241e6f9" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>size</name></member>
+      <member refid="db/dcf/a09187_1a1436f0bac5b002f6fbc7ab8638c3e763" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>swap</name></member>
+      <member refid="db/dcf/a09187_1ac4bb778976874eed977044c27ac45848" prot="private" virt="non-virtual"><scope>castor::Point</scope><name>value_type</name></member>
+      <member refid="db/dcf/a09187_1abb6c9a2b834ea641ea29bbfeda47e414" prot="public" virt="non-virtual"><scope>castor::Point</scope><name>~Point</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

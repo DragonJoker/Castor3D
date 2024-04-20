@@ -1,0 +1,13 @@
+<map id="castor3d::ShadowMap" name="castor3d::ShadowMap">
+<area shape="rect" id="Node000001" title=" " alt="" coords="257,168,408,193"/>
+<area shape="rect" id="Node000004" href="$db/deb/a06635.html" title=" " alt="" coords="5,243,217,268"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="286,200,147,245,145,240,284,195"/>
+<area shape="rect" id="Node000005" href="$dc/d32/a06655.html" title=" " alt="" coords="242,243,423,268"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="335,208,335,242,330,242,330,208"/>
+<area shape="rect" id="Node000006" href="$d0/d95/a06663.html" title=" " alt="" coords="447,243,626,268"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="379,195,505,240,504,245,377,200"/>
+<area shape="rect" id="Node000002" href="$d6/da8/a08227.html" title=" " alt="" coords="239,93,426,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="335,133,335,168,330,168,330,133"/>
+<area shape="rect" id="Node000003" href="$d6/da8/a08227.html" title="Class used to have an object owned by another one." alt="" coords="241,5,424,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="335,45,335,93,330,93,330,45"/>
+</map>
