@@ -34,12 +34,13 @@ The project itself is compilable on supported platforms using CMake and vcpkg (c
 - Scenes are described using a text format easily comprehensible and extensible. ([Scene File](SceneFile-English.md))
 - Synchronous (user defined) or asynchronous (thread) rendering.
 - Using Mesh and Task shaders, if available.
+- GUI primitives.
 
 ## Implemented Plug-ins
 
 ### Importers
 - ASSIMP: Multiple format mesh importer, using assimp library.
-- glTF: glTF 2.0 importer, more precise than assimp's provided one, using fastgltf library
+- glTF: glTF 2.0 importer, more precise than assimp's provided one, using fastgltf library.
 
 ### PostEffects
 - Bloom: HDR Bloom implementation.
@@ -65,12 +66,12 @@ The project itself is compilable on supported platforms using CMake and vcpkg (c
 
 ### ToneMappings
 - None: A passthrough, used when rendering to an HDR screen.
-- Linear: The default one.
-- HaarmPieterDuiker.
-- HejlBurgessDawson.
-- Reinhard.
-- Uncharted2.
-- ACES.
+- LinearToneMapping: Default tone mapping.
+- HaarmPieterDuikerToneMapping: Haarm Pieter Duiker tone mapping.
+- HejlBurgessDawsonToneMapping: Hejl Burgess Dawson tone mapping.
+- ReinhardToneMapping: Reinhard tone mapping.
+- Uncharted2ToneMapping: Uncharted 2 tone mapping.
+- ACES: ACES tone mapping.
 
 ## Other applications
 
