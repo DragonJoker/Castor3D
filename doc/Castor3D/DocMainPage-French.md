@@ -34,6 +34,7 @@ Le projet en lui-même est compilable sur les plateformes supportées en utilisa
 - Scènes décrites dans un format texte facilement compréhensible et extensible. ([Scene File](SceneFile-French.md))
 - Rendu synchrone (timers) ou asynchrone (thread).
 - Utilisation de Mesh et Task shaders, si disponibles.
+- Primitives de GUI.
 
 ## Plugins implémentés
 

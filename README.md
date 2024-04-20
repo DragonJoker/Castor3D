@@ -10,15 +10,16 @@ The project itself is compilable on supported platforms using CMake and vcpkg (\
 
 ## Features
 
-- Deferred rendering for opaque objects.
+- Clustered lighting to compute all light sources.
+- Using a visibility buffer for opaque objects.
 - Blended Weighted rendering for transparent objects.
-- Normal mapping.
+- Normal mapping (using Mikktspace or explicit bitangents specification).
 - Shadow Mapping (allowing to choose between Raw, PCF or Variance Shadow Maps).
 - Parallax Occlusion mapping.
 - Screen Space Ambient Occlusion (using [Scalable Ambiant Obscurance](https://casual-effects.com/research/McGuire2012SAO/index.html)).
 - Reflection/Refraction Mapping.
 - PBR rendering (Metallic and Specular workflows), and Phong/Blinn-Phong rendering.
-- HDR rendering with various tone mapping operators and color grading.
+- HDR rendering with various tone mapping operators and various colour grading operators.
 - Screen Space Subsurface Scattering (without backlit transmittance yet).
 - Volumetric Light Scattering for the directional light source, if it projects shadows.
 - Cascaded Shadow Maps for the directional light source.
@@ -30,7 +31,7 @@ The project itself is compilable on supported platforms using CMake and vcpkg (\
 - Shaders are generated automatically from pipeline configuration.
 - Shaders are writable directly from C++ code.
 - Scenes are described using a text format easily comprehensible and extensible.
-- Asynchronous (user defined) or synchronous (thread) rendering.
+- Synchronous (user defined) or asynchronous (thread) rendering.
 - Using Mesh and Task shaders, if available.
 - GUI primitives.
 
@@ -38,26 +39,28 @@ The project itself is compilable on supported platforms using CMake and vcpkg (\
 
 ### Importers
 - ASSIMP: Multiple format mesh importer.
+- glTF: glTF 2.0 importer, more precise than assimp's provided one, using fastgltf library.
 
 ### PostEffects
 - Bloom: HDR Bloom implementation.
 - PbrBloom: PBR Bloom implementation.
 - DrawEdges: Detects and renders edges, based on normal, depth, and or object ID.
 - FilmGrain: To display some grain on the render.
-- GrayScale: To convert the result to grayscale.
+- GrayScale: Converts render in gray scale.
 - LightStreaks (using Kawase Light Streaks).
 - FXAA Antialiasing.
 - SMAA Antialiasing (1X and T2X so far).
 - Linear Motion Blur.
+- DepthOfField: Implementation of [this depth of field](https://pixelmischiefblog.wordpress.com/2016/11/25/bokeh-depth-of-field/)
 
 ### Generators
 - DiamondSquareTerrain: to generate terrains inside Castor3D scenes, using diamond-quare algorithm.
 
 ### Generic
 - ToonMaterial: A toon material (to be combined with DrawEdges plugin).
+- WaterMaterial: Water material, using normal maps.
 - FFTOceanRendering: Ocean rendering using FFT generated surfaces.
-- OceanRendering: Basic ocean rendering, specifying waves attributes.
-- WaterRendering: Plane water surfaces rendering, using normal maps.
+- WavesRendering: Basic ocean rendering, specifying waves attributes.
 - AtmosphereScattering : Sky and atmosphere rendering (using [Scalable and Production Ready Sky and Atmosphere Rendering Technique](https://sebh.github.io/publications/egsr2020.pdf)).
 
 ### ToneMappings
@@ -88,7 +91,7 @@ You can reach me on the Discord server dedicated to my projects: [DragonJoker's 
 
 ## Screenshots
 
-[![Sponza](http://dragonjoker.github.io/Castor3D/v0.11.0/img/Sponza-PBR-Bloom-Small.png)](http://dragonjoker.github.io/Castor3D/v0.11.0/img/Sponza-PBR-Bloom.png)
+[![Intel Sponza, Candles](http://dragonjoker.github.io/Castor3D/img/IntelSponza-Candles-PBR-Bloom-Small.png)](http://dragonjoker.github.io/Castor3D/img/IntelSponza-Candles-PBR-Bloom.png)
 [![Sponza, VCT](http://dragonjoker.github.io/Castor3D/img/Sponza-PBR-VCT-Small.png)](http://dragonjoker.github.io/Castor3D/img/Sponza-PBR-VCT.png)
 [![Cerberus](http://dragonjoker.github.io/Castor3D/img/Cerberus-PBR-Small.png)](http://dragonjoker.github.io/Castor3D/img/Cerberus-PBR.png)
 [![Park](http://dragonjoker.github.io/Castor3D/img/Park-Small.png)](http://dragonjoker.github.io/Castor3D/img/Park.png)
