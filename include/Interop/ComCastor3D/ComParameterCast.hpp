@@ -89,12 +89,12 @@ namespace CastorCom::details
 	template<>
 	inline BSTR parameterCast< BSTR, castor::U32String >( castor::U32String const & src )
 	{
-		return toBstr( castor::string::stringCast< castor::xchar >( src ) );
+		return toBstr( castor::makeString( src ) );
 	}
 	template<>
 	inline castor::U32String parameterCast< castor::U32String, BSTR >( BSTR const & src )
 	{
-		return castor::string::toU32String( fromBstr( src ) );
+		return castor::toUtf8U32String( fromBstr( src ) );
 	}
 
 	template<>

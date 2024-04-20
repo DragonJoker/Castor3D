@@ -15,7 +15,7 @@ namespace CastorCom
 	 *\brief		Frees a COM pointer
 	 *\param[in]	val	The pointer
 	 *\~french
-	 *\brief		Lib�re un pointeur COM
+	 *\brief		Libère un pointeur COM
 	 *\param[in]	val	Le pointeur
 	 */
 	template< typename T > void safeRelease( T *& ptr )
@@ -32,7 +32,7 @@ namespace CastorCom
 	 *\param[in]	val	The BSTR
 	 *\return		The castor::String
 	 *\~french
-	 *\brief		Remplit un castor::String � partir d'un BSTR
+	 *\brief		Remplit un castor::String à partir d'un BSTR
 	 *\param[in]	val	Le BSTR
 	 *\return		Le castor::String
 	 */
@@ -48,7 +48,7 @@ namespace CastorCom
 
 			if ( ::WideCharToMultiByte( CP_UTF8, 0, val, l_length, l_out.data(), int( l_out.size() ), nullptr, nullptr ) )
 			{
-				l_return = castor::string::stringCast< castor::xchar >( std::string( l_out.begin(), l_out.end() ) );
+				l_return = castor::makeString( std::string( l_out.begin(), l_out.end() ) );
 			}
 		}
 
@@ -60,14 +60,14 @@ namespace CastorCom
 	 *\param[in]	val	The castor::String
 	 *\return		The BSTR
 	 *\~french
-	 *\brief		Remplit un BSTR � partir d'un castor::String
+	 *\brief		Remplit un BSTR à partir d'un castor::String
 	 *\param[in]	val	Le castor::String
 	 *\return		Le BSTR
 	 */
 	inline BSTR toBstr( castor::String const & val )
 	{
 		BSTR l_return = nullptr;
-		std::string l_in = castor::string::stringCast< char >( val );
+		std::string l_in = castor::toUtf8( val );
 		int l_length = int( l_in.size() );
 		int l_size = MultiByteToWideChar( CP_UTF8, 0, &l_in[0], l_length, nullptr, 0 );
 
@@ -85,7 +85,7 @@ namespace CastorCom
 	\brief		Functor used to fill a VARIANT from a castor::String
 	\remarks	Use it if you need a SAFEARRAY of BSTR
 	\~french
-	\brief		Foncteur utilis� pour remplir un VARIANT � partir d'un castor::String
+	\brief		Foncteur utilisé pour remplir un VARIANT à partir d'un castor::String
 	\remarks	A utiliser si vous avez besoin d'un SAFEARRAY de BSTR
 	*/
 	struct BStrValueSetter
@@ -98,7 +98,7 @@ namespace CastorCom
 		 *\param[out]	variant	The VARIANT
 		 *\return		S_OK
 		 *\~french
-		 *\brief		Remplit un VARIANT � partir d'un castor::String
+		 *\brief		Remplit un VARIANT à partir d'un castor::String
 		 *\remarks		Le type du VARIANT sera VT_BSTR
 		 *\param[in]	value	Le castor::String
 		 *\param[out]	variant	Le VARIANT
@@ -118,7 +118,7 @@ namespace CastorCom
 	\brief		Functor used to fill a castor::String from a VARIANT
 	\remarks	Use it if you need a SAFEARRAY of BSTR
 	\~french
-	\brief		Foncteur utilis� pour remplir un castor::String � partir d'un VARIANT
+	\brief		Foncteur utilisé pour remplir un castor::String à partir d'un VARIANT
 	\remarks	A utiliser si vous avez besoin d'un SAFEARRAY de BSTR
 	*/
 	struct StrValueSetter
@@ -131,11 +131,11 @@ namespace CastorCom
 		 *\param[out]	value	The castor::String
 		 *\return		S_OK if successful
 		 *\~french
-		 *\brief		Remplit un castor::String � partir d'un VARIANT
+		 *\brief		Remplit un castor::String à partir d'un VARIANT
 		 *\remarks		Le type du VARIANT doit contenir VT_BSTR
 		 *\param[in]	variant	Le VARIANT
 		 *\param[out]	value	Le castor::String
-		 *\return		S_OK si �a amarch�
+		 *\return		S_OK si ça a marché
 		 */
 		HRESULT operator()( const VARIANT & variant
 			, castor::String & value )
@@ -166,7 +166,7 @@ namespace CastorCom
 	\arg		ComType		The COM data type
 	\arg		CastorType	The Castor data type
 	\~french
-	\brief		Structure utilis�e pour remplir un VARIANT
+	\brief		Structure utilisée pour remplir un VARIANT
 	\arg		ComType		Le type COM
 	\arg		CastorType	Le type Castor
 	*/
@@ -180,10 +180,10 @@ namespace CastorCom
 		 *\param[in]	value		The value
 		 *\param[in]	comsetter	The function used to fill the ComType value from the CastorType value
 		 *\~french
-		 *\brief		Remplit un VARIANT � partir de la valeur donn�e
+		 *\brief		Remplit un VARIANT à partir de la valeur donnée
 		 *\param[out]	variant		Le VARIANT
 		 *\param[in]	value		La valeur
-		 *\param[in]	comSetter	La fonction utilis�e pour remplir la valeur ComType � partir de la valeur CastorType
+		 *\param[in]	comSetter	La fonction utilisée pour remplir la valeur ComType à partir de la valeur CastorType
 		 */
 		HRESULT operator()( VARIANT & variant
 			, CastorType * value
@@ -210,7 +210,7 @@ namespace CastorCom
 	\arg		ComType		The COM data type
 	\arg		CastorType	The Castor data type
 	\~french
-	\brief		Structure utilis�e pour remplir une valeur � partir d'un VARIANT
+	\brief		Structure utilisée pour remplir une valeur à partir d'un VARIANT
 	\arg		ComType		Le type COM
 	\arg		CastorType	Le type Castor
 	*/
@@ -224,10 +224,10 @@ namespace CastorCom
 		 *\param[out]	value		The value
 		 *\param[in]	comPutter	The function used to fill the CastorType value from the ComType value
 		 *\~french
-		 *\brief		Remplit une valeur avec le VARIANT donn�
+		 *\brief		Remplit une valeur avec le VARIANT donné
 		 *\param[in]	variant		Le VARIANT
 		 *\param[out]	value		La valeur
-		 *\param[in]	comsetter	La fonction utilis�e pour remplir la valeur CastorType � partir de la valeur ComType
+		 *\param[in]	comsetter	La fonction utilisée pour remplir la valeur CastorType à partir de la valeur ComType
 		 */
 		HRESULT operator()( const VARIANT & variant
 			, CastorType * value
@@ -259,7 +259,7 @@ namespace CastorCom
 	\brief		Structure used to fill a SAFEARRAY
 	\arg		CastorType	The Castor data type
 	\~french
-	\brief		Structure utilis�e pour remplir un SAFEARRAY
+	\brief		Structure utilisée pour remplir un SAFEARRAY
 	\arg		CastorType	Le type Castor
 	*/
 	template< typename CastorType >
@@ -274,10 +274,10 @@ namespace CastorCom
 		 *\param[in]	comValuesetter	The function used to fill a VARIANT value from an CastorType value
 		 *\~french
 		 *\brief		Remplit un SAFEARRAY avec les valeurs contenues dans un vector
-		 *\arg			setterFunc		La fonction ou foncteur utilis� pour remplir le SAFEARRAY. doit �tre de la forme "HRESULT func( const CastorType &, VARIANT & )"
+		 *\arg			setterFunc		La fonction ou foncteur utilisé pour remplir le SAFEARRAY. doit être de la forme "HRESULT func( const CastorType &, VARIANT & )"
 		 *\param[in]	vals			Le vector contenant les valeurs
-		 *\param[out]	pVal			Re�oit le SAFEARRAY
-		 *\param[in]	comValuesetter	La fonction utilis�e pour remplir un VARIANT � partir d'une valeur CastorType
+		 *\param[out]	pVal			Reçoit le SAFEARRAY
+		 *\param[in]	comValuesetter	La fonction utilisée pour remplir un VARIANT à partir d'une valeur CastorType
 		 */
 		template< typename SetterFunc >
 		HRESULT operator()( std::vector< CastorType > const & vals
@@ -320,7 +320,7 @@ namespace CastorCom
 	\arg		CallerType	The caller class type
 	\arg		CastorType	The Castor data type
 	\~french
-	\brief		Structure utilis�e pour r�cup�rer des valeurs � partir d'un SAFEARRAY
+	\brief		Structure utilisée pour récupérer des valeurs à partir d'un SAFEARRAY
 	\arg		CallerType	Le type de l'appelant
 	\arg		CastorType	Le type Castor
 	*/
@@ -338,12 +338,12 @@ namespace CastorCom
 		 *\param[in]	valuesetter	The member function used to set the array of CastorType values
 		 *\~french
 		 *\brief		Remplit un vector avec les valeurs contenues dans un SAFEARRAY
-		 *\arg			PutterFunc	La fonction ou foncteur utilis�e pour remplir le vector. doit �tre de la forme "HRESULT func( const VARIANT &, CastorType & )"
-		 *\arg			setterFunc	La fonction utilis�e pour d�finir la valeur de l'objet Castor. doit �tre de la forme "void func( const std::vector< CastorType > & )"
+		 *\arg			PutterFunc	La fonction ou foncteur utilisée pour remplir le vector. doit être de la forme "HRESULT func( const VARIANT &, CastorType & )"
+		 *\arg			setterFunc	La fonction utilisée pour définir la valeur de l'objet Castor. doit être de la forme "void func( const std::vector< CastorType > & )"
 		 *\param[in]	val			Le SAFEARRAY contenant les valeurs
-		 *\param[in]	valuePutter	La fonction utilis�e pour remplir une valeur CastorType � partir d'un VARIANT
-		 *\param[in]	caller		L'appelant (car ce foncteur est g�n�ralement appel� depuis une fonction membre de cette classe)
-		 *\param[in]	valuesetter	La fonction membre utilis�e pour d�finir le vector de valeurs CastorType
+		 *\param[in]	valuePutter	La fonction utilisée pour remplir une valeur CastorType à partir d'un VARIANT
+		 *\param[in]	caller		L'appelant (car ce foncteur est généralement appelé depuis une fonction membre de cette classe)
+		 *\param[in]	valuesetter	La fonction membre utilisée pour définir le vector de valeurs CastorType
 		 */
 		template< typename PutterFunc, typename SetterFunc >
 		HRESULT operator()( VARIANT val
@@ -402,11 +402,11 @@ namespace CastorCom
 		 *\param[in]	valuesetter	The member function used to set the array of CastorType values
 		 *\~french
 		 *\brief		Remplit un vector avec les valeurs contenues dans un SAFEARRAY
-		 *\arg			PutterFunc	La fonction ou foncteur utilis�e pour remplir le vector. doit �tre de la forme "HRESULT func( const VARIANT &, CastorType & )"
+		 *\arg			PutterFunc	La fonction ou foncteur utilisée pour remplir le vector. doit être de la forme "HRESULT func( const VARIANT &, CastorType & )"
 		 *\param[in]	val			Le SAFEARRAY contenant les valeurs
-		 *\param[in]	valuePutter	La fonction utilis�e pour remplir une valeur CastorType � partir d'un VARIANT
-		 *\param[in]	caller		L'appelant (car ce foncteur est g�n�ralement appel� depuis une fonction membre de cette classe)
-		 *\param[in]	valuesetter	La fonction membre utilis�e pour d�finir le vector de valeurs CastorType
+		 *\param[in]	valuePutter	La fonction utilisée pour remplir une valeur CastorType à partir d'un VARIANT
+		 *\param[in]	caller		L'appelant (car ce foncteur est généralement appelé depuis une fonction membre de cette classe)
+		 *\param[in]	valuesetter	La fonction membre utilisée pour définir le vector de valeurs CastorType
 		 */
 		template< typename PutterFunc >
 		HRESULT operator()( VARIANT val

@@ -23,7 +23,7 @@ namespace CastorCom
 		COMEX_PROPERTY( Colour, IVector3D *, m_internal, &castor3d::SpotLight::getColour, &castor3d::SpotLight::setColour );
 		COMEX_PROPERTY( DiffuseIntensity, float, m_internal, &castor3d::SpotLight::getDiffuseIntensity, &castor3d::SpotLight::setDiffuseIntensity );
 		COMEX_PROPERTY( SpecularIntensity, float, m_internal, &castor3d::SpotLight::getSpecularIntensity, &castor3d::SpotLight::setSpecularIntensity );
-		COMEX_PROPERTY( Attenuation, IVector3D *, m_internal, &castor3d::SpotLight::getAttenuation, &castor3d::SpotLight::setAttenuation );
+		COMEX_PROPERTY( AttenuationRange, float, m_internal, &castor3d::SpotLight::getRange, &castor3d::SpotLight::setRange );
 		COMEX_PROPERTY( Exponent, float, m_internal, &castor3d::SpotLight::getExponent, &castor3d::SpotLight::setExponent );
 		COMEX_PROPERTY( InnerCutOff, IAngle *, m_internal, &castor3d::SpotLight::getInnerCutOff, &castor3d::SpotLight::setInnerCutOff );
 		COMEX_PROPERTY( OuterCutOff, IAngle *, m_internal, &castor3d::SpotLight::getOuterCutOff, &castor3d::SpotLight::setOuterCutOff );

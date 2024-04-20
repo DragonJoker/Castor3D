@@ -3682,36 +3682,6 @@ namespace castor3d
 		}
 		CU_EndAttributePop()
 
-		static CU_ImplementAttributeParserBlock( parserVertexShader, ProgramContext )
-		{
-			blockContext->shaderStage = VK_SHADER_STAGE_VERTEX_BIT;
-		}
-		CU_EndAttributePushBlock( CSCNSection::eShaderStage, blockContext )
-
-		static CU_ImplementAttributeParserBlock( parserPixelShader, ProgramContext )
-		{
-			blockContext->shaderStage = VK_SHADER_STAGE_FRAGMENT_BIT;
-		}
-		CU_EndAttributePushBlock( CSCNSection::eShaderStage, blockContext )
-
-		static CU_ImplementAttributeParserBlock( parserGeometryShader, ProgramContext )
-		{
-			blockContext->shaderStage = VK_SHADER_STAGE_GEOMETRY_BIT;
-		}
-		CU_EndAttributePushBlock( CSCNSection::eShaderStage, blockContext )
-
-		static CU_ImplementAttributeParserBlock( parserHullShader, ProgramContext )
-		{
-			blockContext->shaderStage = VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
-		}
-		CU_EndAttributePushBlock( CSCNSection::eShaderStage, blockContext )
-
-		static CU_ImplementAttributeParserBlock( parserDomainShader, ProgramContext )
-		{
-			blockContext->shaderStage = VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
-		}
-		CU_EndAttributePushBlock( CSCNSection::eShaderStage, blockContext )
-
 		static CU_ImplementAttributeParserBlock( parserComputeShader, ProgramContext )
 		{
 			blockContext->shaderStage = VK_SHADER_STAGE_COMPUTE_BIT;

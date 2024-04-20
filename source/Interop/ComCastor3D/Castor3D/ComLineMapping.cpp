@@ -39,7 +39,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->addLine( x, y );
+			m_internal->getData().addLine( x, y );
 			hr = S_OK;
 		}
 		else
