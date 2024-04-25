@@ -720,11 +720,6 @@ namespace castor3d
 				&& getCamera() )
 		{
 			result = doRender( queue, signalsToWait );
-
-			if ( m_debugDrawer )
-			{
-				result = m_debugDrawer->render( queue, castor::move( result ) );
-			}
 		}
 
 		return result;
@@ -1035,6 +1030,14 @@ namespace castor3d
 		if ( result )
 		{
 			m_combinePassSource = srgbSource;
+			m_debugDrawer = castor::makeUnique< DebugDrawer >( m_graph.getDefaultGroup()
+				, previousPass
+				, device
+				, *this
+				, crg::ImageViewIdArray{ srgbSource->sampledViewId, srgbTarget->sampledViewId }
+				, m_renderTechnique->getDepth()
+				, &m_combinePassIndex );
+			previousPass = &m_debugDrawer->getLastPass();
 			m_combinePass = &doCreateCombinePass( progress
 				, crg::ImageViewIdArray{ srgbSource->sampledViewId, srgbTarget->sampledViewId } );
 			m_combinePass->addDependency( *previousPass );
@@ -1065,7 +1068,6 @@ namespace castor3d
 					runnable->record();
 					m_initialised = result;
 				} ) );
-			m_debugDrawer = castor::makeUnique< DebugDrawer >(*this, device, m_combined, m_renderTechnique->getDepth() );
 		}
 
 		auto mbName = castor::toUtf8( getName() );
@@ -1360,5 +1362,15 @@ namespace castor3d
 		return context.window
 			? context.window->root
 			: context.texture->root;
+	}
+
+	void addDebugAabbs( RenderTarget const & target
+		, ashes::VkDescriptorSetLayoutBindingArray const & bindings
+		, ashes::WriteDescriptorSetArray const & writes
+		, VkDeviceSize count
+		, ashes::PipelineShaderStageCreateInfoArray const & shader
+		, bool enableDepthTest )
+	{
+		addDebugAabbs( target.getDebugDrawer(), bindings, writes, count, shader, enableDepthTest );
 	}
 }

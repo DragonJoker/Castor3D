@@ -159,10 +159,10 @@ namespace castor3d
 			, m_buffers.end()
 			, [&bufferOffset]( ModelBuffers const & lookup )
 			{
-				return &lookup.vertex->getBuffer() == &bufferOffset.getBuffer( SubmeshData::eIndex );
+				return &lookup.index->getBuffer() == &bufferOffset.getBuffer( SubmeshData::eIndex );
 			} );
 		CU_Require( it != m_buffers.end() );
-		it->vertex->deallocate( bufferOffset.buffers[uint32_t( SubmeshData::eIndex )].chunk );
+		it->index->deallocate( bufferOffset.buffers[uint32_t( SubmeshData::eIndex )].chunk );
 	}
 
 	IndexBufferPool::BufferArray::iterator IndexBufferPool::doFindBuffer( VkDeviceSize size
@@ -172,7 +172,7 @@ namespace castor3d
 		auto it = array.begin();
 
 		while ( it != array.end()
-			&& !it->vertex->hasAvailable( size ) )
+			&& !it->index->hasAvailable( size ) )
 		{
 			++it;
 		}
