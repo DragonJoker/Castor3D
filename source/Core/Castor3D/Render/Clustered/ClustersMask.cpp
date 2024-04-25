@@ -232,13 +232,14 @@ namespace castor3d
 	crg::FramePass const & createClustersMaskPass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
-		, CameraUbo const & cameraUbo
+		, CameraUbo const & mainCameraUbo
+		, CameraUbo const & clustersCameraUbo
 		, FrustumClusters & clusters
 		, RenderTechnique & technique
 		, RenderNodesPass *& nodesPass )
 	{
 		auto & result = graph.createPass( "NodesPass"
-			, [&nodesPass, &device, &technique]( crg::FramePass const & framePass
+			, [&nodesPass, &device, &technique, &clustersCameraUbo]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -250,7 +251,7 @@ namespace castor3d
 					, technique.getTargetDepth()
 					, technique.getSsaoConfig()
 					, RenderNodesPassDesc{ technique.getTargetExtent()
-							, technique.getCameraUbo()
+							, clustersCameraUbo
 							, technique.getSceneUbo()
 							, technique.getRenderTarget().getCuller()
 							, RenderFilter::eNone

@@ -617,6 +617,7 @@ namespace castor3d
 
 		auto & camera = *getCamera();
 		auto & scene = *getScene();
+		updater.jitter = m_jitter;
 		updater.scene = &scene;
 		updater.camera = &camera;
 		camera.resize( m_size );
@@ -640,6 +641,11 @@ namespace castor3d
 		if ( m_frustumClusters )
 		{
 			m_frustumClusters->update( updater );
+
+			if ( m_debugDrawer )
+			{
+				m_frustumClusters->updateDebug( *m_debugDrawer );
+			}
 		}
 
 		m_hdrConfigUbo->cpuUpdate( getHdrConfig() );

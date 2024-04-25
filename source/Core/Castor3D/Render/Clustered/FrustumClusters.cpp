@@ -15,12 +15,14 @@
 #include "Castor3D/Render/Clustered/RadixSortLights.hpp"
 #include "Castor3D/Render/Clustered/ReduceLightsAABB.hpp"
 #include "Castor3D/Render/Clustered/SortAssignedLights.hpp"
+#include "Castor3D/Render/Debug/DebugModule.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
 #include <RenderGraph/FramePassGroup.hpp>
 
@@ -86,6 +88,7 @@ namespace castor3d
 		, m_cameraProjection{ m_clustersDirty, castor::Matrix4x4f{} }
 		, m_cameraView{ m_clustersDirty, castor::Matrix4x4f{} }
 		, m_clustersUbo{ m_device }
+		, m_clustersCameraUbo{ m_device }
 		, m_clustersIndirect{ makeBuffer< VkDispatchIndirectCommand >( m_device
 			, getNumNodes( MaxLightsCount )
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
@@ -210,6 +213,68 @@ namespace castor3d
 		m_first = m_camera.getEngine()->areUpdateOptimisationsEnabled()
 			? std::max( 0, m_first - 1 )
 			: 5;
+
+		if ( !m_config.lockClustersFrustum.value() )
+		{
+			auto jitter = updater.jitter;
+			auto jitterProjSpace = jitter * 2.0f;
+			jitterProjSpace[0] /= float( m_camera.getWidth() );
+			jitterProjSpace[1] /= float( m_camera.getHeight() );
+			m_clustersCameraUbo.cpuUpdate( m_camera
+				, updater.debugIndex
+				, true
+				, jitterProjSpace );
+		}
+	}
+
+	void FrustumClusters::updateDebug( DebugDrawer & drawer )
+	{
+		if ( m_config.debugDisplay.value() == ClusterDebugDisplay::eClustersAABB )
+		{
+			addDebugAabbs( drawer
+				, m_displayClustersAABBBindings
+				, m_displayClustersAABBWrites
+				, getDimensions()->x * getDimensions()->y * getDimensions()->z
+				, m_displayClustersAABBProgram
+				, true );
+		}
+		else if ( m_config.debugDisplay.value() == ClusterDebugDisplay::eLightsAABB )
+		{
+			auto scene = m_camera.getScene();
+			auto const & lightCache = scene->getLightCache();
+			addDebugAabbs( drawer
+				, m_displayLightsAABBBindings
+				, m_displayLightsAABBWrites
+				, lightCache.getLightsBufferCount( LightType::ePoint )
+					+ lightCache.getLightsBufferCount( LightType::eSpot )
+				, m_displayLightsAABBProgram
+				, true );
+		}
+		else if ( m_config.debugDisplay.value() == ClusterDebugDisplay::eLightsBVH )
+		{
+			auto scene = m_camera.getScene();
+			auto const & lightCache = scene->getLightCache();
+
+			if ( auto count = lightCache.getLightsBufferCount( LightType::ePoint ) )
+			{
+				addDebugAabbs( drawer
+					, m_displayPointLightsBVHBindings
+					, m_displayPointLightsBVHWrites
+					, FrustumClusters::getNumNodes( count )
+					, m_displayPointLightsBVHProgram
+					, false );
+			}
+
+			if ( auto count = lightCache.getLightsBufferCount( LightType::eSpot ) )
+			{
+				addDebugAabbs( drawer
+					, m_displaySpotLightsBVHBindings
+					, m_displaySpotLightsBVHWrites
+					, FrustumClusters::getNumNodes( count )
+					, m_displaySpotLightsBVHProgram
+					, false );
+			}
+		}
 	}
 
 	crg::FramePass const & FrustumClusters::createFramePasses( crg::FramePassGroup & parentGraph
@@ -218,16 +283,48 @@ namespace castor3d
 		, CameraUbo const & cameraUbo
 		, RenderNodesPass *& nodesPass )
 	{
+		if ( m_displayClustersAABBProgram.empty() )
+		{
+			createDisplayClustersAABBProgram( m_device, *this, cameraUbo, m_clustersCameraUbo
+				, m_displayClustersAABBProgram
+				, m_displayClustersAABBBindings
+				, m_displayClustersAABBWrites );
+		}
+
+		if ( m_displayLightsAABBProgram.empty() )
+		{
+			createDisplayLightsAABBProgram( m_device, *this, cameraUbo, m_clustersCameraUbo
+				, m_displayLightsAABBProgram
+				, m_displayLightsAABBBindings
+				, m_displayLightsAABBWrites );
+		}
+
+		if ( m_displayPointLightsBVHProgram.empty() )
+		{
+			createDisplayPointLightsBVHProgram( m_device, *this, cameraUbo, m_clustersCameraUbo
+				, m_displayPointLightsBVHProgram
+				, m_displayPointLightsBVHBindings
+				, m_displayPointLightsBVHWrites );
+		}
+
+		if ( m_displaySpotLightsBVHProgram.empty() )
+		{
+			createDisplaySpotLightsBVHProgram( m_device, *this, cameraUbo, m_clustersCameraUbo
+				, m_displaySpotLightsBVHProgram
+				, m_displaySpotLightsBVHBindings
+				, m_displaySpotLightsBVHWrites );
+		}
+
 		auto & graph = parentGraph.createPassGroup( "Clusters" );
 		crg::FramePassArray lastPasses{ 1u, previousPass };
 		lastPasses = { &createComputeLightsAABBPass( graph, lastPasses.front()
-			, m_device, cameraUbo, *this ) };
+			, m_device, cameraUbo, m_clustersCameraUbo, *this ) };
 		lastPasses = { &createReduceLightsAABBPass( graph, lastPasses.front()
-			, m_device, cameraUbo, *this ) };
+			, m_device, cameraUbo, m_clustersCameraUbo, *this ) };
 		lastPasses = { &createComputeClustersAABBPass( graph, lastPasses.front()
-			, m_device, cameraUbo, *this ) };
+			, m_device, cameraUbo, m_clustersCameraUbo, *this ) };
 		lastPasses = { &createClustersMaskPass( graph, *lastPasses.front()
-			, m_device, cameraUbo, *this
+			, m_device, cameraUbo, m_clustersCameraUbo, *this
 			, technique, nodesPass ) };
 		lastPasses = { &createFindUniqueClustersPass( graph, *lastPasses.front()
 			, m_device, *this ) };
@@ -240,7 +337,7 @@ namespace castor3d
 		lastPasses = createBuildLightsBVHPass( graph, lastPasses
 			, m_device, *this );
 		lastPasses = { &createAssignLightsToClustersPass( graph, lastPasses
-			, m_device, cameraUbo, *this ) };
+			, m_device, cameraUbo, m_clustersCameraUbo, *this ) };
 		return createSortAssignedLightsPass( graph, lastPasses
 			, m_device, *this );
 	}

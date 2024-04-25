@@ -35,7 +35,8 @@ namespace castor3d
 	{
 		enum BindingPoints
 		{
-			eCamera,
+			eMainCamera,
+			eClustersCamera,
 			eClusters,
 			eAllLightsAABB,
 			eReducedLightsAABB,
@@ -51,8 +52,13 @@ namespace castor3d
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
-			C3D_Camera( writer
-				, eCamera
+			C3D_CameraNamed( writer
+				, Main
+				, eMainCamera
+				, 0u );
+			C3D_CameraNamed( writer
+				, Clusters
+				, eClustersCamera
 				, 0u );
 			C3D_Clusters( writer
 				, eClusters
@@ -250,8 +256,8 @@ namespace castor3d
 						auto lightsAABBRange = writer.declLocale< sdw::Vec4 >( "lightsAABBRange" );
 						c3d_clustersData.computeGlobalLightsData( lightsMin
 							, lightsMax
-							, c3d_cameraData.nearPlane()
-							, c3d_cameraData.farPlane()
+							, c3d_cameraDataClusters.nearPlane()
+							, c3d_cameraDataClusters.farPlane()
 							, clustersLightsData
 							, lightsAABBRange );
 						c3d_clustersLightsData = clustersLightsData;
@@ -490,7 +496,8 @@ namespace castor3d
 	crg::FramePass const & createReduceLightsAABBPass( crg::FramePassGroup & graph
 		, crg::FramePass const * previousPass
 		, RenderDevice const & device
-		, CameraUbo const & cameraUbo
+		, CameraUbo const & mainCameraUbo
+		, CameraUbo const & clustersCameraUbo
 		, FrustumClusters & clusters )
 	{
 		auto & first = graph.createPass( "ReduceLightsAABB/First"
@@ -509,7 +516,8 @@ namespace castor3d
 				return result;
 			} );
 		first.addDependency( *previousPass );
-		cameraUbo.createPassBinding( first, rdclgb::eCamera );
+		mainCameraUbo.createPassBinding( first, rdclgb::eMainCamera );
+		clustersCameraUbo.createPassBinding( first, rdclgb::eClustersCamera );
 		clusters.getClustersUbo().createPassBinding( first, rdclgb::eClusters );
 		createInputStoragePassBinding( first, uint32_t( rdclgb::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
 		createClearableOutputStorageBinding( first, uint32_t( rdclgb::eReducedLightsAABB ), cuT( "C3D_ReducedLightsAABB" ), clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
@@ -530,7 +538,8 @@ namespace castor3d
 				return result;
 			} );
 		second.addDependency( first );
-		cameraUbo.createPassBinding( second, rdclgb::eCamera );
+		mainCameraUbo.createPassBinding( second, rdclgb::eMainCamera );
+		clustersCameraUbo.createPassBinding( second, rdclgb::eClustersCamera );
 		clusters.getClustersUbo().createPassBinding( second, rdclgb::eClusters );
 		createInOutStoragePassBinding( second, uint32_t( rdclgb::eReducedLightsAABB ), cuT( "C3D_ReducedLightsAABB" ), clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
 

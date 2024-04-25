@@ -306,18 +306,24 @@ namespace castor3d
 	};
 }
 
-#define C3D_CameraEx( writer, binding, set, enabled )\
-	sdw::UniformBuffer camera{ writer\
-		, "C3D_Camera"\
-		, "c3d_camera"\
+#define C3D_CameraNamedEx( writer, suffix, binding, set, enabled )\
+	sdw::UniformBuffer camera##suffix{ writer\
+		, "C3D_Camera"#suffix\
+		, "c3d_camera"#suffix\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, sdw::type::MemoryLayout::eStd140\
 		, enabled };\
-	auto c3d_cameraData = camera.declMember< castor3d::shader::CameraData >( "c", enabled );\
-	camera.end()
+	auto c3d_cameraData##suffix = camera##suffix.declMember< castor3d::shader::CameraData >( "c", enabled );\
+	camera##suffix.end()
+
+#define C3D_CameraEx( writer, binding, set, enabled )\
+	C3D_CameraNamedEx( writer, , binding, set, enabled )
 
 #define C3D_Camera( writer, binding, set )\
 	C3D_CameraEx( writer, binding, set, true )
+
+#define C3D_CameraNamed( writer, suffix, binding, set )\
+	C3D_CameraNamedEx( writer, suffix, binding, set, true )
 
 #endif

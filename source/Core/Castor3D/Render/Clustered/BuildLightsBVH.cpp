@@ -11,6 +11,7 @@
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslAABB.hpp"
+#include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 #include "Castor3D/Shader/Shaders/GlslAppendBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
@@ -20,6 +21,7 @@
 #include <CastorUtils/Design/DataHolder.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
@@ -490,6 +492,102 @@ namespace castor3d
 		};
 	}
 
+	namespace dspbvh
+	{
+		enum BindingPoints
+		{
+			eMainCamera,
+			eClustersCamera,
+			eLightBVH,
+		};
+
+		static ShaderPtr createDebugDisplayShader( RenderDevice const & device )
+		{
+			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+
+			C3D_CameraNamed( writer
+				, Main
+				, eMainCamera
+				, 0u );
+			C3D_CameraNamed( writer
+				, Clusters
+				, eClustersCamera
+				, 0u );
+			C3D_LightBVH( writer
+				, eLightBVH
+				, 0u );
+
+			auto numBVHNodes = writer.declConstantArray< sdw::UInt >( "numBVHNodes"
+				, std::vector< sdw::UInt >{ 0_u /* Level 0 */
+					, 1_u /* Level 1 */
+					, 33_u /* Level 2 */
+					, 1057_u /* Level 3 */
+					, 33825_u /* Level 4 */
+					, 1082401_u /* Level 5 */
+					, 34636833_u /* Level 6 */ } );
+			auto colorPalette = writer.declConstantArray( "colorPalette"
+				, std::vector< sdw::Vec4 >{ vec4( 0.25_f, 0.25_f, 1.00_f, 1.0_f )
+					, vec4( 0.25_f, 1.00_f, 0.25_f, 1.0_f )
+					, vec4( 0.25_f, 1.00_f, 1.00_f, 1.0_f )
+					, vec4( 1.00_f, 0.25_f, 0.25_f, 1.0_f )
+					, vec4( 1.00_f, 0.25_f, 1.00_f, 1.0_f )
+					, vec4( 1.00_f, 1.00_f, 0.25_f, 1.0_f ) } );
+
+			auto getNodeLevel = writer.implementFunction< sdw::UInt >( "getNodeLevel"
+				, [&]( sdw::UInt const & nodeIndex )
+				{
+					auto i = writer.declLocale( "i", 0_u );
+
+					WHILE( writer, nodeIndex > numBVHNodes[i] && i < 5_u )
+					{
+						++i;
+					}
+					ELIHW
+
+					writer.returnStmt( i );
+				}
+				, sdw::InUInt{ writer, "nodeIndex" } );
+
+			writer.implementEntryPointT< shader::Position4FT, shader::Colour4FT >( [&writer, &c3d_cameraDataMain, &c3d_cameraDataClusters, &c3d_lightBVH, &colorPalette, &getNodeLevel]( sdw::VertexInT< shader::Position4FT > const & in
+				, sdw::VertexOutT< shader::Colour4FT > out )
+				{
+					auto aabb = writer.declLocale( "aabb"
+						, c3d_lightBVH[in.instanceIndex] );
+
+					IF( writer, aabb.min().x() == aabb.max().x()
+						&& aabb.min().y() == aabb.max().y()
+						&& aabb.min().z() == aabb.max().z() )
+					{
+						out.vtx.position = vec4( -100.0_f );
+					}
+					ELSE
+					{
+						auto position = writer.declLocale( "position"
+							, in.position() );
+						position.x() = mix( aabb.min().x(), aabb.max().x(), position.x() );
+						position.y() = mix( aabb.min().y(), aabb.max().y(), position.y() );
+						position.z() = mix( aabb.min().z(), aabb.max().z(), position.z() );
+						// Convert from clusters view position to world position
+						position = c3d_cameraDataClusters.curViewToWorld( position );
+						position.w() = 1.0_f;
+						// Then from world to main camera proj.
+						out.vtx.position = c3d_cameraDataMain.worldToCurProj( position );
+
+						out.colour() = colorPalette[getNodeLevel( writer.cast< sdw::UInt >( in.instanceIndex ) )];
+					}
+					FI
+				} );
+
+			writer.implementEntryPointT< shader::Colour4FT, shader::Colour4FT >( []( sdw::FragmentInT< shader::Colour4FT > const & in
+				, sdw::FragmentOutT< shader::Colour4FT > const & out )
+				{
+					out.colour() = in.colour();
+				} );
+
+			return writer.getBuilder().releaseShader();
+		}
+	}
+
 	//*********************************************************************************************
 
 	crg::FramePassArray createBuildLightsBVHPass( crg::FramePassGroup & graph
@@ -548,6 +646,54 @@ namespace castor3d
 		createClearableOutputStorageBinding( spot, uint32_t( lgtbvh::eLightBVH ), cuT( "C3D_SpotLightBVH" ), clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );
 
 		return { &point, &spot };
+	}
+
+	void createDisplayPointLightsBVHProgram( RenderDevice const & device
+		, FrustumClusters const & clusters
+		, CameraUbo const & mainCameraUbo
+		, CameraUbo const & clustersCameraUbo
+		, ashes::PipelineShaderStageCreateInfoArray & program
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, ashes::WriteDescriptorSetArray & writes )
+	{
+		ProgramModule programModule{ "PointLightsBVH", dspbvh::createDebugDisplayShader( device ) };
+		program = makeProgramStates( device, programModule );
+
+		bindings.push_back( VkDescriptorSetLayoutBinding{ dspbvh::eMainCamera, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } );
+		bindings.push_back( VkDescriptorSetLayoutBinding{ dspbvh::eClustersCamera, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } );
+		bindings.push_back( VkDescriptorSetLayoutBinding{ dspbvh::eLightBVH, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } );
+
+		writes.emplace_back( dspbvh::eMainCamera, 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ mainCameraUbo.getUbo().getBuffer().getBuffer(), mainCameraUbo.getUbo().getByteOffset(), mainCameraUbo.getUbo().getByteRange() } } );
+		writes.emplace_back( dspbvh::eClustersCamera, 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ clustersCameraUbo.getUbo().getBuffer().getBuffer(), clustersCameraUbo.getUbo().getByteOffset(), clustersCameraUbo.getUbo().getByteRange() } } );
+		auto const & bvhBuffer = clusters.getPointLightBVHBuffer();
+		writes.emplace_back( dspbvh::eLightBVH, 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ bvhBuffer, 0u, bvhBuffer.getSize() } } );
+	}
+
+	void createDisplaySpotLightsBVHProgram( RenderDevice const & device
+		, FrustumClusters const & clusters
+		, CameraUbo const & mainCameraUbo
+		, CameraUbo const & clustersCameraUbo
+		, ashes::PipelineShaderStageCreateInfoArray & program
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, ashes::WriteDescriptorSetArray & writes )
+	{
+		ProgramModule programModule{ "SpotLightsBVH", dspbvh::createDebugDisplayShader( device ) };
+		program = makeProgramStates( device, programModule );
+
+		bindings.push_back( VkDescriptorSetLayoutBinding{ dspbvh::eMainCamera, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } );
+		bindings.push_back( VkDescriptorSetLayoutBinding{ dspbvh::eClustersCamera, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } );
+		bindings.push_back( VkDescriptorSetLayoutBinding{ dspbvh::eLightBVH, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } );
+
+		writes.emplace_back( dspbvh::eMainCamera, 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ mainCameraUbo.getUbo().getBuffer().getBuffer(), mainCameraUbo.getUbo().getByteOffset(), mainCameraUbo.getUbo().getByteRange() } } );
+		writes.emplace_back( dspbvh::eClustersCamera, 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ clustersCameraUbo.getUbo().getBuffer().getBuffer(), clustersCameraUbo.getUbo().getByteOffset(), clustersCameraUbo.getUbo().getByteRange() } } );
+		auto const & bvhBuffer = clusters.getSpotLightBVHBuffer();
+		writes.emplace_back( dspbvh::eLightBVH, 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ bvhBuffer, 0u, bvhBuffer.getSize() } } );
 	}
 
 	//*********************************************************************************************

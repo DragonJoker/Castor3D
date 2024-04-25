@@ -10,6 +10,7 @@
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslAABB.hpp"
+#include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 #include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
@@ -18,6 +19,7 @@
 #include <CastorUtils/Design/DataHolder.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
@@ -30,7 +32,8 @@ namespace castor3d
 	{
 		enum BindingPoints
 		{
-			eCamera,
+			eMainCamera,
+			eClustersCamera,
 			eClusters,
 			eLights,
 			eAllLightsAABB,
@@ -42,8 +45,13 @@ namespace castor3d
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
-			C3D_Camera( writer
-				, eCamera
+			C3D_CameraNamed( writer
+				, Main
+				, eMainCamera
+				, 0u );
+			C3D_CameraNamed( writer
+				, Clusters
+				, eClustersCamera
 				, 0u );
 			C3D_Clusters( writer
 				, eClusters
@@ -64,7 +72,7 @@ namespace castor3d
 					auto point = writer.declLocale( "point"
 						, lights.getPointLight( lightOffset ) );
 					auto vsPosition = writer.declLocale( "vsPosition"
-						, c3d_cameraData.worldToCurView( vec4( point.position(), 1.0_f ) ).xyz() );
+						, c3d_cameraDataClusters.worldToCurView( vec4( point.position(), 1.0_f ) ).xyz() );
 
 					writer.returnStmt( shader::AABB{ vsPosition, computeRange( point ) } );
 				}
@@ -98,9 +106,9 @@ namespace castor3d
 					if ( config.useSpotTightBoundingBox )
 					{
 						auto vsApex = writer.declLocale( "vsApex"
-							, c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
+							, c3d_cameraDataClusters.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
 						auto vsDirection = writer.declLocale( "vsDirection"
-							, c3d_cameraData.worldToCurView( -spot.direction() ) );
+							, c3d_cameraDataClusters.worldToCurView( -spot.direction() ) );
 
 						auto largeRange = writer.declLocale( "largeRange"
 							, computeRange( spot ) );
@@ -140,7 +148,7 @@ namespace castor3d
 					else
 					{
 						auto vsPosition = writer.declLocale( "vsPosition"
-							, c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
+							, c3d_cameraDataClusters.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
 						writer.returnStmt( shader::AABB{ vsPosition, computeRange( spot ) } );
 					}
 				}
@@ -249,12 +257,78 @@ namespace castor3d
 		};
 	}
 
+	namespace dsplgtb
+	{
+		enum BindingPoints
+		{
+			eMainCamera,
+			eClustersCamera,
+			eLightsAABB,
+		};
+
+		static ShaderPtr createDebugDisplayShader( RenderDevice const & device
+			, FrustumClusters const & frustumClusters )
+		{
+			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+
+			C3D_CameraNamed( writer
+				, Main
+				, eMainCamera
+				, 0u );
+			C3D_CameraNamed( writer
+				, Clusters
+				, eClustersCamera
+				, 0u );
+			C3D_AllLightsAABB( writer
+				, eLightsAABB
+				, 0u );
+
+			auto colorPalette = writer.declConstantArray( "colorPalette"
+				, std::vector< sdw::Vec4 >{ vec4( 0.25_f, 0.25_f, 0.25_f, 1.0_f )
+					, vec4( 0.25_f, 0.25_f, 1.00_f, 1.0_f )
+					, vec4( 0.25_f, 1.00_f, 0.25_f, 1.0_f )
+					, vec4( 0.25_f, 1.00_f, 1.00_f, 1.0_f )
+					, vec4( 1.00_f, 0.25_f, 0.25_f, 1.0_f )
+					, vec4( 1.00_f, 0.25_f, 1.00_f, 1.0_f )
+					, vec4( 1.00_f, 1.00_f, 0.25_f, 1.0_f )
+					, vec4( 1.00_f, 1.00_f, 1.00_f, 1.0_f ) } );
+
+			writer.implementEntryPointT< shader::Position4FT, shader::Colour4FT >( [&writer, &c3d_cameraDataMain, &c3d_cameraDataClusters, &c3d_allLightsAABB, &colorPalette]( sdw::VertexInT< shader::Position4FT > const & in
+				, sdw::VertexOutT< shader::Colour4FT > out )
+				{
+					auto aabb = writer.declLocale( "aabb"
+						, c3d_allLightsAABB[in.instanceIndex] );
+					auto position = writer.declLocale( "position"
+						, in.position() );
+					position.x() = mix( aabb.min().x(), aabb.max().x(), position.x() );
+					position.y() = mix( aabb.min().y(), aabb.max().y(), position.y() );
+					position.z() = mix( aabb.min().z(), aabb.max().z(), position.z() );
+					// Convert from clusters view position to world position
+					position = c3d_cameraDataClusters.curViewToWorld( position );
+					position.w() = 1.0_f;
+					// Then from world to main camera proj.
+					out.vtx.position = c3d_cameraDataMain.worldToCurProj( position );
+
+					out.colour() = colorPalette[in.instanceIndex % 8];
+				} );
+
+			writer.implementEntryPointT< shader::Colour4FT, shader::Colour4FT >( []( sdw::FragmentInT< shader::Colour4FT > const & in
+				, sdw::FragmentOutT< shader::Colour4FT > const & out )
+				{
+					out.colour() = in.colour();
+				} );
+
+			return writer.getBuilder().releaseShader();
+		}
+	}
+
 	//*********************************************************************************************
 
 	crg::FramePass const & createComputeLightsAABBPass( crg::FramePassGroup & graph
 		, crg::FramePass const * previousPass
 		, RenderDevice const & device
-		, CameraUbo const & cameraUbo
+		, CameraUbo const & mainCameraUbo
+		, CameraUbo const & clustersCameraUbo
 		, FrustumClusters const & clusters )
 	{
 		auto & pass = graph.createPass( "ComputeLightsAABB"
@@ -273,14 +347,39 @@ namespace castor3d
 				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );
 				return result;
-			});
+			} );
 		pass.addDependency( *previousPass );
-		cameraUbo.createPassBinding( pass, cptlgtb::eCamera );
+		mainCameraUbo.createPassBinding( pass, cptlgtb::eMainCamera );
+		clustersCameraUbo.createPassBinding( pass, cptlgtb::eClustersCamera );
 		clusters.getClustersUbo().createPassBinding( pass, cptlgtb::eClusters );
 		auto const & lights = clusters.getCamera().getScene()->getLightCache();
 		lights.createPassBinding( pass, cptlgtb::eLights );
 		createClearableOutputStorageBinding( pass, uint32_t( cptlgtb::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
 		return pass;
+	}
+
+	void createDisplayLightsAABBProgram( RenderDevice const & device
+		, FrustumClusters const & clusters
+		, CameraUbo const & mainCameraUbo
+		, CameraUbo const & clustersCameraUbo
+		, ashes::PipelineShaderStageCreateInfoArray & program
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, ashes::WriteDescriptorSetArray & writes )
+	{
+		ProgramModule programModule{ "LightsAABB", dsplgtb::createDebugDisplayShader( device, clusters ) };
+		program = makeProgramStates( device, programModule );
+
+		bindings.push_back( VkDescriptorSetLayoutBinding{ dsplgtb::eMainCamera, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } );
+		bindings.push_back( VkDescriptorSetLayoutBinding{ dsplgtb::eClustersCamera, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } );
+		bindings.push_back( VkDescriptorSetLayoutBinding{ dsplgtb::eLightsAABB, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } );
+
+		writes.emplace_back( dsplgtb::eMainCamera, 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ mainCameraUbo.getUbo().getBuffer().getBuffer(), mainCameraUbo.getUbo().getByteOffset(), mainCameraUbo.getUbo().getByteRange() } } );
+		writes.emplace_back( dsplgtb::eClustersCamera, 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ clustersCameraUbo.getUbo().getBuffer().getBuffer(), clustersCameraUbo.getUbo().getByteOffset(), clustersCameraUbo.getUbo().getByteRange() } } );
+		auto & aabbBuffer = clusters.getAllLightsAABBBuffer();
+		writes.emplace_back( dsplgtb::eLightsAABB, 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ aabbBuffer, 0u, aabbBuffer.getSize() } } );
 	}
 
 	//*********************************************************************************************

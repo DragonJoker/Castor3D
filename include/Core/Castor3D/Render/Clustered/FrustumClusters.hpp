@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Render/Clustered/ClustersConfig.hpp"
 #include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <CastorUtils/Design/Signal.hpp>
@@ -17,6 +18,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	class DebugDrawer;
+
 	class FrustumClusters
 	{
 	public:
@@ -38,6 +41,15 @@ namespace castor3d
 		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( CpuUpdater & updater );
+		/**
+		 *\~english
+		 *\brief			Debug update.
+		 *\param[in, out]	drawer	The debug drawer.
+		 *\~french
+		 *\brief			Mise à jour du debug.
+		 *\param[in, out]	drawer	Le debug drawer.
+		 */
+		C3D_API void updateDebug( DebugDrawer & drawer );
 		/**
 		 *\~english
 		 *\brief		Registers the clusters related frame passes.
@@ -285,6 +297,11 @@ namespace castor3d
 			return m_config;
 		}
 
+		auto & getCameraUbo()const noexcept
+		{
+			return m_clustersCameraUbo;
+		}
+
 		OnClustersBuffersChanged onClusterBuffersChanged;
 
 	private:
@@ -311,6 +328,7 @@ namespace castor3d
 		castor::GroupChangeTracked< castor::Matrix4x4f > m_cameraProjection;
 		castor::GroupChangeTracked< castor::Matrix4x4f > m_cameraView;
 		ClustersUbo m_clustersUbo;
+		CameraUbo m_clustersCameraUbo;
 		ashes::BufferPtr< VkDispatchIndirectCommand > m_clustersIndirect;
 
 		// Fixed size buffers, related to lights
@@ -333,6 +351,22 @@ namespace castor3d
 		ashes::BufferBasePtr m_clusterFlags;
 		ashes::BufferBasePtr m_uniqueClusters;
 		castor::Vector< ashes::BufferBasePtr > m_toDelete;
+
+		ashes::PipelineShaderStageCreateInfoArray m_displayClustersAABBProgram;
+		ashes::VkDescriptorSetLayoutBindingArray m_displayClustersAABBBindings;
+		ashes::WriteDescriptorSetArray m_displayClustersAABBWrites;
+
+		ashes::PipelineShaderStageCreateInfoArray m_displayLightsAABBProgram;
+		ashes::VkDescriptorSetLayoutBindingArray m_displayLightsAABBBindings;
+		ashes::WriteDescriptorSetArray m_displayLightsAABBWrites;
+
+		ashes::PipelineShaderStageCreateInfoArray m_displayPointLightsBVHProgram;
+		ashes::VkDescriptorSetLayoutBindingArray m_displayPointLightsBVHBindings;
+		ashes::WriteDescriptorSetArray m_displayPointLightsBVHWrites;
+
+		ashes::PipelineShaderStageCreateInfoArray m_displaySpotLightsBVHProgram;
+		ashes::VkDescriptorSetLayoutBindingArray m_displaySpotLightsBVHBindings;
+		ashes::WriteDescriptorSetArray m_displaySpotLightsBVHWrites;
 	};
 }
 
