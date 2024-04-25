@@ -34,7 +34,8 @@ namespace castor3d
 	{
 		enum BindingPoints
 		{
-			eCamera,
+			eMainCamera,
+			eClustersCamera,
 			eLights,
 			eClusters,
 			eAllLightsAABB,
@@ -68,8 +69,13 @@ namespace castor3d
 				, 34636833_u	/* 6 levels  +32^5 */ } );
 
 			// Inputs
-			C3D_Camera( writer
-				, eCamera
+			C3D_CameraNamed( writer
+				, Main
+				, eMainCamera
+				, 0u );
+			C3D_CameraNamed( writer
+				, Clusters
+				, eClustersCamera
 				, 0u );
 			shader::LightsBuffer lights{ writer
 				, eLights
@@ -314,8 +320,8 @@ namespace castor3d
 								auto spot = writer.declLocale( "spot"
 									, lights.getSpotLight( lights.getPointsEnd() + lightIndex * castor3d::SpotLight::LightDataComponents ) );
 								auto cone = writer.declLocale( "cone"
-									, shader::Cone{ c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz()
-										, c3d_cameraData.worldToCurView( -spot.direction() )
+									, shader::Cone{ c3d_cameraDataClusters.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz()
+										, c3d_cameraDataClusters.worldToCurView( -spot.direction() )
 										, computeRange( spot )
 										, spot.outerCutOffCos()
 										, spot.outerCutOffSin()
@@ -759,7 +765,8 @@ namespace castor3d
 	crg::FramePass const & createAssignLightsToClustersPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
-		, CameraUbo const & cameraUbo
+		, CameraUbo const & mainCameraUbo
+		, CameraUbo const & clustersCameraUbo
 		, FrustumClusters & clusters )
 	{
 		auto const & lights = clusters.getCamera().getScene()->getLightCache();
@@ -783,7 +790,8 @@ namespace castor3d
 				return result;
 			} );
 		passNoDepth.addDependencies( previousPasses );
-		cameraUbo.createPassBinding( passNoDepth, dspclst::eCamera );
+		mainCameraUbo.createPassBinding( passNoDepth, dspclst::eMainCamera );
+		clustersCameraUbo.createPassBinding( passNoDepth, dspclst::eClustersCamera );
 		lights.createPassBinding( passNoDepth, dspclst::eLights );
 		clusters.getClustersUbo().createPassBinding( passNoDepth, dspclst::eClusters );
 		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
@@ -824,7 +832,8 @@ namespace castor3d
 				return result;
 			} );
 		passDepth.addDependency( passNoDepth );
-		cameraUbo.createPassBinding( passDepth, dspclst::eCamera );
+		mainCameraUbo.createPassBinding( passDepth, dspclst::eMainCamera );
+		clustersCameraUbo.createPassBinding( passDepth, dspclst::eClustersCamera );
 		lights.createPassBinding( passDepth, dspclst::eLights );
 		clusters.getClustersUbo().createPassBinding( passDepth, dspclst::eClusters );
 		createInputStoragePassBinding( passDepth, uint32_t( dspclst::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );

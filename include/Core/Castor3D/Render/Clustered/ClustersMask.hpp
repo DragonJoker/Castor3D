@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_ClustersMask_H___
@@ -11,7 +11,8 @@ namespace castor3d
 	crg::FramePass const & createClustersMaskPass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, RenderDevice const & device
-		, CameraUbo const & cameraUbo
+		, CameraUbo const & mainCameraUbo
+		, CameraUbo const & clustersCameraUbo
 		, FrustumClusters & clusters
 		, RenderTechnique & technique
 		, RenderNodesPass *& nodesPass );

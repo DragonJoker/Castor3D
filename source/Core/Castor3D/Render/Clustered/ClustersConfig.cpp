@@ -259,6 +259,8 @@ namespace castor3d
 		, enableReduceWarpOptimisation{ dirty, false }
 		, enableBVHWarpOptimisation{ dirty, true }
 		, enablePostAssignSort{ dirty, false }
+		, lockClustersFrustum{ dirty, false }
+		, debugDisplay{ dirty, ClusterDebugDisplay::eNone }
 		, splitScheme{ dirty, ClusterSplitScheme::eExponentialLinearHybrid }
 		, bias{ dirty, 1.0f }
 	{
@@ -268,10 +270,14 @@ namespace castor3d
 	{
 		if ( enabled )
 		{
-			static castor::StringArray names{ cuT( "Exponential" )
+			static castor::StringArray splitSchemeNames{ cuT( "Exponential" )
 				, cuT( "Biased Exponential" )
 				, cuT( "Linear" )
 				, cuT( "Hybrid" ) };
+			static castor::StringArray debugDisplayNames{ cuT( "None" )
+				, cuT( "Clusters AABB" )
+				, cuT( "Lights AABB" )
+				, cuT( "Lights BVH" ) };
 
 			visitor.visit( cuT( "Clusters" ) );
 			visitor.visit( cuT( "Use BVH" ), useLightsBVH );
@@ -285,12 +291,17 @@ namespace castor3d
 			visitor.visit( cuT( "Enable Post Assignment Sort" ), enablePostAssignSort );
 			visitor.visit( cuT( "Split Scheme" )
 				, splitScheme
-				, names
-				, ConfigurationVisitorBase::OnEnumValueChangeT< ClusterSplitScheme >( [this]( ClusterSplitScheme, ClusterSplitScheme newV )
-					{
-						splitScheme = newV;
-					} ) );
+				, splitSchemeNames
+				, ConfigurationVisitorBase::OnEnumValueChangeT< ClusterSplitScheme >( [this]( ClusterSplitScheme, ClusterSplitScheme newV ){ splitScheme = newV; } ) );
 			visitor.visit( cuT( "Biased Exponential Bias" ), bias );
+			visitor.visit( cuT( "[Debug] Lock Clusters Frustum" ), lockClustersFrustum );
+			visitor.visit( cuT( "[Debug] Display AABBs" )
+				, debugDisplay
+				, debugDisplayNames
+				, ConfigurationVisitorBase::OnEnumValueChangeT< ClusterDebugDisplay >( [this]( ClusterDebugDisplay, ClusterDebugDisplay newV )
+					{
+						debugDisplay = newV;
+					} ) );
 		}
 	}
 

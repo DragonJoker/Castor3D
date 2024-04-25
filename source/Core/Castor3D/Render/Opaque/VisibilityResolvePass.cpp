@@ -14,6 +14,7 @@
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/Clustered/ClustersConfig.hpp"
+#include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 #include "Castor3D/Render/Culling/PipelineNodes.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
@@ -77,7 +78,8 @@ namespace castor3d
 
 		enum InOutBindings : uint32_t
 		{
-			eCamera,
+			eMainCamera,
+			eClustersCamera,
 			eScene,
 			eModels,
 			eBillboards,
@@ -1110,8 +1112,13 @@ namespace castor3d
 			shader::CookTorranceBRDF cookTorrance{ writer, brdf };
 
 			auto index = uint32_t( InOutBindings::eCount );
-			C3D_Camera( writer
-				, InOutBindings::eCamera
+			C3D_CameraNamed( writer
+				, Main
+				, InOutBindings::eMainCamera
+				, Sets::eInOuts );
+			C3D_CameraNamed( writer
+				, Clusters
+				, InOutBindings::eClustersCamera
 				, Sets::eInOuts );
 			C3D_Scene( writer
 				, InOutBindings::eScene
@@ -1214,7 +1221,7 @@ namespace castor3d
 					{
 						shader::DebugOutput output{ debugConfig
 							, cuT( "Opaque" )
-							, c3d_cameraData.debugIndex()
+							, c3d_cameraDataMain.debugIndex()
 							, outResult
 							, areDebugTargetsEnabled };
 
@@ -1247,7 +1254,7 @@ namespace castor3d
 							, modelData
 							, material
 							, depth
-							, c3d_cameraData
+							, c3d_cameraDataMain
 							, c3d_billboardData
 							, baseSurface );
 						auto components = writer.declLocale( "components"
@@ -1276,7 +1283,7 @@ namespace castor3d
 						}
 
 						auto incident = writer.declLocale( "incident"
-							, reflections.computeIncident( shader::getXYZ( baseSurface.worldPosition ), c3d_cameraData.position() ) );
+							, reflections.computeIncident( shader::getXYZ( baseSurface.worldPosition ), c3d_cameraDataMain.position() ) );
 
 						if ( components.transmission )
 						{
@@ -1301,11 +1308,11 @@ namespace castor3d
 								lightingModel->finish( passShaders
 									, surface
 									, utils
-									, c3d_cameraData.position()
+									, c3d_cameraDataClusters.position()
 									, components );
 								auto lightSurface = shader::LightSurface::create( writer
 									, "lightSurface"
-									, c3d_cameraData.position()
+									, c3d_cameraDataClusters.position()
 									, surface.worldPosition
 									, getXYZ( surface.viewPosition )
 									, surface.clipPosition
@@ -1404,7 +1411,7 @@ namespace castor3d
 										, components
 										, lightSurface
 										, *backgroundModel
-										, c3d_cameraData
+										, c3d_cameraDataMain
 										, directLighting
 										, indirectLighting
 										, vec2( ipixel )
@@ -1468,36 +1475,36 @@ namespace castor3d
 						{
 							if ( flags.hasFog() )
 							{
-								outResult = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
+								outResult = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraDataMain.gamma() )
 									, outResult
 									, shader::getRawXYZ( baseSurface.worldPosition )
-									, c3d_cameraData.position()
+									, c3d_cameraDataMain.position()
 									, c3d_sceneData );
 
 								if ( outputScattering )
 								{
-									outScattering = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
+									outScattering = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraDataMain.gamma() )
 										, outScattering
 										, shader::getRawXYZ( baseSurface.worldPosition )
-										, c3d_cameraData.position()
+										, c3d_cameraDataMain.position()
 										, c3d_sceneData );
 								}
 							}
 
 							auto linearDepth = writer.declLocale( "linearDepth"
-								, utils.lineariseDepth( depth, c3d_cameraData.nearPlane(), c3d_cameraData.farPlane() ) );
+								, utils.lineariseDepth( depth, c3d_cameraDataMain.nearPlane(), c3d_cameraDataMain.farPlane() ) );
 							backgroundModel->applyVolume( vec2( ipixel )
 								, linearDepth
-								, vec2( c3d_cameraData.renderSize() )
-								, c3d_cameraData.depthPlanes()
+								, vec2( c3d_cameraDataMain.renderSize() )
+								, c3d_cameraDataMain.depthPlanes()
 								, outResult );
 
 							if ( outputScattering )
 							{
 								backgroundModel->applyVolume( vec2( ipixel )
 									, linearDepth
-									, vec2( c3d_cameraData.renderSize() )
-									, c3d_cameraData.depthPlanes()
+									, vec2( c3d_cameraDataMain.renderSize() )
+									, c3d_cameraDataMain.depthPlanes()
 									, outScattering );
 							}
 						}
@@ -1543,7 +1550,10 @@ namespace castor3d
 			auto stages = VkShaderStageFlags( VisibilityResolvePass::useCompute()
 				? VK_SHADER_STAGE_COMPUTE_BIT
 				: VK_SHADER_STAGE_FRAGMENT_BIT );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eCamera
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eMainCamera
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, stages ) );
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eClustersCamera
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, stages ) );
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eScene
@@ -1651,7 +1661,8 @@ namespace castor3d
 		static ashes::DescriptorSetPtr createInDescriptorSet( castor::String const & name
 			, ashes::DescriptorSetPool const & pool
 			, crg::RunnableGraph & graph
-			, CameraUbo const & cameraUbo
+			, CameraUbo const & mainCameraUbo
+			, CameraUbo const & clustersCameraUbo
 			, SceneUbo const & sceneUbo
 			, RenderTechnique const & technique
 			, Scene const & scene
@@ -1664,7 +1675,8 @@ namespace castor3d
 			auto const & engine = *scene.getOwner();
 			auto const & matCache = engine.getMaterialCache();
 			ashes::WriteDescriptorSetArray writes;
-			writes.push_back( cameraUbo.getDescriptorWrite( InOutBindings::eCamera ) );
+			writes.push_back( mainCameraUbo.getDescriptorWrite( InOutBindings::eMainCamera ) );
+			writes.push_back( clustersCameraUbo.getDescriptorWrite( InOutBindings::eClustersCamera ) );
 			writes.push_back( sceneUbo.getDescriptorWrite( InOutBindings::eScene ) );
 			writes.push_back( makeDescriptorWrite( scene.getModelBuffer()
 				, InOutBindings::eModels
@@ -2718,7 +2730,8 @@ namespace castor3d
 
 			result->vtxDescriptorPool = result->vtxDescriptorLayout->createPool( MaxPipelines );
 			result->ioDescriptorPool = result->ioDescriptorLayout->createPool( 1u );
-			result->ioDescriptorSet = visres::createInDescriptorSet( getName(), *result->ioDescriptorPool, m_graph, m_cameraUbo, m_sceneUbo, *m_parent, getScene()
+			result->ioDescriptorSet = visres::createInDescriptorSet( getName(), *result->ioDescriptorPool, m_graph
+				, m_cameraUbo, m_parent->getRenderTarget().getFrustumClusters()->getCameraUbo(), m_sceneUbo, *m_parent, getScene()
 				, getClustersConfig()->enabled, m_targetImage, hasSsao() ? m_ssao : nullptr, &getIndirectLighting(), m_deferredLightingFilter );
 			pipelines.push_back( castor::move( result ) );
 			it = std::next( pipelines.begin(), ptrdiff_t( pipelines.size() - 1u ) );

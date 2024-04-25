@@ -11,6 +11,15 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	enum class ClusterDebugDisplay
+	{
+		eNone = 0,
+		eClustersAABB = 1,
+		eLightsAABB = 2,
+		eLightsBVH = 3,
+		CU_ScopedEnumBounds( eNone, eLightsBVH )
+	};
+
 	struct ClustersConfig
 	{
 		C3D_API ClustersConfig();
@@ -50,6 +59,12 @@ namespace castor3d
 		//!\~english	Enable sorting of clusters lights.
 		//!\~french		Autoriser le tri des sources lumineuses dans les clusters.
 		castor::GroupChangeTracked< bool > enablePostAssignSort;
+		//!\~english	Locks clusters frustum, for debug purpose.
+		//!\~french		Verrouille le frustum des clusters, pour le débogage.
+		castor::GroupChangeTracked< bool > lockClustersFrustum;
+		//!\~english	Debug display mode.
+		//!\~french		Mode d'affichage de debug.
+		castor::GroupChangeTracked< ClusterDebugDisplay > debugDisplay;
 		//!\~english	The clusters Z split scheme.
 		//!\~french		Le mode découpage en Z des clusters.
 		castor::GroupChangeTracked < ClusterSplitScheme > splitScheme;

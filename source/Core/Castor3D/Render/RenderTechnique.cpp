@@ -611,7 +611,7 @@ namespace castor3d
 				renderPass.update( updater );
 			} );
 
-		auto jitter = m_renderTarget.getJitter();
+		auto jitter = updater.jitter;
 		auto jitterProjSpace = jitter * 2.0f;
 		jitterProjSpace[0] /= float( camera.getWidth() );
 		jitterProjSpace[1] /= float( camera.getHeight() );

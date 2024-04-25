@@ -6,6 +6,7 @@
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslAABB.hpp"
+#include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 #include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
@@ -13,6 +14,7 @@
 #include <CastorUtils/Design/DataHolder.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
@@ -25,7 +27,8 @@ namespace castor3d
 	{
 		enum BindingPoints
 		{
-			eCamera,
+			eMainCamera,
+			eClustersCamera,
 			eClusters,
 			eReducedLightsAABB,
 			eClustersAABB,
@@ -37,8 +40,13 @@ namespace castor3d
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
-			C3D_Camera( writer
-				, eCamera
+			C3D_CameraNamed( writer
+				, Main
+				, eMainCamera
+				, 0u );
+			C3D_CameraNamed( writer
+				, Clusters
+				, eClustersCamera
 				, 0u );
 			C3D_Clusters( writer
 				, eClusters
@@ -56,7 +64,7 @@ namespace castor3d
 				{
 					// Convert to normalized texture coordinates in the range [0 .. 1].
 					auto texCoord = writer.declLocale( "texCoord"
-						, screen.xy() / vec2( c3d_cameraData.renderSize() ) );
+						, screen.xy() / vec2( c3d_cameraDataClusters.renderSize() ) );
 
 					// Convert to clip space
 					auto clip = writer.declLocale( "clip"
@@ -64,7 +72,7 @@ namespace castor3d
 							, screen.zw() ) );
 
 					auto view = writer.declLocale( "view"
-						, c3d_cameraData.projToView( clip ) );
+						, c3d_cameraDataClusters.projToView( clip ) );
 					view /= view.w();
 					writer.returnStmt( view );
 				}
@@ -188,12 +196,78 @@ namespace castor3d
 		};
 	}
 
+	namespace dspclsb
+	{
+		enum BindingPoints
+		{
+			eMainCamera,
+			eClustersCamera,
+			eClusters,
+			eClustersAABB,
+		};
+
+		static ShaderPtr createDebugDisplayShader( RenderDevice const & device
+			, FrustumClusters const & frustumClusters )
+		{
+			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+
+			C3D_CameraNamed( writer
+				, Main
+				, eMainCamera
+				, 0u );
+			C3D_CameraNamed( writer
+				, Clusters
+				, eClustersCamera
+				, 0u );
+			C3D_Clusters( writer
+				, eClusters
+				, 0u
+				, &frustumClusters.getConfig() );
+			C3D_ClustersAABB( writer
+				, eClustersAABB
+				, 0u );
+
+			writer.implementEntryPointT< shader::Position4FT, shader::Colour4FT >( [&writer, &c3d_cameraDataMain, &c3d_cameraDataClusters, &c3D_clustersAABB, &c3d_clustersData]( sdw::VertexInT< shader::Position4FT > const & in
+				, sdw::VertexOutT< shader::Colour4FT > out )
+				{
+					auto clusterIndex3D = writer.declLocale( "clusterIndex3D"
+						, c3d_clustersData.computeClusterIndex3D( writer.cast< sdw::UInt >( in.instanceIndex ) ) );
+					auto aabb = writer.declLocale( "aabb"
+						, c3D_clustersAABB[in.instanceIndex] );
+					auto position = writer.declLocale( "position"
+						, in.position() );
+					position.x() = mix( aabb.min().x(), aabb.max().x(), position.x() );
+					position.y() = mix( aabb.min().y(), aabb.max().y(), position.y() );
+					position.z() = mix( aabb.min().z(), aabb.max().z(), position.z() );
+					// Convert from clusters view position to world position
+					position = c3d_cameraDataClusters.curViewToWorld( position );
+					position.w() = 1.0_f;
+					// Then from world to main camera proj.
+					out.vtx.position = c3d_cameraDataMain.worldToCurProj( position );
+
+					out.colour() = vec4( writer.cast< sdw::Float >( clusterIndex3D.x() ) / writer.cast< sdw::Float >( c3d_clustersData.dimensions().x() )
+						, writer.cast< sdw::Float >( clusterIndex3D.y() ) / writer.cast< sdw::Float >( c3d_clustersData.dimensions().y() )
+						, writer.cast< sdw::Float >( clusterIndex3D.z() ) / writer.cast< sdw::Float >( c3d_clustersData.dimensions().z() )
+						, 1.0_f );
+				} );
+
+			writer.implementEntryPointT< shader::Colour4FT, shader::Colour4FT >( []( sdw::FragmentInT< shader::Colour4FT > const & in
+				, sdw::FragmentOutT< shader::Colour4FT > const & out )
+				{
+					out.colour() = in.colour();
+				} );
+
+			return writer.getBuilder().releaseShader();
+		}
+	}
+
 	//*********************************************************************************************
 
 	crg::FramePass const & createComputeClustersAABBPass( crg::FramePassGroup & graph
 		, crg::FramePass const * previousPass
 		, RenderDevice const & device
-		, CameraUbo const & cameraUbo
+		, CameraUbo const & mainCameraUbo
+		, CameraUbo const & clustersCameraUbo
 		, FrustumClusters const & clusters )
 	{
 		auto & pass = graph.createPass( "ComputeClustersAABB"
@@ -216,11 +290,40 @@ namespace castor3d
 				return result;
 			});
 		pass.addDependency( *previousPass );
-		cameraUbo.createPassBinding( pass, cptclsb::eCamera );
+		mainCameraUbo.createPassBinding( pass, cptclsb::eMainCamera );
+		clustersCameraUbo.createPassBinding( pass, cptclsb::eClustersCamera );
 		clusters.getClustersUbo().createPassBinding( pass, cptclsb::eClusters );
 		createInputStoragePassBinding( pass, uint32_t( cptclsb::eReducedLightsAABB ), cuT( "C3D_ReducedLightsAABB" ), clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
 		createClearableOutputStorageBinding( pass, uint32_t( cptclsb::eClustersAABB ), cuT( "C3D_ClustersAABB" ), clusters.getClustersAABBBuffer(), 0u, ashes::WholeSize );
 		return pass;
+	}
+
+	void createDisplayClustersAABBProgram( RenderDevice const & device
+		, FrustumClusters const & clusters
+		, CameraUbo const & mainCameraUbo
+		, CameraUbo const & clustersCameraUbo
+		, ashes::PipelineShaderStageCreateInfoArray & program
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, ashes::WriteDescriptorSetArray & writes )
+	{
+		ProgramModule programModule{ "ClustersAABB", dspclsb::createDebugDisplayShader( device, clusters ) };
+		program = makeProgramStates( device, programModule );
+
+		bindings.push_back( VkDescriptorSetLayoutBinding{ dspclsb::eMainCamera, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } );
+		bindings.push_back( VkDescriptorSetLayoutBinding{ dspclsb::eClustersCamera, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } );
+		bindings.push_back( VkDescriptorSetLayoutBinding{ dspclsb::eClusters, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } );
+		bindings.push_back( VkDescriptorSetLayoutBinding{ dspclsb::eClustersAABB, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1u, VK_SHADER_STAGE_VERTEX_BIT, nullptr } );
+
+		writes.emplace_back( dspclsb::eMainCamera, 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ mainCameraUbo.getUbo().getBuffer().getBuffer(), mainCameraUbo.getUbo().getByteOffset(), mainCameraUbo.getUbo().getByteRange() } } );
+		writes.emplace_back( dspclsb::eClustersCamera, 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ clustersCameraUbo.getUbo().getBuffer().getBuffer(), clustersCameraUbo.getUbo().getByteOffset(), clustersCameraUbo.getUbo().getByteRange() } } );
+		auto & clustersUbo = clusters.getClustersUbo();
+		writes.emplace_back( dspclsb::eClusters, 0u, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ clustersUbo.getUbo().getBuffer().getBuffer(), clustersUbo.getUbo().getByteOffset(), clustersUbo.getUbo().getByteRange() } } );
+		auto & aabbBuffer = clusters.getClustersAABBBuffer();
+		writes.emplace_back( dspclsb::eClustersAABB, 0u, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ aabbBuffer, 0u, aabbBuffer.getSize() } } );
 	}
 
 	//*********************************************************************************************
