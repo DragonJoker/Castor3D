@@ -10,6 +10,8 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
+#include <RenderGraph/RunnablePasses/RenderPass.hpp>
+
 namespace castor3d
 {
 	class DebugDrawer
@@ -19,103 +21,128 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	parent	The parent render target.
-		 *\param[in]	device	The GPU device.
-		 *\param[in]	colour	The target colour image.
-		 *\param[in]	depth	The target depth image.
+		 *\param[in]	graph		The graph.
+		 *\param[in]	previous	The previous pass.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	parent		The parent render target.
+		 *\param[in]	colour		The target colour image.
+		 *\param[in]	depth		The target depth image.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	parent	La render target parente.
-		 *\param[in]	device	Le device GPU.
-		 *\param[in]	colour	L'image couleur cible.
-		 *\param[in]	depth	L'image profondeur cible.
+		 *\param[in]	graph		Le graphe.
+		 *\param[in]	previous	La passe précédente.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	parent		La render target parente.
+		 *\param[in]	colour		L'image couleur cible.
+		 *\param[in]	depth		L'image profondeur cible.
 		 */
-		C3D_API DebugDrawer( RenderTarget & parent
+		C3D_API DebugDrawer( crg::FramePassGroup & graph
+			, crg::FramePass const * previous
 			, RenderDevice const & device
-			, Texture const & colour
-			, Texture const & depth );
+			, RenderTarget & parent
+			, crg::ImageViewIdArray colour
+			, Texture const & depth
+			, uint32_t const * passIndex );
 		/**
 		 *\~english
 		 *\brief		Adds a buffer containing AABBs to draw.
-		 *\param[in]	buffer	The GPU buffer.
-		 *\param[in]	offset	The binary offset.
-		 *\param[in]	size	The binary size.
-		 *\param[in]	count	The AABB count.
-		 *\param[in]	shader	The shader stages.
+		 *\param[in]	bindings	The shader data bindings.
+		 *\param[in]	writes		The shader data.
+		 *\param[in]	count		The number of AABB to draw.
+		 *\param[in]	shader		The shader used to draw the AABB.
 		 *\~french
 		 *\brief		Ajoute un buffer d'AABB à dessiner.
-		 *\param[in]	buffer	Le buffer GPU.
-		 *\param[in]	offset	L'offset binaire.
-		 *\param[in]	size	La taille binaire.
-		 *\param[in]	count	Le nombre d'AABB.
-		 *\param[in]	shader	Les shaders.
+		 *\param[in]	bindings	Les bindings des données à passer au shader.
+		 *\param[in]	writes		Les données à passer au shader.
+		 *\param[in]	count		Le nombre d'AABB à dessiner.
+		 *\param[in]	shader		Le shader utilisé pour dessiner les AABB.
 		 */
-		C3D_API void addAabbs( VkBuffer buffer
-			, VkDeviceSize offset
-			, VkDeviceSize size
+		C3D_API void addAabbs( ashes::VkDescriptorSetLayoutBindingArray const & bindings
+			, ashes::WriteDescriptorSetArray const & writes
 			, VkDeviceSize count
-			, ashes::PipelineShaderStageCreateInfoArray shader );
-		/**
-		 *\~english
-		 *\brief		Renders added objects.
-		 *\param[in]	queue	The queue receiving the render commands.
-		 *\param[in]	toWait	The semaphores to wait.
-		 *\return		The semaphores signaled by this render.
-		 *\~french
-		 *\brief		Dessine les objets ajoutés.
-		 *\param[in]	queue	La file recevant les commandes de dessin.
-		 *\param[in]	toWait	Les sémaphores à attendre.
-		 *\return		Les sémaphores signalés par ce dessin.
-		 */
-		C3D_API crg::SemaphoreWaitArray render( ashes::Queue const & queue
-			, crg::SemaphoreWaitArray toWait = {} );
+			, ashes::PipelineShaderStageCreateInfoArray const & shader
+			, bool enableDepthTest );
+
+		crg::FramePass const & getLastPass()const noexcept
+		{
+			return *m_lastPass;
+		}
 
 	private:
+		struct Object
+		{
+			ObjectBufferOffset vertices;
+			ObjectBufferOffset indices;
+		};
+
 		struct Pipeline
 		{
 			ashes::DescriptorSetLayoutPtr descriptorLayout;
 			ashes::PipelineLayoutPtr pipelineLayout;
 			ashes::GraphicsPipelinePtr pipeline;
-			ashes::DescriptorSetPoolPtr descriptorPool;
-			ashes::DescriptorSetPtr descriptorSet;
-			ObjectBufferOffset vertices;
-			ObjectBufferOffset indices;
+
+			struct Instance
+			{
+				ashes::DescriptorSetPoolPtr descriptorPool;
+				ashes::DescriptorSetPtr descriptorSet;
+			};
+
+			castor::UnorderedMap< size_t, Instance > instances;
 		};
 
 		struct AABBBuffer
 		{
-			AABBBuffer( VkBuffer pbuffer
-				, VkDeviceSize poffset
-				, VkDeviceSize psize
-				, VkDeviceSize pcount
-				, Pipeline * ppipeline )
-				: buffer{ pbuffer }
-				, offset{ poffset }
-				, size{ psize }
-				, count{ pcount }
-				, pipeline{ ppipeline }
+			AABBBuffer( VkDeviceSize count
+				, Pipeline * pipeline
+				, ashes::DescriptorSet * descriptorSet
+				, ashes::WriteDescriptorSetArray writes );
 
-			{
-			}
-
-			VkBuffer buffer;
-			VkDeviceSize offset;
-			VkDeviceSize size;
 			VkDeviceSize count;
 			Pipeline * pipeline;
+			ashes::DescriptorSet * descriptorSet;
+			ashes::WriteDescriptorSetArray writes;
 		};
 
 		using PipelinePtr = castor::RawUniquePtr< Pipeline >;
 
+		class FramePass
+			: public crg::RenderPass
+		{
+		public:
+			FramePass( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph
+				, RenderDevice const & device
+				, VkExtent2D dimensions
+				, uint32_t const * passIndex );
+			~FramePass()noexcept override;
+
+			void addAabbs( ashes::VkDescriptorSetLayoutBindingArray const & bindings
+			, ashes::WriteDescriptorSetArray const & writes
+			, VkDeviceSize count
+			, ashes::PipelineShaderStageCreateInfoArray const & shader
+			, bool enableDepthTest );
+
+		private:
+			void doSubRecordInto( crg::RecordContext const & context
+				, VkCommandBuffer commandBuffer );
+			bool doIsEnabled()const noexcept
+			{
+				return m_pending || !m_aabbs.empty();
+			}
+
+		private:
+			RenderDevice const & m_device;
+			castor::UnorderedMap< size_t, PipelinePtr > m_pipelines;
+			castor::Vector< AABBBuffer > m_aabbs;
+			Object m_aabb;
+			bool m_pending{};
+		};
+
 	private:
 		RenderDevice const & m_device;
-		castor::UnorderedMap< size_t, PipelinePtr > m_pipelines;
-		ashes::RenderPassPtr m_renderPass;
-		ashes::FrameBufferPtr m_framebuffer;
-		ashes::CommandPoolPtr m_commandPool;
-		castor::Array< CommandsSemaphore, 2u > m_commandBuffers;
-		castor::Vector< AABBBuffer > m_aabbs;
-		uint32_t m_index{};
+		crg::FramePass const * m_lastPass{};
+		FramePass * m_framePass{};
 	};
 }
 

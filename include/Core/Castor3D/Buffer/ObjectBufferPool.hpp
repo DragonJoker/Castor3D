@@ -87,12 +87,12 @@ namespace castor3d
 	public:
 		struct ModelBuffers
 		{
-			explicit ModelBuffers( GpuPackedBaseBufferUPtr vtx )
-				: vertex{ castor::move( vtx ) }
+			explicit ModelBuffers( GpuPackedBaseBufferUPtr idx )
+				: index{ castor::move( idx ) }
 			{
 			}
 
-			GpuPackedBaseBufferUPtr vertex;
+			GpuPackedBaseBufferUPtr index;
 		};
 		using BufferArray = castor::Vector< ModelBuffers >;
 
@@ -119,15 +119,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
-		 *\param[in]	vertexCount	The wanted buffer element count.
+		 *\param[in]	indexCount	The wanted buffer element count.
 		 *\return		The GPU buffer.
 		 *\~french
 		 *\brief		Récupère un tampon GPU avec la taille donnée.
-		 *\param[in]	vertexCount	Le nombre d'éléments voulu pour le tampon.
+		 *\param[in]	indexCount	Le nombre d'éléments voulu pour le tampon.
 		 *\return		Le tampon GPU.
 		 */
 		template< typename IndexT >
-		ObjectBufferOffset getBuffer( VkDeviceSize vertexCount );
+		ObjectBufferOffset getBuffer( VkDeviceSize indexCount );
 		/**
 		 *\~english
 		 *\brief		Releases a GPU buffer.

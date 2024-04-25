@@ -69,11 +69,11 @@ namespace castor3d
 		if ( it == m_buffers.end() )
 		{
 			ModelBuffers buffers{ details::createBaseBuffer< uint8_t >( m_device
-				, size
+				, std::max( size, 65536ULL )
 				, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, m_debugName + cuT( "Vertex" ) + castor::string::toString( m_buffers.size() )
-				, 1u ) };
+				, uint32_t( m_device.properties.limits.minMemoryMapAlignment ) ) };
 			m_buffers.emplace_back( castor::move( buffers ) );
 			it = std::next( m_buffers.begin()
 				, ptrdiff_t( m_buffers.size() - 1u ) );
@@ -87,27 +87,27 @@ namespace castor3d
 	//*********************************************************************************************
 
 	template< typename IndexT >
-	ObjectBufferOffset IndexBufferPool::getBuffer( VkDeviceSize vertexCount )
+	ObjectBufferOffset IndexBufferPool::getBuffer( VkDeviceSize indexCount )
 	{
 		ObjectBufferOffset result;
-		auto size = vertexCount * sizeof(IndexT);
+		auto size = indexCount * sizeof( IndexT );
 		auto it = doFindBuffer( size, m_buffers );
 
 		if ( it == m_buffers.end() )
 		{
 			ModelBuffers buffers{ details::createBaseBuffer< uint8_t >( m_device
-				, size
-				, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, std::max( size, 65536ULL )
+				, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, m_debugName + cuT( "Index" ) + castor::string::toString( m_buffers.size() )
-				, 1u ) };
+				, uint32_t( m_device.properties.limits.minMemoryMapAlignment ) ) };
 			m_buffers.emplace_back( castor::move( buffers ) );
 			it = std::next( m_buffers.begin()
 				, ptrdiff_t( m_buffers.size() - 1u ) );
 		}
 
-		result.buffers[uint32_t( SubmeshData::eIndex )].buffer = it->vertex.get();
-		result.buffers[uint32_t( SubmeshData::eIndex )].chunk = it->vertex->allocate( size );
+		result.buffers[uint32_t( SubmeshData::eIndex )].buffer = it->index.get();
+		result.buffers[uint32_t( SubmeshData::eIndex )].chunk = it->index->allocate( size );
 		return result;
 	}
 
