@@ -250,7 +250,7 @@ namespace castor3d
 				, castor::Point4f{ 1.0f, 0.0f, 1.0f, 1.0f }
 				, castor::Point4f{ 0.0f, 1.0f, 1.0f, 1.0f }
 				, castor::Point4f{ 1.0f, 1.0f, 1.0f, 1.0f } };
-			static castor::Array< castor::Point2ui, 16u > const indexData{ castor::Point2ui{ 0u, 1u }
+			static castor::Array< castor::Point2ui, 12u > const indexData{ castor::Point2ui{ 0u, 1u }
 				, castor::Point2ui{ 1u, 3u }
 				, castor::Point2ui{ 3u, 2u }
 				, castor::Point2ui{ 2u, 0u }
@@ -261,24 +261,20 @@ namespace castor3d
 				, castor::Point2ui{ 0u, 4u }
 				, castor::Point2ui{ 1u, 5u }
 				, castor::Point2ui{ 2u, 6u }
-				, castor::Point2ui{ 3u, 7u }
-				, castor::Point2ui{ 0u, 0u }
-				, castor::Point2ui{ 0u, 0u }
-				, castor::Point2ui{ 0u, 0u }
-				, castor::Point2ui{ 0u, 0u } };
+				, castor::Point2ui{ 3u, 7u } };
 			auto queue = m_device.graphicsData();
 			InstantDirectUploadData uploader{ *queue->queue
 				, m_device
 				, cuT( "RenderCube" )
 				, *queue->commandPool };
 			uploader->pushUpload( vertexData.data()->constPtr()
-				, m_aabb.vertices.getAskedSize( SubmeshData::ePositions )
+				, vertexData.size() * sizeof( castor::Point4f )
 				, m_aabb.vertices.getBuffer( SubmeshData::ePositions )
 				, m_aabb.vertices.getOffset( SubmeshData::ePositions )
 				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 			uploader->pushUpload( indexData.data()->constPtr()
-				, m_aabb.indices.getAskedSize( SubmeshData::eIndex )
+				, indexData.size() * sizeof( castor::Point2ui )
 				, m_aabb.indices.getBuffer( SubmeshData::eIndex )
 				, m_aabb.indices.getOffset( SubmeshData::eIndex )
 				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT

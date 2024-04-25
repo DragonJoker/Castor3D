@@ -22,6 +22,7 @@
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslRadixSort.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
 #include <RenderGraph/FramePassGroup.hpp>
@@ -161,8 +162,8 @@ namespace castor3d
 		// The maximum number of elements that need to be sorted.
 		uint32_t maxElements = MaxLightsCount;
 
-		// Radix sort will sort Morton codes (keys) into chunks of SORT_NUM_THREADS_PER_THREAD_GROUP size.
-		uint32_t chunkSize = NumThreadsPerThreadGroup;
+		// Radix sort will sort Morton codes (keys) into chunks of shader::radix::sortBucketSizeT<4u> size.
+		uint32_t chunkSize = shader::radix::sortBucketSizeT< 4u >;
 		// The number of chunks that need to be merge sorted after Radix sort finishes.
 		uint32_t numChunks = castor::divRoundUp( maxElements, chunkSize );
 		// The number of sort groups that are needed to sort the first set of chunks.

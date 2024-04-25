@@ -14,6 +14,7 @@
 #include "Castor3D/Shader/Shaders/GlslAppendBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslRadixSort.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
@@ -31,10 +32,9 @@ namespace castor3d
 
 	namespace merge
 	{
-		static uint32_t constexpr NumThreads = 256u;
 		static uint32_t constexpr NumThreadsPerThreadGroup = 256u;
 		static uint32_t constexpr NumValuesPerThread = 8u;
-		static uint32_t constexpr NumValuesPerThreadGroup = NumThreads * NumValuesPerThread;
+		static uint32_t constexpr NumValuesPerThreadGroup = NumThreadsPerThreadGroup * NumValuesPerThread;
 
 		enum BindingPoints
 		{
@@ -186,7 +186,7 @@ namespace castor3d
 				, sdw::InInt{ writer, "numValues" }
 				, sdw::InInt{ writer, "out0" } );
 
-			writer.implementMainT< sdw::VoidT >( NumThreads
+			writer.implementMainT< sdw::VoidT >( NumThreadsPerThreadGroup
 				, [&]( sdw::ComputeIn const & in )
 				{
 					auto const & threadIndex = in.globalInvocationID.x();
@@ -434,37 +434,46 @@ namespace castor3d
 				, VkCommandBuffer commandBuffer
 				, uint32_t index )
 			{
-				auto totalValues = m_lightCache.getLightsBufferCount( m_lightType );
-				auto chunkSize = NumThreadsPerThreadGroup;
+				// The number of threads per thread group.
+				constexpr u32 threadsPerThreadGroupCount = NumThreadsPerThreadGroup;
+				// The number of values that each thread sorts.
+				constexpr u32 valuesPerThreadCount = NumValuesPerThread;
+				// The number of values that each thread group will sort.
+				constexpr u32 valuesPerThreadGroupCount = threadsPerThreadGroupCount * valuesPerThreadCount;
 
-				// The total number of complete chunks to sort.
-				auto numChunks = getLightsMortonCodeChunkCount( totalValues );
+				auto totalValues = m_lightCache.getLightsBufferCount( m_lightType );
 				DispatchData data{ totalValues, 0u };
 
-				while ( numChunks > 1u )
+				// The size of a single chunk that keys will be sorted into.
+				auto chunkSize = shader::radix::sortBucketSizeT< 4u >;
+
+				// The total number of complete chunks to sort.
+				auto chunksCount = getLightsMortonCodeChunkCount( totalValues );
+
+				while ( chunksCount > 1u )
 				{
 					data.chunkSize = chunkSize;
 
 					// Number of sort groups required to sort all chunks.
 					// Each sort group merge sorts 2 chunks into a single chunk.
-					auto numSortGroups = numChunks / 2u;
+					auto sortGroupsCount = chunksCount / 2u;
+
+					// The number of thread groups that are required per sort group.
+					auto threadGroupsPerSortGroupCount = castor::divRoundUp( chunkSize * 2u, valuesPerThreadGroupCount );
 
 					// Compute merge path partitions per thread group.
 					{
 						m_partitions.pipeline.recordInto( context, commandBuffer, index );
 
-						// The number of thread groups that are required per sort group.
-						auto numThreadGroupsPerSortGroup = castor::divRoundUp( chunkSize * 2u, NumValuesPerThreadGroup );
-
 						// The number of merge path partitions that need to be computed.
-						auto numMergePathPartitionsPerSortGroup = numThreadGroupsPerSortGroup + 1u;
-						auto totalMergePathPartitions = numMergePathPartitionsPerSortGroup * numSortGroups;
+						auto mergePathPartitionsPerSortGroupCount = threadGroupsPerSortGroupCount + 1u;
+						auto totalMergePathPartitions = mergePathPartitionsPerSortGroupCount * sortGroupsCount;
 
 						// The number of thread groups needed to compute all merge path partitions.
-						auto numThreadGroups = castor::divRoundUp( totalMergePathPartitions, NumThreadsPerThreadGroup );
+						auto threadGroupsCount = castor::divRoundUp( totalMergePathPartitions, threadsPerThreadGroupCount );
 
 						m_context.vkCmdPushConstants( commandBuffer, m_partitions.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &data );
-						m_context.vkCmdDispatch( commandBuffer, numThreadGroups, 1u, 1u );
+						m_context.vkCmdDispatch( commandBuffer, threadGroupsCount, 1u, 1u );
 
 						// Add an explicit barrier for MergePathPartitions.
 						// This is required since the MergePathPartitions structured buffer is being used
@@ -480,16 +489,6 @@ namespace castor3d
 					{
 						m_merge.pipeline.recordInto( context, commandBuffer, index );
 
-						// The number of values that each sort group will sort.
-						// Each sort group merges 2 chunks into 1.
-						auto numValuesPerSortGroup = std::min( chunkSize * 2u, totalValues );
-
-						// The number of thread groups required to sort all values.
-						auto numThreadGroupsPerSortGroup = castor::divRoundUp( numValuesPerSortGroup, NumValuesPerThreadGroup );
-
-						// The number of values that each thread group will sort.
-						constexpr u32 numValuesPerThreadGroup = NumThreadsPerThreadGroup * NumValuesPerThread;
-
 						// Don't dispatch thread groups that will perform no work:
 						// we need at least one thread group for each sort group; no more than the number of sort groups times
 						// the number of thread groups per sort groups (if there is an odd number of chunks, the last chunk
@@ -497,17 +496,17 @@ namespace castor3d
 
 
 						// The number of thread groups required to sort all values.
-						const u32 numThreadGroups = std::max( numSortGroups
-							, std::min( numThreadGroupsPerSortGroup * numSortGroups
-								, castor::divRoundUp( totalValues, numValuesPerThreadGroup ) ) );
+						const u32 numThreadGroups = std::max( sortGroupsCount
+							, std::min( threadGroupsPerSortGroupCount * sortGroupsCount
+								, castor::divRoundUp( totalValues, valuesPerThreadGroupCount ) ) );
 						m_context.vkCmdPushConstants( commandBuffer, m_merge.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &data );
 						m_context.vkCmdDispatch( commandBuffer, numThreadGroups, 1u, 1u );
 
-						if ( numChunks & 1 )
+						if ( chunksCount & 1 )
 						{
 							// copy last chunk, there is no merging required but we still need data in the destination buffer
 							// note: no additional barriers as we are still doing read from source-> write to dest, so that should be good
-							u32 lastChunkOffset = chunkSize * ( numChunks - 1 ) * sizeof( u32 );
+							u32 lastChunkOffset = chunkSize * ( chunksCount - 1 ) * sizeof( u32 );
 							auto lastChunkSize = u32( totalValues * sizeof( u32 ) - lastChunkOffset );
 							auto srcMorton = m_pass.buffers[0].buffer( index );
 							auto srcIndices = m_pass.buffers[1].buffer( index );
@@ -523,7 +522,7 @@ namespace castor3d
 					index = 1u - index;
 
 					chunkSize *= 2;
-					numChunks = castor::divRoundUp( totalValues, chunkSize );
+					chunksCount = castor::divRoundUp( totalValues, chunkSize );
 				}
 			}
 
