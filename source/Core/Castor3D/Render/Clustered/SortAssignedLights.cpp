@@ -12,6 +12,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslAABB.hpp"
 #include "Castor3D/Shader/Shaders/GlslAppendBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslBitonicSort.hpp"
 #include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -31,12 +32,6 @@ namespace castor3d
 
 	namespace sort
 	{
-		static uint32_t constexpr BlockSize = 1024u;
-		static uint32_t constexpr BatchesPerPass = 8u;
-		static uint32_t constexpr BatchSize = BlockSize / BatchesPerPass;
-		static uint32_t constexpr ValuesPerThread = BatchesPerPass << 1u;
-		static uint32_t constexpr NumThreads = BlockSize / ValuesPerThread;
-
 		enum class BindingPoints
 		{
 			eClusters,
@@ -48,6 +43,7 @@ namespace castor3d
 			, ClustersConfig const & config )
 		{
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			shader::BitonicSort bitonic{ writer };
 
 			C3D_Clusters( writer
 				, BindingPoints::eClusters
@@ -60,103 +56,7 @@ namespace castor3d
 				, BindingPoints::eClusterGrid
 				, 0u );
 
-			auto gBatchSize = writer.declConstant( "gBatchSize", sdw::UInt{ BatchSize } );
-			auto gBatchSizeLog = writer.declGlobal( "gBatchSizeLog", writer.cast< sdw::UInt >( findMSB( gBatchSize ) ) );
-			auto gNumThreads = writer.declConstant( "gNumThreads", sdw::UInt{ NumThreads } );
-			auto gMaxUInt = writer.declConstant( "gMaxInt", 0xFFFFFFFF_u );
-
-			auto gsKeys = writer.declSharedVariable< sdw::UInt >( "gsKeys", BlockSize );
-
-			auto bitInsert0 = writer.implementFunction< sdw::UInt >( "bitInsert0"
-				, [&]( sdw::UInt const & value
-					, sdw::UInt const & bit )
-				{
-					writer.returnStmt( ( ( ( gMaxUInt << bit ) & value ) << 1u ) | ( ~( gMaxUInt << bit ) & value ) );
-				}
-				, sdw::InUInt{ writer, "value" }
-				, sdw::InUInt{ writer, "bit" } );
-
-			auto sortLights = writer.implementFunction< sdw::Void >( "c3d_sortLights"
-				, [&]( sdw::UInt const & groupIndex
-					, sdw::UInt const & offset
-					, sdw::UInt const & numElements )
-				{
-					// start with simple version, do everything in group shared memory
-	
-					// we process a power of two number of elements, 
-					auto passCount = writer.declLocale( "passCount", 1u + writer.cast< sdw::UInt >( findMSB( numElements - 1u ) ) );
-					auto roundedElementCount = writer.declLocale( "roundedElementCount", 1u << passCount );
-					auto batchCount = writer.declLocale( "batchCount", ( roundedElementCount + gBatchSize - 1u ) >> gBatchSizeLog );
-					// Load data into shared memory. Pad missing values with max ints.
-	
-					FOR( writer, sdw::UInt, batch, 0_u, batch < batchCount, ++batch )
-					{
-						// each thread loads a pair of values per batch.
-						auto i1 = writer.declLocale( "i1", groupIndex + batch * gBatchSize );
-						auto i2 = writer.declLocale( "i2", i1 + ( gBatchSize >> 1u ) );
-						gsKeys[i1] = writer.ternary( i1 < numElements, c3d_lightClusterIndex[offset + i1], gMaxUInt );
-						gsKeys[i2] = writer.ternary( i2 < numElements, c3d_lightClusterIndex[offset + i2], gMaxUInt );
-					}
-					ROF
-
-					shader::groupMemoryBarrierWithGroupSync( writer );
-	
-					// Each loop iteration produces blocks of size k that are monotonic (alternatively increasing and decreasing)
-					// thus, producing blocks of size 2*k that are bitonic.
-					// as a result, the last pass produces a single block sorted in ascending order
-					FOR( writer, sdw::UInt, pass, 0_u, pass < passCount, ++pass )
-					{
-						auto k = writer.declLocale( "k", 1_u << ( pass + 1u ) );
-						// Each iteration compares and optionally swap elements in pairs exactly once for each element
-						FOR( writer, sdw::UInt, subPass, 0_u, subPass <= pass, ++subPass )
-						{
-							FOR( writer, sdw::UInt, batch, 0_u, batch < batchCount, ++batch )
-							{
-								auto indexFirst = writer.declLocale( "indexFirst", bitInsert0( groupIndex + batch * gNumThreads, ( pass - subPass ) ) );
-								auto indexSecond = writer.declLocale( "indexSecond", indexFirst | ( 1u << ( pass - subPass ) ) );
-								auto valFirst = writer.declLocale( "valFirst", gsKeys[indexFirst] );
-								auto valSecond = writer.declLocale( "valSecond", gsKeys[indexSecond] );
-								shader::groupMemoryBarrierWithGroupSync( writer );
-
-								IF( writer, writer.ternary( ( indexFirst & k ) == 0_u, 1_u, 0_u ) ^ writer.ternary( valFirst <= valSecond, 1_u, 0_u ) )
-								{
-									gsKeys[indexFirst] = valSecond;
-									gsKeys[indexSecond] = valFirst;
-								}
-								FI
-
-								shader::groupMemoryBarrierWithGroupSync( writer );
-							}
-							ROF
-						}
-						ROF
-					}
-					ROF
-
-					// Now commit the results to global memory.
-					FOR( writer, sdw::UInt, batch, 0_u, batch < batchCount, ++batch )
-					{
-						auto i1 = writer.declLocale( "i1", groupIndex + batch * gBatchSize );
-						auto i2 = writer.declLocale( "i2", i1 + ( gBatchSize >> 1u ) );
-
-						IF( writer, i1 < numElements )
-						{
-							c3d_lightClusterIndex[offset + i1] = gsKeys[i1];
-						}
-						FI
-						IF( writer, i2 < numElements )
-						{
-							c3d_lightClusterIndex[offset + i2] = gsKeys[i2];
-						}
-						FI
-					}
-					ROF
-				}
-				, sdw::InUInt{ writer, "groupIndex" }
-				, sdw::InUInt{ writer, "offset" }
-				, sdw::InUInt{ writer, "numElements" } );
-
-			writer.implementMainT< sdw::VoidT >( NumThreads
+			writer.implementMainT< sdw::VoidT >( shader::BitonicSort::NumThreads
 				, [&]( sdw::ComputeIn const & in )
 				{
 					auto clusterIndex3D = writer.declLocale( "clusterIndex3D"
@@ -168,13 +68,11 @@ namespace castor3d
 					auto startOffset = writer.declLocale( "startOffset"
 						, clusterLights.x() );
 					auto lightCount = writer.declLocale( "lightCount"
-						, min( sdw::UInt{ BlockSize }, clusterLights.y() ) );
+						, min( sdw::UInt{ shader::BitonicSort::BlockSize }, clusterLights.y() ) );
 
-					IF( writer, lightCount > 1_u )
-					{
-						sortLights( in.localInvocationIndex, startOffset, lightCount );
-					}
-					FI
+					bitonic.sortT( writer, startOffset, lightCount
+						, c3d_lightClusterIndex, c3d_lightClusterIndex
+						, in.localInvocationIndex, sdw::UInt{ 0xFFFFFFFFU } );
 				} );
 			return writer.getBuilder().releaseShader();
 		}
@@ -229,7 +127,7 @@ namespace castor3d
 						.groupCountX( clusters.getDimensions()->x )
 						.groupCountY( clusters.getDimensions()->y )
 						.groupCountZ( clusters.getDimensions()->z )
-						.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return clusters.getCamera().getScene()->getLightCache().hasClusteredLights() && clusters.getConfig().enablePostAssignSort; } ) )
+						.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return clusters.getConfig().enablePostAssignSort && !clusters.getCamera().getScene()->getLightCache().getLights( LightType::ePoint ).empty(); } ) )
 					, clusters
 					, LightType::ePoint );
 				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
@@ -255,7 +153,7 @@ namespace castor3d
 						.groupCountX( clusters.getDimensions()->x )
 						.groupCountY( clusters.getDimensions()->y )
 						.groupCountZ( clusters.getDimensions()->z )
-						.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return clusters.getCamera().getScene()->getLightCache().hasClusteredLights() && clusters.getConfig().enablePostAssignSort; } ) )
+						.isEnabled( crg::RunnablePass::IsEnabledCallback( [&clusters](){ return clusters.getConfig().enablePostAssignSort && !clusters.getCamera().getScene()->getLightCache().getLights( LightType::eSpot ).empty(); } ) )
 					, clusters
 					, LightType::eSpot );
 				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
