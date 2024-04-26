@@ -89,6 +89,8 @@ namespace castor3d
 		 */
 		C3D_API static uint32_t getNumNodes( uint32_t numLeaves );
 
+		C3D_API static uint32_t getBucketSortBucketSize();
+
 		castor::Point3ui const & getDimensions()const noexcept
 		{
 			return m_dimensions;

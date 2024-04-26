@@ -12,7 +12,7 @@
 #include "Castor3D/Render/Clustered/ComputeLightsMortonCode.hpp"
 #include "Castor3D/Render/Clustered/FindUniqueClusters.hpp"
 #include "Castor3D/Render/Clustered/MergeSortLights.hpp"
-#include "Castor3D/Render/Clustered/RadixSortLights.hpp"
+#include "Castor3D/Render/Clustered/BucketSortLights.hpp"
 #include "Castor3D/Render/Clustered/ReduceLightsAABB.hpp"
 #include "Castor3D/Render/Clustered/SortAssignedLights.hpp"
 #include "Castor3D/Render/Debug/DebugModule.hpp"
@@ -22,6 +22,7 @@
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslBitonicSort.hpp"
 #include "Castor3D/Shader/Shaders/GlslRadixSort.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
@@ -162,8 +163,8 @@ namespace castor3d
 		// The maximum number of elements that need to be sorted.
 		uint32_t maxElements = MaxLightsCount;
 
-		// Radix sort will sort Morton codes (keys) into chunks of shader::radix::sortBucketSizeT<4u> size.
-		uint32_t chunkSize = shader::radix::sortBucketSizeT< 4u >;
+		// Radix sort will sort Morton codes (keys) into chunks of BucketSortBucketSize size.
+		uint32_t chunkSize = getBucketSortBucketSize();
 		// The number of chunks that need to be merge sorted after Radix sort finishes.
 		uint32_t numChunks = castor::divRoundUp( maxElements, chunkSize );
 		// The number of sort groups that are needed to sort the first set of chunks.
@@ -331,7 +332,7 @@ namespace castor3d
 			, m_device, *this ) };
 		lastPasses = { &createComputeLightsMortonCodePass( graph, lastPasses.front()
 			, m_device, *this ) };
-		lastPasses = createRadixSortLightsPass( graph, lastPasses.front()
+		lastPasses = createBucketSortLightsPass( graph, lastPasses.front()
 			, m_device, *this );
 		lastPasses = createMergeSortLightsPass( graph, lastPasses
 			, m_device, *this );
@@ -372,6 +373,11 @@ namespace castor3d
 		}
 
 		return numNodes;
+	}
+
+	uint32_t FrustumClusters::getBucketSortBucketSize()
+	{
+		return shader::RadixSortT< 4u >::bucketSize;
 	}
 
 	void FrustumClusters::doUpdate()

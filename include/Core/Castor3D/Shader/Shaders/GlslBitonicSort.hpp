@@ -10,20 +10,21 @@ See LICENSE file in root folder
 
 namespace castor3d::shader
 {
-	struct BitonicSort
+	/**
+	 *\arg	ValueSizeT	The size of the value type.
+	 */
+	template< uint32_t ValueSizeT >
+	struct BitonicSortT
 	{
-		static uint32_t constexpr BlockSize = 1024u;
-		static uint32_t constexpr BatchesPerPass = 8u;
-		static uint32_t constexpr ValuesPerThread = BatchesPerPass << 1u;
-		static uint32_t constexpr NumThreads = BlockSize / ValuesPerThread;
+		static uint32_t constexpr bucketSize{ 4096u / ValueSizeT };
 
-		sdw::UInt m_batchSize;
-		sdw::UInt m_numThreads;
-		sdw::UInt m_maxUInt;
+		uint32_t threadsCount;
 
-		BitonicSort( sdw::ComputeWriter & writer )
-			: m_batchSize{ writer.declConstant( "gBatchSize", sdw::UInt{ BlockSize / BatchesPerPass } ) }
-			, m_numThreads{ writer.declConstant( "gNumThreads", sdw::UInt{ NumThreads } ) }
+		BitonicSortT( sdw::ComputeWriter & writer
+			, uint32_t batchesPerPass )
+			: threadsCount{ bucketSize / ( batchesPerPass << 1u ) }
+			, m_batchSize{ writer.declConstant( "gBatchSize", sdw::UInt{ bucketSize / batchesPerPass } ) }
+			, m_numThreads{ writer.declConstant( "gNumThreads", sdw::UInt{ threadsCount } ) }
 			, m_maxUInt{ writer.declConstant( "gMaxUInt", 0xFFFFFFFF_u ) }
 		{
 		}
@@ -31,18 +32,19 @@ namespace castor3d::shader
 		 *\arg	ValueT		The value type.
 		 */
 		template< typename ValueT >
-		void sortT( sdw::ComputeWriter & writer
-			, sdw::UInt const & elementOffset
-			, sdw::UInt const & elementCount
-			, sdw::Array< sdw::UInt > const & inKeys
-			, sdw::Array< sdw::UInt > const & outKeys
-			, sdw::UInt const & localInvocationIndex
-			, sdw::Array< ValueT > const & inValues
-			, sdw::Array< ValueT > const & outValues
+		void sortT( sdw::ShaderWriter & writer
+			, sdw::UInt elementOffset
+			, sdw::UInt elementCount
+			, sdw::UInt groupIndex
+			, [[maybe_unused]] sdw::UInt threadIndex
+			, sdw::Array< sdw::UInt > const & inputKeys
+			, sdw::Array< sdw::UInt > const & outputKeys
+			, sdw::Array< ValueT > const & inputValues
+			, sdw::Array< ValueT > const & outputValues
 			, ValueT const & invalidValue )
 		{
-			auto gsKeys = writer.declSharedVariable< sdw::UInt >( "gsKeys", BlockSize );
-			auto gsValues = writer.declSharedVariable< ValueT >( "gsValues", BlockSize, inValues.isEnabled() );
+			auto gsKeys = writer.declSharedVariable< sdw::UInt >( "gsKeys", bucketSize );
+			auto gsValues = writer.declSharedVariable< ValueT >( "gsValues", bucketSize, inputValues.isEnabled() );
 
 			auto bitInsert0 = [&]( sdw::UInt const & value
 					, sdw::UInt const & bit )
@@ -50,15 +52,12 @@ namespace castor3d::shader
 					return ( ( ( m_maxUInt << bit ) & value ) << 1u ) | ( ~( m_maxUInt << bit ) & value );
 				};
 
-			auto bitonicSort = [&]( sdw::UInt const & groupIndex
-					, sdw::UInt const & offset
-					, sdw::UInt const & numElements )
+			auto bitonicSort = [&]()
 				{
-					// start with simple version, do everything in group shared memory
 					auto batchSizeLog = writer.declLocale( "batchSizeLog", writer.cast< sdw::UInt >( findMSB( m_batchSize ) ) );
 
 					// we process a power of two number of elements, 
-					auto passCount = writer.declLocale( "passCount", 1u + writer.cast< sdw::UInt >( findMSB( numElements - 1u ) ) );
+					auto passCount = writer.declLocale( "passCount", 1u + writer.cast< sdw::UInt >( findMSB( elementCount - 1u ) ) );
 					auto roundedElementCount = writer.declLocale( "roundedElementCount", 1u << passCount );
 					auto batchCount = writer.declLocale( "batchCount", ( roundedElementCount + m_batchSize - 1u ) >> batchSizeLog );
 					// Load data into shared memory. Pad missing values with max ints.
@@ -68,10 +67,10 @@ namespace castor3d::shader
 						// each thread loads a pair of values per batch.
 						auto i1 = writer.declLocale( "i1", groupIndex + batch * m_batchSize );
 						auto i2 = writer.declLocale( "i2", i1 + ( m_batchSize >> 1u ) );
-						gsKeys[i1] = writer.ternary( i1 < numElements, inKeys[offset + i1], m_maxUInt );
-						gsKeys[i2] = writer.ternary( i2 < numElements, inKeys[offset + i2], m_maxUInt );
-						gsValues[i1] = writer.ternary( i1 < numElements, inValues[offset + i1], invalidValue );
-						gsValues[i2] = writer.ternary( i2 < numElements, inValues[offset + i2], invalidValue );
+						gsKeys[i1] = writer.ternary( i1 < elementCount, inputKeys[elementOffset + i1], m_maxUInt );
+						gsKeys[i2] = writer.ternary( i2 < elementCount, inputKeys[elementOffset + i2], m_maxUInt );
+						gsValues[i1] = writer.ternary( i1 < elementCount, inputValues[elementOffset + i1], invalidValue );
+						gsValues[i2] = writer.ternary( i2 < elementCount, inputValues[elementOffset + i2], invalidValue );
 					}
 					ROF
 
@@ -121,25 +120,26 @@ namespace castor3d::shader
 						auto i1 = writer.declLocale( "i1", groupIndex + batch * m_batchSize );
 						auto i2 = writer.declLocale( "i2", i1 + ( m_batchSize >> 1u ) );
 
-						IF( writer, i1 < numElements )
+						IF( writer, i1 < elementCount )
 						{
-							outKeys[offset + i1] = gsKeys[i1];
-							outValues[offset + i1] = gsValues[i1];
+							outputKeys[elementOffset + i1] = gsKeys[i1];
+							outputValues[elementOffset + i1] = gsValues[i1];
 						}
 						FI
-						IF( writer, i2 < numElements )
+						IF( writer, i2 < elementCount )
 						{
-							outKeys[offset + i2] = gsKeys[i2];
-							outValues[offset + i2] = gsValues[i2];
+							outputKeys[elementOffset + i2] = gsKeys[i2];
+							outputValues[elementOffset + i2] = gsValues[i2];
 						}
 						FI
 					}
 					ROF
 				};
+			elementCount = min( sdw::UInt{ bucketSize }, elementCount );
 
 			IF( writer, elementCount > 1_u )
 			{
-				bitonicSort( localInvocationIndex, elementOffset, elementCount );
+				bitonicSort();
 			}
 			FI
 		}
@@ -148,19 +148,28 @@ namespace castor3d::shader
 		 */
 		template< typename ValueT >
 		void sortT( sdw::ComputeWriter & writer
-			, sdw::UInt const & elementOffset
-			, sdw::UInt const & elementCount
-			, sdw::Array< sdw::UInt > const & inKeys
-			, sdw::Array< sdw::UInt > const & outKeys
-			, sdw::UInt const & localInvocationIndex
+			, sdw::UInt elementOffset
+			, sdw::UInt elementCount
+			, sdw::UInt groupIndex
+			, sdw::UInt threadIndex
+			, sdw::Array< sdw::UInt > const & inputKeys
+			, sdw::Array< sdw::UInt > const & outputKeys
 			, ValueT const & invalidValue )
 		{
-			sdw::Array< ValueT > inValues = writer.declGlobalArray< ValueT >( "c3d_dummyInValues", 1u, false );
-			sdw::Array< ValueT > outValues = writer.declGlobalArray< ValueT >( "c3d_dummyOutValues", 1u, false );
-			sortT( writer, elementOffset, elementCount
-				, inKeys, outKeys, localInvocationIndex
-				, inValues, outValues, invalidValue );
+			sdw::Array< ValueT > inputValues = writer.declGlobalArray< ValueT >( "c3d_dummyInValues", 1u, false );
+			sdw::Array< ValueT > outputValues = writer.declGlobalArray< ValueT >( "c3d_dummyOutValues", 1u, false );
+			sortT( writer
+				, elementOffset, elementCount
+				, groupIndex, threadIndex
+				, inputKeys, outputKeys
+				, inputValues, outputValues
+				, invalidValue );
 		}
+
+	private:
+		sdw::UInt m_batchSize;
+		sdw::UInt m_numThreads;
+		sdw::UInt m_maxUInt;
 	};
 }
 
