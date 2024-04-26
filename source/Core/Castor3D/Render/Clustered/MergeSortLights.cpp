@@ -89,19 +89,19 @@ namespace castor3d
 			auto gsValues = writer.declSharedVariable< sdw::UInt >( "gsValues", NumValuesPerThreadGroup );	// Intermediate values.		(8,192 Bytes)
 
 			/**
-				* MergePath is a binary search over two sorted arrays that finds the
-				* point in list A and list B to begin a merge operation.
-				* Based on: https://moderngpu.github.io/bulkinsert.html#mergepath
-				* Retrieved on: Aug 9, 2016.
-				*
-				* @param a0 The first element in list A.
-				* @param aCount The number of elements in A.
-				* @param b0 The first element in list B.
-				* @param bCount The number of elements in B.
-				* @param diag The cross diagonal of the merge matrix where the merge path is computed.
-				* @param bUseSharedMem Whether to read from shared memory or global memory.
-				* @return
-				*/
+			* MergePath is a binary search over two sorted arrays that finds the
+			* point in list A and list B to begin a merge operation.
+			* Based on: https://moderngpu.github.io/bulkinsert.html#mergepath
+			* Retrieved on: Aug 9, 2016.
+			*
+			* @param a0 The first element in list A.
+			* @param aCount The number of elements in A.
+			* @param b0 The first element in list B.
+			* @param bCount The number of elements in B.
+			* @param diag The cross diagonal of the merge matrix where the merge path is computed.
+			* @param bUseSharedMem Whether to read from shared memory or global memory.
+			* @return
+			*/
 			auto mergePath = writer.implementFunction< sdw::Int >( "c3d_mergePath"
 				, [&]( sdw::Int const & a0, sdw::Int const & aCount
 					, sdw::Int const & b0, sdw::Int const & bCount
@@ -138,8 +138,8 @@ namespace castor3d
 				, sdw::InInt{ writer, "diag" }
 				, sdw::InBoolean{ writer, "bUseSharedMem" } );
 			/**
-				* Perform a serial merge using shared memory. Write results to global memory.
-				*/
+			* Perform a serial merge using shared memory. Write results to global memory.
+			*/
 			auto serialMerge = writer.implementFunction< sdw::Void >( "c3d_serialMerge"
 				, [&]( sdw::Int a0, sdw::Int const & a1
 					, sdw::Int b0, sdw::Int const & b1
@@ -445,7 +445,7 @@ namespace castor3d
 				DispatchData data{ totalValues, 0u };
 
 				// The size of a single chunk that keys will be sorted into.
-				auto chunkSize = shader::radix::sortBucketSizeT< 4u >;
+				auto chunkSize = FrustumClusters::getBucketSortBucketSize();
 
 				// The total number of complete chunks to sort.
 				auto chunksCount = getLightsMortonCodeChunkCount( totalValues );

@@ -43,7 +43,7 @@ namespace castor3d
 			, ClustersConfig const & config )
 		{
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
-			shader::BitonicSort bitonic{ writer };
+			shader::BitonicSortT< 4u > bitonic{ writer, 8u };
 
 			C3D_Clusters( writer
 				, BindingPoints::eClusters
@@ -56,7 +56,7 @@ namespace castor3d
 				, BindingPoints::eClusterGrid
 				, 0u );
 
-			writer.implementMainT< sdw::VoidT >( shader::BitonicSort::NumThreads
+			writer.implementMainT< sdw::VoidT >( bitonic.threadsCount
 				, [&]( sdw::ComputeIn const & in )
 				{
 					auto clusterIndex3D = writer.declLocale( "clusterIndex3D"
@@ -68,11 +68,13 @@ namespace castor3d
 					auto startOffset = writer.declLocale( "startOffset"
 						, clusterLights.x() );
 					auto lightCount = writer.declLocale( "lightCount"
-						, min( sdw::UInt{ shader::BitonicSort::BlockSize }, clusterLights.y() ) );
+						, min( sdw::UInt{ shader::BitonicSortT< 4u >::bucketSize }, clusterLights.y() ) );
 
-					bitonic.sortT( writer, startOffset, lightCount
+					bitonic.sortT( writer
+						, startOffset, lightCount
+						, in.localInvocationIndex, in.globalInvocationID.x()
 						, c3d_lightClusterIndex, c3d_lightClusterIndex
-						, in.localInvocationIndex, sdw::UInt{ 0xFFFFFFFFU } );
+						, sdw::UInt{ 0xFFFFFFFFU } );
 				} );
 			return writer.getBuilder().releaseShader();
 		}
