@@ -615,8 +615,8 @@ namespace castor3d
 		clusters.getClustersUbo().createPassBinding( point, lgtbvh::eClusters );
 		createInputStoragePassBinding( point, uint32_t( lgtbvh::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
 		createInputStoragePassBinding( point, uint32_t( lgtbvh::eLightIndices ), cuT( "C3D_PointLightIndices" )
-			, { &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer()
-				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer() }
+			, { &clusters.getOutputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer()
+				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
 		createClearableOutputStorageBinding( point, uint32_t( lgtbvh::eLightBVH ), cuT( "C3D_PointLightBVH" ), clusters.getPointLightBVHBuffer(), 0u, ashes::WholeSize );
 
@@ -640,8 +640,8 @@ namespace castor3d
 		clusters.getClustersUbo().createPassBinding( spot, lgtbvh::eClusters );
 		createInputStoragePassBinding( spot, uint32_t( lgtbvh::eAllLightsAABB ), cuT( "C3D_AllLightsAABB" ), clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
 		createInputStoragePassBinding( spot, uint32_t( lgtbvh::eLightIndices ), cuT( "C3D_SpotLightIndices" )
-			, { &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer()
-				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer() }
+			, { &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer()
+				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
 		createClearableOutputStorageBinding( spot, uint32_t( lgtbvh::eLightBVH ), cuT( "C3D_SpotLightBVH" ), clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );
 

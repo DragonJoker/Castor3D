@@ -463,8 +463,6 @@ namespace castor3d
 
 					// Compute merge path partitions per thread group.
 					{
-						m_partitions.pipeline.recordInto( context, commandBuffer, index );
-
 						// The number of merge path partitions that need to be computed.
 						auto mergePathPartitionsPerSortGroupCount = threadGroupsPerSortGroupCount + 1u;
 						auto totalMergePathPartitions = mergePathPartitionsPerSortGroupCount * sortGroupsCount;
@@ -472,50 +470,41 @@ namespace castor3d
 						// The number of thread groups needed to compute all merge path partitions.
 						auto threadGroupsCount = castor::divRoundUp( totalMergePathPartitions, threadsPerThreadGroupCount );
 
+						doMergeTransitionBarrier( context, commandBuffer, index );
+						m_partitions.pipeline.recordInto( context, commandBuffer, index );
 						m_context.vkCmdPushConstants( commandBuffer, m_partitions.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &data );
 						m_context.vkCmdDispatch( commandBuffer, threadGroupsCount, 1u, 1u );
-
-						// Add an explicit barrier for MergePathPartitions.
-						// This is required since the MergePathPartitions structured buffer is being used
-						// as a UAV in the MergePathPartions compute shader and as an SRV in the MergeSort
-						// compute shader. Because the MergePathPartions argument is not rebound between
-						// dispatches, no implicit UAV barrier will be added to the command list and MergeSort
-						// will likely not see the correct merge path partitions.
-						// To resolve this, an explicit UAV barrier is added for the resource.
-						doBarriers( context, commandBuffer, index );
 					}
 
 					// Perform merge sort using merge path partitions computed from the previous step.
 					{
-						m_merge.pipeline.recordInto( context, commandBuffer, index );
-
 						// Don't dispatch thread groups that will perform no work:
 						// we need at least one thread group for each sort group; no more than the number of sort groups times
 						// the number of thread groups per sort groups (if there is an odd number of chunks, the last chunk
 						// needs no merge); enough thread groups to sort all values.
-
-
-						// The number of thread groups required to sort all values.
-						const u32 numThreadGroups = std::max( sortGroupsCount
+						const u32 threadGroupsCount = std::max( sortGroupsCount
 							, std::min( threadGroupsPerSortGroupCount * sortGroupsCount
 								, castor::divRoundUp( totalValues, valuesPerThreadGroupCount ) ) );
-						m_context.vkCmdPushConstants( commandBuffer, m_merge.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &data );
-						m_context.vkCmdDispatch( commandBuffer, numThreadGroups, 1u, 1u );
 
-						if ( chunksCount & 1 )
-						{
-							// copy last chunk, there is no merging required but we still need data in the destination buffer
-							// note: no additional barriers as we are still doing read from source-> write to dest, so that should be good
-							u32 lastChunkOffset = chunkSize * ( chunksCount - 1 ) * sizeof( u32 );
-							auto lastChunkSize = u32( totalValues * sizeof( u32 ) - lastChunkOffset );
-							auto srcMorton = m_pass.buffers[0].buffer( index );
-							auto srcIndices = m_pass.buffers[1].buffer( index );
-							auto dstMorton = m_pass.buffers[0].buffer( 1u - index );
-							auto dstIndices = m_pass.buffers[1].buffer( 1u - index );
-							VkBufferCopy region{ lastChunkOffset, lastChunkOffset, lastChunkSize };
-							m_context.vkCmdCopyBuffer( commandBuffer, srcMorton, dstMorton, 1u, &region );
-							m_context.vkCmdCopyBuffer( commandBuffer, srcIndices, dstIndices, 1u, &region );
-						}
+						doAllBarriers( context, commandBuffer, index );
+						m_merge.pipeline.recordInto( context, commandBuffer, index );
+						m_context.vkCmdPushConstants( commandBuffer, m_merge.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &data );
+						m_context.vkCmdDispatch( commandBuffer, threadGroupsCount, 1u, 1u );
+					}
+
+					if ( chunksCount & 1 )
+					{
+						// copy last chunk, there is no merging required but we still need data in the destination buffer
+						// note: no additional barriers as we are still doing read from source-> write to dest, so that should be good
+						u32 lastChunkOffset = chunkSize * ( chunksCount - 1 ) * sizeof( u32 );
+						auto lastChunkSize = u32( totalValues * sizeof( u32 ) - lastChunkOffset );
+						auto srcMorton = m_pass.buffers[0].buffer( index );
+						auto srcIndices = m_pass.buffers[1].buffer( index );
+						auto dstMorton = m_pass.buffers[0].buffer( 1u - index );
+						auto dstIndices = m_pass.buffers[1].buffer( 1u - index );
+						VkBufferCopy region{ lastChunkOffset, lastChunkOffset, lastChunkSize };
+						m_context.vkCmdCopyBuffer( commandBuffer, srcMorton, dstMorton, 1u, &region );
+						m_context.vkCmdCopyBuffer( commandBuffer, srcIndices, dstIndices, 1u, &region );
 					}
 
 					// Ping-pong the buffers
@@ -526,26 +515,75 @@ namespace castor3d
 				}
 			}
 
-			void doBarriers( crg::RecordContext & context
+			void doMergeTransitionBarrier( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
 				, uint32_t passIndex )const
 			{
+				uint32_t bufferIndex{};
+
 				for ( auto & attach : m_pass.buffers )
 				{
 					if ( !attach.isNoTransition()
 						&& attach.isStorageBuffer()
 						&& attach.isClearableBuffer() )
 					{
-						auto currentState = context.getAccessState( attach.buffer( passIndex )
-							, attach.getBufferRange() );
+						auto buffer = attach.buffer( passIndex );
+						auto currentState = context.getAccessState( buffer, attach.getBufferRange() );
+
 						context.memoryBarrier( commandBuffer
-							, attach.buffer( passIndex )
+							, buffer
 							, attach.getBufferRange()
 							, currentState.access
 							, currentState.pipelineStage
 							, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
 							, true );
 					}
+
+					++bufferIndex;
+				}
+			}
+
+			void doAllBarriers( crg::RecordContext & context
+				, VkCommandBuffer commandBuffer
+				, uint32_t passIndex )const
+			{
+				uint32_t bufferIndex{};
+
+				for ( auto & attach : m_pass.buffers )
+				{
+					if ( !attach.isNoTransition()
+						&& attach.isStorageBuffer() )
+					{
+						auto buffer = attach.buffer( passIndex );
+						auto currentState = context.getAccessState( buffer, attach.getBufferRange() );
+						crg::AccessState dstState;
+
+						if ( bufferIndex < 2u )
+						{
+							// Input buffer
+							dstState = { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT };
+						}
+						else if ( bufferIndex < 4u )
+						{
+							// Output buffer
+							dstState = { VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT };
+						}
+						else
+						{
+							// Merge Path Transition Buffer
+							dstState = { VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT };
+						}
+
+						context.memoryBarrier( commandBuffer
+							, buffer
+							, attach.getBufferRange()
+							, currentState.access
+							, currentState.pipelineStage
+							, dstState
+							, true );
+					}
+
+					++bufferIndex;
 				}
 			}
 
