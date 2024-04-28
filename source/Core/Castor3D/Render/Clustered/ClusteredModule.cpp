@@ -8,8 +8,6 @@ namespace castor3d
 		{
 		case castor3d::ClusterSplitScheme::eExponentialBase:
 			return cuT( "exponential" );
-		case castor3d::ClusterSplitScheme::eExponentialBiased:
-			return cuT( "exponential_biased" );
 		case castor3d::ClusterSplitScheme::eLinear:
 			return cuT( "linear" );
 		case castor3d::ClusterSplitScheme::eExponentialLinearHybrid:

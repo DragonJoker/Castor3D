@@ -68,9 +68,9 @@ namespace castor3d
 		//!\~english	The clusters Z split scheme.
 		//!\~french		Le mode découpage en Z des clusters.
 		castor::GroupChangeTracked < ClusterSplitScheme > splitScheme;
-		//!\~english	The biased exponential split scheme bias.
-		//!\~french		Le décalage en mode de découpage exponentiel décalé.
-		castor::GroupChangeTracked< float > bias;
+		//!\~english	The hybrid split scheme minimal threshold distance.
+		//!\~french		La distance minimale en mode de découpage hybride.
+		castor::GroupChangeTracked< float > minDistance;
 	};
 
 	C3D_API bool operator==( ClustersConfig const & lhs, ClustersConfig const & rhs );

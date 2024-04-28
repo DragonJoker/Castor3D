@@ -229,7 +229,7 @@ namespace castor3d
 			}
 			else
 			{
-				params[0]->get( blockContext->clustersConfig->bias );
+				params[0]->get( blockContext->clustersConfig->minDistance );
 			}
 		}
 		CU_EndAttribute()
@@ -262,7 +262,7 @@ namespace castor3d
 		, lockClustersFrustum{ dirty, false }
 		, debugDisplay{ dirty, ClusterDebugDisplay::eNone }
 		, splitScheme{ dirty, ClusterSplitScheme::eExponentialLinearHybrid }
-		, bias{ dirty, 1.0f }
+		, minDistance{ dirty, 1.0f }
 	{
 	}
 
@@ -271,7 +271,6 @@ namespace castor3d
 		if ( enabled )
 		{
 			static castor::StringArray splitSchemeNames{ cuT( "Exponential" )
-				, cuT( "Biased Exponential" )
 				, cuT( "Linear" )
 				, cuT( "Hybrid" ) };
 			static castor::StringArray debugDisplayNames{ cuT( "None" )
@@ -293,7 +292,7 @@ namespace castor3d
 				, splitScheme
 				, splitSchemeNames
 				, ConfigurationVisitorBase::OnEnumValueChangeT< ClusterSplitScheme >( [this]( ClusterSplitScheme, ClusterSplitScheme newV ){ splitScheme = newV; } ) );
-			visitor.visit( cuT( "Biased Exponential Bias" ), bias );
+			visitor.visit( cuT( "Minimal Threshold Distance" ), minDistance );
 			visitor.visit( cuT( "[Debug] Lock Clusters Frustum" ), lockClustersFrustum );
 			visitor.visit( cuT( "[Debug] Display AABBs" )
 				, debugDisplay
@@ -323,6 +322,7 @@ namespace castor3d
 		clustersContext.addParser( cuT( "enable_bvh_warp_optimisation" ), clscfg::parserClustersBVHWarpOptimisation, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 		clustersContext.addParser( cuT( "split_scheme" ), clscfg::parserClustersSplitScheme, { makeParameter< ParameterType::eCheckedText, ClusterSplitScheme >() } );
 		clustersContext.addParser( cuT( "bias" ), clscfg::parserClustersBias, { makeDefaultedParameter< ParameterType::eFloat >( 1.0f ) } );
+		clustersContext.addParser( cuT( "min_distance" ), clscfg::parserClustersBias, { makeDefaultedParameter< ParameterType::eFloat >( 1.0f ) } );
 		clustersContext.addPopParser( cuT( "}" ), clscfg::parserClustersEnd );
 	}
 
@@ -338,6 +338,6 @@ namespace castor3d
 			&& lhs.enableReduceWarpOptimisation == rhs.enableReduceWarpOptimisation
 			&& lhs.enableBVHWarpOptimisation == rhs.enableBVHWarpOptimisation
 			&& lhs.splitScheme == rhs.splitScheme
-			&& lhs.bias == rhs.bias;
+			&& lhs.minDistance == rhs.minDistance;
 	}
 }

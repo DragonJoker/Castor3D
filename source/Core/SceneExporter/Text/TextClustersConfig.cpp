@@ -17,7 +17,6 @@ namespace castor
 		static const String splitSchemes[uint32_t( castor3d::ClusterSplitScheme::eCount )] =
 		{
 			getName( castor3d::ClusterSplitScheme::eExponentialBase ),
-			getName( castor3d::ClusterSplitScheme::eExponentialBiased ),
 			getName( castor3d::ClusterSplitScheme::eLinear ),
 			getName( castor3d::ClusterSplitScheme::eExponentialLinearHybrid ),
 		};
@@ -37,7 +36,7 @@ namespace castor
 				&& writeOpt( file, cuT( "enable_reduce_warp_optimisation" ), object.enableReduceWarpOptimisation.value(), false )
 				&& writeOpt( file, cuT( "enable_bvh_warp_optimisation" ), object.enableBVHWarpOptimisation.value(), true )
 				&& writeOpt( file, cuT( "split_scheme" ), splitSchemes[uint32_t( object.splitScheme.value() )], splitSchemes[uint32_t( castor3d::ClusterSplitScheme::eExponentialLinearHybrid )] )
-				&& writeOpt( file, cuT( "bias" ), object.bias.value(), 1.0f );
+				&& writeOpt( file, cuT( "min_distance" ), object.minDistance.value(), 1.0f );
 		}
 
 		return result;

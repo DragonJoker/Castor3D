@@ -18,9 +18,8 @@ namespace castor3d
 	enum class ClusterSplitScheme
 	{
 		eExponentialBase = 0,
-		eExponentialBiased = 1,
-		eLinear = 2,
-		eExponentialLinearHybrid = 3,
+		eLinear = 1,
+		eExponentialLinearHybrid = 2,
 		CU_ScopedEnumBounds( eExponentialBase, eExponentialLinearHybrid )
 	};
 	C3D_API castor::String getName( ClusterSplitScheme value );

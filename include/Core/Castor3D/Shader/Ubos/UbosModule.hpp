@@ -244,8 +244,8 @@ namespace castor3d
 		uint32_t pointLightsCount{};
 		// The number of spot lights.
 		uint32_t spotLightsCount{};
-		// The biased exponential split scheme bias.
-		float bias{};
+		// The hybrid split scheme minimal threshold distance.
+		float minDistance{};
 		// If clustered lights processing uses wave intrinsics.
 		uint32_t enableWaveIntrinsics{};
 		float pad0{};
