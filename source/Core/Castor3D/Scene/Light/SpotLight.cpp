@@ -38,11 +38,10 @@ namespace castor3d
 
 	SpotLight::SpotLight( Light & light )
 		: LightCategory{ LightType::eSpot, light, LightDataComponents, ShadowDataComponents }
-		, m_dirtyData{ true }
-		, m_range{ m_dirtyData, 10.0f }
-		, m_exponent{ m_dirtyData, 1.0f }
-		, m_innerCutOff{ m_dirtyData, 22.5_degrees }
-		, m_outerCutOff{ m_dirtyData, 45.0_degrees }
+		, m_range{ m_dirty, 10.0f, [this](){ getLight().markDirty(); } }
+		, m_exponent{ m_dirty, 1.0f, [this](){ getLight().markDirty(); } }
+		, m_innerCutOff{ m_dirty, 22.5_degrees, [this](){ getLight().markDirty(); } }
+		, m_outerCutOff{ m_dirty, 45.0_degrees, [this](){ getLight().markDirty(); } }
 		, m_lightView{ m_dirtyShadow }
 		, m_lightProj{ m_dirtyShadow }
 	{
@@ -174,7 +173,6 @@ namespace castor3d
 		m_cubeBox.load( aabb.getMin() * range
 			, aabb.getMax() * range );
 		m_farPlane = range;
-		m_dirtyData = false;
 	}
 
 	void SpotLight::updateShadow( Camera & lightCamera
@@ -212,51 +210,26 @@ namespace castor3d
 	void SpotLight::setAttenuation( castor::Point3f const & attenuation )
 	{
 		m_range = getMaxDistance( *this, attenuation );
-
-		if ( m_dirtyData )
-		{
-			getLight().markDirty();
-		}
 	}
 
 	void SpotLight::setRange( float range )
 	{
 		m_range = range;
-
-		if ( m_dirtyData )
-		{
-			getLight().markDirty();
-		}
 	}
 
 	void SpotLight::setExponent( float exponent )
 	{
 		m_exponent = exponent;
-
-		if ( m_dirtyData )
-		{
-			getLight().markDirty();
-		}
 	}
 
 	void SpotLight::setInnerCutOff( castor::Angle const & cutOff )
 	{
 		m_innerCutOff = cutOff;
-
-		if ( m_dirtyData )
-		{
-			getLight().markDirty();
-		}
 	}
 
 	void SpotLight::setOuterCutOff( castor::Angle const & cutOff )
 	{
 		m_outerCutOff = cutOff;
-
-		if ( m_dirtyData )
-		{
-			getLight().markDirty();
-		}
 	}
 
 	void SpotLight::doFillLightBuffer( castor::Point4f * data )const

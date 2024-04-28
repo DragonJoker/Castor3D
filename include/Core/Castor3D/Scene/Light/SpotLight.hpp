@@ -162,7 +162,6 @@ namespace castor3d
 		void doAccept( ConfigurationVisitorBase & vis )override;
 
 	private:
-		bool m_dirtyData{ false };
 		bool m_dirtyShadow{ true };
 		castor::GroupChangeTracked< float > m_range;
 		castor::GroupChangeTracked< float > m_exponent;

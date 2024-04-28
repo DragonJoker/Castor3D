@@ -113,6 +113,9 @@ namespace castor3d
 		//!\~english	The node change notification index.
 		//!\~french		L'indice de notifcation des changements du noeud.
 		OnSceneNodeChangedConnection m_notifyIndex;
+		//!\~english	The object "to update" status.
+		//!\~french		Le statut d'objet "à mettre à jour".
+		bool m_dirty{ true };
 	};
 
 	template< typename CacheT >

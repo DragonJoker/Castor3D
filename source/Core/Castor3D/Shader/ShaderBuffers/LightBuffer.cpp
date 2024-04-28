@@ -198,6 +198,7 @@ namespace castor3d
 		for ( auto i = uint32_t( type ); i < uint32_t( LightType::eMax ); ++i )
 		{
 			auto begin = m_typeSortedLights[i].begin() + index;
+			index = 0u;
 
 			for ( auto it : castor::makeArrayView( begin, m_typeSortedLights[i].end() ) )
 			{

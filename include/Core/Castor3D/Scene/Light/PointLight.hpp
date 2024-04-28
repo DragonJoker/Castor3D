@@ -117,7 +117,7 @@ namespace castor3d
 
 	private:
 		friend class Scene;
-		bool m_dirtyData{ false };
+
 		castor::GroupChangeTracked< float > m_range;
 		castor::GroupChangeTracked< castor::Point3f > m_position;
 		castor::Array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > m_lightViews;

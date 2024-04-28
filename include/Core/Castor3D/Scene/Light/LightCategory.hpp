@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/ShaderBuffers/LightBuffer.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
+#include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 
 namespace castor3d
@@ -136,12 +137,12 @@ namespace castor3d
 
 		float getDiffuseIntensity()const
 		{
-			return m_intensity[0];
+			return m_intensity.value()[0];
 		}
 
 		float getSpecularIntensity()const
 		{
-			return m_intensity[1];
+			return m_intensity.value()[1];
 		}
 
 		castor::Point2f const & getIntensity()const
@@ -197,25 +198,18 @@ namespace castor3d
 		{
 			return m_light;
 		}
-
-		castor::Point3f & getColour()
-		{
-			return m_colour;
-		}
-
-		castor::Point2f & getIntensity()
-		{
-			return m_intensity;
-		}
 		/**@}*/
+
+	protected:
+		bool & m_dirty;
 
 	private:
 		LightType m_lightType;
 		Light & m_light;
 		uint32_t m_lightComponentCount{};
 		uint32_t m_shadowComponentCount{};
-		castor::Point3f m_colour{ 1.0, 1.0, 1.0 };
-		castor::Point2f m_intensity{ 1.0, 1.0 };
+		castor::GroupChangeTracked< castor::Point3f > m_colour;
+		castor::GroupChangeTracked< castor::Point2f > m_intensity;
 		/**
 		 *\~english
 		 *\brief		Puts the light into the given buffer.
