@@ -27,9 +27,8 @@ namespace castor3d
 
 	PointLight::PointLight( Light & light )
 		: LightCategory{ LightType::ePoint, light, LightDataComponents, ShadowDataComponents }
-		, m_dirtyData{ true }
-		, m_range{ m_dirtyData, 10.0f }
-		, m_position{ m_dirtyData }
+		, m_range{ m_dirty, 10.0f, [this](){ getLight().markDirty(); } }
+		, m_position{ m_dirty, [this](){ getLight().markDirty(); } }
 	{
 	}
 
@@ -129,7 +128,7 @@ namespace castor3d
 		auto range = computeRange( getIntensity(), m_range.value() );
 		m_cubeBox.load( castor::Point3f{ -range, -range, -range }
 			, castor::Point3f{ range, range, range } );
-		m_farPlane = m_range;
+		m_farPlane = m_range.value();
 	}
 
 	void PointLight::updateShadow( int32_t index )
@@ -154,21 +153,11 @@ namespace castor3d
 	void PointLight::setAttenuation( castor::Point3f const & attenuation )
 	{
 		m_range = getMaxDistance( *this, attenuation );
-
-		if ( m_dirtyData )
-		{
-			getLight().markDirty();
-		}
 	}
 
 	void PointLight::setRange( float value )
 	{
 		m_range = value;
-
-		if ( m_dirtyData )
-		{
-			getLight().markDirty();
-		}
 	}
 
 	void PointLight::doFillLightBuffer( castor::Point4f * data )const

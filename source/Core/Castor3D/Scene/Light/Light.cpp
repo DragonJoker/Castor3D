@@ -18,6 +18,7 @@ namespace castor3d
 		, LightFactory & factory
 		, LightType lightType )
 		: MovableObject{ name, scene, MovableType::eLight, node }
+		, m_enabled{ m_dirty, true, [this](){ markDirty(); } }
 	{
 		m_category = factory.create( lightType, castor::ref( *this ) );
 	}

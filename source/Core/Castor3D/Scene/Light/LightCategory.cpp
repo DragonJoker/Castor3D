@@ -16,10 +16,13 @@ namespace castor3d
 		, Light & light
 		, uint32_t lightComponentCount
 		, uint32_t shadowComponentCount )
-		: m_lightType{ lightType }
+		: m_dirty{ light.doGetDirty() }
+		, m_lightType{ lightType }
 		, m_light{ light }
 		, m_lightComponentCount{ lightComponentCount }
 		, m_shadowComponentCount{ shadowComponentCount }
+		, m_colour{ m_dirty, { 1.0, 1.0, 1.0 }, [this](){ getLight().markDirty(); } }
+		, m_intensity{ m_dirty, { 1.0, 1.0 }, [this](){ getLight().markDirty(); } }
 	{
 	}
 
@@ -40,8 +43,7 @@ namespace castor3d
 	void LightCategory::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Colour" ), m_colour );
-		vis.visit( cuT( "Diffuse Intensity" ), m_intensity->x );
-		vis.visit( cuT( "Specular Intensity" ), m_intensity->y );
+		vis.visit( cuT( "Intensity" ), m_intensity );
 		doAccept( vis );
 	}
 
@@ -159,13 +161,13 @@ namespace castor3d
 
 	void LightCategory::setDiffuseIntensity( float value )
 	{
-		m_intensity[0] = value;
+		( *m_intensity )->x = value;
 		getLight().markDirty();
 	}
 
 	void LightCategory::setSpecularIntensity( float value )
 	{
-		m_intensity[1] = value;
+		( *m_intensity )->y = value;
 		getLight().markDirty();
 	}
 
