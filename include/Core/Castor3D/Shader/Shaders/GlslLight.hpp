@@ -25,7 +25,7 @@ namespace castor3d::shader
 			, sdw::IntField< "shadowMapIndex" >
 			, sdw::UIntField< "cascadeCount" >
 			, sdw::Vec3Field< "posDir" >
-			, sdw::FloatField< "exponent" > >
+			, sdw::UIntField< "enabled" > >
 	{
 		friend class LightsBuffer;
 		friend struct DirectionalLight;
@@ -44,10 +44,10 @@ namespace castor3d::shader
 		auto intensity()const { return getMember< "intensity" >(); }
 		auto range()const { return getMember< "range" >(); }
 		auto shadowMapIndex()const { return getMember< "shadowMapIndex" >(); }
+		auto enabled()const { return getMember< "enabled" >(); }
 
 	private:
 		auto posDir()const { return getMember< "posDir" >(); }
-		auto exponent()const { return getMember< "exponent" >(); }
 		auto cascadeCount()const { return getMember< "cascadeCount" >(); }
 	};
 
@@ -69,6 +69,7 @@ namespace castor3d::shader
 		auto colour()const { return base().colour(); }
 		auto intensity()const { return base().intensity(); }
 		auto shadowMapIndex()const { return base().shadowMapIndex(); }
+		auto enabled()const { return base().enabled() != 0_u; }
 		auto cascadeCount()const { return base().cascadeCount(); }
 
 		auto direction()const { return base().posDir(); }
@@ -96,6 +97,7 @@ namespace castor3d::shader
 		auto intensity()const { return base().intensity(); }
 		auto range()const { return base().range(); }
 		auto shadowMapIndex()const { return base().shadowMapIndex(); }
+		auto enabled()const { return base().enabled() != 0_u; }
 
 		auto position()const { return base().posDir(); }
 	};
@@ -105,6 +107,7 @@ namespace castor3d::shader
 			, sdw::type::MemoryLayout::eC
 			, sdw::StructFieldT< Light, "base" >
 			, sdw::Vec3Field< "direction" >
+			, sdw::FloatField< "exponent" >
 			, sdw::FloatField< "outerCutOffCos" >
 			, sdw::FloatField< "innerCutOff" >
 			, sdw::FloatField< "outerCutOff" >
@@ -130,10 +133,11 @@ namespace castor3d::shader
 		auto intensity()const { return base().intensity(); }
 		auto range()const { return base().range(); }
 		auto shadowMapIndex()const { return base().shadowMapIndex(); }
+		auto enabled()const { return base().enabled() != 0_u; }
 
 		auto position()const { return base().posDir(); }
-		auto exponent()const { return base().exponent(); }
 		auto direction()const { return getMember< "direction" >(); }
+		auto exponent()const { return getMember< "exponent" >(); }
 		auto innerCutOff()const { return getMember< "innerCutOff" >(); }
 		auto outerCutOff()const { return getMember< "outerCutOff" >(); }
 		auto innerCutOffCos()const { return getMember< "innerCutOffCos" >(); }

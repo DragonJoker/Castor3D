@@ -260,7 +260,7 @@ namespace castor3d
 
 		auto targetResult = getOwner()->getTargetResult();
 		auto targetDepth = getOwner()->getTargetDepth();
-		auto & result = m_graph.createPass( isDeferredLighting ? castor::MbString{ "DeferredVisibility" } : castor::MbString{ "Visibility" }
+		auto & result = m_graph.createPass( isDeferredLighting ? castor::MbString{ "DeferredVisibilityResolve" } : castor::MbString{ "VisibilityResolve" }
 			, [this, targetResult, targetDepth, progress, isDeferredLighting, &previous]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )

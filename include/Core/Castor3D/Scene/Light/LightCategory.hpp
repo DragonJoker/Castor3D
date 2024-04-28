@@ -48,7 +48,7 @@ namespace castor3d
 			Float1 shadowMapIndex;
 			Float1 cascadeCount;
 			Float3 posDir;
-			Float1 exponent;
+			Float1 enabled;
 		};
 
 		static uint32_t constexpr LightMbrAlign = 4u * sizeof( float );

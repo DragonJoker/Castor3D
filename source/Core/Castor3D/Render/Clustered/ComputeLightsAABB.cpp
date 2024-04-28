@@ -42,6 +42,8 @@ namespace castor3d
 		static ShaderPtr createShader( RenderDevice const & device
 			, ClustersConfig const & config )
 		{
+			static float constexpr FltMax = std::numeric_limits< float >::max();
+
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
@@ -71,10 +73,23 @@ namespace castor3d
 						, lights.getDirectionalsEnd() + lightIndex * PointLight::LightDataComponents );
 					auto point = writer.declLocale( "point"
 						, lights.getPointLight( lightOffset ) );
-					auto vsPosition = writer.declLocale( "vsPosition"
-						, c3d_cameraDataClusters.worldToCurView( vec4( point.position(), 1.0_f ) ).xyz() );
+					auto result = writer.declLocale< shader::AABB >( "result" );
 
-					writer.returnStmt( shader::AABB{ vsPosition, computeRange( point ) } );
+					IF( writer, point.enabled() )
+					{
+						auto vsPosition = writer.declLocale( "vsPosition"
+							, c3d_cameraDataClusters.worldToCurView( vec4( point.position(), 1.0_f ) ).xyz() );
+
+						result = shader::AABB{ vsPosition, computeRange( point ) };
+					}
+					ELSE
+					{
+						result = shader::AABB{ vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f )
+							, vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f ) };
+					}
+					FI
+
+					writer.returnStmt( result );
 				}
 				, sdw::InUInt{ writer, "lightIndex" } );
 
@@ -102,55 +117,69 @@ namespace castor3d
 						, lights.getPointsEnd() + lightIndex * SpotLight::LightDataComponents );
 					auto spot = writer.declLocale( "spot"
 						, lights.getSpotLight( lightOffset ) );
+					auto result = writer.declLocale< shader::AABB >( "result" );
 
-					if ( config.useSpotTightBoundingBox )
+					IF( writer, spot.enabled() )
 					{
-						auto vsApex = writer.declLocale( "vsApex"
-							, c3d_cameraDataClusters.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
-						auto vsDirection = writer.declLocale( "vsDirection"
-							, c3d_cameraDataClusters.worldToCurView( -spot.direction() ) );
-
-						auto largeRange = writer.declLocale( "largeRange"
-							, computeRange( spot ) );
-						auto smallRange = writer.declLocale( "smallRange"
-							, largeRange * spot.outerCutOffCos() );
-						auto baseRadius = writer.declLocale( "baseRadius"
-							, smallRange * spot.outerCutOffTan() );
-
-						auto smallBase = writer.declLocale( "smallBase"
-							, vsApex + smallRange * vsDirection );
-
-						IF( writer, dot( vsDirection, vec3( 0.0_f, 0.0_f, -1.0_f ) ) > 0.999_f )
+						if ( config.useSpotTightBoundingBox )
 						{
-							// Light is looking the same direction as the camera.
-							// Weird bug here, resulting in both small and large AABB having min.z == max.z
-							// whilst everything looks good when debugging step by step in RenderDoc...
-							// Hence just take the disk AABB
-							auto e = writer.declLocale( "e"
-								, baseRadius * sqrt( vec3( 1.0_f ) - vsDirection * vsDirection ) );
+							auto vsApex = writer.declLocale( "vsApex"
+								, c3d_cameraDataClusters.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
+							auto vsDirection = writer.declLocale( "vsDirection"
+								, c3d_cameraDataClusters.worldToCurView( -spot.direction() ) );
 
-							writer.returnStmt( shader::AABB{ vec4( min( vsApex, smallBase - e ), 1.0_f )
-								, vec4( max( vsApex, smallBase + e ), 1.0_f ) } );
+							auto largeRange = writer.declLocale( "largeRange"
+								, computeRange( spot ) );
+							auto smallRange = writer.declLocale( "smallRange"
+								, largeRange * spot.outerCutOffCos() );
+							auto baseRadius = writer.declLocale( "baseRadius"
+								, smallRange * spot.outerCutOffTan() );
+
+							auto smallBase = writer.declLocale( "smallBase"
+								, vsApex + smallRange * vsDirection );
+
+							IF( writer, dot( vsDirection, vec3( 0.0_f, 0.0_f, -1.0_f ) ) > 0.999_f )
+							{
+								// Light is looking the same direction as the camera.
+								// Weird bug here, resulting in both small and large AABB having min.z == max.z
+								// whilst everything looks good when debugging step by step in RenderDoc...
+								// Hence just take the disk AABB
+								auto e = writer.declLocale( "e"
+									, baseRadius * sqrt( vec3( 1.0_f ) - vsDirection * vsDirection ) );
+
+								result = shader::AABB{ vec4( min( vsApex, smallBase - e ), 1.0_f )
+									, vec4( max( vsApex, smallBase + e ), 1.0_f ) };
+							}
+							ELSE
+							{
+								auto smallAABB = writer.declLocale( "smallAABB"
+									, getConeAABB( vsApex, smallBase, baseRadius ) );
+
+								auto largeBase = writer.declLocale( "largeBase"
+									, vsApex + largeRange * vsDirection );
+								auto largeAABB = writer.declLocale( "largeAABB"
+									, getConeAABB( vsApex, largeBase, baseRadius ) );
+
+								result = shader::AABB{ min( smallAABB.min(), largeAABB.min() )
+									, max( smallAABB.max(), largeAABB.max() ) };
+							}
+							FI
 						}
-						FI
-
-						auto smallAABB = writer.declLocale( "smallAABB"
-							, getConeAABB( vsApex, smallBase, baseRadius ) );
-
-						auto largeBase = writer.declLocale( "largeBase"
-							, vsApex + largeRange * vsDirection );
-						auto largeAABB = writer.declLocale( "largeAABB"
-							, getConeAABB( vsApex, largeBase, baseRadius ) );
-
-						writer.returnStmt( shader::AABB{ min( smallAABB.min(), largeAABB.min() )
-							, max( smallAABB.max(), largeAABB.max() ) } );
+						else
+						{
+							auto vsPosition = writer.declLocale( "vsPosition"
+								, c3d_cameraDataClusters.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
+							result = shader::AABB{ vsPosition, computeRange( spot ) };
+						}
 					}
-					else
+					ELSE
 					{
-						auto vsPosition = writer.declLocale( "vsPosition"
-							, c3d_cameraDataClusters.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
-						writer.returnStmt( shader::AABB{ vsPosition, computeRange( spot ) } );
+						result = shader::AABB{ vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f )
+							, vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f ) };
 					}
+					FI
+
+					writer.returnStmt( result );
 				}
 				, sdw::InUInt{ writer, "lightIndex" } );
 
