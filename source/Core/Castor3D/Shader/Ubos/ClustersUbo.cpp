@@ -50,45 +50,38 @@ namespace castor3d
 						, sdw::Float const & viewZ
 						, sdw::Vec4 const & clustersLightsData )
 					{
+						auto nearZ = clustersLightsData.x();
+						auto farZ = clustersLightsData.y();
+
 						auto i = writer.declLocale( "i"
 							, screenPos.x() / writer.cast< sdw::Float >( clusterSize().x() ) );
 						auto j = writer.declLocale( "j"
 							, screenPos.y() / writer.cast< sdw::Float >( clusterSize().y() ) );
 
-						sdw::UInt const ExponentialBase = 0_u;
-						sdw::UInt const ExponentialBiased = 1_u;
-						sdw::UInt const Linear = 2_u;
-						sdw::UInt const ExponentialLinearHybrid = 3_u;
+						sdw::UInt const Exponential= 0_u;
+						sdw::UInt const Linear = 1_u;
+						sdw::UInt const Hybrid = 2_u;
 
 						auto k = writer.declLocale( "k", 0.0_f );
 
-						IF( writer, splitScheme() == ExponentialBase )
+						IF( writer, splitScheme() == Exponential )
 						{
-							k = floor( sdw::log( -viewZ ) * clustersLightsData.z() - clustersLightsData.w() );
-						}
-						ELSEIF( splitScheme() == ExponentialBiased )
-						{
-							auto nearZ = writer.declLocale( "nearZ"
-								, clustersLightsData.x() );
-							auto farZ = writer.declLocale( "farZ"
-								, clustersLightsData.y() );
-							k = max( 0.0_f, floor( sdw::log( -viewZ / nearZ ) * clustersLightsData.w() - writer.cast< sdw::Float >( dimensions().z() ) * bias() ) );
+							auto multiply = clustersLightsData.z();
+							auto add = clustersLightsData.w();
+							k = floor( sdw::log( -viewZ ) * multiply - add );
 						}
 						ELSEIF( splitScheme() == Linear )
 						{
-							k = floor( writer.cast< sdw::Float >( dimensions().z() ) * ( -viewZ - clustersLightsData.z() ) / ( clustersLightsData.w() - clustersLightsData.z() ) );
+							k = floor( writer.cast< sdw::Float >( dimensions().z() ) * ( -viewZ - nearZ ) / ( farZ - nearZ ) );
 						}
 						ELSE
 						{
-							auto nearZ = writer.declLocale( "nearZ"
-								, clustersLightsData.x() );
-							auto farZ = writer.declLocale( "farZ"
-								, clustersLightsData.y() );
+							auto d = clustersLightsData.z();
 							auto limZ = writer.declLocale( "limZ"
-								, max( bias(), nearZ ) );
+								, max( minDistance(), nearZ ) );
 							auto depthBias = writer.declLocale( "depthBias"
 								, sdw::log( limZ / nearZ ) / sdw::log( farZ / limZ ) );
-							k = max( 0.0_f, floor( sdw::log( -viewZ / nearZ ) * clustersLightsData.z() - writer.cast< sdw::Float >( dimensions().z() ) * depthBias ) );
+							k = max( 0.0_f, floor( sdw::log( -viewZ / nearZ ) * d - writer.cast< sdw::Float >( dimensions().z() ) * depthBias ) );
 						}
 						FI
 
@@ -104,20 +97,9 @@ namespace castor3d
 				, pclustersLightsData );
 		}
 
-		sdw::RetUInt32 ClustersData::computeClusterIndex1D( sdw::U32Vec3 const pclusterIndex3D )
+		sdw::UInt32 ClustersData::computeClusterIndex1D( sdw::U32Vec3 const clusterIndex3D )
 		{
-			if ( !m_computeClusterIndex1D )
-			{
-				auto & writer = *getWriter();
-				m_computeClusterIndex1D = writer.implementFunction< sdw::UInt32 >( "c3d_computeClusterIndex1D"
-					, [this, &writer]( sdw::U32Vec3 const & clusterIndex3D )
-					{
-						writer.returnStmt( clusterIndex3D.x() + ( dimensions().x() * ( clusterIndex3D.y() + dimensions().y() * clusterIndex3D.z() ) ) );
-					}
-					, sdw::InU32Vec3{ writer, "clusterIndex3D" } );
-			}
-
-			return m_computeClusterIndex1D( pclusterIndex3D );
+			return clusterIndex3D.x() + ( dimensions().x() * ( clusterIndex3D.y() + dimensions().y() * clusterIndex3D.z() ) );
 		}
 
 		sdw::RetVec2 ClustersData::getClusterDepthBounds( sdw::U32Vec3 const pclusterIndex3D
@@ -132,54 +114,47 @@ namespace castor3d
 						, sdw::Vec4 const & clustersLightsData
 						, sdw::Vec4 const & )
 					{
-						auto nearZ = writer.declLocale( "nearZ"
-							, clustersLightsData.x() );
-						auto farZ = writer.declLocale( "farZ"
-							, clustersLightsData.y() );
+						auto nearZ = clustersLightsData.x();
+						auto farZ = clustersLightsData.y();
+						auto clustersZ = writer.cast< sdw::Float >( dimensions().z() );
 
-						sdw::UInt const ExponentialBase = 0_u;
-						sdw::UInt const ExponentialBiased = 1_u;
-						sdw::UInt const Linear = 2_u;
-						sdw::UInt const ExponentialLinearHybrid = 3_u;
+						sdw::UInt const Exponential = 0_u;
+						sdw::UInt const Linear = 1_u;
+						sdw::UInt const Hybrid = 2_u;
 
-						IF( writer, splitScheme() == ExponentialBase )
+						IF( writer, splitScheme() == Exponential )
 						{
 							auto nearTile = writer.declLocale( "nearTile"
-								, -nearZ * pow( farZ / nearZ, writer.cast< sdw::Float >( clusterIndex3D.z() ) / writer.cast< sdw::Float >( dimensions().z() ) ) );
+								, -nearZ * pow( farZ / nearZ, writer.cast< sdw::Float >( clusterIndex3D.z() ) / clustersZ ) );
 							auto farTile = writer.declLocale( "farTile"
-								, -nearZ * pow( farZ / nearZ, writer.cast< sdw::Float >( clusterIndex3D.z() + 1_u ) / writer.cast< sdw::Float >( dimensions().z() ) ) );
-							writer.returnStmt( vec2( nearTile, farTile ) );
-						}
-						ELSEIF( splitScheme() == ExponentialBiased )
-						{
-							auto nearTile = writer.declLocale( "nearTile"
-								, -nearZ * pow( farZ / nearZ, ( writer.cast< sdw::Float >( clusterIndex3D.z() ) + writer.cast< sdw::Float >( dimensions().z() ) * bias() ) / clustersLightsData.z() ) );
-							auto farTile = writer.declLocale( "farTile"
-								, -nearZ * pow( farZ / nearZ, ( writer.cast< sdw::Float >( clusterIndex3D.z() + 1_u ) + writer.cast< sdw::Float >( dimensions().z() ) * bias() ) / clustersLightsData.z() ) );
+								, -nearZ * pow( farZ / nearZ, writer.cast< sdw::Float >( clusterIndex3D.z() + 1_u ) / clustersZ ) );
 							writer.returnStmt( vec2( nearTile, farTile ) );
 						}
 						ELSEIF( splitScheme() == Linear )
 						{
 							auto nearTile = writer.declLocale( "nearTile"
-								, -nearZ - writer.cast< sdw::Float >( clusterIndex3D.z() ) * ( farZ - nearZ ) / writer.cast< sdw::Float >( dimensions().z() ) );
+								, -nearZ - writer.cast< sdw::Float >( clusterIndex3D.z() ) * ( farZ - nearZ ) / clustersZ );
 							auto farTile = writer.declLocale( "farTile"
-								, -nearZ - writer.cast< sdw::Float >( clusterIndex3D.z() + 1_u ) * ( farZ - nearZ ) / writer.cast< sdw::Float >( dimensions().z() ) );
+								, -nearZ - writer.cast< sdw::Float >( clusterIndex3D.z() + 1_u ) * ( farZ - nearZ ) / clustersZ );
 							writer.returnStmt( vec2( nearTile, farTile ) );
 						}
 						ELSE
 						{
+							auto e = clustersLightsData.w();
 							auto limZ = writer.declLocale( "limZ"
-								, max( bias(), nearZ ) );
+								, max( minDistance(), nearZ ) );
 							auto depthBias = writer.declLocale( "depthBias"
 								, sdw::log( limZ / nearZ ) / sdw::log( farZ / limZ ) );
+							auto curSlice = clusterIndex3D.z();
+							auto nxtSlice = clusterIndex3D.z() + 1_u;
 							auto nearTile = writer.declLocale( "nearTile"
-								, writer.ternary( clusterIndex3D.z() == 0_u
+								, writer.ternary( curSlice == 0_u
 									, -nearZ
-									, -clustersLightsData.w() * pow( farZ / nearZ, writer.cast< sdw::Float >( clusterIndex3D.z() ) / ( writer.cast< sdw::Float >( dimensions().z() ) * ( 1.0_f + depthBias ) ) ) ) );
+									, -e * pow( farZ / nearZ, writer.cast< sdw::Float >( curSlice ) / ( clustersZ * ( 1.0_f + depthBias ) ) ) ) );
 							auto farTile = writer.declLocale( "farTile"
-								, writer.ternary( clusterIndex3D.z() == 0_u
+								, writer.ternary( nxtSlice == 0_u
 									, -nearZ
-									, -clustersLightsData.w() * pow( farZ / nearZ, writer.cast< sdw::Float >( clusterIndex3D.z() + 1_u ) / ( writer.cast< sdw::Float >( dimensions().z() ) * ( 1.0_f + depthBias ) ) ) ) );
+									, -e * pow( farZ / nearZ, writer.cast< sdw::Float >( nxtSlice ) / ( clustersZ * ( 1.0_f + depthBias ) ) ) ) );
 							writer.returnStmt( vec2( nearTile, farTile ) );
 						}
 						FI
@@ -233,12 +208,11 @@ namespace castor3d
 						auto nearZ = writer.getVariable < sdw::Float >( "nearZ" );
 						auto farZ = writer.getVariable < sdw::Float >( "farZ" );
 
-						sdw::UInt const ExponentialBase = 0_u;
-						sdw::UInt const ExponentialBiased = 1_u;
-						sdw::UInt const Linear = 2_u;
-						sdw::UInt const ExponentialLinearHybrid = 3_u;
+						sdw::UInt const Exponential = 0_u;
+						sdw::UInt const Linear = 1_u;
+						sdw::UInt const Hybrid = 2_u;
 
-						IF( writer, splitScheme() == ExponentialBase )
+						IF( writer, splitScheme() == Exponential )
 						{
 							auto multiply = writer.declLocale( "multiply"
 								, writer.cast< sdw::Float >( dimensions().z() ) / sdw::log( farZ / nearZ ) );
@@ -246,22 +220,14 @@ namespace castor3d
 								, multiply * sdw::log( nearZ ) );
 							clustersLightsData = vec4( nearZ, farZ, multiply, add );
 						}
-						ELSEIF( splitScheme() == ExponentialBiased )
-						{
-							auto d = writer.declLocale( "d"
-								, writer.cast< sdw::Float >( dimensions().z() ) * ( 1.0_f + bias() ) );
-							auto e = writer.declLocale( "e"
-								, d / sdw::log( farZ / nearZ ) );
-							clustersLightsData = vec4( nearZ, farZ, d, e );
-						}
 						ELSEIF( splitScheme() == Linear )
 						{
-							clustersLightsData = vec4( nearZ, farZ, nearZ, farZ );
+							clustersLightsData = vec4( nearZ, farZ, 0.0_f, 0.0_f );
 						}
 						ELSE
 						{
 							auto limZ = writer.declLocale( "limZ"
-								, max( bias(), nearZ ) );
+								, max( minDistance(), nearZ ) );
 							auto depthBias = writer.declLocale( "depthBias"
 								, sdw::log( limZ / nearZ ) / sdw::log( farZ / limZ ) );
 							auto nTimesOnePlusB = writer.declLocale( "nTimesOnePlusB"
@@ -310,7 +276,7 @@ namespace castor3d
 		, uint32_t pointLightsCount
 		, uint32_t spotLightsCount
 		, ClusterSplitScheme splitScheme
-		, float bias
+		, float minDistance
 		, bool enableWaveIntrinsics )
 	{
 		CU_Require( m_ubo );
@@ -323,7 +289,7 @@ namespace castor3d
 		configuration.pointLightLevelsCount = FrustumClusters::getNumLevels( pointLightsCount );
 		configuration.spotLightLevelsCount = FrustumClusters::getNumLevels( spotLightsCount );
 		configuration.splitScheme = uint32_t( splitScheme );
-		configuration.bias = bias;
+		configuration.minDistance = minDistance;
 		configuration.enableWaveIntrinsics = enableWaveIntrinsics ? 1u : 0u;
 	}
 

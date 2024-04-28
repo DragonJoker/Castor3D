@@ -204,7 +204,7 @@ namespace castor3d
 			, lightCache.getLightsBufferCount( LightType::ePoint )
 			, lightCache.getLightsBufferCount( LightType::eSpot )
 			, m_config.splitScheme
-			, m_config.bias
+			, m_config.minDistance
 			, m_config.enablePostAssignSort );
 		auto it = updater.dirtyScenes.find( scene );
 		m_lightsDirty = lightCache.hasClusteredLights()
