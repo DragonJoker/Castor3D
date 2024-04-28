@@ -84,7 +84,7 @@ namespace castor3d
 			auto logStepReduction = [&]( sdw::UInt const & groupIndex
 				, sdw::UInt const & groupID )
 			{
-				// If we can assume that NUM_THREADS is a power of 2, we can compute
+				// If we can assume that NumThreads is a power of 2, we can compute
 				// the reduction index by performing a bit shift. This is equivalent to 
 				// halving the number of values (and threads) that must perform the reduction
 				// operation.

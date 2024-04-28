@@ -31,6 +31,9 @@ namespace castor3d
 		base.intensity = getIntensity();
 		base.shadowMapIndex = float( m_light.getShadowMapIndex() );
 
+		base.enabled = ( ( m_light.isEnabled() && m_light.getParent()->isVisible() )
+			? 1.0f : 0.0f );
+
 		doFillLightBuffer( data );
 	}
 

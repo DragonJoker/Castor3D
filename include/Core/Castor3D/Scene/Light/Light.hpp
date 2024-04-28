@@ -330,6 +330,7 @@ namespace castor3d
 		void setEnabled( bool value )
 		{
 			m_enabled = value;
+			markDirty();
 		}
 
 		void enable()
@@ -434,10 +435,16 @@ namespace castor3d
 	public:
 		OnLightChanged onGPUChanged;
 
-	protected:
-		bool m_enabled{};
+	private:
+		friend class LightCategory;
+
+		bool & doGetDirty()
+		{
+			return m_dirty;
+		}
+
+		castor::GroupChangeTracked< bool > m_enabled;
 		std::atomic_bool m_currentShadowCaster{};
-		bool m_dirty{ true };
 		ShadowConfig m_shadows;
 		LightCategoryUPtr m_category;
 		ShadowMapRPtr m_shadowMap{};

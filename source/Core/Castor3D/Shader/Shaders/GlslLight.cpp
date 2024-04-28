@@ -154,17 +154,18 @@ namespace castor3d::shader
 
 					lightData = getLightData( offset );
 					result.direction() = normalize( lightData.xyz() );
-					result.outerCutOffCos() = lightData.w();
+					result.exponent() = lightData.w();
 
 					lightData = getLightData( offset );
-					result.innerCutOff() = lightData.x();
-					result.outerCutOff() = lightData.y();
-					result.innerCutOffSin() = lightData.z();
-					result.outerCutOffSin() = lightData.w();
+					result.outerCutOffCos() = lightData.x();
+					result.innerCutOff() = lightData.y();
+					result.outerCutOff() = lightData.z();
+					result.innerCutOffSin() = lightData.w();
 
 					lightData = getLightData( offset );
-					result.innerCutOffCos() = lightData.x();
-					result.outerCutOffTan() = lightData.y();
+					result.outerCutOffSin() = lightData.x();
+					result.innerCutOffCos() = lightData.y();
+					result.outerCutOffTan() = lightData.z();
 
 					m_writer.returnStmt( result );
 				}
@@ -195,7 +196,7 @@ namespace castor3d::shader
 
 		lightData = getLightData( offset );
 		light.posDir() = lightData.xyz();
-		light.exponent() = lightData.w();
+		light.enabled() = m_writer.cast< sdw::UInt >( lightData.w() );
 	}
 
 	//*********************************************************************************************
@@ -324,13 +325,17 @@ namespace castor3d::shader
 				{
 					auto directionalLight = m_writer.declLocale( "directionalLight"
 						, getDirectionalLight( cur ) );
-					lightingModel->compute( debugOutput
-						, directionalLight
-						, components
-						, backgroundModel
-						, lightSurface
-						, receivesShadows
-						, parentOutput );
+					IF( m_writer, directionalLight.enabled() )
+					{
+						lightingModel->compute( debugOutput
+							, directionalLight
+							, components
+							, backgroundModel
+							, lightSurface
+							, receivesShadows
+							, parentOutput );
+					}
+					FI
 					cur += castor3d::DirectionalLight::LightDataComponents;
 				}
 				ELIHW
@@ -388,13 +393,17 @@ namespace castor3d::shader
 				{
 					auto directionalLight = m_writer.declLocale( "directionalLight"
 						, getDirectionalLight( cur ) );
-					lightingModel->computeAllButDiffuse( debugOutput
-						, directionalLight
-						, components
-						, backgroundModel
-						, lightSurface
-						, receivesShadows
-						, parentOutput );
+					IF( m_writer, directionalLight.enabled() )
+					{
+						lightingModel->computeAllButDiffuse( debugOutput
+							, directionalLight
+							, components
+							, backgroundModel
+							, lightSurface
+							, receivesShadows
+							, parentOutput );
+					}
+					FI
 					cur += castor3d::DirectionalLight::LightDataComponents;
 				}
 				ELIHW
@@ -451,12 +460,16 @@ namespace castor3d::shader
 				{
 					auto directionalLight = m_writer.declLocale( "directionalLight"
 						, getDirectionalLight( cur ) );
-					output += lightingModel->computeDiffuse( debugOutput
-						, directionalLight
-						, components
-						, backgroundModel
-						, lightSurface
-						, receivesShadows );
+					IF( m_writer, directionalLight.enabled() )
+					{
+						output += lightingModel->computeDiffuse( debugOutput
+							, directionalLight
+							, components
+							, backgroundModel
+							, lightSurface
+							, receivesShadows );
+					}
+					FI
 					cur += castor3d::DirectionalLight::LightDataComponents;
 				}
 				ELIHW
@@ -503,13 +516,17 @@ namespace castor3d::shader
 			{
 				auto directionalLight = m_writer.declLocale( "directionalLight"
 					, getDirectionalLight( cur ) );
-				lightingModel->compute( debugOutput
-					, directionalLight
-					, components
-					, backgroundModel
-					, lightSurface
-					, receivesShadows
-					, output );
+				IF( m_writer, directionalLight.enabled() )
+				{
+					lightingModel->compute( debugOutput
+						, directionalLight
+						, components
+						, backgroundModel
+						, lightSurface
+						, receivesShadows
+						, output );
+				}
+				FI
 				cur += castor3d::DirectionalLight::LightDataComponents;
 			}
 			ELIHW
@@ -520,12 +537,16 @@ namespace castor3d::shader
 			{
 				auto pointLight = m_writer.declLocale( "pointLight"
 					, getPointLight( cur ) );
-				lightingModel->compute( debugOutput
-					, pointLight
-					, components
-					, lightSurface
-					, receivesShadows
-					, output );
+				IF( m_writer, pointLight.enabled() )
+				{
+					lightingModel->compute( debugOutput
+						, pointLight
+						, components
+						, lightSurface
+						, receivesShadows
+						, output );
+				}
+				FI
 				cur += castor3d::PointLight::LightDataComponents;
 			}
 			ELIHW
@@ -536,12 +557,16 @@ namespace castor3d::shader
 			{
 				auto spotLight = m_writer.declLocale( "spotLight"
 					, getSpotLight( cur ) );
-				lightingModel->compute( debugOutput
-					, spotLight
-					, components
-					, lightSurface
-					, receivesShadows
-					, output );
+				IF( m_writer, spotLight.enabled() )
+				{
+					lightingModel->compute( debugOutput
+						, spotLight
+						, components
+						, lightSurface
+						, receivesShadows
+						, output );
+				}
+				FI
 				cur += castor3d::SpotLight::LightDataComponents;
 			}
 			ELIHW
@@ -568,13 +593,17 @@ namespace castor3d::shader
 			{
 				auto directionalLight = m_writer.declLocale( "directionalLight"
 					, getDirectionalLight( cur ) );
-				lightingModel->computeAllButDiffuse( debugOutput
-					, directionalLight
-					, components
-					, backgroundModel
-					, lightSurface
-					, receivesShadows
-					, output );
+				IF( m_writer, directionalLight.enabled() )
+				{
+					lightingModel->computeAllButDiffuse( debugOutput
+						, directionalLight
+						, components
+						, backgroundModel
+						, lightSurface
+						, receivesShadows
+						, output );
+				}
+				FI
 				cur += castor3d::DirectionalLight::LightDataComponents;
 			}
 			ELIHW
@@ -585,12 +614,16 @@ namespace castor3d::shader
 			{
 				auto pointLight = m_writer.declLocale( "pointLight"
 					, getPointLight( cur ) );
-				lightingModel->computeAllButDiffuse( debugOutput
-					, pointLight
-					, components
-					, lightSurface
-					, receivesShadows
-					, output );
+				IF( m_writer, pointLight.enabled() )
+				{
+					lightingModel->computeAllButDiffuse( debugOutput
+						, pointLight
+						, components
+						, lightSurface
+						, receivesShadows
+						, output );
+				}
+				FI
 				cur += castor3d::PointLight::LightDataComponents;
 			}
 			ELIHW
@@ -601,12 +634,16 @@ namespace castor3d::shader
 			{
 				auto spotLight = m_writer.declLocale( "spotLight"
 					, getSpotLight( cur ) );
-				lightingModel->computeAllButDiffuse( debugOutput
-					, spotLight
-					, components
-					, lightSurface
-					, receivesShadows
-					, output );
+				IF( m_writer, spotLight.enabled() )
+				{
+					lightingModel->computeAllButDiffuse( debugOutput
+						, spotLight
+						, components
+						, lightSurface
+						, receivesShadows
+						, output );
+				}
+				FI
 				cur += castor3d::SpotLight::LightDataComponents;
 			}
 			ELIHW
@@ -631,12 +668,16 @@ namespace castor3d::shader
 			{
 				auto directionalLight = m_writer.declLocale( "directionalLight"
 					, getDirectionalLight( cur ) );
-				output += lightingModel->computeDiffuse( debugOutput
-					, directionalLight
-					, components
-					, backgroundModel
-					, lightSurface
-					, receivesShadows );
+				IF( m_writer, directionalLight.enabled() )
+				{
+					output += lightingModel->computeDiffuse( debugOutput
+						, directionalLight
+						, components
+						, backgroundModel
+						, lightSurface
+						, receivesShadows );
+				}
+				FI
 				cur += castor3d::DirectionalLight::LightDataComponents;
 			}
 			ELIHW
@@ -647,11 +688,15 @@ namespace castor3d::shader
 			{
 				auto pointLight = m_writer.declLocale( "pointLight"
 					, getPointLight( cur ) );
-				output += lightingModel->computeDiffuse( debugOutput
-					, pointLight
-					, components
-					, lightSurface
-					, receivesShadows );
+				IF( m_writer, pointLight.enabled() )
+				{
+					output += lightingModel->computeDiffuse( debugOutput
+						, pointLight
+						, components
+						, lightSurface
+						, receivesShadows );
+				}
+				FI
 				cur += castor3d::PointLight::LightDataComponents;
 			}
 			ELIHW
@@ -662,11 +707,15 @@ namespace castor3d::shader
 			{
 				auto spotLight = m_writer.declLocale( "spotLight"
 					, getSpotLight( cur ) );
-				output += lightingModel->computeDiffuse( debugOutput
-					, spotLight
-					, components
-					, lightSurface
-					, receivesShadows );
+				IF( m_writer, spotLight.enabled() )
+				{
+					output += lightingModel->computeDiffuse( debugOutput
+						, spotLight
+						, components
+						, lightSurface
+						, receivesShadows );
+				}
+				FI
 				cur += castor3d::SpotLight::LightDataComponents;
 			}
 			ELIHW
