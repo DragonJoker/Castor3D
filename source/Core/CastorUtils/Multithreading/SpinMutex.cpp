@@ -7,6 +7,10 @@ See LICENSE file in root folder
 #	include <Windows.h>
 #endif
 
+#if defined( __ARM_ACLE )
+#	include <arm_acle.h>
+#endif
+
 namespace castor
 {
 	void SpinMutex::lock()noexcept
@@ -22,9 +26,10 @@ namespace castor
 			{
 #if defined( CU_CompilerMSVC )
 				_mm_pause();
-#elif defined( CU_PlatformAndroid )
-#else
+#elif defined( CU_ArchX86_64 ) || defined( CU_ArchX86_32 )
 				__builtin_ia32_pause();
+#elif defined( __ARM_ACLE )
+				__yield();
 #endif
 			}
 		}
