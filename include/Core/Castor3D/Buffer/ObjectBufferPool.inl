@@ -63,7 +63,7 @@ namespace castor3d
 	ObjectBufferOffset VertexBufferPool::getBuffer( VkDeviceSize vertexCount )
 	{
 		ObjectBufferOffset result;
-		auto size = vertexCount * sizeof( VertexT );
+		auto size = VkDeviceSize( vertexCount * sizeof( VertexT ) );
 		auto it = doFindBuffer( size, m_buffers );
 
 		if ( it == m_buffers.end() )
@@ -90,7 +90,7 @@ namespace castor3d
 	ObjectBufferOffset IndexBufferPool::getBuffer( VkDeviceSize indexCount )
 	{
 		ObjectBufferOffset result;
-		auto size = indexCount * sizeof( IndexT );
+		auto size = VkDeviceSize( indexCount * sizeof( IndexT ) );
 		auto it = doFindBuffer( size, m_buffers );
 
 		if ( it == m_buffers.end() )
