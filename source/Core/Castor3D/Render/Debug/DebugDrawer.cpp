@@ -28,79 +28,6 @@ namespace castor3d
 {
 	namespace dbgdrw
 	{
-		static ashes::RenderPassPtr createRenderPass( RenderDevice const & device
-			, castor::String const & name
-			, Texture const & colour
-			, Texture const & depth )
-		{
-			ashes::VkAttachmentDescriptionArray attaches{ VkAttachmentDescription{ 0u
-					, depth.getFormat()
-					, VK_SAMPLE_COUNT_1_BIT
-					, VK_ATTACHMENT_LOAD_OP_LOAD
-					, VK_ATTACHMENT_STORE_OP_STORE
-					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-					, VK_ATTACHMENT_STORE_OP_DONT_CARE
-					, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
-					, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL }
-				, VkAttachmentDescription{ 1u
-					, colour.getFormat()
-					, VK_SAMPLE_COUNT_1_BIT
-					, VK_ATTACHMENT_LOAD_OP_LOAD
-					, VK_ATTACHMENT_STORE_OP_STORE
-					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-					, VK_ATTACHMENT_STORE_OP_DONT_CARE
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } };
-			ashes::SubpassDescription subpassesDesc{ 0u
-				, VK_PIPELINE_BIND_POINT_GRAPHICS
-				, {}
-				, { { 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
-				, {}
-				, VkAttachmentReference{ 0u, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL }
-				, {} };
-			ashes::SubpassDescriptionArray subpasses;
-			subpasses.push_back( castor::move( subpassesDesc ) );
-			ashes::VkSubpassDependencyArray dependencies{ { VK_SUBPASS_EXTERNAL
-					, 0u
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_ACCESS_SHADER_READ_BIT
-					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VK_DEPENDENCY_BY_REGION_BIT }
-				, { 0u
-					, VK_SUBPASS_EXTERNAL
-					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VK_ACCESS_SHADER_READ_BIT
-					, VK_DEPENDENCY_BY_REGION_BIT } };
-			ashes::RenderPassCreateInfo createInfo{ 0u
-				, castor::move( attaches )
-				, castor::move( subpasses )
-				, castor::move( dependencies ) };
-			return device->createRenderPass( castor::toUtf8( name ) + "/Debug"
-				, castor::move( createInfo ) );
-		}
-
-		static ashes::FrameBufferPtr createFrameBuffer( ashes::RenderPass const & renderPass
-			, castor::String const & name
-			, Texture const & colour
-			, Texture const & depth )
-		{
-			ashes::VkImageViewArray fbAttaches;
-			auto extent = colour.getExtent();
-			fbAttaches.emplace_back( depth.targetView );
-			fbAttaches.emplace_back( colour.targetView );
-			return renderPass.createFrameBuffer( castor::toUtf8( name ) + "/Debug"
-				, makeVkStruct< VkFramebufferCreateInfo >( 0u
-					, renderPass
-					, uint32_t( fbAttaches.size() )
-					, fbAttaches.data()
-					, extent.width
-					, extent.height
-					, 1u ) );
-		}
-
 		static size_t hash( VkPipelineShaderStageCreateInfo const & shader )
 		{
 			size_t result = std::hash< VkFlags >{}( shader.flags );
@@ -387,7 +314,6 @@ namespace castor3d
 		, Texture const & depth
 			, uint32_t const * passIndex )
 		: castor::OwnedBy< RenderTarget >{ parent }
-		, m_device{ device }
 	{
 		auto extent = makeExtent2D( depth.getExtent() );
 		auto & pass = graph.createPass( "DebugDraw"
