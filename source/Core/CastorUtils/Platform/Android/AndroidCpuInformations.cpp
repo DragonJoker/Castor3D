@@ -12,9 +12,6 @@ namespace castor::platform
 #pragma clang diagnostic ignored "-Wmissing-prototypes"
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-declarations"
-	void callCpuid( uint32_t func, Array< int32_t, 4 > & p_data )
-	{
-	}
 
 	uint32_t getCoreCount()
 	{
@@ -25,6 +22,12 @@ namespace castor::platform
 	{
 		return String{};
 	}
+
+	String getCPUVendor()
+	{
+		return String{};
+	}
+
 #pragma GCC diagnostic pop
 #pragma clang diagnostic pop
 }
