@@ -519,28 +519,16 @@ namespace castor3d
 				, VkCommandBuffer commandBuffer
 				, uint32_t passIndex )const
 			{
-				uint32_t bufferIndex{};
-
-				for ( auto & attach : m_pass.buffers )
-				{
-					if ( !attach.isNoTransition()
-						&& attach.isStorageBuffer()
-						&& attach.isClearableBuffer() )
-					{
-						auto buffer = attach.buffer( passIndex );
-						auto currentState = context.getAccessState( buffer, attach.getBufferRange() );
-
-						context.memoryBarrier( commandBuffer
-							, buffer
-							, attach.getBufferRange()
-							, currentState.access
-							, currentState.pipelineStage
-							, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
-							, true );
-					}
-
-					++bufferIndex;
-				}
+				auto & attach = m_pass.buffers.back();
+				auto buffer = attach.buffer( passIndex );
+				auto currentState = context.getAccessState( buffer, attach.getBufferRange() );
+				context.memoryBarrier( commandBuffer
+					, buffer
+					, attach.getBufferRange()
+					, currentState.access
+					, currentState.pipelineStage
+					, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
+					, true );
 			}
 
 			void doAllBarriers( crg::RecordContext & context
@@ -624,11 +612,11 @@ namespace castor3d
 		auto & point = graph.createPass( "MergeSort/Point"
 			, [&clusters, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runnableGraph )
 			{
 				auto result = castor::make_unique< merge::FramePass >( framePass
 					, context
-					, graph
+					, runnableGraph
 					, device
 					, clusters
 					, LightType::ePoint );
@@ -647,11 +635,11 @@ namespace castor3d
 		auto & spot = graph.createPass( "MergeSort/Spot"
 			, [&clusters, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
+				, crg::RunnableGraph & runnableGraph )
 			{
 				auto result = castor::make_unique< merge::FramePass >( framePass
 					, context
-					, graph
+					, runnableGraph
 					, device
 					, clusters
 					, LightType::eSpot );

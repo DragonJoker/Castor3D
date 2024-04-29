@@ -140,7 +140,6 @@ namespace castor3d
 		};
 
 	private:
-		RenderDevice const & m_device;
 		crg::FramePass const * m_lastPass{};
 		FramePass * m_framePass{};
 	};

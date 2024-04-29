@@ -69,7 +69,7 @@ namespace castor3d
 		if ( it == m_buffers.end() )
 		{
 			ModelBuffers buffers{ details::createBaseBuffer< uint8_t >( m_device
-				, std::max( size, 65536ULL )
+				, std::max( size, VkDeviceSize( 65536U ) )
 				, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, m_debugName + cuT( "Vertex" ) + castor::string::toString( m_buffers.size() )
@@ -96,7 +96,7 @@ namespace castor3d
 		if ( it == m_buffers.end() )
 		{
 			ModelBuffers buffers{ details::createBaseBuffer< uint8_t >( m_device
-				, std::max( size, 65536ULL )
+				, std::max( size, VkDeviceSize( 65536U ) )
 				, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, m_debugName + cuT( "Index" ) + castor::string::toString( m_buffers.size() )
