@@ -541,11 +541,9 @@ namespace GuiCommon
 	}
 
 	PassTreeItemProperty::PassTreeItemProperty( bool editable
-		, castor3d::Pass & pass
 		, castor3d::Scene & scene
 		, wxWindow * parent )
-		: TreeItemProperty{ pass.getOwner()->getEngine(), editable }
-		, m_pass{ &pass }
+		: TreeItemProperty{ scene.getEngine(), editable }
 		, m_scene{ scene }
 		, m_parent{ parent }
 	{
@@ -559,72 +557,73 @@ namespace GuiCommon
 		static wxString PROPERTY_PASS_SHADER = _( "Shader" );
 		static wxString PROPERTY_PASS_EDIT_SHADER = _( "View Shaders..." );
 
-		if ( auto pass = getPass() )
+		if ( !m_pass )
 		{
-			addProperty( grid, PROPERTY_CATEGORY_PASS + wxString( pass->getOwner()->getName() ) );
-			auto mainContainer = addProperty( grid, PROPERTY_CATEGORY_BASE );
-			addProperty( grid, PROPERTY_PASS_SHADER
-				, [this]( wxVariant const & var )
-				{
-					auto lpass = getPass();
-					auto sources = passtp::PassShaderGatherer::submit( *lpass, m_scene );
-					auto editor = new ShaderDialog{ lpass->getOwner()->getEngine()
-						, castor::move( sources )
-						, lpass->getOwner()->getName() + castor::string::toString( lpass->getId() )
-						, m_parent };
-					editor->Show();
-				} );
-			m_properties = passtp::PassTreeGatherer::submit( *pass
-				, this
-				, grid
-				, mainContainer
-				, [this]( wxVariant const & value
-					, castor3d::Pass & pass
-					, castor::String const & compName )
-				{
-					auto it = std::find_if( m_properties.begin()
-						, m_properties.end()
-						, [&compName]( PropertiesPtr const & lookup )
-						{
-							return lookup->component->getType() == compName;
-						} );
-
-					if ( it == m_properties.end() )
-					{
-						return;
-					}
-
-					auto & compProps = **it;
-
-					if ( !compProps.component )
-					{
-						return;
-					}
-
-					auto enable = value.GetBool();
-
-					for ( auto & prop : compProps.properties )
-					{
-						prop->Enable( enable );
-					}
-
-					if ( enable )
-					{
-						if ( compProps.ownComponent )
-						{
-							moveComponentsToPass( castor::move( compProps.ownComponent ) );
-						}
-					}
-					else if ( pass.hasComponent( compProps.component->getType() ) )
-					{
-						auto removed = pass.removeComponent( compProps.component->getType() );
-						compProps.ownComponent = castor::move( removed.back() );
-						removed.pop_back();
-						moveComponentsToProps( castor::move( removed ) );
-						CU_Require( compProps.ownComponent );
-					}
-				} );
+			return;
 		}
+
+		addProperty( grid, PROPERTY_CATEGORY_PASS + wxString( m_pass->getOwner()->getName() ) );
+		auto mainContainer = addProperty( grid, PROPERTY_CATEGORY_BASE );
+		addProperty( grid, PROPERTY_PASS_SHADER
+			, [this]( wxVariant const & var )
+			{
+				auto sources = passtp::PassShaderGatherer::submit( *m_pass, m_scene );
+				auto editor = new ShaderDialog{ m_pass->getOwner()->getEngine()
+					, castor::move( sources )
+					, m_pass->getOwner()->getName() + castor::string::toString( m_pass->getId() )
+					, m_parent };
+				editor->Show();
+			} );
+		m_properties = passtp::PassTreeGatherer::submit( *m_pass
+			, this
+			, grid
+			, mainContainer
+			, [this]( wxVariant const & value
+				, castor3d::Pass & pass
+				, castor::String const & compName )
+			{
+				auto it = std::find_if( m_properties.begin()
+					, m_properties.end()
+					, [&compName]( PropertiesPtr const & lookup )
+					{
+						return lookup->component->getType() == compName;
+					} );
+
+				if ( it == m_properties.end() )
+				{
+					return;
+				}
+
+				auto & compProps = **it;
+
+				if ( !compProps.component )
+				{
+					return;
+				}
+
+				auto enable = value.GetBool();
+
+				for ( auto & prop : compProps.properties )
+				{
+					prop->Enable( enable );
+				}
+
+				if ( enable )
+				{
+					if ( compProps.ownComponent )
+					{
+						moveComponentsToPass( castor::move( compProps.ownComponent ) );
+					}
+				}
+				else if ( pass.hasComponent( compProps.component->getType() ) )
+				{
+					auto removed = pass.removeComponent( compProps.component->getType() );
+					compProps.ownComponent = castor::move( removed.back() );
+					removed.pop_back();
+					moveComponentsToProps( castor::move( removed ) );
+					CU_Require( compProps.ownComponent );
+				}
+			} );
 	}
 
 	void PassTreeItemProperty::moveComponentsToPass( castor3d::PassComponentUPtr component )

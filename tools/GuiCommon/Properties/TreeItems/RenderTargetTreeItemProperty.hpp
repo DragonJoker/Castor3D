@@ -6,6 +6,9 @@ See LICENSE file in root folder
 
 #include "GuiCommon/Properties/TreeItems/TreeItemProperty.hpp"
 
+class wxTreeListCtrl;
+class wxTreeListItem;
+
 namespace GuiCommon
 {
 	/**
@@ -59,6 +62,10 @@ namespace GuiCommon
 	void appendRenderTarget( wxTreeCtrlBase * list
 		, bool editable
 		, wxTreeItemId id
+		, castor3d::RenderTarget & target );
+	void appendRenderTarget( wxTreeListCtrl * list
+		, bool editable
+		, wxTreeListItem const & id
 		, castor3d::RenderTarget & target );
 }
 

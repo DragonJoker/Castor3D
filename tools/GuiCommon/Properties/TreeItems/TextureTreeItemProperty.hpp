@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___GUICOMMON_TEXTURE_TREE_ITEM_PROPERTY_H___
-#define ___GUICOMMON_TEXTURE_TREE_ITEM_PROPERTY_H___
+#ifndef ___GC_TextureTreeItemProperty_H___
+#define ___GC_TextureTreeItemProperty_H___
 
 #include "GuiCommon/Properties/TreeItems/TreeItemProperty.hpp"
 
@@ -12,9 +12,9 @@ namespace GuiCommon
 {
 	/**
 	\~english
-	\brief		Texture helper class to communicate between Scene objects or Materials lists and PropertiesContainer
+	\brief		Texture helper class to communicate between Scene objects or Materials lists and PropertiesContainer.
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer, pour les textures
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer, pour les textures.
 	*/
 	class TextureTreeItemProperty
 		: public TreeItemProperty
@@ -56,16 +56,18 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	editable	Tells if the properties are modifiable
-		 *\param[in]	texture		The target texture
+		 *\param[in]	editable	Tells if the properties are modifiable.
+		 *\param[in]	engine		The engine.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	editable	Dit si les propriétés sont modifiables
-		 *\param[in]	texture		La texture cible
+		 *\param[in]	editable	Dit si les propriétés sont modifiables.
+		 *\param[in]	engine		Le moteur.
 		 */
 		TextureTreeItemProperty( bool editable
-			, castor3d::Pass & pass
-			, castor3d::TextureUnit & texture );
+			, castor3d::Engine * engine );
+
+		void setData( castor3d::Pass & pass
+			, castor3d::TextureUnit & texture )noexcept;
 
 	private:
 		/**
@@ -77,8 +79,8 @@ namespace GuiCommon
 		void moveComponentsToProps( castor::Vector< castor3d::PassComponentUPtr > removed );
 
 	private:
-		castor3d::Pass & m_pass;
-		castor3d::TextureUnit & m_texture;
+		castor3d::Pass * m_pass{};
+		castor3d::TextureUnit * m_texture{};
 		castor3d::TextureConfiguration m_configuration;
 		castor::Point2f m_translate;
 		castor::Angle m_rotate;

@@ -18,18 +18,18 @@ namespace GuiCommon
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	editable	Tells if the properties are modifiable.
-		 *\param[in]	style		The target style.
+		 *\param[in]	engine		The engine.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	editable	Dit si les propriétés sont modifiables.
-		 *\param[in]	style		Le style cible.
+		 *\param[in]	engine		Le moteur.
 		 */
 		StyleTreeItemProperty( bool editable
-			, castor3d::ControlStyle & style );
+			, castor3d::Engine * engine );
 
-		inline castor3d::ControlStyle & getStyle()const noexcept
+		void setData( castor3d::ControlStyle & data )noexcept
 		{
-			return m_style;
+			m_style = &data;
 		}
 
 	private:
@@ -50,7 +50,7 @@ namespace GuiCommon
 		void doCreateStyleProperties( wxPropertyGrid * grid, castor3d::StaticStyle & object );
 
 	private:
-		castor3d::ControlStyle & m_style;
+		castor3d::ControlStyle * m_style{};
 		wxArrayString m_materials;
 		wxArrayString m_fonts;
 	};

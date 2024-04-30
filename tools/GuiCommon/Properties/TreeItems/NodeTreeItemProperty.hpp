@@ -1,21 +1,18 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___GUICOMMON_NODE_TREE_ITEM_PROPERTY_H___
-#define ___GUICOMMON_NODE_TREE_ITEM_PROPERTY_H___
+#ifndef ___GC_NodeTreeItemProperty_H___
+#define ___GC_NodeTreeItemProperty_H___
 
 #include "GuiCommon/Properties/TreeItems/TreeItemProperty.hpp"
 
 namespace GuiCommon
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		24/08/2015
-	\version	0.8.0
 	\~english
-	\brief		Geometry helper class to communicate between Scene objects or Materials lists and PropertiesContainer
+	\brief		Helper class to communicate between Scene objects or Materials lists and PropertiesContainer, for SceneNode.
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer, pour les gàomàtries
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer, pour SceneNode.
 	*/
 	class NodeTreeItemProperty
 		: public TreeItemProperty
@@ -24,27 +21,18 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	editable	Tells if the properties are modifiable
-		 *\param[in]	engine	The engine
-		 *\param[in]	node		The target object
+		 *\param[in]	editable	Tells if the properties are modifiable.
+		 *\param[in]	engine		The engine.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	editable	Dit si les propriétés sont modifiables
-		 *\param[in]	engine	Le moteur
-		 *\param[in]	node		L'objet cible
+		 *\param[in]	editable	Dit si les propriétés sont modifiables.
+		 *\param[in]	engine		Le moteur.
 		 */
-		NodeTreeItemProperty( bool editable, castor3d::Engine * engine, castor3d::SceneNode & node );
-		/**
-		 *\~english
-		 *\brief		Retrieves the object
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'objet
-		 *\return		La valeur
-		 */
-		inline castor3d::SceneNode & getNode()const
+		NodeTreeItemProperty( bool editable, castor3d::Engine * engine );
+
+		void setData( castor3d::SceneNode & data )noexcept
 		{
-			return m_node;
+			m_node = &data;
 		}
 
 	private:
@@ -54,7 +42,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::SceneNode & m_node;
+		castor3d::SceneNode * m_node{};
 	};
 }
 

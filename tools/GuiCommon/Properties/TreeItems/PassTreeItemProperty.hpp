@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___GUICOMMON_PASS_TREE_ITEM_PROPERTY_H___
-#define ___GUICOMMON_PASS_TREE_ITEM_PROPERTY_H___
+#ifndef ___GC_PassTreeItemProperty_H___
+#define ___GC_PassTreeItemProperty_H___
 
 #include "GuiCommon/Properties/TreeItems/TreeItemProperty.hpp"
 
@@ -13,9 +13,9 @@ namespace GuiCommon
 {
 	/**
 	\~english
-	\brief		Geometry helper class to communicate between Scene objects or Materials lists and PropertiesContainer
+	\brief		Helper class to communicate between Scene objects or Materials lists and PropertiesContainer, for Pass.
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer, pour les gàomàtries
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer, pour Pass.
 	*/
 	class PassTreeItemProperty
 		: public TreeItemProperty
@@ -48,29 +48,21 @@ namespace GuiCommon
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	editable	Tells if the properties are modifiable.
-		 *\param[in]	pass		The target pass.
 		 *\param[in]	scene		The scene.
+		 *\param[in]	parent		The parent window.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	editable	Dit si les propriétés sont modifiables.
-		 *\param[in]	pass		La passe cible.
 		 *\param[in]	scene		La scène.
+		 *\param[in]	parent		La fenêtre parent.
 		 */
 		PassTreeItemProperty( bool editable
-			, castor3d::Pass & pass
 			, castor3d::Scene & scene
 			, wxWindow * parent );
-		/**
-		 *\~english
-		 *\brief		Retrieves the geometry
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la gàomàtrie
-		 *\return		La valeur
-		 */
-		inline castor3d::PassRPtr getPass()
+
+		void setData( castor3d::Pass & data )noexcept
 		{
-			return m_pass;
+			m_pass = &data;
 		}
 
 	private:

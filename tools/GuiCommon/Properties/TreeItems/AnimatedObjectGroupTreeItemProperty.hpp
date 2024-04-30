@@ -1,17 +1,14 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___GUICOMMON_ANIMATED_OBJECT_GROUP_TREE_ITEM_PROPERTY_H___
-#define ___GUICOMMON_ANIMATED_OBJECT_GROUP_TREE_ITEM_PROPERTY_H___
+#ifndef ___GC_AnimatedObjectGroupTreeItemProperty_H___
+#define ___GC_AnimatedObjectGroupTreeItemProperty_H___
 
 #include "GuiCommon/Properties/TreeItems/TreeItemProperty.hpp"
 
 namespace GuiCommon
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		01/02/2016
-	\version	0.8.0
 	\~english
 	\brief		AnimatedObjectGroup helper class to communicate between Scene objects or Materials lists and PropertiesContainer.
 	\~french
@@ -24,26 +21,19 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	editable	Tells if the properties are modifiable
-		 *\param[in]	group		The target AnimatedObjectGroup
+		 *\param[in]	editable	Tells if the properties are modifiable.
+		 *\param[in]	engine		The engine.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	editable	Dit si les propriétés sont modifiables
-		 *\param[in]	group		L"AnimatedObjectGroup cible
+		 *\param[in]	editable	Dit si les propriétés sont modifiables.
+		 *\param[in]	engine		Le moteur.
 		 */
 		AnimatedObjectGroupTreeItemProperty( bool editable
-			, castor3d::AnimatedObjectGroup & group );
-		/**
-		 *\~english
-		 *\brief		Retrieves the AnimatedObjectGroup
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'AnimatedObjectGroup
-		 *\return		La valeur
-		 */
-		inline castor3d::AnimatedObjectGroupRPtr getGroup()
+			, castor3d::Engine * engine );
+
+		void setData( castor3d::AnimatedObjectGroup & data )noexcept
 		{
-			return &m_group;
+			m_group = &data;
 		}
 
 	private:
@@ -53,7 +43,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::AnimatedObjectGroup & m_group;
+		castor3d::AnimatedObjectGroup * m_group{};
 	};
 }
 

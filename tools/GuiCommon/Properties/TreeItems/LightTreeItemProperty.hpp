@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___GUICOMMON_LIGHT_TREE_ITEM_PROPERTY_H___
-#define ___GUICOMMON_LIGHT_TREE_ITEM_PROPERTY_H___
+#ifndef ___GC_LightTreeItemProperty_H___
+#define ___GC_LightTreeItemProperty_H___
 
 #include "GuiCommon/Properties/TreeItems/TreeItemProperty.hpp"
 
@@ -19,13 +19,10 @@ namespace GuiCommon
 		eLLPVG,
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		24/08/2015
-	\version	0.8.0
 	\~english
-	\brief		Geometry helper class to communicate between Scene objects or Materials lists and PropertiesContainer
+	\brief		Helper class to communicate between Scene objects or Materials lists and PropertiesContainer, for Light.
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer, pour les gàomàtries
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer, pour Light.
 	*/
 	class LightTreeItemProperty
 		: public TreeItemProperty
@@ -34,25 +31,18 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	editable	Tells if the properties are modifiable
-		 *\param[in]	light		The target light
+		 *\param[in]	editable	Tells if the properties are modifiable.
+		 *\param[in]	engine		The engine.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	editable	Dit si les propriétés sont modifiables
-		 *\param[in]	light		La lumiàre cible
+		 *\param[in]	editable	Dit si les propriétés sont modifiables.
+		 *\param[in]	engine		Le moteur.
 		 */
-		LightTreeItemProperty( bool editable, castor3d::Light & light );
-		/**
-		 *\~english
-		 *\brief		Retrieves the light source
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la source lumineuse
-		 *\return		La valeur
-		 */
-		inline castor3d::Light & getLight()
+		LightTreeItemProperty( bool editable, castor3d::Engine * engine );
+
+		void setData( castor3d::Light & data )noexcept
 		{
-			return m_light;
+			m_light = &data;
 		}
 
 	private:
@@ -62,7 +52,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::Light & m_light;
+		castor3d::Light * m_light{};
 	};
 }
 

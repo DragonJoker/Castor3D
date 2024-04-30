@@ -25,13 +25,8 @@
 namespace GuiCommon
 {
 	ControlTreeItemProperty::ControlTreeItemProperty( bool editable
-		, castor3d::Control & control
-		, bool full
-		, bool inLayout )
-		: TreeItemProperty{ &control.getEngine(), editable }
-		, m_control{ control }
-		, m_full{ full }
-		, m_inLayout{ inLayout }
+		, castor3d::Engine * engine )
+		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();
 	}
@@ -44,7 +39,12 @@ namespace GuiCommon
 		static wxString PROPERTY_CONTROL_SIZE = _( "Size" );
 		static wxString PROPERTY_CONTROL_BORDERS_SIZE = _( "Borders" );
 
-		auto & control = getControl();
+		if ( !m_control )
+		{
+			return;
+		}
+
+		auto & control = *m_control;
 		addProperty( grid, PROPERTY_CATEGORY_CONTROL + wxString( control.getName() ) );
 
 		if ( m_full )

@@ -8,9 +8,8 @@
 
 namespace GuiCommon
 {
-	MaterialTreeItemProperty::MaterialTreeItemProperty( bool editable, castor3d::Material & material )
-		: TreeItemProperty( material.getEngine(), editable )
-		, m_material( &material )
+	MaterialTreeItemProperty::MaterialTreeItemProperty( bool editable, castor3d::Engine * engine )
+		: TreeItemProperty( engine, editable )
 	{
 		CreateTreeItemMenu();
 	}

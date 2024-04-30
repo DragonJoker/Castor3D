@@ -125,7 +125,7 @@ namespace GuiCommon
 	class TextureTreeItemProperty;
 	class ButtonEventEditor;
 
-	class SceneObjectsList;
+	class SceneObjectsTree;
 	class FrameVariablesList;
 	class ImagesLoader;
 	class RendererSelector;

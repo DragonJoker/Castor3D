@@ -14,15 +14,17 @@
 
 namespace GuiCommon
 {
-	LightTreeItemProperty::LightTreeItemProperty( bool editable, castor3d::Light & light )
-		: TreeItemProperty( light.getScene()->getEngine(), editable )
-		, m_light( light )
+	LightTreeItemProperty::LightTreeItemProperty( bool editable, castor3d::Engine * engine )
+		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();
 	}
 
 	void LightTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
-		TreeItemConfigurationBuilder::submit( grid, *this, m_light );
+		if ( m_light )
+		{
+			TreeItemConfigurationBuilder::submit( grid, *this, *m_light );
+		}
 	}
 }

@@ -114,6 +114,9 @@ namespace castor3d
 		, m_listener{ engine.addNewFrameListener( cuT( "Scene_" ) + name + castor::string::toString( intptr_t( this ) ) ) }
 		, m_renderNodes{ castor::makeUnique< SceneRenderNodes >( *this ) }
 	{
+		m_rootNode->setSerialisable( false );
+		m_rootCameraNode->setSerialisable( false );
+		m_rootObjectNode->setSerialisable( false );
 		m_billboardCache = makeObjectCache< BillboardList, castor::String, BillboardListCacheTraits >( *this
 			, m_rootNode
 			, m_rootCameraNode

@@ -11,9 +11,8 @@
 namespace GuiCommon
 {
 	SkeletonAnimationTreeItemProperty::SkeletonAnimationTreeItemProperty( bool editable
-		, castor3d::SkeletonAnimation & animation )
-		: TreeItemProperty( animation.getEngine(), editable )
-		, m_animation( animation )
+		, castor3d::Engine * engine )
+		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();
 	}
@@ -22,6 +21,11 @@ namespace GuiCommon
 	{
 		static wxString PROPERTY_CATEGORY_SKELETON_ANIMATION = _( "Skeleton Animation: " );
 
-		addProperty( grid, PROPERTY_CATEGORY_SKELETON_ANIMATION + wxString( m_animation.getName() ) );
+		if ( !m_animation )
+		{
+			return;
+		}
+
+		addProperty( grid, PROPERTY_CATEGORY_SKELETON_ANIMATION + wxString( m_animation->getName() ) );
 	}
 }
