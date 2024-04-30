@@ -17,7 +17,7 @@ See LICENSE file in root folder
 #include <GuiCommon/GuiCommonPrerequisites.hpp>
 
 #include <GuiCommon/System/Recorder.hpp>
-#include <GuiCommon/System/SceneObjectsList.hpp>
+#include <GuiCommon/System/SceneObjectsTree.hpp>
 
 #include <CastorUtils/Log/Logger.hpp>
 #include <CastorUtils/Data/Path.hpp>
@@ -123,13 +123,13 @@ namespace CastorViewer
 #ifndef NDEBUG
 		LogContainer m_debugLog;
 #endif
-		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList > * m_sceneTree{ nullptr };
-		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList > * m_objectsTree{ nullptr };
-		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList > * m_nodesTree{ nullptr };
-		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList > * m_lightsTree{ nullptr };
-		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList > * m_materialsTree{ nullptr };
-		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList > * m_overlaysTree{ nullptr };
-		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList > * m_guiTree{ nullptr };
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_sceneTree{ nullptr };
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_objectsTree{ nullptr };
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_nodesTree{ nullptr };
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_lightsTree{ nullptr };
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_materialsTree{ nullptr };
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_overlaysTree{ nullptr };
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree > * m_guiTree{ nullptr };
 		castor3d::SceneRPtr m_mainScene{};
 		castor3d::CameraRPtr m_mainCamera{};
 		castor3d::SceneNodeRPtr m_sceneNode{};

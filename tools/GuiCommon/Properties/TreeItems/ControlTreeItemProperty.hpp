@@ -18,20 +18,22 @@ namespace GuiCommon
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	editable	Tells if the properties are modifiable.
-		 *\param[in]	control		The target control.
+		 *\param[in]	engine		The engine.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	editable	Dit si les propriétés sont modifiables.
-		 *\param[in]	control		Le contrôle cible.
+		 *\param[in]	engine		Le moteur.
 		 */
 		ControlTreeItemProperty( bool editable
-			, castor3d::Control & control
-			, bool full
-			, bool inLayout );
+			, castor3d::Engine * engine );
 
-		inline castor3d::Control & getControl()const noexcept
+		void setData( castor3d::Control & control
+			, bool full
+			, bool inLayout )noexcept
 		{
-			return m_control;
+			m_control = &control;
+			m_full = full;
+			m_inLayout = inLayout;
 		}
 
 	private:
@@ -52,9 +54,9 @@ namespace GuiCommon
 		void doCreateControlProperties( wxPropertyGrid * grid, castor3d::StaticCtrl & object );
 
 	private:
-		castor3d::Control & m_control;
-		bool m_full;
-		bool m_inLayout;
+		castor3d::Control * m_control{};
+		bool m_full{};
+		bool m_inLayout{};
 	};
 }
 

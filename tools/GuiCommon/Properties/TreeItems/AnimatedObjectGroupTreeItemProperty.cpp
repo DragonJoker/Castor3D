@@ -1,35 +1,23 @@
 #include "GuiCommon/Properties/TreeItems/AnimatedObjectGroupTreeItemProperty.hpp"
 
-#include <Castor3D/Engine.hpp>
-#include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/Animation/AnimatedObjectGroup.hpp>
-
-#include <wx/propgrid/advprops.h>
 
 namespace GuiCommon
 {
-	namespace
-	{
-		static wxString PROPERTY_CATEGORY_ANIMATED_OBJECT_GROUP = _( "Animated Objects Group: " );
-	}
-
 	AnimatedObjectGroupTreeItemProperty::AnimatedObjectGroupTreeItemProperty( bool editable
-		, castor3d::AnimatedObjectGroup & group )
-		: TreeItemProperty( group.getScene()->getEngine(), editable )
-		, m_group( group )
+		, castor3d::Engine * engine )
+		: TreeItemProperty{ engine, editable }
 	{
-		PROPERTY_CATEGORY_ANIMATED_OBJECT_GROUP = _( "Animated Objects Group: " );
-
 		CreateTreeItemMenu();
 	}
 
 	void AnimatedObjectGroupTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
-		auto group = getGroup();
+		static wxString PROPERTY_CATEGORY_ANIMATED_OBJECT_GROUP = _( "Animated Objects Group: " );
 
-		if ( group )
+		if ( m_group )
 		{
-			addProperty( grid, PROPERTY_CATEGORY_ANIMATED_OBJECT_GROUP + wxString( group->getName() ) );
+			addProperty( grid, PROPERTY_CATEGORY_ANIMATED_OBJECT_GROUP + wxString( m_group->getName() ) );
 		}
 	}
 }

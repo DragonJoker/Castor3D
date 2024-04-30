@@ -19,11 +19,8 @@
 namespace GuiCommon
 {
 	SubmeshTreeItemProperty::SubmeshTreeItemProperty( bool editable
-		, castor3d::Geometry & geometry
-		, castor3d::Submesh & submesh )
-		: TreeItemProperty( submesh.getOwner()->getScene()->getEngine(), editable )
-		, m_geometry( geometry )
-		, m_submesh( submesh )
+		, castor3d::Engine * engine )
+		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();
 	}
@@ -33,12 +30,17 @@ namespace GuiCommon
 		static wxString PROPERTY_CATEGORY_SUBMESH = _( "Submesh: " );
 		static wxString PROPERTY_SUBMESH_MATERIAL = _( "Material" );
 
-		m_materials = getMaterialsList();
-		auto & engine = *m_geometry.getEngine();
+		if ( !m_geometry || !m_submesh )
+		{
+			return;
+		}
 
-		addProperty( grid, PROPERTY_CATEGORY_SUBMESH + wxString( m_geometry.getName() ) );
-		addMaterial( grid, engine, PROPERTY_SUBMESH_MATERIAL, m_materials, m_geometry.getMaterial( m_submesh )
-			, [this]( castor3d::MaterialObs material ) { m_geometry.setMaterial( m_submesh, material ); } );
-		TreeItemConfigurationBuilder::submit( grid, *this, m_submesh );
+		m_materials = getMaterialsList();
+		auto & engine = *m_geometry->getEngine();
+
+		addProperty( grid, PROPERTY_CATEGORY_SUBMESH + wxString( m_geometry->getName() ) );
+		addMaterial( grid, engine, PROPERTY_SUBMESH_MATERIAL, m_materials, m_geometry->getMaterial( *m_submesh )
+			, [this]( castor3d::MaterialObs material ) { m_geometry->setMaterial( *m_submesh, material ); } );
+		TreeItemConfigurationBuilder::submit( grid, *this, *m_submesh );
 	}
 }

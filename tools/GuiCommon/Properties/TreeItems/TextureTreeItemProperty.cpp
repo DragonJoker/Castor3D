@@ -480,14 +480,18 @@ namespace GuiCommon
 	//*********************************************************************************************
 
 	TextureTreeItemProperty::TextureTreeItemProperty( bool editable
-		, castor3d::Pass & pass
-		, castor3d::TextureUnit & texture )
-		: TreeItemProperty( texture.getEngine(), editable )
-		, m_pass{ pass }
-		, m_texture{ texture }
-		, m_configuration{ m_texture.getConfiguration() }
+		, castor3d::Engine * engine )
+		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();
+	}
+
+	void TextureTreeItemProperty::setData( castor3d::Pass & pass
+		, castor3d::TextureUnit & texture )noexcept
+	{
+		m_pass = &pass;
+		m_texture = &texture;
+		m_configuration = texture.getConfiguration();
 	}
 
 	void TextureTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
@@ -497,28 +501,31 @@ namespace GuiCommon
 		static wxString const PROPERTY_TEXTURE_IMAGE = _( "Image" );
 		static wxString const PROPERTY_TEXTURE_TEXCOORDSET = _( "Texcoord Set" );
 
-		auto unit = &m_texture;
-		m_configuration = unit->getConfiguration();
-		addProperty( grid, wxString{ CATEGORY_TEXTURE } << unit->getId() );
+		if ( !m_pass || !m_texture )
+		{
+			return;
+		}
+
+		m_configuration = m_texture->getConfiguration();
+		addProperty( grid, wxString{ CATEGORY_TEXTURE } << m_texture->getId() );
 		auto mainContainer = addProperty( grid, PROPERTY_TEXTURE_BASE );
-		addPropertyT( mainContainer, PROPERTY_TEXTURE_TEXCOORDSET, unit->getTexcoordSet()
-			, unit
+		addPropertyT( mainContainer, PROPERTY_TEXTURE_TEXCOORDSET, m_texture->getTexcoordSet()
+			, m_texture
 			, &castor3d::TextureUnit::setTexcoordSet );
 
-		if ( unit->isTextureStatic() )
+		if ( m_texture->isTextureStatic() )
 		{
-			m_path = castor::Path{ unit->getTexturePath() };
+			m_path = castor::Path{ m_texture->getTexturePath() };
 			addProperty( mainContainer, PROPERTY_TEXTURE_IMAGE, m_path
 				, [this]( wxVariant const & var )
 				{
-					auto unit = &m_texture;
 					castor::Path path{ make_String( var.GetString() ) };
 
 					// Absolute path
 					if ( castor::File::fileExists( path ) )
 					{
-						auto & sourceInfo = unit->getSourceInfo();
-						m_pass.resetTexture( sourceInfo
+						auto & sourceInfo = m_texture->getSourceInfo();
+						m_pass->resetTexture( sourceInfo
 							, castor3d::TextureSourceInfo{ path.getFileName( true )
 								, sourceInfo.textureConfig()
 								, path.getPath()
@@ -528,7 +535,7 @@ namespace GuiCommon
 				} );
 		}
 
-		auto & transform = unit->getTransform();
+		auto & transform = m_texture->getTransform();
 		m_translate->x = transform.translate->x;
 		m_translate->y = transform.translate->y;
 		m_scale->x = transform.scale->x;
@@ -544,48 +551,48 @@ namespace GuiCommon
 			, [this]( wxVariant const & value )
 			{
 				m_translate = variantCast< castor::Point2f >( value );
-				auto transform = m_texture.getTransform();
+				auto transform = m_texture->getTransform();
 				transform.translate->x = m_translate->x;
 				transform.translate->y = m_translate->y;
-				m_texture.setTransform( transform );
+				m_texture->setTransform( transform );
 			} );
 		addProperty( transformCont, PROPERTY_TRANSFORM_UV_ROTATE
 			, m_rotate
 			, [this]( wxVariant const & value )
 			{
 				m_rotate = variantCast< castor::Angle >( value );
-				auto transform = m_texture.getTransform();
+				auto transform = m_texture->getTransform();
 				transform.rotate = m_rotate;
-				m_texture.setTransform( transform );
+				m_texture->setTransform( transform );
 			} );
 		addProperty( transformCont, PROPERTY_TRANSFORM_UV_SCALE
 			, m_scale
 			, [this]( wxVariant const & value )
 			{
 				m_scale = variantCast< castor::Point2f >( value );
-				auto transform = m_texture.getTransform();
+				auto transform = m_texture->getTransform();
 				transform.scale->x = m_scale->x;
 				transform.scale->y = m_scale->y;
-				m_texture.setTransform( transform );
+				m_texture->setTransform( transform );
 			} );
 
-		if ( unit->hasAnimation() )
+		if ( m_texture->hasAnimation() )
 		{
 			static wxString const CATEGORY_ANIMATION = _( "Animation" );
 			static wxString const PROPERTY_ANIMATION_TRANSLATE = _( "Translate" );
 			static wxString const PROPERTY_ANIMATION_ROTATE = _( "Rotate" );
 			static wxString const PROPERTY_ANIMATION_SCALE = _( "Scale" );
 
-			auto & anim = unit->getAnimation();
+			auto & anim = m_texture->getAnimation();
 			auto animCont = addProperty( mainContainer, CATEGORY_ANIMATION );
 			addPropertyT( animCont, PROPERTY_ANIMATION_TRANSLATE, anim.getTranslateSpeed(), &anim, &castor3d::TextureAnimation::setTranslateSpeed );
 			addPropertyT( animCont, PROPERTY_ANIMATION_ROTATE, anim.getRotateSpeed(), &anim, &castor3d::TextureAnimation::setRotateSpeed );
 			addPropertyT( animCont, PROPERTY_ANIMATION_SCALE, anim.getScaleSpeed(), &anim, &castor3d::TextureAnimation::setScaleSpeed );
 		}
 
-		m_properties = textp::UnitTreeGatherer::submit( m_pass
+		m_properties = textp::UnitTreeGatherer::submit( *m_pass
 			, m_configuration
-			, castor::PixelFormat( unit->getTexturePixelFormat() )
+			, castor::PixelFormat( m_texture->getTexturePixelFormat() )
 			, this
 			, grid
 			, mainContainer
@@ -615,7 +622,6 @@ namespace GuiCommon
 
 				auto enable = value.GetBool();
 				long components = compProps.components->GetValue();
-				auto unit = &m_texture;
 				compProps.configuration.componentsMask = textp::getMask( enable, components, compProps.componentsCount );
 
 				if ( enable )
@@ -626,7 +632,7 @@ namespace GuiCommon
 						{
 							addFlagConfiguration( m_configuration, compProps.configuration );
 							moveComponentsToPass( castor::ptrRefCast< castor3d::PassComponent >( compProps.ownComponent ) );
-							m_pass.updateConfig( unit->getSourceInfo(), m_configuration );
+							m_pass->updateConfig( m_texture->getSourceInfo(), m_configuration );
 						}
 						catch ( std::exception & exc )
 						{
@@ -665,7 +671,6 @@ namespace GuiCommon
 				, castor3d::PassComponentTextureFlag flag
 				, uint32_t componentsCount )
 			{
-				auto unit = &m_texture;
 				auto it = std::find_if( m_properties.begin()
 					, m_properties.end()
 					, [&flag]( auto & lookup )
@@ -683,7 +688,7 @@ namespace GuiCommon
 					prop->Enable( isEnabled );
 				}
 
-				m_pass.updateConfig( unit->getSourceInfo(), m_configuration );
+				m_pass->updateConfig( m_texture->getSourceInfo(), m_configuration );
 			} );
 	}
 

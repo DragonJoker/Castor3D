@@ -10,9 +10,8 @@
 namespace GuiCommon
 {
 	SkeletonTreeItemProperty::SkeletonTreeItemProperty( bool editable
-		, castor3d::Skeleton & skeleton )
-		: TreeItemProperty( skeleton.getScene()->getEngine(), editable )
-		, m_skeleton{ skeleton }
+		, castor3d::Engine * engine )
+		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();
 	}
@@ -22,7 +21,12 @@ namespace GuiCommon
 		static wxString PROPERTY_CATEGORY_SKELETON = _( "Skeleton: " );
 		static wxString PROPERTY_CATEGORY_INVERSE_BIND = _( "Global Inverse Bind" );
 
+		if ( !m_skeleton )
+		{
+			return;
+		}
+
 		addProperty( grid, PROPERTY_CATEGORY_SKELETON );
-		addProperty( grid, PROPERTY_CATEGORY_INVERSE_BIND, m_skeleton.getGlobalInverseTransform(), [&]( wxVariant const & var ){} );
+		addProperty( grid, PROPERTY_CATEGORY_INVERSE_BIND, m_skeleton->getGlobalInverseTransform(), [&]( wxVariant const & var ){} );
 	}
 }

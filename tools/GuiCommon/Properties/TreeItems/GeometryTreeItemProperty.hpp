@@ -1,21 +1,18 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___GUICOMMON_GEOMETRY_TREE_ITEM_PROPERTY_H___
-#define ___GUICOMMON_GEOMETRY_TREE_ITEM_PROPERTY_H___
+#ifndef ___GC_GeometryTreeItemProperty_H___
+#define ___GC_GeometryTreeItemProperty_H___
 
 #include "GuiCommon/Properties/TreeItems/TreeItemProperty.hpp"
 
 namespace GuiCommon
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		24/08/2015
-	\version	0.8.0
 	\~english
-	\brief		Geometry helper class to communicate between Scene objects or Materials lists and PropertiesContainer
+	\brief		Geometry helper class to communicate between Scene objects or Materials lists and PropertiesContainer.
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer, pour les gàomàtries
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer, pour les gàomàtries.
 	*/
 	class GeometryTreeItemProperty
 		: public TreeItemProperty
@@ -24,14 +21,15 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	editable	Tells if the properties are modifiable
-		 *\param[in]	geometry	The target geometry
+		 *\param[in]	editable	Tells if the properties are modifiable.
+		 *\param[in]	engine		The engine.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	editable	Dit si les propriétés sont modifiables
-		 *\param[in]	geometry	La géométrie cible
+		 *\param[in]	editable	Dit si les propriétés sont modifiables.
+		 *\param[in]	engine		Le moteur.
 		 */
-		GeometryTreeItemProperty( bool editable, castor3d::Geometry & geometry );
+		GeometryTreeItemProperty( bool editable
+			, castor3d::Engine * engine );
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry
@@ -40,9 +38,9 @@ namespace GuiCommon
 		 *\brief		Récupère la géométrie
 		 *\return		La valeur
 		 */
-		inline castor3d::Geometry & getGeometry()
+		void setData( castor3d::Geometry & data )noexcept
 		{
-			return m_geometry;
+			m_geometry = &data;
 		}
 
 	private:
@@ -52,7 +50,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::Geometry & m_geometry;
+		castor3d::Geometry * m_geometry{};
 	};
 }
 

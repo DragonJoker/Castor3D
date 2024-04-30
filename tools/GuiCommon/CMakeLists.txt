@@ -143,6 +143,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	Properties/TreeItems/MaterialTreeItemProperty.cpp
 	Properties/TreeItems/NodeTreeItemProperty.cpp
 	Properties/TreeItems/OverlayTreeItemProperty.cpp
+	Properties/TreeItems/ParticleSystemTreeItemProperty.cpp
 	Properties/TreeItems/PassTreeItemProperty.cpp
 	Properties/TreeItems/PostEffectTreeItemProperty.cpp
 	Properties/TreeItems/RenderPassTreeItemProperty.cpp
@@ -181,6 +182,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	Properties/TreeItems/MaterialTreeItemProperty.hpp
 	Properties/TreeItems/NodeTreeItemProperty.hpp
 	Properties/TreeItems/OverlayTreeItemProperty.hpp
+	Properties/TreeItems/ParticleSystemTreeItemProperty.hpp
 	Properties/TreeItems/PassTreeItemProperty.hpp
 	Properties/TreeItems/PostEffectTreeItemProperty.hpp
 	Properties/TreeItems/RenderPassTreeItemProperty.hpp
@@ -258,7 +260,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	System/NodeState.cpp
 	System/Recorder.cpp
 	System/RendererSelector.cpp
-	System/SceneObjectsList.cpp
+	System/SceneObjectsTree.cpp
 	System/SpaceMouseController.cpp
 	System/SplashScreen.cpp
 )
@@ -270,7 +272,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	System/NodeState.hpp
 	System/Recorder.hpp
 	System/RendererSelector.hpp
-	System/SceneObjectsList.hpp
+	System/SceneObjectsTree.hpp
 	System/SplashScreen.hpp
 	System/SpaceMouseController.hpp
 	System/TreeListContainer.hpp

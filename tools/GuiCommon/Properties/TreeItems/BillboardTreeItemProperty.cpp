@@ -4,40 +4,36 @@
 #include "GuiCommon/Properties/Math/PointProperties.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Scene/BillboardList.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 
-#include <wx/propgrid/advprops.h>
-
 namespace GuiCommon
 {
-	BillboardTreeItemProperty::BillboardTreeItemProperty( bool editable, castor3d::BillboardList & billboard )
-		: TreeItemProperty( billboard.getParentScene().getEngine(), editable )
-		, m_billboard( billboard )
+	BillboardTreeItemProperty::BillboardTreeItemProperty( bool editable
+			, castor3d::Engine * engine )
+		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();
 	}
 
 	void BillboardTreeItemProperty::doCreateProperties( wxPropertyGrid * grid )
 	{
-		static wxString PROPERTY_CATEGORY_BILLBOARD = _( "Billboard: " );
-		static wxString PROPERTY_BILLBOARD_MATERIAL = _( "Material" );
-		static wxString PROPERTY_BILLBOARD_SIZE = _( "Size" );
+		static wxString PROPERTY_CATEGORY = _( "Billboard: " );
+		static wxString PROPERTY_MATERIAL = _( "Material" );
+		static wxString PROPERTY_SIZE = _( "Size" );
 
-		addProperty( grid, PROPERTY_CATEGORY_BILLBOARD + wxString( m_billboard.getName() ) );
-		addPropertyT( grid, PROPERTY_BILLBOARD_SIZE, m_billboard.getDimensions(), &m_billboard, &castor3d::BillboardList::setDimensions );
-		addProperty( grid, PROPERTY_BILLBOARD_MATERIAL, getMaterialsList(), m_billboard.getMaterial()->getName()
-			, [this]( wxVariant const & var )
-			{
-				auto & engine = *m_billboard.getParentScene().getEngine();
-				auto material = engine.findMaterial( variantCast< castor::String >( var ) );
+		if ( !m_billboard )
+		{
+			return;
+		}
 
-				if ( material )
-				{
-					m_billboard.setMaterial( material );
-				}
-			} );
+		m_materials = getMaterialsList();
+		auto & engine = *m_billboard->getEngine();
+
+		addProperty( grid, PROPERTY_CATEGORY + wxString( m_billboard->getName() ) );
+		addPropertyT( grid, PROPERTY_SIZE, m_billboard->getDimensions(), m_billboard, &castor3d::BillboardList::setDimensions );
+		addMaterial( grid, engine, PROPERTY_MATERIAL, m_materials, m_billboard->getMaterial()
+			, [this]( castor3d::MaterialObs material ) { m_billboard->setMaterial( material ); } );
 	}
 }

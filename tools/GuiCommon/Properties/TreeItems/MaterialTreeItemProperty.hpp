@@ -1,21 +1,18 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___GUICOMMON_MATERIAL_TREE_ITEM_PROPERTY_H___
-#define ___GUICOMMON_MATERIAL_TREE_ITEM_PROPERTY_H___
+#ifndef ___GC_MaterialTreeItemProperty_H___
+#define ___GC_MaterialTreeItemProperty_H___
 
 #include "GuiCommon/Properties/TreeItems/TreeItemProperty.hpp"
 
 namespace GuiCommon
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		24/08/2015
-	\version	0.8.0
 	\~english
-	\brief		Material helper class to communicate between Scene objects or Materials lists and PropertiesContainer
+	\brief		Helper class to communicate between Scene objects or Materials lists and PropertiesContainer, for Material.
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer, pour les matériaux
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer, pour Material.
 	*/
 	class MaterialTreeItemProperty
 		: public TreeItemProperty
@@ -24,25 +21,18 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	editable	Tells if the properties are modifiable
-		 *\param[in]	material	The target material
+		 *\param[in]	editable	Tells if the properties are modifiable.
+		 *\param[in]	engine		The engine.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	editable	Dit si les propriétés sont modifiables
-		 *\param[in]	material	Le matàriau cible
+		 *\param[in]	editable	Dit si les propriétés sont modifiables.
+		 *\param[in]	engine		Le moteur.
 		 */
-		MaterialTreeItemProperty( bool editable, castor3d::Material & material );
-		/**
-		 *\~english
-		 *\brief		Retrieves the material
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le matàriau
-		 *\return		La valeur
-		 */
-		inline castor3d::Material & getMaterial()
+		MaterialTreeItemProperty( bool editable, castor3d::Engine * engine );
+
+		void setData( castor3d::Material & data )noexcept
 		{
-			return *m_material;
+			m_material = &data;
 		}
 
 	private:
@@ -52,7 +42,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::MaterialObs m_material{};
+		castor3d::Material * m_material{};
 	};
 }
 

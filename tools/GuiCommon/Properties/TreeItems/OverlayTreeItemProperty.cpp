@@ -20,9 +20,8 @@
 namespace GuiCommon
 {
 	OverlayTreeItemProperty::OverlayTreeItemProperty( bool editable
-		, castor3d::OverlayCategory & overlay )
-		: TreeItemProperty( overlay.getOverlay().getEngine(), editable )
-		, m_overlay( overlay )
+		, castor3d::Engine * engine )
+		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();
 	}
@@ -35,7 +34,12 @@ namespace GuiCommon
 		static wxString PROPERTY_OVERLAY_SIZE = _( "Size" );
 		static wxString PROPERTY_OVERLAY_MATERIAL = _( "Material" );
 
-		auto & overlay = getOverlay();
+		if ( !m_overlay )
+		{
+			return;
+		}
+
+		auto & overlay = *m_overlay;
 		auto & engine = *overlay.getOverlay().getEngine();
 		m_materials = getMaterialsList();
 		addProperty( grid, PROPERTY_CATEGORY_OVERLAY + wxString( overlay.getOverlayName() ) );

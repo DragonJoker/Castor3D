@@ -1,21 +1,18 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___GUICOMMON_BILLBOARD_TREE_ITEM_PROPERTY_H___
-#define ___GUICOMMON_BILLBOARD_TREE_ITEM_PROPERTY_H___
+#ifndef ___GC_BillboardTreeItemProperty_H___
+#define ___GC_BillboardTreeItemProperty_H___
 
 #include "GuiCommon/Properties/TreeItems/TreeItemProperty.hpp"
 
 namespace GuiCommon
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		24/08/2015
-	\version	0.8.0
 	\~english
-	\brief		Billboard helper class to communicate between Scene objects or Materials lists and PropertiesContainer
+	\brief		Billboard helper class to communicate between Scene objects or Materials lists and PropertiesContainer.
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer, pour les billboards
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer, pour les billboards.
 	*/
 	class BillboardTreeItemProperty
 		: public TreeItemProperty
@@ -24,25 +21,19 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	editable	Tells if the properties are modifiable
-		 *\param[in]	billboard	The target billboard
+		 *\param[in]	editable	Tells if the properties are modifiable.
+		 *\param[in]	engine		The engine.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	editable	Dit si les propriétés sont modifiables
-		 *\param[in]	billboard	Le billboard cible
+		 *\param[in]	editable	Dit si les propriétés sont modifiables.
+		 *\param[in]	engine		Le moteur.
 		 */
-		BillboardTreeItemProperty( bool editable, castor3d::BillboardList & billboard );
-		/**
-		 *\~english
-		 *\brief		Retrieves the billboard
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le billboard
-		 *\return		La valeur
-		 */
-		inline castor3d::BillboardList & getBillboard()
+		BillboardTreeItemProperty( bool editable
+			, castor3d::Engine * engine );
+
+		void setData( castor3d::BillboardList & data )noexcept
 		{
-			return m_billboard;
+			m_billboard = &data;
 		}
 
 	private:
@@ -52,7 +43,8 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::BillboardList & m_billboard;
+		castor3d::BillboardList * m_billboard{};
+		wxArrayString m_materials;
 	};
 }
 

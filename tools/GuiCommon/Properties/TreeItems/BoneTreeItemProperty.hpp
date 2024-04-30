@@ -10,7 +10,7 @@ namespace GuiCommon
 {
 	/**
 	\~english
-	\brief		Helper class to communicate between Scene objects or Materials lists and PropertiesContainer
+	\brief		Helper class to communicate between Scene objects or Materials lists and PropertiesContainer.
 	\~french
 	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesContainer.
 	*/
@@ -22,13 +22,19 @@ namespace GuiCommon
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	editable	Tells if the properties are modifiable.
-		 *\param[in]	material	The target.
+		 *\param[in]	engine		The engine.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	editable	Dit si les propriétés sont modifiables.
-		 *\param[in]	material	La cible.
+		 *\param[in]	engine		Le moteur.
 		 */
-		BoneTreeItemProperty( bool editable, castor3d::BoneNode & bone );
+		BoneTreeItemProperty( bool editable
+			, castor3d::Engine * engine );
+
+		void setData( castor3d::BoneNode & data )noexcept
+		{
+			m_bone = &data;
+		}
 
 	private:
 		/**
@@ -37,7 +43,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::BoneNode & m_bone;
+		castor3d::BoneNode * m_bone{};
 	};
 }
 

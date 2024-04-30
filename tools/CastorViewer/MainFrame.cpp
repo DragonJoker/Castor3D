@@ -354,13 +354,13 @@ namespace CastorViewer
 #endif
 		m_logTabsContainer->ChangeSelection( 0u );
 
-		m_sceneTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		m_objectsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		m_nodesTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		m_lightsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		m_materialsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		m_overlaysTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		m_guiTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_sceneTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_objectsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_nodesTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_lightsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_materialsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_overlaysTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_guiTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsTree >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
 		m_sceneTabsContainer->AddPage( m_sceneTree, _( "Scene" ), true );
 
 		if ( m_objectsTree )
@@ -796,32 +796,32 @@ namespace CastorViewer
 
 			if ( m_objectsTree )
 			{
-				m_objectsTree->getList()->loadSceneObjects( engine, m_renderPanel->getRenderWindow(), m_mainScene );
+				m_objectsTree->getList()->loadSceneObjects( engine, m_mainScene );
 			}
 
 			if ( m_nodesTree )
 			{
-				m_nodesTree->getList()->loadSceneNodes( engine, m_renderPanel->getRenderWindow(), m_mainScene );
+				m_nodesTree->getList()->loadSceneNodes( engine, m_mainScene );
 			}
 
 			if ( m_lightsTree )
 			{
-				m_lightsTree->getList()->loadSceneLights( engine, m_renderPanel->getRenderWindow(), m_mainScene );
+				m_lightsTree->getList()->loadSceneLights( engine, m_mainScene );
 			}
 
 			if ( m_materialsTree )
 			{
-				m_materialsTree->getList()->loadSceneMaterials( engine, m_renderPanel->getRenderWindow(), m_mainScene );
+				m_materialsTree->getList()->loadSceneMaterials( engine, m_mainScene );
 			}
 
 			if ( m_overlaysTree )
 			{
-				m_overlaysTree->getList()->loadSceneOverlays( engine, m_renderPanel->getRenderWindow(), m_mainScene );
+				m_overlaysTree->getList()->loadSceneOverlays( engine, m_mainScene );
 			}
 
 			if ( m_guiTree )
 			{
-				m_guiTree->getList()->loadSceneGui( engine, m_renderPanel->getRenderWindow(), m_mainScene );
+				m_guiTree->getList()->loadSceneGui( engine, m_mainScene );
 			}
 		}
 

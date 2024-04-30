@@ -17,9 +17,8 @@
 namespace GuiCommon
 {
 	StyleTreeItemProperty::StyleTreeItemProperty( bool editable
-		, castor3d::ControlStyle & style )
-		: TreeItemProperty{ &style.getEngine(), editable }
-		, m_style{ style }
+		, castor3d::Engine * engine )
+		: TreeItemProperty{ engine, editable }
 	{
 		CreateTreeItemMenu();
 	}
@@ -30,7 +29,12 @@ namespace GuiCommon
 		static wxString PROPERTY_BACKGROUND_MATERIAL = _( "Background Material" );
 		static wxString PROPERTY_FOREGROUND_MATERIAL = _( "Foreground Material" );
 
-		auto & style = getStyle();
+		if ( !m_style )
+		{
+			return;
+		}
+
+		auto & style = *m_style;
 		auto & engine = style.getEngine();
 		m_materials = getMaterialsList();
 		m_fonts = getFontsList();
