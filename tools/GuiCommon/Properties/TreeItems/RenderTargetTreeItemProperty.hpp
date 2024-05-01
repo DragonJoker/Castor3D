@@ -59,13 +59,9 @@ namespace GuiCommon
 		castor3d::RenderTarget & m_target;
 	};
 
-	void appendRenderTarget( wxTreeCtrlBase * list
+	void appendRenderTarget( SceneObjectsTree * list
 		, bool editable
 		, wxTreeItemId id
-		, castor3d::RenderTarget & target );
-	void appendRenderTarget( wxTreeListCtrl * list
-		, bool editable
-		, wxTreeListItem const & id
 		, castor3d::RenderTarget & target );
 }
 

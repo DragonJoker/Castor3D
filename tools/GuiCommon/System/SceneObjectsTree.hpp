@@ -34,11 +34,7 @@ namespace GuiCommon
 	class SceneObjectsTree final
 		: public wxTreeCtrl
 	{
-	private:
-		using SubmeshIdMap = castor::Map< castor3d::Submesh const *, wxTreeItemId >;
-		using GeometrySubmeshIdMap = castor::Map< castor3d::GeometryRPtr, SubmeshIdMap >;
-		using MaterialIdMap = castor::Map< castor3d::MaterialRPtr, wxTreeItemId >;
-
+	public:
 		enum class ObjectType : uint8_t
 		{
 			eTreeItemProp,
@@ -158,6 +154,11 @@ namespace GuiCommon
 			std::unique_ptr< AnimationData > m_animationlData;
 			std::unique_ptr< SubmeshData > m_submeshData;
 		};
+
+	private:
+		using SubmeshIdMap = castor::Map< castor3d::Submesh const *, wxTreeItemId >;
+		using GeometrySubmeshIdMap = castor::Map< castor3d::GeometryRPtr, SubmeshIdMap >;
+		using MaterialIdMap = castor::Map< castor3d::MaterialRPtr, wxTreeItemId >;
 
 	public:
 		SceneObjectsTree( PropertiesContainer * propertiesHolder

@@ -89,6 +89,7 @@ namespace castor3d
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 	{
 		stepProgressBarLocal( progress, cuT( "Creating ShadowMapSpot" ) );
+		m_resources.createImage( device.makeContext(), m_blurIntermediate );
 	}
 
 	crg::FramePassArray ShadowMapSpot::doCreatePass( crg::FramePassGroup & graph
