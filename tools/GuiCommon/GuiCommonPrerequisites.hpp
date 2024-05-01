@@ -93,6 +93,8 @@ namespace GuiCommon
 		eBMP_STYLE_SEL,
 		eBMP_THEME,
 		eBMP_THEME_SEL,
+		eBMP_PARTICLE,
+		eBMP_PARTICLE_SEL,
 		eBMP_COUNT,
 	};
 

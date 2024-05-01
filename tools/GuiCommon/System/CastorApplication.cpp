@@ -50,10 +50,12 @@ namespace app
 #include "GuiCommon/xpms/node_sel.xpm"
 #include "GuiCommon/xpms/material.xpm"
 #include "GuiCommon/xpms/material_sel.xpm"
-#include "GuiCommon/xpms/pass.xpm"
-#include "GuiCommon/xpms/pass_sel.xpm"
 #include "GuiCommon/xpms/panel.xpm"
 #include "GuiCommon/xpms/panel_sel.xpm"
+#include "GuiCommon/xpms/particle.xpm"
+#include "GuiCommon/xpms/particle_sel.xpm"
+#include "GuiCommon/xpms/pass.xpm"
+#include "GuiCommon/xpms/pass_sel.xpm"
 #include "GuiCommon/xpms/point.xpm"
 #include "GuiCommon/xpms/point_sel.xpm"
 #include "GuiCommon/xpms/post_effect.xpm"
@@ -671,6 +673,8 @@ namespace GuiCommon
 		m_imagesLoader.addBitmap( eBMP_STYLE_SEL, app::style_sel_xpm );
 		m_imagesLoader.addBitmap( eBMP_THEME, app::theme_xpm );
 		m_imagesLoader.addBitmap( eBMP_THEME_SEL, app::theme_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_PARTICLE, app::particle_xpm );
+		m_imagesLoader.addBitmap( eBMP_PARTICLE_SEL, app::particle_sel_xpm );
 		doLoadAppImages();
 		ImagesLoader::waitAsyncLoads();
 	}
