@@ -212,7 +212,7 @@ namespace castor3d
 	DebugDrawer::FramePass::~FramePass()noexcept
 	{
 		m_device.indexPools->putBuffer( m_aabb.indices );
-		m_device.vertexPools->putBuffer( m_aabb.vertices );
+		m_device.vertexPools->putBuffer< castor::Point4f >( m_aabb.vertices );
 	}
 
 	void DebugDrawer::FramePass::addAabbs( ashes::VkDescriptorSetLayoutBindingArray const & bindings

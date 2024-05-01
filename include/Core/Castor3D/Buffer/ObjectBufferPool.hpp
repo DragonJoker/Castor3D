@@ -69,16 +69,19 @@ namespace castor3d
 		 *\brief		Libère un tampon GPU.
 		 *\param[in]	bufferOffset	Le tampon à libérer.
 		 */
-		C3D_API void putBuffer( ObjectBufferOffset const & bufferOffset )noexcept;
+		template< typename VertexT >
+		void putBuffer( ObjectBufferOffset const & bufferOffset )noexcept;
 
 	private:
 		C3D_API BufferArray::iterator doFindBuffer( VkDeviceSize size
 			, BufferArray & array )const;
+		C3D_API castor::Vector< castor::Pair< size_t, BufferArray > >::iterator doInsertBuffers( size_t align );
+		C3D_API castor::Vector< castor::Pair< size_t, BufferArray > >::const_iterator doFindBuffers( size_t align )const;
 
 	private:
 		RenderDevice const & m_device;
 		castor::String m_debugName;
-		BufferArray m_buffers;
+		castor::Vector < castor::Pair< size_t, BufferArray > > m_buffers;
 	};
 
 	class IndexBufferPool
