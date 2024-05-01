@@ -395,8 +395,8 @@ namespace GuiCommon
 
 			auto particlesId = AppendItem( rootId
 				, _( "Particles" )
-				, eBMP_BILLBOARD
-				, eBMP_BILLBOARD_SEL );
+				, eBMP_PARTICLE
+				, eBMP_PARTICLE_SEL );
 			scene->getParticleSystemCache().forEach( [this, particlesId]( castor3d::ParticleSystem & elem )
 				{
 					doAddParticleSystem( particlesId, elem );
@@ -406,6 +406,7 @@ namespace GuiCommon
 			Expand( rootId );
 			Expand( geometriesId );
 			Expand( billboardsId );
+			Expand( particlesId );
 		}
 	}
 
@@ -551,8 +552,8 @@ namespace GuiCommon
 	{
 		AppendItem( id
 			, particleSystem.getName()
-			, eBMP_BILLBOARD
-			, eBMP_BILLBOARD_SEL
+			, eBMP_PARTICLE
+			, eBMP_PARTICLE_SEL
 			, new DataType{ ObjectType::eParticleSystem, &particleSystem } );
 	}
 
