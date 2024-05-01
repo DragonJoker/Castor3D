@@ -64,24 +64,40 @@ namespace castor3d
 	{
 		ObjectBufferOffset result;
 		auto size = VkDeviceSize( vertexCount * sizeof( VertexT ) );
-		auto it = doFindBuffer( size, m_buffers );
+		auto ait = doInsertBuffers( sizeof( VertexT ) );
+		auto it = doFindBuffer( size, ait->second );
 
-		if ( it == m_buffers.end() )
+		if ( it == ait->second.end() )
 		{
 			ModelBuffers buffers{ details::createBaseBuffer< uint8_t >( m_device
 				, std::max( size, VkDeviceSize( 65536U ) )
 				, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, m_debugName + cuT( "Vertex" ) + castor::string::toString( m_buffers.size() )
-				, uint32_t( m_device.properties.limits.minMemoryMapAlignment ) ) };
-			m_buffers.emplace_back( castor::move( buffers ) );
-			it = std::next( m_buffers.begin()
-				, ptrdiff_t( m_buffers.size() - 1u ) );
+				, m_debugName + cuT( "Vertex" ) + castor::string::toString( ait->second.size() )
+				, uint32_t( ait->first ) ) };
+			ait->second.emplace_back( castor::move( buffers ) );
+			it = std::next( ait->second.begin()
+				, ptrdiff_t( ait->second.size() - 1u ) );
 		}
 
 		result.buffers[uint32_t( SubmeshData::ePositions )].buffer = it->vertex.get();
 		result.buffers[uint32_t( SubmeshData::ePositions )].chunk = it->vertex->allocate( size );
 		return result;
+	}
+
+	template< typename VertexT >
+	void VertexBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )noexcept
+	{
+		auto ait = doFindBuffers( sizeof( VertexT ) );
+		CU_Require( ait != m_buffers.end() );
+		auto it = std::find_if( ait->second.begin()
+			, ait->second.end()
+			, [&bufferOffset]( ModelBuffers const & lookup )
+			{
+				return &lookup.vertex->getBuffer() == &bufferOffset.getBuffer( SubmeshData::ePositions );
+			} );
+		CU_Require( it != ait->second.end() );
+		it->vertex->deallocate( bufferOffset.buffers[uint32_t( SubmeshData::ePositions )].chunk );
 	}
 
 	//*********************************************************************************************

@@ -156,7 +156,7 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_initialised = false;
-			device.vertexPools->putBuffer( m_bufferOffsets );
+			device.vertexPools->putBuffer< Quad >( m_bufferOffsets );
 			m_bufferOffsets.reset();
 			m_geometryBuffers.buffers.clear();
 			m_geometryBuffers.offsets.clear();

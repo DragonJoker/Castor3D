@@ -11,6 +11,8 @@
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
+#include <numeric>
+
 CU_ImplementSmartPtr( castor3d, IndexBufferPool )
 CU_ImplementSmartPtr( castor3d, VertexBufferPool )
 CU_ImplementSmartPtr( castor3d, ObjectBufferPool )
@@ -111,16 +113,34 @@ namespace castor3d
 		m_buffers.clear();
 	}
 
-	void VertexBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )noexcept
+	castor::Vector< castor::Pair< size_t, VertexBufferPool::BufferArray > >::iterator VertexBufferPool::doInsertBuffers( size_t align )
 	{
+		align = std::lcm( align, m_device.properties.limits.minMemoryMapAlignment );
 		auto it = std::find_if( m_buffers.begin()
 			, m_buffers.end()
-			, [&bufferOffset]( ModelBuffers const & lookup )
+			, [align]( castor::Pair< size_t, VertexBufferPool::BufferArray > const & lookup )
 			{
-				return &lookup.vertex->getBuffer() == &bufferOffset.getBuffer( SubmeshData::ePositions );
+				return align == lookup.first;
 			} );
-		CU_Require( it != m_buffers.end() );
-		it->vertex->deallocate( bufferOffset.buffers[uint32_t( SubmeshData::ePositions )].chunk );
+
+		if ( it == m_buffers.end() )
+		{
+			m_buffers.emplace_back( align, BufferArray{} );
+			it = std::next( m_buffers.begin(), ptrdiff_t( m_buffers.size() - 1u ) );
+		}
+
+		return it;
+	}
+
+	castor::Vector< castor::Pair< size_t, VertexBufferPool::BufferArray > >::const_iterator VertexBufferPool::doFindBuffers( size_t align )const
+	{
+		align = std::lcm( align, m_device.properties.limits.minMemoryMapAlignment );
+		return std::find_if( m_buffers.begin()
+			, m_buffers.end()
+			, [align]( castor::Pair< size_t, VertexBufferPool::BufferArray > const & lookup )
+			{
+				return align == lookup.first;
+			} );
 	}
 
 	VertexBufferPool::BufferArray::iterator VertexBufferPool::doFindBuffer( VkDeviceSize size
