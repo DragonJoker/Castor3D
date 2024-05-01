@@ -501,6 +501,14 @@ namespace castor3d
 		, m_clearPass{ doCreateClearPass() }
 		, m_downsamplePass{ m_downsampledSmResult ? &doCreateDownsamplePass() : &m_clearPass }
 	{
+		m_injection.create();
+		m_geometry.create();
+
+		for ( auto & value : m_propagate )
+		{
+			value.create();
+		}
+
 		m_graph.addInput( m_sourceSmResult[SmTexture::eNormal].targetViewId
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		m_graph.addInput( m_sourceSmResult[SmTexture::ePosition].targetViewId

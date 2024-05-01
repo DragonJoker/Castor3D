@@ -9,6 +9,7 @@
 #include "GuiCommon/Properties/TreeItems/ToneMappingTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/VCTConfigTreeItemProperty.hpp"
 #include "GuiCommon/Shader/ShaderDialog.hpp"
+#include "GuiCommon/System/SceneObjectsTree.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Plugin/ToneMappingPlugin.hpp>
@@ -24,100 +25,80 @@
 
 namespace GuiCommon
 {
-	namespace rdrtgt
-	{
-		template< typename TreeT, typename ItemT >
-		void appendRenderTarget( TreeT * list
-			, bool editable
-			, ItemT const & id
-			, castor3d::RenderTarget & target )
-		{
-			auto targetId = list->AppendItem( id
-				, make_wxString( target.getName() )
-				, eBMP_RENDER_TARGET
-				, eBMP_RENDER_TARGET_SEL
-				, new RenderTargetTreeItemProperty( editable, target ) );
-
-			list->AppendItem( targetId
-				, _( "SSAO Configuration" )
-				, eBMP_SSAO_CONFIG
-				, eBMP_SSAO_CONFIG_SEL
-				, new SsaoConfigTreeItemProperty{ editable
-					, target.getEngine()
-					, target.getSsaoConfig() } );
-			list->AppendItem( targetId
-				, _( "Colour Grading Configuration" )
-				, eBMP_COLOURGRADING_CONFIG
-				, eBMP_COLOURGRADING_CONFIG_SEL
-				, new ColourGradingConfigTreeItemProperty{ editable
-					, target.getEngine()
-					, target.getColourGradingConfig() } );
-			list->AppendItem( targetId
-				, _( "Clusters Configuration" )
-				, eBMP_CLUSTERS_CONFIG
-				, eBMP_CLUSTERS_CONFIG_SEL
-				, new ClustersConfigTreeItemProperty{ editable
-				, target.getEngine()
-				, target } );
-
-			if ( target.isFullLoadingEnabled()
-				|| target.getScene()->getVoxelConeTracingConfig().enabled )
-			{
-				list->AppendItem( targetId
-					, _( "VCT Configuration" )
-					, eBMP_VCT_CONFIG
-					, eBMP_VCT_CONFIG_SEL
-					, new VCTConfigTreeItemProperty{ editable
-					, target.getEngine()
-					, target.getScene()->getVoxelConeTracingConfig() } );
-			}
-
-			for ( auto & postEffect : target.getHDRPostEffects() )
-			{
-				if ( target.isFullLoadingEnabled() || postEffect->isEnabled() )
-				{
-					list->AppendItem( targetId
-						, _( "HDR - " ) + make_wxString( postEffect->getFullName() )
-						, eBMP_POST_EFFECT
-						, eBMP_POST_EFFECT_SEL
-						, new PostEffectTreeItemProperty( editable, *postEffect, list ) );
-				}
-			}
-
-			for ( auto & postEffect : target.getSRGBPostEffects() )
-			{
-				if ( target.isFullLoadingEnabled() || postEffect->isEnabled() )
-				{
-					list->AppendItem( targetId
-						, _( "SRGB - " ) + make_wxString( postEffect->getFullName() )
-						, eBMP_POST_EFFECT
-						, eBMP_POST_EFFECT_SEL
-						, new PostEffectTreeItemProperty( editable, *postEffect, list ) );
-				}
-			}
-
-			list->AppendItem( targetId
-				, _( "Tone Mapping" )
-				, eBMP_TONE_MAPPING
-				, eBMP_TONE_MAPPING_SEL
-				, new ToneMappingTreeItemProperty( editable, target, list ) );
-		}
-	}
-
-	void appendRenderTarget( wxTreeCtrlBase * list
+	void appendRenderTarget( SceneObjectsTree * list
 		, bool editable
 		, wxTreeItemId id
 		, castor3d::RenderTarget & target )
 	{
-		rdrtgt::appendRenderTarget( list, editable, id, target );
-	}
+		auto targetId = list->AppendItem( id
+			, make_wxString( target.getName() )
+			, eBMP_RENDER_TARGET
+			, eBMP_RENDER_TARGET_SEL
+			, new SceneObjectsTree::DataType{ std::make_unique< RenderTargetTreeItemProperty >( editable, target ) } );
 
-	void appendRenderTarget( wxTreeListCtrl * list
-		, bool editable
-		, wxTreeListItem const & id
-		, castor3d::RenderTarget & target )
-	{
-		rdrtgt::appendRenderTarget( list, editable, id, target );
+		list->AppendItem( targetId
+			, _( "SSAO Configuration" )
+			, eBMP_SSAO_CONFIG
+			, eBMP_SSAO_CONFIG_SEL
+			, new SceneObjectsTree::DataType{ std::make_unique< SsaoConfigTreeItemProperty >( editable
+				, target.getEngine()
+				, target.getSsaoConfig() ) } );
+		list->AppendItem( targetId
+			, _( "Colour Grading Configuration" )
+			, eBMP_COLOURGRADING_CONFIG
+			, eBMP_COLOURGRADING_CONFIG_SEL
+			, new SceneObjectsTree::DataType{ std::make_unique< ColourGradingConfigTreeItemProperty >( editable
+				, target.getEngine()
+				, target.getColourGradingConfig() ) } );
+		list->AppendItem( targetId
+			, _( "Clusters Configuration" )
+			, eBMP_CLUSTERS_CONFIG
+			, eBMP_CLUSTERS_CONFIG_SEL
+			, new SceneObjectsTree::DataType{ std::make_unique< ClustersConfigTreeItemProperty >( editable
+				, target.getEngine()
+				, target ) } );
+
+		if ( target.isFullLoadingEnabled()
+			|| target.getScene()->getVoxelConeTracingConfig().enabled )
+		{
+			list->AppendItem( targetId
+				, _( "VCT Configuration" )
+				, eBMP_VCT_CONFIG
+				, eBMP_VCT_CONFIG_SEL
+				, new SceneObjectsTree::DataType{ std::make_unique< VCTConfigTreeItemProperty >( editable
+					, target.getEngine()
+					, target.getScene()->getVoxelConeTracingConfig() ) } );
+		}
+
+		for ( auto & postEffect : target.getHDRPostEffects() )
+		{
+			if ( target.isFullLoadingEnabled() || postEffect->isEnabled() )
+			{
+				list->AppendItem( targetId
+					, _( "HDR - " ) + make_wxString( postEffect->getFullName() )
+					, eBMP_POST_EFFECT
+					, eBMP_POST_EFFECT_SEL
+					, new SceneObjectsTree::DataType{ std::make_unique< PostEffectTreeItemProperty >( editable, *postEffect, list ) } );
+			}
+		}
+
+		for ( auto & postEffect : target.getSRGBPostEffects() )
+		{
+			if ( target.isFullLoadingEnabled() || postEffect->isEnabled() )
+			{
+				list->AppendItem( targetId
+					, _( "SRGB - " ) + make_wxString( postEffect->getFullName() )
+					, eBMP_POST_EFFECT
+					, eBMP_POST_EFFECT_SEL
+					, new SceneObjectsTree::DataType{ std::make_unique< PostEffectTreeItemProperty >( editable, *postEffect, list ) } );
+			}
+		}
+
+		list->AppendItem( targetId
+			, _( "Tone Mapping" )
+			, eBMP_TONE_MAPPING
+			, eBMP_TONE_MAPPING_SEL
+			, new SceneObjectsTree::DataType{ std::make_unique< ToneMappingTreeItemProperty >( editable, target, list ) } );
 	}
 
 	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( bool editable

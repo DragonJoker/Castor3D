@@ -92,6 +92,7 @@ namespace castor3d
 			, getFormat( m_blurIntermediate )
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 	{
+		m_resources.createImage( device.makeContext(), m_blurIntermediate );
 		stepProgressBarLocal( progress, cuT( "Creating ShadowMapPoint" ) );
 	}
 

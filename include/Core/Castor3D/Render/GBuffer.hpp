@@ -197,6 +197,15 @@ namespace castor3d
 	class GBufferT
 		: private GBufferBase
 	{
+	protected:
+		~GBufferT()noexcept
+		{
+			for ( auto const & texture : m_owned )
+			{
+				texture->destroy();
+			}
+		}
+
 	public:
 		GBufferT( GBufferT const & rhs ) = delete;
 		GBufferT & operator=( GBufferT const & rhs ) = delete;
@@ -313,14 +322,6 @@ namespace castor3d
 				, sampleCount
 				, m_owned ) }
 		{
-		}
-
-		~GBufferT()noexcept
-		{
-			for ( auto const & texture : m_owned )
-			{
-				texture->destroy();
-			}
 		}
 
 		void create()const
