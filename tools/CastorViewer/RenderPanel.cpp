@@ -535,6 +535,12 @@ namespace CastorViewer
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( RenderPanel, wxPanel )
+		EVT_TIMER( int( eTIMER_ID::FORWARD ), RenderPanel::onTimerFwd )
+		EVT_TIMER( int( eTIMER_ID::BACK ), RenderPanel::onTimerBck )
+		EVT_TIMER( int( eTIMER_ID::LEFT ), RenderPanel::onTimerLft )
+		EVT_TIMER( int( eTIMER_ID::RIGHT ), RenderPanel::onTimerRgt )
+		EVT_TIMER( int( eTIMER_ID::UP ), RenderPanel::onTimerUp )
+		EVT_TIMER( int( eTIMER_ID::DOWN ), RenderPanel::onTimerDwn )
 		EVT_TIMER( int( eTIMER_ID::MOUSE ), RenderPanel::onTimerMouse )
 		EVT_TIMER( int( eTIMER_ID::MOVEMENT ), RenderPanel::onTimerMovement )
 		EVT_SIZE( RenderPanel::onSize )
@@ -562,6 +568,72 @@ namespace CastorViewer
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 
+		void RenderPanel::onTimerFwd( wxTimerEvent & event )
+	{
+		if ( m_currentState )
+		{
+			auto speed = doGetRealSpeed();
+			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, speed } );
+		}
+
+		event.Skip();
+	}
+
+	void RenderPanel::onTimerBck( wxTimerEvent & event )
+	{
+		if ( m_currentState )
+		{
+			auto speed = doGetRealSpeed();
+			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, -speed } );
+		}
+
+		event.Skip();
+	}
+
+	void RenderPanel::onTimerLft( wxTimerEvent & event )
+	{
+		if ( m_currentState )
+		{
+			auto speed = doGetRealSpeed();
+			m_currentState->addScalarVelocity( castor::Point3f{ speed, 0.0f, 0.0f } );
+		}
+
+		event.Skip();
+	}
+
+	void RenderPanel::onTimerRgt( wxTimerEvent & event )
+	{
+		if ( m_currentState )
+		{
+			auto speed = doGetRealSpeed();
+			m_currentState->addScalarVelocity( castor::Point3f{ -speed, 0.0f, 0.0f } );
+		}
+
+		event.Skip();
+	}
+
+	void RenderPanel::onTimerUp( wxTimerEvent & event )
+	{
+		if ( m_currentState )
+		{
+			auto speed = doGetRealSpeed();
+			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, speed, 0.0f } );
+		}
+
+		event.Skip();
+	}
+
+	void RenderPanel::onTimerDwn( wxTimerEvent & event )
+	{
+		if ( m_currentState )
+		{
+			auto speed = doGetRealSpeed();
+			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, -speed, 0.0f } );
+		}
+
+		event.Skip();
+	}
+
 	void RenderPanel::onTimerMouse( wxTimerEvent & event )
 	{
 		event.Skip();
@@ -571,43 +643,6 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			if ( m_keyUp || m_keyDown || m_keyLeft || m_keyRight || m_keyPageUp || m_keyPageDown )
-			{
-				auto speed = doGetRealSpeed();
-				auto xSpeed = 0.0f;
-				auto ySpeed = 0.0f;
-				auto zSpeed = 0.0f;
-
-				if ( m_keyUp && !m_keyDown )
-				{
-					zSpeed = speed;
-				}
-				else if ( m_keyDown && !m_keyUp )
-				{
-					zSpeed = -speed;
-				}
-
-				if ( m_keyPageUp && !m_keyPageDown )
-				{
-					ySpeed = speed;
-				}
-				else if ( m_keyPageDown && !m_keyPageUp )
-				{
-					ySpeed = -speed;
-				}
-
-				if ( m_keyLeft && !m_keyRight )
-				{
-					xSpeed = speed;
-				}
-				else if ( m_keyRight && !m_keyLeft )
-				{
-					xSpeed = -speed;
-				}
-
-				m_currentState->addScalarVelocity( castor::Point3f{ xSpeed, ySpeed, zSpeed } );
-			}
-
 			m_currentState->update();
 		}
 
@@ -672,30 +707,30 @@ namespace CastorViewer
 			{
 			case WXK_LEFT:
 			case 'Q':
-				m_keyLeft = true;
+				doStartTimer( eTIMER_ID::LEFT );
 				break;
 
 			case WXK_RIGHT:
 			case 'D':
-				m_keyRight = true;
+				doStartTimer( eTIMER_ID::RIGHT );
 				break;
 
 			case WXK_UP:
 			case 'Z':
-				m_keyUp = true;
+				doStartTimer( eTIMER_ID::FORWARD );
 				break;
 
 			case WXK_DOWN:
 			case 'S':
-				m_keyDown = true;
+				doStartTimer( eTIMER_ID::BACK );
 				break;
 
 			case WXK_PAGEUP:
-				m_keyPageUp = true;
+				doStartTimer( eTIMER_ID::UP );
 				break;
 
 			case WXK_PAGEDOWN:
-				m_keyPageDown = true;
+				doStartTimer( eTIMER_ID::DOWN );
 				break;
 
 			case WXK_ALT:
@@ -754,30 +789,30 @@ namespace CastorViewer
 
 			case WXK_LEFT:
 			case 'Q':
-				m_keyLeft = false;
+				doStopTimer( eTIMER_ID::LEFT );
 				break;
 
 			case WXK_RIGHT:
 			case 'D':
-				m_keyRight = false;
+				doStopTimer( eTIMER_ID::RIGHT );
 				break;
 
 			case WXK_UP:
 			case 'Z':
-				m_keyUp = false;
+				doStopTimer( eTIMER_ID::FORWARD );
 				break;
 
 			case WXK_DOWN:
 			case 'S':
-				m_keyDown = false;
+				doStopTimer( eTIMER_ID::BACK );
 				break;
 
 			case WXK_PAGEUP:
-				m_keyPageUp = false;
+				doStopTimer( eTIMER_ID::UP );
 				break;
 
 			case WXK_PAGEDOWN:
-				m_keyPageDown = false;
+				doStopTimer( eTIMER_ID::DOWN );
 				break;
 
 			case WXK_ALT:
