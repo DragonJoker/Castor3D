@@ -171,7 +171,8 @@ namespace castor3d
 	void ShadowMap::update( CpuUpdater & updater )
 	{
 		auto vsm = updater.light->getShadowType() == ShadowType::eVariance;
-		auto rsm = updater.light->needsRsmShadowMaps();
+		auto rsm = updater.light->needsRsmShadowMaps()
+			&& !updater.scene->getVoxelConeTracingConfig().enabled;
 		m_passesIndex = shdmap::getPassesIndex( vsm, rsm );
 		auto & myPasses = m_passes[m_passesIndex];
 
