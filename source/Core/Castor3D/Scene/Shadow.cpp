@@ -307,7 +307,7 @@ namespace castor3d
 		{
 			baseBlock.visit( cuT( "GI Type" )
 				, globalIllumination
-				, castor::StringArray{ cuT( "None" ), cuT( "VCT" ), cuT( "RSM" ), cuT( "LPV" ), cuT( "LPV (Geometry)" ), cuT( "Layered LPV" ), cuT( "Layered LPV (Geometry)" ) }
+				, castor::StringArray{ cuT( "None" ), cuT( "RSM" ), cuT( "LPV" ), cuT( "LPV (Geometry)" ), cuT( "Layered LPV" ), cuT( "Layered LPV (Geometry)" ) }
 				, ConfigurationVisitorBase::OnEnumValueChangeT< GlobalIlluminationType >( [this]( GlobalIlluminationType, GlobalIlluminationType newV )
 				{
 					globalIllumination = GlobalIlluminationType( newV );
@@ -317,7 +317,7 @@ namespace castor3d
 		{
 			baseBlock.visit( cuT( "GI Type" )
 				, globalIllumination
-				, castor::StringArray{ cuT( "None" ), cuT( "VCT" ), cuT( "RSM" ), cuT( "LPV" ), cuT( "LPV (Geometry)" ) }
+				, castor::StringArray{ cuT( "None" ), cuT( "RSM" ), cuT( "LPV" ), cuT( "LPV (Geometry)" ) }
 				, ConfigurationVisitorBase::OnEnumValueChangeT< GlobalIlluminationType >( [this]( GlobalIlluminationType, GlobalIlluminationType newV )
 				{
 					globalIllumination = GlobalIlluminationType( newV );

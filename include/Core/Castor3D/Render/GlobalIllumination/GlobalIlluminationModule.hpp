@@ -16,27 +16,25 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Enumerator of supported global illumination algorithms.
+	*	Enumerator of per light source supported global illumination algorithms.
 	*\~french
 	*\brief
-	*	Enumération des algorithmes de global illumination supportés.
+	*	Enumération des algorithmes de global illumination par source lumineuse supportés.
 	*/
 	enum class GlobalIlluminationType
 		: uint32_t
 	{
 		eNone = 0,
-		// Voxel Cone Tracing.
-		eVoxelConeTracing = 1,
 		// Reflective shadow maps.
-		eRsm = 2,
+		eRsm = 1,
 		// Light Propagation Volumes without geometry injection.
-		eLpv = 3,
+		eLpv = 2,
 		// Light Propagation Volumes with geometry injection.
-		eLpvG = 4,
+		eLpvG = 3,
 		// Layered Light Propagation Volumes without geometry injection.
-		eLayeredLpv = 5,
+		eLayeredLpv = 4,
 		// Layered Light Propagation Volumes with geometry injection.
-		eLayeredLpvG = 6,
+		eLayeredLpvG = 5,
 		CU_ScopedEnumBounds( eNone, eLayeredLpvG ),
 	};
 	C3D_API castor::String getName( GlobalIlluminationType giType );

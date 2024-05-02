@@ -8,7 +8,6 @@ namespace castor3d
 		{
 			{
 				cuT( "none" ),
-				cuT( "vct" ),
 				cuT( "rsm" ),
 				cuT( "lpv" ),
 				cuT( "lpv_geometry" ),
