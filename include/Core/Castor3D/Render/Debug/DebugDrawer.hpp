@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_DebugDrawer_H___
 #define ___C3D_DebugDrawer_H___
 
+#include "Castor3D/Render/Debug/DebugModule.hpp"
+
 #include "Castor3D/Buffer/ObjectBufferOffset.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
@@ -46,20 +48,43 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Adds a buffer containing AABBs to draw.
-		 *\param[in]	bindings	The shader data bindings.
-		 *\param[in]	writes		The shader data.
-		 *\param[in]	count		The number of AABB to draw.
-		 *\param[in]	shader		The shader used to draw the AABB.
+		 *\param[in]	bindings		The shader data bindings.
+		 *\param[in]	writes			The shader data.
+		 *\param[in]	instanceCount	The number of AABB to draw.
+		 *\param[in]	shader			The shader used to draw the AABB.
 		 *\~french
 		 *\brief		Ajoute un buffer d'AABB à dessiner.
-		 *\param[in]	bindings	Les bindings des données à passer au shader.
-		 *\param[in]	writes		Les données à passer au shader.
-		 *\param[in]	count		Le nombre d'AABB à dessiner.
-		 *\param[in]	shader		Le shader utilisé pour dessiner les AABB.
+		 *\param[in]	bindings		Les bindings des données à passer au shader.
+		 *\param[in]	writes			Les données à passer au shader.
+		 *\param[in]	instanceCount	Le nombre d'AABB à dessiner.
+		 *\param[in]	shader			Le shader utilisé pour dessiner les AABB.
 		 */
 		C3D_API void addAabbs( ashes::VkDescriptorSetLayoutBindingArray const & bindings
 			, ashes::WriteDescriptorSetArray const & writes
-			, VkDeviceSize count
+			, VkDeviceSize instanceCount
+			, ashes::PipelineShaderStageCreateInfoArray const & shader
+			, bool enableDepthTest );
+		/**
+		 *\~english
+		 *\brief		Adds a buffer containing AABBs to draw.
+		 *\param[in]	bindings		The shader data bindings.
+		 *\param[in]	writes			The shader data.
+		 *\param[in]	instanceCount	The number of instances to draw.
+		 *\param[in]	shader			The shader used to draw the AABB.
+		 *\~french
+		 *\brief		Ajoute un buffer d'AABB à dessiner.
+		 *\param[in]	bindings		Les bindings des données à passer au shader.
+		 *\param[in]	writes			Les données à passer au shader.
+		 *\param[in]	instanceCount	Le nombre d'instances à dessiner.
+		 *\param[in]	shader			Le shader utilisé pour dessiner les AABB.
+		 */
+		C3D_API void addDrawable( DebugVertexBuffers vertexBuffers
+			, DebugIndexBuffer indexBuffer
+			, ashes::VkVertexInputAttributeDescriptionArray const & vertexAttributes
+			, ashes::VkVertexInputBindingDescriptionArray const & vertexBindings
+			, ashes::VkDescriptorSetLayoutBindingArray const & bindings
+			, ashes::WriteDescriptorSetArray const & writes
+			, VkDeviceSize instanceCount
 			, ashes::PipelineShaderStageCreateInfoArray const & shader
 			, bool enableDepthTest );
 
@@ -92,12 +117,16 @@ namespace castor3d
 
 		struct AABBBuffer
 		{
-			AABBBuffer( VkDeviceSize count
+			AABBBuffer( DebugVertexBuffers vertexBuffers
+				, DebugIndexBuffer indexBuffer
+				, VkDeviceSize instanceCount
 				, Pipeline * pipeline
 				, ashes::DescriptorSet * descriptorSet
 				, ashes::WriteDescriptorSetArray writes );
 
-			VkDeviceSize count;
+			DebugVertexBuffers vertexBuffers;
+			DebugIndexBuffer indexBuffer;
+			VkDeviceSize instanceCount;
 			Pipeline * pipeline;
 			ashes::DescriptorSet * descriptorSet;
 			ashes::WriteDescriptorSetArray writes;
@@ -117,11 +146,20 @@ namespace castor3d
 				, uint32_t const * passIndex );
 			~FramePass()noexcept override;
 
+			void addDrawable( DebugVertexBuffers vertexBuffers
+				, DebugIndexBuffer indexBuffer
+				, ashes::VkVertexInputAttributeDescriptionArray const & vertexAttributes
+				, ashes::VkVertexInputBindingDescriptionArray const & vertexBindings
+				, ashes::VkDescriptorSetLayoutBindingArray const & bindings
+				, ashes::WriteDescriptorSetArray const & writes
+				, VkDeviceSize instanceCount
+				, ashes::PipelineShaderStageCreateInfoArray const & shader
+				, bool enableDepthTest );
 			void addAabbs( ashes::VkDescriptorSetLayoutBindingArray const & bindings
-			, ashes::WriteDescriptorSetArray const & writes
-			, VkDeviceSize count
-			, ashes::PipelineShaderStageCreateInfoArray const & shader
-			, bool enableDepthTest );
+				, ashes::WriteDescriptorSetArray const & writes
+				, VkDeviceSize instanceCount
+				, ashes::PipelineShaderStageCreateInfoArray const & shader
+				, bool enableDepthTest );
 
 		private:
 			void doSubRecordInto( crg::RecordContext const & context
