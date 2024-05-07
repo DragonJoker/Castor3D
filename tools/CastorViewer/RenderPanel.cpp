@@ -219,7 +219,7 @@ namespace CastorViewer
 
 		if ( auto scene = target->getScene() )
 		{
-			m_cubeManager = castor::make_unique< GuiCommon::CubeBoxManager >( *scene );
+			m_cubeManager = castor::make_unique< GuiCommon::CubeBoxManager >( *target );
 
 			if ( scene->hasSceneNode( cuT( "PointLightsNode" ) ) )
 			{
