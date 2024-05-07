@@ -1379,4 +1379,21 @@ namespace castor3d
 	{
 		addDebugAabbs( target.getDebugDrawer(), bindings, writes, count, shader, enableDepthTest );
 	}
+
+	void addDebugDrawable( RenderTarget const & target
+		, DebugVertexBuffers vertexBuffers
+		, DebugIndexBuffer indexBuffer
+		, ashes::VkVertexInputAttributeDescriptionArray const & vertexAttributes
+		, ashes::VkVertexInputBindingDescriptionArray const & vertexBindings
+		, ashes::VkDescriptorSetLayoutBindingArray const & bindings
+		, ashes::WriteDescriptorSetArray const & writes
+		, VkDeviceSize count
+		, ashes::PipelineShaderStageCreateInfoArray const & shader
+		, bool enableDepthTest )
+	{
+		addDebugDrawable( target.getDebugDrawer()
+			, std::move( vertexBuffers ), std::move( indexBuffer )
+			, vertexAttributes, vertexBindings
+			, bindings, writes, count, shader, enableDepthTest );
+	}
 }
