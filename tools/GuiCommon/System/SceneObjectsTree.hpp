@@ -24,6 +24,7 @@ See LICENSE file in root folder
 #include "GuiCommon/Properties/TreeItems/TextureTreeItemProperty.hpp"
 
 #include <Castor3D/Gui/GuiModule.hpp>
+#include <CastorUtils/Design/Signal.hpp>
 
 #include <wx/imaglist.h>
 #include <wx/panel.h>
@@ -35,6 +36,16 @@ namespace GuiCommon
 		: public wxTreeCtrl
 	{
 	public:
+		using SelectLightFunc = std::function< void( castor3d::Light * ) >;
+		using SelectSubmeshFunc = std::function< void( castor3d::Geometry *, castor3d::Submesh const * ) >;
+		using SelectNodeFunc = std::function< void( castor3d::SceneNode * ) >;
+		using SelectLightSignal = castor::SignalT< SelectLightFunc >;
+		using SelectSubmeshSignal = castor::SignalT< SelectSubmeshFunc >;
+		using SelectNodeSignal = castor::SignalT< SelectNodeFunc >;
+		using SelectLightConnection = SelectLightSignal::connection;
+		using SelectSubmeshConnection = SelectSubmeshSignal::connection;
+		using SelectNodeConnection = SelectNodeSignal::connection;
+
 		enum class ObjectType : uint8_t
 		{
 			eTreeItemProp,
@@ -157,7 +168,7 @@ namespace GuiCommon
 
 	private:
 		using SubmeshIdMap = castor::Map< castor3d::Submesh const *, wxTreeItemId >;
-		using GeometrySubmeshIdMap = castor::Map< castor3d::GeometryRPtr, SubmeshIdMap >;
+		using GeometrySubmeshIdMap = castor::Map< castor3d::Geometry const *, SubmeshIdMap >;
 		using MaterialIdMap = castor::Map< castor3d::MaterialRPtr, wxTreeItemId >;
 
 	public:
@@ -182,9 +193,13 @@ namespace GuiCommon
 		void loadSceneObjects( castor3d::Engine * engine
 			, castor3d::SceneRPtr scene );
 		void unloadScene();
-		void select( castor3d::GeometryRPtr geometry
+		void select( castor3d::Geometry const * geometry
 			, castor3d::Submesh const * submesh );
 		void select( castor3d::MaterialRPtr material );
+
+		SelectLightSignal onSelectLight;
+		SelectSubmeshSignal onSelectSubmesh;
+		SelectNodeSignal onSelectNode;
 
 	protected:
 		void doAddSubmesh( wxTreeItemId id

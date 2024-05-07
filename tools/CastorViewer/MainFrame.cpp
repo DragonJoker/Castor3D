@@ -225,9 +225,9 @@ namespace CastorViewer
 		}
 	}
 
-	void MainFrame::select( castor3d::GeometryRPtr geometry, castor3d::Submesh const * submesh )
+	void MainFrame::select( castor3d::Geometry const * geometry, castor3d::Submesh const * submesh )const
 	{
-		if (m_objectsTree && m_objectsTree->getList() )
+		if ( m_objectsTree && m_objectsTree->getList() )
 		{
 			m_objectsTree->getList()->select( geometry, submesh );
 			m_materialsTree->getList()->select( geometry->getMaterial( *submesh ) );
@@ -236,9 +236,8 @@ namespace CastorViewer
 
 	void MainFrame::doInitialiseTimers()
 	{
-		auto engine = wxGetApp().getCastor();
-
-		if ( !engine->isThreaded() && !m_timer )
+		if ( auto engine = wxGetApp().getCastor();
+			!engine->isThreaded() && !m_timer )
 		{
 			m_timer = new wxTimer( this, main::eID_RENDER_TIMER );
 			m_timer->Start( 1000 / int( engine->getRenderLoop().getWantedFps() ) );
@@ -366,16 +365,38 @@ namespace CastorViewer
 		if ( m_objectsTree )
 		{
 			m_sceneTabsContainer->AddPage( m_objectsTree, _( "Objects" ), false );
+			m_selectSubmesh = m_objectsTree->getList()->onSelectSubmesh.connect( [this]( castor3d::Geometry * geometry
+				, castor3d::Submesh const * submesh )
+				{
+					if ( m_renderPanel )
+					{
+						m_renderPanel->select( geometry, submesh );
+					}
+				} );
 		}
 
 		if ( m_nodesTree )
 		{
 			m_sceneTabsContainer->AddPage( m_nodesTree, _( "Nodes" ), false );
+			m_selectNode = m_nodesTree->getList()->onSelectNode.connect( [this]( castor3d::SceneNode * node )
+				{
+					if ( m_renderPanel )
+					{
+						m_renderPanel->select( node );
+					}
+				} );
 		}
 
 		if ( m_lightsTree )
 		{
 			m_sceneTabsContainer->AddPage( m_lightsTree, _( "Lights" ), false );
+			m_selectLight = m_lightsTree->getList()->onSelectLight.connect( [this]( castor3d::Light * light )
+				{
+					if ( m_renderPanel )
+					{
+						m_renderPanel->select( light );
+					}
+				} );
 		}
 
 		if ( m_materialsTree )

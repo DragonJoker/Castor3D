@@ -416,7 +416,7 @@ namespace GuiCommon
 		m_scene = {};
 	}
 
-	void SceneObjectsTree::select( castor3d::GeometryRPtr geometry
+	void SceneObjectsTree::select( castor3d::Geometry const * geometry
 		, castor3d::Submesh const * submesh )
 	{
 		if ( auto itg = m_objects.find( geometry );
@@ -872,6 +872,10 @@ namespace GuiCommon
 
 	void SceneObjectsTree::onSelectItem( wxTreeEvent & event )
 	{
+		onSelectNode( nullptr );
+		onSelectLight( nullptr );
+		onSelectSubmesh( nullptr, nullptr );
+
 		if ( auto data = static_cast< DataType * >( GetItemData( event.GetItem() ) ) )
 		{
 			switch ( data->getType() )
@@ -890,10 +894,12 @@ namespace GuiCommon
 			case ObjectType::eSceneNode:
 				m_nodeProperties->setData( data->getObject< castor3d::SceneNode >() );
 				m_propertiesHolder->setPropertyData( m_nodeProperties.get() );
+				onSelectNode( &data->getObject< castor3d::SceneNode >() );
 				break;
 			case ObjectType::eLight:
 				m_lightProperties->setData( data->getObject< castor3d::Light >() );
 				m_propertiesHolder->setPropertyData( m_lightProperties.get() );
+				onSelectLight( &data->getObject< castor3d::Light >() );
 				break;
 			case ObjectType::eOverlay:
 				m_overlayProperties->setData( data->getObject< castor3d::OverlayCategory >() );
@@ -955,6 +961,8 @@ namespace GuiCommon
 				m_submeshProperties->setData( *std::get< 0 >( data->getSubmeshData() )
 					, *std::get< 1 >( data->getSubmeshData() ) );
 				m_propertiesHolder->setPropertyData( m_submeshProperties.get() );
+				onSelectSubmesh( std::get< 0 >( data->getSubmeshData() )
+						, std::get< 1 >( data->getSubmeshData() ) );
 				break;
 			}
 		}

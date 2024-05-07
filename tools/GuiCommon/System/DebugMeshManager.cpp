@@ -390,7 +390,7 @@ namespace GuiCommon
 
 			castor3d::addDebugDrawable( m_renderTarget
 				, castor3d::DebugVertexBuffers{ {}, {}, 24u }
-				, castor3d::DebugIndexBuffer{ {}, 0u }
+				, castor3d::DebugIndexBuffer{ {}, 0u, 0u }
 				, ashes::VkVertexInputAttributeDescriptionArray{}
 				, ashes::VkVertexInputBindingDescriptionArray{}
 				, m_bindings
@@ -463,7 +463,7 @@ namespace GuiCommon
 					, castor3d::DebugVertexBuffers{ { VkBuffer( buffer->getBuffer().getBuffer() ) }
 						, { buffer->getOffset() }
 						, buffer->getCount() }
-					, castor3d::DebugIndexBuffer{ {}, 0u }
+					, castor3d::DebugIndexBuffer{ {}, 0u, 0u }
 					, ashes::VkVertexInputAttributeDescriptionArray{ VkVertexInputAttributeDescription{ 0u, 0u, VK_FORMAT_R32G32B32A32_SFLOAT, 0u } }
 					, ashes::VkVertexInputBindingDescriptionArray{ VkVertexInputBindingDescription{ 0u, 16u, VK_VERTEX_INPUT_RATE_VERTEX } }
 					, m_bindings

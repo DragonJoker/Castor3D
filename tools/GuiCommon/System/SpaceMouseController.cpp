@@ -149,7 +149,7 @@ namespace GuiCommon
 				reset();
 			}
 
-			void setGeometry( castor3d::GeometryRPtr geometry )override
+			void setGeometry( castor3d::Geometry const * geometry )override
 			{
 				m_geometry = geometry;
 				reset();
@@ -670,7 +670,7 @@ namespace GuiCommon
 			bool m_connected{};
 			castor3d::FrameListener & m_listener;
 			castor3d::CameraRPtr m_camera{};
-			castor3d::GeometryRPtr m_geometry{};
+			castor3d::Geometry const * m_geometry{};
 			float m_lookAperture{};
 			castor::Point3f m_lookDirection{};
 			castor::Point3f m_lookPosition{};
