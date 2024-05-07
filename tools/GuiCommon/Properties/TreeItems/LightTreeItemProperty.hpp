@@ -43,6 +43,7 @@ namespace GuiCommon
 
 		void setData( castor3d::Light & data )noexcept
 		{
+			clearProperties();
 			m_light = &data;
 		}
 

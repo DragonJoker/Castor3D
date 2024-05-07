@@ -31,6 +31,7 @@ namespace GuiCommon
 			, bool full
 			, bool inLayout )noexcept
 		{
+			clearProperties();
 			m_control = &control;
 			m_full = full;
 			m_inLayout = inLayout;

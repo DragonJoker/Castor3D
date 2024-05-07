@@ -62,6 +62,7 @@ namespace GuiCommon
 
 		void setData( castor3d::Pass & data )noexcept
 		{
+			clearProperties();
 			m_pass = &data;
 		}
 

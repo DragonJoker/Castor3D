@@ -33,6 +33,7 @@ namespace GuiCommon
 
 		void setData( castor3d::OverlayCategory & data )noexcept
 		{
+			clearProperties();
 			m_overlay = &data;
 		}
 

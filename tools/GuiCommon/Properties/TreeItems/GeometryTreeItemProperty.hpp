@@ -40,6 +40,7 @@ namespace GuiCommon
 		 */
 		void setData( castor3d::Geometry & data )noexcept
 		{
+			clearProperties();
 			m_geometry = &data;
 		}
 

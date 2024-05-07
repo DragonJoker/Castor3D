@@ -60,10 +60,15 @@ namespace GuiCommon
 		void DisplayTreeItemMenu( wxWindow * window, wxCoord x, wxCoord y );
 		/**
 		 *\~english
+		 *\brief		Clears the properties.
+		 */
+		void clearProperties();
+		/**
+		 *\~english
 		 *\brief		Creates and fills the item properties, in the given wxPropertyGrid
 		 *\param[in]	grid	The target wxPropertyGrid
 		 */
-		void CreateProperties( wxPropertyGrid * grid );
+		void createProperties( wxPropertyGrid * grid );
 		/**
 		 *\brief		Call when a property grid property is changed
 		 *\param[in]	event	The event
@@ -600,6 +605,7 @@ namespace GuiCommon
 		bool m_editable;
 		castor3d::Engine * m_engine;
 		castor::Map< wxString, PropertyChangeHandler > m_handlers;
+		wxPropertyGrid * m_grid{};
 		castor::String m_prefix;
 	};
 }

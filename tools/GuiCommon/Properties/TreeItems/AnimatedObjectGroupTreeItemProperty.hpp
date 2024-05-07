@@ -33,6 +33,7 @@ namespace GuiCommon
 
 		void setData( castor3d::AnimatedObjectGroup & data )noexcept
 		{
+			clearProperties();
 			m_group = &data;
 		}
 

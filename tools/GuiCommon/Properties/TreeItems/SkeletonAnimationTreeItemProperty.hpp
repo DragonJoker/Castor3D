@@ -35,6 +35,7 @@ namespace GuiCommon
 
 		void setData( castor3d::SkeletonAnimation & data )noexcept
 		{
+			clearProperties();
 			m_animation = &data;
 		}
 
