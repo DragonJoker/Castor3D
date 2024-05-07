@@ -59,6 +59,11 @@ namespace CastorViewer
 
 		void reset();
 		void updateWindow( castor3d::RenderWindowDesc const & window );
+		void select( castor3d::Geometry * geometry, castor3d::Submesh const * submesh );
+		void select( castor3d::Light * light );
+		void select( castor3d::SceneNode * node
+			, bool cameraNode = false );
+		void select( castor3d::Camera * camera );
 		void onKeyUp( wxKeyEvent & event );
 
 		castor3d::RenderWindow & getRenderWindow()const
@@ -92,12 +97,12 @@ namespace CastorViewer
 		float doTransformY( int y );
 		int doTransformX( float x );
 		int doTransformY( float y );
-		void doUpdateSelectedGeometry( castor3d::GeometryRPtr geometry
-			, castor3d::Submesh const * submesh );
+		void doUpdateSelectedGeometry( castor3d::Geometry const * geometry
+			, castor3d::Submesh const * submesh
+			, bool forwardToMain );
 		GuiCommon::NodeState & doAddNodeState( castor3d::SceneNodeRPtr node
 			, bool camera );
 		void doUpdateSpeed( float factor = 1.0f );
-		void doSetCamera( castor3d::Camera & camera );
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-override"
@@ -122,11 +127,11 @@ namespace CastorViewer
 		void onKeyDown( wxKeyEvent & event );
 		void onChar( wxKeyEvent & event );
 		void onMouseLDClick( wxMouseEvent & event );
-		void onMouseLdown( wxMouseEvent & event );
+		void onMouseLDown( wxMouseEvent & event );
 		void onMouseLUp( wxMouseEvent & event );
-		void onMouseMdown( wxMouseEvent & event );
+		void onMouseMDown( wxMouseEvent & event );
 		void onMouseMUp( wxMouseEvent & event );
-		void onMouseRdown( wxMouseEvent & event );
+		void onMouseRDown( wxMouseEvent & event );
 		void onMouseRUp( wxMouseEvent & event );
 		void onMouseMove( wxMouseEvent & event );
 		void onMouseWheel( wxMouseEvent & event );
@@ -155,7 +160,7 @@ namespace CastorViewer
 
 		castor::StringMap< GuiCommon::NodeStatePtr > m_nodesStates{};
 		GuiCommon::NodeState * m_currentState{};
-		castor3d::GeometryRPtr m_selectedGeometry{};
+		castor3d::Geometry const * m_selectedGeometry{};
 		castor3d::Submesh const * m_selectedSubmesh{};
 
 		castor3d::CameraRPtr m_camera{};

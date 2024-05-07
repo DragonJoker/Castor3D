@@ -20,6 +20,7 @@
 #include <Castor3D/Scene/Camera.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
+#include <Castor3D/Scene/Light/Light.hpp>
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
@@ -50,6 +51,8 @@ namespace CastorViewer
 				case WXK_RETURN:
 				case WXK_ESCAPE:
 					result = castor3d::KeyboardKey( code );
+					break;
+				default:
 					break;
 				}
 			}
@@ -202,6 +205,68 @@ namespace CastorViewer
 		castor::Logger::logInfo( cuT( "RenderPanel cleaned up." ) );
 	}
 
+	void RenderPanel::select( castor3d::Geometry * geometry, castor3d::Submesh const * submesh )
+	{
+		if ( m_debugMeshManager )
+		{
+			doUpdateSelectedGeometry( geometry, submesh, false );
+		}
+	}
+
+	void RenderPanel::select( castor3d::Light * light )
+	{
+		if ( m_debugMeshManager )
+		{
+			if ( light )
+			{
+				m_debugMeshManager->select( *light );
+				select( light->getParent(), false );
+			}
+			else
+			{
+				m_debugMeshManager->unselect();
+				select( m_camera->getParent(), true );
+			}
+		}
+	}
+
+	void RenderPanel::select( castor3d::SceneNode * node
+		, bool cameraNode )
+	{
+		m_currentNode = node;
+
+		if ( m_currentNode )
+		{
+			m_currentState = &doAddNodeState( m_currentNode, cameraNode );
+		}
+		else if ( m_camera )
+		{
+			select( m_camera->getParent(), true );
+		}
+	}
+
+	void RenderPanel::select( castor3d::Camera * camera )
+	{
+		if ( m_camera )
+		{
+			doStopMovement();
+		}
+
+		if ( auto cameraNode = camera->getParent() )
+		{
+			select( cameraNode, true );
+
+			if ( m_3dController )
+			{
+				m_3dController->setCamera( camera );
+			}
+		}
+
+		m_camera = camera;
+		m_renderWindow->setCamera( *m_camera );
+		doStartMovement();
+	}
+
 	void RenderPanel::updateWindow( castor3d::RenderWindowDesc const & window )
 	{
 		auto target = window.renderTarget;
@@ -232,7 +297,7 @@ namespace CastorViewer
 
 			if ( auto camera = target->getCamera() )
 			{
-				doSetCamera( *camera );
+				select( camera );
 			}
 
 			m_scene = scene;
@@ -367,7 +432,7 @@ namespace CastorViewer
 				it = cache.begin();
 			}
 
-			doSetCamera( *it->second );
+			select( it->second.get() );
 		}
 	}
 
@@ -379,10 +444,9 @@ namespace CastorViewer
 
 	float RenderPanel::doTransformX( int x )
 	{
-		float result = float( x );
-		auto camera = m_camera;
+		auto result = float( x );
 
-		if ( camera )
+		if ( auto camera = m_camera )
 		{
 			result *= float( camera->getWidth() ) / float( GetClientSize().x );
 		}
@@ -392,10 +456,9 @@ namespace CastorViewer
 
 	float RenderPanel::doTransformY( int y )
 	{
-		float result = float( y );
-		auto camera = m_camera;
+		auto result = float( y );
 
-		if ( camera )
+		if ( auto camera = m_camera )
 		{
 			result *= float( camera->getHeight() ) / float( GetClientSize().y );
 		}
@@ -405,10 +468,9 @@ namespace CastorViewer
 
 	int RenderPanel::doTransformX( float x )
 	{
-		int result = int( x );
-		auto camera = m_camera;
+		auto result = int( x );
 
-		if ( camera )
+		if ( auto camera = m_camera )
 		{
 			result = int( x * float( GetClientSize().x ) / float( camera->getWidth() ) );
 		}
@@ -418,10 +480,9 @@ namespace CastorViewer
 
 	int RenderPanel::doTransformY( float y )
 	{
-		int result = int( y );
-		auto camera = m_camera;
+		auto result = int( y );
 
-		if ( camera )
+		if ( auto camera = m_camera )
 		{
 			result = int( y * float( GetClientSize().y ) / float( camera->getHeight() ) );
 		}
@@ -429,14 +490,14 @@ namespace CastorViewer
 		return result;
 	}
 
-	void RenderPanel::doUpdateSelectedGeometry( castor3d::GeometryRPtr geometry
-		, castor3d::Submesh const * submesh )
+	void RenderPanel::doUpdateSelectedGeometry( castor3d::Geometry const * geometry
+		, castor3d::Submesh const * submesh
+		, bool forwardToMain )
 	{
 		auto oldSubmesh = m_selectedSubmesh;
-		auto oldGeometry = m_selectedGeometry;
 
-		if ( oldGeometry != geometry
-			|| oldSubmesh != submesh )
+		if ( auto oldGeometry = m_selectedGeometry;
+			oldGeometry != geometry || oldSubmesh != submesh )
 		{
 			m_selectedSubmesh = nullptr;
 
@@ -458,24 +519,31 @@ namespace CastorViewer
 			if ( submesh )
 			{
 				m_selectedSubmesh = submesh;
-				wxGetApp().getMainFrame()->select( m_selectedGeometry, m_selectedSubmesh );
+
+				if ( forwardToMain )
+				{
+					wxGetApp().getMainFrame()->select( m_selectedGeometry, m_selectedSubmesh );
+				}
 			}
 		}
 
 		if ( m_selectedGeometry )
 		{
-			m_currentNode = m_selectedGeometry->getParent();
+			select( m_selectedGeometry->getParent() );
+
+			if ( m_3dController )
+			{
+				m_3dController->setGeometry( m_selectedGeometry );
+			}
 		}
 		else if ( auto camera = m_camera )
 		{
-			m_currentNode = camera->getParent();
-		}
+			select( camera->getParent() );
 
-		m_currentState = &doAddNodeState( m_currentNode, false );
-
-		if ( m_3dController )
-		{
-			m_3dController->setGeometry( m_selectedGeometry );
+			if ( m_3dController )
+			{
+				m_3dController->setCamera( camera );
+			}
 		}
 	}
 
@@ -509,29 +577,6 @@ namespace CastorViewer
 		}
 	}
 
-	void RenderPanel::doSetCamera( castor3d::Camera & camera )
-	{
-		if ( m_camera )
-		{
-			doStopMovement();
-		}
-
-		if ( auto cameraNode = camera.getParent() )
-		{
-			m_currentNode = cameraNode;
-			m_currentState = &doAddNodeState( m_currentNode, true );
-
-			if ( m_3dController )
-			{
-				m_3dController->setCamera( &camera );
-			}
-		}
-
-		m_camera = &camera;
-		m_renderWindow->setCamera( *m_camera );
-		doStartMovement();
-	}
-
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( RenderPanel, wxPanel )
@@ -555,11 +600,11 @@ namespace CastorViewer
 		EVT_KEY_UP( RenderPanel::onKeyUp )
 		EVT_CHAR( RenderPanel::onChar )
 		EVT_LEFT_DCLICK( RenderPanel::onMouseLDClick )
-		EVT_LEFT_DOWN( RenderPanel::onMouseLdown )
+		EVT_LEFT_DOWN( RenderPanel::onMouseLDown )
 		EVT_LEFT_UP( RenderPanel::onMouseLUp )
-		EVT_MIDDLE_DOWN( RenderPanel::onMouseMdown )
+		EVT_MIDDLE_DOWN( RenderPanel::onMouseMDown )
 		EVT_MIDDLE_UP( RenderPanel::onMouseMUp )
-		EVT_RIGHT_DOWN( RenderPanel::onMouseRdown )
+		EVT_RIGHT_DOWN( RenderPanel::onMouseRDown )
 		EVT_RIGHT_UP( RenderPanel::onMouseRUp )
 		EVT_MOTION( RenderPanel::onMouseMove )
 		EVT_MOUSEWHEEL( RenderPanel::onMouseWheel )
@@ -698,10 +743,9 @@ namespace CastorViewer
 
 	void RenderPanel::onKeyDown( wxKeyEvent & event )
 	{
-		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
-
-		if ( !inputListener || !inputListener->fireKeydown( panel::doConvertKeyCode( event.GetKeyCode() )
-			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
+		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener();
+			!inputListener || !inputListener->fireKeydown( panel::doConvertKeyCode( event.GetKeyCode() )
+				, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			switch ( event.GetKeyCode() )
 			{
@@ -751,6 +795,9 @@ namespace CastorViewer
 					m_currentNode = m_lightsNode;
 					m_currentState = &doAddNodeState( m_currentNode, false );
 				}
+				break;
+
+			default:
 				break;
 			}
 		}
@@ -829,7 +876,7 @@ namespace CastorViewer
 			case WXK_ESCAPE:
 				if ( m_selectedGeometry )
 				{
-					doUpdateSelectedGeometry( nullptr, nullptr );
+					doUpdateSelectedGeometry( nullptr, nullptr, true );
 				}
 				else if ( m_parent )
 				{
@@ -850,6 +897,9 @@ namespace CastorViewer
 					}
 				}
 				break;
+
+			default:
+				break;
 			}
 		}
 
@@ -858,9 +908,7 @@ namespace CastorViewer
 
 	void RenderPanel::onChar( wxKeyEvent & event )
 	{
-		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
-
-		if ( inputListener )
+		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener() )
 		{
 			wxChar key = event.GetUnicodeKey();
 			wxString tmp;
@@ -895,7 +943,7 @@ namespace CastorViewer
 		event.Skip();
 	}
 
-	void RenderPanel::onMouseLdown( wxMouseEvent & event )
+	void RenderPanel::onMouseLDown( wxMouseEvent & event )
 	{
 		m_mouseLeftDown = true;
 		m_x = doTransformX( event.GetX() );
@@ -903,10 +951,9 @@ namespace CastorViewer
 		m_oldX = m_x;
 		m_oldY = m_y;
 
-		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
-
-		if ( !inputListener || !inputListener->fireMouseButtonPushed( castor3d::MouseButton::eLeft
-			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
+		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener();
+			!inputListener || !inputListener->fireMouseButtonPushed( castor3d::MouseButton::eLeft
+				, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			if ( m_currentState )
 			{
@@ -925,10 +972,9 @@ namespace CastorViewer
 		m_oldX = m_x;
 		m_oldY = m_y;
 
-		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
-
-		if ( !inputListener || !inputListener->fireMouseButtonReleased( castor3d::MouseButton::eLeft
-			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
+		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener();
+			!inputListener || !inputListener->fireMouseButtonReleased( castor3d::MouseButton::eLeft
+				, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			doStopTimer( eTIMER_ID::MOUSE );
 		}
@@ -936,7 +982,7 @@ namespace CastorViewer
 		event.Skip();
 	}
 
-	void RenderPanel::onMouseMdown( wxMouseEvent & event )
+	void RenderPanel::onMouseMDown( wxMouseEvent & event )
 	{
 		m_mouseMiddleDown = true;
 		m_x = doTransformX( event.GetX() );
@@ -944,10 +990,9 @@ namespace CastorViewer
 		m_oldX = m_x;
 		m_oldY = m_y;
 
-		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
-
-		if ( !inputListener || !inputListener->fireMouseButtonPushed( castor3d::MouseButton::eMiddle
-			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
+		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener();
+			!inputListener || !inputListener->fireMouseButtonPushed( castor3d::MouseButton::eMiddle
+				, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			auto x = m_oldX;
 			auto y = m_oldY;
@@ -959,11 +1004,13 @@ namespace CastorViewer
 					if ( type != castor3d::PickNodeType::eNone
 						&& type != castor3d::PickNodeType::eBillboard )
 					{
-						doUpdateSelectedGeometry( m_renderWindow->getPickedGeometry(), m_renderWindow->getPickedSubmesh() );
+						doUpdateSelectedGeometry( m_renderWindow->getPickedGeometry(), m_renderWindow->getPickedSubmesh(), true );
 					}
 					else
 					{
-						doUpdateSelectedGeometry( nullptr, nullptr );
+						doUpdateSelectedGeometry( nullptr, nullptr, true );
+						select( castor3d::LightRPtr{} );
+						select( castor3d::SceneNodeRPtr{} );
 					}
 				} ) );
 		}
@@ -979,9 +1026,7 @@ namespace CastorViewer
 		m_oldX = m_x;
 		m_oldY = m_y;
 
-		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
-
-		if ( inputListener  )
+		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener() )
 		{
 			inputListener->fireMouseButtonReleased( castor3d::MouseButton::eMiddle
 				, event.ControlDown(), event.AltDown(), event.ShiftDown() );
@@ -990,7 +1035,7 @@ namespace CastorViewer
 		event.Skip();
 	}
 
-	void RenderPanel::onMouseRdown( wxMouseEvent & event )
+	void RenderPanel::onMouseRDown( wxMouseEvent & event )
 	{
 		m_mouseRightDown = true;
 		m_x = doTransformX( event.GetX() );
@@ -998,9 +1043,7 @@ namespace CastorViewer
 		m_oldX = m_x;
 		m_oldY = m_y;
 
-		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
-
-		if ( inputListener  )
+		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener() )
 		{
 			inputListener->fireMouseButtonPushed( castor3d::MouseButton::eRight
 				, event.ControlDown(), event.AltDown(), event.ShiftDown() );
@@ -1017,9 +1060,7 @@ namespace CastorViewer
 		m_oldX = m_x;
 		m_oldY = m_y;
 
-		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
-
-		if ( inputListener  )
+		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener() )
 		{
 			inputListener->fireMouseButtonReleased( castor3d::MouseButton::eRight
 				, event.ControlDown(), event.AltDown(), event.ShiftDown() );
@@ -1071,10 +1112,9 @@ namespace CastorViewer
 	{
 		int wheelRotation = event.GetWheelRotation();
 
-		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
-
-		if ( !inputListener || !inputListener->fireMouseWheel( castor::Position( 0, wheelRotation )
-			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
+		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener();
+			!inputListener || !inputListener->fireMouseWheel( castor::Position( 0, wheelRotation )
+				, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			if ( wheelRotation < 0 )
 			{
@@ -1095,7 +1135,7 @@ namespace CastorViewer
 		event.Skip();
 	}
 
-	void RenderPanel::onClipboardText( wxCommandEvent & event )
+	void RenderPanel::onClipboardText( wxCommandEvent & )
 	{
 		if ( wxTheClipboard->Open() )
 		{

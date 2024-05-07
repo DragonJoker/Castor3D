@@ -18,7 +18,7 @@ namespace GuiCommon
 
 		virtual void reset() = 0;
 		virtual void setCamera( castor3d::CameraRPtr camera ) = 0;
-		virtual void setGeometry( castor3d::GeometryRPtr geometry ) = 0;
+		virtual void setGeometry( castor3d::Geometry const * geometry ) = 0;
 
 		virtual void setSpeedFactor( float value ) = 0;
 		virtual void multSpeedFactor( float value ) = 0;
