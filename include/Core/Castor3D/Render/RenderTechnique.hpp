@@ -26,8 +26,6 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Transparent/TransparentRendering.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
-#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
-#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
@@ -155,6 +153,8 @@ namespace castor3d
 		C3D_API bool isOpaqueEnabled()const;
 		C3D_API DebugConfig & getDebugConfig()const;
 		C3D_API bool areDebugTargetsEnabled()const noexcept;
+		C3D_API CameraUbo const & getCameraUbo()const noexcept;
+		C3D_API SceneUbo const & getSceneUbo()const noexcept;
 
 		castor::Size const & getSize()const noexcept
 		{
@@ -254,26 +254,6 @@ namespace castor3d
 		ShadowMapResult const & getSpotShadowPassResult()const noexcept
 		{
 			return m_spotShadowMap->getShadowPassResult( false );
-		}
-
-		CameraUbo const & getCameraUbo()const noexcept
-		{
-			return m_cameraUbo;
-		}
-
-		CameraUbo & getCameraUbo()noexcept
-		{
-			return m_cameraUbo;
-		}
-
-		SceneUbo const & getSceneUbo()const noexcept
-		{
-			return m_sceneUbo;
-		}
-
-		SceneUbo & getSceneUbo()noexcept
-		{
-			return m_sceneUbo;
 		}
 
 		ShadowMapLightTypeArray const & getShadowMaps()const noexcept
@@ -405,8 +385,6 @@ namespace castor3d
 		Texture m_normal;
 		Texture m_scattering;
 		Texture m_diffuse;
-		CameraUbo m_cameraUbo;
-		SceneUbo m_sceneUbo;
 		LpvGridConfigUbo m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo m_llpvConfigUbo;
 		VoxelizerUbo m_vctConfigUbo;
