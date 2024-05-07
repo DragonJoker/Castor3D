@@ -9,6 +9,9 @@ if ( VCPKG_TOOLCHAIN )
 	set( unofficial-minizip_DIR ${VCPKG_SHARE_DIR}/unofficial-minizip )
 	find_package( unofficial-minizip CONFIG REQUIRED )
 	set( minizip_LIB unofficial::minizip::minizip )
+        set( unofficial-brotli_DIR ${VCPKG_SHARE_DIR}/unofficial-brotli )
+	find_package( unofficial-brotli CONFIG REQUIRED )
+        set( brotlidec_LIB unofficial::brotli::brotlidec )
 else ()
 	find_package( minizip CONFIG REQUIRED )
 	set( minizip_LIB minizip::minizip )
@@ -691,6 +694,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			${PLATFORM_LIBRARIES}
 			${Freetype_LIBRARIES}
 			${minizip_LIB}
+			${brotlidec_LIB}
 			unofficial::convectionkernels::convectionkernels
 			gli
 	)
