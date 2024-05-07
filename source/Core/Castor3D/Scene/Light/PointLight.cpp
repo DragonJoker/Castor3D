@@ -124,7 +124,6 @@ namespace castor3d
 
 	void PointLight::update()
 	{
-		PointLight::generateVertices();
 		auto range = computeRange( getIntensity(), m_range.value() );
 		m_cubeBox.load( castor::Point3f{ -range, -range, -range }
 			, castor::Point3f{ range, range, range } );
