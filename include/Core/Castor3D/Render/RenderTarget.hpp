@@ -21,8 +21,10 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/ToneMapping/ColourGradingConfig.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ColourGradingUbo.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/ResourceHandler.hpp>
@@ -227,11 +229,19 @@ namespace castor3d
 		C3D_API ShadowMapLightTypeArray getShadowMaps()const;
 		C3D_API ShadowBuffer * getShadowBuffer()const;
 		C3D_API TechniquePassVector getCustomRenderPasses()const;
-		C3D_API CameraUbo const & getCameraUbo()const;
-		C3D_API SceneUbo const & getSceneUbo()const;
 		C3D_API bool hasIndirect()const noexcept;
 		C3D_API bool hasSss()const noexcept;
 		C3D_API bool areDebugTargetsEnabled()const noexcept;
+
+		CameraUbo const & getCameraUbo()const noexcept
+		{
+			return m_cameraUbo;
+		}
+
+		SceneUbo const & getSceneUbo()const noexcept
+		{
+			return m_sceneUbo;
+		}
 
 		SsaoConfig const & getSsaoConfig()const noexcept
 		{
@@ -517,6 +527,8 @@ namespace castor3d
 		castor::Array< Texture, 2u > m_hdrObjects;
 		Texture m_overlays;
 		Texture m_combined;
+		CameraUbo m_cameraUbo;
+		SceneUbo m_sceneUbo;
 		crg::FramePass & m_overlayPassDesc;
 		OverlayPass * m_overlayPass{};
 		uint32_t m_hdrCopyPassIndex{ 0u };

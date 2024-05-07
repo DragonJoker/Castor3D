@@ -372,8 +372,6 @@ namespace castor3d
 			, VK_FORMAT_R16G16B16A16_SFLOAT
 			, rendtech::diffuseUsageFlags | ( C3D_UseVisibilityBuffer ? VkImageUsageFlagBits{} : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
-		, m_cameraUbo{ m_device }
-		, m_sceneUbo{ m_device }
 		, m_lpvConfigUbo{ m_device }
 		, m_llpvConfigUbo{ m_device }
 		, m_vctConfigUbo{ m_device }
@@ -456,7 +454,7 @@ namespace castor3d
 			? &m_renderTarget.getFrustumClusters()->createFramePasses( m_graph
 				, m_depthRangePass
 				, *this
-				, m_cameraUbo
+				, getCameraUbo()
 				, m_clustersFlagsPass )
 			: nullptr ) }
 		, m_background{ doCreateBackgroundPass( progress ) }
@@ -584,7 +582,6 @@ namespace castor3d
 	void RenderTechnique::update( CpuUpdater & updater )
 	{
 		auto & scene = *updater.scene;
-		auto const & camera = *updater.camera;
 		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
 		auto const & debugConfig = getDebugConfig();
 		updater.debugIndex = debugConfig.intermediateShaderValueIndex;
@@ -641,16 +638,6 @@ namespace castor3d
 			{
 				renderPass.update( updater );
 			} );
-
-		auto jitter = updater.jitter;
-		auto jitterProjSpace = jitter * 2.0f;
-		jitterProjSpace[0] /= float( camera.getWidth() );
-		jitterProjSpace[1] /= float( camera.getHeight() );
-		m_cameraUbo.cpuUpdate( camera
-			, updater.debugIndex
-			, true
-			, jitterProjSpace );
-		m_sceneUbo.cpuUpdate( scene );
 	}
 
 	void RenderTechnique::update( GpuUpdater & updater )
@@ -864,6 +851,16 @@ namespace castor3d
 		return m_renderTarget.areDebugTargetsEnabled();
 	}
 
+	CameraUbo const & RenderTechnique::getCameraUbo()const noexcept
+	{
+		return m_renderTarget.getCameraUbo();
+	}
+
+	SceneUbo const & RenderTechnique::getSceneUbo()const noexcept
+	{
+		return m_renderTarget.getSceneUbo();
+	}
+
 	crg::FramePassArray RenderTechnique::doCreateRenderPasses( TechniquePassEvent event
 		, crg::FramePass const * previousPass
 		, crg::FramePassArray previousPasses )
@@ -902,7 +899,7 @@ namespace castor3d
 			, progress
 			, *m_renderTarget.getScene()->getBackground()
 			, m_renderTarget.getHdrConfigUbo()
-			, m_sceneUbo
+			, getSceneUbo()
 			, getTargetResult()
 			, true /*clearColour*/
 			, false /*clearDepth*/
@@ -924,7 +921,7 @@ namespace castor3d
 			m_reflectiveShadowMaps = castor::makeUnique< ReflectiveShadowMaps >( getOwner()->getGraphResourceHandler()
 				, scene
 				, m_device
-				, m_cameraUbo
+				, getCameraUbo()
 				, *m_shadowBuffer
 				, m_prepass.getDepthObj().sampledViewId
 				, m_normal.sampledViewId

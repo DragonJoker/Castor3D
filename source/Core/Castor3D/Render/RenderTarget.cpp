@@ -425,7 +425,9 @@ namespace castor3d
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
-		, m_overlayPassDesc{ doCreateOverlayPass( nullptr, engine.getRenderSystem()->getRenderDevice() ) }
+		, m_cameraUbo{ m_device }
+		, m_sceneUbo{ m_device }
+		, m_overlayPassDesc{ doCreateOverlayPass( nullptr, m_device ) }
 	{
 		m_graph.addInput( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampledViewId
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
@@ -636,6 +638,16 @@ namespace castor3d
 		CU_Require( m_culler );
 		m_culler->update( updater );
 		m_renderTechnique->update( updater );
+		auto jitter = updater.jitter;
+		auto jitterProjSpace = jitter * 2.0f;
+		jitterProjSpace[0] /= float( camera.getWidth() );
+		jitterProjSpace[1] /= float( camera.getHeight() );
+		m_cameraUbo.cpuUpdate( camera
+			, updater.debugIndex
+			, true
+			, jitterProjSpace );
+		m_sceneUbo.cpuUpdate( scene );
+
 		m_overlayPass->update( updater );
 
 		if ( m_frustumClusters )
@@ -881,18 +893,6 @@ namespace castor3d
 		}
 
 		return {};
-	}
-
-	CameraUbo const & RenderTarget::getCameraUbo()const
-	{
-		CU_Require( m_renderTechnique );
-		return m_renderTechnique->getCameraUbo();
-	}
-
-	SceneUbo const & RenderTarget::getSceneUbo()const
-	{
-		CU_Require( m_renderTechnique );
-		return m_renderTechnique->getSceneUbo();
 	}
 
 	bool RenderTarget::hasIndirect()const noexcept
