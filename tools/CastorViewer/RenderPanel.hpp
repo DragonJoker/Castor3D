@@ -16,7 +16,7 @@ See LICENSE file in root folder
 #include <future>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
-#include <GuiCommon/System/CubeBoxManager.hpp>
+#include <GuiCommon/System/DebugMeshManager.hpp>
 #include <GuiCommon/System/NodeState.hpp>
 
 #include <Castor3D/Engine.hpp>
@@ -151,7 +151,7 @@ namespace CastorViewer
 		castor3d::SceneNodeRPtr m_lightsNode{};
 		castor3d::SceneNodeRPtr m_currentNode{};
 		castor::RangedValue< float > m_camSpeed;
-		castor::RawUniquePtr< GuiCommon::CubeBoxManager > m_cubeManager{};
+		castor::RawUniquePtr< GuiCommon::DebugMeshManager > m_debugMeshManager{};
 
 		castor::StringMap< GuiCommon::NodeStatePtr > m_nodesStates{};
 		GuiCommon::NodeState * m_currentState{};

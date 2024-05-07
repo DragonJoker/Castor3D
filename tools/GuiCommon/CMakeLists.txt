@@ -254,7 +254,7 @@ source_group( "Source Files\\Shader" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	System/CastorApplication.cpp
-	System/CubeBoxManager.cpp
+	System/DebugMeshManager.cpp
 	System/GradientButton.cpp
 	System/ImagesLoader.cpp
 	System/NodeState.cpp
@@ -266,7 +266,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	System/CastorApplication.hpp
-	System/CubeBoxManager.hpp
+	System/DebugMeshManager.hpp
 	System/GradientButton.hpp
 	System/ImagesLoader.hpp
 	System/NodeState.hpp

@@ -197,7 +197,7 @@ namespace CastorViewer
 		m_currentNode = nullptr;
 		m_lightsNode = nullptr;
 		m_listener = {};
-		m_cubeManager.reset();
+		m_debugMeshManager.reset();
 		wxGetApp().getCastor()->postEvent( makeCpuCleanupEvent( *m_renderWindow ) );
 		castor::Logger::logInfo( cuT( "RenderPanel cleaned up." ) );
 	}
@@ -219,7 +219,7 @@ namespace CastorViewer
 
 		if ( auto scene = target->getScene() )
 		{
-			m_cubeManager = castor::make_unique< GuiCommon::CubeBoxManager >( *target );
+			m_debugMeshManager = castor::make_unique< GuiCommon::DebugMeshManager >( *target );
 
 			if ( scene->hasSceneNode( cuT( "PointLightsNode" ) ) )
 			{
@@ -442,12 +442,12 @@ namespace CastorViewer
 
 			if ( oldGeometry )
 			{
-				m_cubeManager->hideObject( *oldGeometry );
+				m_debugMeshManager->unselect();
 			}
 
 			if ( geometry )
 			{
-				m_cubeManager->displayObject( *geometry, *submesh );
+				m_debugMeshManager->select( *geometry, *submesh );
 			}
 
 			m_selectedGeometry = geometry;
@@ -760,9 +760,8 @@ namespace CastorViewer
 
 	void RenderPanel::onKeyUp( wxKeyEvent & event )
 	{
-		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
-
-		if ( !inputListener || !inputListener->fireKeyUp( panel::doConvertKeyCode( event.GetKeyCode() )
+		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener();
+			!inputListener || !inputListener->fireKeyUp( panel::doConvertKeyCode( event.GetKeyCode() )
 			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			switch ( event.GetKeyCode() )
