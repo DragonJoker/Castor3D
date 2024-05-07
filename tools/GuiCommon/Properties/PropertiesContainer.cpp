@@ -68,7 +68,7 @@ namespace GuiCommon
 
 		if ( m_data )
 		{
-			m_data->CreateProperties( this );
+			m_data->createProperties( this );
 		}
 	}
 

@@ -40,9 +40,19 @@ namespace GuiCommon
 		}
 	}
 
-	void TreeItemProperty::CreateProperties( wxPropertyGrid * grid )
+	void TreeItemProperty::clearProperties()
+	{
+		if ( m_grid )
+		{
+			m_handlers.clear();
+			m_grid->Clear();
+		}
+	}
+
+	void TreeItemProperty::createProperties( wxPropertyGrid * grid )
 	{
 		doCreateProperties( grid );
+		m_grid = grid;
 	}
 
 	void TreeItemProperty::onPropertyChange( wxPropertyGridEvent & event )

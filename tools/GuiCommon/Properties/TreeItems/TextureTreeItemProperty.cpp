@@ -489,6 +489,7 @@ namespace GuiCommon
 	void TextureTreeItemProperty::setData( castor3d::Pass & pass
 		, castor3d::TextureUnit & texture )noexcept
 	{
+		clearProperties();
 		m_pass = &pass;
 		m_texture = &texture;
 		m_configuration = texture.getConfiguration();

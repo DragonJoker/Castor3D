@@ -33,6 +33,7 @@ namespace GuiCommon
 
 		void setData( castor3d::ParticleSystem & data )noexcept
 		{
+			clearProperties();
 			m_particleSystem = &data;
 		}
 

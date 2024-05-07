@@ -29,6 +29,7 @@ namespace GuiCommon
 
 		void setData( castor3d::ControlStyle & data )noexcept
 		{
+			clearProperties();
 			m_style = &data;
 		}
 

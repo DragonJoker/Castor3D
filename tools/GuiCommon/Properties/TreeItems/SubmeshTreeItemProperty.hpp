@@ -34,6 +34,7 @@ namespace GuiCommon
 		void setData( castor3d::Geometry & geometry
 			, castor3d::Submesh & submesh )noexcept
 		{
+			clearProperties();
 			m_geometry = &geometry;
 			m_submesh = &submesh;
 		}

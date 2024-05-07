@@ -33,6 +33,7 @@ namespace GuiCommon
 
 		void setData( castor3d::BillboardList & data )noexcept
 		{
+			clearProperties();
 			m_billboard = &data;
 		}
 

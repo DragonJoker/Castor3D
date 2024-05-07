@@ -32,6 +32,7 @@ namespace GuiCommon
 
 		void setData( castor3d::Material & data )noexcept
 		{
+			clearProperties();
 			m_material = &data;
 		}
 

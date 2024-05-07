@@ -35,6 +35,7 @@ namespace GuiCommon
 		void setData( castor3d::AnimatedObjectGroup & group
 			, castor3d::GroupAnimation anim )noexcept
 		{
+			clearProperties();
 			m_group = &group;
 			m_groupAnim = std::move( anim );
 		}

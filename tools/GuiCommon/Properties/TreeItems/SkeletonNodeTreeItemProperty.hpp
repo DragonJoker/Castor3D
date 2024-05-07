@@ -33,6 +33,7 @@ namespace GuiCommon
 
 		void setData( castor3d::SkeletonNode & data )noexcept
 		{
+			clearProperties();
 			m_node = &data;
 		}
 
