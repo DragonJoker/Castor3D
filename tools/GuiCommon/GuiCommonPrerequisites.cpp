@@ -75,17 +75,13 @@ namespace GuiCommon
 			castor::PathArray files;
 			castor::File::listDirectoryFiles( folder, files );
 			castor::PathArray result;
-			castor::String endRel = cuT( "." ) + castor::String{ CU_SharedLibExt };
-			castor::String endDbg = cuT( "d" ) + endRel;
+			castor::String endRel = castor::String{ CU_SharedLibExt };
 
-			// Exclude debug plug-in in release builds, and release plug-ins in debug builds
 			for ( auto file : files )
 			{
 				auto fileName = file.getFileName( true );
-				bool res = castor::string::endsWith( fileName, endDbg );
-#if defined( NDEBUG )
-				res = castor::string::endsWith( fileName, endRel ) && !res;
-#endif
+				bool res = castor::string::endsWith( fileName, endRel );
+
 				if ( res && fileName.find( castor3DLibPrefix ) == 0u )
 				{
 					result.push_back( file );

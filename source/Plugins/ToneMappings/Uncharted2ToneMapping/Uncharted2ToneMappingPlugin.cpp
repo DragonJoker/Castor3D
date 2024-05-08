@@ -21,6 +21,7 @@
 extern "C"
 {
 	C3D_Uncharted2ToneMapping_API void getRequiredVersion( castor3d::Version * version );
+	C3D_Uncharted2ToneMapping_API void isDebug( int * value );
 	C3D_Uncharted2ToneMapping_API void getType( castor3d::PluginType * type );
 	C3D_Uncharted2ToneMapping_API void getName( char const ** name );
 	C3D_Uncharted2ToneMapping_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
@@ -29,6 +30,11 @@ extern "C"
 	C3D_Uncharted2ToneMapping_API void getRequiredVersion( castor3d::Version * version )
 	{
 		*version = castor3d::Version();
+	}
+
+	C3D_Uncharted2ToneMapping_API void isDebug( int * value )
+	{
+		*value = castor::system::isDebug() ? 1 : 0;
 	}
 
 	C3D_Uncharted2ToneMapping_API void getType( castor3d::PluginType * type )
