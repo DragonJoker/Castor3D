@@ -8,4 +8,13 @@ namespace castor::system
 	{
 		std::this_thread::sleep_for( Milliseconds( uiTime ) );
 	}
+
+	bool isDebug()
+	{
+#if !defined( NDEBUG )
+		return true;
+#else
+		return false;
+#endif
+	}
 }

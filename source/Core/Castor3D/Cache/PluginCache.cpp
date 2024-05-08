@@ -28,6 +28,7 @@ namespace castor
 	namespace cacheplgn
 	{
 		static const String getTypeFunctionABIName = cuT( "getType" );
+		static const String isDebugFunctionABIName = cuT( "isDebug" );
 	}
 
 	ResourceCacheT< Plugin, String, PluginCacheTraits >::ResourceCacheT( Engine & engine )
@@ -168,6 +169,23 @@ namespace castor
 			}
 
 			DynamicLibraryUPtr library{ castor::makeUnique< DynamicLibrary >( pathFile ) };
+			Plugin::IsDebugFunction pfnIsDebug;
+
+			if ( !library->getFunction( pfnIsDebug, cacheplgn::isDebugFunctionABIName ) )
+			{
+				String strError = cuT( "Error encountered while loading file [" ) + pathFile.getFileName( true ) + cuT( "] isDebug plug-in function => Not a Castor3D plug-in" );
+				C3D_PluginException( strError, true );
+			}
+
+			int isDebugPlugin{};
+			pfnIsDebug( &isDebugPlugin );
+
+			if ( int isDebug = castor::system::isDebug() ? 1 : 0;
+				isDebug != isDebugPlugin )
+			{
+				return nullptr;
+			}
+
 			Plugin::GetTypeFunction pfnGetType;
 
 			if ( !library->getFunction( pfnGetType, cacheplgn::getTypeFunctionABIName ) )

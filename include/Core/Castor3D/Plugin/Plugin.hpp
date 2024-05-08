@@ -17,6 +17,8 @@ namespace castor3d
 		using OnLoadFunction = void ( * )( Engine *, Plugin * );
 		//!< Signature for the plug-in's unloading function
 		using OnUnloadFunction = void ( * )( Engine * )noexcept;
+		//!< Signature for the plug-in's debug mode retrieval function
+		using IsDebugFunction = void ( * )( int * );
 		//!< Signature for the plug-in's type retrieval function
 		using GetTypeFunction = void ( * )( PluginType * );
 		//!< Signature for the plug-in's version checking function

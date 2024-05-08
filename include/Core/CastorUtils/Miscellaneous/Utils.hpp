@@ -52,6 +52,13 @@ namespace castor
 		 *\return		Le nom de l'operating system.
 		 */
 		CU_API String getOSName();
+		/**
+		 *\~english
+		 *\return		\p true in debug builds.
+		 *\~french
+		 *\return		\p true pour les builds de debogage.
+		 */
+		CU_API bool isDebug();
 	}
 	/**
 	 *\see			localtime
