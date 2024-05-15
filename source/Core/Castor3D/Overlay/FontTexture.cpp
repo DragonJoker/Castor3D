@@ -6,7 +6,7 @@
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp"
+#include "Castor3D/Shader/Ubos/FontUbo.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/Font.hpp>
@@ -68,10 +68,7 @@ namespace castor3d
 			, fonttex::createTexture( engine, font )
 			, fonttex::createTexture( engine, font ) }
 		, m_font( font )
-		, m_buffer{ castor::makeUnique< FontGlyphBuffer >( engine
-			, *engine.getRenderDevice()
-			, *this
-			, MaxCharsPerBuffer ) }
+		, m_ubo{ castor::makeUnique< FontUbo >( *engine.getRenderDevice() ) }
 	{
 		if ( !m_font )
 		{
@@ -108,8 +105,6 @@ namespace castor3d
 			resource.resource->upload( uploader );
 			resource.needsUpload = false;
 		}
-
-		m_buffer->update( uploader );
 	}
 
 	castor::UInt32Array FontTexture::convert( castor::U32String const & text )const
@@ -173,11 +168,9 @@ namespace castor3d
 			uint32_t const maxHeight = font->getMaxHeight();
 			uint32_t const count = castor::divRoundUp( uint32_t( std::distance( font->begin(), font->end() ) ), 16u );
 			castor::Size size{ maxWidth * 16, maxHeight * count };
-			m_buffer->setMaxHeight( font->getMaxHeight() );
-			m_buffer->setImgWidth( size.getWidth() );
-			m_buffer->setImgHeight( size.getHeight() );
 			resource.resource->setSource( castor::PxBufferBase::create( castor::Size( maxWidth * 16, maxHeight * count )
 				, castor::PixelFormat::eR8_UNORM ), true );
+			m_ubo->cpuUpdate( size.getWidth(), size.getHeight() );
 			auto & image = resource.resource->getImage();
 
 			auto it = font->begin();
@@ -212,12 +205,7 @@ namespace castor3d
 					offX += maxWidth;
 					++it;
 
-					auto res = m_charIndices.try_emplace( glyph.getCharacter(), uint32_t( m_charIndices.size() ) ).second;
-
-					if ( res )
-					{
-						m_buffer->add( glyph );
-					}
+					m_charIndices.try_emplace( glyph.getCharacter(), uint32_t( m_charIndices.size() ) ).second;
 				}
 
 				offY -= maxHeight;

@@ -5,7 +5,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
-#include "Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp"
+#include "Castor3D/Shader/Ubos/FontUbo.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
@@ -138,7 +138,7 @@ namespace castor3d
 		}
 
 		it->second->fillDescriptorSet( descriptorLayout, descriptorSet );
-		fontTexture->getFontBuffer().createBinding( descriptorSet
+		fontTexture->getFontUbo().createSizedBinding( descriptorSet
 			, descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eFont ) ) );
 	}
 

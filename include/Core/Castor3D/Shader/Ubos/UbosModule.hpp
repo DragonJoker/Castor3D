@@ -24,6 +24,7 @@ namespace castor3d
 		struct BillboardData;
 		struct CameraData;
 		struct ClustersData;
+		struct FontData;
 		struct HdrConfigData;
 		struct LayeredLpvGridData;
 		struct LpvGridData;
@@ -85,6 +86,30 @@ namespace castor3d
 		castor::Point2f dimensions{};
 		uint32_t isSpherical{};
 		uint32_t isFixedSize{};
+	};
+	/**
+	*\~english
+	*\brief
+	*	Fonts UBO.
+	*\~french
+	*\brief
+	*	UBO pour les polices.
+	*/
+	class FontUbo;
+	/**
+	*\~english
+	*\brief
+	*	Font data.
+	*\~french
+	*\brief
+	*	Données pour une police.
+	*/
+	struct FontUboConfiguration
+	{
+		float imgWidth{};
+		float imgHeight{};
+		float pad0{};
+		float pad1{};
 	};
 	/**
 	*\~english
@@ -477,6 +502,7 @@ namespace castor3d
 	*/
 	struct VoxelizerUboConfiguration;
 
+	CU_DeclareSmartPtr( castor3d, FontUbo, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LayeredLpvGridConfigUbo, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LpvGridConfigUbo, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LpvLightConfigUbo, C3D_API );
