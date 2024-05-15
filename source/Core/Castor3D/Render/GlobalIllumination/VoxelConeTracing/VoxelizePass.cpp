@@ -529,6 +529,7 @@ namespace castor3d
 		writer.implementMainT< shader::VoxelSurfaceT, sdw::VoidT >( sdw::FragmentInT< shader::VoxelSurfaceT >{ writer
 				, sdw::FragmentOrigin::eUpperLeft
 				, sdw::FragmentCenter::eHalfPixel
+				, sdw::InvocationOrdering::eNone
 				, flags }
 			, sdw::FragmentOut{ writer }
 			, [&]( sdw::FragmentInT< shader::VoxelSurfaceT > const & in
