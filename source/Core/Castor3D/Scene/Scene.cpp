@@ -204,15 +204,9 @@ namespace castor3d
 			} );
 		m_overlayCache = castor::makeCache< Overlay, castor::String, OverlayCacheTraits >( *getEngine() );
 		m_fontCacheView = makeCacheView< EventType( CpuEventType::ePreGpuStep ) >( getName()
-			, getEngine()->getFontCache()
-			, []( castor::FontCache::ElementT & element )
-			{
-				element.initialise();
-			}
-			, []( castor::FontCache::ElementT & element )
-			{
-				element.cleanup();
-			} );
+			, getEngine()->getFontCache( {} )
+			, castor::DummyFunctorT< castor::FontCache >{}
+			, castor::DummyFunctorT< castor::FontCache >{} );
 
 		m_animatedObjectGroupCache->add( cuT( "C3D_Textures" ), *this );
 		auto & device = engine.getRenderSystem()->getRenderDevice();

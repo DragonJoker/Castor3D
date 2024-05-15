@@ -1100,9 +1100,9 @@ namespace castor3d
 			}
 
 			{
-				auto lock( castor::makeUniqueLock( getFontCache() ) );
+				auto lock( castor::makeUniqueLock( m_fontCache ) );
 
-				for ( auto const & [_, font] : getFontCache() )
+				for ( auto const & [_, font] : m_fontCache )
 				{
 					font->setSerialisable( false );
 				}

@@ -61,6 +61,13 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct PrivEngineToken
+	{
+	private:
+		friend class Scene;
+		PrivEngineToken()noexcept = default;
+	};
+
 	struct EngineConfig
 	{
 		/**
@@ -825,16 +832,6 @@ namespace castor3d
 			return m_imageCache;
 		}
 
-		castor::FontCache const & getFontCache()const noexcept
-		{
-			return m_fontCache;
-		}
-
-		castor::FontCache & getFontCache()noexcept
-		{
-			return m_fontCache;
-		}
-
 		UserInputListenerRPtr getUserInputListener()noexcept
 		{
 			return m_userInputListener.get();
@@ -1057,47 +1054,84 @@ namespace castor3d
 		*/
 		/**@{*/
 		template< typename ... ParametersT >
-		castor::FontCache::ElementPtrT createFont( castor::FontCache::ElementKeyT const & key
-			, ParametersT && ... parameters )const
+		castor::FontCache::ElementPtrT createFont( castor::String const & name
+			, uint32_t height
+			, castor::Path const & path )const
 		{
-			return getFontCache().create( key
-				, castor::forward< ParametersT >( parameters )... );
+			return m_fontCache.create( name, height, path );
 		}
 
 		template< typename ... ParametersT >
-		castor::FontCache::ElementObsT addNewFont( castor::FontCache::ElementKeyT const & key
-			, ParametersT && ... parameters )
+		castor::FontCache::ElementObsT addNewFont( castor::String const & name
+			, uint32_t height
+			, castor::Path const & path )
 		{
-			return getFontCache().add( key
-				, castor::forward< ParametersT >( parameters )... );
+			return m_fontCache.add( name, height, path );
+		}
+
+		template< typename ... ParametersT >
+		castor::FontCache::ElementPtrT createSdfFont( castor::String const & name
+			, castor::Path const & path )const
+		{
+			return m_fontCache.create( name, path );
+		}
+
+		template< typename ... ParametersT >
+		castor::FontCache::ElementObsT addNewSdfFont( castor::String const & name
+			, castor::Path const & path )
+		{
+			return m_fontCache.add( name, path );
 		}
 
 		castor::FontCache::ElementObsT addFont( castor::FontCache::ElementKeyT const & key
 			, castor::FontCache::ElementPtrT & element
 			, bool initialise = false )
 		{
-			return getFontCache().add( key, element, initialise );
+			return m_fontCache.add( key, element, initialise );
 		}
 
 		void removeFont( castor::FontCache::ElementKeyT const & key
 			, bool cleanup = false )
 		{
-			getFontCache().remove( key, cleanup );
+			m_fontCache.remove( key, cleanup );
 		}
 
 		castor::FontCache::ElementObsT findFont( castor::FontCache::ElementKeyT const & key )const
 		{
-			return getFontCache().find( key );
+			return m_fontCache.find( key );
 		}
 
 		bool hasFont( castor::FontCache::ElementKeyT const & key )const
 		{
-			return getFontCache().has( key );
+			return m_fontCache.has( key );
 		}
 
 		castor::FontCache::ElementObsT tryFindFont( castor::FontCache::ElementKeyT const & key )const
 		{
-			return getFontCache().tryFind( key );
+			return m_fontCache.tryFind( key );
+		}
+
+		template< typename FuncT >
+		void forEachFont( FuncT func )const
+		{
+			auto lock( castor::makeUniqueLock( m_fontCache ) );
+
+			for ( auto const & [name, font] : m_fontCache )
+			{
+				func( name, **font );
+			}
+		}
+
+		castor::FontResPtr getDefaultFont()
+		{
+			return m_fontCache.isEmpty()
+				? nullptr
+				: m_fontCache.begin()->second.get();
+		}
+
+		castor::FontCache & getFontCache( PrivEngineToken const & )
+		{
+			return m_fontCache;
 		}
 		/**@}*/
 		/**

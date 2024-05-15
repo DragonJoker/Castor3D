@@ -3780,7 +3780,7 @@ namespace castor3d
 				}
 				else
 				{
-					getEngine( *blockContext )->getFontCache().add( blockContext->name
+					getEngine( *blockContext )->addNewFont( blockContext->name
 						, uint32_t( blockContext->fontHeight )
 						, context.file.getPath() / blockContext->path );
 				}
@@ -4098,10 +4098,9 @@ namespace castor3d
 
 			if ( overlay && overlay->getType() == OverlayType::eText )
 			{
-				auto const & cache = getEngine( *blockContext )->getFontCache();
 				castor::String name;
 
-				if ( cache.find( params[0]->get( name ) ) )
+				if ( getEngine( *blockContext )->hasFont( params[0]->get( name ) ) )
 				{
 					overlay->getTextOverlay()->setFont( name );
 				}
