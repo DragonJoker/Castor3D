@@ -408,6 +408,19 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
+		static CU_ImplementAttributeParserBlock( parserRootDebugTargets, RootContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				blockContext->engine->enableDebugTargets( params[0]->get< bool >() );
+			}
+		}
+		CU_EndAttribute()
+
 		static CU_ImplementAttributeParserNewBlock( parserRootWindow, RootContext, WindowContext )
 		{
 			if ( params.empty() )
@@ -5142,6 +5155,7 @@ namespace castor3d
 		{
 			BlockParserContextT< RootContext > context{ result, CSCNSection::eRoot };
 			context.addParser( cuT( "debug_overlays" ), parserRootDebugOverlays, { makeParameter< ParameterType::eBool >() } );
+			context.addParser( cuT( "debug_targets" ), parserRootDebugTargets, { makeParameter< ParameterType::eBool >() } );
 			context.addParser( cuT( "max_image_size" ), parserRootMaxImageSize, { makeParameter< ParameterType::eUInt32 >() } );
 			context.addParser( cuT( "debug_max_image_size" ), parserRootDebugMaxImageSize, { makeParameter< ParameterType::eUInt32 >() } );
 			context.addParser( cuT( "lpv_grid_size" ), parserRootLpvGridSize, { makeParameter< ParameterType::eUInt32 >() } );
