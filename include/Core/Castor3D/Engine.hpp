@@ -1019,6 +1019,11 @@ namespace castor3d
 			m_lightingModelId = value;
 		}
 
+		void enableDebugTargets( bool value )noexcept
+		{
+			m_config.enableDebugTargets = value;
+		}
+
 		void setMaxImageSize( uint32_t size )noexcept
 		{
 			m_maxImageSize = size;
