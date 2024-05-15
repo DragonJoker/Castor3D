@@ -8,9 +8,9 @@
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Render/Overlays/OverlayRenderer.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/Shaders/GlslFont.hpp"
 #include "Castor3D/Shader/Shaders/GlslOverlaySurface.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
+#include "Castor3D/Shader/Ubos/FontUbo.hpp"
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -224,9 +224,9 @@ namespace castor3d
 			C3D_Lines( writer
 				, TextOverlay::ComputeBindingIdx::eLines
 				, 0u );
-			shader::FontData c3d_fontData{ writer
-				, uint32_t( TextOverlay::ComputeBindingIdx::eFont )
-				, 0u };
+			C3D_Font( writer
+				, TextOverlay::ComputeBindingIdx::eFont
+				, 0u );
 			C3D_OverlaysSurfaces( writer
 				, TextOverlay::ComputeBindingIdx::eVertex
 				, 0u

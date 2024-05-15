@@ -19,15 +19,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	ShaderBuffer holding the fonts glyphs data.
-	*\~french
-	*\brief
-	*	ShaderBuffer contenant les données des glyphes des fonts.
-	*/
-	class FontGlyphBuffer;
-	/**
-	*\~english
-	*\brief
 	*	ShaderBuffer holding the light sources data.
 	*\~french
 	*\brief
@@ -87,7 +78,6 @@ namespace castor3d
 	using GpuDataBufferOffsetModifySignal = castor::SignalT< GpuDataBufferOffsetModifyFunc >;
 	using GpuDataBufferOffsetModifyConnection = castor::ConnectionT< GpuDataBufferOffsetModifySignal >;
 
-	CU_DeclareSmartPtr( castor3d, FontGlyphBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LightBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d, PassBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d, ShadowBuffer, C3D_API );

@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <CastorUtils/Design/Resource.hpp>
 #include <CastorUtils/Design/Signal.hpp>
@@ -239,9 +239,9 @@ namespace castor3d
 			return m_font;
 		}
 
-		FontGlyphBuffer const & getFontBuffer()const
+		FontUbo const & getFontUbo()const
 		{
-			return *m_buffer;
+			return *m_ubo;
 		}
 
 		TextureLayoutRPtr getTexture()const
@@ -282,7 +282,7 @@ namespace castor3d
 		GlyphPositionMap m_frontGlyphsPositions;
 		GlyphPositionMap m_backGlyphsPositions;
 		uint32_t m_id;
-		FontGlyphBufferUPtr m_buffer;
+		FontUboUPtr m_ubo;
 		castor::Map< char32_t, uint32_t > m_charIndices;
 	};
 }
