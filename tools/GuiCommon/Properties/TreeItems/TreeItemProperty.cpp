@@ -104,13 +104,10 @@ namespace GuiCommon
 
 		if ( m_engine )
 		{
-			auto & cache = m_engine->getFontCache();
-			auto lock( castor::makeUniqueLock( cache ) );
-
-			for ( auto & pair : cache )
-			{
-				choices.push_back( pair.first );
-			}
+			m_engine->forEachFont( [&choices]( castor::String const & name, castor::Font const & )
+				{
+					choices.push_back( name );
+				} );
 		}
 
 		return choices;

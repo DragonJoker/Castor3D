@@ -20,9 +20,7 @@ namespace castor3d
 			, Engine & engine )
 			: m_engine{ engine }
 			, m_holderName{ castor::move( name ) }
-			, m_defaultFont{ engine.getFontCache().isEmpty()
-				? nullptr
-				: engine.getFontCache().begin()->second.get() }
+			, m_defaultFont{ engine.getDefaultFont() }
 		{
 		}
 

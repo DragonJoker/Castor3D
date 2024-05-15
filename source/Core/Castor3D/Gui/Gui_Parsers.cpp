@@ -1706,9 +1706,8 @@ namespace castor3d
 		static CU_ImplementAttributeParserBlock( parserStyleDefaultFont, ContextT )
 		{
 			auto guiContext = getGuiContext( blockContext );
-			auto & cache = guiContext->controls->getEngine()->getFontCache();
 			auto name = params[0]->get< castor::String >();
-			auto font = cache.find( name );
+			auto font = guiContext->controls->getEngine()->findFont( name );
 
 			if ( font )
 			{

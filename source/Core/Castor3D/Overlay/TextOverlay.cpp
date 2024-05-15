@@ -371,9 +371,8 @@ namespace castor3d
 	{
 		// Récupération / Création de la police
 		Engine * engine = m_overlay->getEngine();
-		auto const & fontCache = engine->getFontCache();
 
-		if ( auto font = fontCache.find( name ) )
+		if ( auto font = engine->findFont( name ) )
 		{
 			auto fontTexture = engine->getOverlayCache().getFontTexture( font->getName() );
 
