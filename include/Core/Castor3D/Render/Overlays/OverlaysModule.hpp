@@ -35,6 +35,7 @@ namespace castor3d
 		eOverlays,
 		eOverlaysIDs,
 		eOverlaysSurfaces,
+		eOverlaysFont,
 	};
 	/**
 	*\~english
@@ -114,7 +115,7 @@ namespace castor3d
 		OverlayPipelineData & operator=( OverlayPipelineData const & ) = delete;
 		OverlayPipelineData( OverlayPipelineData && )noexcept = default;
 		OverlayPipelineData & operator=( OverlayPipelineData && )noexcept = default;
-		OverlayPipelineData() = default;
+		OverlayPipelineData()noexcept = default;
 		~OverlayPipelineData()noexcept = default;
 
 		OverlayPipelineData( ashes::BufferPtr< uint32_t > iDsBuffer

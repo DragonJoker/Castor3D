@@ -255,7 +255,7 @@ namespace castor3d
 		}
 		else
 		{
-			updateTotalSize( { m_metrics.width + 1u, m_metrics.height } );
+			updateTotalSize( { uint32_t( m_metrics.width + 1.0f ), uint32_t( m_metrics.height ) } );
 			updateScrollBars();
 		}
 	}
@@ -878,7 +878,7 @@ namespace castor3d
 			, [&position, &index]( castor::TextLineMetrics const & lookup )
 			{
 				auto height = uint32_t( lookup.yMax - lookup.yMin );
-				auto result = lookup.top + height > uint32_t( position->y );
+				auto result = uint32_t( lookup.top ) + height > uint32_t( position->y );
 
 				if ( !result )
 				{
@@ -977,8 +977,8 @@ namespace castor3d
 					auto index = uint32_t( std::distance( m_caption.cbegin(), m_caret.indices.captionIt ) );
 					auto lineIt = m_metrics.lines.begin();
 					auto charIt = lineIt->chars.begin();
-					uint32_t left{};
-					uint32_t top{};
+					float left{};
+					float top{};
 					uint32_t i{};
 
 					while ( i < index )
@@ -1064,10 +1064,10 @@ namespace castor3d
 			text->setCaption( m_caption );
 			auto size = text->getPixelSize();
 
-			if ( size->x != m_metrics.width
-				|| size->y != m_metrics.height )
+			if ( size->x != uint32_t( m_metrics.width )
+				|| size->y != uint32_t( m_metrics.height ) )
 			{
-				size = { m_metrics.width, m_metrics.height };
+				size = { uint32_t( m_metrics.width ), uint32_t( m_metrics.height ) };
 				text->setPixelSize( size );
 				updateTotalSize( size );
 			}
@@ -1133,7 +1133,7 @@ namespace castor3d
 					? 0
 					: int32_t( line.chars[selBegin.charIndex - 1u] ) );
 				panel->setPixelPosition( { left, int32_t( line.top ) } );
-				panel->setPixelSize( { LineEndWidth + line.chars.back() - uint32_t( left )
+				panel->setPixelSize( { LineEndWidth + uint32_t( line.chars.back() ) - uint32_t( left )
 					, uint32_t( m_metrics.yMax - m_metrics.yMin ) } );
 				panel->setVisible( true );
 			}
@@ -1164,7 +1164,7 @@ namespace castor3d
 				{
 					auto & line = m_metrics.lines[selBegin.lineIndex];
 					panel->setPixelPosition( { 0, int32_t( line.top ) } );
-					panel->setPixelSize( { LineEndWidth + line.chars.back()
+					panel->setPixelSize( { LineEndWidth + uint32_t( line.chars.back() )
 						, uint32_t( m_metrics.yMax - m_metrics.yMin ) } );
 					panel->setVisible( true );
 				}

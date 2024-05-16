@@ -147,6 +147,19 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Draw constants for one overlay.
+	*\~french
+	*\brief
+	*	Données de dessin pour un overlay.
+	*/
+	struct OverlayDrawConstants
+	{
+		uint32_t pipelineId;
+		int32_t drawId;
+	};
+	/**
+	*\~english
+	*\brief
 	*	The render pass UBOs binding index.
 	*\~french
 	*\brief

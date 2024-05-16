@@ -67,8 +67,8 @@ namespace castor3d
 		OverlayTextBufferPoolUPtr textBuffer;
 
 	private:
-		using PipelineDataMap = castor::Map< OverlayDrawPipeline const *, OverlayPipelineData >;
-		castor::Map< FontTexture const *, PipelineDataMap > m_pipelines;
+		using PipelineDataMap = castor::UnorderedMap< OverlayDrawPipeline const *, OverlayPipelineData >;
+		castor::UnorderedMap< FontTexture const *, PipelineDataMap > m_pipelines;
 		castor::Vector< OverlayPipelineData > m_retired;
 
 	private:

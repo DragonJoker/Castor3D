@@ -65,9 +65,19 @@ namespace castor3d
 			doRefresh( clean, m_first.exchange( false ) );
 		}
 
-		inline Resource const & getResource()const
+		Resource const & getResource()const
 		{
 			return m_front;
+		}
+
+		Resource const & getFront()const
+		{
+			return m_front;
+		}
+
+		Resource const & getBack()const
+		{
+			return m_back;
 		}
 
 	protected:
@@ -109,8 +119,8 @@ namespace castor3d
 		void doRefresh( bool clean
 			, bool front )
 		{
-			auto & resource = front ? m_front : m_back;
-			updateResource( resource, front );
+			auto & resource = m_back;
+			updateResource( resource );
 			postPreRenderGpuEvent( *getEngine()
 				, [this, clean, front, &resource]( RenderDevice const & device
 					, QueueData const & queueData )
@@ -137,9 +147,14 @@ namespace castor3d
 				} );
 		}
 
-		Resource & doGetResource()
+		Resource & doGetFront()
 		{
 			return m_front;
+		}
+
+		Resource & doGetBack()
+		{
+			return m_back;
 		}
 
 	private:
@@ -149,8 +164,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, QueueData const & queueData ) = 0;
 		C3D_API virtual void cleanupResource( Resource & resource ) = 0;
-		C3D_API virtual void updateResource( Resource & resource
-			, bool front ) = 0;
+		C3D_API virtual void updateResource( Resource & resource ) = 0;
 		C3D_API virtual void swapResources() = 0;
 	};
 	using DoubleBufferedTextureLayout = DoubleBufferedResourceT< TextureLayout, castor::UniquePtr >;
@@ -272,15 +286,13 @@ namespace castor3d
 			, RenderDevice const & device
 			, QueueData const & queueData )override;
 		void cleanupResource( Resource & resource )override;
-		void updateResource( Resource & resource
-			, bool front )override;
+		void updateResource( Resource & resource )override;
 		void swapResources()override;
 
 	private:
 		castor::FontResPtr m_font{};
 		SamplerObs m_sampler{};
-		GlyphPositionMap m_frontGlyphsPositions;
-		GlyphPositionMap m_backGlyphsPositions;
+		GlyphPositionMap m_glyphsPositions;
 		uint32_t m_id;
 		FontUboUPtr m_ubo;
 		castor::Map< char32_t, uint32_t > m_charIndices;

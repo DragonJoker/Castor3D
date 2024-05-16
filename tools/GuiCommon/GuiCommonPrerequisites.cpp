@@ -45,10 +45,10 @@ namespace GuiCommon
 {
 	namespace helpers
 	{
-		struct wxWidgetsFontImpl
-			: public castor::Font::SFontImpl
+		struct wxWidgetsGlyphLoader
+			: public castor::Font::GlyphLoader
 		{
-			explicit wxWidgetsFontImpl( wxFont const & font )
+			explicit wxWidgetsGlyphLoader( wxFont const & font )
 				: m_font( font )
 			{
 			}
@@ -63,7 +63,13 @@ namespace GuiCommon
 
 			castor::Glyph loadGlyph( char32_t glyph )override
 			{
-				return { glyph, {}, {}, {}, {} };
+				return { glyph, {}, {}, {}, {}, {} };
+			}
+
+			void fillKerningTable( char32_t c32
+				, castor::Font::GlyphArray const & glyphs
+				, castor::Font::GlyphKerningMap & table )override
+			{
 			}
 
 			wxFont m_font;
@@ -653,7 +659,7 @@ namespace GuiCommon
 		{
 			castor::String name = make_String( wxfont.GetFaceName() ) + castor::string::toString( wxfont.GetPointSize() );
 			font = castor::makeUnique< castor::Font >( name, wxfont.GetPointSize() );
-			font->setGlyphLoader( castor::make_unique< helpers::wxWidgetsFontImpl >( wxfont ) );
+			font->setGlyphLoader( castor::make_unique< helpers::wxWidgetsGlyphLoader >( wxfont ) );
 			castor::Font::BinaryLoader{}( *font
 				, castor::Path{ castor::String{ wxfont.GetFaceName() } }
 				, uint32_t( std::abs( wxfont.GetPointSize() ) ) );

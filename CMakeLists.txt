@@ -259,6 +259,28 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		find_package( freetype CONFIG QUIET REQUIRED )
 		set( Freetype_LIBRARIES freetype )
 		set( FreeType_FOUND ( freetype_FOUND OR FREETYPE_FOUND ) )
+		get_target_property( Freetype_INCLUDE_DIR_freetype2 freetype INTERFACE_INCLUDE_DIRECTORIES )
+		set( FREETYPE_INCLUDE_DIR_freetype2 ${Freetype_INCLUDE_DIR_freetype2} CACHE STRING "" FORCE )
+		set( FREETYPE_INCLUDE_DIR_ft2build ${Freetype_INCLUDE_DIR_freetype2}/freetype CACHE STRING "" FORCE )
+		set( FREETYPE_INCLUDE_DIRS
+			${FREETYPE_INCLUDE_DIR_freetype2}
+			${FREETYPE_INCLUDE_DIR_ft2build}
+			CACHE STRING "" FORCE 
+		)
+		if ( MSVC )
+			get_target_property( Freetype_LIBRARY_DEBUG freetype IMPORTED_IMPLIB_DEBUG )
+			get_target_property( Freetype_LIBRARY_RELEASE freetype IMPORTED_IMPLIB_RELEASE )
+			set( Freetype_LIBRARY_DEBUG ${Freetype_LIBRARY_DEBUG} CACHE STRING "" FORCE )
+			set( Freetype_LIBRARY_RELEASE ${Freetype_LIBRARY_RELEASE} CACHE STRING "" FORCE )
+			set( FREETYPE_LIBRARY
+				debug ${Freetype_LIBRARY_DEBUG}
+				optimized ${Freetype_LIBRARY_RELEASE}
+				CACHE STRING "" FORCE
+			)
+		else ()
+			get_target_property( Freetype_LIBRARY freetype IMPORTED_IMPLIB )
+			set( FREETYPE_LIBRARY ${Freetype_LIBRARY} CACHE STRING "" FORCE )
+		endif ()
 	else ()
 		find_package( ZLIB 1.2.7 QUIET REQUIRED )
 		find_package( Freetype QUIET REQUIRED )

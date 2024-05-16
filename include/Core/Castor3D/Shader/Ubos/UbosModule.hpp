@@ -106,10 +106,9 @@ namespace castor3d
 	*/
 	struct FontUboConfiguration
 	{
-		float imgWidth{};
-		float imgHeight{};
-		float pad0{};
-		float pad1{};
+		castor::Point2f imgSize{};
+		uint32_t sdfFont{};
+		float pixelRange{};
 	};
 	/**
 	*\~english

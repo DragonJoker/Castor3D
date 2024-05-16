@@ -17,10 +17,9 @@ namespace castor3d
 		struct FontData
 			: public sdw::StructInstanceHelperT< "C3D_FontData"
 				, sdw::type::MemoryLayout::eStd140
-				, sdw::FloatField< "imgWidth" >
-				, sdw::FloatField< "imgHeight" >
-				, sdw::FloatField< "pad0" >
-				, sdw::FloatField< "pad1" > >
+				, sdw::Vec2Field< "imgSize" >
+				, sdw::UIntField< "sdfFont" >
+				, sdw::FloatField< "pixelRange" > >
 		{
 		public:
 			FontData( sdw::ShaderWriter & writer
@@ -30,8 +29,9 @@ namespace castor3d
 			{
 			}
 
-			auto imgWidth()const { return getMember< "imgWidth" >(); }
-			auto imgHeight()const { return getMember< "imgHeight" >(); }
+			auto imgSize()const { return getMember< "imgSize" >(); }
+			auto isSDFFont()const { return getMember< "sdfFont" >() != 0_u; }
+			auto pixelRange()const { return getMember< "pixelRange" >(); }
 		};
 	}
 
@@ -48,15 +48,18 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	imgWidth	The font texture width.
-		 *\param[in]	imgHeight	The font texture height.
+		 *\param[in]	imgSize		The font texture dimensions.
+		 *\param[in]	sdfFont		\p true if the font texture stores SDF.
+		 *\param[in]	pixelRange	The distance field thickness.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	imgWidth	La largeur de la texture de police.
-		 *\param[in]	imgHeight	La largeur de la texture de police.
+		 *\param[in]	imgSize		Les dimensions de la texture de police.
+		 *\param[in]	sdfFont		\p true si la texture de police stocke des SDF.
+		 *\param[in]	pixelRange	L'épaisseur du distance field.
 		 */
-		C3D_API void cpuUpdate( castor::u32 imgWidth
-			, castor::u32 imgHeight );
+		C3D_API void cpuUpdate( castor::Size const & imgSize
+			, bool sdfFont
+			, float pixelRange );
 
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
@@ -87,15 +90,18 @@ namespace castor3d
 	};
 }
 
-#define C3D_Font( writer, binding, set )\
+#define C3D_FontEx( writer, binding, set, enable )\
 	sdw::UniformBuffer font{ writer\
 		, "C3D_Font"\
 		, "c3d_font"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
-		, true };\
-	auto c3d_fontData = font.declMember< castor3d::shader::FontData >( "f" );\
+		, enable };\
+	auto c3d_fontData = font.declMember< castor3d::shader::FontData >( "f", enable );\
 	font.end()
+
+#define C3D_Font( writer, binding, set )\
+	C3D_FontEx( writer, binding, set, true )
 
 #endif

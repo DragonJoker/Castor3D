@@ -199,12 +199,12 @@ namespace castor
 	*/
 	struct TextLineMetrics
 	{
-		uint32_t top{};
-		uint32_t width{};
-		int32_t yMin{ 100 };
-		int32_t yMax{};
+		float top{};
+		float width{};
+		float yMin{ 100 };
+		float yMax{};
 		uint32_t firstCharIndex{};
-		Vector< uint32_t > chars{};
+		Vector< float > chars{};
 	};
 	/**
 	\~english
@@ -214,10 +214,10 @@ namespace castor
 	*/
 	struct TextMetrics
 	{
-		int32_t yMin{ 100 };
-		int32_t yMax{};
-		uint32_t width{};
-		uint32_t height{};
+		float yMin{ 100 };
+		float yMax{};
+		float width{};
+		float height{};
 		Vector< TextLineMetrics > lines{};
 	};
 	/**
@@ -840,6 +840,9 @@ namespace castor
 		CU_API static ElementPtrT makeElement( ResourceCacheBaseT< Font, String, ResourceCacheTraitsT< Font, String > > const & cache
 			, KeyT const & name
 			, uint32_t height
+			, Path const & path );
+		CU_API static ElementPtrT makeElement( ResourceCacheBaseT< Font, String, ResourceCacheTraitsT< Font, String > > const & cache
+			, KeyT const & name
 			, Path const & path );
 	};
 	using FontCacheTraits = ResourceCacheTraitsT< Font, String >;

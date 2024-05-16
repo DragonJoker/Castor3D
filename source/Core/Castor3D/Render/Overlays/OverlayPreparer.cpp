@@ -126,10 +126,13 @@ namespace castor3d
 							}
 						}
 #endif
+						commandBuffer.bindPipeline( *data.node->pipeline.pipeline );
+						commandBuffer.bindDescriptorSets( pipelineData->descriptorSets->all
+							, *data.node->pipeline.pipelineLayout );
+
 						if ( m_device.hasDrawId() )
 						{
 							doRegisterDrawCommands( data.node->pipeline
-								, pipelineData->descriptorSets->all
 								, pipelineData->indirectCommandsBuffer->getBuffer()
 								, uint32_t( overlayDatas.size() )
 								, count
@@ -137,9 +140,6 @@ namespace castor3d
 						}
 						else
 						{
-							commandBuffer.bindPipeline( *data.node->pipeline.pipeline );
-							commandBuffer.bindDescriptorSets( pipelineData->descriptorSets->all
-								, *data.node->pipeline.pipelineLayout );
 							uint32_t index{};
 
 							for ( auto const & command : castor::makeArrayView( pipelineData->indirectCommands.begin() + count
@@ -322,17 +322,14 @@ namespace castor3d
 	}
 
 	void OverlayPreparer::doRegisterDrawCommands( OverlayDrawPipeline const & pipeline
-		, ashes::DescriptorSetCRefArray const & descriptorSets
 		, ashes::BufferBase const & indirectCommands
 		, uint32_t drawCount
 		, uint32_t & offset
 		, ashes::CommandBuffer const & commandBuffer )noexcept
 	{
-		commandBuffer.bindPipeline( *pipeline.pipeline );
-		commandBuffer.bindDescriptorSets( descriptorSets, *pipeline.pipelineLayout );
-		DrawConstants constants{ offset, 0u };
+		OverlayDrawConstants constants{ offset, 0u };
 		commandBuffer.pushConstants( *pipeline.pipelineLayout
-			, VK_SHADER_STAGE_VERTEX_BIT
+			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
 			, 0u
 			, sizeof( constants )
 			, &constants );
@@ -354,9 +351,9 @@ namespace castor3d
 		, uint32_t & offset
 		, ashes::CommandBuffer const & commandBuffer )noexcept
 	{
-		DrawConstants constants{ offset, int32_t( drawId ) };
+		OverlayDrawConstants constants{ offset, int32_t( drawId ) };
 		commandBuffer.pushConstants( *pipeline.pipelineLayout
-			, VK_SHADER_STAGE_VERTEX_BIT
+			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
 			, 0u
 			, sizeof( constants )
 			, &constants );

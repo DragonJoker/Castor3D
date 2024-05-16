@@ -1,9 +1,15 @@
 project( CastorUtils )
 
 set( unofficial-convectionkernels_DIR ${VCPKG_SHARE_DIR}/unofficial-convectionkernels )
+set( unofficial-skia_DIR ${VCPKG_SHARE_DIR}/unofficial-skia )
 set( gli_DIR ${VCPKG_SHARE_DIR}/gli )
+set( tinyxml2_DIR ${VCPKG_SHARE_DIR}/tinyxml2 )
+set( msdfgen_DIR ${VCPKG_SHARE_DIR}/msdfgen )
 find_package( unofficial-convectionkernels CONFIG REQUIRED )
+find_package( unofficial-skia CONFIG REQUIRED )
 find_package( gli CONFIG REQUIRED )
+find_package( tinyxml2 CONFIG REQUIRED )
+find_package( msdfgen CONFIG REQUIRED )
 
 if ( VCPKG_TOOLCHAIN )
 	set( unofficial-minizip_DIR ${VCPKG_SHARE_DIR}/unofficial-minizip )
@@ -697,6 +703,10 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			${brotlidec_LIB}
 			unofficial::convectionkernels::convectionkernels
 			gli
+			msdfgen::msdfgen
+			msdfgen::msdfgen-ext
+			msdfgen::msdfgen-core
+			msdfgen::msdfgen-full
 	)
 	if ( WIN32 )
 		target_link_libraries( ${PROJECT_NAME}

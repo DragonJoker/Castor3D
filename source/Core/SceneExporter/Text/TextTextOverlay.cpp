@@ -24,14 +24,29 @@ namespace castor
 
 		if ( auto block{ beginBlock( file, cuT( "text_overlay" ), overlay.getOverlayName() ) } )
 		{
-			result = writeName( file, cuT( "font" ), overlay.getFontTexture()->getFontName() )
-				&& writeName( file, cuT( "text" ), makeString( overlay.getCaption() ) )
-				&& write( file, cuT( "text_wrapping" ), getName( overlay.getTextWrappingMode() ) )
-				&& writeOpt( file, cuT( "horizontal_align" ), getName( overlay.getHAlign() ), getName( HAlign::eLeft ) )
-				&& writeOpt( file, cuT( "vertical_align" ), getName( overlay.getVAlign() ), getName( VAlign::eTop ) )
-				&& write( file, cuT( "texturing_mode" ), getName( overlay.getTexturingMode() ) )
-				&& write( file, cuT( "line_spacing_mode" ), getName( overlay.getLineSpacingMode() ) )
-				&& writeSub< OverlayCategory >( file, overlay );
+			if ( overlay.getFontTexture()->getFont()->isSDF() )
+			{
+				result = writeName( file, cuT( "font" ), overlay.getFontTexture()->getFontName() )
+					&& write( file, cuT( "text_height" ), overlay.getSDFHeight() )
+					&& writeName( file, cuT( "text" ), makeString( overlay.getCaption() ) )
+					&& write( file, cuT( "text_wrapping" ), getName( overlay.getTextWrappingMode() ) )
+					&& writeOpt( file, cuT( "horizontal_align" ), getName( overlay.getHAlign() ), getName( HAlign::eLeft ) )
+					&& writeOpt( file, cuT( "vertical_align" ), getName( overlay.getVAlign() ), getName( VAlign::eTop ) )
+					&& write( file, cuT( "texturing_mode" ), getName( overlay.getTexturingMode() ) )
+					&& write( file, cuT( "line_spacing_mode" ), getName( overlay.getLineSpacingMode() ) )
+					&& writeSub< OverlayCategory >( file, overlay );
+			}
+			else
+			{
+				result = writeName( file, cuT( "font" ), overlay.getFontTexture()->getFontName() )
+					&& writeName( file, cuT( "text" ), makeString( overlay.getCaption() ) )
+					&& write( file, cuT( "text_wrapping" ), getName( overlay.getTextWrappingMode() ) )
+					&& writeOpt( file, cuT( "horizontal_align" ), getName( overlay.getHAlign() ), getName( HAlign::eLeft ) )
+					&& writeOpt( file, cuT( "vertical_align" ), getName( overlay.getVAlign() ), getName( VAlign::eTop ) )
+					&& write( file, cuT( "texturing_mode" ), getName( overlay.getTexturingMode() ) )
+					&& write( file, cuT( "line_spacing_mode" ), getName( overlay.getLineSpacingMode() ) )
+					&& writeSub< OverlayCategory >( file, overlay );
+			}
 		}
 
 		return result;
