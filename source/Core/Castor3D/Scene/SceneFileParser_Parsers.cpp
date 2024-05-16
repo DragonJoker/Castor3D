@@ -311,6 +311,20 @@ namespace castor3d
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eFont )
 
+		static CU_ImplementAttributeParserNewBlock( parserRootSdfFont, RootContext, FontContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( newBlockContext->name );
+				newBlockContext->root = blockContext;
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eSdfFont )
+
 		static CU_ImplementAttributeParserBlock( parserRootPanelOverlay, RootContext )
 		{
 			if ( params.empty() )
@@ -1210,6 +1224,25 @@ namespace castor3d
 			}
 		}
 		CU_EndAttributePushNewBlock( CSCNSection::eFont )
+
+		static CU_ImplementAttributeParserNewBlock( parserSceneSdfFont, SceneContext, FontContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				newBlockContext->scene = blockContext;
+				newBlockContext->root = blockContext->root;
+				params[0]->get( newBlockContext->name );
+			}
+		}
+		CU_EndAttributePushNewBlock( CSCNSection::eSdfFont )
 
 		static CU_ImplementAttributeParserNewBlock( parserSceneCamera, SceneContext, CameraContext )
 		{
@@ -3777,7 +3810,7 @@ namespace castor3d
 
 		static CU_ImplementAttributeParserBlock( parserFontHeight, FontContext )
 		{
-			params[0]->get( blockContext->fontHeight );
+			params[0]->get( blockContext->height );
 		}
 		CU_EndAttribute()
 
@@ -3788,13 +3821,39 @@ namespace castor3d
 				if ( blockContext->scene )
 				{
 					blockContext->scene->scene->getFontView().add( blockContext->name
-						, uint32_t( blockContext->fontHeight )
+						, uint32_t( blockContext->height )
 						, context.file.getPath() / blockContext->path );
 				}
 				else
 				{
 					getEngine( *blockContext )->addNewFont( blockContext->name
-						, uint32_t( blockContext->fontHeight )
+						, uint32_t( blockContext->height )
+						, context.file.getPath() / blockContext->path );
+				}
+
+				log::info << "Loaded font [" << blockContext->name << "]" << std::endl;
+			}
+		}
+		CU_EndAttributePop()
+
+		static CU_ImplementAttributeParserBlock( parserSdfFontFile, FontContext )
+		{
+			params[0]->get( blockContext->path );
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserSdfFontEnd, FontContext )
+		{
+			if ( !blockContext->name.empty() && !blockContext->path.empty() )
+			{
+				if ( blockContext->scene )
+				{
+					blockContext->scene->scene->getFontView().add( blockContext->name
+						, context.file.getPath() / blockContext->path );
+				}
+				else
+				{
+					getEngine( *blockContext )->addNewSdfFont( blockContext->name
 						, context.file.getPath() / blockContext->path );
 				}
 
@@ -3948,9 +4007,18 @@ namespace castor3d
 			{
 				auto textOverlay = blockContext->overlay.rptr->getTextOverlay();
 
-				if ( textOverlay->getFontTexture() )
+				if ( auto fontTexture = textOverlay->getFontTexture() )
 				{
-					blockContext->overlay.rptr->setVisible( true );
+					if ( fontTexture->getFont()->isSDF()
+						&& textOverlay->getSDFHeight() == uint32_t{} )
+					{
+						blockContext->overlay.rptr->setVisible( false );
+						CU_ParsingError( cuT( "TextOverlay's font is an SDF font, and the overlay text_height has not been set, the overlay will not be rendered" ) );
+					}
+					else
+					{
+						blockContext->overlay.rptr->setVisible( true );
+					}
 				}
 				else
 				{
@@ -4129,6 +4197,21 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
+		static CU_ImplementAttributeParserBlock( parserTextOverlayTextHeight, OverlayContext )
+		{
+			auto overlay = blockContext->overlay.rptr;
+
+			if ( overlay && overlay->getType() == OverlayType::eText )
+			{
+				overlay->getTextOverlay()->setSDFHeight( params[0]->get< uint32_t >() );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "TextOverlay not initialised" ) );
+			}
+		}
+		CU_EndAttribute()
+
 		static CU_ImplementAttributeParserBlock( parserTextOverlayTextWrapping, OverlayContext )
 		{
 			auto overlay = blockContext->overlay.rptr;
@@ -4212,7 +4295,13 @@ namespace castor3d
 			{
 				castor::String strParams;
 				params[0]->get( strParams );
+				castor::string::replace( strParams, cuT( "\\a" ), cuT( "\a" ) );
+				castor::string::replace( strParams, cuT( "\\b" ), cuT( "\b" ) );
+				castor::string::replace( strParams, cuT( "\\f" ), cuT( "\f" ) );
 				castor::string::replace( strParams, cuT( "\\n" ), cuT( "\n" ) );
+				castor::string::replace( strParams, cuT( "\\r" ), cuT( "\r" ) );
+				castor::string::replace( strParams, cuT( "\\t" ), cuT( "\t" ) );
+				castor::string::replace( strParams, cuT( "\\v" ), cuT( "\v" ) );
 				overlay->getTextOverlay()->setCaption( castor::toUtf8U32String( strParams ) );
 			}
 			else
@@ -5164,6 +5253,7 @@ namespace castor3d
 			context.addPushParser( cuT( "scene" ), CSCNSection::eScene, parserRootScene, { makeParameter< ParameterType::eName >() } );
 			context.addPushParser( cuT( "loading_screen" ), CSCNSection::eScene, parserRootLoadingScreen, {} );
 			context.addPushParser( cuT( "font" ), CSCNSection::eFont, parserRootFont, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "sdf_font" ), CSCNSection::eSdfFont, parserRootSdfFont, { makeParameter< ParameterType::eName >() } );
 			context.addPushParser( cuT( "panel_overlay" ), CSCNSection::ePanelOverlay, parserRootPanelOverlay, { makeParameter< ParameterType::eName >() } );
 			context.addPushParser( cuT( "border_panel_overlay" ), CSCNSection::eBorderPanelOverlay, parserRootBorderPanelOverlay, { makeParameter< ParameterType::eName >() } );
 			context.addPushParser( cuT( "text_overlay" ), CSCNSection::eTextOverlay, parserRootTextOverlay, { makeParameter< ParameterType::eName >() } );
@@ -5227,6 +5317,7 @@ namespace castor3d
 			context.addParser( cuT( "fog_density" ), parserSceneFogDensity, { makeParameter< ParameterType::eFloat >() } );
 			context.addParser( cuT( "directional_shadow_cascades" ), parserDirectionalShadowCascades, { makeParameter< ParameterType::eUInt32 >( castor::makeRange( 0u, MaxDirectionalCascadesCount ) ) } );
 			context.addPushParser( cuT( "font" ), CSCNSection::eFont, parserSceneFont, { makeParameter< ParameterType::eName >() } );
+			context.addPushParser( cuT( "sdf_font" ), CSCNSection::eSdfFont, parserSceneSdfFont, { makeParameter< ParameterType::eName >() } );
 			context.addPushParser( cuT( "sampler" ), CSCNSection::eSampler, parserSamplerState< SceneContext >, { makeParameter< ParameterType::eName >() } );
 			context.addPushParser( cuT( "camera" ), CSCNSection::eCamera, parserSceneCamera, { makeParameter< ParameterType::eName >() } );
 			context.addPushParser( cuT( "light" ), CSCNSection::eLight, parserSceneLight, { makeParameter< ParameterType::eName >() } );
@@ -5410,6 +5501,13 @@ namespace castor3d
 			context.addPopParser( cuT( "}" ), parserFontEnd );
 		}
 
+		static void addSdfFontParsers( castor::AttributeParsers & result )
+		{
+			BlockParserContextT< FontContext > context{ result, CSCNSection::eSdfFont };
+			context.addParser( cuT( "file" ), parserSdfFontFile, { makeParameter< ParameterType::ePath >() } );
+			context.addPopParser( cuT( "}" ), parserSdfFontEnd );
+		}
+
 		static void addPanelOverlayParsers( castor::AttributeParsers & result )
 		{
 			BlockParserContextT< OverlayContext > context{ result, CSCNSection::ePanelOverlay };
@@ -5455,6 +5553,7 @@ namespace castor3d
 			context.addParser( cuT( "pxl_size" ), parserOverlayPixelSize, { makeParameter< ParameterType::eSize >() } );
 			context.addParser( cuT( "pxl_position" ), parserOverlayPixelPosition, { makeParameter< ParameterType::ePosition >() } );
 			context.addParser( cuT( "font" ), parserTextOverlayFont, { makeParameter< ParameterType::eName >() } );
+			context.addParser( cuT( "text_height" ), parserTextOverlayTextHeight, { makeParameter< ParameterType::eUInt32 >() } );
 			context.addParser( cuT( "text" ), parserTextOverlayText, { makeParameter< ParameterType::eText >() } );
 			context.addParser( cuT( "text_wrapping" ), parserTextOverlayTextWrapping, { makeParameter< ParameterType::eCheckedText, TextWrappingMode >() } );
 			context.addParser( cuT( "vertical_align" ), parserTextOverlayVerticalAlign, { makeParameter< ParameterType::eCheckedText, VAlign >() } );
@@ -5567,6 +5666,7 @@ namespace castor3d
 			addObjectParsers( result );
 			addObjectMaterialsParsers( result );
 			addFontParsers( result );
+			addSdfFontParsers( result );
 			addPanelOverlayParsers( result );
 			addBorderPanelOverlayParsers( result );
 			addTextOverlayParsers( result );

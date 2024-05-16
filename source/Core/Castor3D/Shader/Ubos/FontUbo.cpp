@@ -10,19 +10,23 @@ namespace castor3d
 	FontUbo::FontUbo( RenderDevice const & device )
 		: m_device{ device }
 		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
-	{}
+	{
+	}
 
 	FontUbo::~FontUbo()noexcept
 	{
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	void FontUbo::cpuUpdate( castor::u32 imgWidth
-			, castor::u32 imgHeight )
+	void FontUbo::cpuUpdate( castor::Size const & imgSize
+		, bool sdfFont
+		, float pixelRange )
 	{
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo.getData();
-		configuration.imgWidth = float( imgWidth );
-		configuration.imgHeight = float( imgHeight );
+		configuration.imgSize->x = float( imgSize->x );
+		configuration.imgSize->y = float( imgSize->y );
+		configuration.sdfFont = sdfFont ? 1u : 0u;
+		configuration.pixelRange = float( pixelRange );
 	}
 }

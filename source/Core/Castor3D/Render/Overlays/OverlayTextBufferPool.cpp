@@ -172,9 +172,9 @@ namespace castor3d
 
 	void OverlayTextBufferPool::upload( UploadData & uploader )
 	{
-		for ( auto & it : m_buffers )
+		for ( auto & [_, buffer] : m_buffers )
 		{
-			it.second->upload( uploader );
+			buffer->upload( uploader );
 		}
 	}
 

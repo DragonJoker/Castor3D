@@ -56,8 +56,9 @@ namespace castor3d
 			: public sdw::StructInstanceHelperT< "C3D_TextChar"
 				, sdw::type::MemoryLayout::eStd430
 				, sdw::Vec2Field< "size" >
-				, sdw::Vec2Field< "uvPosition" >
 				, sdw::Vec2Field< "bearing" >
+				, sdw::Vec2Field< "uvLeftTop" >
+				, sdw::Vec2Field< "uvRightBottom" >
 				, sdw::FloatField< "left" >
 				, sdw::UIntField< "word" >
 				, sdw::UIntField< "overlay" >
@@ -72,8 +73,9 @@ namespace castor3d
 			}
 
 			auto size()const { return getMember< "size" >(); }
-			auto uvPosition()const { return getMember< "uvPosition" >(); }
 			auto bearing()const { return getMember< "bearing" >(); }
+			auto uvLeftTop()const { return getMember< "uvLeftTop" >(); }
+			auto uvRightBottom()const { return getMember< "uvRightBottom" >(); }
 			auto left()const { return getMember< "left" >(); }
 			auto word()const { return getMember< "word" >(); }
 			auto overlay()const { return getMember< "overlay" >(); }
@@ -280,11 +282,11 @@ namespace castor3d
 					//
 					// Compute Letter's Font UV.
 					//
-					fontUv = vec4( character.uvPosition().x() / texDim.x()
-						, 0.0, 0.0
-						, character.uvPosition().y() / texDim.y() );
-					fontUv.z() = fontUv.x() + ( character.size().x() / texDim.x() );
-					fontUv.y() = fontUv.w() + ( character.size().y() / texDim.y() );
+					fontUv = vec4( character.uvLeftTop().x() / texDim.x()
+						, character.uvRightBottom().y() / texDim.y()
+						, character.uvRightBottom().x() / texDim.x()
+						, character.uvLeftTop().y() / texDim.y() );
+
 					//
 					// Compute Letter's Texture UV.
 					//
@@ -333,7 +335,7 @@ namespace castor3d
 						auto overlay = writer.declLocale( "overlay"
 							, c3d_overlaysData[character.overlay()] );
 						auto texDim = writer.declLocale( "texDim"
-							, vec2( c3d_fontData.imgWidth(), c3d_fontData.imgHeight() ) );
+							, c3d_fontData.imgSize() );
 
 						IF( writer, overlay.textTexturingMode() == uint32_t( TextTexturingMode::eLetter ) )
 						{
@@ -471,6 +473,10 @@ namespace castor3d
 		auto caption = m_previousCaption;
 		auto fontTexture = getFontTexture();
 		auto & font = ovrltxt::getFont( *this );
+		auto ratio = font.isSDF()
+			? float( m_sdfHeight ) / float( font.getMaxImageHeight() )
+			: 1.0f;
+		auto advanceY = ovrltxt::getFont( *this ).getVerticalAdvance() * ratio;
 		float lineTop{};
 		{
 			float totalLeft{};
@@ -479,142 +485,145 @@ namespace castor3d
 			uint32_t charIndex{};
 			uint32_t wordIndex{};
 			uint32_t lineIndex{};
+			char32_t previous{};
 			auto cit = caption.begin();
 			auto tit = m_text.begin();
 
 			auto nextWord = [&]()
-			{
-				auto & word = m_words.getNext();
-				word.left = wordLeft;
-				word.range = { 100.0, 0.0 };
-				word.charBegin = charIndex;
-				word.charEnd = word.charBegin;
-				word.line = {};
-				return &word;
-			};
+				{
+					auto & word = m_words.getNext();
+					word.left = wordLeft;
+					word.range = { 100.0, 0.0 };
+					word.charBegin = charIndex;
+					word.charEnd = word.charBegin;
+					word.line = {};
+					return &word;
+				};
 
 			auto nextLine = [&]()
-			{
-				auto & line = m_lines.getNext();
-				line.position = { 0.0, lineTop };
-				line.range = { 100.0, 0.0 };
-				line.wordBegin = wordIndex;
-				line.wordEnd = line.wordBegin;
-				line.charBegin = charIndex;
-				line.charEnd = line.charBegin;
-				line.width = 0.0;
-				charLeft = totalLeft - wordLeft;
-				totalLeft = charLeft;
-				wordLeft = 0.0;
-				return &line;
-			};
+				{
+					auto & line = m_lines.getNext();
+					line.position = { 0.0, lineTop };
+					line.range = { 100.0, 0.0 };
+					line.wordBegin = wordIndex;
+					line.wordEnd = line.wordBegin;
+					line.charBegin = charIndex;
+					line.charEnd = line.charBegin;
+					line.width = 0.0;
+					charLeft = totalLeft - wordLeft;
+					totalLeft = charLeft;
+					wordLeft = 0.0;
+					return &line;
+				};
 
 			auto word = nextWord();
 			auto line = nextLine();
 
-			auto alignLine = [&]()
-			{
-				if ( !ovrltxt::isEmpty( *line ) )
+			auto finishLine = [&]()
 				{
-					if ( m_lineSpacingMode == TextLineSpacingMode::eMaxFontHeight )
+					if ( !ovrltxt::isEmpty( *line ) )
 					{
-						line->range = castor::Point2f{ ovrltxt::getFont( *this ).getMaxRange() };
-					}
-
-					// Move line according to halign
-					if ( m_hAlign != HAlign::eLeft )
-					{
-						auto offset = overlaySize->x - line->width;
-
-						if ( m_hAlign == HAlign::eCenter )
+						if ( m_lineSpacingMode == TextLineSpacingMode::eMaxFontHeight )
 						{
-							offset /= 2;
+							line->range = castor::Point2f{ advanceY };
 						}
 
-						line->position->x = line->position->x + offset;
+						// Move line according to halign
+						if ( m_hAlign != HAlign::eLeft )
+						{
+							auto offset = overlaySize->x - line->width;
+
+							if ( m_hAlign == HAlign::eCenter )
+							{
+								offset /= 2;
+							}
+
+							line->position->x = line->position->x + offset;
+						}
 					}
-				}
 
-				lineTop += line->range->y - line->range->x;
-				++lineIndex;
-			};
+					lineTop += line->range->y - line->range->x;
+					++lineIndex;
+				};
 
-			auto addWord = [&]()
-			{
-				if ( !ovrltxt::isEmpty( *word ) )
+			auto finishWord = [&]()
 				{
-					word->width = charLeft;
-					word->line = lineIndex;
-					line->range->x = std::min( line->range->x, word->range->x );
-					line->range->y = std::max( line->range->y, word->range->y );
-					line->width = totalLeft;
-					m_lines.maxRange->x = std::min( m_lines.maxRange->x, line->range->x );
-					m_lines.maxRange->y = std::max( m_lines.maxRange->y, line->range->y );
-					++line->wordEnd;
-					line->charEnd = word->charEnd;
-				}
+					if ( !ovrltxt::isEmpty( *word ) )
+					{
+						word->width = charLeft;
+						word->line = lineIndex;
+						line->range->x = std::min( line->range->x, word->range->x );
+						line->range->y = std::max( line->range->y, word->range->y );
+						line->width = totalLeft;
+						m_lines.maxRange->x = std::min( m_lines.maxRange->x, line->range->x );
+						m_lines.maxRange->y = std::max( m_lines.maxRange->y, line->range->y );
+						++line->wordEnd;
+						line->charEnd = word->charEnd;
+					}
 
-				wordLeft = totalLeft;
-			};
+					wordLeft = totalLeft;
+				};
 
 			auto addChar = [&]( castor::Point2f charSize
-				, castor::Point2f const & bearing )
-			{
-				auto xMin = bearing->x;
-				auto xMax = xMin + charSize->x;
-				auto yMin = -bearing->y;
-				auto yMax = yMin + charSize->y;
-
-				if ( m_wrappingMode == TextWrappingMode::eBreakWords
-					&& wordLeft > 0.0
-					&& ( wordLeft > overlaySize->x
-						|| totalLeft + xMax > overlaySize->x ) )
+					, castor::Point2f const & bearing
+					, castor::Point2f const & advance )
 				{
-					// The word will overflow the overlay size.
-					// So we jump to the next line,
-					// and will write the word on this next line.
-					alignLine();
-					line = nextLine();
-					line->charBegin = word->charBegin;
-					word->left = wordLeft;
-				}
-				else if ( m_wrappingMode == TextWrappingMode::eBreak
-					&& totalLeft + xMax > overlaySize->x )
-				{
-					// The char will overflow the overlay size.
-					// So we write the current word,
-					// jump to the next line,
-					// then carry on the word on this next line.
-					addWord();
-					alignLine();
-					wordLeft = totalLeft;
-					++wordIndex;
-					line = nextLine();
-					word = nextWord();
-				}
+					auto xMin = bearing->x * ratio;
+					auto xMax = xMin + advance->x;
+					auto yMin = -bearing->y * ratio;
+					auto yMax = yMin + advance->y;
 
-				// Setup char
-				auto uvPosition = fontTexture->getGlyphPosition( *cit );
-				auto & outChar = *tit;
-				outChar.left = charLeft;
-				outChar.size = charSize;
-				outChar.bearing = bearing;
-				outChar.uvPosition = { uvPosition.x(), uvPosition.y() };
-				outChar.word = wordIndex;
-				outChar.index = charIndex;
+					if ( m_wrappingMode == TextWrappingMode::eBreakWords
+						&& wordLeft > 0.0
+						&& ( wordLeft > overlaySize->x
+							|| totalLeft + xMax > overlaySize->x ) )
+					{
+						// The word will overflow the overlay size.
+						// So we jump to the next line,
+						// and will write the word on this next line.
+						finishLine();
+						line = nextLine();
+						line->charBegin = word->charBegin;
+						word->left = wordLeft;
+					}
+					else if ( m_wrappingMode == TextWrappingMode::eBreak
+						&& totalLeft + xMax > overlaySize->x )
+					{
+						// The char will overflow the overlay size.
+						// So we write the current word,
+						// jump to the next line,
+						// then carry on the word on this next line.
+						finishWord();
+						finishLine();
+						wordLeft = totalLeft;
+						++wordIndex;
+						line = nextLine();
+						word = nextWord();
+					}
 
-				// Complete word
-				word->range->x = std::min( word->range->x, yMin );
-				word->range->y = std::max( word->range->y, yMax );
-				++word->charEnd;
-			};
+					// Setup char
+					auto uvPosition = fontTexture->getGlyphPosition( *cit );
+					auto & outChar = *tit;
+					outChar.left = charLeft;
+					outChar.size = charSize * ratio;
+					outChar.bearing = bearing * ratio;
+					outChar.uvLeftTop = { uvPosition.x(), uvPosition.y() };
+					outChar.uvRightBottom = outChar.uvLeftTop + charSize;
+					outChar.word = wordIndex;
+					outChar.index = charIndex;
+
+					// Complete word
+					word->range->x = std::min( word->range->x, yMin );
+					word->range->y = std::max( word->range->y, yMax );
+					++word->charEnd;
+				};
 
 			while ( cit != caption.end() )
 			{
 				if ( *cit == U'\n' )
 				{
-					addWord();
-					alignLine();
+					finishWord();
+					finishLine();
 					line = nextLine();
 					charLeft = 0.0;
 					++wordIndex;
@@ -623,33 +632,53 @@ namespace castor3d
 				else
 				{
 					castor::Glyph const & glyph{ font.getGlyphAt( *cit ) };
+					auto advance = glyph.getAdvance() * ratio;
 
 					if ( *cit == U' ' || *cit == U'\t' )
 					{
 						// write the word and leave space before next word.
-						addWord();
-						totalLeft += float( glyph.getAdvance() );
-						wordLeft += float( glyph.getAdvance() );
+						finishWord();
+						totalLeft += advance;
+						wordLeft += advance;
 						charLeft = 0.0;
 						++wordIndex;
 						word = nextWord();
 					}
 					else
 					{
-						addChar( { glyph.getSize().getWidth(), glyph.getSize().getHeight() }
-							, { glyph.getBearing().x(), glyph.getBearing().y() } );
-						totalLeft += float( glyph.getAdvance() );
-						charLeft += float( glyph.getAdvance() );
+						if ( previous != char32_t{} )
+						{
+							auto kerning = font.getKerning( previous, *cit, m_sdfHeight );
+							charLeft += kerning;
+							totalLeft += kerning;
+						}
+
+						if ( font.isSDF() )
+						{
+							addChar( { glyph.getBitmapSize()->x, glyph.getBitmapSize()->y }
+								, glyph.getBearing()
+								, { advance, glyph.getSize()->y * ratio } );
+						}
+						else
+						{
+							addChar( glyph.getSize()
+								, glyph.getBearing()
+								, glyph.getSize() * ratio );
+						}
+
+						totalLeft += advance;
+						charLeft += advance;
 						++charIndex;
 						++tit;
 					}
 				}
 
+				previous = *cit;
 				++cit;
 			}
 
-			addWord();
-			alignLine();
+			finishWord();
+			finishLine();
 		}
 
 		auto lines = m_lines.lines();

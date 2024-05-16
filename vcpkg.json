@@ -10,6 +10,7 @@
     "meshoptimizer",
     "mikktspace",
     "minizip",
+    "msdfgen",
     "vulkan-headers",
     "zlib"
   ],

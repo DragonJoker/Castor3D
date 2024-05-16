@@ -73,13 +73,13 @@ namespace castor3d
 		, ashes::DescriptorSet const * textDescriptorSet )
 	{
 		auto & pipelines = m_pipelines.emplace( fontTexture, PipelineDataMap{} ).first->second;
-		auto ires = pipelines.emplace( &pipeline, OverlayPipelineData{} );
+		auto [it, res] = pipelines.try_emplace( &pipeline );
 		auto debugName = name + ( fontTexture ? cuT( "-" ) + fontTexture->getFontName() : castor::String{} );
 		debugName += cuT( "-" ) + castor::makeString( pipeline.pipeline->getName() );
 
-		if ( ires.second )
+		if ( res )
 		{
-			auto & pipelineData = ires.first->second;
+			auto & pipelineData = it->second;
 			pipelineData.overlaysIDsBuffer = makeBuffer< uint32_t >( device
 				, MaxOverlayPipelines
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
@@ -109,7 +109,7 @@ namespace castor3d
 			}
 		}
 
-		return ires.first->second;
+		return it->second;
 	}
 
 	template< typename VertexT, uint32_t CountT >
@@ -254,6 +254,13 @@ namespace castor3d
 			, idsBuffer
 			, 0u
 			, uint32_t( idsBuffer.getSize() ) );
+
+		if ( fontTexture && textBuffer )
+		{
+			fontTexture->getFontUbo().createSizedBinding( *result
+				, descriptorLayout.getBinding( uint32_t( OverlayBindingId::eOverlaysFont ) ) );
+		}
+
 		result->update();
 		return result;
 	}

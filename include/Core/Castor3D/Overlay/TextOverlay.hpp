@@ -176,6 +176,11 @@ namespace castor3d
 		{
 			return m_lines.count;
 		}
+
+		uint32_t getSDFHeight()const noexcept
+		{
+			return m_sdfHeight;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -186,40 +191,46 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setCaption( castor::U32String value )
+		void setCaption( castor::U32String value )noexcept
 		{
 			m_currentCaption = castor::move( value );
 			m_textChanged = true;
 		}
 
-		void setTextWrappingMode( TextWrappingMode value )
+		void setTextWrappingMode( TextWrappingMode value )noexcept
 		{
 			m_textChanged = m_textChanged || ( m_wrappingMode != value );
 			m_wrappingMode = value;
 		}
 
-		void setHAlign( HAlign value )
+		void setHAlign( HAlign value )noexcept
 		{
 			m_textChanged = m_textChanged || ( m_hAlign != value );
 			m_hAlign = value;
 		}
 
-		void setVAlign( VAlign value )
+		void setVAlign( VAlign value )noexcept
 		{
 			m_textChanged = m_textChanged || ( m_vAlign != value );
 			m_vAlign = value;
 		}
 
-		void setTexturingMode( TextTexturingMode value )
+		void setTexturingMode( TextTexturingMode value )noexcept
 		{
 			m_textChanged = m_textChanged || ( m_texturingMode != value );
 			m_texturingMode = value;
 		}
 
-		void setLineSpacingMode( TextLineSpacingMode value )
+		void setLineSpacingMode( TextLineSpacingMode value )noexcept
 		{
 			m_textChanged = m_textChanged || ( m_lineSpacingMode != value );
 			m_lineSpacingMode = value;
+		}
+
+		void setSDFHeight( uint32_t value )noexcept
+		{
+			m_textChanged = m_textChanged || ( m_sdfHeight != value );
+			m_sdfHeight = value;
 		}
 		/**@}*/
 
@@ -253,6 +264,7 @@ namespace castor3d
 		TextLineSpacingMode m_lineSpacingMode{ TextLineSpacingMode::eOwnHeight };
 		HAlign m_hAlign{ HAlign::eLeft };
 		VAlign m_vAlign{ VAlign::eCenter };
+		uint32_t m_sdfHeight{};
 		bool m_textChanged{ true };
 		FontTexture::OnChanged::connection m_connection;
 		TextTexturingMode m_texturingMode{ TextTexturingMode::eText };

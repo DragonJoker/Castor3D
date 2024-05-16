@@ -69,7 +69,7 @@ namespace castor3d
 		Engine & m_engine;
 		RenderDevice const & m_device;
 		castor::String m_name;
-		castor::Map< FontTexture const *, OverlayTextBufferPtr > m_buffers;
+		castor::UnorderedMap< FontTexture const *, OverlayTextBufferPtr > m_buffers;
 	};
 }
 

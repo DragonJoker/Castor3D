@@ -48,7 +48,6 @@ namespace castor3d
 
 	private:
 		void doRegisterDrawCommands( OverlayDrawPipeline const & pipeline
-			, ashes::DescriptorSetCRefArray const & descriptorSets
 			, ashes::BufferBase const & indirectCommands
 			, uint32_t drawCount
 			, uint32_t & offset

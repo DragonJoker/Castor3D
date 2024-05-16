@@ -74,6 +74,7 @@ namespace castor3d
 		eClusters = CU_MakeSectionName( 'C', 'L', 'S', 'T' ),
 		eTexture = CU_MakeSectionName( 'T', 'X', 'U', 'R' ),
 		eColourGrading = CU_MakeSectionName( 'C', 'L', 'G', 'D' ),
+		eSdfFont = CU_MakeSectionName( 'S', 'D', 'F', 'T' ),
 	};
 
 	struct SceneContext;
@@ -104,7 +105,7 @@ namespace castor3d
 		SceneContext * scene{};
 		castor::String name{};
 		castor::Path path{};
-		int16_t fontHeight{};
+		int16_t height{};
 	};
 
 	inline Engine * getEngine( FontContext const & context )

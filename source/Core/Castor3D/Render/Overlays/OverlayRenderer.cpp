@@ -28,8 +28,9 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
+#include "Castor3D/Shader/Ubos/FontUbo.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
 
 #include <CastorUtils/Graphics/Rectangle.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
@@ -167,10 +168,19 @@ namespace castor3d
 			return result;
 		}
 
-		static uint32_t makeKey( PassComponentRegister const & passComponents
+		static size_t makeKey( Pass const & pass
+			, VkRenderPass renderPass )
+		{
+			auto result = std::hash< Pass const * >{}( &pass );
+			return castor::hashCombine( result, renderPass );
+		}
+
+		static size_t makeKey( PassComponentRegister const & passComponents
 			, TextureCombine const & textures
+			, VkRenderPass renderPass
 			, bool borderOverlay
-			, bool textOverlay )
+			, bool textOverlay
+			, bool sdfFont )
 		{
 			auto tex{ uint32_t( textOverlay ? OverlayTexture::eText : OverlayTexture::eNone ) };
 
@@ -184,11 +194,13 @@ namespace castor3d
 				tex |= uint32_t( OverlayTexture::eOpacity );
 			}
 
-			uint32_t result{ tex };
+			size_t result{ tex };
+			result <<= 1u;
+			result |= ( sdfFont ? 1u : 0u );
 			result <<= 8u;
-			result |= uint32_t( textures.configCount & 0xF );
+			result |= uint32_t( textures.configCount & 0x0F );
 			result |= ( borderOverlay ? 1u : 0u );
-			return result;
+			return castor::hashCombine( result, renderPass );
 		}
 
 		static ashes::DescriptorSetLayoutPtr createBaseDescriptorLayout( RenderDevice const & device )
@@ -214,9 +226,19 @@ namespace castor3d
 			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eOverlaysSurfaces )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_VERTEX_BIT ) );
+			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eOverlaysFont )
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+
 			return device->createDescriptorSetLayout( "OverlaysBase"
 				, castor::move( baseBindings ) );
 		}
+
+		struct TextBatchData
+		{
+			uint32_t batchOffset;
+			uint32_t charCount;
+		};
 	}
 
 	//*********************************************************************************************
@@ -297,9 +319,9 @@ namespace castor3d
 
 		bool hasTexts{};
 
-		for ( auto & [_, it] : textPipeline.sets )
+		for ( auto & [_, set] : textPipeline.sets )
 		{
-			hasTexts = hasTexts || it.count > 0;
+			hasTexts = hasTexts || set.count > 0;
 		}
 
 		if ( hasTexts )
@@ -319,14 +341,14 @@ namespace castor3d
 				, { VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT }
 				, { VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
 
-			for ( auto & [_, it] : textPipeline.sets )
+			for ( auto & [_, set] : textPipeline.sets )
 			{
-				if ( it.count )
+				if ( set.count )
 				{
 					doRegisterComputeBufferCommands( context
 						, commandBuffer
 						, textPipeline
-						, it );
+						, set );
 				}
 			}
 
@@ -471,7 +493,7 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_COMPUTE_BIT ) );
 		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eFont )
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_COMPUTE_BIT ) );
 		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eVertex )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -481,7 +503,7 @@ namespace castor3d
 
 		result.pipelineLayout = device->createPipelineLayout( name
 			, *result.descriptorLayout
-			, VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( uint32_t ) * 2u } );
+			, VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( ovrlrend::TextBatchData ) } );
 		result.pipeline = device->createPipeline( name
 			, ashes::ComputePipelineCreateInfo{ 0u
 				, TextOverlay::createProgram( device )
@@ -605,19 +627,19 @@ namespace castor3d
 		uint32_t batchCountX = 32u;
 		uint32_t batchCountY = 16u;
 		uint32_t batchCount = batchCountX * batchCountY;
-		castor::Array< uint32_t, 2u > data{ 0u, set.count };
+		ovrlrend::TextBatchData data{ 0u, set.count };
 
-		while ( data[0] < data[1] )
+		while ( data.batchOffset < data.charCount )
 		{
 			context.getContext().vkCmdPushConstants( commandBuffer
 				, *pipeline.pipelineLayout
 				, VK_SHADER_STAGE_COMPUTE_BIT
 				, 0u
-				, sizeof( uint32_t ) * 2u
-				, data.data() );
+				, sizeof( ovrlrend::TextBatchData )
+				, &data );
 			context.getContext().vkCmdDispatch( commandBuffer
 				, batchCountX, batchCountY, 1u );
-			data[0] += batchCount;
+			data.batchOffset += batchCount;
 		}
 
 		memoryBarrier( context
@@ -665,12 +687,13 @@ namespace castor3d
 		, VkRenderPass renderPass
 		, Pass const & pass )
 	{
-		auto it = m_mapPanelNodes.find( &pass );
+		auto key = ovrlrend::makeKey( pass, renderPass );
+		auto it = m_mapPanelNodes.find( key );
 
 		if ( it == m_mapPanelNodes.end() )
 		{
-			auto & pipeline = doGetPipeline( device, renderPass, pass, m_panelPipelines, false, false );
-			it = m_mapPanelNodes.try_emplace( &pass, pipeline, pass ).first;
+			auto & pipeline = doGetPipeline( device, renderPass, pass, m_panelPipelines, false, false, false );
+			it = m_mapPanelNodes.try_emplace( key, pipeline, pass ).first;
 		}
 
 		return it->second;
@@ -680,12 +703,13 @@ namespace castor3d
 		, VkRenderPass renderPass
 		, Pass const & pass )
 	{
-		auto it = m_mapBorderNodes.find( &pass );
+		auto key = ovrlrend::makeKey( pass, renderPass );
+		auto it = m_mapBorderNodes.find( key );
 
 		if ( it == m_mapBorderNodes.end() )
 		{
-			auto & pipeline = doGetPipeline( device, renderPass, pass, m_borderPipelines, true, false );
-			it = m_mapBorderNodes.try_emplace( &pass, pipeline, pass ).first;
+			auto & pipeline = doGetPipeline( device, renderPass, pass, m_borderPipelines, true, false, false );
+			it = m_mapBorderNodes.try_emplace( key, pipeline, pass ).first;
 		}
 
 		return it->second;
@@ -693,20 +717,22 @@ namespace castor3d
 
 	OverlayDrawNode & OverlayRenderer::OverlaysDrawData::getTextNode( RenderDevice const & device
 		, VkRenderPass renderPass
-		, Pass const & pass )
+		, Pass const & pass
+		, bool sdfFont )
 	{
-		auto it = m_mapTextNodes.find( &pass );
+		auto key = ovrlrend::makeKey( pass, renderPass );
+		auto it = m_mapTextNodes.find( key );
 
 		if ( it == m_mapTextNodes.end() )
 		{
-			auto & pipeline = doGetPipeline( device, renderPass, pass, m_textPipelines, false, true );
-			it = m_mapTextNodes.try_emplace( &pass, pipeline, pass ).first;
+			auto & pipeline = doGetPipeline( device, renderPass, pass, m_textPipelines, false, true, sdfFont );
+			it = m_mapTextNodes.try_emplace( key, pipeline, pass ).first;
 		}
 
 		return it->second;
 	}
 
-	ashes::DescriptorSet const & OverlayRenderer::OverlaysDrawData::createTextDescriptorSet( FontTexture & fontTexture )
+	ashes::DescriptorSet const & OverlayRenderer::OverlaysDrawData::createTextDescriptorSet( FontTexture & fontTexture)
 	{
 		auto [it, res] = textDescriptorSets.try_emplace( &fontTexture );
 		auto & descriptorConnection = it->second;
@@ -758,15 +784,16 @@ namespace castor3d
 	OverlayDrawPipeline & OverlayRenderer::OverlaysDrawData::doGetPipeline( RenderDevice const & device
 		, VkRenderPass renderPass
 		, Pass const & pass
-		, castor::Map< uint32_t, OverlayDrawPipeline > & pipelines
+		, castor::UnorderedMap< size_t, OverlayDrawPipeline > & pipelines
 		, bool borderOverlay
-		, bool textOverlay )
+		, bool textOverlay
+		, bool sdfFont )
 	{
 		// Remove unwanted flags
 		auto const & passComponents = device.renderSystem.getEngine()->getPassComponentsRegister();
 		auto textures = passComponents.filterTextureFlags( ComponentModeFlag::eColour | ComponentModeFlag::eOpacity
 			, pass.getTexturesMask() );
-		auto key = ovrlrend::makeKey( passComponents, textures, borderOverlay, textOverlay );
+		auto key = ovrlrend::makeKey( passComponents, textures, renderPass, borderOverlay, textOverlay, sdfFont );
 		auto it = pipelines.find( key );
 
 		if ( it == pipelines.end() )
@@ -775,10 +802,11 @@ namespace castor3d
 			it = pipelines.try_emplace( key
 				, doCreatePipeline( device
 					, renderPass
-					, doCreateOverlayProgram( device, textures, textOverlay )
+					, doCreateOverlayProgram( device, textures, textOverlay, sdfFont )
 					, textures
 					, borderOverlay
-					, textOverlay ) ).first;
+					, textOverlay
+					, sdfFont ) ).first;
 		}
 
 		return it->second;
@@ -789,7 +817,8 @@ namespace castor3d
 		, ashes::PipelineShaderStageCreateInfoArray program
 		, TextureCombine const & texturesFlags
 		, bool borderOverlay
-		, bool textOverlay )
+		, bool textOverlay
+		, bool sdfFont )
 	{
 		auto const & engine = *device.renderSystem.getEngine();
 		auto const & passComponents = engine.getPassComponentsRegister();
@@ -814,7 +843,15 @@ namespace castor3d
 
 		if ( textOverlay )
 		{
-			name = "Text" + name;
+			if ( sdfFont )
+			{
+				name = "SdfText" + name;
+			}
+			else
+			{
+				name = "Text" + name;
+			}
+
 			descriptorLayouts.push_back( *textDescriptorLayout );
 		}
 		else if ( borderOverlay )
@@ -824,7 +861,9 @@ namespace castor3d
 
 		auto pipelineLayout = device->createPipelineLayout( name
 			, descriptorLayouts
-			, ashes::VkPushConstantRangeArray{ { VK_SHADER_STAGE_VERTEX_BIT, 0u, uint32_t( sizeof( DrawConstants ) ) } } );
+			, ashes::VkPushConstantRangeArray{ { VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT
+				, 0u
+				, uint32_t( sizeof( OverlayDrawConstants ) ) } } );
 		auto pipeline = device->createPipeline( name
 			, { 0u
 				, castor::move( program )
@@ -845,7 +884,8 @@ namespace castor3d
 
 	ashes::PipelineShaderStageCreateInfoArray OverlayRenderer::OverlaysDrawData::doCreateOverlayProgram( RenderDevice const & device
 		, TextureCombine const & texturesFlags
-		, bool textOverlay )const
+		, bool textOverlay
+		, bool sdfFont )const
 	{
 		auto & engine = *device.renderSystem.getEngine();
 		bool hasTexture = texturesFlags.configCount != 0u;
@@ -889,14 +929,29 @@ namespace castor3d
 				, 0u
 				, textOverlay
 				, true  /* hasTextures */ );
+			C3D_FontEx( writer
+				, OverlayBindingId::eOverlaysFont
+				, 0u
+				, textOverlay );
 			auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 				, 0u
 				, 1u
 				, hasTexture ) );
-			auto c3d_mapText = writer.declCombinedImg< FImg2DR32 >( "c3d_mapText"
-				, 0u
-				, 2u
-				, textOverlay );
+
+			if ( sdfFont )
+			{
+				writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapText"
+					, 0u
+					, 2u
+					, textOverlay );
+			}
+			else
+			{
+				writer.declCombinedImg< FImg2DR32 >( "c3d_mapText"
+					, 0u
+					, 2u
+					, textOverlay );
+			}
 
 			auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", sdw::EntryPoint::eFragment, 0 );
 
@@ -939,6 +994,20 @@ namespace castor3d
 					out.materialId = overlay.materialId();
 				} );
 
+			auto median = []( sdw::Float const & r, sdw::Float const & g, sdw::Float const & b )
+				{
+					return max( min( r, g ), min( max( r, g ), b ) );
+				};
+
+			auto screenPxRange = [&writer, &c3d_fontData]( sdw::Vec2 const & fontUV, sdw::IVec2 const & imgSize )
+				{
+					auto unitRange = writer.declLocale( "unitRange"
+						, vec2( c3d_fontData.pixelRange() ) / vec2( imgSize ) );
+					auto screenTexSize = writer.declLocale( "screenTexSize"
+						, vec2( 1.0_f ) / fwidth( fontUV ) );
+					return max( 0.5_f * dot( unitRange, screenTexSize ), 1.0_f );
+				};
+
 			// Pixel shader
 			writer.implementEntryPointT< shader::OverlaySurfaceT, sdw::VoidT >( sdw::FragmentInT< shader::OverlaySurfaceT >{ writer, false, textOverlay, hasTexture, true }
 				, sdw::FragmentOut{ writer }
@@ -950,7 +1019,22 @@ namespace castor3d
 
 					if ( textOverlay )
 					{
-						material.opacity *= c3d_mapText.lod( in.fontUV, 0.0_f );
+						if ( sdfFont )
+						{
+							auto c3d_mapText = writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapText" );
+							auto msd = writer.declLocale( "msd"
+								, c3d_mapText.lod( in.fontUV, 0.0_f ) );
+							auto sd = writer.declLocale( "sd"
+								, median( msd.r(), msd.g(), msd.b() ) );
+							auto screenPxDistance = writer.declLocale( "screenPxDistance"
+								, screenPxRange( in.fontUV, c3d_mapText.getSize( 0_i ) ) * ( sd - 0.5_f ) );
+							material.opacity *= clamp( screenPxDistance + 0.5_f, 0.0_f, 1.0_f );
+						}
+						else
+						{
+							auto c3d_mapText = writer.getVariable< sdw::CombinedImage2DR32 >( "c3d_mapText" );
+							material.opacity *= c3d_mapText.lod( in.fontUV, 0.0_f );
+						}
 					}
 
 					auto outComponents = writer.declLocale< ovrlrend::OverlayBlendComponents >( "outComponents"
@@ -1102,7 +1186,7 @@ namespace castor3d
 			if ( auto text = overlay.getTextOverlay() )
 			{
 				auto texture = text->getFontTexture();
-				node = &m_draw.getTextNode( device, renderPass, pass );
+				node = &m_draw.getTextNode( device, renderPass, pass, texture->getFont()->isSDF() );
 				pipelineData = &m_common.textVertexBuffer->getDrawPipelineData( node->pipeline
 					, texture
 					, &m_draw.createTextDescriptorSet( *texture ) );

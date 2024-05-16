@@ -13,10 +13,20 @@ namespace castor
 		Logger::logInfo( cuT( "Writing Font " ) + object.getName() );
 		bool result = false;
 
-		if ( auto block{ beginBlock( file, cuT( "font" ), object.getName() ) } )
+		if ( object.isSDF() )
 		{
-			result = writeFile( file, cuT( "file" ), object.getFilePath(), m_folder, cuT( "Fonts" ) )
-				&& write( file, cuT( "height" ), object.getHeight() );
+			if ( auto block{ beginBlock( file, cuT( "sdf_font" ), object.getName() ) } )
+			{
+				result = writeFile( file, cuT( "file" ), object.getFilePath(), m_folder, cuT( "Fonts" ) );
+			}
+		}
+		else
+		{
+			if ( auto block{ beginBlock( file, cuT( "font" ), object.getName() ) } )
+			{
+				result = writeFile( file, cuT( "file" ), object.getFilePath(), m_folder, cuT( "Fonts" ) )
+					&& write( file, cuT( "height" ), object.getHeight() );
+			}
 		}
 
 		return result;

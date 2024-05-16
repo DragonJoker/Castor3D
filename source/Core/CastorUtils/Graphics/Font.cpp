@@ -1,5 +1,7 @@
 #include "CastorUtils/Graphics/Font.hpp"
 
+#include <msdfgen/msdfgen.h>
+#include <msdfgen/msdfgen-ext.h>
 #include <ft2build.h>
 
 FT_BEGIN_HEADER
@@ -105,10 +107,12 @@ namespace castor
 			return result;
 		}
 
-		struct SFreeTypeFontImpl
-			: public Font::SFontImpl
+		struct GlyphLoader
+			: public Font::GlyphLoader
 		{
-			SFreeTypeFontImpl( Path const & pathFile, uint32_t height )
+			static float constexpr f26dot6ToFloat = 1.0f / 64.0f;
+
+			GlyphLoader( Path const & pathFile, uint32_t height )
 				: m_path{ pathFile }
 				, m_height{ height }
 			{
@@ -138,12 +142,6 @@ namespace castor
 				CHECK_FT_ERR( FT_Load_Glyph, m_face, index, FT_LOAD_DEFAULT );
 				auto glyphSlot = m_face->glyph;
 				CHECK_FT_ERR( FT_Render_Glyph, glyphSlot, FT_RENDER_MODE_NORMAL );
-				Position const bearing{ glyphSlot->bitmap_left
-					, glyphSlot->bitmap_top };
-				Size const size{ uint32_t( glyphSlot->metrics.width / 64 )
-					, uint32_t( glyphSlot->metrics.height / 64 ) };
-				auto advance = int32_t( glyphSlot->advance.x / 64 );
-
 				FT_Bitmap const & bitmap = glyphSlot->bitmap;
 				auto const pitch( uint32_t( std::abs( bitmap.pitch ) ) );
 				ByteArray buffer( size_t( bitmap.width ) * size_t( bitmap.rows ) );
@@ -174,7 +172,44 @@ namespace castor
 				}
 
 				FT_Done_Glyph( glyph );
-				return Glyph{ c32, size, bearing, advance, buffer };
+				return Glyph{ c32
+					, { float( glyphSlot->metrics.width ) * f26dot6ToFloat, float( glyphSlot->metrics.height ) * f26dot6ToFloat }
+					, { glyphSlot->bitmap_left, glyphSlot->bitmap_top }
+					, float( glyphSlot->advance.x ) * f26dot6ToFloat
+					, { bitmap.width, bitmap.rows }
+					, buffer };
+			}
+
+			void fillKerningTable( char32_t c32
+				, Font::GlyphArray const & glyphs
+				, Font::GlyphKerningMap & table )override
+			{
+				if ( FT_HAS_KERNING( m_face ) )
+				{
+					// First complete the existing kerning tables agains this glyph.
+					for ( auto & [l32, tab] : table )
+					{
+						FT_UInt const lhs{ FT_Get_Char_Index( m_face, FT_ULong( l32 ) ) };
+						FT_UInt const rhs{ FT_Get_Char_Index( m_face, FT_ULong( c32 ) ) };
+						FT_Vector result{};
+						CHECK_FT_ERR( FT_Get_Kerning, m_face, lhs, rhs, FT_KERNING_UNSCALED, &result );
+						tab.try_emplace( c32, float( result.x ) * f26dot6ToFloat );
+					}
+
+					// Then create kerning table for this glyph against all currently loaded ones.
+					FT_UInt const lhs{ FT_Get_Char_Index( m_face, FT_ULong( c32 ) ) };
+					Font::GlyphKerning lhsKerning;
+
+					for ( auto & glyph : glyphs )
+					{
+						FT_UInt const rhs{ FT_Get_Char_Index( m_face, FT_ULong( glyph.getCharacter() ) ) };
+						FT_Vector result{};
+						CHECK_FT_ERR( FT_Get_Kerning, m_face, lhs, rhs, FT_KERNING_UNSCALED, &result );
+						lhsKerning.try_emplace( glyph.getCharacter(), float( result.x ) * f26dot6ToFloat );
+					}
+
+					table.emplace( c32, lhsKerning );
+				}
 			}
 
 		private:
@@ -182,6 +217,185 @@ namespace castor
 			uint32_t const m_height;
 			FT_Library m_library{};
 			FT_Face m_face{};
+		};
+	}
+
+	namespace msdf
+	{
+		struct GlyphLoader
+			: public Font::GlyphLoader
+		{
+			GlyphLoader( Path const & pathFile )
+				: m_path{ pathFile }
+			{
+			}
+
+			void initialise()override
+			{
+				m_freetype = msdfgen::initializeFreetype();
+
+				if ( m_freetype )
+				{
+					m_font = msdfgen::loadFont( m_freetype, toUtf8( m_path ).c_str() );
+
+					if ( !m_font )
+					{
+						CU_LoaderError( "Couldn't load the font" );
+					}
+
+					if ( !msdfgen::getFontMetrics( m_metrics, m_font ) )
+					{
+						CU_LoaderError( "Couldn't retrieve the font metrics" );
+					}
+					else
+					{
+						m_sdfInfo.emSize = uint32_t( m_metrics.emSize );
+					}
+
+					m_sdfInfo.verticalAdvance = float( m_metrics.ascenderY - m_metrics.descenderY );
+					m_sdfInfo.pixelRange = float( m_sdfInfo.emSize ) * 0.2f;
+				}
+				else
+				{
+					CU_LoaderError( "Couldn't initialise Freetype" );
+				}
+			}
+
+			void cleanup()override
+			{
+				msdfgen::destroyFont( m_font );
+				msdfgen::deinitializeFreetype( m_freetype );
+				m_freetype = nullptr;
+			}
+
+			Glyph loadGlyph( char32_t c32 )override
+			{
+				msdfgen::Shape shape{};
+				auto pixelSize = 4u * sizeof( float );
+				ByteArray buffer( ( m_sdfInfo.emSize + 2u ) * ( m_sdfInfo.emSize + 2u ) * pixelSize );
+				double advance{};
+				double width{};
+				double height{};
+				msdfgen::Vector2 translate{};
+
+				if ( msdfgen::loadGlyph( shape, m_font, c32, &advance ) )
+				{
+					shape.normalize();
+					auto bounds = shape.getBounds();
+					double l = bounds.l;
+					double b = bounds.b;
+					double r = bounds.r;
+					double t = bounds.t;
+					width = r - l;
+					height = t - b;
+
+					if ( c32 == ' ' || c32 == '\t' )
+					{
+						height = 0;
+						double space = {};
+						double tab = {};
+						msdfgen::getFontWhitespaceWidth( space, tab, m_font );
+
+						if ( c32 == ' ' )
+						{
+							width = float( space );
+						}
+						else
+						{
+							width = float( tab );
+						}
+					}
+					else
+					{
+						if ( std::isinf( width ) )
+						{
+							width = float( m_sdfInfo.emSize );
+						}
+
+						if ( std::isinf( height ) )
+						{
+							height = float( m_sdfInfo.emSize );
+						}
+					}
+
+					translate.x = -l + 0.5 * ( m_sdfInfo.emSize - width );
+					translate.y = -b + 0.5 * ( m_sdfInfo.emSize - height );
+					msdfgen::edgeColoringSimple( shape, 3.0f );
+					msdfgen::Bitmap< float, 4u > msdf{ int( m_sdfInfo.emSize ), int( m_sdfInfo.emSize ) };
+					msdfgen::generateMTSDF( msdf
+						, shape
+						, msdfgen::Projection{ msdfgen::Vector2{ 1.0, 1.0 }, translate }
+						, m_sdfInfo.pixelRange );
+					auto * dst = buffer.data();
+					auto const * src = msdf( 0, 0 );
+					auto srcLineSize = m_sdfInfo.emSize * pixelSize;
+					auto dstLineSize = pixelSize + srcLineSize + pixelSize;
+					// First line is empty
+					std::memset( dst, 0u, dstLineSize );
+					dst += dstLineSize;
+
+					for ( size_t line = 0; line < m_sdfInfo.emSize; ++line )
+					{
+						// First pixel of the line is empty.
+						std::memset( dst, 0u, pixelSize );
+						dst += pixelSize;
+						std::memcpy( dst, src, srcLineSize );
+						dst += srcLineSize;
+						// Last pixel of the line is empty.
+						std::memset( dst, 0u, pixelSize );
+						dst += pixelSize;
+						src += 4 * m_sdfInfo.emSize;
+					}
+
+					// Last line is empty
+					std::memset( dst, 0u, dstLineSize );
+				}
+
+				return Glyph{ c32
+					, { width, height }
+					, { -translate.x, -translate.y }
+					, float( advance )
+					, Size{ m_sdfInfo.emSize + 2u, m_sdfInfo.emSize + 2u }
+					, buffer };
+			}
+
+			void fillKerningTable( char32_t c32
+				, Font::GlyphArray const & glyphs
+				, Font::GlyphKerningMap & table )override
+			{
+				// First complete the existing kerning tables agains this glyph.
+				for ( auto & [l32, tab] : table )
+				{
+					double result{};
+					msdfgen::getKerning( result, m_font, l32, c32 );
+					tab.try_emplace( c32, float( result ) );
+				}
+
+				// Then create kerning table for this glyph against all currently loaded ones.
+				Font::GlyphKerning lhsKerning;
+
+				for ( auto & glyph : glyphs )
+				{
+					double result{};
+					auto r32 = glyph.getCharacter();
+					msdfgen::getKerning( result, m_font, c32, r32 );
+					lhsKerning.try_emplace( glyph.getCharacter(), float( result ) );
+				}
+
+				table.emplace( c32, lhsKerning );
+			}
+
+			Font::SdfInfo const & getSdfInfo()const noexcept
+			{
+				return m_sdfInfo;
+			}
+
+		private:
+			Path const m_path;
+			Font::SdfInfo m_sdfInfo{ .emSize = 32u, .pixelRange = 4.0f };
+			msdfgen::FreetypeHandle * m_freetype{};
+			msdfgen::FontHandle * m_font{};
+			msdfgen::FontMetrics m_metrics{};
 		};
 	}
 
@@ -195,12 +409,18 @@ namespace castor
 		return doLoad( font, pathFile );
 	}
 
+	bool Font::BinaryLoader::operator()( Font & font
+		, Path const & pathFile )
+	{
+		return doLoad( font, pathFile );
+	}
+
 	bool Font::BinaryLoader::doLoad( Font & font
 		, Path const & pathFile )
 	{
 		bool result = false;
 
-		if ( ! pathFile.empty() )
+		if ( !pathFile.empty() )
 		{
 			String strFontName = pathFile.getFullFileName();
 
@@ -208,7 +428,16 @@ namespace castor
 			{
 				if ( !font.hasGlyphLoader() )
 				{
-					font.setGlyphLoader( castor::make_unique< ft::SFreeTypeFontImpl >( pathFile, m_height ) );
+					if ( font.isSDF() )
+					{
+						auto loader = castor::make_unique< msdf::GlyphLoader >( pathFile );
+						font.m_sdfInfo = loader->getSdfInfo();
+						font.setGlyphLoader( std::move( loader ) );
+					}
+					else
+					{
+						font.setGlyphLoader( castor::make_unique< ft::GlyphLoader >( pathFile, m_height ) );
+					}
 				}
 
 				font.setFaceName( pathFile.getFileName() );
@@ -247,9 +476,28 @@ namespace castor
 		: Named{ name }
 		, m_height{ height }
 		, m_pathFile{ path }
-		, m_glyphLoader{ castor::make_unique< ft::SFreeTypeFontImpl >( path, height ) }
+		, m_glyphLoader{ castor::make_unique< ft::GlyphLoader >( path, height ) }
 	{
 		BinaryLoader{}( *this, path, height );
+	}
+
+	Font::Font( String const & name )
+		: Named{ name }
+		, m_sdf{ true }
+	{
+	}
+
+	Font::Font( String const & name, Path const & path )
+		: Named{ name }
+		, m_pathFile{ path }
+		, m_glyphLoader{ castor::make_unique< msdf::GlyphLoader >( path ) }
+		, m_sdf{ true }
+	{
+		m_glyphLoader->initialise();
+		auto & loader = static_cast< msdf::GlyphLoader const & >( *m_glyphLoader );
+		m_sdfInfo = loader.getSdfInfo();
+		m_glyphLoader->cleanup();
+		BinaryLoader{}( *this, path, 0u );
 	}
 
 	void Font::loadGlyph( char32_t c32 )
@@ -259,96 +507,125 @@ namespace castor
 		m_glyphLoader->cleanup();
 	}
 
+	float Font::getKerning( char32_t lhs, char32_t rhs, uint32_t height )const
+	{
+		auto tit = m_kerningTable.find( lhs );
+		float result{};
+
+		if ( tit != m_kerningTable.end() )
+		{
+			auto it = tit->second.find( rhs );
+
+			if ( it != tit->second.end() )
+			{
+				result = it->second;
+			}
+		}
+
+		if ( isSDF() && result != 0.0f )
+		{
+			result *= float( height );
+			result /= float( m_sdfInfo.emSize );
+		}
+
+		return result;
+	}
+
+	float Font::getKerning( char32_t lhs, char32_t rhs )const
+	{
+		return getKerning( lhs, rhs, getHeight() );
+	}
+
 	TextMetrics Font::getTextMetrics( std::u32string const & v
 		, uint32_t maxWidth
-		, bool splitLines )const
+		, bool splitLines
+		, uint32_t height )const
 	{
 		TextMetrics result;
 		uint32_t charIndex{};
-		int32_t charLeft{};
-		int32_t wordLeft{};
-		int32_t totalLeft{};
+		float charLeft{};
+		float wordLeft{};
+		float totalLeft{};
 		TextLineMetrics word;
+		char32_t previous{};
+		auto ratio = m_sdf
+			? float( height ) / float( getMaxImageHeight() )
+			: 1.0f;
 
 		auto nextLine = [&]()
-		{
-			if ( !word.chars.empty() )
 			{
-				for ( auto & c : word.chars )
+				if ( !word.chars.empty() )
 				{
-					c -= wordLeft;
+					for ( auto & c : word.chars )
+					{
+						c -= wordLeft;
+					}
 				}
-			}
 
-			auto & line = result.lines.emplace_back();
-			line.firstCharIndex = charIndex;
-			line.top = result.height;
-			charLeft = totalLeft - wordLeft;
-			totalLeft = charLeft;
-			line.width = uint32_t( totalLeft );
-			wordLeft = 0;
-			return &line;
-		};
+				auto & line = result.lines.emplace_back();
+				line.firstCharIndex = charIndex;
+				line.top = result.height;
+				charLeft = totalLeft - wordLeft;
+				totalLeft = charLeft;
+				line.width = totalLeft;
+				wordLeft = 0;
+				return &line;
+			};
 
 		auto line = nextLine();
 
-		auto finishWord = [&]()
-		{
-			if ( !word.chars.empty() )
-			{
-				line->yMin = std::min( line->yMin, word.yMin );
-				line->yMax = std::max( line->yMax, word.yMax );
-
-				line->chars.insert( line->chars.end()
-					, word.chars.begin()
-					, word.chars.end() );
-			}
-
-			word = {};
-			wordLeft = totalLeft;
-		};
-
 		auto finishLine = [&]()
-		{
-			if ( !line->chars.empty() )
 			{
-				result.yMin = std::min( result.yMin, line->yMin );
-				result.yMax = std::max( result.yMax, line->yMax );
+				if ( !line->chars.empty() )
+				{
+					result.yMin = std::min( result.yMin, line->yMin );
+					result.yMax = std::max( result.yMax, line->yMax );
 
-				result.height += line->yMax - line->yMin;
-				result.width = std::max( result.width, line->width );
-			}
-			else
+					result.height += line->yMax - line->yMin;
+					result.width = std::max( result.width, line->width );
+				}
+				else
+				{
+					result.height += float( height );
+				}
+			};
+
+		auto finishWord = [&]()
 			{
-				result.height += getHeight();
-			}
-		};
+				if ( !word.chars.empty() )
+				{
+					line->yMin = std::min( line->yMin, word.yMin );
+					line->yMax = std::max( line->yMax, word.yMax );
 
-		auto addChar = [&]( Size const & charSize
-			, Point2i const & bearing
-			, int32_t advance )
-		{
-			auto xMin = bearing->x;
-			auto xMax = xMin + int32_t( charSize->x );
-			auto yMin = -bearing->y;
-			auto yMax = yMin + int32_t( charSize->y );
+					line->chars.insert( line->chars.end()
+						, word.chars.begin()
+						, word.chars.end() );
+				}
 
-			if ( splitLines
-				&& wordLeft > 0
-				&& ( wordLeft > int32_t( maxWidth )
-					|| totalLeft + xMax > int32_t( maxWidth ) ) )
+				wordLeft = totalLeft;
+			};
+
+		auto addChar = [&]( Point2f const & charSize
+				, Point2f const & bearing
+				, float advance )
 			{
-				finishLine();
-				line = nextLine();
-			}
+				auto xMin = bearing->x * ratio;
+				auto xMax = xMin + advance;
+				auto yMin = -bearing->y * ratio;
+				auto yMax = yMin + charSize->y * ratio;
 
-			word.yMin = std::min( word.yMin, yMin );
-			word.yMax = std::max( word.yMax, yMax );
-			totalLeft += advance;
-			charLeft += advance;
-			word.width += advance;
-			line->width += advance;
-		};
+				if ( splitLines
+					&& wordLeft > 0
+					&& ( wordLeft > float( maxWidth )
+						|| totalLeft + xMax > float( maxWidth ) ) )
+				{
+					finishLine();
+					line = nextLine();
+				}
+
+				word.yMin = std::min( word.yMin, yMin );
+				word.yMax = std::max( word.yMax, yMax );
+			};
 
 		for ( auto c : v )
 		{
@@ -363,24 +640,47 @@ namespace castor
 			else
 			{
 				auto & glyph = getGlyphAt( c );
+				auto advance = glyph.getAdvance() * ratio;
 
 				if ( c == U' ' || c == U'\t' )
 				{
-					totalLeft += glyph.getAdvance();
+					totalLeft += advance;
 					finishWord();
 					charLeft = 0;
-					line->width += glyph.getAdvance();
+					line->width += advance;
 				}
 				else
 				{
-					addChar( { glyph.getSize()->x, glyph.getSize()->y }
-						, { glyph.getBearing().x(), glyph.getBearing().y() }
-						, glyph.getAdvance() );
+					if ( previous != char32_t{} )
+					{
+						auto kerning = getKerning( previous, c, height );
+						charLeft += kerning;
+						totalLeft += kerning;
+					}
+
+					if ( m_sdf )
+					{
+						addChar( { float( glyph.getBitmapSize()->x ), glyph.getBitmapSize()->y }
+							, glyph.getBearing()
+							, advance );
+					}
+					else
+					{
+						addChar( glyph.getSize()
+							, glyph.getBearing()
+							, glyph.getSize()->x * ratio );
+					}
+
+					totalLeft += advance;
+					charLeft += advance;
+					word.width += advance;
+					line->width += advance;
 				}
 
-				word.chars.push_back( uint32_t( totalLeft ) );
+				word.chars.push_back( totalLeft );
 			}
 
+			previous = c;
 			++charIndex;
 		}
 
@@ -392,12 +692,12 @@ namespace castor
 			// Adjust lines heights to maxHeight
 			auto lineMin = result.yMin;
 			auto lineMax = result.yMax;
-			auto lineHeight = int32_t( lineMax - lineMin );
+			auto lineHeight = lineMax - lineMin;
 			result.height = 0;
 
 			for ( auto & ln : result.lines )
 			{
-				ln.top = uint32_t( result.height );
+				ln.top = result.height;
 				ln.yMin = lineMin;
 				ln.yMax = lineMax;
 				result.height += lineHeight;
@@ -405,6 +705,13 @@ namespace castor
 		}
 
 		return result;
+	}
+
+	TextMetrics Font::getTextMetrics( std::u32string const & v
+		, uint32_t maxWidth
+		, bool splitLines )const
+	{
+		return getTextMetrics( v, maxWidth, splitLines, getHeight() );
 	}
 
 	Glyph const & Font::doLoadGlyph( char32_t c )
@@ -421,10 +728,13 @@ namespace castor
 			m_loadedGlyphs.push_back( m_glyphLoader->loadGlyph( c ) );
 			it = std::next( m_loadedGlyphs.begin()
 				, ptrdiff_t( m_loadedGlyphs.size() - 1u ) );
-			m_maxSize->x = std::max( m_maxSize->x, int32_t( it->getSize().getWidth() ) );
-			m_maxSize->y = std::max( m_maxSize->y, int32_t( it->getSize().getHeight() ) );
-			m_maxRange->x = std::min( m_maxRange->x, it->getBearing().y() );
-			m_maxRange->y = std::max( m_maxRange->y, it->getBearing().y() );
+			m_maxSize->x = std::max( m_maxSize->x, it->getSize()->x );
+			m_maxSize->y = std::max( m_maxSize->y, it->getSize()->y );
+			m_maxImageSize->x = std::max( m_maxImageSize->x, int32_t( it->getBitmapSize()->x ) );
+			m_maxImageSize->y = std::max( m_maxImageSize->y, int32_t( it->getBitmapSize()->y ) );
+			m_maxBearing->x = std::min( m_maxBearing->x, it->getBearing()->x );
+			m_maxBearing->y = std::max( m_maxBearing->y, it->getBearing()->y );
+			m_glyphLoader->fillKerningTable( c, m_loadedGlyphs, m_kerningTable );
 		}
 
 		return *it;

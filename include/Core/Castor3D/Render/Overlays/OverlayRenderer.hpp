@@ -40,11 +40,6 @@ namespace castor3d
 
 		struct TextComputePipelineDescriptor
 		{
-			explicit TextComputePipelineDescriptor( ashes::DescriptorSetPtr descriptorSet )
-				: descriptorSet{ castor::move( descriptorSet ) }
-			{
-			}
-
 			TextComputePipelineDescriptor( ashes::DescriptorSetPtr descriptorSet
 				, uint32_t count
 				, OverlayTextBuffer const * textBuffer = {} )
@@ -65,7 +60,7 @@ namespace castor3d
 			ashes::PipelineLayoutPtr pipelineLayout{};
 			ashes::PipelinePtr pipeline{};
 			ashes::DescriptorSetPoolPtr descriptorPool{};
-			castor::Map< FontTexture const *, TextComputePipelineDescriptor > sets;
+			castor::UnorderedMap< FontTexture const *, TextComputePipelineDescriptor > sets;
 		};
 
 	public:
@@ -234,7 +229,7 @@ namespace castor3d
 			castor::Vector< ashes::DescriptorSetPtr > retired;
 			ashes::DescriptorSetLayoutPtr textDescriptorLayout;
 			ashes::DescriptorSetPoolPtr textDescriptorPool;
-			castor::Map< FontTexture const *, FontTextureDescriptorConnection > textDescriptorSets;
+			castor::UnorderedMap< FontTexture const *, FontTextureDescriptorConnection > textDescriptorSets;
 
 			OverlaysDrawData( RenderDevice const & device
 				, VkCommandBufferLevel level
@@ -249,7 +244,8 @@ namespace castor3d
 				, Pass const & pass );
 			OverlayDrawNode & getTextNode( RenderDevice const & device
 				, VkRenderPass renderPass
-				, Pass const & pass );
+				, Pass const & pass
+				, bool sdfFont );
 			ashes::DescriptorSet const & createTextDescriptorSet( FontTexture & fontTexture );
 			void beginPrepare( VkRenderPass renderPass
 				, VkFramebuffer framebuffer
@@ -262,26 +258,29 @@ namespace castor3d
 			OverlayDrawPipeline & doGetPipeline( RenderDevice const & device
 				, VkRenderPass renderPass
 				, Pass const & pass
-				, castor::Map< uint32_t, OverlayDrawPipeline > & pipelines
+				, castor::UnorderedMap< size_t, OverlayDrawPipeline > & pipelines
 				, bool borderOverlay
-				, bool textOverlay );
+				, bool textOverlay
+				, bool sdfFont );
 			OverlayDrawPipeline doCreatePipeline( RenderDevice const & device
 				, VkRenderPass renderPass
 				, ashes::PipelineShaderStageCreateInfoArray program
 				, TextureCombine const & texturesFlags
 				, bool borderOverlay
-				, bool textOverlay );
+				, bool textOverlay
+				, bool sdfFont );
 			ashes::PipelineShaderStageCreateInfoArray doCreateOverlayProgram( RenderDevice const & device
 				, TextureCombine const & texturesFlags
-				, bool textOverlay )const;
+				, bool textOverlay
+				, bool sdfFont )const;
 
 		private:
-			castor::Map< Pass const *, OverlayDrawNode > m_mapPanelNodes;
-			castor::Map< Pass const *, OverlayDrawNode > m_mapBorderNodes;
-			castor::Map< Pass const *, OverlayDrawNode > m_mapTextNodes;
-			castor::Map< uint32_t, OverlayDrawPipeline > m_panelPipelines;
-			castor::Map< uint32_t, OverlayDrawPipeline > m_borderPipelines;
-			castor::Map< uint32_t, OverlayDrawPipeline > m_textPipelines;
+			castor::UnorderedMap< size_t, OverlayDrawNode > m_mapPanelNodes;
+			castor::UnorderedMap< size_t, OverlayDrawNode > m_mapBorderNodes;
+			castor::UnorderedMap< size_t, OverlayDrawNode > m_mapTextNodes;
+			castor::UnorderedMap< size_t, OverlayDrawPipeline > m_panelPipelines;
+			castor::UnorderedMap< size_t, OverlayDrawPipeline > m_borderPipelines;
+			castor::UnorderedMap< size_t, OverlayDrawPipeline > m_textPipelines;
 			OverlaysCommonData & m_commonData;
 			bool m_isHdr;
 		};

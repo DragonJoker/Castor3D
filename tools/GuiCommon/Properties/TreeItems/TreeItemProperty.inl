@@ -274,9 +274,18 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Font > )
 		{
-			wxFontInfo info( value.getHeight() );
-			info.FaceName( value.getFaceName() );
-			return appendProp( parent, new wxFontProperty( name, m_prefix + name, wxFont{ info } ) );
+			if ( value.isSDF() )
+			{
+				wxFontInfo info;
+				info.FaceName( value.getFaceName() );
+				return appendProp( parent, new wxFontProperty( name, m_prefix + name, wxFont{ info } ) );
+			}
+			else
+			{
+				wxFontInfo info( value.getHeight() );
+				info.FaceName( value.getFaceName() );
+				return appendProp( parent, new wxFontProperty( name, m_prefix + name, wxFont{ info } ) );
+			}
 		}
 		else if constexpr ( castor::isGroupChangeTrackedT< ValueT > )
 		{

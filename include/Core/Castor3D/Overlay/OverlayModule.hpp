@@ -277,12 +277,15 @@ namespace castor3d
 		//!\~english	The character dimensions.
 		//!\~french		Les dimensions du caractère.
 		castor::Point2f size{};
-		//!\~english	The character UV position.
-		//!\~french		La position de l'UV du caractère.
-		castor::Point2f uvPosition{};
 		//!\~english	The glyph position relative to cursor.
 		//!\~french		La position de la glyphe par rapport au curseur.
 		castor::Point2f bearing{};
+		//!\~english	The character UV left/top point.
+		//!\~french		Le point gauche/haut de l'UV du caractère.
+		castor::Point2f uvLeftTop{};
+		//!\~english	The character UV right/bottom point.
+		//!\~french		Le point droite/bas de l'UV du caractère.
+		castor::Point2f uvRightBottom{};
 		//!\~english	The character position, relative to its line.
 		//!\~french		La position du caractère, relative à sa ligne.
 		float left{};
