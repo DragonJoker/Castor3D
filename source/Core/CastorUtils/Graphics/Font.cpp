@@ -225,7 +225,7 @@ namespace castor
 		struct GlyphLoader
 			: public Font::GlyphLoader
 		{
-			GlyphLoader( Path const & pathFile )
+			explicit GlyphLoader( Path const & pathFile )
 				: m_path{ pathFile }
 			{
 			}
