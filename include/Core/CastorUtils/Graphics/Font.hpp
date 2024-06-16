@@ -167,7 +167,7 @@ namespace castor
 		 *\brief		Constructeur de police SDF.
 		 *\param[in]	name	Le nom de la police.
 		 */
-		CU_API Font( String const & name );
+		CU_API explicit Font( String const & name );
 		/**
 		 *\~english
 		 *\brief		SDF font constructor.

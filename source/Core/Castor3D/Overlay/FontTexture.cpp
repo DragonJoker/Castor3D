@@ -233,7 +233,7 @@ namespace castor3d
 					offX += maxWidth;
 					++it;
 
-					m_charIndices.try_emplace( glyph.getCharacter(), uint32_t( m_charIndices.size() ) ).second;
+					m_charIndices.try_emplace( glyph.getCharacter(), uint32_t( m_charIndices.size() ) );
 				}
 
 				offY -= maxHeight;
