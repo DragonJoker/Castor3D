@@ -58,10 +58,6 @@ namespace castor3d
 		 */
 		C3D_API ~ShadowMapPassSpot()noexcept override;
 		/**
-		 *\copydoc		castor3d::ShadowMapPass::update
-		 */
-		C3D_API void update( CpuUpdater & updater )override;
-		/**
 		*\~english
 		*name
 		*	Getters.
@@ -77,6 +73,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
+		void doUpdate( CpuUpdater & updater )override;
 		void doUpdateUbos( CpuUpdater & updater )override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;

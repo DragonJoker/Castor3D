@@ -63,15 +63,6 @@ namespace castor3d
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 		/**
-		 *\~english
-		 *\brief			Updates the render pass, CPU wise.
-		 *\param[in, out]	updater	The update data.
-		 *\~french
-		 *\brief			Met à jour la passe de rendu, au niveau CPU.
-		 *\param[in, out]	updater	Les données d'update.
-		 */
-		C3D_API void update( CpuUpdater & updater )override;
-		/**
 		*\~english
 		*name
 		*	Getters.
@@ -87,7 +78,7 @@ namespace castor3d
 		C3D_API void setUpToDate();
 
 	private:
-		using RenderNodesPass::update;
+		void doUpdate( CpuUpdater & updater )override;
 
 		void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;

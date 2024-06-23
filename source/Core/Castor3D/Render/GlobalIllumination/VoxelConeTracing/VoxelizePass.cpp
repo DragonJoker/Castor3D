@@ -116,7 +116,30 @@ namespace castor3d
 		doAccept( visitor );
 	}
 
-	void VoxelizePass::update( CpuUpdater & updater )
+	bool VoxelizePass::isPassEnabled()const noexcept
+	{
+		return m_voxelConfig.enabled
+			&& RenderNodesPass::isPassEnabled()
+			&& ( getRenderQueue().isOutOfDate() || m_outOfDate );
+	}
+
+	ShaderFlags VoxelizePass::getShaderFlags()const noexcept
+	{
+		return ShaderFlag::eWorldSpace
+			| ShaderFlag::eNormal
+			| ShaderFlag::eLighting
+			| ShaderFlag::eOpacity
+			| ShaderFlag::eGeometry
+			| ShaderFlag::eColour;
+	}
+
+	void VoxelizePass::setUpToDate()
+	{
+		m_outOfDate = getRenderQueue().isOutOfDate()
+			&& getEngine()->areUpdateOptimisationsEnabled();
+	}
+
+	void VoxelizePass::doUpdate( CpuUpdater & updater )
 	{
 		if ( m_voxelConfig.enabled )
 		{
@@ -140,34 +163,11 @@ namespace castor3d
 				}
 			}
 
-			RenderNodesPass::update( updater );
+			RenderNodesPass::doUpdate( updater );
 			m_outOfDate = m_outOfDate
 				|| getCuller().areAnyChanged()
 				|| !getEngine()->areUpdateOptimisationsEnabled();
 		}
-	}
-
-	bool VoxelizePass::isPassEnabled()const noexcept
-	{
-		return m_voxelConfig.enabled
-			&& RenderNodesPass::isPassEnabled()
-			&& ( getRenderQueue().isOutOfDate() || m_outOfDate );
-	}
-
-	ShaderFlags VoxelizePass::getShaderFlags()const noexcept
-	{
-		return ShaderFlag::eWorldSpace
-			| ShaderFlag::eNormal
-			| ShaderFlag::eLighting
-			| ShaderFlag::eOpacity
-			| ShaderFlag::eGeometry
-			| ShaderFlag::eColour;
-	}
-
-	void VoxelizePass::setUpToDate()
-	{
-		m_outOfDate = getRenderQueue().isOutOfDate()
-			&& getEngine()->areUpdateOptimisationsEnabled();
 	}
 	
 	SubmeshComponentCombine VoxelizePass::doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const

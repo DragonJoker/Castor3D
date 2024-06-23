@@ -2197,15 +2197,15 @@ namespace castor3d
 			, renderPassDesc.m_ruConfig }
 		, m_device{ device }
 		, m_nodesPass{ nodesPass }
-		, m_cameraUbo{ renderPassDesc.m_cameraUbo }
-		, m_sceneUbo{ *renderPassDesc.m_sceneUbo }
+		, m_cameraUbo{ renderPassDesc.base().m_cameraUbo }
+		, m_sceneUbo{ *renderPassDesc.base().m_sceneUbo }
 		, m_targetImage{ castor::move( targetImage ) }
 		, m_targetDepth{ castor::move( targetDepth ) }
 		, m_ssaoConfig{ techniquePassDesc.m_ssaoConfig }
 		, m_ssao{ techniquePassDesc.m_ssao }
 		, m_deferredLightingFilter{ renderPassDesc.m_deferredLightingFilter }
 		, m_parallaxOcclusionFilter{ renderPassDesc.m_parallaxOcclusionFilter }
-		, m_onNodesPassSort( m_nodesPass.onSortNodes.connect( [this]( RenderNodesPass const & ){ m_commandsChanged = true; } ) )
+		, m_onNodesPassSort( m_nodesPass.onSortNodes.connect( [this]( NodesPass const & ){ m_commandsChanged = true; } ) )
 		, m_renderPass{ ( useCompute()
 			? nullptr
 			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, true, m_deferredLightingFilter ) ) }

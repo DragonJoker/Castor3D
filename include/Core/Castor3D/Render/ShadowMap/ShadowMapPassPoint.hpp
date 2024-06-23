@@ -60,10 +60,6 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~ShadowMapPassPoint()noexcept override;
-		/**
-		 *\copydoc		castor3d::ShadowMapPass::update
-		 */
-		C3D_API void update( CpuUpdater & updater )override;
 
 		C3D_API void updateFrustum( castor::Matrix4x4f const & viewMatrix )const;
 
@@ -73,6 +69,7 @@ namespace castor3d
 		}
 
 	private:
+		void doUpdate( CpuUpdater & updater )override;
 		void doUpdateUbos( CpuUpdater & updater )override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;

@@ -76,19 +76,19 @@ namespace castor3d
 		m_onNodeChanged.disconnect();
 	}
 
-	void ShadowMapPassPoint::update( CpuUpdater & updater )
+	void ShadowMapPassPoint::updateFrustum( castor::Matrix4x4f const & viewMatrix )const
+	{
+		static_cast< FrustumCuller & >( getCuller() ).updateFrustum( m_projection, viewMatrix );
+	}
+
+	void ShadowMapPassPoint::doUpdate( CpuUpdater & updater )
 	{
 		getCuller().update( updater );
 		m_outOfDate = ++m_count < 3u
 			|| m_outOfDate
 			|| getCuller().areAnyChanged();
 		m_count = std::min( m_count, 2u );
-		RenderNodesPass::update( updater );
-	}
-
-	void ShadowMapPassPoint::updateFrustum( castor::Matrix4x4f const & viewMatrix )const
-	{
-		static_cast< FrustumCuller & >( getCuller() ).updateFrustum( m_projection, viewMatrix );
+		RenderNodesPass::doUpdate( updater );
 	}
 
 	void ShadowMapPassPoint::doUpdateUbos( CpuUpdater & updater )
