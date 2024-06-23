@@ -4,25 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderPass_H___
 #define ___C3D_RenderPass_H___
 
-#include "RenderModule.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp"
-#include "Castor3D/Render/RenderInfo.hpp"
-#include "Castor3D/Render/Clustered/ClusteredModule.hpp"
-#include "Castor3D/Render/Culling/CullingModule.hpp"
-#include "Castor3D/Render/Node/RenderNodeModule.hpp"
-#include "Castor3D/Scene/SceneModule.hpp"
-#include "Castor3D/Scene/Animation/AnimationModule.hpp"
-#include "Castor3D/Shader/Ubos/UbosModule.hpp"
-
-#include <CastorUtils/Design/Named.hpp>
-#include <CastorUtils/Graphics/Size.hpp>
+#include "Castor3D/Render/NodesPass.hpp"
 
 #include <RenderGraph/RunnablePasses/RenderPass.hpp>
 
-#include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
-
-#include <optional>
 #include <unordered_map>
 
 namespace castor3d
@@ -37,11 +22,8 @@ namespace castor3d
 			, RenderFilters filters
 			, bool oit
 			, bool forceTwoSided )
-			: m_size{ castor::move( size ) }
-			, m_cameraUbo{ cameraUbo }
-			, m_sceneUbo{ sceneUbo }
+			: m_base{ castor::move( size ), cameraUbo, sceneUbo, filters }
 			, m_culler{ culler }
-			, m_filters{ filters }
 			, m_oit{ oit }
 			, m_forceTwoSided{ forceTwoSided }
 		{
@@ -151,10 +133,9 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	value	Le scene node à ignorer pendant le rendu.
 		 */
-		RenderNodesPassDesc & ignored( SceneNode const & value )
+		NodesPassDesc const & base()const noexcept
 		{
-			m_ignored = &value;
-			return *this;
+			return m_base;
 		}
 		/**
 		 *\~english
@@ -164,7 +145,40 @@ namespace castor3d
 		 */
 		RenderNodesPassDesc & safeBand( bool value )
 		{
-			m_safeBand = value;
+			m_base.safeBand( value );
+			return *this;
+		}
+		/**
+		 *\~english
+		 *\param[in]	value	\p true if the pass is for static nodes.
+		 *\~french
+		 *\param[in]	value	\p true si la passe est pour les noeuds statiques.
+		 */
+		RenderNodesPassDesc & isStatic( bool value )
+		{
+			m_base.isStatic( value );
+			return *this;
+		}
+		/**
+		 *\~english
+		 *\param[in]	value	The nodes pass components flags.
+		 *\~french
+		 *\param[in]	value	Les indicateurs de composants de la passe de noeuds.
+		 */
+		RenderNodesPassDesc & componentModeFlags( ComponentModeFlags value )
+		{
+			m_base.componentModeFlags( value );
+			return *this;
+		}
+		/**
+		 *\~english
+		 *\param[in]	value	The scene node to ignore during rendering.
+		 *\~french
+		 *\param[in]	value	Le scene node à ignorer pendant le rendu.
+		 */
+		RenderNodesPassDesc & ignored( SceneNode const & value )
+		{
+			m_ignored = &value;
 			return *this;
 		}
 		/**
@@ -176,17 +190,6 @@ namespace castor3d
 		RenderNodesPassDesc & passCount( uint32_t value )
 		{
 			m_ruConfig.maxPassCount = value;
-			return *this;
-		}
-		/**
-		 *\~english
-		 *\param[in]	value	\p true if the pass is for static nodes.
-		 *\~french
-		 *\param[in]	value	\p true si la passe est pour les noeuds statiques.
-		 */
-		RenderNodesPassDesc & isStatic( bool value )
-		{
-			m_handleStatic = value;
 			return *this;
 		}
 		/**
@@ -216,6 +219,28 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\param[in]	action	The action to run before the pass recording.
+		 *\~french
+		 *\param[in]	action	L'action à lancer avant l'enregistrement de la passe.
+		 */
+		RenderNodesPassDesc & prePassAction( crg::RecordContext::ImplicitAction action )
+		{
+			m_ruConfig.prePassAction( std::move( action ) );
+			return *this;
+		}
+		/**
+		 *\~english
+		 *\param[in]	action	The action to run after the pass recording.
+		 *\~french
+		 *\param[in]	action	L'action à lancer après l'enregistrement de la passe.
+		 */
+		RenderNodesPassDesc & postPassAction( crg::RecordContext::ImplicitAction action )
+		{
+			m_ruConfig.postPassAction( std::move( action ) );
+			return *this;
+		}
+		/**
+		 *\~english
 		 *\param[in]	value	The use of mesh shaders status.
 		 *\~french
 		 *\param[in]	value	Le statut d'utilisation des mesh shaders.
@@ -223,17 +248,6 @@ namespace castor3d
 		RenderNodesPassDesc & meshShading( bool value )
 		{
 			m_meshShading = value;
-			return *this;
-		}
-		/**
-		 *\~english
-		 *\param[in]	value	The nodes pass components flags.
-		 *\~french
-		 *\param[in]	value	Les indicateurs de composants de la passe de noeuds.
-		 */
-		RenderNodesPassDesc & componentModeFlags( ComponentModeFlags value )
-		{
-			m_componentModeFlags = castor::move( value );
 			return *this;
 		}
 		/**
@@ -270,20 +284,13 @@ namespace castor3d
 			return *this;
 		}
 
-		VkExtent3D m_size;
-		CameraUbo const & m_cameraUbo;
-		SceneUbo const * m_sceneUbo{};
+		NodesPassDesc m_base;
 		SceneCuller & m_culler;
-		RenderFilters m_filters;
 		bool m_oit;
 		bool m_forceTwoSided;
-		bool m_safeBand{};
 		bool m_meshShading{};
 		SceneNode const * m_ignored{};
-		uint32_t m_index{ 0u };
-		std::optional< bool > m_handleStatic{ std::nullopt };
 		crg::ru::Config m_ruConfig{ 1u, true };
-		ComponentModeFlags m_componentModeFlags{ ComponentModeFlag::eAll };
 		bool m_allowClusteredLighting{};
 		DeferredLightingFilter m_deferredLightingFilter{ DeferredLightingFilter::eIgnore };
 		ParallaxOcclusionFilter m_parallaxOcclusionFilter{ ParallaxOcclusionFilter::eIgnore };
@@ -293,8 +300,7 @@ namespace castor3d
 	using RenderQueueHolder = castor::DataHolderT< RenderQueueUPtr >;
 
 	class RenderNodesPass
-		: public castor::OwnedBy< Engine >
-		, public castor::Named
+		: public NodesPass
 		, private SceneCullerHolder
 		, private RenderQueueHolder
 		, public crg::RenderPass
@@ -341,15 +347,6 @@ namespace castor3d
 		C3D_API ~RenderNodesPass()noexcept override;
 		/**
 		 *\~english
-		 *\brief			Updates the render pass, CPU wise.
-		 *\param[in, out]	updater	The update data.
-		 *\~french
-		 *\brief			Met à jour la passe de rendu, au niveau CPU.
-		 *\param[in, out]	updater	Les données d'update.
-		 */
-		C3D_API virtual void update( CpuUpdater & updater );
-		/**
-		 *\~english
 		 *\brief		Retrieves the geometry shader source matching the given flags.
 		 *\param[in]	flags	The pipeline flags.
 		 *\param[in]	builder	Receives the source.
@@ -384,50 +381,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Adjusts given flags to match the render pass requirements.
-		 *\param[in]	submeshCombine	The flags.
-		 *\~french
-		 *\brief		Ajuste les flags donnés pour qu'ils correspondent aux pré-requis de la passe.
-		 *\param[in]	submeshCombine	Les flags.
-		 */
-		C3D_API SubmeshComponentCombine adjustFlags( SubmeshComponentCombine const & submeshCombine )const;
-		/**
-		 *\~english
-		 *\brief		Adjusts given flags to match the render pass requirements.
-		 *\param[in]	passCombine	The flags.
-		 *\~french
-		 *\brief		Ajuste les flags donnés pour qu'ils correspondent aux pré-requis de la passe.
-		 *\param[in]	passCombine	Les flags.
-		 */
-		C3D_API PassComponentCombine adjustFlags( PassComponentCombine const & passCombine )const;
-		/**
-		 *\~english
-		 *\brief		Adjusts given flags to match the render pass requirements.
 		 *\param[in]	flags	The flags.
 		 *\~french
 		 *\brief		Ajuste les flags donnés pour qu'ils correspondent aux pré-requis de la passe.
 		 *\param[in]	flags	Les flags.
 		 */
 		C3D_API ProgramFlags adjustFlags( ProgramFlags flags )const;
-		/**
-		 *\~english
-		 *\brief		Adjusts given flags to match the render pass requirements.
-		 *\param[in]	flags	The flags.
-		 *\~french
-		 *\brief		Ajuste les flags donnés pour qu'ils correspondent aux pré-requis de la passe.
-		 *\param[in]	flags	Les flags.
-		 */
-		C3D_API SceneFlags adjustFlags( SceneFlags flags )const;
-		/**
-		 *\~english
-		 *\brief		Filters the given textures flags using this pass needed textures.
-		 *\param[in]	textureCombine	The textures flags.
-		 *\return		The filtered flags.
-		 *\~french
-		 *\brief		Filtre les indicateurs de textures donnés en utilisant ceux voulus par cette passe.
-		 *\param[in]	textureCombine	Les indicateurs de textures.
-		 *\return		Les indicateurs filtrés.
-		 */
-		C3D_API TextureCombine adjustFlags( TextureCombine const & textureCombine )const;
+		using NodesPass::adjustFlags;
 		/**
 		 *\~english
 		 *\brief		Creates the pipeline flags for given configuration.
@@ -606,120 +566,6 @@ namespace castor3d
 			, BlendMode alphaBlendMode
 			, uint32_t attachesCount );
 		/**
-		 *\~english
-		 *\brief			Adds shadow maps descriptor layout bindings to given list.
-		 *\param[in]		sceneFlags		Used to define what shadow maps need to be bound.
-		 *\param[in,out]	bindings		Receives the bindings.
-		 *\param[in]		shaderStages	The impacted shader stages.
-		 *\param[in,out]	index			The current binding index.
-		 *\~french
-		 *\brief			Ajoute les bindings de descriptor layout des shadow maps à la liste donnée.
-		 *\param[in]		sceneFlags		Le mode de mélange couleurs.
-		 *\param[in,out]	bindings		Reçoit les bindings.
-		 *\param[in]		shaderStages	Les shader stages impactés.
-		 *\param[in,out]	index			L'index de binding actuel.
-		 */
-		C3D_API static void addShadowBindings( SceneFlags const & sceneFlags
-			, ashes::VkDescriptorSetLayoutBindingArray & bindings
-			, VkShaderStageFlags shaderStages
-			, uint32_t & index );
-		/**
-		 *\~english
-		 *\brief			Adds shadow maps descriptor layout bindings to given list.
-		 *\param[in,out]	bindings		Receives the bindings.
-		 *\param[in]		shaderStages	The impacted shader stages.
-		 *\param[in,out]	index			The current binding index.
-		 *\~french
-		 *\brief			Ajoute les bindings de descriptor layout des shadow maps à la liste donnée.
-		 *\param[in,out]	bindings		Reçoit les bindings.
-		 *\param[in]		shaderStages	Les shader stages impactés.
-		 *\param[in,out]	index			L'index de binding actuel.
-		 */
-		C3D_API static void addShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
-			, VkShaderStageFlags shaderStages
-			, uint32_t & index );
-		/**
-		 *\~english
-		 *\brief			Adds background descriptor layout bindings to given list.
-		 *\param[in]		background		The background.
-		 *\param[in,out]	bindings		Receives the bindings.
-		 *\param[in]		shaderStages	The impacted shader stages.
-		 *\param[in,out]	index			The current binding index.
-		 *\~french
-		 *\brief			Ajoute les bindings de descriptor layout du background à la liste donnée.
-		 *\param[in]		background		Le fond.
-		 *\param[in,out]	bindings		Reçoit les bindings.
-		 *\param[in]		shaderStages	Les shader stages impactés.
-		 *\param[in,out]	index			L'index de binding actuel.
-		 */
-		C3D_API static void addBackgroundBindings( SceneBackground const & background
-			, ashes::VkDescriptorSetLayoutBindingArray & bindings
-			, VkShaderStageFlags shaderStages
-			, uint32_t & index );
-		/**
-		 *\~english
-		 *\brief			Adds indirect lighting descriptor layout bindings to given list.
-		 *\param[in]		flags				The scene flags.
-		 *\param[in]		indirectLighting	The indirect lighting data.
-		 *\param[in,out]	bindings			Receives the bindings.
-		 *\param[in]		shaderStages		The impacted shader stages.
-		 *\param[in,out]	index				The current binding index.
-		 *\~french
-		 *\brief			Ajoute les bindings de descriptor layout de l'éclairage indirect à la liste donnée.
-		 *\param[in]		flags				Les indicateurs de scène.
-		 *\param[in]		indirectLighting	Les données d'indirect lighting.
-		 *\param[in,out]	bindings			Reçoit les bindings.
-		 *\param[in]		shaderStages		Les shader stages impactés.
-		 *\param[in,out]	index				L'index de binding actuel.
-		 */
-		C3D_API static void addGIBindings( SceneFlags flags
-			, IndirectLightingData const & indirectLighting
-			, ashes::VkDescriptorSetLayoutBindingArray & bindings
-			, VkShaderStageFlags shaderStages
-			, uint32_t & index );
-		/**
-		 *\~english
-		 *\brief			Adds clusters descriptor layout bindings to given list.
-		 *\param[in]		frustumClusters	The clusters.
-		 *\param[in,out]	bindings		Receives the bindings.
-		 *\param[in]		shaderStages	The impacted shader stages.
-		 *\param[in,out]	index			The current binding index.
-		 *\~french
-		 *\brief			Ajoute les bindings de descriptor layout des clusters à la liste donnée.
-		 *\param[in]		frustumClusters	Les clusters.
-		 *\param[in,out]	bindings		Reçoit les bindings.
-		 *\param[in]		shaderStages	Les shader stages impactés.
-		 *\param[in,out]	index			L'index de binding actuel.
-		 */
-		C3D_API static void addClusteredLightingBindings( FrustumClusters const & frustumClusters
-			, ashes::VkDescriptorSetLayoutBindingArray & bindings
-			, VkShaderStageFlags shaderStages
-			, uint32_t & index );
-		C3D_API static void addShadowDescriptor( RenderSystem const & renderSystem
-			, crg::RunnableGraph & graph
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, ShadowMapLightTypeArray const & shadowMaps
-			, ShadowBuffer const & shadowBuffer
-			, uint32_t & index );
-		C3D_API static void addShadowDescriptor( RenderSystem const & renderSystem
-			, crg::RunnableGraph & graph
-			, SceneFlags const & sceneFlags
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, ShadowMapLightTypeArray const & shadowMaps
-			, ShadowBuffer const & shadowBuffer
-			, uint32_t & index );
-		C3D_API static void addBackgroundDescriptor( SceneBackground const & background
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, crg::ImageViewIdArray const & targetImage
-			, uint32_t & index );
-		C3D_API static void addGIDescriptor( SceneFlags sceneFlags
-			, IndirectLightingData const & indirectLighting
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, uint32_t & index );
-		C3D_API static void addClusteredLightingDescriptor( FrustumClusters const & frustumClusters
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, uint32_t & index );
-		/**
 		*\~english
 		*name
 		*	Getters.
@@ -728,13 +574,9 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API bool areValidPassFlags( PassComponentCombine const & passFlags )const noexcept;
-		C3D_API virtual bool isPassEnabled()const noexcept;
+		C3D_API bool isPassEnabled()const noexcept override;
 		C3D_API virtual ShaderFlags getShaderFlags()const noexcept;
 		C3D_API virtual bool areDebugTargetsEnabled()const noexcept;
-		C3D_API bool isValidPass( Pass const & pass )const noexcept;
-		C3D_API bool isValidRenderable( RenderedObject const & object )const noexcept;
-		C3D_API bool isValidNode( SceneNode const & node )const noexcept;
 		C3D_API bool allowClusteredLighting( ClustersConfig const & config )const noexcept;
 		C3D_API bool hasNodes()const noexcept;
 		C3D_API Scene & getScene()const noexcept;
@@ -749,12 +591,6 @@ namespace castor3d
 			, ashes::BufferBase const & buffer )const;
 		C3D_API uint32_t getDrawCallsCount()const;
 		C3D_API RenderCounts const & getVisibleCounts()const;
-
-
-		ComponentModeFlags getComponentsMask()const noexcept
-		{
-			return m_componentsMask;
-		}
 
 		bool isOrderIndependent()const noexcept
 		{
@@ -777,46 +613,9 @@ namespace castor3d
 				+ m_frontPipelines.size() );
 		}
 
-		bool isDirty()const noexcept
-		{
-			return m_isDirty;
-		}
-
 		bool forceTwoSided()const noexcept
 		{
 			return m_forceTwoSided;
-		}
-
-		RenderFilters getRenderFilters()const noexcept
-		{
-			return m_filters;
-		}
-
-		castor::String const & getTypeName()const noexcept
-		{
-			return m_typeName;
-		}
-
-		RenderPassTypeID getTypeID()const noexcept
-		{
-			return m_typeID;
-		}
-
-		bool filtersStatic()const noexcept
-		{
-			return handleStatic()
-				&& !*m_handleStatic;
-		}
-
-		bool filtersNonStatic()const noexcept
-		{
-			return handleStatic()
-				&& *m_handleStatic;
-		}
-
-		bool handleStatic()const noexcept
-		{
-			return m_handleStatic != std::nullopt;
 		}
 
 		DeferredLightingFilter getDeferredLightingFilter()const noexcept
@@ -830,13 +629,20 @@ namespace castor3d
 		}
 		/**@}*/
 
-		mutable RenderNodesPassChangeSignal onSortNodes;
-
 	private:
 		void doSubInitialise()const;
 		void doSubRecordInto( VkCommandBuffer commandBuffer )const;
 
 	protected:
+		/**
+		 *\~english
+		 *\brief			Updates the render pass, CPU wise.
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\brief			Met à jour la passe de rendu, au niveau CPU.
+		 *\param[in, out]	updater	Les données d'update.
+		 */
+		C3D_API void doUpdate( CpuUpdater & updater )override;
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -858,6 +664,8 @@ namespace castor3d
 		 */
 		C3D_API virtual void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const = 0;
+		C3D_API virtual ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const;
+		C3D_API ShaderProgramRPtr doGetProgram( PipelineFlags const & flags );
 		/**
 		 *\~english
 		 *\param[in]	pass	The material pass.
@@ -866,7 +674,7 @@ namespace castor3d
 		 *\param[in]	pass	La passe de matériau.
 		 *\return		\p true si la passe est rendue via cette passe de noeuds.
 		 */
-		C3D_API virtual bool doIsValidPass( Pass const & pass )const noexcept;
+		C3D_API bool doIsValidPass( Pass const & pass )const noexcept override;
 		/**
 		 *\~english
 		 *\param[in]	object	The rendered object.
@@ -875,11 +683,11 @@ namespace castor3d
 		 *\param[in]	object	L'objet rendu.
 		 *\return		\p true si l'objet est rendu via cette passe de noeuds.
 		 */
-		C3D_API virtual bool doIsValidRenderable( RenderedObject const & object )const noexcept;
-		C3D_API virtual SubmeshComponentCombine doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const;
-		C3D_API virtual ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const;
-		C3D_API virtual SceneFlags doAdjustSceneFlags( SceneFlags flags )const;
-		C3D_API ShaderProgramRPtr doGetProgram( PipelineFlags const & flags );
+		C3D_API bool doIsValidRenderable( RenderedObject const & object )const noexcept override;
+		C3D_API SubmeshComponentCombine doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const override;
+		C3D_API SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
+		C3D_API bool doAreValidPassFlags( PassComponentCombine const & passFlags )const noexcept override;
+		C3D_API bool doIsValidNode( SceneNode const & node )const noexcept override;
 		/**
 		 *\copydoc	castor3d::RenderTechniquePass::doAccept
 		 */
@@ -1017,25 +825,9 @@ namespace castor3d
 			, ast::ShaderBuilder & builder )const = 0;
 
 	protected:
-		RenderDevice const & m_device;
-		RenderSystem & m_renderSystem;
-		CameraUbo const & m_cameraUbo;
-		crg::ImageViewIdArray m_targetImage;
-		crg::ImageViewIdArray m_targetDepth;
-		castor::String m_typeName;
-		RenderPassTypeID m_typeID{};
-		RenderFilters m_filters{ RenderFilter::eNone };
-		castor::String m_category;
-		castor::Size m_size;
 		bool m_oit{ false };
 		bool m_forceTwoSided{ false };
-		bool m_safeBand{ false };
-		bool m_isDirty{ true };
 		bool m_meshShading{};
-		SceneUbo const * m_sceneUbo{};
-		uint32_t m_index{ 0u };
-		std::optional< bool > m_handleStatic{ std::nullopt };
-		ComponentModeFlags m_componentsMask{};
 		bool m_allowClusteredLighting{};
 		DeferredLightingFilter m_deferredLightingFilter{};
 		ParallaxOcclusionFilter m_parallaxOcclusionFilter{};
@@ -1055,33 +847,6 @@ namespace castor3d
 		castor::Vector< RenderPipelineUPtr > m_frontPipelines;
 		castor::Vector< RenderPipelineUPtr > m_backPipelines;
 	};
-
-	struct IsRenderPassEnabled
-	{
-		explicit IsRenderPassEnabled( RenderNodesPass const & pass )
-			: m_pass{ &pass }
-		{
-		}
-
-		IsRenderPassEnabled()
-			: m_pass{}
-		{
-		}
-
-		void setPass( RenderNodesPass const & pass )noexcept
-		{
-			m_pass = &pass;
-		}
-
-		bool operator()()const noexcept
-		{
-			return m_pass
-				&& m_pass->isPassEnabled();
-		}
-
-		RenderNodesPass const * m_pass;
-	};
-	CU_DeclareSmartPtr( castor3d, IsRenderPassEnabled, C3D_API );
 }
 
 #endif

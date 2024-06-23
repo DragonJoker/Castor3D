@@ -199,7 +199,7 @@ namespace castor3d
 		Texture const * m_ssao{};
 		DeferredLightingFilter m_deferredLightingFilter;
 		ParallaxOcclusionFilter m_parallaxOcclusionFilter;
-		RenderNodesPassChangeSignalConnection m_onNodesPassSort;
+		NodesPassChangeSignalConnection m_onNodesPassSort;
 		bool m_commandsChanged{};
 		ashes::RenderPassPtr m_renderPass;
 		ashes::FrameBufferPtr m_framebuffer;

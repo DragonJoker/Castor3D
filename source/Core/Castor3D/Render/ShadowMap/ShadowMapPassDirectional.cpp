@@ -77,7 +77,7 @@ namespace castor3d
 		m_camera.detach();
 	}
 
-	void ShadowMapPassDirectional::update( CpuUpdater & updater )
+	void ShadowMapPassDirectional::doUpdate( CpuUpdater & updater )
 	{
 		if ( auto sceneIt = updater.dirtyScenes.find( &getScene() );
 			sceneIt != updater.dirtyScenes.end() )
@@ -101,7 +101,7 @@ namespace castor3d
 		getCuller().update( updater );
 		m_outOfDate = m_outOfDate
 			|| getCuller().areAnyChanged();
-		RenderNodesPass::update( updater );
+		RenderNodesPass::doUpdate( updater );
 	}
 
 	void ShadowMapPassDirectional::doUpdateUbos( CpuUpdater & updater )
