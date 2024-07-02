@@ -10,6 +10,29 @@ See LICENSE file in root folder
 namespace castor
 {
 	template< typename ValueT >
+	struct IsSpeedT : std::false_type
+	{};
+
+	template< typename ValueT >
+	struct IsSpeedT< SpeedT< ValueT, Seconds > > : std::true_type
+	{};
+
+	template< typename ValueT >
+	struct IsSpeedT< SpeedT< ValueT, Milliseconds > > : std::true_type
+	{};
+
+	template< typename ValueT >
+	struct IsSpeedT< SpeedT< ValueT, Microseconds > > : std::true_type
+	{};
+
+	template< typename ValueT >
+	struct IsSpeedT< SpeedT< ValueT, Nanoseconds > > : std::true_type
+	{};
+
+	template< typename ValueT >
+	static bool constexpr isSpeedT = IsSpeedT< ValueT >::value;
+
+	template< typename ValueT >
 	struct SpeedTraitsT
 	{
 		static ValueT convert( double d )
@@ -91,9 +114,74 @@ namespace castor
 			return m_value * TraitsT::convert( getDurationRatioTo< DurationU >() * double( duration.count() ) );
 		}
 
-		ValueT const & getValue()const
+		ValueT const & getValue()const noexcept
 		{
 			return m_value;
+		}
+
+		SpeedT operator-()const noexcept
+		{
+			return SpeedT{ -m_value };
+		}
+
+		template< typename ValueU >
+		SpeedT & operator+=( ValueU const & rhs )noexcept
+		{
+			if constexpr ( isSpeedT< ValueU > )
+			{
+				m_value += ValueT( rhs.m_value );
+			}
+			else
+			{
+				m_value += rhs;
+			}
+
+			return *this;
+		}
+
+		template< typename ValueU >
+		SpeedT & operator-=( ValueU const & rhs )noexcept
+		{
+			if constexpr ( isSpeedT< ValueU > )
+			{
+				m_value -= ValueT( rhs.m_value );
+			}
+			else
+			{
+				m_value -= rhs;
+			}
+
+			return *this;
+		}
+
+		template< typename ValueU >
+		SpeedT & operator*=( ValueU const & rhs )noexcept
+		{
+			if constexpr ( isSpeedT< ValueU > )
+			{
+				m_value *= ValueT( rhs.m_value );
+			}
+			else
+			{
+				m_value *= rhs;
+			}
+
+			return *this;
+		}
+
+		template< typename ValueU >
+		SpeedT & operator/=( ValueU const & rhs )noexcept
+		{
+			if constexpr ( isSpeedT< ValueU > )
+			{
+				m_value /= ValueT( rhs.m_value );
+			}
+			else
+			{
+				m_value /= rhs;
+			}
+
+			return *this;
 		}
 
 		template< typename DurationU >
@@ -152,13 +240,6 @@ namespace castor
 
 	private:
 		ValueT m_value{};
-
-		template< typename Value, typename Duration, typename Traits >
-		friend bool operator==( SpeedT< Value, Duration, Traits > const &, SpeedT< Value, Duration, Traits > const & );
-		template< typename Value, typename Duration, typename Traits >
-		friend bool operator<( SpeedT< Value, Duration > const &, SpeedT< Value, Duration, Traits > const & );
-		template< typename Value, typename Duration, typename Traits >
-		friend bool operator>( SpeedT< Value, Duration, Traits > const &, SpeedT< Value, Duration, Traits > const & );
 	};
 	/**
 	*\~english
@@ -171,42 +252,14 @@ namespace castor
 	bool operator==( SpeedT< ValueT, DurationT, TraitsT > const & lhs
 		, SpeedT< ValueT, DurationT, TraitsT > const & rhs )
 	{
-		return lhs.m_value == rhs.m_value;
+		return lhs.getValue() == rhs.getValue();
 	}
 
 	template< typename ValueT, typename DurationT, typename TraitsT >
-	bool operator!=( SpeedT< ValueT, DurationT, TraitsT > const & lhs
+	auto operator<=>( SpeedT< ValueT, DurationT, TraitsT > const & lhs
 		, SpeedT< ValueT, DurationT, TraitsT > const & rhs )
 	{
-		return !( lhs == rhs.m_value );
-	}
-
-	template< typename ValueT, typename DurationT, typename TraitsT >
-	bool operator<( SpeedT< ValueT, DurationT, TraitsT > const & lhs
-		, SpeedT< ValueT, DurationT, TraitsT > const & rhs )
-	{
-		return lhs.m_value < rhs.m_value;
-	}
-
-	template< typename ValueT, typename DurationT, typename TraitsT >
-	bool operator>=( SpeedT< ValueT, DurationT, TraitsT > const & lhs
-		, SpeedT< ValueT, DurationT, TraitsT > const & rhs )
-	{
-		return !( lhs < rhs.m_value );
-	}
-
-	template< typename ValueT, typename DurationT, typename TraitsT >
-	bool operator>( SpeedT< ValueT, DurationT, TraitsT > const & lhs
-		, SpeedT< ValueT, DurationT, TraitsT > const & rhs )
-	{
-		return lhs.m_value < rhs.m_value;
-	}
-
-	template< typename ValueT, typename DurationT, typename TraitsT >
-	bool operator<=( SpeedT< ValueT, DurationT, TraitsT > const & lhs
-		, SpeedT< ValueT, DurationT, TraitsT > const & rhs )
-	{
-		return !( lhs > rhs.m_value );
+		return lhs.getValue() <=> rhs.getValue();
 	}
 	/**@}*/
 
@@ -223,23 +276,37 @@ namespace castor
 		return makeSpeed< DurationT >( value );
 	}
 
-	template< typename ValueT >
-	struct IsSpeedT : std::false_type{};
+	template< typename DurationT, typename ValueT, typename ValueU >
+	SpeedT< ValueT, DurationT > operator+( SpeedT< ValueT, DurationT > const & lhs, ValueU const & rhs )noexcept
+	{
+		SpeedT< ValueT, DurationT > result{ lhs };
+		result += rhs;
+		return result;
+	}
 
-	template< typename ValueT >
-	struct IsSpeedT< SpeedT< ValueT, Seconds > > : std::true_type{};
+	template< typename DurationT, typename ValueT, typename ValueU >
+	SpeedT< ValueT, DurationT > operator-( SpeedT< ValueT, DurationT > const & lhs, ValueU const & rhs )noexcept
+	{
+		SpeedT< ValueT, DurationT > result{ lhs };
+		result -= rhs;
+		return result;
+	}
 
-	template< typename ValueT >
-	struct IsSpeedT< SpeedT< ValueT, Milliseconds > > : std::true_type{};
+	template< typename DurationT, typename ValueT, typename ValueU >
+	SpeedT< ValueT, DurationT > operator*( SpeedT< ValueT, DurationT > const & lhs, ValueU const & rhs )noexcept
+	{
+		SpeedT< ValueT, DurationT > result{ lhs };
+		result *= rhs;
+		return result;
+	}
 
-	template< typename ValueT >
-	struct IsSpeedT< SpeedT< ValueT, Microseconds > > : std::true_type{};
-
-	template< typename ValueT >
-	struct IsSpeedT< SpeedT< ValueT, Nanoseconds > > : std::true_type{};
-
-	template< typename ValueT >
-	static bool constexpr isSpeedT = IsSpeedT< ValueT >::value;
+	template< typename DurationT, typename ValueT, typename ValueU >
+	SpeedT< ValueT, DurationT > operator/( SpeedT< ValueT, DurationT > const & lhs, ValueU const & rhs )noexcept
+	{
+		SpeedT< ValueT, DurationT > result{ lhs };
+		result /= rhs;
+		return result;
+	}
 }
 
 #endif
