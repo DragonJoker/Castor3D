@@ -77,17 +77,31 @@ namespace castor
 		}
 	}
 
-	void cuLogError( char const * const description )
+	void cuLogError( char const * const description )noexcept
 	{
-		Logger::logError( description );
+		try
+		{
+			Logger::logError( description );
+		}
+		catch ( ... )
+		{
+			// well well well...
+		}
 	}
 
-	void cuFailure( char const * const description )
+	void cuFailure( char const * const description )noexcept
 	{
-		auto stream = makeStringStream();
-		stream << "Assertion failed: " << description << "\n";
-		stream << debug::Backtrace{};
-		cuLogError( toUtf8( stream.str() ).c_str() );
-		assert( false );
+		try
+		{
+			auto stream = makeStringStream();
+			stream << "Assertion failed: " << description << "\n";
+			stream << debug::Backtrace{};
+			cuLogError( toUtf8( stream.str() ).c_str() );
+			assert( false );
+		}
+		catch ( ... )
+		{
+			// well well well...
+		}
 	}
 }

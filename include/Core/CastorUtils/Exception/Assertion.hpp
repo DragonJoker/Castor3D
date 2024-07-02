@@ -10,8 +10,8 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	CU_API void cuLogError( char const * const description );
-	CU_API void cuFailure( char const * const description );
+	CU_API void cuLogError( char const * const description )noexcept;
+	CU_API void cuFailure( char const * const description )noexcept;
 }
 
 #if CU_UseAssert
