@@ -110,15 +110,15 @@ namespace GuiCommon
 		{
 			angles = m_angles;
 			m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
-			, [this, translate, angles]()
-			{
-				m_node->translate( translate );
+				, [this, translate, angles]()
+				{
+					m_node->translate( translate );
 
-				castor::Quaternion pitch{ castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0, 0.0, 0.0 }, angles[0] ) };
-				castor::Quaternion yaw{ castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0, 1.0, 0.0 }, angles[1] ) };
-				castor::Quaternion roll{ castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0, 0.0, 1.0 }, angles[2] ) };
-				m_node->setOrientation( roll * yaw * pitch );
-			} ) );
+					castor::Quaternion pitch{ castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0, 0.0, 0.0 }, angles[0] ) };
+					castor::Quaternion yaw{ castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0, 1.0, 0.0 }, angles[1] ) };
+					castor::Quaternion roll{ castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0, 0.0, 1.0 }, angles[2] ) };
+					m_node->setOrientation( roll * yaw * pitch );
+				} ) );
 		}
 
 		return result;
