@@ -98,51 +98,63 @@ namespace castor
 		 *\name Opérateurs arithmétiques.
 		 */
 		/**@{*/
-		RangedValue< T > & operator+=( RangedValue< T > const & rhs )noexcept
+		template< typename ValueU >
+		RangedValue< T > & operator+=( ValueU const & rhs )noexcept
 		{
-			m_value = m_range.clamp( m_value + rhs.m_value );
+			if constexpr ( std::is_same_v< RangedValue< T >, ValueU > )
+			{
+				m_value = m_range.clamp( m_value + rhs.m_value );
+			}
+			else
+			{
+				m_value = m_range.clamp( m_value + rhs );
+			}
+
 			return *this;
 		}
 
-		RangedValue< T > & operator-=( RangedValue< T > const & rhs )noexcept
+		template< typename ValueU >
+		RangedValue< T > & operator-=( ValueU const & rhs )noexcept
 		{
-			m_value = m_range.clamp( m_value - rhs.m_value );
+			if constexpr ( std::is_same_v< RangedValue< T >, ValueU > )
+			{
+				m_value = m_range.clamp( m_value - rhs.m_value );
+			}
+			else
+			{
+				m_value = m_range.clamp( m_value - rhs );
+			}
+
 			return *this;
 		}
 
-		RangedValue< T > & operator*=( RangedValue< T > const & rhs )noexcept
+		template< typename ValueU >
+		RangedValue< T > & operator*=( ValueU const & rhs )noexcept
 		{
-			m_value = m_range.clamp( m_value * rhs.m_value );
+			if constexpr ( std::is_same_v< RangedValue< T >, ValueU > )
+			{
+				m_value = m_range.clamp( m_value * rhs.m_value );
+			}
+			else
+			{
+				m_value = m_range.clamp( m_value * rhs );
+			}
+
 			return *this;
 		}
 
-		RangedValue< T > & operator/=( RangedValue< T > const & rhs )noexcept
+		template< typename ValueU >
+		RangedValue< T > & operator/=( ValueU const & rhs )noexcept
 		{
-			m_value = m_range.clamp( m_value / rhs.m_value );
-			return *this;
-		}
+			if constexpr ( std::is_same_v< RangedValue< T >, ValueU > )
+			{
+				m_value = m_range.clamp( m_value / rhs.m_value );
+			}
+			else
+			{
+				m_value = m_range.clamp( m_value / rhs );
+			}
 
-		RangedValue< T > & operator+=( T const & rhs )noexcept
-		{
-			m_value = m_range.clamp( m_value + rhs );
-			return *this;
-		}
-
-		RangedValue< T > & operator-=( T const & rhs )noexcept
-		{
-			m_value = m_range.clamp( m_value - rhs );
-			return *this;
-		}
-
-		RangedValue< T > & operator*=( T const & rhs )noexcept
-		{
-			m_value = m_range.clamp( m_value * rhs );
-			return *this;
-		}
-
-		RangedValue< T > & operator/=( T const & rhs )noexcept
-		{
-			m_value = m_range.clamp( m_value / rhs );
 			return *this;
 		}
 		/**@}*/
