@@ -21,9 +21,6 @@ See LICENSE file in root folder
 
 #include <Castor3D/Engine.hpp>
 
-#include <CastorUtils/Math/Point.hpp>
-#include <CastorUtils/Math/Quaternion.hpp>
-
 namespace CastorViewer
 {
 	enum class eTIMER_ID
@@ -39,12 +36,6 @@ namespace CastorViewer
 		COUNT,
 		CLIPBOARD_CHANGE,
 	};
-
-	class MouseNodeEvent;
-	class TranslateNodeEvent;
-
-	CU_DeclareSmartPtr( CastorViewer, MouseNodeEvent, );
-	CU_DeclareSmartPtr( CastorViewer, TranslateNodeEvent, );
 
 	class RenderPanel
 		: public wxPanel

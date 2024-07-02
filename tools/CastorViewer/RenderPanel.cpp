@@ -1,8 +1,6 @@
 #include "CastorViewer/RenderPanel.hpp"
 #include "CastorViewer/CastorViewer.hpp"
 #include "CastorViewer/MainFrame.hpp"
-#include "CastorViewer/RotateNodeEvent.hpp"
-#include "CastorViewer/TranslateNodeEvent.hpp"
 
 #include <GuiCommon/System/SpaceMouseController.hpp>
 
@@ -25,9 +23,6 @@
 #include <CastorUtils/Design/ResourceCache.hpp>
 
 #include <ashespp/Core/WindowHandle.hpp>
-
-CU_ImplementSmartPtr( CastorViewer, MouseNodeEvent )
-CU_ImplementSmartPtr( CastorViewer, TranslateNodeEvent )
 
 namespace CastorViewer
 {
