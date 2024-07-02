@@ -94,8 +94,8 @@ namespace castor
 		};
 
 		template< LengthUnit FromT, typename TypeT >
-		static inline TypeT convertTo( TypeT const & value
-			, LengthUnit to )
+		static constexpr TypeT convertTo( TypeT const & value
+			, LengthUnit to )noexcept
 		{
 			using ConvertFactors = LengthUnitConvertFactors< FromT >;
 
@@ -117,12 +117,6 @@ namespace castor
 	}
 
 	//*********************************************************************************************
-
-	template< typename TypeT >
-	inline LengthT< TypeT >::LengthT( LengthUnit unit )noexcept
-		: LengthT< TypeT >{ TypeT{}, unit }
-	{
-	}
 
 	template< typename TypeT >
 	inline TypeT LengthT< TypeT >::unit( LengthUnit u )const noexcept
@@ -222,10 +216,9 @@ namespace castor
 	}
 
 	template< typename TypeT >
-	inline LengthT< TypeT > & LengthT< TypeT >::operator-()noexcept
+	inline LengthT< TypeT > LengthT< TypeT >::operator-()const noexcept
 	{
-		m_value = -m_value;
-		return *this;
+		return LengthT{ -m_value, m_unit };
 	}
 
 	template< typename TypeT >
@@ -273,9 +266,9 @@ namespace castor
 	//*********************************************************************************************
 
 	template< typename TypeT >
-	static inline TypeT convert( TypeT const & value
+	static constexpr TypeT convert( TypeT const & value
 		, LengthUnit from
-		, LengthUnit to )
+		, LengthUnit to )noexcept
 	{
 		switch ( from )
 		{

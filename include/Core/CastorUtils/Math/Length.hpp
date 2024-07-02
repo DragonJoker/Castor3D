@@ -27,7 +27,7 @@ namespace castor
 		 *\param[in]	unit	L'unité de la longueur.
 		 */
 		template< typename TypeU >
-		LengthT( TypeU value, LengthUnit unit )noexcept
+		constexpr LengthT( TypeU value, LengthUnit unit )noexcept
 			: m_value( TypeT( value ) )
 			, m_unit{ unit }
 		{
@@ -47,7 +47,7 @@ namespace castor
 		 *\return		La longueur.
 		 */
 		template< typename TypeU >
-		static LengthT< TypeT > fromUnit( TypeU value
+		static constexpr LengthT< TypeT > fromUnit( TypeU value
 			, LengthUnit unit )noexcept
 		{
 			return LengthT< TypeT >( value, unit );
@@ -63,7 +63,7 @@ namespace castor
 		 *\return		La longueur.
 		 */
 		template< typename TypeU >
-		static LengthT< TypeT > fromKilometres( TypeU value )noexcept
+		static constexpr LengthT< TypeT > fromKilometres( TypeU value )noexcept
 		{
 			return LengthT< TypeT >( value, LengthUnit::eKilometre );
 		}
@@ -78,7 +78,7 @@ namespace castor
 		 *\return		La longueur.
 		 */
 		template< typename TypeU >
-		static LengthT< TypeT > fromMetres( TypeU value )noexcept
+		static constexpr LengthT< TypeT > fromMetres( TypeU value )noexcept
 		{
 			return LengthT< TypeT >( value, LengthUnit::eMetre );
 		}
@@ -93,7 +93,7 @@ namespace castor
 		 *\return		La longueur.
 		 */
 		template< typename TypeU >
-		static LengthT< TypeT > fromCentimetres( TypeU value )noexcept
+		static constexpr LengthT< TypeT > fromCentimetres( TypeU value )noexcept
 		{
 			return LengthT< TypeT >( value, LengthUnit::eCentimetre );
 		}
@@ -108,7 +108,7 @@ namespace castor
 		 *\return		La longueur.
 		 */
 		template< typename TypeU >
-		static LengthT< TypeT > fromMillimetres( TypeU value )noexcept
+		static constexpr LengthT< TypeT > fromMillimetres( TypeU value )noexcept
 		{
 			return LengthT< TypeT >( value, LengthUnit::eMillimetre );
 		}
@@ -123,7 +123,7 @@ namespace castor
 		 *\return		La longueur.
 		 */
 		template< typename TypeU >
-		static LengthT< TypeT > fromYards( TypeU value )noexcept
+		static constexpr LengthT< TypeT > fromYards( TypeU value )noexcept
 		{
 			return LengthT< TypeT >( value, LengthUnit::eYard );
 		}
@@ -138,7 +138,7 @@ namespace castor
 		 *\return		La longueur.
 		 */
 		template< typename TypeU >
-		static LengthT< TypeT > fromFeet( TypeU value )noexcept
+		static constexpr LengthT< TypeT > fromFeet( TypeU value )noexcept
 		{
 			return LengthT< TypeT >( value, LengthUnit::eFoot );
 		}
@@ -153,7 +153,7 @@ namespace castor
 		 *\return		La longueur.
 		 */
 		template< typename TypeU >
-		static LengthT< TypeT > fromInches( TypeU value )noexcept
+		static constexpr LengthT< TypeT > fromInches( TypeU value )noexcept
 		{
 			return LengthT< TypeT >( value, LengthUnit::eInch );
 		}
@@ -163,7 +163,10 @@ namespace castor
 		 *\~french
 		 *\brief		Constructeur par défaut
 		 */
-		explicit LengthT( LengthUnit unit = LengthUnit::eMetre )noexcept;
+		explicit constexpr LengthT( LengthUnit unit = LengthUnit::eMetre )noexcept
+			: LengthT< TypeT >{ TypeT{}, unit }
+		{
+		}
 		/**
 		 *\~english
 		 *\return		The value converted to given unit.
@@ -277,7 +280,7 @@ namespace castor
 		**/
 		/**@{*/
 		LengthT< TypeT > & operator=( TypeT const & rhs )noexcept;
-		LengthT< TypeT > & operator-()noexcept;
+		LengthT< TypeT > operator-()const noexcept;
 		LengthT< TypeT > & operator+=( LengthT< TypeT > const & rhs )noexcept;
 		LengthT< TypeT > & operator-=( LengthT< TypeT > const & rhs )noexcept;
 		LengthT< TypeT > & operator+=( TypeT const & rhs )noexcept;
@@ -324,9 +327,9 @@ namespace castor
 	};
 
 	template< typename TypeT >
-	static inline TypeT convert( TypeT const & value
+	static constexpr TypeT convert( TypeT const & value
 		, LengthUnit from
-		, LengthUnit to );
+		, LengthUnit to )noexcept;
 	/**
 	 *\~english
 	 *\name Logic operators.
