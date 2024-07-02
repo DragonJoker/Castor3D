@@ -488,7 +488,7 @@ namespace castor
 	//*************************************************************************************************
 
 	template< typename DstCompT, typename SrcT >
-	PointTypeT< SrcT, DstCompT > pointCast( SrcT const & src )
+	constexpr PointTypeT< SrcT, DstCompT > pointCast( SrcT const & src )noexcept
 	{
 		return PointTypeT< SrcT, DstCompT >{ src };
 	}

@@ -59,7 +59,7 @@ namespace castor
 		 *\remarks		Privé afin que la construction spécifiée ne soit accessible qu'à partir des constructeurs nommés
 		 */
 		template< typename T >
-		explicit AngleT( T radians )noexcept
+		explicit constexpr AngleT( T radians )noexcept
 			: m_radians( Type( radians ) )
 		{
 		}
@@ -76,7 +76,7 @@ namespace castor
 		 *\return		L'angle construit
 		 */
 		template< typename T >
-		static AngleT< Type > fromTurns( T turns )noexcept
+		static constexpr AngleT< Type > fromTurns( T turns )noexcept
 		{
 			return AngleT< Type >( turns * TurnToRadian );
 		}
@@ -91,7 +91,7 @@ namespace castor
 		 *\return		L'angle construit
 		 */
 		template< typename T >
-		static AngleT< Type > fromDegrees( T degrees )noexcept
+		static constexpr AngleT< Type > fromDegrees( T degrees )noexcept
 		{
 			return AngleT< Type >( degrees * DegreeToRadian );
 		}
@@ -106,7 +106,7 @@ namespace castor
 		 *\return		L'angle construit
 		 */
 		template< typename T >
-		static AngleT< Type > fromRadians( T radians )noexcept
+		static constexpr AngleT< Type > fromRadians( T radians )noexcept
 		{
 			return AngleT< Type >( radians );
 		}
@@ -121,7 +121,7 @@ namespace castor
 		 *\return		L'angle construit
 		 */
 		template< typename T >
-		static AngleT< Type > fromGrads( T grads )noexcept
+		static constexpr AngleT< Type > fromGrads( T grads )noexcept
 		{
 			return AngleT< Type >( grads * GradToRadian );
 		}
@@ -665,17 +665,17 @@ namespace castor
 	using Angle = AngleT< float >;
 }
 
-inline castor::Angle operator "" _turns( long double value )
+inline constexpr castor::Angle operator "" _turns( long double value )
 {
 	return castor::Angle::fromTurns( value );
 }
 
-inline castor::Angle operator "" _degrees( long double value )
+inline constexpr castor::Angle operator "" _degrees( long double value )
 {
 	return castor::Angle::fromDegrees( value );
 }
 
-inline castor::Angle operator "" _radians( long double value )
+inline constexpr castor::Angle operator "" _radians( long double value )
 {
 	return castor::Angle::fromRadians( value );
 }

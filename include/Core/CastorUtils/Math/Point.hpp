@@ -297,7 +297,7 @@ namespace castor
 	Point< std::remove_cv_t< T >, TCount > operator/( Point< T, TCount > const & lhs, T const & rhs );
 
 	template< typename DstCompT, typename SrcT >
-	PointTypeT< SrcT, DstCompT > pointCast( SrcT const & src );
+	constexpr PointTypeT< SrcT, DstCompT > pointCast( SrcT const & src )noexcept;
 	/**@}*/
 	/**
 	\~english

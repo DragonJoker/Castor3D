@@ -67,7 +67,7 @@ namespace castor
 	public:
 		SpeedT() = default;
 
-		explicit SpeedT( ValueT const & value )
+		explicit constexpr SpeedT( ValueT const & value )
 			: m_value{ value }
 		{
 		}
