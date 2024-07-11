@@ -18,7 +18,6 @@ namespace castortd
 		eDown,
 		eLeft,
 		eRight,
-		eMouse,
 		eCount,
 	};
 
@@ -66,7 +65,6 @@ namespace castortd
 		void OnMouseRUp( wxMouseEvent & event );
 		void OnMouseMove( wxMouseEvent & event );
 		void OnMouseWheel( wxMouseEvent & event );
-		void OnMouseTimer( wxTimerEvent & event );
 		void OnTimerUp( wxTimerEvent & event );
 		void OnTimerDown( wxTimerEvent & event );
 		void OnTimerLeft( wxTimerEvent & event );

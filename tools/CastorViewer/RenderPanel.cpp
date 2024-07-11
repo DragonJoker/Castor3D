@@ -28,9 +28,9 @@ namespace CastorViewer
 {
 	namespace panel
 	{
-		static const float MAX_CAM_SPEED = 10.0f;
+		static const float MAX_CAM_SPEED = 1.0f;
 		static const float DEF_CAM_SPEED = 0.5f;
-		static const float MIN_CAM_SPEED = 0.05f;
+		static const float MIN_CAM_SPEED = 0.005f;
 		static const float CAM_SPEED_INC = 0.9f;
 
 		static castor3d::KeyboardKey doConvertKeyCode( int code )
@@ -181,7 +181,12 @@ namespace CastorViewer
 		doStopMovement();
 		m_selectedSubmesh = {};
 		m_selectedGeometry = {};
-		m_currentState = nullptr;
+
+		if ( m_currentState )
+		{
+			m_currentState->stop();
+			m_currentState = nullptr;
+		}
 
 		if ( m_3dController )
 		{
@@ -229,6 +234,11 @@ namespace CastorViewer
 		, bool cameraNode )
 	{
 		m_currentNode = node;
+
+		if ( m_currentState )
+		{
+			m_currentState->stop();
+		}
 
 		if ( m_currentNode )
 		{
@@ -554,6 +564,7 @@ namespace CastorViewer
 		}
 
 		doUpdateSpeed();
+		it->second->start();
 		return *it->second;
 	}
 
@@ -581,7 +592,6 @@ namespace CastorViewer
 		EVT_TIMER( int( eTIMER_ID::RIGHT ), RenderPanel::onTimerRgt )
 		EVT_TIMER( int( eTIMER_ID::UP ), RenderPanel::onTimerUp )
 		EVT_TIMER( int( eTIMER_ID::DOWN ), RenderPanel::onTimerDwn )
-		EVT_TIMER( int( eTIMER_ID::MOUSE ), RenderPanel::onTimerMouse )
 		EVT_TIMER( int( eTIMER_ID::MOVEMENT ), RenderPanel::onTimerMovement )
 		EVT_SIZE( RenderPanel::onSize )
 		EVT_MOVE( RenderPanel::onMove )
@@ -674,18 +684,8 @@ namespace CastorViewer
 		event.Skip();
 	}
 
-	void RenderPanel::onTimerMouse( wxTimerEvent & event )
-	{
-		event.Skip();
-	}
-
 	void RenderPanel::onTimerMovement( wxTimerEvent & event )
 	{
-		if ( m_currentState )
-		{
-			m_currentState->update();
-		}
-
 		event.Skip();
 	}
 
@@ -804,7 +804,7 @@ namespace CastorViewer
 	{
 		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 			!inputListener || !inputListener->fireKeyUp( panel::doConvertKeyCode( event.GetKeyCode() )
-			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
+				, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			switch ( event.GetKeyCode() )
 			{
@@ -946,14 +946,10 @@ namespace CastorViewer
 		m_oldX = m_x;
 		m_oldY = m_y;
 
-		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener();
-			!inputListener || !inputListener->fireMouseButtonPushed( castor3d::MouseButton::eLeft
-				, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
+		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener() )
 		{
-			if ( m_currentState )
-			{
-				doStartTimer( eTIMER_ID::MOUSE );
-			}
+			inputListener->fireMouseButtonPushed( castor3d::MouseButton::eLeft
+				, event.ControlDown(), event.AltDown(), event.ShiftDown() );
 		}
 
 		event.Skip();
@@ -967,11 +963,10 @@ namespace CastorViewer
 		m_oldX = m_x;
 		m_oldY = m_y;
 
-		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener();
-			!inputListener || !inputListener->fireMouseButtonReleased( castor3d::MouseButton::eLeft
-				, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
+		if ( auto inputListener = wxGetApp().getCastor()->getUserInputListener() )
 		{
-			doStopTimer( eTIMER_ID::MOUSE );
+			inputListener->fireMouseButtonReleased( castor3d::MouseButton::eLeft
+				, event.ControlDown(), event.AltDown(), event.ShiftDown() );
 		}
 
 		event.Skip();
@@ -1074,9 +1069,9 @@ namespace CastorViewer
 		{
 			if ( m_currentState )
 			{
-				static float constexpr mult = 8.0f;
-				float deltaX = ( m_oldX - m_x ) / mult;
-				float deltaY = ( m_oldY - m_y ) / mult;
+				static float constexpr mult = 0.01f;
+				float deltaX = ( m_oldX - m_x ) * mult;
+				float deltaY = ( m_oldY - m_y ) * mult;
 
 				if ( event.ControlDown() )
 				{

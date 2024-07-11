@@ -10,12 +10,13 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/Point.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
+#include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
 namespace GuiCommon
 {
 	using Angles = castor::Array< castor::Angle, 3u >;
-	static float constexpr MaxAngularSpeed = 5.0f;
-	static float constexpr MaxScalarSpeed = 20.0f;
+	static float constexpr MaxAngularSpeed = 0.2f;
+	static float constexpr MaxScalarSpeed = 2.0f;
 	/**
 	*\brief
 	*	Classe de gestion des déplacements d'un noeud de scène.
@@ -38,6 +39,16 @@ namespace GuiCommon
 			, bool camera );
 		/**
 		*\brief
+		*	Démarre la mise à jour automatique de l'état via le frame listener.
+		*/
+		void start();
+		/**
+		*\brief
+		*	Stoppe la mise à jour automatique de l'état via le frame listener.
+		*/
+		void stop();
+		/**
+		*\brief
 		*	Réinitialise l'état.
 		*/
 		void reset( float speed );
@@ -46,13 +57,6 @@ namespace GuiCommon
 		*	Met à jour la vitesse maximale (de rotation et translation).
 		*/
 		void setMaxSpeed( float speed );
-		/**
-		*\brief
-		*	Met à jour l'angle et le zoom en fonction des vitesses.
-		*\return
-		 * 	\p true s'il y a eu du mouvement.
-		*/
-		bool update();
 		/**
 		*\brief
 		*	Définit la vitesse de rotation du noeud.
@@ -107,6 +111,10 @@ namespace GuiCommon
 		}
 
 	private:
+		void doUpdate();
+		bool doUpdateVelocities( castor::Point3f & translate
+		, Angles & angles );
+
 		//! Le listener qui recevra les évènements de déplacement / rotation.
 		castor3d::FrameListener & m_listener;
 		//! Le noeud de scène affecté par les évènements.
@@ -153,6 +161,9 @@ namespace GuiCommon
 		};
 		//! Si l'état est pour le noeud d'une caméra.
 		bool m_isCamera{};
+		castor::PreciseTimer m_timer;
+		castor::Mutex m_mutex;
+		std::atomic_bool m_running;
 	};
 	using NodeStatePtr = castor::RawUniquePtr< NodeState >;
 }

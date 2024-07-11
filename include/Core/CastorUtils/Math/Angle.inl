@@ -225,41 +225,6 @@ namespace castor
 	}
 
 	template< typename Type >
-	bool operator==( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
-	{
-		return std::abs( lhs.m_radians - rhs.m_radians ) < std::numeric_limits< Type >::epsilon();
-	}
-
-	template< typename Type >
-	bool operator!=( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
-	{
-		return !( lhs == rhs );
-	}
-
-	template< typename Type >
-	inline bool operator<( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
-	{
-		return lhs.m_radians < rhs.m_radians;
-	}
-
-	template< typename Type >
-	inline bool operator>=( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
-	{
-		return !( lhs < rhs );
-	}
-
-	template< typename Type >
-	inline bool operator>( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
-	{
-		return lhs.m_radians > rhs.m_radians;
-	}
-
-	template< typename Type >
-	inline bool operator<=( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
-	{
-		return !( lhs > rhs );
-	}
-	template< typename Type >
 	AngleT< Type > operator+( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
 	{
 		AngleT< Type > result( lhs );

@@ -31,7 +31,6 @@ namespace CastorViewer
 		RIGHT,
 		UP,
 		DOWN,
-		MOUSE,
 		MOVEMENT,
 		COUNT,
 		CLIPBOARD_CHANGE,
@@ -105,7 +104,6 @@ namespace CastorViewer
 		void onTimerRgt( wxTimerEvent & event );
 		void onTimerUp( wxTimerEvent & event );
 		void onTimerDwn( wxTimerEvent & event );
-		void onTimerMouse( wxTimerEvent & event );
 		void onTimerMovement( wxTimerEvent & event );
 		void onSize( wxSizeEvent & event );
 		void onMove( wxMoveEvent & event );

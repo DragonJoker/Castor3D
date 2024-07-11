@@ -404,10 +404,6 @@ namespace castor
 
 		template< typename T >
 		friend bool operator==( AngleT< T > const & lhs, AngleT< T > const & rhs )noexcept;
-		template< typename T >
-		friend bool operator<( AngleT< T > const & lhs, AngleT< T > const & rhs )noexcept;
-		template< typename T >
-		friend bool operator>( AngleT< T > const & lhs, AngleT< T > const & rhs )noexcept;
 	};
 	/**
 	 *\~english
@@ -495,172 +491,43 @@ namespace castor
 	static inline AngleT< double > atand( double value );
 	/**
 	 *\~english
-	 *\brief		Equality operator
-	 *\param[in]	lhs	First operand
-	 *\param[in]	rhs	Second operand
-	 *\return		\p true if lhs is equal to rhs
+	 *\name Comparison operators.
 	 *\~french
-	 *\brief		Opérateur d'égalité
-	 *\param[in]	lhs	Premier opérande
-	 *\param[in]	rhs	Second opérande
-	 *\return		\p true si lhs est égal à rhs
-	 */
+	 *\name Opérateurs de comparaison.
+	 **/
+	/**@{*/
 	template< typename Type >
-	inline bool operator==( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
+	inline bool operator==( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
+	{
+		return std::abs( lhs.radians() - rhs.radians() ) < std::numeric_limits< Type >::epsilon();
+	}
+
+	template< typename Type >
+	inline auto operator<=>( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
+	{
+		return lhs.radians() <=> rhs.radians();
+	}
+	/**@}*/
 	/**
 	 *\~english
-	 *\brief		Difference operator
-	 *\param[in]	lhs	First operand
-	 *\param[in]	rhs	Second operand
-	 *\return		\p true if lhs is different from rhs
+	 *\name Arihmetic operators.
 	 *\~french
-	 *\brief		Opérateur de différence
-	 *\param[in]	lhs	Premier opérande
-	 *\param[in]	rhs	Second opérande
-	 *\return		\p true si lhs est différent de rhs
-	 */
-	template< typename Type >
-	inline bool operator!=( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
-	/**
-	 *\~english
-	 *\brief		"Less than" operator
-	 *\param[in]	lhs	First operand
-	 *\param[in]	rhs	Second operand
-	 *\return		\p true if lhs is less than rhs.
-	 *\~french
-	 *\brief		Opérateur "inférieur à"
-	 *\param[in]	lhs	Premier opérande.
-	 *\param[in]	rhs	Second opérande.
-	 *\return		\p true si lhs est inférieur à rhs.
-	 */
-	template< typename Type >
-	inline bool operator<( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
-	/**
-	 *\~english
-	 *\brief		"Greater than or equal to" operator
-	 *\param[in]	lhs	First operand
-	 *\param[in]	rhs	Second operand
-	 *\return		\p true if lhs is greater than or equal to rhs.
-	 *\~french
-	 *\brief		Opérateur "supérieur ou égal à"
-	 *\param[in]	lhs	Premier opérande.
-	 *\param[in]	rhs	Second opérande.
-	 *\return		\p true si lhs est supérieur ou égal à rhs.
-	 */
-	template< typename Type >
-	inline bool operator>=( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
-	/**
-	 *\~english
-	 *\brief		"Greater than" operator
-	 *\param[in]	lhs	First operand
-	 *\param[in]	rhs	Second operand
-	 *\return		\p true if lhs is greater than rhs.
-	 *\~french
-	 *\brief		Opérateur "supérieur à"
-	 *\param[in]	lhs	Premier opérande.
-	 *\param[in]	rhs	Second opérande.
-	 *\return		\p true si lhs est supérieur à rhs.
-	 */
-	template< typename Type >
-	inline bool operator>( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
-	/**
-	 *\~english
-	 *\brief		"Less than or equal to" operator
-	 *\param[in]	lhs	First operand
-	 *\param[in]	rhs	Second operand
-	 *\return		\p true if lhs is less than or equal to rhs.
-	 *\~french
-	 *\brief		Opérateur "inférieur ou égal à"
-	 *\param[in]	lhs	Premier opérande.
-	 *\param[in]	rhs	Second opérande.
-	 *\return		\p true si lhs est inférieur ou égal à rhs.
-	 */
-	template< typename Type >
-	inline bool operator<=( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
-	/**
-	 *\~english
-	 *\brief		addition operator
-	 *\param[in]	lhs	First operand
-	 *\param[in]	rhs	Second operand
-	 *\return		Result of addition
-	 *\~french
-	 *\brief		Opérateur d'addition
-	 *\param[in]	lhs	Premier opérande
-	 *\param[in]	rhs	Second opérande
-	 *\return		Le résultat de l'addition
-	 */
+	 *\name Opérateurs arithmétiques.
+	 **/
+	/**@{*/
 	template< typename Type >
 	inline AngleT< Type > operator+( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
-	/**
-	 *\~english
-	 *\brief		Substraction operator
-	 *\param[in]	lhs	First operand
-	 *\param[in]	rhs	Second operand
-	 *\return		Result of substraction
-	 *\~french
-	 *\brief		Opérateur de soustraction
-	 *\param[in]	lhs	Premier opérande
-	 *\param[in]	rhs	Second opérande
-	 *\return		Le résultat de la soustraction
-	 */
 	template< typename Type >
 	inline AngleT< Type > operator-( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
-	/**
-	 *\~english
-	 *\brief		Multiplication operator
-	 *\param[in]	lhs	First operand
-	 *\param[in]	rhs	Second operand
-	 *\return		Result of multiplication
-	 *\~french
-	 *\brief		Opérateur de multiplication
-	 *\param[in]	lhs	Premier opérande
-	 *\param[in]	rhs	Second opérande
-	 *\return		Le résultat de la multiplication
-	 */
 	template< typename Type >
 	inline AngleT< Type > operator*( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
-	/**
-	 *\~english
-	 *\brief		Division operator
-	 *\param[in]	lhs	First operand
-	 *\param[in]	rhs	Second operand
-	 *\return		Result of division
-	 *\~french
-	 *\brief		Opérateur de division
-	 *\param[in]	lhs	Premier opérande
-	 *\param[in]	rhs	Second opérande
-	 *\return		Le résultat de la division
-	 */
 	template< typename Type >
 	inline AngleT< Type > operator/( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept;
-	/**
-	 *\~english
-	 *\brief		Multiplication operator
-	 *\param[in]	lhs	First operand
-	 *\param[in]	rhs	Second operand
-	 *\return		Result of multiplication
-	 *\~french
-	 *\brief		Opérateur de multiplication
-	 *\param[in]	lhs	Premier opérande
-	 *\param[in]	rhs	Second opérande
-	 *\return		Le résultat de la multiplication
-	 */
 	template< typename Type >
 	inline AngleT< Type > operator*( AngleT< Type > const & lhs, double rhs )noexcept;
-	/**
-	 *\~english
-	 *\brief		Division operator
-	 *\param[in]	lhs	First operand
-	 *\param[in]	rhs	Second operand
-	 *\return		Result of division
-	 *\~french
-	 *\brief		Opérateur de division
-	 *\param[in]	lhs	Premier opérande
-	 *\param[in]	rhs	Second opérande
-	 *\return		Le résultat de la division
-	 */
 	template< typename Type >
 	inline AngleT< Type > operator/( AngleT< Type > const & lhs, double rhs )noexcept;
+	/**@}*/
 
 	using Angle = AngleT< float >;
 }
