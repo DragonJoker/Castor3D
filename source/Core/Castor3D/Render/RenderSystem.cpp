@@ -931,8 +931,8 @@ namespace castor3d
 				, true
 				, true
 				, true };
-			config.allocator = &shaderAllocator;
-			glsl = glsl::compileGlsl( shader
+			glsl = glsl::compileGlsl( *allocator
+				, shader
 				, statements.get()
 				, entryPoint.stage
 				, ast::SpecialisationInfo{}
