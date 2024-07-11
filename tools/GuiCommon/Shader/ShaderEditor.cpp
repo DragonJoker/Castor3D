@@ -405,9 +405,9 @@ namespace GuiCommon
 				, *m_shader.shader->getStatements() );
 
 			spirv::SpirVConfig spvConfig{ spirv::v1_5 };
-			spvConfig.allocator = &shaderAllocator;
 			m_sources.try_emplace( ShaderLanguage::SPIRV
-				, make_wxString( spirv::writeSpirv( *m_shader.shader
+				, make_wxString( spirv::writeSpirv( *allocator
+					, *m_shader.shader
 					, statements.get()
 					, stage
 					, spvConfig
@@ -422,9 +422,9 @@ namespace GuiCommon
 				, true
 				, true
 				, true };
-			glslConfig.allocator = &shaderAllocator;
 			m_sources.try_emplace( ShaderLanguage::GLSL
-				, make_wxString( glsl::compileGlsl( *m_shader.shader
+				, make_wxString( glsl::compileGlsl( *allocator
+					, *m_shader.shader
 					, statements.get()
 					, stage
 					, {}
@@ -434,9 +434,9 @@ namespace GuiCommon
 			hlsl::HlslConfig hlslConfig{ hlsl::v6_6
 				, stage
 				, false };
-			hlslConfig.allocator = &shaderAllocator;
 			m_sources.try_emplace( ShaderLanguage::HLSL
-				, make_wxString( hlsl::compileHlsl( *m_shader.shader
+				, make_wxString( hlsl::compileHlsl( *allocator
+					, *m_shader.shader
 					, statements.get()
 					, stage
 					, {}
@@ -464,7 +464,6 @@ namespace GuiCommon
 		spirv::SpirVConfig spvConfig{ spirv::v1_5 };
 		ast::ShaderAllocator shaderAllocator{ ast::AllocationMode::eIncremental };
 		auto allocator = shaderAllocator.getBlock();
-		spvConfig.allocator = &shaderAllocator;
 		m_sources.try_emplace( ShaderLanguage::SPIRV
 			, make_wxString( spirv::displaySpirv( *allocator
 				, m_shader.source.spirv ) ) );
