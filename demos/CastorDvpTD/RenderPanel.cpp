@@ -46,7 +46,6 @@ namespace castortd
 			new wxTimer( this, int( TimerID::eDown ) ),
 			new wxTimer( this, int( TimerID::eLeft ) ),
 			new wxTimer( this, int( TimerID::eRight ) ),
-			new wxTimer( this, int( TimerID::eMouse ) ),
 		}
 		, m_game{ game }
 	{
@@ -96,12 +95,20 @@ namespace castortd
 				LockType lock{ castor::makeUniqueLock( scene->getCameraCache() ) };
 				auto camera = scene->getCameraCache().begin()->second.get();
 				m_cameraState = castor::make_unique< GuiCommon::NodeState >( scene->getListener(), camera->getParent(), true );
-				m_timers[size_t( TimerID::eMouse )]->Start( 30 );
+				m_cameraState->start();
 			}
 		}
-		else if ( m_listener )
+		else
 		{
-			m_listener = {};
+			if ( m_cameraState )
+			{
+				m_cameraState->stop();
+			}
+
+			if ( m_listener )
+			{
+				m_listener = {};
+			}
 		}
 	}
 
@@ -260,7 +267,7 @@ namespace castortd
 		}
 		else
 		{
-			for ( size_t i = 0; i < size_t( TimerID::eMouse ); i++ )
+			for ( size_t i = 0; i < size_t( TimerID::eCount ); i++ )
 			{
 				m_timers[i]->Stop();
 			}
@@ -286,7 +293,6 @@ namespace castortd
 		EVT_TIMER( int( TimerID::eDown ), RenderPanel::OnTimerDown )
 		EVT_TIMER( int( TimerID::eLeft ), RenderPanel::OnTimerLeft )
 		EVT_TIMER( int( TimerID::eRight ), RenderPanel::OnTimerRight )
-		EVT_TIMER( int( TimerID::eMouse ), RenderPanel::OnMouseTimer )
 		EVT_MENU( int( panel::MenuID::eNewLRTower ), RenderPanel::OnNewLongRangeTower )
 		EVT_MENU( int( panel::MenuID::eNewSRTower ), RenderPanel::OnNewShortRangeTower )
 		EVT_MENU( int( panel::MenuID::eUpgradeSpeed ), RenderPanel::OnUpgradeTowerSpeed )
@@ -548,9 +554,9 @@ namespace castortd
 
 		if ( m_game.isRunning() )
 		{
-			static float constexpr mult = 4.0f;
+			static float constexpr mult = 0.1f;
 			float deltaX = 0.0f;
-			float deltaY = std::min( 1.0f / mult, 1.0f ) * ( m_oldY - m_y ) / mult;
+			float deltaY = std::min( 1.0f * mult, 1.0f ) * ( m_oldY - m_y ) * mult;
 
 			if ( m_mouseLeftDown )
 			{
@@ -580,16 +586,6 @@ namespace castortd
 			{
 				m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, panel::g_camSpeed } );
 			}
-		}
-
-		event.Skip();
-	}
-
-	void RenderPanel::OnMouseTimer( wxTimerEvent & event )
-	{
-		if ( m_game.isRunning() && m_cameraState )
-		{
-			m_cameraState->update();
 		}
 
 		event.Skip();
