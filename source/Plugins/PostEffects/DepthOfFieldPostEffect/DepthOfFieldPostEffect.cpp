@@ -26,6 +26,7 @@ namespace dof
 	castor::String const PostEffect::FocalDistance = cuT( "focalDistance" );
 	castor::String const PostEffect::FocalLength = cuT( "focalLength" );
 	castor::String const PostEffect::BokehScale = cuT( "bokehScale" );
+	castor::String const PostEffect::EnableFarBlur = cuT( "enableFarBlur" );
 
 	PostEffect::PostEffect( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
@@ -146,7 +147,7 @@ namespace dof
 			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
 			, m_nearCoC
 			, m_intermediate
-			, &isEnabled()
+			, crg::RunnablePass::IsEnabledCallback( [this]() { return isEnabled(); } )
 			, &m_passIndex );
 		passes = createSecondBlurPass( device
 			, nearGroup
@@ -154,8 +155,9 @@ namespace dof
 			, m_ubo
 			, m_intermediate
 			, m_nearBlur
-			, &isEnabled()
+			, crg::RunnablePass::IsEnabledCallback( [this]() { return isEnabled(); } )
 			, &m_passIndex );
+
 		auto & farGroup = m_graph.createPassGroup( "Far" );
 		m_blurFarCoC = std::make_unique< castor3d::GaussianBlur >( farGroup
 			, *passes.front()
@@ -163,7 +165,7 @@ namespace dof
 			, "Far"
 			, m_farCoC.sampledViewId
 			, 5u
-			, crg::RunnablePass::IsEnabledCallback( [this]() { return isEnabled(); } ) );
+			, crg::RunnablePass::IsEnabledCallback( [this]() { return isEnabled() && m_data.enableFarBlur; } ) );
 		passes = createFirstBlurPass( device
 			, farGroup
 			, { &m_blurFarCoC->getLastPass() }
@@ -171,7 +173,7 @@ namespace dof
 			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
 			, m_farCoC
 			, m_intermediate
-			, &isEnabled()
+			, crg::RunnablePass::IsEnabledCallback( [this]() { return isEnabled() && m_data.enableFarBlur; } )
 			, &m_passIndex );
 		passes = createSecondBlurPass( device
 			, farGroup
@@ -179,7 +181,7 @@ namespace dof
 			, m_ubo
 			, m_intermediate
 			, m_farBlur
-			, &isEnabled()
+			, crg::RunnablePass::IsEnabledCallback( [this]() { return isEnabled() && m_data.enableFarBlur; } )
 			, &m_passIndex );
 		m_lastPass = &createCombinePass( device
 			, m_graph

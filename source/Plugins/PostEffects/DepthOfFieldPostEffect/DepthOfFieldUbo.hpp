@@ -9,6 +9,7 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/BaseTypes/Array.hpp>
 #include <ShaderWriter/BaseTypes/Float.hpp>
+#include <ShaderWriter/BaseTypes/UInt.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/VecTypes/Vec2.hpp>
 
@@ -25,6 +26,7 @@ namespace dof
 		castor::RangedValue< float > focalDistance{ 10.0f, castor::makeRange( 0.0f, 100.0f ) };
 		castor::RangedValue< float > focalLength{ 1.0f, castor::makeRange( 0.0f, 100.0f ) };
 		castor::RangedValue< float > bokehScale{ 1.0f, castor::makeRange( 0.0f, 10.0f ) };
+		bool enableFarBlur;
 
 		castor::Point2f pixelStepFull{ 1.0f, 1.0f };
 		castor::Point2f pixelStepHalf{ 1.0f, 1.0f };
@@ -35,7 +37,7 @@ namespace dof
 		float focalDistance{ 10.0f };
 		float focalLength{ 1.0f };
 		float bokehScale{ 1.0f };
-		float pad0{ 0.0f };
+		uint32_t enableFarBlur{ 1u };
 
 		castor::Point2f pixelStepFull{ 1.0f, 1.0f };
 		castor::Point2f pixelStepHalf{ 1.0f, 1.0f };
@@ -50,7 +52,7 @@ namespace dof
 			, sdw::FloatField< "focalDistance" >
 			, sdw::FloatField< "focalLength" >
 			, sdw::FloatField< "bokehScale" >
-			, sdw::FloatField< "pad0" >
+			, sdw::UIntField< "enableFarBlur" >
 			, sdw::Vec2Field< "pixelStepFull" >
 			, sdw::Vec2Field< "pixelStepHalf" >
 			, sdw::Vec4ArrayField< "points64", 64u >
@@ -69,6 +71,7 @@ namespace dof
 		auto bokehScale()const { return getMember< "bokehScale" >(); }
 		auto pixelStepFull()const { return getMember< "pixelStepFull" >(); }
 		auto pixelStepHalf()const { return getMember< "pixelStepHalf" >(); }
+		auto enableFarBlur()const { return getMember< "enableFarBlur" >() != 0_u; }
 		auto points64()const { return getMember< "points64" >(); }
 		auto points16()const { return getMember< "points16" >(); }
 	};

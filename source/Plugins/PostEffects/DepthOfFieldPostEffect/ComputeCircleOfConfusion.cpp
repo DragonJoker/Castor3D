@@ -81,7 +81,12 @@ namespace dof
 						, c3d_mapColour.lod( in.uv(), 0.0_f ).rgb() );
 
 					out.near() = step( signedDist, 0.0_f ) * CoC;
-					out.far() = step( 0.0_f, signedDist ) * CoC;
+
+					IF( writer, c3d_dofData.enableFarBlur() )
+					{
+						out.far() = step( 0.0_f, signedDist ) * CoC;
+					}
+					FI
 				} );
 
 			return writer.getBuilder().releaseShader();

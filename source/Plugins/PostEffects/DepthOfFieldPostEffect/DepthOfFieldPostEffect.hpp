@@ -63,6 +63,7 @@ namespace dof
 		static castor::String const FocalDistance;
 		static castor::String const FocalLength;
 		static castor::String const BokehScale;
+		static castor::String const EnableFarBlur;
 
 	private:
 		castor3d::Texture m_nearCoC;
