@@ -117,12 +117,12 @@ namespace dof
 		, DepthOfFieldUbo const & configurationUbo
 		, castor3d::Texture const & firstBlurResult
 		, castor3d::Texture const & blurResult
-		, bool const * enabled
+		, crg::RunnablePass::IsEnabledCallback isEnabled
 		, uint32_t const * passIndex )
 	{
 		auto extent = blurResult.getExtent();
 		auto & pass = graph.createPass( "SecondBlur"
-			, [&device, extent, enabled, passIndex]( crg::FramePass const & framePass
+			, [&device, extent, isEnabled, passIndex]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -132,7 +132,7 @@ namespace dof
 					, device
 					, crg::rq::Config{}
 						.renderSize( castor3d::makeExtent2D( extent ) )
-						.enabled( enabled )
+						.isEnabled( isEnabled )
 						.passIndex( passIndex ) );
 				device.renderSystem.getEngine()->registerTimer( castor::makeString( framePass.getFullName() )
 					, result->getTimer() );

@@ -17,7 +17,7 @@ namespace dof
 		, crg::ImageViewIdArray const & colour
 		, castor3d::Texture const & cocResult
 		, castor3d::Texture const & blurResult
-		, bool const * enabled
+		, crg::RunnablePass::IsEnabledCallback isEnabled
 		, uint32_t const * passIndex );
 }
 
