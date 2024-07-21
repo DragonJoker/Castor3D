@@ -24,7 +24,6 @@ namespace castor3d
 			entry.create = info.passCreator;
 			entry.id = ++m_currentId;
 			entry.name = info.lightingModel;
-			entry.hasIBLSupport = info.hasIBLSupport;
 		}
 	}
 
@@ -72,16 +71,5 @@ namespace castor3d
 		}
 
 		return it->name;
-	}
-
-	bool PassFactory::hasIBLSupport( LightingModelID lightingModelId )const
-	{
-		return m_registered.end() != std::find_if( m_registered.begin()
-			, m_registered.end()
-			, [lightingModelId]( Entry const & lookup )
-			{
-				return lookup.key == lightingModelId
-					&& lookup.hasIBLSupport;
-			} );
 	}
 }

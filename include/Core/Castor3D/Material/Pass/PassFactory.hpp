@@ -22,7 +22,6 @@ namespace castor3d
 		castor::String lightingModel;
 		PassFactoryBase::Creator passCreator;
 		shader::LightingModelCreator lightingModelCreator;
-		bool hasIBLSupport;
 	};
 
 	class PassFactory
@@ -47,7 +46,6 @@ namespace castor3d
 
 		C3D_API LightingModelID getNameId( castor::String const & passType )const;
 		C3D_API castor::String getIdName( LightingModelID lightingModelId )const;
-		C3D_API bool hasIBLSupport( LightingModelID lightingModelId )const;
 
 		ObjCont const & listRegisteredTypes()const noexcept
 		{

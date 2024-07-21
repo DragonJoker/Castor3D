@@ -37,7 +37,7 @@ namespace castor3d::shader
 		C3D_API void registerOutput( castor::String category
 			, castor::String name
 			, sdw::Float const value );
-		C3D_API DebugOutputCategory pushBlock(castor::String category);
+		C3D_API DebugOutputCategory pushBlock( castor::String category );
 
 		template< typename ValueT >
 		void registerOutput( castor::String name
@@ -103,11 +103,24 @@ namespace castor3d::shader
 			return *this;
 		}
 
+		DebugOutputCategory pushBlock( castor::String category )
+		{
+			return m_debugOutput->pushBlock( castor::move( category ) );
+		}
+
 		template< typename ValueT >
 		void registerOutput( castor::String name
 			, ValueT const value )
 		{
 			m_debugOutput->registerOutput( castor::move( name ), value );
+		}
+
+		template< typename ValueT >
+		void registerOutput( castor::String category
+			, castor::String name
+			, ValueT const value )
+		{
+			m_debugOutput->registerOutput( castor::move( category ), castor::move( name ), value );
 		}
 
 	private:

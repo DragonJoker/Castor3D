@@ -29,18 +29,30 @@ namespace castor3d::shader
 			, Shadow & shadowModel
 			, Lights & lights
 			, bool hasIblSupport
+			, bool hasBackgroundReflectionsSupport
+			, bool hasBackgroundRefractionSupport
 			, bool enableVolumetric
 			, castor::String prefix );
 		C3D_API virtual ~LightingModel() = default;
 
-		inline LightingModelID getLightingModelId()const
+		LightingModelID getLightingModelId()const
 		{
 			return m_lightingModelId;
 		}
 
-		inline bool hasIblSupport()const
+		bool hasIblSupport()const
 		{
 			return m_hasIblSupport;
+		}
+
+		bool hasBackgroundReflectionsSupport()const
+		{
+			return m_hasBackgroundReflectionsSupport;
+		}
+
+		bool hasBackgroundRefractionSupport()const
+		{
+			return m_hasBackgroundRefractionSupport;
 		}
 
 		C3D_API void finish( PassShaders const & passShaders
@@ -284,6 +296,8 @@ namespace castor3d::shader
 		Utils & m_utils;
 		Shadow & m_shadowModel;
 		Lights & m_lights;
+		bool m_hasBackgroundReflectionsSupport;
+		bool m_hasBackgroundRefractionSupport;
 		bool m_hasIblSupport;
 		bool m_enableVolumetric;
 		castor::String m_prefix;

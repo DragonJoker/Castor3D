@@ -28,7 +28,7 @@ namespace castor3d::shader
 		, VkExtent2D targetSize
 		, uint32_t & binding
 		, uint32_t set )
-		: BackgroundModel{ writer, utils, castor::move( targetSize ) }
+		: BackgroundModel{ writer, utils, castor::move( targetSize ), true, true, true }
 	{
 		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapBackground"
 			, binding
@@ -63,14 +63,18 @@ namespace castor3d::shader
 			, set );
 	}
 
-	sdw::RetVec3 IblBackgroundModel::computeDiffuseReflections( sdw::Vec3 const & palbedo
-		, sdw::Vec3 const & pwsNormal
-		, sdw::Vec3 const & pfresnel
-		, sdw::Float const & pmetalness )
+	sdw::RetVec3 IblBackgroundModel::computeDiffuseReflections( sdw::Vec3 const & pwsNormal
+			, sdw::Vec3 const & pwsPosition
+			, sdw::Vec3 const & pV
+			, sdw::Float const & pNdotV
+			, sdw::Vec3 const & pfresnel
+			, sdw::Float const & pmetalness
+			, BlendComponents & components
+			, DebugOutputCategory & debugOutput )
 	{
 		if ( !m_computeDiffuseReflections )
 		{
-			m_computeDiffuseReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeReflections"
+			m_computeDiffuseReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeDiffuseReflections"
 				, [this]( sdw::Vec3 const & albedo
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & fresnel
@@ -92,19 +96,22 @@ namespace castor3d::shader
 		}
 
 		auto irradianceMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
-		return m_computeDiffuseReflections( palbedo
+		return m_computeDiffuseReflections( components.colour
 			, pwsNormal
 			, pfresnel
 			, pmetalness
 			, irradianceMap );
 	}
 
-	sdw::RetVec3 IblBackgroundModel::computeSpecularReflections( sdw::Vec3 const & pfresnel
-		, sdw::Vec3 const & pwsNormal
+	sdw::RetVec3 IblBackgroundModel::computeSpecularReflections( sdw::Vec3 const & pwsNormal
+		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
 		, sdw::Float const & pNdotV
+		, sdw::Vec3 const & pfresnel
 		, sdw::Float const & proughness
-		, sdw::CombinedImage2DRgba32 const & pbrdfMap )
+		, BlendComponents & components
+		, sdw::CombinedImage2DRgba32 const & pbrdfMap
+		, DebugOutputCategory & debugOutput )
 	{
 		if ( !m_computeSpecularReflections )
 		{
@@ -148,10 +155,12 @@ namespace castor3d::shader
 	}
 
 	sdw::RetVec3 IblBackgroundModel::computeSheenReflections( sdw::Vec3 const & pwsNormal
+		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
 		, sdw::Float const & pNdotV
 		, BlendComponents & components
-		, sdw::CombinedImage2DRgba32 const & pbrdfMap )
+		, sdw::CombinedImage2DRgba32 const & pbrdfMap
+		, DebugOutputCategory & debugOutput )
 	{
 		if ( !m_computeSheenReflections )
 		{
@@ -197,9 +206,11 @@ namespace castor3d::shader
 	}
 
 	sdw::RetVec3 IblBackgroundModel::computeRefractions( sdw::Vec3 const & pwsNormal
+		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
 		, sdw::Float const & prefractionRatio
-		, BlendComponents & components )
+		, BlendComponents & components
+		, DebugOutputCategory & debugOutput )
 	{
 		if ( !m_computeRefractions )
 		{
@@ -238,12 +249,14 @@ namespace castor3d::shader
 
 	sdw::RetVec3 IblBackgroundModel::computeSpecularRefractions( sdw::Vec3 const & pfresnel
 		, sdw::Vec3 const & pwsNormal
+		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
 		, sdw::Float const & pNdotV
 		, sdw::Float const & proughness
 		, sdw::Float const & prefractionRatio
 		, BlendComponents & components
-		, sdw::CombinedImage2DRgba32 const & pbrdfMap )
+		, sdw::CombinedImage2DRgba32 const & pbrdfMap
+		, DebugOutputCategory & debugOutput )
 	{
 		if ( !m_computeSpecularRefractions )
 		{

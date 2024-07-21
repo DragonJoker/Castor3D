@@ -34,6 +34,8 @@ namespace castor3d::shader
 			, shadowModel
 			, lights
 			, false
+			, false
+			, false
 			, enableVolumetric
 			, castor::String{ cuT( "c3d_phong_" ) } }
 	{

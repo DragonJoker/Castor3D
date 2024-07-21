@@ -16,7 +16,9 @@ namespace castor3d::shader
 			, Utils & utils
 			, uint32_t & envMapBinding
 			, uint32_t envMapSet
-			, bool hasIblSupport
+			, bool allowReflections
+			, bool allowRefraction
+			, bool allowIbl
 			, bool hasEnvMap = true );
 
 		C3D_API sdw::RetVec3 computeIncident( sdw::Vec3 const & wsPosition
@@ -42,6 +44,7 @@ namespace castor3d::shader
 			, DebugOutputCategory & debugOutput );
 		C3D_API void computeCombined( BlendComponents & components
 			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & difF
 			, sdw::Vec3 const & spcF
 			, sdw::Vec3 const & V
@@ -76,6 +79,7 @@ namespace castor3d::shader
 			, DebugOutputCategory & debugOutput );
 		C3D_API void computeCombined( BlendComponents & pcomponents
 			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & difF
 			, sdw::Vec3 const & spcF
 			, sdw::Vec3 const & V
@@ -101,6 +105,7 @@ namespace castor3d::shader
 			, DebugOutputCategory & debugOutput );
 		C3D_API void computeReflections( BlendComponents & components
 			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & difF
 			, sdw::Vec3 const & spcF
 			, sdw::Vec3 const & V
@@ -120,6 +125,7 @@ namespace castor3d::shader
 			, DebugOutputCategory & debugOutput );
 		C3D_API sdw::Vec3 computeRefractions( BlendComponents & components
 			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, BackgroundModel & background
 			, sdw::UInt envMapIndex
@@ -209,18 +215,21 @@ namespace castor3d::shader
 			, sdw::Float const & NdotV
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::CombinedImage2DRgba32 const & brdfMap
-			, BackgroundModel & background );
+			, BackgroundModel & background
+			, DebugOutputCategory & debugOutput );
 		sdw::RetVec3 computeSheenReflEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::UInt const & envMapIndex
-			, BlendComponents & components );
+			, BlendComponents & components
+			, DebugOutputCategory & debugOutput );
 		sdw::RetVec3 computeRefrEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::UInt const & envMapIndex
 			, sdw::Float const & refractionRatio
-			, BlendComponents & f0 );
+			, BlendComponents & f0
+			, DebugOutputCategory & debugOutput );
 		sdw::RetVec3 computeRefrSceneMap( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & wsNormal
@@ -228,19 +237,22 @@ namespace castor3d::shader
 			, CameraData const & camera
 			, sdw::Vec2 sceneUv
 			, sdw::Float const & refractionRatio
-			, BlendComponents & components );
+			, BlendComponents & components
+			, DebugOutputCategory & debugOutput );
 		sdw::RetVec3 doComputeRefrEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::UInt const & envMapIndex
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 & albedo
-			, sdw::Float const & roughness );
+			, sdw::Float const & roughness
+			, DebugOutputCategory & debugOutput );
 		void doComputeReflections( sdw::CombinedImage2DRgba32 const & brdf
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::Boolean const & hasEnvMap
 			, BackgroundModel & background
 			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & difF
 			, sdw::Vec3 const & spcF
 			, sdw::Vec3 const & V
@@ -249,46 +261,56 @@ namespace castor3d::shader
 			, BlendComponents & components
 			, sdw::UInt & envMapIndex
 			, sdw::Vec3 & reflectedDiffuse
-			, sdw::Vec3 & reflectedSpecular );
+			, sdw::Vec3 & reflectedSpecular
+			, DebugOutputCategory & debugOutput );
 		void doComputeRefractions( sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::Boolean const & hasEnvMap
 			, BackgroundModel & background
 			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & refractionRatio
 			, sdw::UInt const & envMapIndex
 			, BlendComponents & components
-			, sdw::Vec3 & refracted );
+			, sdw::Vec3 & refracted
+			, DebugOutputCategory & debugOutput );
 		void doComputeClearcoatReflections( sdw::CombinedImage2DRgba32 const & brdf
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::Boolean const & hasEnvMap
 			, BackgroundModel & background
 			, sdw::Vec3 const & fresnel
+			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::UInt const & hasReflection
 			, sdw::Float const & NdotV
 			, BlendComponents & components
 			, sdw::UInt & envMapIndex
-			, sdw::Vec3 & coatReflected );
+			, sdw::Vec3 & coatReflected
+			, DebugOutputCategory & debugOutput );
 		void doComputeSheenReflections( sdw::CombinedImage2DRgba32 const & brdf
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::Boolean const & hasEnvMap
 			, BackgroundModel & background
 			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
 			, sdw::UInt const & hasReflection
 			, BlendComponents & components
 			, sdw::UInt & envMapIndex
-			, sdw::Vec3 & sheenReflected );
+			, sdw::Vec3 & sheenReflected
+			, DebugOutputCategory & debugOutput );
 
 	private:
 		sdw::ShaderWriter & m_writer;
 		Utils & m_utils;
-		bool m_hasIblSupport;
+		bool m_allowReflections;
+		bool m_allowRefraction;
+		bool m_allowIbl;
 		bool m_hasEnvMap;
 		sdw::Function< sdw::Void
 			, InOutBlendComponents
+			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3
@@ -308,6 +330,7 @@ namespace castor3d::shader
 			, sdw::OutVec3 > m_computeSceneReflRefr;
 		sdw::Function< sdw::Void
 			, InOutBlendComponents
+			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3

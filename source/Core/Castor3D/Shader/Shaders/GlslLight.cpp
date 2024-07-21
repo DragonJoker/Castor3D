@@ -769,6 +769,22 @@ namespace castor3d::shader
 			: false;
 	}
 
+	bool Lights::hasBackgroundReflectionsSupport()
+	{
+		auto lightingModel = getLightingModel();
+		return lightingModel
+			? lightingModel->hasBackgroundReflectionsSupport()
+			: false;
+	}
+
+	bool Lights::hasBackgroundRefractionSupport()
+	{
+		auto lightingModel = getLightingModel();
+		return lightingModel
+			? lightingModel->hasBackgroundRefractionSupport()
+			: false;
+	}
+
 	LightingModel * Lights::getLightingModel()
 	{
 		if ( !m_lightingModel )

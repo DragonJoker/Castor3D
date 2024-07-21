@@ -17,7 +17,7 @@ namespace castor3d::shader
 		, VkExtent2D targetSize
 		, uint32_t & binding
 		, uint32_t set )
-		: BackgroundModel{ writer, utils, castor::move( targetSize ) }
+		: BackgroundModel{ writer, utils, castor::move( targetSize ), false, false, false }
 	{
 		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapBackground"
 			, binding
@@ -41,6 +41,7 @@ namespace castor3d::shader
 	}
 
 	void NoIblBackgroundModel::computeReflections( sdw::Vec3 const & pwsNormal
+		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pdifF
 		, sdw::Vec3 const & pspcF
 		, sdw::Vec3 const & pV
@@ -48,7 +49,8 @@ namespace castor3d::shader
 		, BlendComponents & components
 		, sdw::CombinedImage2DRgba32 const & pbrdf
 		, sdw::Vec3 & preflectedDiffuse
-		, sdw::Vec3 & preflectedSpecular )
+		, sdw::Vec3 & preflectedSpecular
+		, DebugOutputCategory & debugOutput )
 	{
 		if ( !m_computeReflections )
 		{
@@ -86,9 +88,11 @@ namespace castor3d::shader
 	}
 
 	sdw::RetVec3 NoIblBackgroundModel::computeRefractions( sdw::Vec3 const & pwsNormal
+		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pV
 		, sdw::Float const & prefractionRatio
-		, BlendComponents & components )
+		, BlendComponents & components
+		, DebugOutputCategory & debugOutput )
 	{
 		if ( !m_computeRefractions )
 		{

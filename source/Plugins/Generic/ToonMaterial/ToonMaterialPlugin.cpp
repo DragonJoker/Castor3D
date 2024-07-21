@@ -69,12 +69,10 @@ extern "C"
 		engine->registerPassComponent< toon::EdgesComponent >();
 		engine->registerPassModels( { toon::shader::ToonPhongLightingModel::getName()
 			, toon::ToonPhongPass::create
-			, &toon::shader::ToonPhongLightingModel::create
-			, false } );
+			, &toon::shader::ToonPhongLightingModel::create } );
 		engine->registerPassModels( { toon::shader::ToonPbrLightingModel::getName()
 			, toon::ToonPbrPass::create
-			, &toon::shader::ToonPbrLightingModel::create
-			, true } );
+			, &toon::shader::ToonPbrLightingModel::create } );
 		engine->registerSpecificsBuffer( castor::String{ toon::shader::ToonProfile::getName() }
 			, { &toon::shader::ToonProfiles::create
 				, &toon::shader::ToonProfiles::update

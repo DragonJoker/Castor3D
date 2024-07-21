@@ -217,12 +217,10 @@ namespace castor3d
 
 		registerPassModels( { castor::String{ PhongPass::LightingModel }
 				, PhongPass::create
-				, &shader::PhongLightingModel::create
-				, false } );
+				, &shader::PhongLightingModel::create } );
 		registerPassModels( { castor::String{ PbrPass::LightingModel }
 				, PbrPass::create
-				, &shader::PbrLightingModel::create
-				, true } );
+				, &shader::PbrLightingModel::create } );
 		m_lightingModelId = getPassFactory().listRegisteredTypes().begin()->key;
 
 		registerParsers( ControlsManager::Name
