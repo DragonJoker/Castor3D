@@ -1,4 +1,4 @@
-﻿#include "AtmosphereScattering/AtmosphereModel.hpp"
+#include "AtmosphereScattering/AtmosphereModel.hpp"
 
 #include <Castor3D/Shader/Shaders/GlslLight.hpp>
 #include <Castor3D/Shader/Shaders/GlslShadow.hpp>
@@ -85,6 +85,33 @@ namespace atmosphere_scattering
 		}
 
 		return m_getWorldPos( pdepth, ppixPos, ptexSize );
+	}
+
+	sdw::RetVec3 AtmosphereModel::getMultipleScattering( sdw::Float const & pworldPosLength
+		, sdw::Float const & pviewZenithCosAngle )
+	{
+		if ( !m_getMultipleScattering )
+		{
+			m_getMultipleScattering = writer.implementFunction< sdw::Vec3 >( "getMultipleScattering"
+				, [&]( sdw::Float const & worldPosLength
+					, sdw::Float const & viewZenithCosAngle )
+				{
+					auto uv = writer.declLocale( "uv"
+						, clamp( vec2( viewZenithCosAngle * 0.5_f + 0.5_f
+								, ( worldPosLength - getPlanetRadius() ) / ( getAtmosphereThickness() ) )
+							, vec2( 0.0_f )
+							, vec2( 1.0_f ) ) );
+					uv = vec2( fromUnitToSubUvs( uv.x(), atmosphereData.multiScatteringLUTRes() )
+						, fromUnitToSubUvs( uv.y(), atmosphereData.multiScatteringLUTRes() ) );
+
+					writer.returnStmt( multiScatTexture->lod( uv, 0.0_f ).rgb() );
+				}
+				, sdw::InFloat{ writer, "worldPosLength" }
+				, sdw::InFloat{ writer, "viewZenithCosAngle" } );
+		}
+
+		return m_getMultipleScattering( pworldPosLength
+			, pviewZenithCosAngle );
 	}
 
 	sdw::Vec3 AtmosphereModel::getPositionToPlanet( sdw::Vec3 const & position )const
@@ -301,14 +328,7 @@ namespace atmosphere_scattering
 
 						if ( settings.multiScatApproxEnabled && multiScatTexture )
 						{
-							auto msUv = writer.declLocale( "msUv"
-								, clamp( vec2( sdw::fma( sunZenithCosAngle, 0.5_f, 0.5_f ), ( pHeight - getPlanetRadius() ) / ( getAtmosphereThickness() ) )
-									, vec2( 0.0_f )
-									, vec2( 1.0_f ) ) );
-							msUv = vec2( fromUnitToSubUvs( msUv.x(), atmosphereData.multiScatteringLUTRes() )
-								, fromUnitToSubUvs( msUv.y(), atmosphereData.multiScatteringLUTRes() ) );
-
-							multiScatteredLuminance = multiScatTexture->lod( msUv, 0.0_f ).rgb();
+							multiScatteredLuminance = getMultipleScattering( pHeight, sunZenithCosAngle );
 						}
 
 						auto S = writer.declLocale( "S", globalL * ( planetShadow * transmittanceToSun * phaseTimesScattering + multiScatteredLuminance * medium.scattering() ) );
@@ -435,15 +455,13 @@ namespace atmosphere_scattering
 		return m_moveToTopAtmosphere( pray );
 	}
 
-	sdw::RetVec3 AtmosphereModel::getSunRadiance( sdw::Vec3 const & pcameraPosition
-		, sdw::Vec3 const & psunDir
+	sdw::RetVec3 AtmosphereModel::getSunRadiance( sdw::Vec3 const & psunDir
 		, sdw::CombinedImage2DRgba32 const & ptransmittanceMap )
 	{
 		if ( !m_getSunRadiance )
 		{
 			m_getSunRadiance = writer.implementFunction< sdw::Vec3 >( "atm_getSunRadiance"
-				, [&]( sdw::Vec3 const & cameraPosition
-					, sdw::Vec3 const & sunDir
+				, [&]( sdw::Vec3 const & sunDir
 					, sdw::CombinedImage2DRgba32 const & transmittanceMap )
 				{
 					auto sunZenithCosAngle = writer.declLocale( "sunZenithCosAngle"
@@ -453,14 +471,11 @@ namespace atmosphere_scattering
 					lutTransmittanceParamsToUv( getPlanetRadius(), sunZenithCosAngle, uv );
 					writer.returnStmt( transmittanceMap.lod( uv, 0.0_f ).rgb() );
 				}
-				, sdw::InVec3{ writer, "cameraPosition" }
 				, sdw::InVec3{ writer, "sunDir" }
 				, sdw::InCombinedImage2DRgba32{ writer, "transmittanceMap" } );
 		}
 
-		return m_getSunRadiance( pcameraPosition
-			, psunDir
-			, ptransmittanceMap );
+		return m_getSunRadiance( psunDir, ptransmittanceMap );
 	}
 
 	sdw::RetFloat AtmosphereModel::getPlanetShadow( sdw::Vec3 const & pplanetO

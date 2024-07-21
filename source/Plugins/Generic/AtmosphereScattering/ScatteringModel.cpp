@@ -150,17 +150,16 @@ namespace atmosphere_scattering
 		return m_getSunLuminance( pray );
 	}
 
-	sdw::RetVec3 ScatteringModel::getSunRadiance( sdw::Vec3 const & position
-		, sdw::Vec3 const & sunDir )
-	{
-		return m_atmosphere.getSunRadiance( position
-			, sunDir
-			, transmittanceMap );
-	}
-
 	sdw::RetVec3 ScatteringModel::getSunRadiance( sdw::Vec3 const & sunDir )
 	{
-		return getSunRadiance( m_atmosphere.getCameraPosition(), sunDir );
+		return m_atmosphere.getSunRadiance( sunDir, transmittanceMap );
+	}
+
+	sdw::Vec4 ScatteringModel::gradSkyView( sdw::Vec2 const & coord
+		, sdw::Vec2 const & dPdx
+		, sdw::Vec2 const & dPdy )const
+	{
+		return skyViewMap.grad( coord, dPdx, dPdy );
 	}
 
 	sdw::Float ScatteringModel::aerialPerspectiveDepthToSlice( sdw::Float const & depth )

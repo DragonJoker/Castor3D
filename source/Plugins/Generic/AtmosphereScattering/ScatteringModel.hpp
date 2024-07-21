@@ -66,9 +66,10 @@ namespace atmosphere_scattering
 			, uint32_t & binding
 			, uint32_t set );
 		sdw::RetVec3 getSunLuminance( Ray const & ray );
-		sdw::RetVec3 getSunRadiance( sdw::Vec3 const & position
-			, sdw::Vec3 const & sunDir );
 		sdw::RetVec3 getSunRadiance( sdw::Vec3 const & sunDir );
+		sdw::Vec4 gradSkyView( sdw::Vec2 const & coord
+			, sdw::Vec2 const & dPdx
+			, sdw::Vec2 const & dPdy )const;
 		sdw::Float aerialPerspectiveDepthToSlice( sdw::Float const & depth );
 		castor3d::shader::RetRay getPixelTransLum( sdw::Vec2 const & fragPos
 			, sdw::Vec2 const & fragSize

@@ -266,8 +266,7 @@ namespace atmosphere_scattering
 			, sdw::Float const & depthBufferValue
 			, sdw::Float const & tMaxMax = sdw::Float{ 9000000.0_f } );
 		sdw::RetBoolean moveToTopAtmosphere( Ray & ray );
-		sdw::RetVec3 getSunRadiance( sdw::Vec3 const & cameraPosition
-			, sdw::Vec3 const & sunDir
+		sdw::RetVec3 getSunRadiance( sdw::Vec3 const & sunDir
 			, sdw::CombinedImage2DRgba32 const & transmittanceMap );
 		sdw::RetFloat getPlanetShadow( sdw::Vec3 const & planetO
 			, sdw::Vec3 const & position );
@@ -302,6 +301,8 @@ namespace atmosphere_scattering
 		sdw::RetVec3 getWorldPos( sdw::Float const & depth
 			, sdw::Vec2 const & pixPos
 			, sdw::Vec2 const & texSize );
+		sdw::RetVec3 getMultipleScattering( sdw::Float const & worldPosLength
+			, sdw::Float const & viewZenithCosAngle );
 
 		////////////////////////////////////////////////////////////
 		// LUT functions
@@ -402,8 +403,10 @@ namespace atmosphere_scattering
 			, sdw::InFloat
 			, sdw::InVec2
 			, sdw::InVec2 > m_getWorldPos;
+		sdw::Function < sdw::Vec3
+			, sdw::InFloat
+			, sdw::InFloat > m_getMultipleScattering;
 		sdw::Function< sdw::Vec3
-			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InCombinedImage2DRgba32 > m_getSunRadiance;
 		sdw::Function< sdw::Float

@@ -98,6 +98,7 @@ namespace ocean_fft
 			components.declMember( "gradientJacobianUV", sdw::type::Kind::eVec2F );
 			components.declMember( "noiseGradientUV", sdw::type::Kind::eVec2F );
 			components.declMember( "mdlPosition", sdw::type::Kind::eVec3F );
+			components.declMember( "noiseGradient", sdw::type::Kind::eVec2F );
 		}
 	}
 
@@ -122,7 +123,7 @@ namespace ocean_fft
 			inits.emplace_back( sdw::makeExpr( sdw::Float{ FFTWaterComponent::Default } ) );
 		}
 
-		inits.push_back( sdw::makeExpr( 1.0_f ) );
+		inits.push_back( sdw::makeExpr( 1.0_f ) ); // waterColourMod
 
 		if ( surface && surface->hasMember( "gradientJacobianUV" ) )
 		{
@@ -136,6 +137,8 @@ namespace ocean_fft
 			inits.push_back( sdw::makeExpr( vec2( 0.0_f ) ) );
 			inits.push_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		}
+
+		inits.push_back( sdw::makeExpr( vec2( 0.0_f ) ) ); // noiseGradient
 	}
 
 	void FFTWaterComponent::ComponentsShader::blendComponents( c3d::Materials const & materials
@@ -167,14 +170,14 @@ namespace ocean_fft
 			&& writer.hasGlobalVariable( "c3d_normalsMap" ) )
 		{
 			auto gradientJacobianUV = components.getMember< sdw::Vec2 >( "gradientJacobianUV" );
+			auto noiseGradient = components.getMember< sdw::Vec2 >( "noiseGradient" );
 			auto gradientJacobianMap = writer.getVariable< sdw::CombinedImage2DRgba16 >( "c3d_gradientJacobianMap" );
 			auto gradJacobian = writer.declLocale( "gradJacobian"
 				, gradientJacobianMap.sample( gradientJacobianUV ).xyz() );
 		
 			auto noiseGradientUV = components.getMember< sdw::Vec2 >( "noiseGradientUV" );
 			auto normalsMap = writer.getVariable< sdw::CombinedImage2DRg32 >( "c3d_normalsMap" );
-			auto noiseGradient = writer.declLocale( "noiseGradient"
-				, vec2( 0.3_f ) * normalsMap.sample( noiseGradientUV ) );
+			noiseGradient = vec2( 0.3_f ) * normalsMap.sample( noiseGradientUV );
 
 			// Add low frequency gradient from heightmap with gradient from high frequency noisemap.
 			auto finalNormal = writer.declLocale( "finalNormal"
