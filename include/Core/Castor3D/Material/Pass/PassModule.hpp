@@ -156,7 +156,6 @@ namespace castor3d
 		PassCreator create;
 		PassTypeID id;
 		castor::String name;
-		bool hasIBLSupport;
 	};
 
 	using PassFactoryBase = castor::Factory< Pass

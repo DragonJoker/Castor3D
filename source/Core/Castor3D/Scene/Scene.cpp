@@ -878,11 +878,6 @@ namespace castor3d
 		return m_renderNodes->hasNodes( lightingModelId );
 	}
 
-	bool Scene::hasIBLSupport( LightingModelID lightingModelId )const
-	{
-		return getEngine()->getPassFactory().hasIBLSupport( lightingModelId );
-	}
-
 	void Scene::setDirectionalShadowCascades( uint32_t value )
 	{
 		CU_Require( value <= MaxDirectionalCascadesCount );

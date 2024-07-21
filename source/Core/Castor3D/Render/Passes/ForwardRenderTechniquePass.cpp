@@ -267,6 +267,8 @@ namespace castor3d
 			, utils
 			, index
 			, uint32_t( RenderPipeline::eBuffers )
+			, lights.hasBackgroundReflectionsSupport()
+			, lights.hasBackgroundRefractionSupport()
 			, lights.hasIblSupport()
 			, m_hasEnvMap };
 		auto backgroundModel = shader::BackgroundModel::createModel( getScene()

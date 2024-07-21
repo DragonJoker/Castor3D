@@ -32,7 +32,7 @@ namespace atmosphere_scattering
 		, bool needsForeground
 		, uint32_t & binding
 		, uint32_t set )
-		: castor3d::shader::BackgroundModel{ writer, utils, castor::move( targetSize ) }
+		: castor3d::shader::BackgroundModel{ writer, utils, castor::move( targetSize ), false, false, false }
 		, cameraBuffer{ writer.declUniformBuffer<>( CameraUbo::Buffer
 			, binding++
 			, set ) }

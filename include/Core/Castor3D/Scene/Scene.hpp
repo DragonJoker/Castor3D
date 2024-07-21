@@ -308,7 +308,6 @@ namespace castor3d
 		C3D_API ashes::Buffer< ModelBufferConfiguration > const & getModelBuffer()const;
 		C3D_API ashes::Buffer< BillboardUboConfiguration > const & getBillboardsBuffer()const;
 		C3D_API bool hasObjects( LightingModelID lightingModelId )const;
-		C3D_API bool hasIBLSupport( LightingModelID lightingModelId )const;
 
 		castor::BoundingBox const & getBoundingBox()const noexcept
 		{

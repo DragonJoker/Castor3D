@@ -565,6 +565,8 @@ namespace castor3d::shader
 		*/
 		//\{
 		C3D_API bool hasIblSupport();
+		C3D_API bool hasBackgroundReflectionsSupport();
+		C3D_API bool hasBackgroundRefractionSupport();
 		C3D_API LightingModel * getLightingModel();
 		//\}
 		//\}

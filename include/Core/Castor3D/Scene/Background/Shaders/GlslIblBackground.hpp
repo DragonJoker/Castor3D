@@ -26,34 +26,47 @@ namespace castor3d::shader
 			, uint32_t & binding
 			, uint32_t set );
 
-		C3D_API sdw::RetVec3 computeDiffuseReflections( sdw::Vec3 const & albedo
-			, sdw::Vec3 const & wsNormal
-			, sdw::Vec3 const & fresnel
-			, sdw::Float const & metalness )override;
-		C3D_API sdw::RetVec3 computeSpecularReflections( sdw::Vec3 const & fresnel
-			, sdw::Vec3 const & wsNormal
+		C3D_API sdw::RetVec3 computeDiffuseReflections( sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
+			, sdw::Vec3 const & fresnel
+			, sdw::Float const & metalness
+			, BlendComponents & components
+			, DebugOutputCategory & debugOutput )override;
+		C3D_API sdw::RetVec3 computeSpecularReflections( sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsPosition
+			, sdw::Vec3 const & V
+			, sdw::Float const & NdotV
+			, sdw::Vec3 const & fresnel
 			, sdw::Float const & roughness
-			, sdw::CombinedImage2DRgba32 const & brdf )override;
+			, BlendComponents & components
+			, sdw::CombinedImage2DRgba32 const & brdf
+			, DebugOutputCategory & debugOutput )override;
 		C3D_API sdw::RetVec3 computeSheenReflections( sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
 			, BlendComponents & components
-			, sdw::CombinedImage2DRgba32 const & brdf )override;
+			, sdw::CombinedImage2DRgba32 const & brdf
+			, DebugOutputCategory & debugOutput )override;
 
 		C3D_API sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & refractionRatio
-			, BlendComponents & components )override;
+			, BlendComponents & components
+			, DebugOutputCategory & debugOutput )override;
 		C3D_API sdw::RetVec3 computeSpecularRefractions( sdw::Vec3 const & fresnel
 			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & V
 			, sdw::Float const & NdotV
 			, sdw::Float const & roughness
 			, sdw::Float const & refractionRatio
 			, BlendComponents & components
-			, sdw::CombinedImage2DRgba32 const & brdfMap )override;
+			, sdw::CombinedImage2DRgba32 const & brdfMap
+			, DebugOutputCategory & debugOutput )override;
 
 	public:
 		static castor::String const Name;

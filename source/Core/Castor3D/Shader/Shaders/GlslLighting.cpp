@@ -37,6 +37,8 @@ namespace castor3d::shader
 		, Shadow & shadowModel
 		, Lights & lights
 		, bool hasIblSupport
+		, bool hasBackgroundReflectionsSupport
+		, bool hasBackgroundRefractionSupport
 		, bool enableVolumetric
 		, castor::String prefix )
 		: m_lightingModelId{ lightingModelId }
@@ -45,6 +47,8 @@ namespace castor3d::shader
 		, m_utils{ utils }
 		, m_shadowModel{ shadowModel }
 		, m_lights{ lights }
+		, m_hasBackgroundReflectionsSupport{ hasBackgroundReflectionsSupport }
+		, m_hasBackgroundRefractionSupport{ hasBackgroundRefractionSupport }
 		, m_hasIblSupport{ hasIblSupport }
 		, m_enableVolumetric{ enableVolumetric }
 		, m_prefix{ castor::move( prefix ) }

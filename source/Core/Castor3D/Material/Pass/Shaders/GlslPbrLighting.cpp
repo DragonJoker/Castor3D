@@ -31,6 +31,8 @@ namespace castor3d::shader
 			, shadowModel
 			, lights
 			, true
+			, true
+			, true
 			, enableVolumetric
 			, cuT( "c3d_pbr_" ) }
 		, m_cookTorrance{ writer, brdf }
