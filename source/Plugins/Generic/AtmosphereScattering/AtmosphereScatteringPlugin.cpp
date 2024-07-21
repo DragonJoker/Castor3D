@@ -59,13 +59,11 @@ extern "C"
 		engine->registerPassModel( backgroundModelId
 			, { castor::String{ atmosphere_scattering::AtmospherePhongLightingModel::getName() }
 				, castor3d::PhongPass::create
-				, &atmosphere_scattering::AtmospherePhongLightingModel::create
-				, false } );
+				, &atmosphere_scattering::AtmospherePhongLightingModel::create } );
 		engine->registerPassModel( backgroundModelId
 			, { castor::String{ atmosphere_scattering::AtmospherePbrLightingModel::getName() }
 				, castor3d::PbrPass::create
-				, &atmosphere_scattering::AtmospherePbrLightingModel::create
-				, true } );
+				, &atmosphere_scattering::AtmospherePbrLightingModel::create } );
 		engine->registerParsers( atmosphere_scattering::AtmosphereBackgroundModel::PluginType
 			, atmosphere_scattering::createParsers()
 			, atmosphere_scattering::createSections()
