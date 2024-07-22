@@ -883,6 +883,7 @@ namespace castor3d
 		using Creator = castor::Function< crg::FramePassArray( RenderDevice const &
 			, RenderTechnique &
 			, TechniquePasses &
+			, crg::ResourcesCache &
 			, crg::FramePassArray ) >;
 
 		RenderPassRegisterInfo( castor::String pname

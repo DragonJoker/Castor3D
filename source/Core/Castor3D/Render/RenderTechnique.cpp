@@ -874,6 +874,7 @@ namespace castor3d
 			result = renderPassInfo->create( m_device
 				, *this
 				, m_renderPasses
+				, m_renderTarget.getResources()
 				, castor::move( result ) );
 		}
 

@@ -360,53 +360,6 @@ namespace atmosphere_scattering
 		return m_U( pzeta, pV, pN, pTx, pTy );
 	}
 
-	sdw::RetFloat AtmosphereBackgroundModel::meanFresnel1F( sdw::Float const pcosThetaV
-		, sdw::Float const psigmaV )
-	{
-		if ( !m_meanFresnel1F )
-		{
-			m_meanFresnel1F = m_writer.implementFunction< sdw::Float >( "meanFresnel1F"
-				, [&]( sdw::Float const & cosThetaV
-					, sdw::Float const & sigmaV )
-				{
-					m_writer.returnStmt( pow( 1.0_f - cosThetaV
-						, 5.0_f * exp( -2.69_f * sigmaV ) ) / ( 1.0_f + 22.7_f * pow( sigmaV, 1.5_f ) ) );
-				}
-				, sdw::InFloat{ m_writer, "cosThetaV" }
-				, sdw::InFloat{ m_writer, "sigmaV" } );
-		}
-
-		return m_meanFresnel1F( pcosThetaV, psigmaV );
-	}
-
-	sdw::RetFloat AtmosphereBackgroundModel::meanFresnel2F( sdw::Vec3 const pV
-		, sdw::Vec3 const pN
-		, sdw::Vec2 const psigmaSq )
-	{
-		if ( !m_meanFresnel2F )
-		{
-			// V, N in world space
-			m_meanFresnel2F = m_writer.implementFunction< sdw::Float >( "meanFresnel2F"
-				, [&]( sdw::Vec3 const & V
-					, sdw::Vec3 const & N
-					, sdw::Vec2 const & sigmaSq )
-				{
-					auto v = m_writer.declLocale( "v"
-						, V.xy() ); // view direction in wind space
-					auto t = m_writer.declLocale( "t"
-						, v * v / ( 1.0_f - V.z() * V.z() ) ); // cos^2 and sin^2 of view direction
-					auto sigmaV2 = m_writer.declLocale( "sigmaV2"
-						, dot( t, sigmaSq ) ); // slope variance in view direction
-					m_writer.returnStmt( meanFresnel1F( dot( V, N ), sqrt( max( 0.0_f, sigmaV2 ) ) ) );
-				}
-				, sdw::InVec3{ m_writer, "V" }
-				, sdw::InVec3{ m_writer, "N" }
-				, sdw::InVec2{ m_writer, "sigmaSq" } );
-		}
-
-		return m_meanFresnel2F( pV, pN, psigmaSq );
-	}
-
 	sdw::RetVec3 AtmosphereBackgroundModel::meanSkyRadiance( sdw::Vec3 const pV
 		, sdw::Vec3 const pN
 		, sdw::Vec3 const pTx

@@ -231,7 +231,7 @@ namespace castor3d
 		shader::SssProfiles sssProfiles{ writer
 			, uint32_t( GlobalBuffersIdx::eSssProfiles )
 			, RenderPipeline::eBuffers
-				, !C3D_DisableSSSTransmittance };
+			, !C3D_DisableSSSTransmittance };
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers
