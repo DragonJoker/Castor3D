@@ -83,11 +83,6 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const N
 			, sdw::Vec3 const Tx
 			, sdw::Vec3 const Ty );
-		sdw::RetFloat meanFresnel1F( sdw::Float const cosThetaV
-			, sdw::Float const sigmaV );
-		sdw::RetFloat meanFresnel2F( sdw::Vec3 const V
-			, sdw::Vec3 const N
-			, sdw::Vec2 const sigmaSq );
 		sdw::RetVec3 meanSkyRadiance( sdw::Vec3 const V
 			, sdw::Vec3 const N
 			, sdw::Vec3 const Tx
@@ -140,13 +135,6 @@ namespace atmosphere_scattering
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3 > m_U;
-		sdw::Function< sdw::Float
-			, sdw::InFloat
-			, sdw::InFloat > m_meanFresnel1F;
-		sdw::Function < sdw::Float
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InVec2 > m_meanFresnel2F;
 		sdw::Function < sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
