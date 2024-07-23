@@ -53,29 +53,29 @@ namespace castor3d
 
 	Face TriFaceMapping::ComponentData::addFace( uint32_t a, uint32_t b, uint32_t c )
 	{
-		Face result{ a, b, c };
-
-		if ( auto size = m_submesh.getPointsCount();
-			a < size && b < size && c < size )
-		{
-			m_faces.push_back( result );
-			m_hasNormals = false;
-		}
-		else
-		{
-			throw std::range_error( "addFace - One or more index out of bound" );
-		}
-
+		doCheckFace( m_submesh.getPointsCount(), a, b, c );
+		auto result = doAddFace( a, b, c );
+		m_hasNormals = false;
+		needsUpdate();
 		return result;
 	}
 
 	void TriFaceMapping::ComponentData::addFaceGroup( FaceIndices const * const begin
 		, FaceIndices const * const end )
 	{
+		for ( auto size = m_submesh.getPointsCount();
+			auto & face : castor::makeArrayView( begin, end ) )
+		{
+			doCheckFace( size, face.m_index[0], face.m_index[1], face.m_index[2] );
+		}
+
 		for ( auto & face : castor::makeArrayView( begin, end ) )
 		{
-			addFace( face.m_index[0], face.m_index[1], face.m_index[2] );
+			doAddFace( face.m_index[0], face.m_index[1], face.m_index[2] );
 		}
+
+		m_hasNormals = false;
+		needsUpdate();
 	}
 
 	void TriFaceMapping::ComponentData::addQuadFace( uint32_t a
@@ -85,8 +85,13 @@ namespace castor3d
 		, castor::Point3f const & minUV
 		, castor::Point3f const & maxUV )
 	{
-		addFace( a, b, c );
-		addFace( a, c, d );
+		auto size = m_submesh.getPointsCount();
+		doCheckFace( size, a, b, c );
+		doCheckFace( size, a, c, d );
+		doAddFace( a, b, c );
+		doAddFace( a, c, d );
+		m_hasNormals = false;
+		needsUpdate();
 
 		if ( auto texComp = m_submesh.getComponent< Texcoords0Component >() )
 		{
@@ -98,6 +103,19 @@ namespace castor3d
 				texData->getData()[d] = castor::Point3f{ minUV[0], maxUV[1], 0.0f };
 			}
 		}
+	}
+
+	void TriFaceMapping::ComponentData::doCheckFace( uint32_t size, uint32_t a, uint32_t b, uint32_t c )const
+	{
+		if ( a >= size || b >= size || c >= size )
+		{
+			throw std::range_error( "checkFaceFace - One or more index out of bound" );
+		}
+	}
+
+	Face TriFaceMapping::ComponentData::doAddFace( uint32_t a, uint32_t b, uint32_t c )
+	{
+		return m_faces.emplace_back( a, b, c );
 	}
 
 	void TriFaceMapping::ComponentData::doCleanup( RenderDevice const & device )

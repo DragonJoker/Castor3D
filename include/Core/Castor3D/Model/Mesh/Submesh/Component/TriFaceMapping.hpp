@@ -140,6 +140,7 @@ namespace castor3d
 			void setData( FaceArray faces )
 			{
 				m_faces = castor::move( faces );
+				needsUpdate();
 			}
 
 			uint32_t getCount()const noexcept
@@ -160,6 +161,8 @@ namespace castor3d
 		private:
 			void doCleanup( RenderDevice const & device )override;
 			void doUpload( UploadData & uploader )override;
+			void doCheckFace( uint32_t size, uint32_t a, uint32_t b, uint32_t c )const;
+			Face doAddFace( uint32_t a, uint32_t b, uint32_t c );
 
 		private:
 			//!\~english	The faces in the submesh.
