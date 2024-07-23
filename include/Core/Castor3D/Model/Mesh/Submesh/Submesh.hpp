@@ -293,6 +293,7 @@ namespace castor3d
 		C3D_API void setBaseData( SubmeshData submeshData, castor::Point3fArray data );
 		C3D_API void setBaseData( SubmeshData submeshData, castor::Point4fArray data );
 		C3D_API void addComponent( SubmeshComponentUPtr component );
+		C3D_API void setIndexCount( uint32_t value );
 		void disableSceneUpdate();
 		void needsUpdate();
 		void addPoints( castor::Vector< InterleavedVertex > const & vertices );

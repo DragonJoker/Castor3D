@@ -219,6 +219,12 @@ namespace castor3d
 			return getFirst< PositionT >( SubmeshData::ePositions );
 		}
 
+		void setBufferChunkSize( SubmeshData data, uint32_t size )
+		{
+			buffers[uint32_t( data )].chunk.askedSize = size;
+			buffers[uint32_t( data )].chunk.size = size;
+		}
+
 		void createUniformPassBinding( SubmeshData data
 			, crg::FramePass & pass
 			, uint32_t binding
