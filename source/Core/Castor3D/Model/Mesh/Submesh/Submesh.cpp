@@ -760,6 +760,12 @@ namespace castor3d
 		m_components.emplace( id, castor::move( component ) );
 	}
 
+	void Submesh::setIndexCount( uint32_t value )
+	{
+		m_sourceBufferOffset.setBufferChunkSize( SubmeshData::eIndex, value * sizeof( uint32_t ) );
+		m_dirty = true;
+	}
+
 	InterleavedVertex Submesh::getInterleavedPoint( uint32_t index )const
 	{
 		CU_Require( index < getPointsCount() );
