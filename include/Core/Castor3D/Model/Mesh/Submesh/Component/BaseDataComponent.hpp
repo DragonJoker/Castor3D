@@ -99,10 +99,12 @@ namespace castor3d
 			void setData( castor::Vector< DataT > const & data )
 			{
 				m_data = data;
+				needsUpdate();
 			}
 
 			castor::Vector< DataT > & getData()
 			{
+				needsUpdate();
 				return m_data;
 			}
 
