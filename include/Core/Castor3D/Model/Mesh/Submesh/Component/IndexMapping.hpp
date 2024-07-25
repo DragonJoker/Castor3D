@@ -37,6 +37,15 @@ namespace castor3d
 		C3D_API virtual uint32_t getCount()const = 0;
 		/**
 		 *\~english
+		 *\brief		Sets the elements count.
+		 *\param[in]	value	The count.
+		 *\~french
+		 *\brief		Définit le nombre d'éléments.
+		 *\param[in]	value	Le nombre.
+		 */
+		C3D_API virtual void setCount( uint32_t value ) = 0;
+		/**
+		 *\~english
 		 *\return		The components count in an element.
 		 *\~french
 		 *\return		Le nombre de composantes d'un élément.

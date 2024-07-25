@@ -26,7 +26,8 @@ namespace castor3d::shader
 			, sdw::UIntField< "meshletCount" >
 			, sdw::UIntField< "indexOffset" >
 			, sdw::UIntField< "meshletOffset" >
-			, sdw::UVec2Field< "pad" > >
+			, sdw::UIntField< "indexCount" >
+			, sdw::UIntField< "vertexCount" > >
 	{
 		ModelData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -83,6 +84,16 @@ namespace castor3d::shader
 		sdw::UInt getMeshletCount()const
 		{
 			return getMember< "meshletCount" >();
+		}
+
+		sdw::UInt getIndexCount()const
+		{
+			return getMember< "indexCount" >();
+		}
+
+		sdw::UInt getVertexCount()const
+		{
+			return getMember< "vertexCount" >();
 		}
 
 		sdw::UInt getVertexOffset()const

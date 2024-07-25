@@ -132,6 +132,12 @@ namespace castor3d
 				return uint32_t( m_lines.size() );
 			}
 
+			void setCount( uint32_t value )
+			{
+				m_lines.resize( value );
+				needsUpdate();
+			}
+
 		private:
 			void doCleanup( RenderDevice const & device )override;
 			void doUpload( UploadData & uploader )override;
@@ -187,6 +193,10 @@ namespace castor3d
 		 *\copydoc		castor3d::IndexMapping::getCount
 		 */
 		C3D_API uint32_t getCount()const override;
+		/**
+		 *\copydoc		castor3d::IndexMapping::setCount
+		 */
+		C3D_API void setCount( uint32_t value )override;
 		/**
 		 *\copydoc		castor3d::IndexMapping::getComponentsCount
 		 */

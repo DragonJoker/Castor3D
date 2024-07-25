@@ -194,6 +194,12 @@ namespace castor
 		return AngleT< Type >::fromRadians( Type( std::atan( value ) ) );
 	}
 
+	template< typename Type >
+	inline AngleT< Type > atan2T( double y, double x )
+	{
+		return AngleT< Type >::fromRadians( Type( std::atan2( y, x ) ) );
+	}
+
 	inline AngleT< float > acosf( double value )
 	{
 		return acosT< float >( value );
@@ -209,6 +215,11 @@ namespace castor
 		return atanT< float >( value );
 	}
 
+	inline AngleT< float > atan2f( double y, double x )
+	{
+		return atan2T< float >( y, x );
+	}
+
 	inline AngleT< double > acosd( double value )
 	{
 		return acosT< double >( value );
@@ -222,6 +233,11 @@ namespace castor
 	inline AngleT< double > atand( double value )
 	{
 		return atanT< double >( value );
+	}
+
+	inline AngleT< double > atan2d( double y, double x )
+	{
+		return atan2T< double >( y, x );
 	}
 
 	template< typename Type >

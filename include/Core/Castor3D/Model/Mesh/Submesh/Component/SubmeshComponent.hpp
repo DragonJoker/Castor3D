@@ -303,9 +303,14 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		void needsUpdate()
+		void needsUpdate()noexcept
 		{
 			m_dirty = true;
+		}
+
+		bool isDirty()const noexcept
+		{
+			return m_dirty;
 		}
 		/**@}*/
 

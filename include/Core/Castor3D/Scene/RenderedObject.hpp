@@ -19,6 +19,8 @@ namespace castor3d
 			, Pass const & pass
 			, SceneNode const & sceneNode
 			, uint32_t meshletCount
+			, uint32_t indexCount
+			, uint32_t vertexCount
 			, ModelBufferConfiguration & modelData );
 		C3D_API void fillEntryOffsets( uint32_t nodeId
 			, VkDeviceSize vertexOffset

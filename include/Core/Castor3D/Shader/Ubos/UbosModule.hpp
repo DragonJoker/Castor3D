@@ -318,8 +318,8 @@ namespace castor3d
 		uint32_t meshletCount{};
 		uint32_t indexOffset{};
 		uint32_t meshletOffset{};
-		uint32_t pad1{};
-		uint32_t pad2{};
+		uint32_t indexCount{};
+		uint32_t vertexCount{};
 	};
 	/**
 	*\~english

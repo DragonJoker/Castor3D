@@ -19,7 +19,17 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	a, b	Les indices des 2 sommets.
 		 */
-		C3D_API Line( uint32_t a, uint32_t b );
+		C3D_API Line( uint32_t a, uint32_t b )noexcept;
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\~french
+		 *\brief		Constructeur.
+		 */
+		Line()noexcept
+			: Line{ 0u, 0u }
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex index

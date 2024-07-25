@@ -285,6 +285,7 @@ namespace castor3d
 			else
 			{
 				ires.first->second->visible = culled.visible;
+				ires.first->second->command = castor::move( command );
 			}
 		}
 

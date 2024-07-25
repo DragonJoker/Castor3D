@@ -127,6 +127,11 @@ namespace castor3d
 		return getDataT< ComponentData >()->getCount();
 	}
 
+	void LinesMapping::setCount( uint32_t value )
+	{
+		getDataT< ComponentData >()->setCount( value );
+	}
+
 	uint32_t LinesMapping::getComponentsCount()const
 	{
 		return 2u;

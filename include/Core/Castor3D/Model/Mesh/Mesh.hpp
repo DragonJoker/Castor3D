@@ -260,11 +260,6 @@ namespace castor3d
 		 *\name Getters.
 		**/
 		/**@{*/
-		bool isModified()const
-		{
-			return m_modified;
-		}
-
 		uint32_t getSubmeshCount()const
 		{
 			return uint32_t( m_submeshes.size() );
@@ -305,11 +300,12 @@ namespace castor3d
 		}
 		/**@}*/
 
+		MeshChangeSignal onChange;
+
 	private:
 		friend class MeshGenerator;
 
 		Scene * m_scene{};
-		bool m_modified{};
 		castor::BoundingBox m_box;
 		castor::BoundingSphere m_sphere;
 		SubmeshPtrArray m_submeshes{};

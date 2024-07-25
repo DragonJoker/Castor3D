@@ -287,18 +287,22 @@ namespace castor3d
 #if C3D_DebugTimers
 			auto blockCompute( m_timerCompute->start() );
 #endif
-			for ( auto const & node : m_culledSubmeshes )
+			for ( auto const & culled : m_culledSubmeshes )
 			{
-				auto visible = isSubmeshVisible( *node->node );
-				auto count = node->node->getInstanceCount();
+				auto visible = isSubmeshVisible( *culled->node );
+				auto count = culled->node->getInstanceCount();
 
-				if ( node->visible != visible
-					|| node->instanceCount != count )
+				if ( culled->visible != visible
+					|| culled->instanceCount != count
+					|| culled->vertexCount != culled->node->modelData.vertexCount
+					|| culled->indexCount != culled->node->modelData.indexCount )
 				{
 					m_culledChanged = true;
-					node->visible = visible;
-					node->instanceCount = count;
-					onSubmeshChanged( *this, *node, visible );
+					culled->visible = visible;
+					culled->instanceCount = count;
+					culled->indexCount = culled->node->modelData.indexCount;
+					culled->vertexCount = culled->node->modelData.vertexCount;
+					onSubmeshChanged( *this, *culled, visible );
 				}
 			}
 
@@ -373,11 +377,15 @@ namespace castor3d
 				auto const & culled = *it;
 
 				if ( culled->visible != visible
-					|| culled->instanceCount != count )
+					|| culled->instanceCount != count
+					|| culled->vertexCount != culled->node->modelData.vertexCount
+					|| culled->indexCount != culled->node->modelData.indexCount )
 				{
 					m_culledChanged = true;
 					culled->visible = visible;
 					culled->instanceCount = count;
+					culled->indexCount = culled->node->modelData.indexCount;
+					culled->vertexCount = culled->node->modelData.vertexCount;
 					onSubmeshChanged( *this, *culled, visible );
 				}
 			}

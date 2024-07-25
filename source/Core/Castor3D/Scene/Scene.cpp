@@ -982,6 +982,8 @@ namespace castor3d
 							, *pass
 							, *geometry.getParent()
 							, submesh.getMeshletsCount()
+							, submesh.getIndexCount()
+							, submesh.getPointsCount()
 							, rendered.second->modelData );
 						geometry.fillEntryOffsets( rendered.first
 							, submesh.getVertexOffset( geometry, *pass )
@@ -1012,6 +1014,8 @@ namespace castor3d
 				object->fillEntry( billboard.first
 					, *pass
 					, *object->getNode()
+					, 0u
+					, 0u
 					, 0u
 					, billboard.second->modelData );
 				object->fillEntryOffsets( billboard.first

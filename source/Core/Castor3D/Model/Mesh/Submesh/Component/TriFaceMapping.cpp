@@ -184,6 +184,11 @@ namespace castor3d
 		return getDataT< ComponentData >()->getCount();
 	}
 
+	void TriFaceMapping::setCount( uint32_t value )
+	{
+		getDataT< ComponentData >()->setCount( value );
+	}
+
 	uint32_t TriFaceMapping::getComponentsCount()const
 	{
 		return 3u;
