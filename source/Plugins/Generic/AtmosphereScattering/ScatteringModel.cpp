@@ -244,6 +244,68 @@ namespace atmosphere_scattering
 			, pluminance );
 	}
 
+	sdw::RetVec3 ScatteringModel::getSkyRadiance( sdw::Vec3 const & pwsNormal
+		, sdw::Vec3 const & pwsPosition
+		, sdw::Vec3 const & pV
+		, sdw::Vec2 const & pfragSize )
+	{
+		if ( !m_getSkyRadiance )
+		{
+			m_getSkyRadiance = m_writer.implementFunction< sdw::Vec3 >( "scatter_getSkyRadiance"
+				, [&]( sdw::Vec3 const & wsNormal
+					, sdw::Vec3 const & wsPosition
+					, sdw::Vec3 const & V
+					, sdw::Vec2 const & fragSize )
+				{
+					auto psPosition = m_writer.declLocale( "psPosition"
+						, wsPosition - m_atmosphere.getPlanetPosition() );
+					auto ray = m_writer.declLocale( "ray"
+						, castor3d::shader::Ray{ m_writer, psPosition, reflect( -V, wsNormal ) } );
+					auto viewHeight = m_writer.declLocale( "viewHeight"
+						, length( ray.origin ) );
+					auto upVector = m_writer.declLocale( "upVector"
+						, normalize( ray.origin ) );
+					auto viewZenithCosAngle = m_writer.declLocale( "viewZenithCosAngle"
+						, dot( ray.direction, upVector ) );
+
+					auto sideVector = m_writer.declLocale( "sideVector"
+						, normalize( cross( upVector, ray.direction ) ) );		// assumes non parallel vectors
+					auto forwardVector = m_writer.declLocale( "forwardVector"
+						, normalize( cross( sideVector, upVector ) ) );	// aligns toward the sun light but perpendicular to up vector
+					auto lightOnPlane = m_writer.declLocale( "lightOnPlane"
+						, vec2( dot( m_atmosphere.getSunDirection(), forwardVector )
+							, dot( m_atmosphere.getSunDirection(), sideVector ) ) );
+					lightOnPlane = normalize( lightOnPlane );
+					auto lightViewCosAngle = m_writer.declLocale( "lightViewCosAngle"
+						, lightOnPlane.x() );
+
+					auto intersectGround = m_writer.declLocale( "intersectGround"
+						, m_atmosphere.raySphereIntersectNearest( ray
+							, vec3( 0.0_f )
+							, m_atmosphere.getPlanetRadius() ).valid() );
+
+					auto uv = m_writer.declLocale< sdw::Vec2 >( "uv" );
+					m_atmosphere.skyViewLutParamsToUv( intersectGround, viewZenithCosAngle, lightViewCosAngle, viewHeight, uv, fragSize );
+
+					auto result = m_writer.declLocale( "result"
+						, skyViewMap.lod( uv, 0.0_f ).rgb() );
+
+					// Rescale
+					auto whitePoint = vec3( 1.08241_f, 0.96756_f, 0.95003_f );
+					auto exposure = 10.0_f;
+					result = vec3( 1.0_f ) - exp( -result / whitePoint * exposure );
+
+					m_writer.returnStmt( result );
+				}
+				, sdw::InVec3{ m_writer, "wsNormal" }
+				, sdw::InVec3{ m_writer, "wsPosition" }
+				, sdw::InVec3{ m_writer, "V" }
+				, sdw::InVec2{ m_writer, "fragSize" } );
+		}
+
+		return m_getSkyRadiance( pwsNormal, pwsPosition, pV, pfragSize );
+	}
+
 	sdw::Vec4 ScatteringModel::rescaleLuminance( sdw::Vec4 const & luminance )
 	{
 		auto hdr = m_writer.declLocale( "hdr"

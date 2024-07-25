@@ -76,6 +76,10 @@ namespace atmosphere_scattering
 			, sdw::Float const & fragDepth
 			, sdw::Vec4 & transmittance
 			, sdw::Vec4 & luminance );
+		sdw::RetVec3 getSkyRadiance( sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsPosition
+			, sdw::Vec3 const & V
+			, sdw::Vec2 const & fragSize );
 		sdw::Vec4 rescaleLuminance( sdw::Vec4 const & luminance );
 
 	private:
@@ -128,6 +132,11 @@ namespace atmosphere_scattering
 			, sdw::InUInt
 			, sdw::OutVec4
 			, sdw::OutVec4 > m_getPixelTransLumShadow;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InVec2 > m_getSkyRadiance;
 	};
 }
 
