@@ -415,6 +415,7 @@ namespace castor
 			{
 				auto filled = param->clone();
 				result = filled->parse( m_parser.getLogger(), params );
+				castor::string::trim( params, true, false );
 
 				if ( !result && !param->isSet() )
 				{
