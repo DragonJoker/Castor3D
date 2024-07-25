@@ -403,13 +403,21 @@ namespace castor3d
 	}
 
 	bool MeshPreparer::prepare( Submesh & submesh
-		, Parameters const & /*parameters*/ )
+		, Parameters const & parameters )
 	{
 		auto indexMapping = submesh.getIndexMapping();
+		castor::String param;
 
-		if ( !indexMapping || indexMapping->getComponentsCount() != 3u )
+		if ( !indexMapping
+			|| indexMapping->getComponentsCount() != 3u )
 		{
 			// Don't optimize non triangular meshes.
+			return true;
+		}
+
+		if ( parameters.get( "disablePrepare", param )
+			&& param == cuT( "true" ) )
+		{
 			return true;
 		}
 
