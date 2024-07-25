@@ -99,11 +99,11 @@ namespace castor3d
 		{
 			uint32_t result{};
 
-			if ( auto comp = submesh.getComponent< ComponentT >() )
+			if ( ComponentT const * comp = submesh.getComponent< ComponentT >() )
 			{
-				if ( auto compData = comp->getBaseData() )
+				if ( SubmeshComponentData const * compData = comp->getBaseData() )
 				{
-					result = uint32_t( static_cast< typename ComponentT::ComponentData * >( compData )->getData().size() );
+					result = uint32_t( static_cast< const typename ComponentT::ComponentData * >( compData )->getData().size() );
 				}
 			}
 
@@ -298,18 +298,17 @@ namespace castor3d
 
 	void Submesh::upload( UploadData & uploader )
 	{
-		m_dirty = false;
-
 		for ( auto const & [_, component] : m_components )
 		{
 			if ( auto data = component->getBaseData() )
 			{
+				m_dirty = m_dirty || data->isDirty();
 				data->upload( uploader );
 			}
 		}
 	}
 
-	void Submesh::update( CpuUpdater & updater )
+	bool Submesh::update( CpuUpdater & updater )
 	{
 		for ( auto const & [_, component] : m_components )
 		{
@@ -318,6 +317,10 @@ namespace castor3d
 				data->update( updater );
 			}
 		}
+
+		bool result = m_dirty;
+		m_dirty = false;
+		return result;
 	}
 
 	crg::FramePassArray Submesh::record( crg::ResourcesCache & resources
@@ -381,11 +384,12 @@ namespace castor3d
 			return;
 		}
 
-		auto positions = getComponent< PositionsComponent >();
+		PositionsComponent const * positions = getComponent< PositionsComponent >();
 
 		if ( positions && getPointsCount() )
 		{
-			auto & points = positions->getData().getData();
+			auto const & data = positions->getData();
+			auto & points = data.getData();
 			castor::Point3f min{ points[0] };
 			castor::Point3f max{ points[0] };
 			uint32_t nbVertex = getPointsCount();
@@ -762,10 +766,9 @@ namespace castor3d
 
 	void Submesh::setIndexCount( uint32_t value )
 	{
-		if ( value != m_sourceBufferOffset.getBufferChunk( SubmeshData::eIndex ).getAskedSize() )
+		if ( auto indexMapping = getIndexMapping() )
 		{
-			m_sourceBufferOffset.setBufferChunkSize( SubmeshData::eIndex, value * sizeof( uint32_t ) );
-			m_dirty = true;
+			indexMapping->setCount( value / indexMapping->getComponentsCount() );
 		}
 	}
 
@@ -1106,6 +1109,16 @@ namespace castor3d
 		if ( auto component = getComponent< MeshletComponent >() )
 		{
 			return component->getData().getMeshletsCount();
+		}
+
+		return 0u;
+	}
+
+	uint32_t Submesh::getIndexCount()const
+	{
+		if ( auto component = getIndexMapping() )
+		{
+			return component->getCount() * component->getComponentsCount();
 		}
 
 		return 0u;

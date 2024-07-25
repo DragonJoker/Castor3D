@@ -88,7 +88,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les composants de rendu.
 		 */
-		C3D_API void update( CpuUpdater & updater );
+		C3D_API bool update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Records the components' dependent render passes.
@@ -340,6 +340,7 @@ namespace castor3d
 		C3D_API castor::Vector< Meshlet > const & getMeshlets()const;
 		C3D_API castor::Vector< Meshlet > & getMeshlets();
 		C3D_API uint32_t getMeshletsCount()const;
+		C3D_API uint32_t getIndexCount()const;
 		C3D_API bool isDynamic()const;
 		C3D_API bool isAnimated()const;
 		C3D_API ObjectBufferOffset const & getFinalBufferOffsets( Geometry const & geometry

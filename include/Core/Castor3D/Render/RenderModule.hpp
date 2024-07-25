@@ -815,6 +815,8 @@ namespace castor3d
 
 		NodeT const * node;
 		uint32_t instanceCount;
+		uint32_t indexCount;
+		uint32_t vertexCount;
 		bool visible;
 	};
 

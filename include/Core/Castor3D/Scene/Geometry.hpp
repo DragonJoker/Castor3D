@@ -256,6 +256,7 @@ namespace castor3d
 		castor::BoundingBox m_box;
 		castor::BoundingSphere m_sphere;
 		castor::UnorderedMap< Pass const *, SubmeshIdRenderNodeMap > m_ids{};
+		MeshChangeConnection m_onMeshChanged;
 	};
 
 	struct ObjectContext

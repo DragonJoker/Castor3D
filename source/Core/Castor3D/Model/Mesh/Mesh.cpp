@@ -85,9 +85,16 @@ namespace castor3d
 
 	void Mesh::update( CpuUpdater & updater )
 	{
+		bool dirty = false;
+
 		for ( auto const & submesh : m_submeshes )
 		{
-			submesh->update( updater );
+			dirty = submesh->update( updater ) || dirty;
+		}
+
+		if ( dirty )
+		{
+			onChange( *this );
 		}
 	}
 

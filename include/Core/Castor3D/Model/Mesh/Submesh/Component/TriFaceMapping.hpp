@@ -148,6 +148,12 @@ namespace castor3d
 				return uint32_t( m_faces.size() );
 			}
 
+			void setCount( uint32_t value )
+			{
+				m_faces.resize( value );
+				needsUpdate();
+			}
+
 			bool hasNormals()const noexcept
 			{
 				return m_hasNormals;
@@ -262,6 +268,10 @@ namespace castor3d
 		 *\copydoc		castor3d::IndexMapping::getCount
 		 */
 		C3D_API uint32_t getCount()const override;
+		/**
+		 *\copydoc		castor3d::IndexMapping::setCount
+		 */
+		C3D_API void setCount( uint32_t value )override;
 		/**
 		 *\copydoc		castor3d::IndexMapping::getComponentsCount
 		 */

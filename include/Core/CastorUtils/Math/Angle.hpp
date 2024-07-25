@@ -437,6 +437,16 @@ namespace castor
 	static inline AngleT< Type > atanT( double value );
 	/**
 	 *\~english
+	 *\brief		Computes this angle's value from the given tangent value
+	 *\param[in]	y, x	The tangent values
+	 *\~french
+	 *\brief		Calcule la valeur de cet angle à partir de la tangente donné
+	 *\param[in]	y, x	Les valeurs de la tangente
+	 */
+	template< typename Type >
+	static inline AngleT< Type > atan2T( double y, double x );
+	/**
+	 *\~english
 	 *\brief		Computes this angle's value from the given cosine value
 	 *\param[in]	value	The cosine value
 	 *\~french
@@ -464,6 +474,15 @@ namespace castor
 	static inline AngleT< float > atanf( double value );
 	/**
 	 *\~english
+	 *\brief		Computes this angle's value from the given tangent value
+	 *\param[in]	y, x	The tangent values
+	 *\~french
+	 *\brief		Calcule la valeur de cet angle à partir de la tangente donné
+	 *\param[in]	y, x	Les valeurs de la tangente
+	 */
+	static inline AngleT< float > atan2f( double y, double x );
+	/**
+	 *\~english
 	 *\brief		Computes this angle's value from the given cosine value
 	 *\param[in]	value	The cosine value
 	 *\~french
@@ -489,6 +508,15 @@ namespace castor
 	 *\param[in]	value	La tangente
 	 */
 	static inline AngleT< double > atand( double value );
+	/**
+	 *\~english
+	 *\brief		Computes this angle's value from the given tangent value
+	 *\param[in]	y, x	The tangent values
+	 *\~french
+	 *\brief		Calcule la valeur de cet angle à partir de la tangente donné
+	 *\param[in]	y, x	Les valeurs de la tangente
+	 */
+	static inline AngleT< double > atan2d( double y, double x );
 	/**
 	 *\~english
 	 *\name Comparison operators.

@@ -214,6 +214,8 @@ namespace castor3d
 				, pass
 				, *instance.getParent()
 				, data.getMeshletsCount()
+				, data.getIndexCount()
+				, data.getPointsCount()
 				, node.modelData );
 			scnrendnd::add( pass.getLightingModelId(), m_lightingModels );
 			auto [pit, pres] = m_onPassChanged.try_emplace( &pass );
@@ -284,6 +286,8 @@ namespace castor3d
 			instance.fillEntry( m_nodeId
 				, pass
 				, *instance.getNode()
+				, 0u
+				, 0u
 				, 0u
 				, it->second->modelData );
 			scnrendnd::add( pass.getLightingModelId(), m_lightingModels );

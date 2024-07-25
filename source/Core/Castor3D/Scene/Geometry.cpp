@@ -53,6 +53,7 @@ namespace castor3d
 
 	void Geometry::setMesh( MeshResPtr mesh )
 	{
+		m_onMeshChanged = {};
 		m_mesh = mesh;
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		doUpdateMesh();
@@ -312,6 +313,10 @@ namespace castor3d
 		if ( auto mesh = m_mesh )
 		{
 			m_meshName = mesh->getName();
+			m_onMeshChanged = mesh->onChange.connect( [this]( Mesh const & mesh )
+				{
+					markDirty();
+				} );
 
 			for ( auto & submesh : *mesh )
 			{

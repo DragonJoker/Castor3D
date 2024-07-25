@@ -286,7 +286,7 @@ namespace castor3d
 
 	SubmeshComponentUPtr InstantiationComponent::clone( Submesh & submesh )const
 	{
-		auto data = getDataT< ComponentData >();
+		ComponentData const * data = getDataT< ComponentData >();
 		auto result = castor::makeUnique< InstantiationComponent >( submesh
 			, data->getThreshold() );
 		return castor::ptrRefCast< SubmeshComponent >( result );
@@ -294,7 +294,7 @@ namespace castor3d
 
 	ProgramFlags InstantiationComponent::getProgramFlags( Pass const & pass )const noexcept
 	{
-		auto data = getDataT< ComponentData >();
+		ComponentData const * data = getDataT< ComponentData >();
 		auto it = data->find( pass );
 		return ( it != data->end() && it->second.buffer && !getOwner()->isDynamic() )
 			? ProgramFlag::eInstantiation
@@ -303,14 +303,14 @@ namespace castor3d
 
 	bool InstantiationComponent::isInstanced( Pass const & pass )const
 	{
-		auto data = getDataT< ComponentData >();
+		ComponentData const * data = getDataT< ComponentData >();
 		return !getOwner()->isDynamic()
 			&& data->isInstanced( data->getRefCount( pass ) );
 	}
 
 	bool InstantiationComponent::isInstanced()const
 	{
-		auto data = getDataT< ComponentData >();
+		ComponentData const * data = getDataT< ComponentData >();
 		return !getOwner()->isDynamic()
 			&& data->isInstanced( data->getMaxRefCount() );
 	}

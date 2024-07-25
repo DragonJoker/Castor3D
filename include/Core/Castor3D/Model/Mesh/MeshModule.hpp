@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/ModelModule.hpp"
 
 #include <CastorUtils/Design/Factory.hpp>
+#include <CastorUtils/Design/Signal.hpp>
 
 namespace castor3d
 {
@@ -166,6 +167,10 @@ namespace castor3d
 
 	using MeshRes = MeshCacheTraits::ElementPtrT;
 	using MeshResPtr = MeshCacheTraits::ElementObsT;
+
+	using MeshChangeFunc = std::function< void( Mesh const & ) >;
+	using MeshChangeSignal = castor::SignalT< MeshChangeFunc >;
+	using MeshChangeConnection = castor::ConnectionT< MeshChangeSignal >;
 
 	CU_DeclareSmartPtr( castor3d, MeshCache, C3D_API );
 

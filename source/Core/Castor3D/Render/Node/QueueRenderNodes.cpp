@@ -66,7 +66,7 @@ namespace castor3d
 			, CulledNodeT< SubmeshRenderNode > const & culled )
 		{
 			auto & indexOffset = bufferOffsets.getBufferChunk( SubmeshData::eIndex );
-			return VkDrawIndexedIndirectCommand{ .indexCount = indexOffset.hasData() ? indexOffset.getCount< uint32_t >() : bufferChunk.getCount< castor::Point4f >()
+			return VkDrawIndexedIndirectCommand{ .indexCount = indexOffset.hasData() ? culled.indexCount : culled.vertexCount
 				, .instanceCount = culled.instanceCount
 				, .firstIndex = indexOffset.hasData() ? indexOffset.getFirst< uint32_t >() : 0u
 				, .vertexOffset = int32_t( bufferChunk.getFirst< castor::Point4f >() )

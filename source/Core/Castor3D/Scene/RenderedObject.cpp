@@ -11,6 +11,8 @@ namespace castor3d
 		, Pass const & pass
 		, SceneNode const & sceneNode
 		, uint32_t meshletCount
+		, uint32_t indexCount
+		, uint32_t vertexCount
 		, ModelBufferConfiguration & modelData )
 	{
 		auto modelMtx = sceneNode.getDerivedTransformationMatrix();
@@ -28,6 +30,8 @@ namespace castor3d
 		m_firstUpdate = m_firstUpdate ? m_firstUpdate - 1u : 0u;
 		modelData.curModel = modelMtx;
 		modelData.normal = castor::Matrix4x4f{ normalMtx };
+		modelData.indexCount = indexCount;
+		modelData.vertexCount = vertexCount;
 
 		modelData.materialId = pass.getId();
 		modelData.shadowReceiver = isShadowReceiver() ? 1u : 0u;
