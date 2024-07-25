@@ -68,31 +68,6 @@ namespace atmosphere_scattering
 				, luminance );
 		}
 
-	private:
-		sdw::Float erfc( sdw::Float const x );
-		sdw::RetFloat lambda( sdw::Float const cosTheta
-			, sdw::Float const sigmaSq );
-		sdw::RetFloat reflectedSunRadiance( sdw::Vec3 const L
-			, sdw::Vec3 const V
-			, sdw::Vec3 const N
-			, sdw::Vec3 const Tx
-			, sdw::Vec3 const Ty
-			, sdw::Vec2 const sigmaSq );
-		sdw::RetVec2 U( sdw::Vec2 const zeta
-			, sdw::Vec3 const V
-			, sdw::Vec3 const N
-			, sdw::Vec3 const Tx
-			, sdw::Vec3 const Ty );
-		sdw::RetVec3 meanSkyRadiance( sdw::Vec3 const V
-			, sdw::Vec3 const N
-			, sdw::Vec3 const Tx
-			, sdw::Vec3 const Ty
-			, sdw::Vec2 const sigmaSq );
-		sdw::RetVec3 getMultipleScattering( sdw::Vec3 const & scattering
-			, sdw::Vec3 const & extinction
-			, sdw::Vec3 const & worldPos
-			, sdw::Float const & viewZenithCosAngle );
-
 	public:
 		static castor::String const Name;
 		static castor::String const PluginType;
@@ -117,39 +92,11 @@ namespace atmosphere_scattering
 			, sdw::InFloat
 			, sdw::InVec2
 			, sdw::InOutVec4 > m_computeVolume;
-		sdw::Function < sdw::Float
-			, sdw::InFloat > m_erfc;
-		sdw::Function < sdw::Float
-			, sdw::InFloat
-			, sdw::InFloat > m_lambda;
-		sdw::Function < sdw::Float
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InVec2 > m_reflectedSunRadiance;
-		sdw::Function < sdw::Vec2
-			, sdw::InVec2
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InVec3 > m_U;
-		sdw::Function < sdw::Vec3
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InVec2 > m_meanSkyRadiance;
-		sdw::Function< sdw::Vec3
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InVec3 > m_computeDiffuseReflections;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InVec2 > m_computeSpecularReflections;
+			, sdw::InVec3 > m_computeSpecularReflections;
 	};
 }
 

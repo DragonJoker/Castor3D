@@ -42,7 +42,7 @@ namespace atmosphere_scattering
 	{
 		auto & writer = sdw::findWriterMandat( lightSurface, output );
 		auto targetSize = vec2( sdw::Float{ float( atmosphereBackground->getTargetSize().width ) }
-		, float( atmosphereBackground->getTargetSize().height ) );
+			, float( atmosphereBackground->getTargetSize().height ) );
 		auto luminance = writer.declLocale< sdw::Vec4 >( "luminance" );
 		auto transmittance = writer.declLocale< sdw::Vec4 >( "transmittance" );
 		atmosphereBackground->getPixelTransLum( lightSurface.clipPosition().xy()

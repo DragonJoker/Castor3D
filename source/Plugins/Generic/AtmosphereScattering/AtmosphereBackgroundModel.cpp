@@ -102,37 +102,30 @@ namespace atmosphere_scattering
 		{
 			m_computeSpecularReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_atmbg_computeSpecularReflections"
 				, [this, &debugOutput]( sdw::Vec3 const & wsNormal
-					, sdw::Vec3 const & fresnel
-					, sdw::Vec3 const & V
-					, sdw::Vec2 const & gradient )
+					, sdw::Vec3 const & wsPosition
+					, sdw::Vec3 const & wsEyeDir
+					, sdw::Vec3 const & fresnel )
 				{
-					auto Ty = m_writer.declLocale( "Ty"
-						, vec3( 0.0_f, wsNormal.z(), -wsNormal.y() ) );
-					auto Lty = m_writer.declLocale( "Lty"
-						, length( Ty ) );
-					Ty = m_writer.ternary( ( Lty == 0.0_f )
-						, Ty
-						, normalize( Ty ) );
-					auto Tx = m_writer.declLocale( "Tx"
-						, cross( Ty, wsNormal ) );
-					auto sunContrib = m_writer.declLocale( "sunContrib"
-						, getSunRadiance( atmosphereData.sunDirection() )
-							* reflectedSunRadiance( atmosphereData.sunDirection(), V, wsNormal, Tx, Ty, vec2( 1.0_f ) ) );
-					debugOutput.registerOutput( cuT( "Atmosphere Reflections" ), cuT( "Sun Contribution" ), sunContrib );
+					auto fragSize = vec2( sdw::Float{ float( getTargetSize().width ) }
+						, float( getTargetSize().height ) );
 					auto skyContrib = m_writer.declLocale( "skyContrib"
-						, meanSkyRadiance( V, wsNormal, Tx, Ty, gradient ) );
+						, max( vec3( 0.0_f )
+							, scattering.getSkyRadiance( wsNormal
+								, wsPosition
+								, wsEyeDir
+								, fragSize ) ) );
 					debugOutput.registerOutput( cuT( "Atmosphere Reflections" ), cuT( "Sky Contribution" ), skyContrib );
-					m_writer.returnStmt( fresnel * ( sunContrib + skyContrib ) );
+					m_writer.returnStmt( fresnel * skyContrib );
 				}
 				, sdw::InVec3{ m_writer, "wsNormal" }
-				, sdw::InVec3{ m_writer, "fresnel" }
-				, sdw::InVec3{ m_writer, "V" }
-				, sdw::InVec2{ m_writer, "gradient" } );
+				, sdw::InVec3{ m_writer, "wsPosition" }
+				, sdw::InVec3{ m_writer, "wsEyeDir" }
+				, sdw::InVec3{ m_writer, "fresnel" } );
 		}
 		return m_computeSpecularReflections( pwsNormal
-			, pfresnel
+			, pwsPosition
 			, pV
-			, components.getMember< sdw::Vec2 >( "noiseGradient", vec2( 1.0_f ) ) );
+			, pfresnel );
 	}
 
 	void AtmosphereBackgroundModel::applyVolume( sdw::Vec2 const pfragCoord
@@ -228,177 +221,5 @@ namespace atmosphere_scattering
 	sdw::Vec3 AtmosphereBackgroundModel::getSunRadiance( sdw::Vec3 const & psunDir )
 	{
 		return scattering.getSunRadiance( psunDir );
-	}
-
-	sdw::Float AtmosphereBackgroundModel::erfc( sdw::Float const x )
-	{
-		return 2.0_f * exp( -x * x ) / ( 2.319_f * x + sqrt( 4.0_f + 1.52_f * x * x ) );
-	}
-
-	sdw::RetFloat AtmosphereBackgroundModel::lambda( sdw::Float const pcosTheta
-		, sdw::Float const psigmaSq )
-	{
-		if ( !m_lambda )
-		{
-			m_lambda = m_writer.implementFunction< sdw::Float >( "Lambda"
-				, [&]( sdw::Float const & cosTheta
-					, sdw::Float const & sigmaSq )
-				{
-					auto sqrtPi = float( sqrt( castor::Pi< double > ) );
-					auto v = m_writer.declLocale( "v"
-						, cosTheta / sqrt( max( 0.0_f, ( 1.0_f - cosTheta * cosTheta ) * ( 2.0_f * sigmaSq ) ) ) );
-					m_writer.returnStmt( max( 0.0_f, ( exp( -v * v ) - v * sdw::Float{ sqrtPi } * erfc( v ) ) / ( 2.0_f * v * sdw::Float{ sqrtPi } ) ) );
-				}
-				, sdw::InFloat{ m_writer, "cosTheta" }
-				, sdw::InFloat{ m_writer, "sigmaSq" } );
-		}
-
-		return m_lambda( pcosTheta, psigmaSq );
-	}
-
-	sdw::RetFloat AtmosphereBackgroundModel::reflectedSunRadiance( sdw::Vec3 const pL
-		, sdw::Vec3 const pV
-		, sdw::Vec3 const pN
-		, sdw::Vec3 const pTx
-		, sdw::Vec3 const pTy
-		, sdw::Vec2 const psigmaSq )
-	{
-		if ( !m_reflectedSunRadiance )
-		{
-			// L, V, N, Tx, Ty in world space
-			m_reflectedSunRadiance = m_writer.implementFunction< sdw::Float >( "reflectedSunRadiance"
-				, [&]( sdw::Vec3 const & L
-					, sdw::Vec3 const & V
-					, sdw::Vec3 const & N
-					, sdw::Vec3 const & Tx
-					, sdw::Vec3 const & Ty
-					, sdw::Vec2 const & sigmaSq )
-				{
-					auto H = m_writer.declLocale( "H"
-						, normalize( L + V ) );
-					auto zetax = m_writer.declLocale( "zetax"
-						, dot( H, Tx ) / dot( H, N ) );
-					auto zetay = m_writer.declLocale( "zetay"
-						, dot( H, Ty ) / dot( H, N ) );
-
-					auto zL = m_writer.declLocale( "zL"
-						, dot( L, N ) ); // cos of source zenith angle
-					auto zV = m_writer.declLocale( "zV"
-						, dot( V, N ) ); // cos of receiver zenith angle
-					auto zH = m_writer.declLocale( "zH"
-						, dot( H, N ) ); // cos of facet normal zenith angle
-					auto zH2 = m_writer.declLocale( "zH2"
-						, zH * zH );
-
-					auto p = m_writer.declLocale( "p"
-						, exp( -0.5_f * ( zetax * zetax / sigmaSq.x() + zetay * zetay / sigmaSq.y() ) ) / ( 2.0_f * sdw::Float{ castor::Pi< float > } * sqrt( max( 0.0_f, sigmaSq.x() * sigmaSq.y() ) ) ) );
-
-					auto tanV = m_writer.declLocale( "tanV"
-						, atan( dot( V, Ty ) / dot( V, Tx ) ) );
-					auto cosV2 = m_writer.declLocale( "cosV2"
-						, 1.0_f / ( 1.0_f + tanV * tanV ) );
-					auto sigmaV2 = m_writer.declLocale( "sigmaV2"
-						, sigmaSq.x() * cosV2 + sigmaSq.y() * ( 1.0_f - cosV2 ) );
-
-					auto tanL = m_writer.declLocale( "tanL"
-						, atan( dot( L, Ty ) / dot( L, Tx ) ) );
-					auto cosL2 = m_writer.declLocale( "cosL2"
-						, 1.0_f / ( 1.0_f + tanL * tanL ) );
-					auto sigmaL2 = m_writer.declLocale( "sigmaL2"
-						, sigmaSq.x() * cosL2 + sigmaSq.y() * ( 1.0_f - cosL2 ) );
-
-					auto fresnel = m_writer.declLocale( "fresnel"
-						, 0.02_f + 0.98_f * pow( 1.0_f - dot( V, H ), 5.0_f ) );
-
-					zL = max( zL, 0.01_f );
-					zV = max( zV, 0.01_f );
-
-					m_writer.returnStmt( fresnel * p / ( ( 1.0_f + lambda( zL, sigmaL2 ) + lambda( zV, sigmaV2 ) ) * zV * zH2 * zH2 * 4.0_f ) );
-				}
-				, sdw::InVec3{ m_writer, "L" }
-				, sdw::InVec3{ m_writer, "V" }
-				, sdw::InVec3{ m_writer, "N" }
-				, sdw::InVec3{ m_writer, "Tx" }
-				, sdw::InVec3{ m_writer, "Ty" }
-				, sdw::InVec2{ m_writer, "sigmaSq" } );
-		}
-
-		return m_reflectedSunRadiance( pL, pV, pN, pTx, pTy, psigmaSq );
-	}
-
-	sdw::RetVec2 AtmosphereBackgroundModel::U( sdw::Vec2 const pzeta
-		, sdw::Vec3 const pV
-		, sdw::Vec3 const pN
-		, sdw::Vec3 const pTx
-		, sdw::Vec3 const pTy )
-	{
-		if ( !m_U )
-		{
-			// V, N, Tx, Ty in world space
-			m_U = m_writer.implementFunction< sdw::Vec2 >( "U"
-				, [&]( sdw::Vec2 const & zeta
-					, sdw::Vec3 const & V
-					, sdw::Vec3 const & N
-					, sdw::Vec3 const & Tx
-					, sdw::Vec3 const & Ty )
-				{
-					auto f = m_writer.declLocale( "f"
-						, normalize( vec3( -zeta, 1.0 ) ) ); // tangent space
-					auto F = m_writer.declLocale( "F"
-						, f.x() * Tx + f.y() * Ty + f.z() * N ); // world space
-					auto R = m_writer.declLocale( "R"
-						, 2.0_f * dot( F, V ) * F - V );
-					m_writer.returnStmt( R.xy() / ( 1.0_f + R.z() ) );
-				}
-				, sdw::InVec2{ m_writer, "zeta" }
-				, sdw::InVec3{ m_writer, "V" }
-				, sdw::InVec3{ m_writer, "N" }
-				, sdw::InVec3{ m_writer, "Tx" }
-				, sdw::InVec3{ m_writer, "Ty" } );
-		}
-
-		return m_U( pzeta, pV, pN, pTx, pTy );
-	}
-
-	sdw::RetVec3 AtmosphereBackgroundModel::meanSkyRadiance( sdw::Vec3 const pV
-		, sdw::Vec3 const pN
-		, sdw::Vec3 const pTx
-		, sdw::Vec3 const pTy
-		, sdw::Vec2 const psigmaSq )
-	{
-		if ( !m_meanSkyRadiance )
-		{
-			// V, N, Tx, Ty in world space;
-			m_meanSkyRadiance = m_writer.implementFunction< sdw::Vec3 >( "meanSkyRadiance"
-				, [&]( sdw::Vec3 const & V
-					, sdw::Vec3 const & N
-					, sdw::Vec3 const & Tx
-					, sdw::Vec3 const & Ty
-					, sdw::Vec2 const & sigmaSq )
-				{
-					auto result = m_writer.declLocale( "result"
-						, vec4( 0.0_f ) );
-
-					const auto eps = 0.001_f;
-					auto u0 = m_writer.declLocale( "u0"
-						, U( vec2( 0.0_f ), V, N, Tx, Ty ) );
-					auto dux = m_writer.declLocale( "dux"
-						, 2.0_f * ( U( vec2( eps, 0.0_f ), V, N, Tx, Ty ) - u0 ) / eps * sqrt( max( 0.0_f, sigmaSq.x() ) ) );
-					auto duy = m_writer.declLocale( "duy"
-						, 2.0_f * ( U( vec2( 0.0_f, eps ), V, N, Tx, Ty ) - u0 ) / eps * sqrt( max( 0.0_f, sigmaSq.y() ) ) );
-					result = scattering.gradSkyView( u0 * ( 0.5_f / 1.1_f ) + 0.5_f
-						, dux * ( 0.5_f / 1.1_f )
-						, duy * ( 0.5_f / 1.1_f ) );
-
-					m_writer.returnStmt( result.rgb() );
-				}
-				, sdw::InVec3{ m_writer, "V" }
-				, sdw::InVec3{ m_writer, "N" }
-				, sdw::InVec3{ m_writer, "Tx" }
-				, sdw::InVec3{ m_writer, "Ty" }
-				, sdw::InVec2{ m_writer, "sigmaSq" } );
-		}
-
-		return m_meanSkyRadiance( pV, pN, pTx, pTy, psigmaSq );
 	}
 }
