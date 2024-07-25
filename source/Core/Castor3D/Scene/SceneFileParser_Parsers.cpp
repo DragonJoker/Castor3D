@@ -2816,6 +2816,82 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
+		static CU_ImplementAttributeParserBlock( parserSkeletonSingleAnimImport, SkeletonContext )
+		{
+			if ( !blockContext->scene )
+			{
+				CU_ParsingError( cuT( "No scene initialised." ) );
+			}
+			else if ( !blockContext->skeleton )
+			{
+				CU_ParsingError( cuT( "No Skeleton initialised." ) );
+			}
+			else
+			{
+				auto animRename = params[0]->get< castor::String >();
+				auto path = params[1]->get< castor::Path >();
+				castor::Path pathFile = context.file.getPath() / path;
+				Parameters parameters;
+
+				if ( params.size() > 2 )
+				{
+					castor::String meshParams;
+					params[2]->get( meshParams );
+					scnprs::fillMeshImportParameters( context, meshParams, parameters );
+				}
+
+				auto const & engine = *getEngine( *blockContext );
+				auto extension = castor::string::lowerCase( path.getExtension() );
+
+				if ( !engine.getImporterFileFactory().isTypeRegistered( extension ) )
+				{
+					CU_ParsingError( cuT( "Importer for [" ) + extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
+				}
+				else
+				{
+					castor::String preferredImporter = cuT( "any" );
+					parameters.get( cuT( "preferred_importer" ), preferredImporter );
+					auto file = engine.getImporterFileFactory().create( extension
+						, preferredImporter
+						, *blockContext->scene->scene
+						, pathFile
+						, parameters );
+
+					if ( auto importer = file->createAnimationImporter() )
+					{
+						auto animations = file->listSkeletonAnimations( *blockContext->skeleton );
+
+						if ( animations.empty() )
+						{
+							CU_ParsingError( cuT( "File [" ) + path + cuT( "] contains no skeleton animation for [" ) + blockContext->skeleton->getName() + cuT( "]." ) );
+						}
+						else if ( animations.size() > 1 )
+						{
+							CU_ParsingError( cuT( "File [" ) + path + cuT( "] contains too many skeleton animations, use `import_anim`." ) );
+						}
+						else
+						{
+							auto animation = castor::makeUnique< SkeletonAnimation >( *blockContext->skeleton
+								, *animations.begin() );
+
+							if ( !importer->import( *animation
+								, file.get()
+								, parameters ) )
+							{
+								CU_ParsingError( cuT( "Skeleton animation Import failed" ) );
+							}
+							else
+							{
+								animation->rename( animRename );
+								blockContext->skeleton->addAnimation( castor::ptrRefCast< Animation >( animation ) );
+							}
+						}
+					}
+				}
+			}
+		}
+		CU_EndAttribute()
+
 		static CU_ImplementAttributeParserBlock( parserSkeletonEnd, SkeletonContext )
 		{
 			if ( !blockContext->scene )
@@ -2919,6 +2995,41 @@ namespace castor3d
 
 				auto animation = castor::makeUnique< MeshAnimation >( *blockContext->mesh
 					, pathFile.getFileName() );
+
+				if ( !AnimationImporter::import( *animation
+					, pathFile
+					, parameters ) )
+				{
+					CU_ParsingError( cuT( "Mesh animation Import failed" ) );
+				}
+				else
+				{
+					blockContext->mesh->addAnimation( castor::ptrRefCast< Animation >( animation ) );
+				}
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParserBlock( parserMeshSingleAnimImport, MeshContext )
+		{
+			if ( !blockContext->mesh )
+			{
+				CU_ParsingError( cuT( "No Mesh initialised." ) );
+			}
+			else
+			{
+				auto animName = params[0]->get< castor::String >();
+				auto path = params[1]->get< castor::Path >();
+				castor::Path pathFile = context.file.getPath() / path;
+				Parameters parameters;
+
+				if ( params.size() > 2 )
+				{
+					scnprs::fillMeshImportParameters( context, params[2]->get< castor::String >(), parameters );
+				}
+
+				auto animation = castor::makeUnique< MeshAnimation >( *blockContext->mesh
+					, animName );
 
 				if ( !AnimationImporter::import( *animation
 					, pathFile
@@ -5430,6 +5541,7 @@ namespace castor3d
 			BlockParserContextT< SkeletonContext > context{ result, CSCNSection::eSkeleton, CSCNSection::eScene };
 			context.addParser( cuT( "import" ), parserSkeletonImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
 			context.addParser( cuT( "import_anim" ), parserSkeletonAnimImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
+			context.addParser( cuT( "import_single_anim" ), parserSkeletonSingleAnimImport, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
 			context.addPopParser( cuT( "}" ), parserSkeletonEnd );
 		}
 
@@ -5439,6 +5551,7 @@ namespace castor3d
 			context.addParser( cuT( "type" ), parserMeshType, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
 			context.addParser( cuT( "import" ), parserMeshImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
 			context.addParser( cuT( "import_anim" ), parserMeshAnimImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
+			context.addParser( cuT( "import_single_anim" ), parserMeshSingleAnimImport, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
 			context.addParser( cuT( "import_morph_target" ), parserMeshMorphTargetImport, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eText >() } );
 			context.addParser( cuT( "default_material" ), parserMeshDefaultMaterial, { makeParameter< ParameterType::eName >() } );
 			context.addParser( cuT( "skeleton" ), parserMeshSkeleton, { makeParameter< ParameterType::eName >() } );
