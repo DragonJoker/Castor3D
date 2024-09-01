@@ -24,18 +24,21 @@
   "vcpkg-configuration": {
     "overlay-ports": [
       "./data/vcpkg/ports/ashes",
+      "./data/vcpkg/ports/assimp",
       "./data/vcpkg/ports/draco",
       "./data/vcpkg/ports/fastgltf",
       "./data/vcpkg/ports/liblzma",
       "./data/vcpkg/ports/rendergraph",
-      "./data/vcpkg/ports/shaderwriter"
+      "./data/vcpkg/ports/shaderwriter",
+      "./data/vcpkg/ports/tinyusdz"
     ]
   },
   "features": {
     "assimp": {
       "description": "Use Assimp library to import external scenes.",
       "dependencies": [
-        "assimp"
+        "assimp",
+        "tinyusdz"
       ]
     },
     "freeimage": {
