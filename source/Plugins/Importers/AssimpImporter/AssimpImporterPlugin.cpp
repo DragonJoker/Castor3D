@@ -89,6 +89,16 @@ namespace
 				extensions.emplace_back( cuT( "assimp" ), Extension{ cuT( "GLTF" ), cuT( "Text glTF" ) } );
 				extensions.emplace_back( cuT( "assimp" ), Extension{ cuT( "GLB" ), cuT( "Binary glTF" ) } );
 			}
+
+			if ( aiGetVersionMajor() > 5
+				|| ( aiGetVersionMajor() == 5 && aiGetVersionMajor() > 4 )
+				|| ( aiGetVersionMajor() == 5 && aiGetVersionMajor() == 4 && aiGetVersionMajor() >= 2 ) )
+			{
+				extensions.emplace_back( cuT( "usd" ), Extension{ cuT( "USD" ), cuT( "Universal Scene Description" ) } );
+				extensions.emplace_back( cuT( "usda" ), Extension{ cuT( "USDA" ), cuT( "Universal Scene Description" ) } );
+				extensions.emplace_back( cuT( "usdc" ), Extension{ cuT( "USDC" ), cuT( "Universal Scene Description" ) } );
+				extensions.emplace_back( cuT( "usdz" ), Extension{ cuT( "USDZ" ), cuT( "Universal Scene Description" ) } );
+			}
 		}
 
 		return extensions;
