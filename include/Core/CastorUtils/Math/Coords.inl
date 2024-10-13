@@ -420,8 +420,8 @@ namespace castor
 		return in;
 	}
 
-	template< typename T, uint32_t Count, typename CharType >
-	inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & out, Coords< T, Count > const & in )
+	template< typename T, uint32_t Count, typename CharT >
+	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & out, Coords< T, Count > const & in )
 	{
 		if constexpr ( Count != 0 )
 		{
@@ -436,8 +436,8 @@ namespace castor
 		return out;
 	}
 
-	template< typename T, uint32_t Count, typename CharType >
-	inline std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & in, Coords< T, Count > & out )
+	template< typename T, uint32_t Count, typename CharT >
+	inline std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & in, Coords< T, Count > & out )
 	{
 		for ( uint32_t i = 0; i < Count; i++ )
 		{

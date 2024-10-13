@@ -488,10 +488,10 @@ namespace castor
 	String & operator<<( String & out, Coords< T, Count > const & in );
 	template< typename T, uint32_t Count >
 	String & operator>>( String & in, Coords< T, Count > & out );
-	template< typename T, uint32_t Count, typename CharType >
-	std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & out, Coords< T, Count > const & in );
-	template< typename T, uint32_t Count, typename CharType >
-	std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & in, Coords< T, Count > & out );
+	template< typename T, uint32_t Count, typename CharT >
+	std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & out, Coords< T, Count > const & in );
+	template< typename T, uint32_t Count, typename CharT >
+	std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & in, Coords< T, Count > & out );
 	/**@}*/
 }
 

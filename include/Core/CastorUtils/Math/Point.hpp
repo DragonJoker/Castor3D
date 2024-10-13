@@ -754,10 +754,10 @@ namespace castor
 	String & operator<<( String & out, Point< T, TCount > const & in );
 	template< typename T, uint32_t TCount >
 	String & operator>>( String & in, Point< T, TCount > & out );
-	template< typename T, uint32_t TCount, typename CharType >
-	std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & out, Point< T, TCount > const & in );
-	template< typename T, uint32_t TCount, typename CharType >
-	std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & in, Point< T, TCount > & out );
+	template< typename T, uint32_t TCount, typename CharT >
+	std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & out, Point< T, TCount > const & in );
+	template< typename T, uint32_t TCount, typename CharT >
+	std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & in, Point< T, TCount > & out );
 	/**@}*/
 }
 #include "Point.inl"

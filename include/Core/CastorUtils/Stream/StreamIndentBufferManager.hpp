@@ -15,22 +15,22 @@ See LICENSE file in root folder
 
 namespace castor::format
 {
-	template< typename char_type, typename traits >
-	class BasicIndentBufferManager
+	template< typename CharT, typename traits >
+	class BasicIndentBufferManagerT
 	{
 	private:
 		using bos = std::ios_base;
-		using bsb = std::basic_streambuf< char_type, traits >;
+		using bsb = std::basic_streambuf< CharT, traits >;
 		using table_type = Map< bos *, bsb * >;
 		using value_type = typename table_type::value_type;
 		using iterator = typename table_type::iterator;
 		using const_iterator = typename table_type::const_iterator;
 		using lock_type = castor::UniqueLock< castor::Mutex >;
 
-		BasicIndentBufferManager( BasicIndentBufferManager const & ) = delete;
-		BasicIndentBufferManager & operator =( BasicIndentBufferManager const & ) = delete;
-		BasicIndentBufferManager( BasicIndentBufferManager && )noexcept = delete;
-		BasicIndentBufferManager & operator =( BasicIndentBufferManager && )noexcept = delete;
+		BasicIndentBufferManagerT( BasicIndentBufferManagerT const & ) = delete;
+		BasicIndentBufferManagerT & operator =( BasicIndentBufferManagerT const & ) = delete;
+		BasicIndentBufferManagerT( BasicIndentBufferManagerT && )noexcept = delete;
+		BasicIndentBufferManagerT & operator =( BasicIndentBufferManagerT && )noexcept = delete;
 		/**
 		 *\~english
 		 *\brief		Default constructor
@@ -39,7 +39,7 @@ namespace castor::format
 		 */
 		/** Default constructor
 		*/
-		BasicIndentBufferManager()
+		BasicIndentBufferManagerT()
 		{
 			++sm_instances;
 		}
@@ -50,7 +50,7 @@ namespace castor::format
 		 *\~french
 		 *\brief		Constructeur par copie
 		 */
-		BasicIndentBufferManager( BasicIndentBufferManager< char_type, traits > & obj ) = delete;
+		BasicIndentBufferManagerT( BasicIndentBufferManagerT< CharT, traits > & obj ) = delete;
 
 	public:
 		/**
@@ -59,7 +59,7 @@ namespace castor::format
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~BasicIndentBufferManager()noexcept
+		~BasicIndentBufferManagerT()noexcept
 		{
 			--sm_instances;
 			lock_type lock{ makeUniqueLock( m_mutex ) };
@@ -155,13 +155,13 @@ namespace castor::format
 
 		/**
 		 *\~english
-		 *\brief		Retrieves an instance of the BasicIndentBufferManager
+		 *\brief		Retrieves an instance of the BasicIndentBufferManagerT
 		 *\~french
-		 *\brief		Récupère une instance du BasicIndentBufferManager
+		 *\brief		Récupère une instance du BasicIndentBufferManagerT
 		 */
-		static BasicIndentBufferManager< char_type, traits > * instance()
+		static BasicIndentBufferManagerT< CharT, traits > * instance()
 		{
-			static BasicIndentBufferManager< char_type, traits > ibm;
+			static BasicIndentBufferManagerT< CharT, traits > ibm;
 			return &ibm;
 		}
 
@@ -177,8 +177,8 @@ namespace castor::format
 		castor::Mutex m_mutex;
 	};
 
-	template< typename char_type, typename traits >
-	std::atomic_int BasicIndentBufferManager< char_type, traits >::sm_instances = 0;
+	template< typename CharT, typename traits >
+	std::atomic_int BasicIndentBufferManagerT< CharT, traits >::sm_instances = 0;
 }
 
 #endif

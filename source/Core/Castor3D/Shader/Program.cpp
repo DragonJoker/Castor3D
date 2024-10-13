@@ -10,20 +10,6 @@ namespace castor3d
 {
 	namespace shdprog
 	{
-		template< typename CharType, typename PrefixType >
-		inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & stream
-			, castor::format::BasePrefixer< CharType, PrefixType > const & )
-		{
-			if ( auto * sbuf = dynamic_cast< castor::format::BasicPrefixBuffer< castor::format::BasePrefixer< CharType, PrefixType >, CharType > * >( stream.rdbuf() );
-				!sbuf )
-			{
-				castor::format::installPrefixBuffer< PrefixType >( stream );
-				stream.register_callback( castor::format::callback< PrefixType, CharType >, 0 );
-			}
-
-			return stream;
-		}
-
 		static castor::String getName( VkShaderStageFlagBits value )
 		{
 			switch ( value )

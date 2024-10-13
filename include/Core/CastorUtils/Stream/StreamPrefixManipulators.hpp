@@ -11,31 +11,33 @@ namespace castor
 {
 	namespace format
 	{
-		template < typename char_type, typename prefix_traits >
-		struct BasePrefixer
-			: public prefix_traits
+		template < typename CharT, typename TraitsT >
+		struct BasePrefixerT
+			: public TraitsT
 		{
-			std::basic_string< char_type > toString()
+			std::basic_string< CharT > toString()const
 			{
-				return prefix_traits::toString();
+				return TraitsT::toString();
 			}
 		};
 
-		template < typename char_type >
-		struct BasicPrefixTraits
+		template < typename CharT >
+		struct BasicPrefixTraitsT
 		{
-			std::basic_string< char_type > toString()
+			std::basic_string< CharT > toString()const
 			{
-				return std::basic_string< char_type >();
+				return prefix;
 			}
+
+			String prefix;
 		};
 
-		template < typename char_type >
-		struct BasicLinePrefixTraits
+		template < typename CharT >
+		struct BasicLinePrefixTraitsT
 		{
-			std::basic_string< char_type > toString()
+			std::basic_string< CharT > toString()const
 			{
-				std::basic_stringstream< char_type > prefix;
+				std::basic_stringstream< CharT > prefix;
 				prefix.width( 8 );
 				prefix.fill( ' ' );
 				prefix << std::left << ++m_line;
@@ -52,10 +54,10 @@ namespace castor
 		 *\brief		Initialise le flux afin de pouvoir l'indenter
 		 *\param[in]	stream	Le flux
 		 */
-		template< typename PrefixType, typename CharType, typename BufferType = BasicPrefixBuffer< BasePrefixer< CharType, PrefixType >, CharType >, typename BufferManagerType = BasicPrefixBufferManager< BasePrefixer< CharType, PrefixType >, CharType > >
-		inline BufferType * installPrefixBuffer( std::basic_ostream< CharType > & stream )
+		template< typename PrefixT, typename CharT, typename BufferT = BasicPrefixBufferT< BasePrefixerT< CharT, PrefixT >, CharT >, typename BufferManagerType = BasicPrefixBufferManagerT< BasePrefixerT< CharT, PrefixT >, CharT > >
+		inline BufferT * installPrefixBuffer( std::basic_ostream< CharT > & stream )
 		{
-			BufferType * sbuf( new BufferType( stream.rdbuf() ) );
+			BufferT * sbuf( new BufferT( stream.rdbuf() ) );
 			BufferManagerType::instance()->insert( stream, sbuf );
 			stream.rdbuf( sbuf );
 			return sbuf;
@@ -66,14 +68,14 @@ namespace castor
 		 *\~french
 		 *\brief		Le callback des évènements du flux
 		 */
-		template< typename PrefixType, typename CharType >
+		template< typename PrefixT, typename CharT >
 		inline void callback( std::ios_base::event ev, std::ios_base & ios, CU_UnusedParam( int, x ) )
 		{
-			if ( BasicPrefixBufferManager< BasePrefixer< CharType, PrefixType >, CharType >::instances() )
+			if ( BasicPrefixBufferManagerT< BasePrefixerT< CharT, PrefixT >, CharT >::instances() )
 			{
 				if ( ev == std::ios_base::erase_event )
 				{
-					BasicPrefixBufferManager< BasePrefixer< CharType, PrefixType >, CharType >::instance()->erase( ios );
+					BasicPrefixBufferManagerT< BasePrefixerT< CharT, PrefixT >, CharT >::instance()->erase( ios );
 				}
 				else if ( ev == std::ios_base::copyfmt_event )
 				{
@@ -82,9 +84,9 @@ namespace castor
 #	error Known good compilers: 3.3
 #else
 
-					if ( auto & o_s = dynamic_cast< std::basic_ostream< CharType > & >( ios ) )
+					if ( auto & o_s = dynamic_cast< std::basic_ostream< CharT > & >( ios ) )
 					{
-						o_s << BasePrefixer< CharType, PrefixType >();
+						o_s << BasePrefixerT< CharT, PrefixT >();
 					}
 
 #endif
@@ -102,14 +104,14 @@ namespace castor
 	 *\remarks		Initialise le flux afin de pouvoir le préfixer.
 	 *\param[in]	stream	Le flux.
 	 */
-	template< typename CharType, typename PrefixType >
-	inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & stream, format::BasePrefixer< CharType, PrefixType > const & )
+	template< typename CharT, typename PrefixT >
+	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, format::BasePrefixerT< CharT, PrefixT > const & )
 	{
-		if ( auto * sbuf = dynamic_cast< format::BasicPrefixBuffer< format::BasePrefixer< CharType, PrefixType >, CharType > * >( stream.rdbuf() );
+		if ( auto * sbuf = dynamic_cast< format::BasicPrefixBufferT< format::BasePrefixerT< CharT, PrefixT >, CharT > * >( stream.rdbuf() );
 			!sbuf )
 		{
-			format::installPrefixBuffer< PrefixType >( stream );
-			stream.register_callback( format::callback< PrefixType, CharType >, 0 );
+			format::installPrefixBuffer< PrefixT >( stream );
+			stream.register_callback( format::callback< PrefixT, CharT >, 0 );
 		}
 
 		return stream;

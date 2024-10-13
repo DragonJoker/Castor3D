@@ -128,16 +128,16 @@ namespace castor
 	\~french
 	\brief		Traits de streambuf pour du log de trace.
 	*/
-	template< typename CharType >
+	template< typename CharT >
 	struct TraceLoggerStreambufTraitsT
 	{
 		static void log( LoggerInstance & logger
-			, std::basic_string< CharType > const & text )
+			, std::basic_string< CharT > const & text )
 		{
 			logger.lockedLogTrace( text );
 		}
 		static void logNoLF( LoggerInstance & logger
-			, std::basic_string< CharType > const & text )
+			, std::basic_string< CharT > const & text )
 		{
 			logger.lockedLogTraceNoLF( text );
 		}
@@ -148,16 +148,16 @@ namespace castor
 	\~french
 	\brief		Traits de streambuf pour du log de debug.
 	*/
-	template< typename CharType >
+	template< typename CharT >
 	struct DebugLoggerStreambufTraitsT
 	{
 		static void log( LoggerInstance & logger
-			, std::basic_string< CharType > const & text )
+			, std::basic_string< CharT > const & text )
 		{
 			logger.lockedLogDebug( text );
 		}
 		static void logNoLF( LoggerInstance & logger
-			, std::basic_string< CharType > const & text )
+			, std::basic_string< CharT > const & text )
 		{
 			logger.lockedLogDebugNoLF( text );
 		}
@@ -168,16 +168,16 @@ namespace castor
 	\~french
 	\brief		Traits de streambuf pour du log d'info.
 	*/
-	template< typename CharType >
+	template< typename CharT >
 	struct InfoLoggerStreambufTraitsT
 	{
 		static void log( LoggerInstance & logger
-			, std::basic_string< CharType > const & text )
+			, std::basic_string< CharT > const & text )
 		{
 			logger.lockedLogInfo( text );
 		}
 		static void logNoLF( LoggerInstance & logger
-			, std::basic_string< CharType > const & text )
+			, std::basic_string< CharT > const & text )
 		{
 			logger.lockedLogInfoNoLF( text );
 		}
@@ -188,16 +188,16 @@ namespace castor
 	\~french
 	\brief		Traits de streambuf pour du log de warning.
 	*/
-	template< typename CharType >
+	template< typename CharT >
 	struct WarningLoggerStreambufTraitsT
 	{
 		static void log( LoggerInstance & logger
-			, std::basic_string< CharType > const & text )
+			, std::basic_string< CharT > const & text )
 		{
 			logger.lockedLogWarning( text );
 		}
 		static void logNoLF( LoggerInstance & logger
-			, std::basic_string< CharType > const & text )
+			, std::basic_string< CharT > const & text )
 		{
 			logger.lockedLogWarningNoLF( text );
 		}
@@ -208,16 +208,16 @@ namespace castor
 	\~french
 	\brief		Traits de streambuf pour du log d'erreur.
 	*/
-	template< typename CharType >
+	template< typename CharT >
 	struct ErrorLoggerStreambufTraitsT
 	{
 		static void log( LoggerInstance & logger
-			, std::basic_string< CharType > const & text )
+			, std::basic_string< CharT > const & text )
 		{
 			logger.lockedLogError( text );
 		}
 		static void logNoLF( LoggerInstance & logger
-			, std::basic_string< CharType > const & text )
+			, std::basic_string< CharT > const & text )
 		{
 			logger.lockedLogErrorNoLF( text );
 		}
