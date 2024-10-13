@@ -7,7 +7,7 @@
 namespace c3d_assimp
 {
 	AssimpSceneNodeImporter::AssimpSceneNodeImporter( castor3d::Engine & engine )
-		: castor3d::SceneNodeImporter{ engine }
+		: castor3d::SceneNodeImporter{ engine, cuT( "Assimp" ) }
 	{
 	}
 
@@ -28,8 +28,6 @@ namespace c3d_assimp
 		{
 			return false;
 		}
-
-		castor3d::log::info << cuT( "  SceneNode found: [" ) << name << cuT( "]" ) << std::endl;
 
 		if ( auto parent = node.getScene()->tryFindSceneNode( it->parent ) )
 		{

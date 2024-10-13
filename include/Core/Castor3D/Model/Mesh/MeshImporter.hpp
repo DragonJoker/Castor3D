@@ -31,7 +31,8 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API explicit MeshImporter( Engine & engine );
+		C3D_API explicit MeshImporter( Engine & engine
+			, castor::String const & prefix );
 		/**
 		 *\~english
 		 *\brief		Mesh import Function.
@@ -73,6 +74,11 @@ namespace castor3d
 			, Parameters const & parameters
 			, bool forceImport );
 
+		castor::StringView getPrefix()const noexcept
+		{
+			return m_prefix;
+		}
+
 	protected:
 		/**
 		 *\~english
@@ -87,6 +93,7 @@ namespace castor3d
 		C3D_API virtual bool doImportMesh( Mesh & mesh ) = 0;
 
 	protected:
+		castor::String m_prefix;
 		ImporterFile * m_file{};
 		//!\~english The loaded meshes.
 		//!\~french Les maillages chargés.

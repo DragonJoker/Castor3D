@@ -533,23 +533,13 @@ namespace c3d_gltf
 	}
 
 	GltfMaterialImporter::GltfMaterialImporter( castor3d::Engine & engine )
-		: castor3d::MaterialImporter{ engine }
+		: GltfMaterialImporter{ engine, nullptr }
 	{
-		if ( !engine.hasMaterial( DefaultMaterial ) )
-		{
-			auto defaultMaterial = engine.createMaterial( DefaultMaterial
-				, engine
-				, materials::getLightingModel( engine ) );
-			defaultMaterial->createPass();
-			defaultMaterial->setSerialisable( false );
-			engine.addMaterial( DefaultMaterial, defaultMaterial, true );
-		}
-
 	}
 
 	GltfMaterialImporter::GltfMaterialImporter( castor3d::Engine & engine
 		, GltfImporterFile * file )
-		: castor3d::MaterialImporter{ engine, file }
+		: castor3d::MaterialImporter{ engine, cuT( "Gltf" ), file }
 	{
 		if ( !engine.hasMaterial( DefaultMaterial ) )
 		{
@@ -588,9 +578,7 @@ namespace c3d_gltf
 			return false;
 		}
 
-		castor3d::log::info << cuT( "  Material found: [" ) << name << cuT( "]" ) << std::endl;
 		fastgltf::Material const & impMaterial = *it;
-
 		auto pass = material.createPass( materials::getLightingModel( *getEngine() ) );
 
 		if ( impMaterial.unlit )

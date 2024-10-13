@@ -9,7 +9,7 @@
 namespace c3d_assimp
 {
 	AssimpCameraImporter::AssimpCameraImporter( castor3d::Engine & engine )
-		: castor3d::CameraImporter{ engine }
+		: castor3d::CameraImporter{ engine, cuT( "Assimp" ) }
 	{
 	}
 
@@ -27,7 +27,6 @@ namespace c3d_assimp
 		auto & aiCamera = *it->second;
 		auto & scene = *camera.getScene();
 		auto & viewport = camera.getViewport();
-		castor3d::log::info << cuT( "  Camera found: [" ) << name << cuT( "]" ) << std::endl;
 		castor3d::SceneNodeRPtr node{};
 
 		if ( scene.hasSceneNode( name ) )

@@ -79,7 +79,7 @@ namespace c3d_assimp
 	}
 
 	AssimpMeshImporter::AssimpMeshImporter( castor3d::Engine & engine )
-		: castor3d::MeshImporter{ engine }
+		: castor3d::MeshImporter{ engine, cuT( "Assimp" ) }
 	{
 	}
 
@@ -187,7 +187,6 @@ namespace c3d_assimp
 			material = materialRes;
 		}
 
-		castor3d::log::info << cuT( "  Mesh found: [" ) << file.getInternalName( aiMesh.mName ) << cuT( "]" ) << std::endl;
 		submesh.setDefaultMaterial( material );
 		submesh.createComponent< castor3d::DefaultRenderComponent >();
 

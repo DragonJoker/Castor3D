@@ -308,7 +308,7 @@ namespace c3d_gltf
 	//*********************************************************************************************
 
 	GltfMeshImporter::GltfMeshImporter( castor3d::Engine & engine )
-		: castor3d::MeshImporter{ engine }
+		: castor3d::MeshImporter{ engine, cuT( "Gltf" ) }
 	{
 	}
 
@@ -323,7 +323,6 @@ namespace c3d_gltf
 			return false;
 		}
 
-		castor3d::log::info << cuT( "  Mesh found: [" ) << name << cuT( "]" ) << std::endl;
 		using PrimitiveMap = castor::Map< fastgltf::PrimitiveType, PrimitiveArray >;
 		using MaterialPrimitiveMap = castor::Map< castor3d::Material *, PrimitiveMap >;
 		castor::Map< fastgltf::Mesh const *, MaterialPrimitiveMap > submeshes;
@@ -365,12 +364,9 @@ namespace c3d_gltf
 			}
 		}
 
-		uint32_t index{};
-
 		for ( auto & meshesIt : submeshes )
 		{
 			auto & impMesh = *meshesIt.first;
-			castor3d::log::info << cuT( "    submesh found: [" ) << index++ << cuT( "]" ) << std::endl;
 
 			for ( auto & materialsIt : meshesIt.second )
 			{

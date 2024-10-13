@@ -200,7 +200,7 @@ namespace c3d_gltf
 	}
 
 	GltfSkeletonImporter::GltfSkeletonImporter( castor3d::Engine & engine )
-		: castor3d::SkeletonImporter{ engine }
+		: castor3d::SkeletonImporter{ engine, cuT( "Gltf" ) }
 	{
 	}
 
@@ -222,7 +222,6 @@ namespace c3d_gltf
 			return false;
 		}
 
-		castor3d::log::info << cuT( "  Skeleton found: [" ) << name << cuT( "]" ) << std::endl;
 		auto & impSkin = *it;
 		castor::Vector< castor::Matrix4x4f > skinOffsetMatrices;
 
@@ -244,7 +243,6 @@ namespace c3d_gltf
 		}
 
 		auto skinRootNode = skeletons::findSkinRootNode( file, impSkin );
-		castor3d::log::info << cuT( "      Root Node: [" ) << file.getNodeName( skinRootNode, 0u ) << cuT( "]" ) << std::endl;
 
 		skeleton.setGlobalInverseTransform( impSkin.skeleton
 			? skeletons::getTransformMatrix( impAsset.nodes[*impSkin.skeleton].transform )

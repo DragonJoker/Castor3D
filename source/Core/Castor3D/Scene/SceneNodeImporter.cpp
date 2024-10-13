@@ -9,8 +9,10 @@ CU_ImplementSmartPtr( castor3d, SceneNodeImporter )
 
 namespace castor3d
 {
-	SceneNodeImporter::SceneNodeImporter( Engine & engine )
+	SceneNodeImporter::SceneNodeImporter( Engine & engine
+		, castor::String const & prefix )
 		: OwnedBy< Engine >{ engine }
+		, m_prefix{ prefix + cuT( " - " ) }
 	{
 	}
 
@@ -20,7 +22,19 @@ namespace castor3d
 	{
 		m_file = file;
 		m_parameters = parameters;
-		return doImportSceneNode( node );
+		log::info << getPrefix() << cuT( "Loading SceneNode [" ) << node.getName() << cuT( "]" ) << std::endl;
+		bool result = doImportSceneNode( node );
+
+		if ( result )
+		{
+			log::info << getPrefix() << cuT( "Loaded SceneNode [" ) << node.getName() << cuT( "]" ) << std::endl;
+		}
+		else
+		{
+			log::info << getPrefix() << cuT( "Couldn't load SceneNode [" ) << node.getName() << cuT( "]" ) << std::endl;
+		}
+
+		return result;
 	}
 
 	bool SceneNodeImporter::import( SceneNode & node

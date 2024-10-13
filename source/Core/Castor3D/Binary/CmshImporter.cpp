@@ -243,7 +243,7 @@ namespace castor3d
 	castor::String const CmshMeshImporter::Type = cuT( "cmsh" );
 
 	CmshMeshImporter::CmshMeshImporter( Engine & engine )
-		: MeshImporter{ engine }
+		: MeshImporter{ engine, "Castor" }
 	{
 	}
 
@@ -263,7 +263,7 @@ namespace castor3d
 	castor::String const CmshSkeletonImporter::Type = cuT( "cskl" );
 
 	CmshSkeletonImporter::CmshSkeletonImporter( Engine & engine )
-		: SkeletonImporter{ engine }
+		: SkeletonImporter{ engine, "Castor" }
 	{
 	}
 
@@ -285,7 +285,7 @@ namespace castor3d
 	castor::String const CmshAnimationImporter::NodeAnimType = cuT( "csna" );
 
 	CmshAnimationImporter::CmshAnimationImporter( Engine & engine )
-		: AnimationImporter{ engine }
+		: AnimationImporter{ engine, "Castor" }
 	{
 	}
 
@@ -297,46 +297,19 @@ namespace castor3d
 	bool CmshAnimationImporter::doImportSkeleton( SkeletonAnimation & animation )
 	{
 		castor::BinaryFile animFile{ m_file->getFileName(), castor::File::OpenMode::eRead };
-		auto result = BinaryParser< SkeletonAnimation >{}.parse( animation, animFile );
-
-		if ( result )
-		{
-			castor3d::log::info << cuT( "Loaded skeleton animation [" ) << animation.getName() << cuT( "] " )
-				<< animation.getLength().count() << cuT( " ms, " )
-				<< animation.size() << cuT( " Keyframes" ) << std::endl;
-		}
-
-		return result;
+		return BinaryParser< SkeletonAnimation >{}.parse( animation, animFile );
 	}
 
 	bool CmshAnimationImporter::doImportMesh( MeshAnimation & animation )
 	{
 		castor::BinaryFile animFile{ m_file->getFileName(), castor::File::OpenMode::eRead };
-		auto result = BinaryParser< MeshAnimation >{}.parse( animation, animFile );
-
-		if ( result )
-		{
-			castor3d::log::info << cuT( "Loaded mesh animation [" ) << animation.getName() << cuT( "] " )
-				<< animation.getLength().count() << cuT( " ms, " )
-				<< animation.size() << cuT( " Keyframes" ) << std::endl;
-		}
-
-		return result;
+		return BinaryParser< MeshAnimation >{}.parse( animation, animFile );
 	}
 
 	bool CmshAnimationImporter::doImportNode( SceneNodeAnimation & animation )
 	{
 		castor::BinaryFile animFile{ m_file->getFileName(), castor::File::OpenMode::eRead };
-		auto result = BinaryParser< SceneNodeAnimation >{}.parse( animation, animFile );
-
-		if ( result )
-		{
-			castor3d::log::info << cuT( "Loaded scene node animation [" ) << animation.getName() << cuT( "] " )
-				<< animation.getLength().count() << cuT( " ms, " )
-				<< animation.size() << cuT( " Keyframes" ) << std::endl;
-		}
-
-		return result;
+		return BinaryParser< SceneNodeAnimation >{}.parse( animation, animFile );
 	}
 
 	//*********************************************************************************************

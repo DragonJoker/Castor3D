@@ -80,7 +80,7 @@ namespace c3d_assimp
 	}
 
 	AssimpSkeletonImporter::AssimpSkeletonImporter( castor3d::Engine & engine )
-		: castor3d::SkeletonImporter{ engine }
+		: castor3d::SkeletonImporter{ engine, cuT( "Assimp" ) }
 	{
 	}
 
@@ -102,7 +102,6 @@ namespace c3d_assimp
 			return false;
 		}
 
-		castor3d::log::info << cuT( "  Skeleton found: [" ) << name << cuT( "]" ) << std::endl;
 		auto & skelData = it->second;
 		skeleton.setGlobalInverseTransform( fromAssimp( skelData.rootNode->mTransformation ).getInverse() );
 		skeletons::processSkeletonNodes( file

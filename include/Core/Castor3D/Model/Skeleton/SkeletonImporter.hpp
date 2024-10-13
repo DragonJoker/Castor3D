@@ -26,7 +26,8 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API explicit SkeletonImporter( Engine & engine );
+		C3D_API explicit SkeletonImporter( Engine & engine
+			, castor::String const & prefix );
 		/**
 		 *\~english
 		 *\brief		Skeleton import Function.
@@ -62,6 +63,11 @@ namespace castor3d
 			, castor::Path const & pathFile
 			, Parameters const & parameters );
 
+		castor::StringView getPrefix()const noexcept
+		{
+			return m_prefix;
+		}
+
 	protected:
 		/**
 		 *\~english
@@ -76,6 +82,7 @@ namespace castor3d
 		C3D_API virtual bool doImportSkeleton( Skeleton & skeleton ) = 0;
 
 	protected:
+		castor::String m_prefix;
 		ImporterFile * m_file{};
 		//!\~english Import configuration parameters.
 		//!\~french Paramètres de configuration de l'import.

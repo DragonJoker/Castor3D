@@ -9,18 +9,32 @@ CU_ImplementSmartPtr( castor3d, CameraImporter )
 
 namespace castor3d
 {
-	CameraImporter::CameraImporter( Engine & engine )
+	CameraImporter::CameraImporter( Engine & engine
+		, castor::String const & prefix )
 		: OwnedBy< Engine >{ engine }
+		, m_prefix{ prefix + cuT( " - " ) }
 	{
 	}
 
-	bool CameraImporter::import( Camera & node
+	bool CameraImporter::import( Camera & camera
 		, ImporterFile * file
 		, Parameters const & parameters )
 	{
 		m_file = file;
 		m_parameters = parameters;
-		return doImportCamera( node );
+		log::info << getPrefix() << cuT( "Loading Camera [" ) << camera.getName() << cuT( "]" ) << std::endl;
+		bool result = doImportCamera( camera );
+
+		if ( result )
+		{
+			log::info << getPrefix() << cuT( "Loaded Camera [" ) << camera.getName() << cuT( "]" ) << std::endl;
+		}
+		else
+		{
+			log::info << getPrefix() << cuT( "Couldn't load Camera [" ) << camera.getName() << cuT( "]" ) << std::endl;
+		}
+
+		return result;
 	}
 
 	bool CameraImporter::import( Camera & camera

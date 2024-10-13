@@ -25,7 +25,8 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API explicit CameraImporter( Engine & engine );
+		C3D_API explicit CameraImporter( Engine & engine
+			, castor::String const & prefix );
 		/**
 		 *\~english
 		 *\brief		Camera import Function.
@@ -61,6 +62,11 @@ namespace castor3d
 			, castor::Path const & pathFile
 			, Parameters const & parameters );
 
+		castor::StringView getPrefix()const noexcept
+		{
+			return m_prefix;
+		}
+
 	private:
 		/**
 		 *\~english
@@ -75,6 +81,7 @@ namespace castor3d
 		virtual bool doImportCamera( Camera & camera ) = 0;
 
 	protected:
+		castor::String m_prefix;
 		ImporterFile * m_file{};
 		Parameters m_parameters;
 	};

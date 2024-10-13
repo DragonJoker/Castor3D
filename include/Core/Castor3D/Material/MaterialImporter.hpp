@@ -31,7 +31,8 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 */
-		C3D_API explicit MaterialImporter( Engine & engine );
+		C3D_API explicit MaterialImporter( Engine & engine
+			, castor::String const & prefix );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -43,6 +44,7 @@ namespace castor3d
 		 *\param[in]	file	Le fichier à importer.
 		 */
 		C3D_API explicit MaterialImporter( Engine & engine
+			, castor::String const & prefix
 			, ImporterFile * file );
 		/**
 		 *\~english
@@ -222,10 +224,16 @@ namespace castor3d
 			return m_file;
 		}
 
+		castor::StringView getPrefix()const noexcept
+		{
+			return m_prefix;
+		}
+
 	private:
 		virtual bool doImportMaterial( Material & material ) = 0;
 
 	protected:
+		castor::String m_prefix;
 		ImporterFile * m_file{};
 		Parameters m_parameters;
 		castor::Map< PassComponentTextureFlag, TextureConfiguration > m_textureRemaps;
