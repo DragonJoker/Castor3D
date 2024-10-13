@@ -67,7 +67,7 @@ namespace c3d_assimp
 	using SceneNodeAnimationKeyFrameMap = castor::Map< castor::Milliseconds, castor3d::SceneNodeAnimationKeyFrameUPtr >;
 
 	AssimpAnimationImporter::AssimpAnimationImporter( castor3d::Engine & engine )
-		: castor3d::AnimationImporter{ engine }
+		: castor3d::AnimationImporter{ engine, cuT( "Assimp" ) }
 	{
 	}
 
@@ -130,10 +130,6 @@ namespace c3d_assimp
 		{
 			animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
 		}
-
-		castor3d::log::info << cuT( "Loaded skeleton animation [" ) << animation.getName() << cuT( "] " )
-			<< animation.getLength().count() << cuT( " ms, " )
-			<< animation.size() << cuT( " Keyframes" ) << std::endl;
 		return true;
 	}
 
@@ -181,9 +177,6 @@ namespace c3d_assimp
 			}
 		}
 
-		castor3d::log::info << cuT( "Loaded mesh animation [" ) << animation.getName() << cuT( "] " )
-			<< animation.getLength().count() << cuT( " ms, " )
-			<< animation.size() << cuT( " Keyframes" ) << std::endl;
 		return true;
 	}
 
@@ -227,9 +220,6 @@ namespace c3d_assimp
 			animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
 		}
 
-		castor3d::log::info << cuT( "Loaded node animation [" ) << animation.getName() << cuT( "] " )
-			<< animation.getLength().count() << cuT( " ms, " )
-			<< animation.size() << cuT( " Keyframes" ) << std::endl;
 		return true;
 	}
 

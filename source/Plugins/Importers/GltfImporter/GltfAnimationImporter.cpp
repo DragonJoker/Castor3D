@@ -378,7 +378,7 @@ namespace c3d_gltf
 	using SceneNodeAnimationKeyFrameMap = castor::Map< castor::Milliseconds, castor3d::SceneNodeAnimationKeyFrameUPtr >;
 
 	GltfAnimationImporter::GltfAnimationImporter( castor3d::Engine & engine )
-		: castor3d::AnimationImporter{ engine }
+		: castor3d::AnimationImporter{ engine, cuT( "Gltf" ) }
 	{
 	}
 
@@ -395,7 +395,6 @@ namespace c3d_gltf
 			return false;
 		}
 
-		castor3d::log::info << cuT( "  Skeleton Animation found: [" ) << name << cuT( "]" ) << std::endl;
 		SkeletonAnimationKeyFrameMap keyframes;
 		SkeletonAnimationObjectSet notAnimated;
 		anims::processSkeletonAnimationNodes( file
@@ -434,9 +433,6 @@ namespace c3d_gltf
 			animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
 		}
 
-		castor3d::log::info << cuT( "Loaded skeleton animation [" ) << animation.getName() << cuT( "] " )
-			<< animation.getLength().count() << cuT( " ms, " )
-			<< animation.size() << cuT( " Keyframes" ) << std::endl;
 		return keyframes.size() > 1u;
 	}
 
@@ -534,9 +530,6 @@ namespace c3d_gltf
 			}
 		}
 
-		castor3d::log::info << cuT( "Loaded mesh animation [" ) << animation.getName() << cuT( "] " )
-			<< animation.getLength().count() << cuT( " ms, " )
-			<< animation.size() << cuT( " Keyframes" ) << std::endl;
 		return hasAnyKeyframes;
 	}
 
@@ -553,7 +546,6 @@ namespace c3d_gltf
 			return false;
 		}
 
-		castor3d::log::info << cuT( "  SceneNode Animation found: [" ) << name << cuT( "]" ) << std::endl;
 		auto & impAsset = file.getAsset();
 		auto nodeName = node.getName();
 		auto nodeIndex = file.getNodeIndex( nodeName );
@@ -579,9 +571,6 @@ namespace c3d_gltf
 			animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
 		}
 
-		castor3d::log::info << cuT( "Loaded node animation [" ) << animation.getName() << cuT( "] " )
-			<< animation.getLength().count() << cuT( " ms, " )
-			<< animation.size() << cuT( " Keyframes" ) << std::endl;
 		return keyFrames.size() > 1u;
 	}
 }

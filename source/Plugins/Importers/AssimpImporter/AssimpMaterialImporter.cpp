@@ -1277,7 +1277,7 @@ namespace c3d_assimp
 	//*********************************************************************************************
 
 	AssimpMaterialImporter::AssimpMaterialImporter( castor3d::Engine & engine )
-		: castor3d::MaterialImporter{ engine }
+		: castor3d::MaterialImporter{ engine, cuT( "Assimp" ) }
 	{
 	}
 
@@ -1304,7 +1304,6 @@ namespace c3d_assimp
 		int ishadingMode{};
 		it->second->Get( AI_MATKEY_SHADING_MODEL, ishadingMode );
 		auto shadingMode = aiShadingMode( ishadingMode );
-		castor3d::log::info << cuT( "  Material found: [" ) << name << cuT( "]" ) << std::endl;
 		auto pass = material.createPass( materials::getLightingModel( *getEngine(), shadingMode ) );
 		materials::MaterialParser::parse( *it->second 
 			, file.getAiScene()

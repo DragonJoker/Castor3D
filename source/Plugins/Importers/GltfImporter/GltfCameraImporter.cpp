@@ -8,7 +8,7 @@
 namespace c3d_gltf
 {
 	GltfCameraImporter::GltfCameraImporter( castor3d::Engine & engine )
-		: castor3d::CameraImporter{ engine }
+		: castor3d::CameraImporter{ engine, cuT( "Gltf" ) }
 	{
 	}
 
@@ -30,7 +30,6 @@ namespace c3d_gltf
 			return false;
 		}
 
-		castor3d::log::info << cuT( "  Camera found: [" ) << name << cuT( "]" ) << std::endl;
 		fastgltf::Camera const & impCamera = *it;
 		--cameraIndex;
 		auto nodeIt = std::find_if( impAsset.nodes.begin()

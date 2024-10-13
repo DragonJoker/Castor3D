@@ -11,7 +11,7 @@
 namespace c3d_assimp
 {
 	AssimpLightImporter::AssimpLightImporter( castor3d::Engine & engine )
-		: castor3d::LightImporter{ engine }
+		: castor3d::LightImporter{ engine, cuT( "Assimp" ) }
 	{
 	}
 
@@ -28,7 +28,6 @@ namespace c3d_assimp
 
 		auto & aiLight = *it->second;
 		auto & scene = *light.getScene();
-		castor3d::log::info << cuT( "  Light found: [" ) << name << cuT( "]" ) << std::endl;
 		castor3d::SceneNodeRPtr node{};
 
 		if ( scene.hasSceneNode( name ) )

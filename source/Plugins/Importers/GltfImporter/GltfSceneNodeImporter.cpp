@@ -7,7 +7,7 @@
 namespace c3d_gltf
 {
 	GltfSceneNodeImporter::GltfSceneNodeImporter( castor3d::Engine & engine )
-		: castor3d::SceneNodeImporter{ engine }
+		: castor3d::SceneNodeImporter{ engine, cuT( "Gltf" ) }
 	{
 	}
 
@@ -27,7 +27,6 @@ namespace c3d_gltf
 			return false;
 		}
 
-		castor3d::log::info << cuT( "  SceneNode found: [" ) << name << cuT( "]" ) << std::endl;
 		node.setPosition( it->transform.translate );
 		node.setScale( it->transform.scale );
 		node.setOrientation( it->transform.rotate );
