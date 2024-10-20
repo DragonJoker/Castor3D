@@ -146,6 +146,7 @@ namespace castor3d
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
+			, CSCNSection::eTextureRemapChannel
 			, cuT( "transmission" )
 			, trscmp::parserTexRemapTransmission );
 

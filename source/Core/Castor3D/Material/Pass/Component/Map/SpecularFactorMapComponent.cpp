@@ -151,6 +151,7 @@ namespace castor3d
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
+			, CSCNSection::eTextureRemapChannel
 			, cuT( "specular_factor" )
 			, spcftcmp::parserTexRemapSpecularFactor );
 

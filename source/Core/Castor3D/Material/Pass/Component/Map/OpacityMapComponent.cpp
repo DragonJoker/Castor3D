@@ -148,6 +148,7 @@ namespace castor3d
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
+			, CSCNSection::eTextureRemapChannel
 			, cuT( "opacity" )
 			, opacmp::parserTexRemapOpacity );
 

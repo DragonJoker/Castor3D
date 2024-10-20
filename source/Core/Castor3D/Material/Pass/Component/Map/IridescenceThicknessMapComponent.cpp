@@ -171,6 +171,7 @@ namespace castor3d
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
+			, CSCNSection::eTextureRemapChannel
 			, cuT( "iridescence_thickness" )
 			, trscmp::parserTexRemapIridescenceThickness );
 
