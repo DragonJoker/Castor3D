@@ -319,6 +319,7 @@ namespace castor3d
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
+			, CSCNSection::eTextureRemapChannel
 			, cuT( "normal" )
 			, nmlcmp::parserTexRemapNormal );
 

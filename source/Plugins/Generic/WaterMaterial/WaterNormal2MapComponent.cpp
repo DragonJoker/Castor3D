@@ -234,6 +234,7 @@ namespace water
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
+			, CSCNSection::eTextureRemapChannel
 			, cuT( "water_normal2" )
 			, trscmp::parserTexRemapWaterNormal2 );
 

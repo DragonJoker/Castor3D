@@ -271,6 +271,7 @@ namespace water
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
+			, CSCNSection::eTextureRemapChannel
 			, cuT( "water_noise" )
 			, trscmp::parserTexRemapWaterNoise );
 

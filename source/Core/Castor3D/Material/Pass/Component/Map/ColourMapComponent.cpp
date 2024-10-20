@@ -183,14 +183,17 @@ namespace castor3d
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
+			, CSCNSection::eTextureRemapChannel
 			, cuT( "colour" )
 			, colcmp::parserTexRemapColour );
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
+			, CSCNSection::eTextureRemapChannel
 			, cuT( "albedo" )
 			, colcmp::parserTexRemapColour );
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
+			, CSCNSection::eTextureRemapChannel
 			, cuT( "diffuse" )
 			, colcmp::parserTexRemapColour );
 
