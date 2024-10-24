@@ -44,7 +44,7 @@ namespace castor
 				return prefix.str();
 			}
 
-			uint32_t m_line = 0;
+			mutable uint32_t m_line = 0;
 		};
 		/**
 		 *\~english
