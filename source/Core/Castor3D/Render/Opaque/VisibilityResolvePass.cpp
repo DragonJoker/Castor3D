@@ -1664,11 +1664,10 @@ namespace castor3d
 			, ashes::DescriptorSetPool const & pool
 			, crg::RunnableGraph & graph
 			, CameraUbo const & mainCameraUbo
-			, CameraUbo const & clustersCameraUbo
+			, CameraUbo const * clustersCameraUbo
 			, SceneUbo const & sceneUbo
 			, RenderTechnique const & technique
 			, Scene const & scene
-			, bool allowClusteredLighting
 			, crg::ImageViewIdArray const & targetImage
 			, Texture const * ssao
 			, IndirectLightingData const * indirectLighting
@@ -1678,7 +1677,12 @@ namespace castor3d
 			auto const & matCache = engine.getMaterialCache();
 			ashes::WriteDescriptorSetArray writes;
 			writes.push_back( mainCameraUbo.getDescriptorWrite( InOutBindings::eMainCamera ) );
-			writes.push_back( clustersCameraUbo.getDescriptorWrite( InOutBindings::eClustersCamera ) );
+
+			if ( clustersCameraUbo )
+			{
+				writes.push_back( clustersCameraUbo->getDescriptorWrite( InOutBindings::eClustersCamera ) );
+			}
+
 			writes.push_back( sceneUbo.getDescriptorWrite( InOutBindings::eScene ) );
 			writes.push_back( makeDescriptorWrite( scene.getModelBuffer()
 				, InOutBindings::eModels
@@ -1772,7 +1776,7 @@ namespace castor3d
 				, writes
 				, index );
 
-			if ( allowClusteredLighting
+			if ( clustersCameraUbo
 				&& technique.getRenderTarget().getFrustumClusters() )
 			{
 				RenderNodesPass::addClusteredLightingDescriptor( *technique.getRenderTarget().getFrustumClusters()
@@ -2732,9 +2736,13 @@ namespace castor3d
 
 			result->vtxDescriptorPool = result->vtxDescriptorLayout->createPool( MaxPipelines );
 			result->ioDescriptorPool = result->ioDescriptorLayout->createPool( 1u );
+			const CameraUbo * clustersCameraUbo = getClustersConfig()->enabled
+				? &m_parent->getRenderTarget().getFrustumClusters()->getCameraUbo()
+				: nullptr;
 			result->ioDescriptorSet = visres::createInDescriptorSet( getName(), *result->ioDescriptorPool, m_graph
-				, m_cameraUbo, m_parent->getRenderTarget().getFrustumClusters()->getCameraUbo(), m_sceneUbo, *m_parent, getScene()
-				, getClustersConfig()->enabled, m_targetImage, hasSsao() ? m_ssao : nullptr, &getIndirectLighting(), m_deferredLightingFilter );
+				, m_cameraUbo, clustersCameraUbo, m_sceneUbo, *m_parent, getScene()
+				, m_targetImage, hasSsao() ? m_ssao : nullptr, &getIndirectLighting(), m_deferredLightingFilter );
+
 			pipelines.push_back( castor::move( result ) );
 			it = std::next( pipelines.begin(), ptrdiff_t( pipelines.size() - 1u ) );
 		}
