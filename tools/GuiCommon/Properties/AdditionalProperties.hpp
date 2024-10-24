@@ -425,7 +425,6 @@ namespace GuiCommon
 		wxDECLARE_DYNAMIC_CLASS( gcImageFileProperty );
 
 	public:
-
 		gcImageFileProperty( castor::ImageLoader * loader = nullptr
 			, wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
@@ -446,6 +445,39 @@ namespace GuiCommon
 	private:
 		// Initialize m_image using the current file name.
 		void doLoadImageFromFile();
+	};
+
+	class gcTextureProperty
+		: public wxFileProperty
+	{
+		wxDECLARE_DYNAMIC_CLASS( gcTextureProperty );
+
+	public:
+		gcTextureProperty( castor::ImageLoader * loader = nullptr
+			, wxString const & label = wxPG_LABEL
+			, wxString const & name = wxPG_LABEL
+			, castor3d::TextureSourceInfo * value = nullptr );
+
+		void OnSetValue()override;
+
+		wxSize OnMeasureImage( int item )const override;
+		void OnCustomPaint( wxDC & dc
+			, wxRect const & rect
+			, wxPGPaintData & paintdata ) override;
+
+	protected:
+		castor::ImageLoader * m_loader;
+		castor3d::TextureSourceInfo * m_source;
+		castor::RawUniquePtr< castor::Image > m_image; // intermediate thumbnail area
+		castor::RawUniquePtr< wxBitmap > m_bitmap; // final thumbnail area
+
+	private:
+		// Initialize m_image using the current file name.
+		void doLoadImage();
+		void doLoadImageFromFile();
+		void doLoadImageFromBuffer();
+		void doLoadImageBuffer( castor::String const & name
+			, castor::PxBufferBaseUPtr buffer );
 	};
 }
 

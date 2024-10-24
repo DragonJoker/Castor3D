@@ -231,7 +231,11 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Path > )
 		{
-			return appendProp( parent, new gcImageFileProperty( &m_engine->getImageLoader(), name, m_prefix + name, make_wxString(value)));
+			return appendProp( parent, new gcImageFileProperty( &m_engine->getImageLoader(), name, m_prefix + name, make_wxString( value ) ) );
+		}
+		else if constexpr ( std::is_same_v< ValueT, castor3d::TextureSourceInfo * > )
+		{
+			return appendProp( parent, new gcTextureProperty( &m_engine->getImageLoader(), name, m_prefix + name, value ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Milliseconds > )
 		{

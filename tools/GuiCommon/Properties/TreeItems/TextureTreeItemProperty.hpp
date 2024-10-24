@@ -86,7 +86,7 @@ namespace GuiCommon
 		castor::Angle m_rotate;
 		castor::Point2f m_scale;
 		PropertiesArray m_properties;
-		castor::Path m_path;
+		castor3d::TextureSourceInfo m_textureSource;
 	};
 }
 

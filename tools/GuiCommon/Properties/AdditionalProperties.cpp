@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
+#include <Castor3D/Material/Texture/TextureSourceInfo.hpp>
 
 namespace GuiCommon
 {
@@ -326,6 +327,160 @@ namespace GuiCommon
 				std::cerr << exc.what() << std::endl;
 			}
 		}
+	}
+
+	//************************************************************************************************
+
+	wxIMPLEMENT_DYNAMIC_CLASS( gcTextureProperty, wxFileProperty )
+
+		gcTextureProperty::gcTextureProperty( castor::ImageLoader * loader
+		, wxString const & label
+		, wxString const & name
+		, castor3d::TextureSourceInfo * value )
+		: wxFileProperty{ label
+			, name
+			, ( value
+				? ( value->isFileImage()
+					? make_wxString( value->relative() )
+					: make_wxString( value->name() ) )
+				: wxString{} ) }
+		, m_loader{ loader }
+		, m_source{ value }
+	{
+		m_wildcard = wxPGGetDefaultImageWildcard();
+		doLoadImage();
+	}
+
+	void gcTextureProperty::OnSetValue()
+	{
+		wxFileProperty::OnSetValue();
+		*m_source = castor3d::TextureSourceInfo{ m_source->name()
+			, m_source->textureConfig()
+			, castor::Path{}
+			, castor::Path{ make_String( GetFileName().GetFullPath() ) }
+			, m_source->loadConfig() };
+
+		// Delete old image
+		m_image.reset();
+		m_bitmap.reset();
+
+		doLoadImage();
+	}
+
+	wxSize gcTextureProperty::OnMeasureImage( int ) const
+	{
+		return wxPG_DEFAULT_IMAGE_SIZE;
+	}
+
+	void gcTextureProperty::OnCustomPaint( wxDC & dc
+		, wxRect const & rect
+		, wxPGPaintData & )
+	{
+		if ( m_bitmap || m_image )
+		{
+			// Draw the thumbnail
+			// Create the bitmap here because required size is not known in OnSetValue().
+
+			// Delete the cache if required size changed
+			if ( m_bitmap && ( m_bitmap->GetWidth() != rect.width || m_bitmap->GetHeight() != rect.height ) )
+			{
+				m_bitmap.reset();
+			}
+
+			if ( !m_bitmap )
+			{
+				m_image->resample( { uint32_t( rect.width ), uint32_t( rect.height ) } );
+				m_bitmap = castor::make_unique< wxBitmap >();
+				createBitmapFromBuffer( *m_image->getPixels()
+					, false
+					, *m_bitmap );
+			}
+
+			dc.DrawBitmap( *m_bitmap, rect.x, rect.y, false );
+		}
+		else
+		{
+			// No file - just draw a white box
+			dc.SetBrush( *wxWHITE_BRUSH );
+			dc.DrawRectangle( rect );
+		}
+	}
+
+	void gcTextureProperty::doLoadImage()
+	{
+		if ( m_source )
+		{
+			if ( m_source->isFileImage() )
+			{
+				doLoadImageFromFile();
+			}
+			else if ( m_source->isBufferImage() )
+			{
+				doLoadImageFromBuffer();
+			}
+		}
+	}
+
+	void gcTextureProperty::doLoadImageFromFile()
+	{
+		wxFileName filename{ make_wxString( m_source->folder() / m_source->relative() ) };
+
+		// Create the image thumbnail
+		if ( filename.FileExists() )
+		{
+			CU_Require( m_loader );
+			auto name = make_String( filename.GetName() );
+
+			try
+			{
+				doLoadImageBuffer( name
+					, m_loader->load( name
+						, make_Path( filename.GetFullPath() )
+						, {} ).getPixels()->clone() );
+			}
+			catch ( std::exception & exc )
+			{
+				std::cerr << exc.what() << std::endl;
+			}
+		}
+	}
+
+	void gcTextureProperty::doLoadImageFromBuffer()
+	{
+		auto name = m_source->name();
+
+		try
+		{
+			doLoadImageBuffer( name
+				, m_loader->load( name
+					, m_source->type()
+					, m_source->buffer().data()
+					, uint32_t( m_source->buffer().size() )
+					, m_source->loadConfig() ).getPixels()->clone() );
+		}
+		catch ( std::exception & exc )
+		{
+			std::cerr << exc.what() << std::endl;
+		}
+	}
+
+	void gcTextureProperty::doLoadImageBuffer( castor::String const & name
+			, castor::PxBufferBaseUPtr buffer )
+	{
+		if ( castor::isCompressed( buffer->getFormat() ) )
+		{
+			buffer = castor::decompressBuffer( *buffer );
+		}
+
+		if ( buffer->getFormat() != castor::PixelFormat::eR8G8B8A8_UNORM )
+		{
+			buffer = castor::PxBufferBase::create( buffer->getDimensions()
+				, castor::PixelFormat::eR8G8B8A8_UNORM
+				, buffer->getConstPtr()
+				, buffer->getFormat() );
+		}
+
+		m_image = castor::make_unique< castor::Image >( name, *buffer );
 	}
 
 	//************************************************************************************************

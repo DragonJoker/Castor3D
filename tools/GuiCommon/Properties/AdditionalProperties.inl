@@ -387,6 +387,32 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
+	template<>
+	struct ValueTraitsT< castor3d::TextureSourceInfo * >
+	{
+		using ValueT = castor3d::TextureSourceInfo *;
+		using ParamType = castor3d::TextureSourceInfo *;
+		using RetType = castor3d::TextureSourceInfo *;
+
+		static inline RetType convert( wxVariant const & var )
+		{
+			void * ptr = var.GetVoidPtr();
+			return static_cast< RetType >( ptr );
+		}
+
+		static inline wxVariant convert( ParamType value )
+		{
+			return WXVARIANT( static_cast< void * >( value ) );
+		}
+
+		static inline wxString getUnit()
+		{
+			return wxEmptyString;
+		}
+	};
+
+	//************************************************************************************************
+
 	template< typename MyValueT >
 	struct ValueTraitsT< castor::RangedValue< MyValueT > >
 	{
