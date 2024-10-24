@@ -313,7 +313,7 @@ namespace castor3d
 		if ( auto mesh = m_mesh )
 		{
 			m_meshName = mesh->getName();
-			m_onMeshChanged = mesh->onChange.connect( [this]( Mesh const & mesh )
+			m_onMeshChanged = mesh->onChange.connect( [this]( Mesh const & )
 				{
 					markDirty();
 				} );

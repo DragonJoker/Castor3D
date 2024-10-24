@@ -51,7 +51,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur par déplacement.
 		 */
-		C3D_API Mesh( Mesh && rhs ) = default;
+		C3D_API Mesh( Mesh && rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Move assignment operator.
