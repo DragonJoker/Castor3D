@@ -516,23 +516,12 @@ namespace GuiCommon
 
 		if ( m_texture->isTextureStatic() )
 		{
-			m_path = castor::Path{ m_texture->getTexturePath() };
-			addProperty( mainContainer, PROPERTY_TEXTURE_IMAGE, m_path
-				, [this]( wxVariant const & var )
+			m_textureSource = m_texture->getSourceInfo();
+			addProperty( mainContainer, PROPERTY_TEXTURE_IMAGE, &m_textureSource
+				, [this]( wxVariant const & )
 				{
-					castor::Path path{ make_String( var.GetString() ) };
-
-					// Absolute path
-					if ( castor::File::fileExists( path ) )
-					{
-						auto & sourceInfo = m_texture->getSourceInfo();
-						m_pass->resetTexture( sourceInfo
-							, castor3d::TextureSourceInfo{ path.getFileName( true )
-								, sourceInfo.textureConfig()
-								, path.getPath()
-								, path.getFileName( true )
-								, sourceInfo.loadConfig() } );
-					}
+					auto & sourceInfo = m_texture->getSourceInfo();
+					m_pass->resetTexture( sourceInfo, m_textureSource );
 				} );
 		}
 

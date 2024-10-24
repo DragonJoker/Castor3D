@@ -110,13 +110,45 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, shader::SampleTexture const & sampleTexture )const
 	{
-		applyFloatComponent( cuT( "roughness" )
-			, passShaders
-			, textureConfigs
-			, textureAnims
-			, material
-			, components
-			, sampleTexture );
+		auto mbMapName = castor::toUtf8( cuT( "roughness" ) );
+		auto mbValueName = castor::toUtf8( cuT( "roughness" ) );
+		auto textureName = mbMapName + "MapAndMask";
+
+		if ( !material.hasMember( textureName )
+			|| !components.hasMember( mbValueName ) )
+		{
+			return;
+		}
+
+		auto & writer{ *material.getWriter() };
+		auto map = writer.declLocale( mbMapName + "Map"
+			, material.getMember< sdw::UInt >( textureName ) >> 16u );
+		auto mask = writer.declLocale( mbMapName + "Mask"
+			, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
+		auto value = components.getMember< sdw::Float >( mbValueName );
+		auto roughnessMode = components.getMember< sdw::UInt32 >( "roughnessMode" );
+
+		auto config = writer.declLocale( mbValueName + "Config"
+			, textureConfigs.getTextureConfiguration( map ) );
+		auto anim = writer.declLocale( mbValueName + "Anim"
+			, textureAnims.getTextureAnimation( map ) );
+		passShaders.computeTexcoords( textureConfigs
+			, config
+			, anim
+			, components );
+		auto sampled = writer.declLocale( mbValueName + "Sampled"
+			, sampleTexture( map, config, components ) );
+
+		IF( writer, roughnessMode != 0_u )
+		{
+			auto gloss = 1.0_f - value;
+			value = 1.0_f - ( gloss * shader::TextureConfigData::getFloat( sampled, mask ) );
+		}
+		ELSE
+		{
+			value *= shader::TextureConfigData::getFloat( sampled, mask );
+		}
+		FI;
 	}
 
 	//*********************************************************************************************
@@ -138,21 +170,62 @@ namespace castor3d
 			, cuT( "roughness_mask" )
 			, rghcmp::parserUnitRoughnessMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		castor::addParserT( parsers
+			, CSCNSection::eTexture
+			, cuT( "glossiness_mask" )
+			, rghcmp::parserUnitRoughnessMask
+			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		castor::addParserT( parsers
+			, CSCNSection::eTexture
+			, cuT( "shininess_mask" )
+			, rghcmp::parserUnitRoughnessMask
+			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "roughness_mask" )
 			, rghcmp::parserUnitRoughnessMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		castor::addParserT( parsers
+			, CSCNSection::eTextureUnit
+			, cuT( "glossiness_mask" )
+			, rghcmp::parserUnitRoughnessMask
+			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		castor::addParserT( parsers
+			, CSCNSection::eTextureUnit
+			, cuT( "shininess_mask" )
+			, rghcmp::parserUnitRoughnessMask
+			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
+			, CSCNSection::eTextureRemapChannel
 			, cuT( "roughness" )
+			, rghcmp::parserTexRemapRoughness );
+		castor::addParserT( parsers
+			, CSCNSection::eTextureRemap
+			, CSCNSection::eTextureRemapChannel
+			, cuT( "glossiness" )
+			, rghcmp::parserTexRemapRoughness );
+		castor::addParserT( parsers
+			, CSCNSection::eTextureRemap
+			, CSCNSection::eTextureRemapChannel
+			, cuT( "shininess" )
 			, rghcmp::parserTexRemapRoughness );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "roughness_mask" )
+			, rghcmp::parserTexRemapRoughnessMask
+			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		castor::addParserT( parsers
+			, CSCNSection::eTextureRemapChannel
+			, cuT( "glossiness_mask" )
+			, rghcmp::parserTexRemapRoughnessMask
+			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		castor::addParserT( parsers
+			, CSCNSection::eTextureRemapChannel
+			, cuT( "shininess_mask" )
 			, rghcmp::parserTexRemapRoughnessMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 	}
@@ -201,6 +274,17 @@ namespace castor3d
 	{
 		vis.visit( cuT( "Roughness" ) );
 		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
+	}
+
+	PassMapDefaultImageParams RoughnessMapComponent::createDefaultImage( Engine & engine )const
+	{
+		castor::String name{ cuT( "DefaultRoughness" ) };
+		castor::ByteArray data;
+		data.resize( sizeof( float ) );
+		float value{ 1.0f };
+		std::memcpy( data.data(), &value, data.size() );
+		return { name
+			, castor::ImageCreateParams{ getFormatName( castor::PixelFormat::eR32_SFLOAT ), data } };
 	}
 
 	//*********************************************************************************************

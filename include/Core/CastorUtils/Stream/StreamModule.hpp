@@ -21,7 +21,7 @@ namespace castor
 		\~french
 		\brief		Définit un type manipulateur de base, c'est ce que font les manipulateurs de flux lorsqu'ils prennent des paramètres, sauf qu'ils retournent un type opaque
 		*/
-		template< typename CharType >
+		template< typename CharT >
 		struct BasicBaseManip;
 	}
 	namespace format
@@ -32,16 +32,16 @@ namespace castor
 		\~french
 		\brief		Tampon de flux utilisé pour indenter les lignes
 		*/
-		template < typename char_type, char_type fill_char = ' ', typename traits = std::char_traits< char_type > >
-		struct BasicIndentBuffer;
+		template < typename CharT, CharT fill_char = ' ', typename TraitsT = std::char_traits< CharT > >
+		struct BasicIndentBufferT;
 		/**
 		\~english
 		\brief		Holds associated streams and stream buffers
 		\~french
 		\brief		Garde les associations flux/tampon de flux
 		*/
-		template< typename char_type, typename traits = std::char_traits< char_type > >
-		class BasicIndentBufferManager;
+		template< typename CharT, typename TraitsT = std::char_traits< CharT > >
+		class BasicIndentBufferManagerT;
 		/**
 		\~english
 		\brief		Holds the indentation value
@@ -55,61 +55,68 @@ namespace castor
 		\~french
 		\brief		Tampon de flux utilisé pour indenter les lignes
 		*/
-		template < typename prefix_type, typename char_type, typename traits = std::char_traits< char_type > >
-		struct BasicPrefixBuffer;
+		template< typename PrefixT, typename CharT, typename TraitsT = std::char_traits< CharT > >
+		struct BasicPrefixBufferT;
 		/**
 		\~english
 		\brief		Holds associated streams and stream buffers
 		\~french
 		\brief		Garde les associations flux/tampon de flux
 		*/
-		template< typename prefix_type, typename char_type, typename traits = std::char_traits< char_type > >
-		class BasicPrefixBufferManager;
+		template< typename PrefixT, typename CharT, typename TraitsT = std::char_traits< CharT > >
+		class BasicPrefixBufferManagerT;
 		/**
 		\~english
-		\brief		Contains an std::basic_string< char_type > operator()() member function which generates the Prefix.
+		\brief		Contains an std::basic_string< CharT > operator()() member function which generates the Prefix.
 		\~french
-		\brief		Contient une méthode std::basic_string< char_type > operator()() qui génère le préfixe.
+		\brief		Contient une méthode std::basic_string< CharT > operator()() qui génère le préfixe.
 		*/
-		template < typename char_type, typename prefix_traits >
-		struct BasePrefixer;
+		template < typename CharT, typename TraitsT >
+		struct BasePrefixerT;
 		/**
 		\~english
 		\brief		Default Prefix traits.
 		\~french
 		\brief		Classe de traits par défaut pour les préfixes.
 		*/
-		template < typename char_type >
-		struct BasicPrefixTraits;
+		template < typename CharT >
+		struct BasicPrefixTraitsT;
 		/**
 		\~english
 		\brief		Prefixes lines with their index.
 		\~french
 		\brief		Préfixe les lignes par leur index.
 		*/
-		template < typename char_type >
-		struct BasicLinePrefixTraits;
+		template < typename CharT >
+		struct BasicLinePrefixTraitsT;
 
-		using SpaceIndentBuffer = BasicIndentBuffer< char >;
-		using WSpaceIndentBuffer = BasicIndentBuffer< wchar_t >;
+		using SpaceIndentBuffer = BasicIndentBufferT< xchar >;
+		using MbSpaceIndentBuffer = BasicIndentBufferT< char >;
+		using WSpaceIndentBuffer = BasicIndentBufferT< wchar_t >;
 
-		using TabIndentBuffer = BasicIndentBuffer< char, '\t' >;
-		using WTabIndentBuffer = BasicIndentBuffer< wchar_t, L'\t' >;
+		using TabIndentBuffer = BasicIndentBufferT< xchar, cuT( '\t' ) >;
+		using MbTabIndentBuffer = BasicIndentBufferT< char, '\t' >;
+		using WTabIndentBuffer = BasicIndentBufferT< wchar_t, L'\t' >;
 
-		using IndentBufferManager = BasicIndentBufferManager< char, std::char_traits< char > >;
-		using WIndentBufferManager = BasicIndentBufferManager< wchar_t, std::char_traits< wchar_t > >;
+		using IndentBufferManager = BasicIndentBufferManagerT< xchar, std::char_traits< xchar > >;
+		using MbIndentBufferManager = BasicIndentBufferManagerT< char, std::char_traits< char > >;
+		using WIndentBufferManager = BasicIndentBufferManagerT< wchar_t, std::char_traits< wchar_t > >;
 
-		using Prefix = BasePrefixer< char, BasicPrefixTraits< char > >;
-		using WPrefix = BasePrefixer< wchar_t, BasicPrefixTraits< wchar_t > >;
+		using Prefix = BasePrefixerT< xchar, BasicPrefixTraitsT< xchar > >;
+		using MbPrefix = BasePrefixerT< char, BasicPrefixTraitsT< char > >;
+		using WPrefix = BasePrefixerT< wchar_t, BasicPrefixTraitsT< wchar_t > >;
 
-		using LinePrefix = BasePrefixer< char, BasicLinePrefixTraits< char > >;
-		using WLinePrefix = BasePrefixer< wchar_t, BasicLinePrefixTraits< wchar_t > >;
+		using LinePrefix = BasePrefixerT< xchar, BasicLinePrefixTraitsT< xchar > >;
+		using MbLinePrefix = BasePrefixerT< char, BasicLinePrefixTraitsT< char > >;
+		using WLinePrefix = BasePrefixerT< wchar_t, BasicLinePrefixTraitsT< wchar_t > >;
 
-		using PrefixBuffer = BasicPrefixBuffer< Prefix, char >;
-		using WPrefixBuffer = BasicPrefixBuffer< WPrefix, wchar_t >;
+		using PrefixBuffer = BasicPrefixBufferT< Prefix, xchar >;
+		using MbPrefixBuffer = BasicPrefixBufferT< MbPrefix, char >;
+		using WPrefixBuffer = BasicPrefixBufferT< WPrefix, wchar_t >;
 
-		using LinePrefixBuffer = BasicPrefixBuffer< LinePrefix, char >;
-		using WLinePrefixBuffer = BasicPrefixBuffer< WLinePrefix, wchar_t >;
+		using LinePrefixBuffer = BasicPrefixBufferT< LinePrefix, xchar >;
+		using MbLinePrefixBuffer = BasicPrefixBufferT< LinePrefix, char >;
+		using WLinePrefixBuffer = BasicPrefixBufferT< WLinePrefix, wchar_t >;
 	}
 	//@}
 }

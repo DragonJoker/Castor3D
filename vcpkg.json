@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
   "name": "castor3d",
   "version": "0.16.0",
-  "builtin-baseline": "f7423ee180c4b7f40d43402c2feb3859161ef625",
+  "builtin-baseline": "11ed79186fe850bd3a98cfbf1854514d2b3070a2",
   "dependencies": [
     "convectionkernels",
     "freetype",
@@ -47,8 +47,7 @@
     "glsl": {
       "description": "Enable GLSL shaders import support.",
       "dependencies": [
-        "glslang",
-        "spirv-cross"
+        "glslang"
       ]
     },
     "gltf": {

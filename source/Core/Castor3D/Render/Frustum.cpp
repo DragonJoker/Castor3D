@@ -20,14 +20,14 @@ namespace castor3d
 			castor::Array< castor::Point3f, 8u > corners;
 			auto constexpr neg1 = -1.0f;
 			auto constexpr pos1 = +1.0f;
-			corners[size_t( FrustumCorner::eFarLeftBottom )] = { neg1, neg1, pos1 };
-			corners[size_t( FrustumCorner::eFarLeftTop )] = { neg1, pos1, pos1 };
-			corners[size_t( FrustumCorner::eFarRightTop )] = { pos1, pos1, pos1 };
-			corners[size_t( FrustumCorner::eFarRightBottom )] = { pos1, neg1, pos1 };
-			corners[size_t( FrustumCorner::eNearLeftBottom )] = { neg1, neg1, 0.0f };
-			corners[size_t( FrustumCorner::eNearLeftTop )] = { neg1, pos1, 0.0f };
-			corners[size_t( FrustumCorner::eNearRightTop )] = { pos1, pos1, 0.0f };
-			corners[size_t( FrustumCorner::eNearRightBottom )] = { pos1, neg1, 0.0f };
+			corners[size_t( Corner::eFarLeftBottom )] = { neg1, neg1, pos1 };
+			corners[size_t( Corner::eFarLeftTop )] = { neg1, pos1, pos1 };
+			corners[size_t( Corner::eFarRightTop )] = { pos1, pos1, pos1 };
+			corners[size_t( Corner::eFarRightBottom )] = { pos1, neg1, pos1 };
+			corners[size_t( Corner::eNearLeftBottom )] = { neg1, neg1, 0.0f };
+			corners[size_t( Corner::eNearLeftTop )] = { neg1, pos1, 0.0f };
+			corners[size_t( Corner::eNearRightTop )] = { pos1, pos1, 0.0f };
+			corners[size_t( Corner::eNearRightBottom )] = { pos1, neg1, 0.0f };
 			auto invViewProj = viewProj.getInverse();
 
 			for ( auto & corner : corners )

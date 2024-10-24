@@ -9,8 +9,10 @@ CU_ImplementSmartPtr( castor3d, LightImporter )
 
 namespace castor3d
 {
-	LightImporter::LightImporter( Engine & engine )
+	LightImporter::LightImporter( Engine & engine
+		, castor::String const & prefix )
 		: OwnedBy< Engine >{ engine }
+		, m_prefix{ prefix + cuT( " - " ) }
 	{
 	}
 
@@ -20,7 +22,19 @@ namespace castor3d
 	{
 		m_file = file;
 		m_parameters = parameters;
-		return doImportLight( light );
+		log::info << getPrefix() << cuT( "Loading Light [" ) << light.getName() << cuT( "]" ) << std::endl;
+		bool result = doImportLight( light );
+
+		if ( result )
+		{
+			log::info << getPrefix() << cuT( "Light found: [" ) << light.getName() << cuT( "]" ) << std::endl;
+		}
+		else
+		{
+			log::info << getPrefix() << cuT( "Couldn't load Light [" ) << light.getName() << cuT( "]" ) << std::endl;
+		}
+
+		return result;
 	}
 
 	bool LightImporter::import( Light & light

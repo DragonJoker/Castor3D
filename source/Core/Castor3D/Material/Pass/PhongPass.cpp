@@ -4,7 +4,8 @@
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp"
-#include "Castor3D/Material/Pass/Component/Other/ColourComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/RoughnessMapComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/SpecularMapComponent.hpp"
 #include "Castor3D/Material/Pass/Shaders/GlslPhongLighting.hpp"
 
 namespace castor3d
@@ -17,9 +18,13 @@ namespace castor3d
 	{
 		auto result = castor::makeUnique< Pass >( parent
 			, lightingModelId );
-		result->createComponent< ColourComponent >();
+
 		result->createComponent< RoughnessComponent >( Pass::computeRoughnessFromShininess( 50.0f ) );
-		result->createComponent< SpecularComponent >( SpecularComponent::Default );
+		result->createComponent< SpecularComponent >();
+
+		createDefaultTextureComponent< RoughnessMapComponent >( *result );
+		createDefaultTextureComponent< SpecularMapComponent >( *result );
+
 		return result;
 	}
 }

@@ -25,8 +25,10 @@ namespace castor3d
 		}
 	}
 
-	SkeletonImporter::SkeletonImporter( Engine & engine )
+	SkeletonImporter::SkeletonImporter( Engine & engine
+		, castor::String const & prefix )
 		: OwnedBy< Engine >{ engine }
+		, m_prefix{ prefix + cuT( " - " ) }
 	{
 	}
 
@@ -40,6 +42,7 @@ namespace castor3d
 
 		if ( skeleton.getNodes().empty() )
 		{
+			log::info << getPrefix() << cuT( "Loading Skeleton [" ) << skeleton.getName() << cuT( "]" ) << std::endl;
 			result = doImportSkeleton( skeleton );
 
 			if ( result )
@@ -55,9 +58,14 @@ namespace castor3d
 					skelimp::transformSkeleton( transform, skeleton );
 				}
 
-				log::info << "Loaded skeleton [" << skeleton.getName() << "]"
+				log::info << getPrefix() << "Loaded Skeleton [" << skeleton.getName() << "]"
 					<< " " << skeleton.getNodesCount() << " Node(s)"
-					<< ", " << skeleton.getBonesCount() << " Bones(s)" << std::endl;
+					<< ", " << skeleton.getBonesCount() << " Bones(s)"
+					<< ", " << cuT( "Root Node [" ) << skeleton.getRootNode()->getName() << cuT( "]" ) << std::endl;
+			}
+			else
+			{
+				log::info << getPrefix() << cuT( "Couldn't load Skeleton [" ) << skeleton.getName() << cuT( "]" ) << std::endl;
 			}
 		}
 

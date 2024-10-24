@@ -19,7 +19,7 @@ namespace castor3d
 			castor::move( debugName ),
 			castor::move( sharingMode ),
 		}
-		, m_data( count, DataT{} )
+		, m_data( size_t( count ), DataT{} )
 	{
 	}
 
@@ -104,7 +104,7 @@ namespace castor3d
 		{
 			for ( auto i = 0u; i < range; ++i )
 			{
-				std::memcpy( buffer, &m_data[offset + i], sizeof( DataT ) );
+				std::memcpy( buffer, &m_data[size_t( offset + i )], sizeof( DataT ) );
 				buffer += size;
 			}
 

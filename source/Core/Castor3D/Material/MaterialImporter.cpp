@@ -67,14 +67,17 @@ namespace castor3d
 		}
 	}
 
-	MaterialImporter::MaterialImporter( Engine & engine )
-		: OwnedBy< Engine >{ engine }
+	MaterialImporter::MaterialImporter( Engine & engine
+		, castor::String const & prefix )
+		: MaterialImporter{ engine, prefix, nullptr }
 	{
 	}
 
 	MaterialImporter::MaterialImporter( Engine & engine
+		, castor::String const & prefix
 		, ImporterFile * file )
 		: OwnedBy< Engine >{ engine }
+		, m_prefix{ prefix + cuT( " - " ) }
 		, m_file{ file }
 	{
 	}
@@ -91,7 +94,19 @@ namespace castor3d
 
 		m_textureRemaps = textureRemaps;
 		m_parameters = parameters;
-		return doImportMaterial( material );
+		log::info << getPrefix() << cuT( "Loading Material [" ) << material.getName() << cuT( "]" ) << std::endl;
+		bool result = doImportMaterial( material );
+
+		if ( result )
+		{
+			log::info << getPrefix() << cuT( "Loaded Material [" ) << material.getName() << cuT( "]" ) << std::endl;
+		}
+		else
+		{
+			log::info << getPrefix() << cuT( "Couldn't load Material [" ) << material.getName() << cuT( "]" ) << std::endl;
+		}
+
+		return result;
 	}
 
 	bool MaterialImporter::import( Material & material
@@ -266,7 +281,7 @@ namespace castor3d
 		{
 			if ( auto image = loadImage( path ) )
 			{
-				log::info << "Converting height map to normal map." << std::endl;
+				log::info << getPrefix() << "Converting height map to normal map." << std::endl;
 
 				if ( castor::convertToNormalMap( 3.0f, *image ) )
 				{

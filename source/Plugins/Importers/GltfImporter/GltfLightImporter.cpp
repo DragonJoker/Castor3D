@@ -11,7 +11,7 @@
 namespace c3d_gltf
 {
 	GltfLightImporter::GltfLightImporter( castor3d::Engine & engine )
-		: castor3d::LightImporter{ engine }
+		: castor3d::LightImporter{ engine, cuT( "Gltf" ) }
 	{
 	}
 
@@ -33,7 +33,6 @@ namespace c3d_gltf
 			return false;
 		}
 
-		castor3d::log::info << cuT( "  Light found: [" ) << name << cuT( "]" ) << std::endl;
 		fastgltf::Light const & impLight = *lightIt;
 		--lightIndex;
 		auto nodeIt = std::find_if( impAsset.nodes.begin()

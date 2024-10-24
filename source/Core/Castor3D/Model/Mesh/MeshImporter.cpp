@@ -54,8 +54,10 @@ namespace castor3d
 		}
 	}
 
-	MeshImporter::MeshImporter( Engine & engine )
+	MeshImporter::MeshImporter( Engine & engine
+		, castor::String const & prefix )
 		: OwnedBy< Engine >{ engine }
+		, m_prefix{ prefix + cuT( " - " ) }
 	{
 	}
 
@@ -70,6 +72,7 @@ namespace castor3d
 
 		if ( !mesh.getSubmeshCount() || forceImport )
 		{
+			log::info << getPrefix() << cuT( "Loading Mesh [" ) << mesh.getName() << cuT( "]" ) << std::endl;
 			result = doImportMesh( mesh );
 
 			if ( result )
@@ -106,11 +109,15 @@ namespace castor3d
 				}
 
 				mesh.computeContainers();
-				log::info << cuT( "Loaded mesh [" ) << mesh.getName() << cuT( "]" )
+				log::info << getPrefix() << cuT( "Loaded Mesh [" ) << mesh.getName() << cuT( "]" )
 					<< cuT( " AABB (" ) << print( mesh.getBoundingBox() ) << cuT( ")" )
 					<< cuT( ", " ) << mesh.getVertexCount() << cuT( " vertices" )
 					<< cuT( ", " ) << mesh.getFaceCount() << cuT( " faces" )
 					<< cuT( ", " ) << mesh.getSubmeshCount() << cuT( " submeshes" ) << std::endl;
+			}
+			else
+			{
+				log::info << getPrefix() << cuT( "Couldn't load Mesh [" ) << mesh.getName() << cuT( "]" ) << std::endl;
 			}
 		}
 		else

@@ -15,7 +15,7 @@ See LICENSE file in root folder
 
 namespace castor::manip
 {
-	template< typename CharType >
+	template< typename CharT >
 	struct BasicBaseManip
 	{
 		int m_base;
@@ -35,7 +35,7 @@ namespace castor::manip
 			return iw;
 		}
 
-		void apply( std::basic_ostream< CharType > & os )const
+		void apply( std::basic_ostream< CharT > & os )const
 		{
 			// store the base value in the manipulator.
 			os.iword( getIWord() ) = m_base;
@@ -57,10 +57,10 @@ namespace castor::manip
 	 *\remarks		Crée un manipulateur, pour l'utiliser dans un flux
 	 *\param[in]	b	La base
 	 */
-	template< typename CharType >
-	inline BasicBaseManip< CharType > baseT( int b )
+	template< typename CharT >
+	inline BasicBaseManip< CharT > baseT( int b )
 	{
-		return BasicBaseManip< CharType >( b );
+		return BasicBaseManip< CharT >( b );
 	}
 
 	/**
@@ -177,7 +177,7 @@ namespace castor::manip
 		return stream;
 	}
 
-	template< typename CharType >
+	template< typename CharT >
 	struct DigitChars;
 
 	template<>
@@ -215,10 +215,10 @@ namespace castor::manip
 		static std::u32string_view constexpr digitCharUc{ U"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" };
 	};
 
-	template< typename CharType >
-	inline std::basic_string_view< CharType > constexpr digitCharLcT = DigitChars< CharType >::digitCharLc;
-	template< typename CharType >
-	inline std::basic_string_view< CharType > constexpr digitCharUcT = DigitChars< CharType >::digitCharUc;
+	template< typename CharT >
+	inline std::basic_string_view< CharT > constexpr digitCharLcT = DigitChars< CharT >::digitCharLc;
+	template< typename CharT >
+	inline std::basic_string_view< CharT > constexpr digitCharUcT = DigitChars< CharT >::digitCharUc;
 
 	/**
 	\~english
@@ -232,11 +232,11 @@ namespace castor::manip
 				<br />La facet num_put gère la sortie de valeurs numériques en tant que caractères dans le flux
 				<br />Ici nous en créons une qui connait notre manipulateur.
 	*/
-	template< typename CharType >
+	template< typename CharT >
 	struct BaseNumPut
-		: std::num_put< CharType >
+		: std::num_put< CharT >
 	{
-		using iter_type = typename std::num_put< CharType >::iter_type;
+		using iter_type = typename std::num_put< CharT >::iter_type;
 		// These absVal functions are needed as std::abs doesnt support
 		// unsigned types, but the templated doPutHelper works on signed and
 		// unsigned types.
@@ -267,19 +267,19 @@ namespace castor::manip
 		}
 
 		template< class NumType >
-		iter_type doPutHelper( iter_type out, std::ios_base & str, CharType fill, NumType val )const
+		iter_type doPutHelper( iter_type out, std::ios_base & str, CharT fill, NumType val )const
 		{
 			// read the value stored in our xalloc location.
-			const auto base = str.iword( BasicBaseManip< CharType >::getIWord() );
+			const auto base = str.iword( BasicBaseManip< CharT >::getIWord() );
 
 			// we only want this manipulator to affect the next numeric value, so
 			// reset its value.
-			str.iword( BasicBaseManip< CharType >::getIWord() ) = 0;
+			str.iword( BasicBaseManip< CharT >::getIWord() ) = 0;
 
 			// normal number output, use the built in putter.
 			if ( base == 0 || base == 10 )
 			{
-				return std::num_put< CharType >::do_put( out, str, fill, val );
+				return std::num_put< CharT >::do_put( out, str, fill, val );
 			}
 
 			// We want to conver the base, so do it and output.
@@ -315,7 +315,7 @@ namespace castor::manip
 				std::fill_n( out, str.width() - i, fill );
 			}
 
-			auto const * digitChar = ( str.flags() & std::ios_base::uppercase ) ? &digitCharUcT< CharType > : &digitCharLcT< CharType >;
+			auto const * digitChar = ( str.flags() & std::ios_base::uppercase ) ? &digitCharUcT< CharT > : &digitCharLcT< CharT >;
 
 			while ( i > 0 )
 			{
@@ -337,12 +337,12 @@ namespace castor::manip
 		}
 
 		// Overrides for the virtual do_put member functions.
-		iter_type do_put( iter_type out, std::ios_base & str, CharType fill, long val )const override
+		iter_type do_put( iter_type out, std::ios_base & str, CharT fill, long val )const override
 		{
 			return doPutHelper( out, str, fill, val );
 		}
 
-		iter_type do_put( iter_type out, std::ios_base & str, CharType fill, unsigned long val )const override
+		iter_type do_put( iter_type out, std::ios_base & str, CharT fill, unsigned long val )const override
 		{
 			return doPutHelper( out, str, fill, val );
 		}

@@ -183,14 +183,17 @@ namespace castor3d
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
+			, CSCNSection::eTextureRemapChannel
 			, cuT( "colour" )
 			, colcmp::parserTexRemapColour );
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
+			, CSCNSection::eTextureRemapChannel
 			, cuT( "albedo" )
 			, colcmp::parserTexRemapColour );
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
+			, CSCNSection::eTextureRemapChannel
 			, cuT( "diffuse" )
 			, colcmp::parserTexRemapColour );
 
@@ -254,6 +257,14 @@ namespace castor3d
 	{
 		vis.visit( cuT( "Colour" ) );
 		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
+	}
+
+	PassMapDefaultImageParams ColourMapComponent::createDefaultImage( Engine & engine )const
+	{
+		castor::String name{ cuT( "DefaultColour" ) };
+		castor::ByteArray data{ 255u, 255u, 255u, 0u };
+		return { name
+			, castor::ImageCreateParams{ getFormatName( castor::PixelFormat::eR8G8B8A8_UNORM ), data } };
 	}
 
 	//*********************************************************************************************

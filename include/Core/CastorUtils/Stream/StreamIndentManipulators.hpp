@@ -80,10 +80,10 @@ namespace castor
 		 *\brief		Initialise le flux afin de pouvoir l'indenter
 		 *\param[in]	stream	Le flux
 		 */
-		template< typename CharType, typename BufferType = BasicIndentBuffer< CharType >, typename BufferManagerType = BasicIndentBufferManager< CharType > >
-		inline BufferType * installIndentBuffer( std::basic_ostream< CharType > & stream )
+		template< typename CharT, typename BufferT = BasicIndentBufferT< CharT >, typename BufferManagerType = BasicIndentBufferManagerT< CharT > >
+		inline BufferT * installIndentBuffer( std::basic_ostream< CharT > & stream )
 		{
-			BufferType * sbuf( new BufferType( stream.rdbuf() ) );
+			BufferT * sbuf( new BufferT( stream.rdbuf() ) );
 			BufferManagerType::instance()->insert( stream, sbuf );
 			stream.rdbuf( sbuf );
 			return sbuf;
@@ -94,14 +94,14 @@ namespace castor
 		 *\~french
 		 *\brief		Le callback des évènements du flux
 		 */
-		template< typename CharType >
+		template< typename CharT >
 		inline void callback( std::ios_base::event ev, std::ios_base & ios, CU_UnusedParam( int, x ) )
 		{
-			if ( BasicIndentBufferManager< CharType >::instances() )
+			if ( BasicIndentBufferManagerT< CharT >::instances() )
 			{
 				if ( ev == std::ios_base::erase_event )
 				{
-					BasicIndentBufferManager< CharType >::instance()->erase( ios );
+					BasicIndentBufferManagerT< CharT >::instance()->erase( ios );
 				}
 				else if ( ev == std::ios_base::copyfmt_event )
 				{
@@ -110,7 +110,7 @@ namespace castor
 #	error Known good compilers: 3.3
 #else
 
-					if ( auto & o_s = dynamic_cast< std::basic_ostream< CharType > & >( ios ) )
+					if ( auto & o_s = dynamic_cast< std::basic_ostream< CharT > & >( ios ) )
 					{
 						o_s << Indent( getIndent( ios ) );
 					}
@@ -132,15 +132,15 @@ namespace castor
 	 *\param[in]	stream	Le flux
 	 *\param[in]	ind		La valeur d'indentation
 	 */
-	template< typename CharType >
-	inline std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & stream, format::Indent const & ind )
+	template< typename CharT >
+	inline std::basic_ostream< CharT > & operator <<( std::basic_ostream< CharT > & stream, format::Indent const & ind )
 	{
-		auto * sbuf = dynamic_cast< format::BasicIndentBuffer< CharType > * >( stream.rdbuf() );
+		auto * sbuf = dynamic_cast< format::BasicIndentBufferT< CharT > * >( stream.rdbuf() );
 
 		if ( !sbuf )
 		{
 			sbuf = format::installIndentBuffer( stream );
-			stream.register_callback( format::callback< CharType >, 0 );
+			stream.register_callback( format::callback< CharT >, 0 );
 		}
 
 		format::setIndent( stream, ind.m_indent );

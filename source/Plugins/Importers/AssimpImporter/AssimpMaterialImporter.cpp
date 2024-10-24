@@ -29,7 +29,6 @@
 #include <Castor3D/Material/Pass/Component/Map/ClearcoatRoughnessMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ColourMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/EmissiveMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/GlossinessMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/MetalnessMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/NormalMapComponent.hpp>
@@ -153,7 +152,6 @@ namespace c3d_assimp
 				, m_result{ result }
 				, m_colourMapPlugin{ m_result.getComponentPlugin< castor3d::ColourMapComponent >() }
 				, m_emissiveMapPlugin{ m_result.getComponentPlugin< castor3d::EmissiveMapComponent >() }
-				, m_glossinessMapPlugin{ m_result.getComponentPlugin< castor3d::GlossinessMapComponent >() }
 				, m_heightMapPlugin{ m_result.getComponentPlugin< castor3d::HeightMapComponent >() }
 				, m_metalnessMapPlugin{ m_result.getComponentPlugin< castor3d::MetalnessMapComponent >() }
 				, m_normalMapPlugin{ m_result.getComponentPlugin< castor3d::NormalMapComponent >() }
@@ -171,7 +169,6 @@ namespace c3d_assimp
 				, m_sheenRoughnessMapPlugin{ m_result.getComponentPlugin< castor3d::SheenRoughnessMapComponent >() }
 				, m_colourMapFlags{ m_colourMapPlugin.getTextureFlags() }
 				, m_emissiveMapFlags{ m_emissiveMapPlugin.getTextureFlags() }
-				, m_glossinessMapFlags{ m_glossinessMapPlugin.getTextureFlags() }
 				, m_heightMapFlags{ m_heightMapPlugin.getTextureFlags() }
 				, m_metalnessMapFlags{ m_metalnessMapPlugin.getTextureFlags() }
 				, m_normalMapFlags{ m_normalMapPlugin.getTextureFlags() }
@@ -189,7 +186,6 @@ namespace c3d_assimp
 				, m_sheenRoughnessMapFlags{ m_sheenRoughnessMapPlugin.getTextureFlags() }
 				, m_colourBaseConfiguration{ m_colourMapPlugin.getBaseTextureConfiguration() }
 				, m_emissiveBaseConfiguration{ m_emissiveMapPlugin.getBaseTextureConfiguration() }
-				, m_glossinessBaseConfiguration{ m_glossinessMapPlugin.getBaseTextureConfiguration() }
 				, m_heightBaseConfiguration{ m_heightMapPlugin.getBaseTextureConfiguration() }
 				, m_metalnessBaseConfiguration{ m_metalnessMapPlugin.getBaseTextureConfiguration() }
 				, m_normalBaseConfiguration{ m_normalMapPlugin.getBaseTextureConfiguration() }
@@ -237,13 +233,11 @@ namespace c3d_assimp
 			{
 				parseComponentBoolData< castor3d::TwoSidedComponent >( AI_MATKEY_TWOSIDED );
 
-				if ( !parseComponentDataT< castor3d::RoughnessComponent, float >( AI_MATKEY_ROUGHNESS_FACTOR ) )
+				if ( !parseRoughness() )
 				{
-					if ( !parseComponentDataT< castor3d::RoughnessComponent, float >( AI_MATKEY_GLOSSINESS_FACTOR
-						, []( float v ){ return 1.0f - v; } ) )
+					if ( !parseGlossiness() )
 					{
-						parseComponentDataFactorT< castor3d::RoughnessComponent, float >( AI_MATKEY_SHININESS, AI_MATKEY_SHININESS_STRENGTH
-							, []( float v ){ return 1.0f - ( v / castor3d::MaxPhongShininess ); } );
+						parseShininess();
 					}
 				}
 
@@ -279,7 +273,7 @@ namespace c3d_assimp
 				TextureInfo opaInfo{};
 				TextureInfo spcInfo{};
 				TextureInfo mtlInfo{};
-				TextureInfo glsInfo{};
+				TextureInfo shnInfo{};
 				TextureInfo rghInfo{};
 				auto trsInfo = getTextureInfo( TextureType_TRANSMISSION, 0u );
 				auto thkInfo = getTextureInfo( TextureType_TRANSMISSION, 1u );
@@ -297,8 +291,8 @@ namespace c3d_assimp
 
 				auto hgtInfo = finishHeight();
 				auto emiInfo = finishEmissive();
-				finishColour( colInfo, nmlInfo, opaInfo, spcInfo, mtlInfo, glsInfo, rghInfo );
-				finishSpecular( spcInfo, occInfo, mtlInfo, glsInfo, rghInfo );
+				finishColour( colInfo, nmlInfo, opaInfo, spcInfo, mtlInfo, shnInfo, rghInfo );
+				finishSpecular( spcInfo, occInfo, mtlInfo, shnInfo, rghInfo );
 				auto hasOpacityTex = finishOpacity( opaInfo );
 
 				loadTexture( colInfo, getRemap( m_colourMapFlags, m_colourBaseConfiguration )
@@ -311,7 +305,7 @@ namespace c3d_assimp
 					, hasOpacityTex );
 				loadTexture( rghInfo, getRemap( m_roughnessMapFlags, m_roughnessBaseConfiguration )
 					, hasOpacityTex );
-				loadTexture( glsInfo, getRemap( m_glossinessMapFlags, m_glossinessBaseConfiguration )
+				loadTexture( shnInfo, getRemap( m_roughnessMapFlags, m_roughnessBaseConfiguration )
 					, hasOpacityTex );
 				loadTexture( occInfo, getRemap( m_occlusionMapFlags, m_occlusionBaseConfiguration )
 					, hasOpacityTex );
@@ -375,6 +369,51 @@ namespace c3d_assimp
 					auto data = component->getData();
 					*data = value;
 					component->setData( *data );
+				}
+
+				return result;
+			}
+
+			bool parseRoughness()
+			{
+				float value{};
+				bool result = parseDataT( AI_MATKEY_ROUGHNESS_FACTOR, value );
+
+				if ( result )
+				{
+					auto component = m_result.createComponent< castor3d::RoughnessComponent >();
+					component->setRoughness( value );
+				}
+
+				return result;
+			}
+
+			bool parseGlossiness()
+			{
+				float value{};
+				bool result = parseDataT( AI_MATKEY_GLOSSINESS_FACTOR, value );
+
+				if ( result )
+				{
+					auto component = m_result.createComponent< castor3d::RoughnessComponent >();
+					component->setGlossiness( true );
+					component->setRoughness( 1.0f - value );
+				}
+
+				return result;
+			}
+
+			bool parseShininess()
+			{
+				float value{};
+				bool result = parseDataT( AI_MATKEY_SHININESS, value );
+
+				if ( result )
+				{
+					float factor{ 1.0f };
+					m_material.Get( AI_MATKEY_SHININESS_STRENGTH, factor );
+					auto component = m_result.createComponent< castor3d::RoughnessComponent >();
+					component->setRoughness( 1.0f - ( ( value * factor ) / castor3d::MaxPhongShininess ) );
 				}
 
 				return result;
@@ -995,7 +1034,7 @@ namespace c3d_assimp
 				, TextureInfo & opaInfo
 				, TextureInfo & spcInfo
 				, TextureInfo & mtlInfo
-				, TextureInfo & glsInfo
+				, TextureInfo & shnInfo
 				, TextureInfo & rghInfo )
 			{
 				colInfo = getTextureInfo( TextureType_BASE_COLOR );
@@ -1038,7 +1077,7 @@ namespace c3d_assimp
 
 					opaInfo = getTextureInfo( aiTextureType_OPACITY );
 					spcInfo = getTextureInfo( aiTextureType_SPECULAR );
-					glsInfo = getTextureInfo( aiTextureType_SHININESS );
+					shnInfo = getTextureInfo( aiTextureType_SHININESS );
 					mtlInfo = getTextureInfo( TextureType_METALNESS );
 					rghInfo = getTextureInfo( TextureType_DIFFUSE_ROUGHNESS );
 				}
@@ -1047,7 +1086,7 @@ namespace c3d_assimp
 			void finishSpecular( TextureInfo & spcInfo
 				, TextureInfo & occInfo
 				, TextureInfo & mtlInfo
-				, TextureInfo & glsInfo
+				, TextureInfo & shnInfo
 				, TextureInfo & rghInfo )
 			{
 				if ( spcInfo.name.empty() )
@@ -1083,9 +1122,9 @@ namespace c3d_assimp
 							mtlInfo.name.clear();
 						}
 
-						if ( spcInfo.name == glsInfo.name )
+						if ( spcInfo.name == shnInfo.name )
 						{
-							glsInfo.name.clear();
+							shnInfo.name.clear();
 						}
 
 						if ( spcInfo.name == rghInfo.name )
@@ -1184,7 +1223,6 @@ namespace c3d_assimp
 			castor3d::Pass & m_result;
 			castor3d::PassComponentPlugin const & m_colourMapPlugin;
 			castor3d::PassComponentPlugin const & m_emissiveMapPlugin;
-			castor3d::PassComponentPlugin const & m_glossinessMapPlugin;
 			castor3d::PassComponentPlugin const & m_heightMapPlugin;
 			castor3d::PassComponentPlugin const & m_metalnessMapPlugin;
 			castor3d::PassComponentPlugin const & m_normalMapPlugin;
@@ -1202,7 +1240,6 @@ namespace c3d_assimp
 			castor3d::PassComponentPlugin const & m_sheenRoughnessMapPlugin;
 			castor3d::PassComponentTextureFlag m_colourMapFlags;
 			castor3d::PassComponentTextureFlag m_emissiveMapFlags;
-			castor3d::PassComponentTextureFlag m_glossinessMapFlags;
 			castor3d::PassComponentTextureFlag m_heightMapFlags;
 			castor3d::PassComponentTextureFlag m_metalnessMapFlags;
 			castor3d::PassComponentTextureFlag m_normalMapFlags;
@@ -1220,7 +1257,6 @@ namespace c3d_assimp
 			castor3d::PassComponentTextureFlag m_sheenRoughnessMapFlags;
 			castor3d::TextureConfiguration m_colourBaseConfiguration;
 			castor3d::TextureConfiguration m_emissiveBaseConfiguration;
-			castor3d::TextureConfiguration m_glossinessBaseConfiguration;
 			castor3d::TextureConfiguration m_heightBaseConfiguration;
 			castor3d::TextureConfiguration m_metalnessBaseConfiguration;
 			castor3d::TextureConfiguration m_normalBaseConfiguration;
@@ -1277,7 +1313,7 @@ namespace c3d_assimp
 	//*********************************************************************************************
 
 	AssimpMaterialImporter::AssimpMaterialImporter( castor3d::Engine & engine )
-		: castor3d::MaterialImporter{ engine }
+		: castor3d::MaterialImporter{ engine, cuT( "Assimp" ) }
 	{
 	}
 
@@ -1304,7 +1340,6 @@ namespace c3d_assimp
 		int ishadingMode{};
 		it->second->Get( AI_MATKEY_SHADING_MODEL, ishadingMode );
 		auto shadingMode = aiShadingMode( ishadingMode );
-		castor3d::log::info << cuT( "  Material found: [" ) << name << cuT( "]" ) << std::endl;
 		auto pass = material.createPass( materials::getLightingModel( *getEngine(), shadingMode ) );
 		materials::MaterialParser::parse( *it->second 
 			, file.getAiScene()

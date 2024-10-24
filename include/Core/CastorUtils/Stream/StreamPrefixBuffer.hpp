@@ -15,78 +15,77 @@ See LICENSE file in root folder
 
 namespace castor::format
 {
-	template < typename prefix_type, typename char_type, typename traits >
-	struct BasicPrefixBuffer
-		: public std::basic_streambuf< char_type, traits >
-		, public prefix_type
+	template< typename PrefixT, typename CharT, typename TraitsT >
+	struct BasicPrefixBufferT
+		: public std::basic_streambuf< CharT, TraitsT >
+		, public PrefixT
 	{
 	public:
-		using int_type = typename traits::int_type;
-		using pos_type = typename traits::pos_type;
-		using off_type = typename traits::off_type;
+		using traits_type = TraitsT;
+		using string_type = std::basic_string< CharT, TraitsT >;
+		using ostream_type = std::basic_ostream< CharT, TraitsT >;
+		using streambuf_type = std::basic_streambuf< CharT, TraitsT >;
+		using int_type = typename TraitsT::int_type;
+		using pos_type = typename TraitsT::pos_type;
+		using off_type = typename TraitsT::off_type;
 
 	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\~french
-		 *\brief		Constructeur.
-		 */
-		explicit BasicPrefixBuffer( std::basic_streambuf< char_type, traits > * sbuf )
-			: m_sbuf( sbuf )
-			, m_set{ true }
+		explicit BasicPrefixBufferT( ostream_type & stream )
+			: m_stream{ stream }
 		{
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the stream buffer
-		 *\return		The buffer
-		 *\~french
-		 *\brief		Récupère le tampon du flux
-		 *\return		Le tampon
-		 */
-		std::streambuf * sbuf() const
-		{
-			return m_sbuf;
+			m_old = m_stream.rdbuf( this );
 		}
 
-	private:
-		BasicPrefixBuffer( const BasicPrefixBuffer< prefix_type, char_type, traits > & ) = delete;
-		BasicPrefixBuffer< prefix_type, char_type, traits > & operator=( const BasicPrefixBuffer< prefix_type, char_type, traits > & ) = delete;
-
-	private:
-		virtual int_type overflow( int_type c = traits::eof() )
+		~BasicPrefixBufferT()noexcept override
 		{
-			if ( traits::eq_int_type( c, traits::eof() ) )
+			try
 			{
-				return m_sbuf->sputc( static_cast< char_type >( c ) );
+				m_stream.rdbuf( m_old );
+			}
+			catch ( ... )
+			{
+				// Nothing to do here...
+			}
+		}
+
+	private:
+		BasicPrefixBufferT( const BasicPrefixBufferT< PrefixT, CharT, TraitsT > & ) = delete;
+		BasicPrefixBufferT( BasicPrefixBufferT< PrefixT, CharT, TraitsT > && ) = delete;
+		BasicPrefixBufferT< PrefixT, CharT, TraitsT > & operator=( const BasicPrefixBufferT< PrefixT, CharT, TraitsT > & ) = delete;
+		BasicPrefixBufferT< PrefixT, CharT, TraitsT > & operator=( BasicPrefixBufferT< PrefixT, CharT, TraitsT > && ) = delete;
+
+	private:
+		int_type overflow( int_type c = TraitsT::eof() )override
+		{
+			if ( TraitsT::eq_int_type( c, TraitsT::eof() ) )
+			{
+				return m_old->sputc( static_cast< CharT >( c ) );
 			}
 
 			if ( m_set )
 			{
-				auto Prefix = prefix_type::toString();
-				m_sbuf->sputn( Prefix.c_str(), Prefix.size() );
+				auto prefix = PrefixT::toString();
+				m_old->sputn( prefix.c_str(), std::streamsize( prefix.size() ) );
 				m_set = false;
 			}
 
-			if ( traits::eq_int_type( m_sbuf->sputc( static_cast< char_type >( c ) ), traits::eof() ) )
+			if ( TraitsT::eq_int_type( m_old->sputc( static_cast< CharT >( c ) ), TraitsT::eof() ) )
 			{
-				return traits::eof();
+				return TraitsT::eof();
 			}
 
-			if ( traits::eq_int_type( c, traits::to_char_type( '\n' ) ) )
+			if ( TraitsT::eq_int_type( c, TraitsT::to_char_type( '\n' ) ) )
 			{
 				m_set = true;
 			}
 
-			return traits::not_eof( c );
+			return TraitsT::not_eof( c );
 		}
 
 	private:
-		//!\~english The internal stream buffer.	\~french Le tampon interne.
-		std::basic_streambuf< char_type, traits > * m_sbuf;
-		//!\~english Tells the stream it to Prefix.	\~french Dit si le flux doit être préfixé.
-		bool m_set{};
+		ostream_type & m_stream;
+		streambuf_type * m_old{};
+		bool m_set{ true };
 	};
 }
 

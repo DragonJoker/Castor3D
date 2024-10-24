@@ -15,24 +15,24 @@ See LICENSE file in root folder
 
 namespace castor::format
 {
-	template< typename prefix_type, typename char_type, typename traits >
-	class BasicPrefixBufferManager
+	template< typename prefix_type, typename CharT, typename traits >
+	class BasicPrefixBufferManagerT
 	{
 	private:
 		using bos = std::ios_base;
-		using bsb = std::basic_streambuf< char_type, traits >;
+		using bsb = std::basic_streambuf< CharT, traits >;
 		using table_type = Map< bos *, bsb * >;
 		using value_type = typename table_type::value_type;
 		using iterator = typename table_type::iterator;
 		using const_iterator = typename table_type::const_iterator;
 		using lock_type = castor::UniqueLock< castor::Mutex >;
 
-		BasicPrefixBufferManager( BasicPrefixBufferManager const & ) = delete;
-		BasicPrefixBufferManager & operator =( BasicPrefixBufferManager const & ) = delete;
-		BasicPrefixBufferManager( BasicPrefixBufferManager && )noexcept = delete;
-		BasicPrefixBufferManager & operator =( BasicPrefixBufferManager && )noexcept = delete;
+		BasicPrefixBufferManagerT( BasicPrefixBufferManagerT const & ) = delete;
+		BasicPrefixBufferManagerT & operator =( BasicPrefixBufferManagerT const & ) = delete;
+		BasicPrefixBufferManagerT( BasicPrefixBufferManagerT && )noexcept = delete;
+		BasicPrefixBufferManagerT & operator =( BasicPrefixBufferManagerT && )noexcept = delete;
 
-		BasicPrefixBufferManager( BasicPrefixBufferManager< prefix_type, char_type, traits > & obj ) = delete;
+		BasicPrefixBufferManagerT( BasicPrefixBufferManagerT< prefix_type, CharT, traits > & obj ) = delete;
 
 		/**
 		 *\~english
@@ -42,7 +42,7 @@ namespace castor::format
 		 */
 		/** Default constructor
 		*/
-		BasicPrefixBufferManager()
+		BasicPrefixBufferManagerT()
 		{
 			++sm_instances;
 		}
@@ -54,7 +54,7 @@ namespace castor::format
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~BasicPrefixBufferManager()noexcept
+		~BasicPrefixBufferManagerT()noexcept
 		{
 			--sm_instances;
 			lock_type lock{ castor::makeUniqueLock( m_mutex ) };
@@ -150,13 +150,13 @@ namespace castor::format
 
 		/**
 		 *\~english
-		 *\brief		Retrieves an instance of the BasicPrefixBufferManager
+		 *\brief		Retrieves an instance of the BasicPrefixBufferManagerT
 		 *\~french
-		 *\brief		Récupère une instance du BasicPrefixBufferManager
+		 *\brief		Récupère une instance du BasicPrefixBufferManagerT
 		 */
-		static BasicPrefixBufferManager< prefix_type, char_type, traits > * instance()
+		static BasicPrefixBufferManagerT< prefix_type, CharT, traits > * instance()
 		{
-			static BasicPrefixBufferManager< prefix_type, char_type, traits > ibm;
+			static BasicPrefixBufferManagerT< prefix_type, CharT, traits > ibm;
 			return &ibm;
 		}
 
@@ -172,8 +172,8 @@ namespace castor::format
 		castor::Mutex m_mutex;
 	};
 
-	template< typename prefix_type, typename char_type, typename traits >
-	std::atomic_int BasicPrefixBufferManager< prefix_type, char_type, traits >::sm_instances = 0;
+	template< typename prefix_type, typename CharT, typename traits >
+	std::atomic_int BasicPrefixBufferManagerT< prefix_type, CharT, traits >::sm_instances = 0;
 }
 
 #endif

@@ -137,7 +137,7 @@ namespace CastorViewer
 		bool m_mouseRightDown{};
 		bool m_mouseMiddleDown{};
 		bool m_resizeWindow{ true };
-		bool m_extraSpeed{};
+		double m_speedMult{};
 		std::atomic_bool m_movementStarted{};
 		castor3d::RenderWindowUPtr m_renderWindow{};
 		castor::Array< wxTimer *, size_t( eTIMER_ID::COUNT ) > m_timers{};

@@ -1,5 +1,6 @@
 #include "Castor3D/Material/Pass/Component/PassMapComponent.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
@@ -65,6 +66,16 @@ namespace castor3d
 		{
 			doFillConfig( configuration, vis );
 		}
+	}
+
+	void PassMapComponent::createDefaultTexture( Pass & pass
+		, castor::String name
+		, TextureConfiguration config
+		, castor::ImageCreateParams imageParams )
+	{
+		TextureSourceInfo sourceInfo{ std::move( name ), std::move( config ), std::move( imageParams ) };
+		PassTextureConfig passConfig{ getEngine( pass )->getDefaultSampler() };
+		pass.registerTexture( std::move( sourceInfo ), std::move( passConfig ) );
 	}
 
 	void PassMapComponent::doFillBuffer( PassBuffer & buffer )const

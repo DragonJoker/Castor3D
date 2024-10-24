@@ -11,6 +11,8 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureSourceInfo.hpp"
 
+#include <CastorUtils/Graphics/ImageCache.hpp>
+
 namespace castor3d
 {
 	using TextureSourceSet = castor::UnorderedSet< TextureSourceInfo, TextureSourceInfoHasher >;
@@ -119,6 +121,10 @@ namespace castor3d
 
 		C3D_API void fillConfig( TextureConfiguration & config
 			, ConfigurationVisitorBase & vis )const override;
+		C3D_API void createDefaultTexture( Pass & pass
+			, castor::String name
+			, TextureConfiguration config
+			, castor::ImageCreateParams imageParams );
 		/**@}*/
 
 	private:
@@ -131,6 +137,26 @@ namespace castor3d
 	private:
 		PassComponentTextureFlag m_textureFlags;
 	};
+
+	struct PassMapDefaultImageParams
+	{
+		castor::String name;
+		castor::ImageCreateParams image;
+	};
+
+	template< typename ComponentT >
+	void createDefaultTextureComponent( Pass & pass )
+	{
+		ComponentT * component = createPassComponent< ComponentT >( pass );
+		PassMapDefaultImageParams imageParams = component->createDefaultImage( *getEngine( pass ) );
+		const PassComponentPlugin & plugin = component->getPlugin();
+		TextureConfiguration config;
+		plugin.fillTextureConfiguration( config, 0U );
+		component->createDefaultTexture( pass
+			, std::move( imageParams.name )
+			, std::move( config )
+			, std::move( imageParams.image ) );
+	}
 }
 
 #endif

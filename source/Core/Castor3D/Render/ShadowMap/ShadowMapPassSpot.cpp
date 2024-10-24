@@ -69,12 +69,12 @@ namespace castor3d
 		getCuller().getCamera().detach();
 	}
 
-	void ShadowMapPassSpot::update( CpuUpdater & updater )
+	void ShadowMapPassSpot::doUpdate( CpuUpdater & updater )
 	{
 		getCuller().update( updater );
 		m_outOfDate = m_outOfDate
 			|| getCuller().areAnyChanged();
-		RenderNodesPass::update( updater );
+		RenderNodesPass::doUpdate( updater );
 	}
 
 	void ShadowMapPassSpot::doUpdateUbos( CpuUpdater & updater )

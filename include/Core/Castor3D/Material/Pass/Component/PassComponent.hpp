@@ -1296,6 +1296,9 @@ namespace castor3d
 		std::atomic_bool & m_dirty;
 		shader::PassMaterialShader * m_materialShader{};
 	};
+
+	template< typename ComponentT, typename ... ParamsT >
+	ComponentT * createPassComponent( Pass & pass, ParamsT && ... params );
 }
 
 #endif

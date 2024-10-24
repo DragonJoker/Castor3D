@@ -585,7 +585,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Map/ClearcoatRoughnessMapComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Map/ColourMapComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Map/EmissiveMapComponent.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Map/GlossinessMapComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Map/HeightMapComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Map/IridescenceMapComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Map/IridescenceThicknessMapComponent.cpp
@@ -608,7 +607,6 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Map/ClearcoatRoughnessMapComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Map/ColourMapComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Map/EmissiveMapComponent.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Map/GlossinessMapComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Map/HeightMapComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Map/IridescenceMapComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Map/IridescenceThicknessMapComponent.hpp
@@ -1067,6 +1065,7 @@ source_group( "Source Files\\Plugin" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Frustum.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/GBuffer.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/NodesPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/PipelineFlags.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Picking.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Ray.cpp
@@ -1091,6 +1090,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Frustum.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/GBuffer.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/NodesPass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/PipelineFlags.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Picking.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Ray.hpp

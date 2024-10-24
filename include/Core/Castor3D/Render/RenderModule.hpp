@@ -214,7 +214,7 @@ namespace castor3d
 	*\brief
 	*	Enumération des coins d'un frustum
 	*/
-	enum class FrustumCorner
+	enum class Corner
 	{
 		//!\~english	Far left bottom corner.
 		//!\~french		Coin éloigné bas gauche.
@@ -242,7 +242,7 @@ namespace castor3d
 		eNearRightBottom = 7,
 		CU_ScopedEnumBounds( eFarLeftBottom, eNearRightBottom )
 	};
-	C3D_API castor::String getName( FrustumCorner value );
+	C3D_API castor::String getName( Corner value );
 	/**
 	*\~english
 	*\brief
@@ -624,16 +624,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	The render nodes for a specific scene.
-	*\~french
-	*\brief
-	*	Les noeuds de rendu pour une scène spécifique.
-	*/
-	template< typename NodeType, typename MapType >
-	struct RenderNodesT;
-	/**
-	*\~english
-	*\brief
 	*	A pipeline to render specific nodes from a render pass.
 	*\~french
 	*\brief
@@ -732,10 +722,19 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Render pass base class.
+	*	Nodes pass base class.
 	*\~french
 	*\brief
-	*	Classe de base d'une passe de rendu.
+	*	Classe de base d'une passe de noeuds.
+	*/
+	class NodesPass;
+	/**
+	*\~english
+	*\brief
+	*	Rasterized nodes pass base class.
+	*\~french
+	*\brief
+	*	Classe de base d'une passe de rastérisation de noeuds.
 	*/
 	class RenderNodesPass;
 	/**
@@ -776,6 +775,7 @@ namespace castor3d
 	struct SubmeshRenderNode;
 
 	CU_DeclareSmartPtr( castor3d, Frustum, C3D_API );
+	CU_DeclareSmartPtr( castor3d, NodesPass, C3D_API );
 	CU_DeclareSmartPtr( castor3d, Picking, C3D_API );
 	CU_DeclareSmartPtr( castor3d, RenderDevice, C3D_API );
 	CU_DeclareSmartPtr( castor3d, RenderLoop, C3D_API );
@@ -864,9 +864,9 @@ namespace castor3d
 		CU_ScopedEnumBounds( eBeforeDepth, eBeforePostEffects )
 	};
 
-	using RenderNodesPassChangeSignalFunction = castor::Function< void( RenderNodesPass const & ) >;
-	using RenderNodesPassChangeSignal = castor::SignalT< RenderNodesPassChangeSignalFunction >;
-	using RenderNodesPassChangeSignalConnection = castor::ConnectionT< RenderNodesPassChangeSignal >;
+	using NodesPassChangeSignalFunction = castor::Function< void( NodesPass const & ) >;
+	using NodesPassChangeSignal = castor::SignalT< NodesPassChangeSignalFunction >;
+	using NodesPassChangeSignalConnection = castor::ConnectionT< NodesPassChangeSignal >;
 
 	using TechniquePassVector = castor::Vector< RenderTechniqueNodesPass * >;
 	using TechniquePasses = castor::Array< TechniquePassVector, size_t( TechniquePassEvent::eCount ) >;

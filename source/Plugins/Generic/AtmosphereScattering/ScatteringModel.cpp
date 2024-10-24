@@ -279,13 +279,8 @@ namespace atmosphere_scattering
 					auto lightViewCosAngle = m_writer.declLocale( "lightViewCosAngle"
 						, lightOnPlane.x() );
 
-					auto intersectGround = m_writer.declLocale( "intersectGround"
-						, m_atmosphere.raySphereIntersectNearest( ray
-							, vec3( 0.0_f )
-							, m_atmosphere.getPlanetRadius() ).valid() );
-
 					auto uv = m_writer.declLocale< sdw::Vec2 >( "uv" );
-					m_atmosphere.skyViewLutParamsToUv( intersectGround, viewZenithCosAngle, lightViewCosAngle, viewHeight, uv, fragSize );
+					m_atmosphere.skyViewLutParamsToUv( 0_b, viewZenithCosAngle, lightViewCosAngle, viewHeight, uv, fragSize );
 
 					auto result = m_writer.declLocale( "result"
 						, skyViewMap.lod( uv, 0.0_f ).rgb() );

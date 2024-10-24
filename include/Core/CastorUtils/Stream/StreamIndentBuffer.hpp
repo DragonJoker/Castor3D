@@ -12,9 +12,9 @@ See LICENSE file in root folder
 
 namespace castor::format
 {
-	template < typename char_type, char_type fill_char, typename traits >
-	struct BasicIndentBuffer
-		: public std::basic_streambuf< char_type, traits >
+	template < typename CharT, CharT fill_char, typename traits >
+	struct BasicIndentBufferT
+		: public std::basic_streambuf< CharT, traits >
 	{
 	public:
 		using int_type = typename traits::int_type;
@@ -22,10 +22,10 @@ namespace castor::format
 		using off_type = typename traits::off_type;
 
 	private:
-		BasicIndentBuffer( BasicIndentBuffer const & ) = delete;
-		BasicIndentBuffer & operator=( BasicIndentBuffer const & ) = delete;
-		BasicIndentBuffer( BasicIndentBuffer && )noexcept = delete;
-		BasicIndentBuffer & operator=( BasicIndentBuffer && )noexcept = delete;
+		BasicIndentBufferT( BasicIndentBufferT const & ) = delete;
+		BasicIndentBufferT & operator=( BasicIndentBufferT const & ) = delete;
+		BasicIndentBufferT( BasicIndentBufferT && )noexcept = delete;
+		BasicIndentBufferT & operator=( BasicIndentBufferT && )noexcept = delete;
 
 	public:
 		/**
@@ -34,7 +34,7 @@ namespace castor::format
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		explicit BasicIndentBuffer( std::basic_streambuf< char_type, traits > * sbuf )
+		explicit BasicIndentBufferT( std::basic_streambuf< CharT, traits > * sbuf )
 			: m_sbuf( sbuf )
 			, m_set{ true }
 		{
@@ -81,16 +81,16 @@ namespace castor::format
 		{
 			if ( traits::eq_int_type( c, traits::eof() ) )
 			{
-				return m_sbuf->sputc( static_cast< char_type >( c ) );
+				return m_sbuf->sputc( static_cast< CharT >( c ) );
 			}
 
 			if ( m_set )
 			{
-				std::fill_n( std::ostreambuf_iterator< char_type >( m_sbuf ), m_count, fill_char );
+				std::fill_n( std::ostreambuf_iterator< CharT >( m_sbuf ), m_count, fill_char );
 				m_set = false;
 			}
 
-			if ( traits::eq_int_type( m_sbuf->sputc( static_cast< char_type >( c ) ), traits::eof() ) )
+			if ( traits::eq_int_type( m_sbuf->sputc( static_cast< CharT >( c ) ), traits::eof() ) )
 			{
 				return traits::eof();
 			}
@@ -105,7 +105,7 @@ namespace castor::format
 
 	private:
 		//!\~english The internal stream buffer	\~french Le tampon interne
-		std::basic_streambuf< char_type, traits > * m_sbuf;
+		std::basic_streambuf< CharT, traits > * m_sbuf;
 		//!\~english The indentation value	\~french La valeur d'indentation
 		int m_count{};
 		//!\~english Tells the stream has been indented	\~french Dit si le flux a été indenté

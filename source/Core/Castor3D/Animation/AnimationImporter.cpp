@@ -100,18 +100,21 @@ namespace castor3d
 		}
 	}
 
-	AnimationImporter::AnimationImporter( Engine & engine )
+	AnimationImporter::AnimationImporter( Engine & engine
+		, castor::String const & prefix )
 		: OwnedBy< Engine >{ engine }
+		, m_prefix{ prefix + cuT( " - " ) }
 	{
 	}
 
-	bool AnimationImporter::import( SkeletonAnimation & skeleton
+	bool AnimationImporter::import( SkeletonAnimation & animation
 		, ImporterFile * file
 		, Parameters const & parameters )
 	{
 		m_file = file;
 		m_parameters = parameters;
-		auto result = doImportSkeleton( skeleton );
+		log::info << getPrefix() << cuT( "Loading skeleton animation [" ) << animation.getName() << cuT( "]" ) << std::endl;
+		auto result = doImportSkeleton( animation );
 
 		if ( result )
 		{
@@ -122,8 +125,16 @@ namespace castor3d
 			{
 				animimp::transformSkeletonAnimation( scale
 					, orientation
-					, skeleton );
+					, animation );
 			}
+
+			log::info << getPrefix() << cuT( "Loaded skeleton animation [" ) << animation.getName() << cuT( "] " )
+				<< animation.getLength().count() << cuT( " ms, " )
+				<< animation.size() << cuT( " Keyframes" ) << std::endl;
+		}
+		else
+		{
+			log::info << getPrefix() << cuT( "Couldn't load skeleton animation [" ) << animation.getName() << cuT( "]" ) << std::endl;
 		}
 
 		return result;
@@ -163,6 +174,7 @@ namespace castor3d
 		m_parameters.get( cuT( "split_mesh" ), splitSubmeshes );
 		m_file = file;
 		m_parameters = parameters;
+		log::info << getPrefix() << cuT( "Loading mesh animation [" ) << animation.getName() << cuT( "]" ) << std::endl;
 		auto result = doImportMesh( animation );
 
 		if ( result )
@@ -177,6 +189,14 @@ namespace castor3d
 				castor::matrix::scale( transform, scale );
 				animimp::transformMeshAnimation( transform, animation );
 			}
+
+			log::info << getPrefix() << cuT( "Loaded mesh animation [" ) << animation.getName() << cuT( "] " )
+				<< animation.getLength().count() << cuT( " ms, " )
+				<< animation.size() << cuT( " Keyframes" ) << std::endl;
+		}
+		else
+		{
+			log::info << getPrefix() << cuT( "Couldn't load mesh skeleton animation [" ) << animation.getName() << cuT( "]" ) << std::endl;
 		}
 
 		return result;
@@ -217,7 +237,21 @@ namespace castor3d
 	{
 		m_file = file;
 		m_parameters = parameters;
-		return doImportNode( animation );
+		log::info << getPrefix() << cuT( "Loading node animation [" ) << animation.getName() << cuT( "]" ) << std::endl;
+		bool result = doImportNode( animation );
+
+		if ( result )
+		{
+			log::info << getPrefix() << cuT( "Loaded node animation [" ) << animation.getName() << cuT( "] " )
+				<< animation.getLength().count() << cuT( " ms, " )
+				<< animation.size() << cuT( " Keyframes" ) << std::endl;
+		}
+		else
+		{
+			log::info << getPrefix() << cuT( "Couldn't load node animation [" ) << animation.getName() << cuT( "]" ) << std::endl;
+		}
+
+		return result;
 	}
 
 	bool AnimationImporter::import( SceneNodeAnimation & animation
