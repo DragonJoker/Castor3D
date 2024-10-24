@@ -127,6 +127,8 @@ namespace castor3d
 
 		C3D_API explicit ColourMapComponent( Pass & pass );
 
+		C3D_API PassMapDefaultImageParams createDefaultImage( Engine & engine )const;
+
 		C3D_API static castor::String const TypeName;
 
 	private:

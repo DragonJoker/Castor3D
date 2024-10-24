@@ -186,10 +186,10 @@ namespace castor3d
 		, shader::BlendComponents & components
 		, bool isFrontCulled )
 	{
-		auto & plugin = passComponents.getPlugin< MetalnessMapComponent >();
+		auto & mtlPlugin = passComponents.getPlugin< MetalnessMapComponent >();
 		auto & spcPlugin = passComponents.getPlugin< SpecularMapComponent >();
 
-		if ( !hasAny( combine, plugin.getTextureFlags() )
+		if ( !hasAny( combine, mtlPlugin.getTextureFlags() )
 			&& hasAny( combine, spcPlugin.getTextureFlags() ) )
 		{
 			components.getMember< sdw::Float >( "metalness", true ) = length( components.getMember< sdw::Vec3 >( "specular", true ) );
@@ -218,6 +218,17 @@ namespace castor3d
 	{
 		vis.visit( cuT( "Metalness" ) );
 		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
+	}
+
+	PassMapDefaultImageParams MetalnessMapComponent::createDefaultImage( Engine & engine )const
+	{
+		castor::String name{ cuT( "DefaultMetalness" ) };
+		castor::ByteArray data;
+		data.resize( sizeof( float ) );
+		float value = 1.0f;
+		std::memcpy( data.data(), &value, data.size() );
+		return { name
+			, castor::ImageCreateParams{ getFormatName( castor::PixelFormat::eR32_SFLOAT ), data } };
 	}
 
 	//*********************************************************************************************

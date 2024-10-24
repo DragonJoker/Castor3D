@@ -68,6 +68,19 @@ namespace castor3d
 	{
 	}
 
+	TextureSourceInfo::TextureSourceInfo( castor::String name
+		, TextureConfiguration textureConfig
+		, castor::ImageCreateParams imageParams )
+		: m_name{ castor::move( name ) }
+		, m_textureConfig{ castor::move( textureConfig ) }
+		, m_folder{ imageParams.path.getPath() }
+		, m_relative{ imageParams.path.getFileName( true ) }
+		, m_loadConfig{ castor::move( imageParams.loadConfig ) }
+		, m_type{ castor::move( imageParams.type ) }
+		, m_data{ castor::move( imageParams.data ) }
+	{
+	}
+
 	//************************************************************************************************
 
 	size_t TextureSourceInfoHasher::operator()( TextureSourceInfo const & value )const noexcept

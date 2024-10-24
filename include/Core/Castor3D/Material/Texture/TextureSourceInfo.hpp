@@ -12,6 +12,11 @@ See LICENSE file in root folder
 
 #include <ashespp/Image/ImageCreateInfo.hpp>
 
+namespace castor
+{
+	struct ImageCreateParams;
+}
+
 namespace castor3d
 {
 	class TextureSourceInfo
@@ -36,6 +41,9 @@ namespace castor3d
 		C3D_API TextureSourceInfo( castor::String name
 			, TextureConfiguration textureConfig
 			, ashes::ImageCreateInfo const & createInfo );
+		C3D_API TextureSourceInfo( castor::String name
+			, TextureConfiguration textureConfig
+			, castor::ImageCreateParams imageParams );
 
 		bool isSerialisable()const noexcept
 		{

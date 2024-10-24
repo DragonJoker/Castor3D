@@ -170,6 +170,7 @@ namespace castor3d
 
 	C3D_API PassRPtr getComponentPass( PassComponent const & component );
 	C3D_API castor::String const & getPassComponentType( PassComponent const & component );
+	C3D_API Engine * getEngine( Pass const & pass );
 	//@}
 	//@}
 }

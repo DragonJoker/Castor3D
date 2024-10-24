@@ -634,7 +634,7 @@ namespace castor3d
 		}
 		else
 		{
-			log::info << "TextureCache: Reusing existing TextureUnitData for [" << unitData.base->sourceInfo.name() << "]" << std::endl;
+			log::debug << "TextureCache: Reusing existing TextureUnitData for [" << unitData.base->sourceInfo.name() << "]" << std::endl;
 		}
 
 		return result;

@@ -30,6 +30,16 @@ namespace castor
 		bool operator()( castor3d::RoughnessComponent const & object
 			, StringStream & file )override
 		{
+			if ( object.isShininess() )
+			{
+				return write( file, cuT( "shininess" ), object.getShininess() );
+			}
+
+			if ( object.isGlossiness() )
+			{
+				return write( file, cuT( "glossiness" ), object.getGlossiness() );
+			}
+
 			return write( file, cuT( "roughness" ), object.getRoughness() );
 		}
 	};
@@ -111,6 +121,7 @@ namespace castor3d
 		if ( !components.hasMember( "roughness" ) )
 		{
 			components.declMember( "roughness", sdw::type::Kind::eFloat );
+			components.declMember( "roughnessMode", sdw::type::Kind::eUInt32 );
 		}
 	}
 
@@ -129,10 +140,12 @@ namespace castor3d
 		if ( material )
 		{
 			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "roughness" ) ) );
+			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::UInt32 >( "roughnessMode" ) ) );
 		}
 		else
 		{
 			inits.emplace_back( sdw::makeExpr( 1.0_f ) );
+			inits.emplace_back( sdw::makeExpr( 0_u ) );
 		}
 	}
 
@@ -144,13 +157,15 @@ namespace castor3d
 		if ( res.hasMember( "roughness" ) )
 		{
 			res.getMember< sdw::Float >( "roughness" ) += src.getMember< sdw::Float >( "roughness" ) * passMultiplier;
+			res.getMember< sdw::UInt32 >( "roughnessMode" ) = sdw::max( res.getMember< sdw::UInt32 >( "roughnessMode" )
+				, src.getMember< sdw::UInt32 >( "roughnessMode" ) );
 		}
 	}
 
 	//*********************************************************************************************
 
 	RoughnessComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 4u }
+		: shader::PassMaterialShader{ 8u }
 	{
 	}
 
@@ -160,7 +175,9 @@ namespace castor3d
 		if ( !type.hasMember( "roughness" ) )
 		{
 			type.declMember( "roughness", ast::type::Kind::eFloat );
+			type.declMember( "roughnessMode", ast::type::Kind::eUInt32 );
 			inits.emplace_back( sdw::makeExpr( 1.0_f ) );
+			inits.emplace_back( sdw::makeExpr( 0_u ) );
 		}
 	}
 
@@ -191,7 +208,8 @@ namespace castor3d
 		, PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( pass.getId() );
-		data.write( materialShader.getMaterialChunk(), 1.0f, 0u );
+		auto offset = data.write( materialShader.getMaterialChunk(), 1.0f, 0u );
+		data.write( materialShader.getMaterialChunk(), 0u, offset );
 	}
 
 	bool RoughnessComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -207,34 +225,17 @@ namespace castor3d
 
 	RoughnessComponent::RoughnessComponent( Pass & pass
 		, float defaultValue )
-		: BaseDataPassComponentT{ pass, TypeName, {}, defaultValue }
+		: BaseDataPassComponentT< RoughnessData >{ pass, TypeName, {}, defaultValue }
 	{
-	}
-
-	float RoughnessComponent::getGlossiness()const
-	{
-		return 1.0f - getRoughness();
-	}
-
-	void RoughnessComponent::setGlossiness( float v )
-	{
-		m_value = 1.0f - v;
-	}
-
-	float RoughnessComponent::getShininess()const
-	{
-		return getGlossiness() * MaxPhongShininess;
-	}
-
-	void RoughnessComponent::setShininess( float v )
-	{
-		setGlossiness( v / MaxPhongShininess );
 	}
 
 	void RoughnessComponent::accept( ConfigurationVisitorBase & vis )
 	{
+		static castor::StringArray const Names{ cuT( "Roughness" ), cuT( "Glossiness" ), cuT( "Shininess" ) };
 		vis.visit( cuT( "Roughness" ) );
-		vis.visit( cuT( "Factor" ), m_value );
+		vis.visit( cuT( "Factor" ), m_value.factor );
+		vis.visit( cuT( "Mode" ), m_value.mode, Names
+			, ConfigurationVisitorBase::OnEnumValueChangeT< RoughnessMode >( []( RoughnessMode, RoughnessMode ){} ) );
 	}
 
 	PassComponentUPtr RoughnessComponent::doClone( Pass & pass )const
@@ -255,7 +256,8 @@ namespace castor3d
 	void RoughnessComponent::doFillBuffer( PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( getOwner()->getId() );
-		data.write( m_materialShader->getMaterialChunk(), getRoughness(), 0u );
+		auto offset = data.write( m_materialShader->getMaterialChunk(), getRoughness(), 0u );
+		data.write( m_materialShader->getMaterialChunk(), uint32_t( m_value.mode.value() ), offset );
 	}
 
 	//*********************************************************************************************

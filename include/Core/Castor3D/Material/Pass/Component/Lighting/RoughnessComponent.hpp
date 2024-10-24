@@ -11,8 +11,28 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	enum class RoughnessMode
+	{
+		eRoughness,
+		eGlossiness,
+		eShininess
+	};
+
+	struct RoughnessData
+	{
+		explicit RoughnessData( std::atomic_bool & dirty
+			, float value = 1.0f )
+			: factor{ dirty, value }
+			, mode{ dirty, RoughnessMode::eRoughness }
+		{
+		}
+
+		castor::AtomicGroupChangeTracked< float > factor;
+		castor::AtomicGroupChangeTracked< RoughnessMode > mode;
+	};
+
 	struct RoughnessComponent
-		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< float > >
+		: public BaseDataPassComponentT< RoughnessData >
 	{
 		struct ComponentsShader
 			: shader::PassComponentsShader
@@ -81,21 +101,49 @@ namespace castor3d
 		C3D_API explicit RoughnessComponent( Pass & pass
 			, float defaultValue = 1.0f );
 
-		C3D_API float getGlossiness()const;
-		C3D_API void setGlossiness( float v );
-		C3D_API float getShininess()const;
-		C3D_API void setShininess( float v );
-
 		C3D_API void accept( ConfigurationVisitorBase & vis )override;
 
 		float getRoughness()const
 		{
-			return getData();
+			return m_value.factor;
+		}
+
+		float getGlossiness()const
+		{
+			return 1.0f - m_value.factor;
+		}
+
+		float getShininess()const
+		{
+			return getGlossiness() * MaxPhongShininess;
+		}
+
+		bool isGlossiness()const
+		{
+			return m_value.mode == RoughnessMode::eGlossiness;
+		}
+
+		bool isShininess()const
+		{
+			return m_value.mode == RoughnessMode::eShininess;
 		}
 
 		void setRoughness( float v )
 		{
-			setData( v );
+			m_value.factor = v;
+			m_value.mode = RoughnessMode::eRoughness;
+		}
+
+		void setGlossiness( float v )
+		{
+			m_value.factor = 1.0f - v;
+			m_value.mode = RoughnessMode::eGlossiness;
+		}
+
+		void setShininess( float v )
+		{
+			m_value.factor = 1.0f - ( v / MaxPhongShininess );
+			m_value.mode = RoughnessMode::eShininess;
 		}
 
 		C3D_API static castor::String const TypeName;

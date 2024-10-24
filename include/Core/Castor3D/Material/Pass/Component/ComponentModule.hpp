@@ -347,13 +347,6 @@ namespace castor3d
 	struct EmissiveMapComponent;
 	/**
 	\~english
-	\brief		Component holding the glossiness map.
-	\~french
-	\brief		Composant détenant la texture de glossiness.
-	*/
-	struct GlossinessMapComponent;
-	/**
-	\~english
 	\brief		Component holding the height map.
 	\~french
 	\brief		Composant détenant la texture de hauteurs.
@@ -457,7 +450,6 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, ClearcoatRoughnessMapComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, ColourMapComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, EmissiveMapComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, GlossinessMapComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, HeightMapComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, IridescenceMapComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, IridescenceThicknessMapComponent, C3D_API );

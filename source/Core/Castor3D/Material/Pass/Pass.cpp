@@ -25,6 +25,8 @@
 #include "Castor3D/Material/Pass/Component/Other/ReflectionComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/ColourMapComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/NormalMapComponent.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -184,6 +186,9 @@ namespace castor3d
 		createComponent< TexturesComponent >();
 		createComponent< ColourComponent >();
 		createComponent< NormalComponent >();
+
+		createDefaultTextureComponent< ColourMapComponent >( *this );
+		createDefaultTextureComponent< NormalMapComponent >( *this );
 	}
 
 	Pass::Pass( Material & parent
@@ -511,6 +516,22 @@ namespace castor3d
 		, PassTextureConfig configuration )
 	{
 		auto texcoordSet = configuration.texcoordSet;
+
+		for ( auto flag : sourceInfo.textureConfig().components )
+		{
+			if ( flag.flag )
+			{
+				auto srcIt = m_sources.begin();
+
+				while ( srcIt != m_sources.end() )
+				{
+					srcIt = matpass::removeConfiguration( flag.flag
+						, srcIt->first.textureConfig()
+						, srcIt
+						, m_sources );
+				}
+			}
+		}
 
 		if ( auto it = std::find_if( m_sources.begin()
 			, m_sources.end()
@@ -1055,5 +1076,10 @@ namespace castor3d
 	Engine * getEngine( PassContext const & context )
 	{
 		return getEngine( *context.material );
+	}
+
+	Engine * getEngine( Pass const & pass )
+	{
+		return pass.getOwner()->getEngine();
 	}
 }

@@ -588,8 +588,14 @@ namespace castor3d
 
 	C3D_API Engine * getEngine( PassContext const & context );
 
-	template< typename ComponentT >
-	ComponentT & getPassComponent( PassContext & context )
+	template< typename ComponentT, typename ... ParamsT >
+	ComponentT * createPassComponent( Pass & pass, ParamsT && ... params )
+	{
+		return pass.template createComponent< ComponentT >( std::forward< ParamsT >( params )... );
+	}
+
+	template< typename ComponentT, typename ... ParamsT >
+	ComponentT & getPassComponent( PassContext & context, ParamsT && ... params )
 	{
 		if ( !context.passComponent
 			|| getComponentPass( *context.passComponent ) != context.pass
@@ -601,7 +607,7 @@ namespace castor3d
 			}
 			else
 			{
-				context.passComponent = context.pass->template createComponent< ComponentT >();
+				context.passComponent = createPassComponent< ComponentT >( *context.pass, std::forward< ParamsT >( params )... );
 			}
 		}
 

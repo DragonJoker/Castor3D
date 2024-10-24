@@ -31,7 +31,6 @@
 #include "Castor3D/Material/Pass/Component/Map/ClearcoatRoughnessMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/ColourMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/EmissiveMapComponent.hpp"
-#include "Castor3D/Material/Pass/Component/Map/GlossinessMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/IridescenceMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/IridescenceThicknessMapComponent.hpp"
@@ -187,7 +186,6 @@ namespace castor3d
 		registerComponent< SpecularMapComponent >();
 		registerComponent< SpecularFactorMapComponent >();
 		registerComponent< MetalnessMapComponent >();
-		registerComponent< GlossinessMapComponent >();
 		registerComponent< RoughnessMapComponent >();
 		registerComponent< TransmittanceMapComponent >();
 		registerComponent< TransmissionMapComponent >();
