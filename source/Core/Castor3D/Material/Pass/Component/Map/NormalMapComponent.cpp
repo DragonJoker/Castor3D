@@ -391,5 +391,16 @@ namespace castor3d
 		vis.visit( cuT( "2 Channels" ), configuration.normal2Channels );
 	}
 
+	PassMapDefaultImageParams NormalMapComponent::createDefaultImage( Engine & engine )const
+	{
+		castor::String name{ cuT( "DefaultNormal" ) };
+		castor::Point4f defaultNml{ 0.5, 0.5, 1.0, 0.0 };
+		castor::ByteArray data;
+		data.resize( sizeof( float ) * 4 );
+		std::memcpy( data.data(), defaultNml.constPtr(), data.size() );
+		return { name
+			, castor::ImageCreateParams{ getFormatName( castor::PixelFormat::eR32G32B32A32_SFLOAT ), data } };
+	}
+
 	//*********************************************************************************************
 }

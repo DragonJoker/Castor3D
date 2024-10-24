@@ -30,7 +30,6 @@
 #include <Castor3D/Material/Pass/Component/Map/ClearcoatRoughnessMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ColourMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/EmissiveMapComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/GlossinessMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/IridescenceMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/IridescenceThicknessMapComponent.hpp>
@@ -436,12 +435,17 @@ namespace c3d_gltf
 			if ( texInfo )
 			{
 				auto texConfig = pass.getComponentPlugin< castor3d::SpecularMapComponent >().getBaseTextureConfiguration();
-				texConfig.components[1] = pass.getComponentPlugin< castor3d::GlossinessMapComponent >().getBaseTextureConfiguration().components[0];
+				texConfig.components[1] = pass.getComponentPlugin< castor3d::RoughnessMapComponent >().getBaseTextureConfiguration().components[0];
 				texConfig.components[0].componentsMask = 0x00FFFFFF;
 				texConfig.components[1].componentsMask = 0xFF000000;
 				parseTexture( file, pass
 					, std::move( texConfig )
 					, impAsset, *texInfo, importer );
+
+				if ( auto component = pass.getComponent< castor3d::RoughnessComponent >() )
+				{
+					component->setGlossiness( true );
+				}
 			}
 		}
 
@@ -655,7 +659,7 @@ namespace c3d_gltf
 				, impMaterial.specularGlossiness->specularFactor[1]
 				, impMaterial.specularGlossiness->specularFactor[2] ) );
 			auto rghComponent = pass.createComponent< castor3d::RoughnessComponent >();
-			rghComponent->setGlossiness( impMaterial.specularGlossiness->glossinessFactor );
+			rghComponent->setRoughness( 1.0f - impMaterial.specularGlossiness->glossinessFactor );
 
 			materials::parseColOpaTexture( file, pass, impAsset, impMaterial.specularGlossiness->diffuseTexture, *this );
 			materials::parseSpcGlsTexture( file, pass, impAsset, impMaterial.specularGlossiness->specularGlossinessTexture, *this );

@@ -49,7 +49,7 @@ namespace castor3d
 		{
 		public:
 			explicit Plugin( PassComponentRegister const & passComponent )
-				: PassMapComponentPlugin{ passComponent, &Plugin::doUpdateComponent }
+				: PassMapComponentPlugin{ passComponent }
 			{
 			}
 
@@ -126,6 +126,8 @@ namespace castor3d
 		}
 
 		C3D_API explicit MetalnessMapComponent( Pass & pass );
+
+		C3D_API PassMapDefaultImageParams createDefaultImage( Engine & engine )const;
 
 		C3D_API static castor::String const TypeName;
 
