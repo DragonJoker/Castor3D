@@ -369,10 +369,7 @@ namespace CastorViewer
 
 	float RenderPanel::doGetRealSpeed()const noexcept
 	{
-		return m_camSpeed.value()
-			* ( m_extraSpeed
-				? 10.0f
-				: 1.0f );
+		return float( m_camSpeed.value() * m_speedMult );
 	}
 
 	void RenderPanel::doResetNode()
@@ -777,9 +774,17 @@ namespace CastorViewer
 				break;
 
 			case 'E':
-				if ( !m_extraSpeed )
+				if ( m_speedMult != 10.0 )
 				{
-					m_extraSpeed = true;
+					m_speedMult = 10.0;
+					doUpdateSpeed();
+				}
+				break;
+
+			case 'W':
+				if ( m_speedMult != 0.1 )
+				{
+					m_speedMult = 0.1;
 					doUpdateSpeed();
 				}
 				break;
@@ -861,9 +866,17 @@ namespace CastorViewer
 				break;
 
 			case 'E':
-				if ( m_extraSpeed )
+				if ( m_speedMult == 10.0 )
 				{
-					m_extraSpeed = false;
+					m_speedMult = 1.0;
+					doUpdateSpeed();
+				}
+				break;
+
+			case 'W':
+				if ( m_speedMult == 0.1 )
+				{
+					m_speedMult = 1.0;
 					doUpdateSpeed();
 				}
 				break;
