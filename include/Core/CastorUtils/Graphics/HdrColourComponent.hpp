@@ -11,15 +11,15 @@ namespace castor
 	class HdrColourComponent
 	{
 	public:
-		HdrColourComponent() = default;
+		constexpr HdrColourComponent() = default;
 		/**
 		 *\~english
-		 *\brief		Constructor from SRGB component.
-		 *\param[in]	rhs		The SRGB component value.
+		 *\brief		Constructor from normalized component.
+		 *\param[in]	rhs		The normalized component value.
 		 *\param[in]	gamma	The gamma correction value.
 		 *\~french
-		 *\brief		Constructeur depuis une componsante SRGB.
-		 *\param[in]	rhs		La valeur de la composante SRGB.
+		 *\brief		Constructeur depuis une componsante normalisée.
+		 *\param[in]	rhs		La valeur de la composante normalisée.
 		 *\param[in]	gamma	La valeur de la correction gamma.
 		 */
 		CU_API explicit HdrColourComponent( ColourComponent const & rhs
@@ -32,18 +32,18 @@ namespace castor
 		 *\brief		Constructeur spécifié
 		 *\param[in]	value	La valeur de la composante
 		 */
-		explicit HdrColourComponent( float value )
+		explicit constexpr HdrColourComponent( float value )
 			: m_component{ value }
 		{
 		}
 		/**
 		 *\~english
 		 *\brief		Assignment operator from float
-		 *\param[in]	rhs	The component value, must be between 0.0f and 1.0f
+		 *\param[in]	rhs	The component value
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un float
-		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0.0f et 1.0f
+		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
 		HdrColourComponent & operator=( float rhs )
@@ -54,11 +54,11 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from double
-		 *\param[in]	rhs	The component value, must be between 0.0 and 1.0
+		 *\param[in]	rhs	The component value
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un double
-		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0.0 et 1.0
+		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
 		HdrColourComponent & operator=( double rhs )
@@ -69,11 +69,11 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from long double
-		 *\param[in]	rhs	The component value, must be between 0.0 and 1.0
+		 *\param[in]	rhs	The component value
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un long double
-		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0.0 et 1.0
+		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
 		HdrColourComponent & operator=( long double rhs )
@@ -114,11 +114,11 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from int16_t
-		 *\param[in]	rhs	The component value, must be between 0 and 255
+		 *\param[in]	rhs	The component value
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un int16_t
-		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0 et 255
+		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
 		HdrColourComponent & operator=( int16_t rhs )
@@ -129,11 +129,11 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from uint16_t
-		 *\param[in]	rhs	The component value, must be between 0 and 255
+		 *\param[in]	rhs	The component value
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un uint16_t
-		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0 et 255
+		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
 		HdrColourComponent & operator=( uint16_t rhs )
@@ -144,11 +144,11 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from int32_t
-		 *\param[in]	rhs	The component value, must be between 0 and 255
+		 *\param[in]	rhs	The component value
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un int32_t
-		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0 et 255
+		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
 		HdrColourComponent & operator=( int32_t rhs )
@@ -159,11 +159,11 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from uint32_t
-		 *\param[in]	rhs	The component value, must be between 0 and 255
+		 *\param[in]	rhs	The component value
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un uint32_t
-		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0 et 255
+		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
 		HdrColourComponent & operator=( uint32_t rhs )
@@ -174,11 +174,11 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from int64_t
-		 *\param[in]	rhs	The component value, must be between 0 and 255
+		 *\param[in]	rhs	The component value
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un int64_t
-		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0 et 255
+		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
 		HdrColourComponent & operator=( int64_t rhs )
@@ -189,11 +189,11 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Assignment operator from uint64_t
-		 *\param[in]	rhs	The component value, must be between 0 and 255
+		 *\param[in]	rhs	The component value
 		 *\return		Reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation à partir d'un uint64_t
-		 *\param[in]	rhs	La valeur de la composante, doit être comprise entre 0 et 255
+		 *\param[in]	rhs	La valeur de la composante
 		 *\return		Référence sur cet objet
 		 */
 		HdrColourComponent & operator=( uint64_t rhs )
@@ -451,7 +451,7 @@ namespace castor
 		 *\brief		Opérateur de conversion implicite
 		 *\return		La valeur
 		 */
-		operator float()const
+		constexpr operator float()const
 		{
 			return m_component;
 		}
@@ -463,7 +463,7 @@ namespace castor
 		 *\brief		Récupère la valeur de la composante
 		 *\return		La valeur
 		 */
-		float const & value()const
+		constexpr float const & value()const
 		{
 			return m_component;
 		}
@@ -481,7 +481,7 @@ namespace castor
 		}
 
 	private:
-		float m_component;
+		float m_component{};
 	};
 	static_assert( sizeof( HdrColourComponent ) == sizeof( float ) );
 	/**

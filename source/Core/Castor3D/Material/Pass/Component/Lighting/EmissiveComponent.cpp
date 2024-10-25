@@ -28,8 +28,8 @@ namespace castor
 		bool operator()( castor3d::EmissiveComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, cuT( "emissive_colour" ), object.getEmissiveColour(), castor::RgbColour{} )
-				&& writeOpt( file, cuT( "emissive_factor" ), object.getEmissiveFactor(), 1.0f );
+			return writeNamedSubOpt( file, cuT( "emissive_colour" ), object.getEmissiveColour(), castor3d::EmissiveComponent::DefaultColour )
+				&& writeOpt( file, cuT( "emissive_factor" ), object.getEmissiveFactor(), castor3d::EmissiveComponent::DefaultFactor );
 		}
 	};
 }
@@ -108,8 +108,8 @@ namespace castor3d
 		}
 		else
 		{
-			inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ EmissiveComponent::DefaultComponent } ) ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ EmissiveComponent::DefaultFactor } ) );
 		}
 	}
 
@@ -141,8 +141,8 @@ namespace castor3d
 		{
 			type.declMember( "emissiveColour", ast::type::Kind::eVec3F );
 			type.declMember( "emissiveFactor", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ EmissiveComponent::DefaultComponent } ) ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ EmissiveComponent::DefaultFactor } ) );
 		}
 	}
 
@@ -174,8 +174,8 @@ namespace castor3d
 	{
 		auto data = buffer.getData( pass.getId() );
 		VkDeviceSize offset{};
-		offset += data.write( materialShader.getMaterialChunk(), castor::RgbColour{}, offset );
-		data.write( materialShader.getMaterialChunk(), 0.0f, offset );
+		offset += data.write( materialShader.getMaterialChunk(), EmissiveComponent::DefaultColour, offset );
+		data.write( materialShader.getMaterialChunk(), EmissiveComponent::DefaultFactor, offset );
 	}
 
 	bool EmissiveComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -189,7 +189,8 @@ namespace castor3d
 	castor::String const EmissiveComponent::TypeName = C3D_MakePassLightingComponentName( "emissive" );
 
 	EmissiveComponent::EmissiveComponent( Pass & pass )
-		: BaseDataPassComponentT{ pass, TypeName }
+		: BaseDataPassComponentT{ pass, TypeName, {}
+			, EmissiveComponent::DefaultColour, EmissiveComponent::DefaultFactor }
 	{
 	}
 

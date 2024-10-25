@@ -30,7 +30,7 @@ namespace castor
 		bool operator()( castor3d::ColourComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSub( file, cuT( "colour_hdr" ), object.getColour() );
+			return writeNamedSubOpt( file, cuT( "colour_hdr" ), object.getColour(), castor3d::ColourComponent::DefaultColour );
 		}
 	};
 }
@@ -111,7 +111,7 @@ namespace castor3d
 			if ( material )
 			{
 				inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Vec3 >( "colour" )
-					* surface->getMember< sdw::Vec3 >( "colour", vec3( 1.0_f ) ) ) );
+					* surface->getMember< sdw::Vec3 >( "colour", vec3( sdw::Float{ ColourComponent::DefaultColour.red() } ) ) ) );
 			}
 			else
 			{
@@ -124,7 +124,7 @@ namespace castor3d
 		}
 		else
 		{
-			inits.emplace_back( sdw::makeExpr( vec3( pow( 1.0_f, 2.2_f ) ) ) );
+			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ ColourComponent::DefaultColour.red() } ) ) );
 		}
 	}
 
@@ -155,7 +155,7 @@ namespace castor3d
 		if ( !type.hasMember( "colour" ) )
 		{
 			type.declMember( "colour", ast::type::Kind::eVec3F );
-			inits.emplace_back( sdw::makeExpr( vec3( pow( 1.0_f, 2.2_f ) ) ) );
+			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ ColourComponent::DefaultColour.red() } ) ) );
 		}
 	}
 
@@ -190,13 +190,8 @@ namespace castor3d
 		, shader::PassMaterialShader const & materialShader
 		, PassBuffer & buffer )const
 	{
-		static castor::HdrRgbColour const dummy{ castor::RgbColour{ 1.0f, 1.0f, 1.0f }, 2.2f };
 		auto data = buffer.getData( pass.getId() );
-		data.write( materialShader.getMaterialChunk()
-			, dummy.red()
-			, dummy.green()
-			, dummy.blue()
-			, 0u );
+		data.write( materialShader.getMaterialChunk(), ColourComponent::DefaultColour, 0u );
 	}
 
 	bool ColourComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -208,10 +203,12 @@ namespace castor3d
 	//*********************************************************************************************
 
 	castor::String const ColourComponent::TypeName = C3D_MakePassOtherComponentName( "colour" );
+	castor::HdrRgbColour const ColourComponent::DefaultColour{ castor::RgbColour{ 1.0f, 1.0f, 1.0f }, 2.2f };
 
 	ColourComponent::ColourComponent( Pass & pass
 		, castor::HdrRgbColour defaultValue )
-		: BaseDataPassComponentT{ pass, TypeName, {}, castor::move( defaultValue ) }
+		: BaseDataPassComponentT{ pass, TypeName, {}
+			, castor::move( defaultValue ) }
 	{
 	}
 

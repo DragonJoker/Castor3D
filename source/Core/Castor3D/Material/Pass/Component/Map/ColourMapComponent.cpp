@@ -259,7 +259,7 @@ namespace castor3d
 		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
 	}
 
-	PassMapDefaultImageParams ColourMapComponent::createDefaultImage( Engine & engine )const
+	PassMapDefaultImageParams ColourMapComponent::createDefaultImage()const
 	{
 		castor::String name{ cuT( "DefaultColour" ) };
 		castor::ByteArray data{ 255u, 255u, 255u, 0u };

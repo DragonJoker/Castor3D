@@ -14,9 +14,11 @@ namespace castor3d
 {
 	struct ClearcoatData
 	{
-		explicit ClearcoatData( std::atomic_bool & dirty )
-			: factor{ dirty, 1.0f }
-			, roughness{ dirty, 0.0f }
+		explicit ClearcoatData( std::atomic_bool & dirty
+			, float fac
+			, float rgh )
+			: factor{ dirty, fac }
+			, roughness{ dirty, rgh }
 		{
 		}
 
@@ -116,6 +118,8 @@ namespace castor3d
 		}
 
 		C3D_API static castor::String const TypeName;
+		C3D_API static float constexpr DefaultFactor{ 1.0f };
+		C3D_API static float constexpr DefaultRoughness{ 0.0f };
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;

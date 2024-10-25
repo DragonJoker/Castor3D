@@ -14,11 +14,15 @@ namespace castor3d
 {
 	struct IridescenceData
 	{
-		explicit IridescenceData( std::atomic_bool & dirty )
-			: factor{ dirty, 0.0f }
-			, ior{ dirty, 1.3f }
-			, minThickness{ dirty, 100.0f }
-			, maxThickness{ dirty, 400.0f }
+		explicit IridescenceData( std::atomic_bool & dirty
+			, float pfactor
+			, float pior
+			, float pminThickness
+			, float pmaxThickness )
+			: factor{ dirty, pfactor }
+			, ior{ dirty, pior }
+			, minThickness{ dirty, pminThickness }
+			, maxThickness{ dirty, pmaxThickness }
 		{
 		}
 
@@ -149,6 +153,10 @@ namespace castor3d
 		}
 
 		C3D_API static castor::String const TypeName;
+		C3D_API static constexpr float DefaultFactor{ 0.0f };
+		C3D_API static constexpr float DefaultIor{ 1.3f };
+		C3D_API static constexpr float DefaultMinThickness{ 100.0f };
+		C3D_API static constexpr float DefaultMaxThickness{ 400.0f };
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;

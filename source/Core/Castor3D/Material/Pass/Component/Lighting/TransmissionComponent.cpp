@@ -30,7 +30,7 @@ namespace castor
 		bool operator()( castor3d::TransmissionComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, cuT( "transmission" ), object.getTransmission(), 0.0f );
+			return writeNamedSubOpt( file, cuT( "transmission" ), object.getTransmission(), castor3d::TransmissionComponent::Default );
 		}
 	};
 }
@@ -99,7 +99,7 @@ namespace castor3d
 		}
 		else
 		{
-			inits.emplace_back( sdw::makeExpr( 1.0_f ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ TransmissionComponent::Default } ) );
 			inits.emplace_back( sdw::makeExpr( 0_u ) );
 		}
 	}
@@ -133,7 +133,7 @@ namespace castor3d
 		{
 			type.declMember( "transmission", ast::type::Kind::eFloat );
 			type.declMember( "hasTransmission", ast::type::Kind::eUInt );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ TransmissionComponent::Default } ) );
 			inits.emplace_back( sdw::makeExpr( 0_u ) );
 		}
 	}
@@ -156,7 +156,7 @@ namespace castor3d
 	{
 		auto data = buffer.getData( pass.getId() );
 		VkDeviceSize offset{};
-		offset += data.write( materialShader.getMaterialChunk(), 0.0f, offset );
+		offset += data.write( materialShader.getMaterialChunk(), TransmissionComponent::Default, offset );
 		data.write( materialShader.getMaterialChunk(), 0u, offset );
 	}
 
@@ -172,9 +172,7 @@ namespace castor3d
 
 	TransmissionComponent::TransmissionComponent( Pass & pass
 		, float defaultValue )
-		: BaseDataPassComponentT{ pass
-			, TypeName
-			, { RefractionComponent::TypeName }
+		: BaseDataPassComponentT{ pass, TypeName, { RefractionComponent::TypeName }
 			, defaultValue }
 	{
 	}

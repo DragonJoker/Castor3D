@@ -29,7 +29,7 @@ namespace castor
 		bool operator()( castor3d::RefractionComponent const & object
 			, StringStream & file )override
 		{
-			return writeOpt( file, cuT( "refraction_ratio" ), object.getRefractionRatio(), 0.0f )
+			return writeOpt( file, cuT( "refraction_ratio" ), object.getRefractionRatio(), castor3d::RefractionComponent::Default )
 				&& writeOpt( file, cuT( "has_refraction" ), object.hasRefraction(), false );
 		}
 	};
@@ -187,9 +187,8 @@ namespace castor3d
 	castor::String const RefractionComponent::TypeName = C3D_MakePassOtherComponentName( "refraction" );
 
 	RefractionComponent::RefractionComponent( Pass & pass )
-		: BaseDataPassComponentT< RefractionData >{ pass
-			, TypeName
-			, {} }
+		: BaseDataPassComponentT< RefractionData >{ pass, TypeName, {}
+			, RefractionComponent::Default }
 	{
 	}
 

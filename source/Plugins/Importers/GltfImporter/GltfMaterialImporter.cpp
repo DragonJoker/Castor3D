@@ -24,7 +24,6 @@
 #include <Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/ThicknessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ClearcoatMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ClearcoatRoughnessMapComponent.hpp>
@@ -42,6 +41,7 @@
 #include <Castor3D/Material/Pass/Component/Map/SheenRoughnessMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/SpecularMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/SpecularFactorMapComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Map/ThicknessMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/TransmissionMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/TransmittanceMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Other/AlphaTestComponent.hpp>
@@ -700,7 +700,7 @@ namespace c3d_gltf
 
 			auto thicknessComponent = pass.createComponent< castor3d::ThicknessComponent >();
 			thicknessComponent->setThicknessFactor( impMaterial.volume->thicknessFactor );
-			materials::parseTexture< castor3d::AttenuationMapComponent >( file, pass, impAsset, impMaterial.volume->thicknessTexture, *this );
+			materials::parseTexture< castor3d::ThicknessMapComponent >( file, pass, impAsset, impMaterial.volume->thicknessTexture, *this );
 		}
 	}
 

@@ -13,8 +13,9 @@ namespace castor3d
 {
 	struct RefractionData
 	{
-		explicit RefractionData( std::atomic_bool & dirty )
-			: factor{ dirty, 1.0f }
+		explicit RefractionData( std::atomic_bool & dirty
+			, float fac )
+			: factor{ dirty, fac }
 			, enabled{ dirty, false }
 		{
 		}
@@ -115,7 +116,7 @@ namespace castor3d
 		}
 
 		C3D_API static castor::String const TypeName;
-		C3D_API static float constexpr Default = 0.0f;
+		C3D_API static float constexpr Default{ 0.0f };
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;

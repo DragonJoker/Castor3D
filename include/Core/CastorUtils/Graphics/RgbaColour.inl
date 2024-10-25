@@ -132,7 +132,7 @@ namespace castor
 
 	//*************************************************************************************************
 
-	String getPredefinedName( PredefinedRgbaColour predefined )
+	inline String getPredefinedName( PredefinedRgbaColour predefined )
 	{
 		String result = cuT( "black" );
 
@@ -145,7 +145,7 @@ namespace castor
 		return result;
 	}
 
-	PredefinedRgbaColour getPredefinedRgba( String const & name )
+	inline PredefinedRgbaColour getPredefinedRgba( String const & name )
 	{
 		PredefinedRgbaColour result = PredefinedRgbaColour::eOpaqueBlack;
 
@@ -164,7 +164,7 @@ namespace castor
 	template< typename ComponentU >
 	inline RgbaColourT< ComponentType >::RgbaColourT( RgbaColourT< ComponentU > const & rhs
 		, float gamma )
-		: m_components{ ComponentType{ rhs.m_components[0u], gamma }
+		: RgbaColourT{ ComponentType{ rhs.m_components[0u], gamma }
 			, ComponentType{ rhs.m_components[1u], gamma }
 			, ComponentType{ rhs.m_components[2u], gamma }
 			, ComponentType{ rhs.m_components[3u], gamma } }
@@ -172,213 +172,213 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType >::RgbaColourT( float r, float g, float b, float a )
-		: m_components{ ComponentType{ r }, ComponentType{ g }, ComponentType{ b }, ComponentType{ a } }
+	inline constexpr RgbaColourT< ComponentType >::RgbaColourT( ComponentType r, ComponentType g, ComponentType b, ComponentType a )
+		: m_components{ std::move( r ), std::move( g ), std::move( b ), std::move( a ) }
 	{
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( Point3ub const & colour )
+	inline constexpr RgbaColourT< ComponentType >::RgbaColourT( float r, float g, float b, float a )
+		: RgbaColourT{ ComponentType{ r }, ComponentType{ g }, ComponentType{ b }, ComponentType{ a } }
 	{
-		return fromComponents( colour[0], colour[1], colour[2], uint8_t( 255 ) );
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( Point3ub const & colour )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( Point3ub const & colour )
 	{
-		return fromComponents( colour[2], colour[1], colour[0], uint8_t( 255 ) );
+		return RgbaColourT{ ComponentType{ colour[0] }, ComponentType{ colour[1] }, ComponentType{ colour[2] }, ComponentType{ uint8_t( 255 ) } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( Point4ub const & colour )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( Point3ub const & colour )
 	{
-		return fromComponents( colour[0], colour[1], colour[2], colour[3] );
+		return RgbaColourT{ ComponentType{ colour[2] }, ComponentType{ colour[1] }, ComponentType{ colour[0] }, ComponentType{ uint8_t( 255 ) } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( Point4ub const & colour )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( Point4ub const & colour )
 	{
-		return fromComponents( colour[3], colour[2], colour[1], colour[0] );
+		return RgbaColourT{ ComponentType{ colour[0] }, ComponentType{ colour[1] }, ComponentType{ colour[2] }, ComponentType{ colour[3] } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( Point4ub const & colour )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( Point4ub const & colour )
 	{
-		return fromComponents( colour[2], colour[1], colour[0], colour[3] );
+		return RgbaColourT{ ComponentType{ colour[3] }, ComponentType{ colour[2] }, ComponentType{ colour[1] }, ComponentType{ colour[0] } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( Point4ub const & colour )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( Point4ub const & colour )
 	{
-		return fromComponents( colour[1], colour[2], colour[3], colour[0] );
+		return RgbaColourT{ ComponentType{ colour[2] }, ComponentType{ colour[1] }, ComponentType{ colour[0] }, ComponentType{ colour[3] } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( Point3f const & colour )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( Point4ub const & colour )
 	{
-		return fromComponents( colour[0], colour[1], colour[2], 1.0f );
+		return RgbaColourT{ ComponentType{ colour[1] }, ComponentType{ colour[2] }, ComponentType{ colour[3] }, ComponentType{ colour[0] } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( Point3f const & colour )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( Point3f const & colour )
 	{
-		return fromComponents( colour[2], colour[1], colour[0], 1.0f );
+		return RgbaColourT{ ComponentType{ colour[0] }, ComponentType{ colour[1] }, ComponentType{ colour[2] }, ComponentType{ 1.0f } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( Point4f const & colour )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( Point3f const & colour )
 	{
-		return fromComponents( colour[0], colour[1], colour[2], colour[3] );
+		return RgbaColourT{ ComponentType{ colour[2] }, ComponentType{ colour[1] }, ComponentType{ colour[0] }, ComponentType{ 1.0f } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( Point4f const & colour )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( Point4f const & colour )
 	{
-		return fromComponents( colour[3], colour[2], colour[1], colour[0] );
+		return RgbaColourT{ ComponentType{ colour[0] }, ComponentType{ colour[1] }, ComponentType{ colour[2] }, ComponentType{ colour[3] } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( Point4f const & colour )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( Point4f const & colour )
 	{
-		return fromComponents( colour[2], colour[1], colour[0], colour[3] );
+		return RgbaColourT{ ComponentType{ colour[3] }, ComponentType{ colour[2] }, ComponentType{ colour[1] }, ComponentType{ colour[0] } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( Point4f const & colour )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( Point4f const & colour )
 	{
-		return fromComponents( colour[1], colour[2], colour[3], colour[0] );
+		return RgbaColourT{ ComponentType{ colour[2] }, ComponentType{ colour[1] }, ComponentType{ colour[0] }, ComponentType{ colour[3] } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( uint8_t const( & colour )[3] )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( Point4f const & colour )
 	{
-		return fromComponents( colour[0], colour[1], colour[2], uint8_t( 255 ) );
+		return RgbaColourT{ ComponentType{ colour[1] }, ComponentType{ colour[2] }, ComponentType{ colour[3] }, ComponentType{ colour[0] } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( uint8_t const( & colour )[3] )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( uint8_t const( & colour )[3] )
 	{
-		return fromComponents( colour[2], colour[1], colour[0], uint8_t( 255 ) );
+		return RgbaColourT{ ComponentType{ colour[0] }, ComponentType{ colour[1] }, ComponentType{ colour[2] }, ComponentType{ uint8_t( 255 ) } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( uint8_t const( & colour )[4] )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( uint8_t const( & colour )[3] )
 	{
-		return fromComponents( colour[0], colour[1], colour[2], colour[3] );
+		return RgbaColourT{ ComponentType{ colour[2] }, ComponentType{ colour[1] }, ComponentType{ colour[0] }, ComponentType{ uint8_t( 255 ) } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( uint8_t const( & colour )[4] )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( uint8_t const( & colour )[4] )
 	{
-		return fromComponents( colour[3], colour[2], colour[1], colour[0] );
+		return RgbaColourT{ ComponentType{ colour[0] }, ComponentType{ colour[1] }, ComponentType{ colour[2] }, ComponentType{ colour[3] } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( uint8_t const( & colour )[4] )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( uint8_t const( & colour )[4] )
 	{
-		return fromComponents( colour[2], colour[1], colour[0], colour[3] );
+		return RgbaColourT{ ComponentType{ colour[3] }, ComponentType{ colour[2] }, ComponentType{ colour[1] }, ComponentType{ colour[0] } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( uint8_t const( & colour )[4] )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( uint8_t const( & colour )[4] )
 	{
-		return fromComponents( colour[1], colour[2], colour[3], colour[0] );
+		return RgbaColourT{ ComponentType{ colour[2] }, ComponentType{ colour[1] }, ComponentType{ colour[0] }, ComponentType{ colour[3] } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( float const( & colour )[3] )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( uint8_t const( & colour )[4] )
 	{
-		return fromComponents( colour[0], colour[1], colour[2], 1.0f );
+		return RgbaColourT{ ComponentType{ colour[1] }, ComponentType{ colour[2] }, ComponentType{ colour[3] }, ComponentType{ colour[0] } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( float const( & colour )[3] )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( float const( & colour )[3] )
 	{
-		return fromComponents( colour[2], colour[1], colour[0], 1.0f );
+		return RgbaColourT{ ComponentType{ colour[0] }, ComponentType{ colour[1] }, ComponentType{ colour[2] }, ComponentType{ 1.0f } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( float const( & colour )[4] )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( float const( & colour )[3] )
 	{
-		return fromComponents( colour[0], colour[1], colour[2], colour[3] );
+		return RgbaColourT{ ComponentType{ colour[2] }, ComponentType{ colour[1] }, ComponentType{ colour[0] }, ComponentType{ 1.0f } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( float const( & colour )[4] )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( float const( & colour )[4] )
 	{
-		return fromComponents( colour[3], colour[2], colour[1], colour[0] );
+		return RgbaColourT{ ComponentType{ colour[0] }, ComponentType{ colour[1] }, ComponentType{ colour[2] }, ComponentType{ colour[3] } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( float const( & colour )[4] )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( float const( & colour )[4] )
 	{
-		return fromComponents( colour[2], colour[1], colour[0], colour[3] );
+		return RgbaColourT{ ComponentType{ colour[3] }, ComponentType{ colour[2] }, ComponentType{ colour[1] }, ComponentType{ colour[0] } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( float const( & colour )[4] )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( float const( & colour )[4] )
 	{
-		return fromComponents( colour[1], colour[2], colour[3], colour[0] );
+		return RgbaColourT{ ComponentType{ colour[2] }, ComponentType{ colour[1] }, ComponentType{ colour[0] }, ComponentType{ colour[3] } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( uint32_t colour )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( float const( & colour )[4] )
 	{
-		float fR = float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
-		float fG = float( ( ( colour & 0x0000FF00 ) >>  8 ) ) / 255.0f;
-		float fB = float( ( ( colour & 0x000000FF ) >>  0 ) ) / 255.0f;
-		float fA = 1.0f;
-		return fromComponents( fR, fG, fB, fA );
+		return RgbaColourT{ ComponentType{ colour[1] }, ComponentType{ colour[2] }, ComponentType{ colour[3] }, ComponentType{ colour[0] } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( uint32_t colour )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGB( uint32_t colour )
 	{
-		float fB = float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
-		float fG = float( ( ( colour & 0x0000FF00 ) >>  8 ) ) / 255.0f;
-		float fR = float( ( ( colour & 0x000000FF ) >>  0 ) ) / 255.0f;
-		float fA = 1.0f;
-		return fromComponents( fR, fG, fB, fA );
+		return RgbaColourT{ ComponentType{ float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f }
+			, ComponentType{ float( ( ( colour & 0x0000FF00 ) >>  8 ) ) / 255.0f }
+			, ComponentType{ float( ( ( colour & 0x000000FF ) >>  0 ) ) / 255.0f }
+			, ComponentType{ 1.0f } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( uint32_t colour )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGR( uint32_t colour )
 	{
-		float fA = float( ( ( colour & 0xFF000000 ) >> 24 ) ) / 255.0f;
-		float fR = float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
-		float fG = float( ( ( colour & 0x0000FF00 ) >>  8 ) ) / 255.0f;
-		float fB = float( ( ( colour & 0x000000FF ) >>  0 ) ) / 255.0f;
-		return fromComponents( fR, fG, fB, fA );
+		return RgbaColourT{ ComponentType{ float( ( ( colour & 0x000000FF ) >> 0 ) ) / 255.0f }
+			, ComponentType{ float( ( ( colour & 0x0000FF00 ) >> 8 ) ) / 255.0f }
+			, ComponentType{ float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f }
+			, ComponentType{ 1.0f } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( uint32_t colour )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromARGB( uint32_t colour )
 	{
-		float fB = float( ( ( colour & 0xFF000000 ) >> 24 ) ) / 255.0f;
-		float fG = float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
-		float fR = float( ( ( colour & 0x0000FF00 ) >>  8 ) ) / 255.0f;
-		float fA = float( ( ( colour & 0x000000FF ) >>  0 ) ) / 255.0f;
-		return fromComponents( fR, fG, fB, fA );
+		return RgbaColourT{ ComponentType{ float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f }
+			, ComponentType{ float( ( ( colour & 0x0000FF00 ) >>  8 ) ) / 255.0f }
+			, ComponentType{ float( ( ( colour & 0x000000FF ) >>  0 ) ) / 255.0f }
+			, ComponentType{ float( ( ( colour & 0xFF000000 ) >> 24 ) ) / 255.0f } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( uint32_t colour )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromBGRA( uint32_t colour )
 	{
-		float fR = float( ( ( colour & 0xFF000000 ) >> 24 ) ) / 255.0f;
-		float fG = float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
-		float fB = float( ( ( colour & 0x0000FF00 ) >>  8 ) ) / 255.0f;
-		float fA = float( ( ( colour & 0x000000FF ) >>  0 ) ) / 255.0f;
-		return fromComponents( fR, fG, fB, fA );
+		return RgbaColourT{ ComponentType{ float( ( ( colour & 0x0000FF00 ) >>  8 ) ) / 255.0f }
+			, ComponentType{ float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f }
+			, ComponentType{ float( ( ( colour & 0xFF000000 ) >> 24 ) ) / 255.0f }
+			, ComponentType{ float( ( ( colour & 0x000000FF ) >>  0 ) ) / 255.0f } };
 	}
 
 	template< typename ComponentType >
-	inline RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( uint32_t colour )
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromRGBA( uint32_t colour )
 	{
-		float fA = float( ( ( colour & 0xFF000000 ) >> 24 ) ) / 255.0f;
-		float fB = float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f;
-		float fG = float( ( ( colour & 0x0000FF00 ) >>  8 ) ) / 255.0f;
-		float fR = float( ( ( colour & 0x000000FF ) >>  0 ) ) / 255.0f;
-		return fromComponents( fR, fG, fB, fA );
+		return RgbaColourT{ ComponentType{ float( ( ( colour & 0xFF000000 ) >> 24 ) ) / 255.0f }
+			, ComponentType{ float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f }
+			, ComponentType{ float( ( ( colour & 0x0000FF00 ) >>  8 ) ) / 255.0f }
+			, ComponentType{ float( ( ( colour & 0x000000FF ) >>  0 ) ) / 255.0f } };
+	}
+
+	template< typename ComponentType >
+	inline constexpr RgbaColourT< ComponentType > RgbaColourT< ComponentType >::fromABGR( uint32_t colour )
+	{
+		return RgbaColourT{ ComponentType{ float( ( ( colour & 0x000000FF ) >> 0 ) ) / 255.0f }
+			, ComponentType{ float( ( ( colour & 0x0000FF00 ) >> 8 ) ) / 255.0f }
+			, ComponentType{ float( ( ( colour & 0x00FF0000 ) >> 16 ) ) / 255.0f }
+			, ComponentType{ float( ( ( colour & 0xFF000000 ) >> 24 ) ) / 255.0f } };
 	}
 
 	template< typename ComponentType >

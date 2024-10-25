@@ -11,7 +11,7 @@ namespace castor
 	class ColourComponent
 	{
 	public:
-		ColourComponent() = default;
+		constexpr ColourComponent() = default;
 		/**
 		 *\~english
 		 *\brief		Constructor from HDR component.
@@ -32,7 +32,7 @@ namespace castor
 		 *\brief		Constructeur spécifié
 		 *\param[in]	value	La valeur de la composante
 		 */
-		explicit ColourComponent( float value )
+		explicit constexpr ColourComponent( float value )
 			: m_component{ value }
 		{
 		}
@@ -481,7 +481,7 @@ namespace castor
 		 *\brief		Opérateur de conversion implicite
 		 *\return		La valeur
 		 */
-		operator float()const
+		constexpr operator float()const
 		{
 			return m_component;
 		}
@@ -493,7 +493,7 @@ namespace castor
 		 *\brief		Récupère la valeur de la composante
 		 *\return		La valeur
 		 */
-		float const & value()const
+		constexpr float const & value()const
 		{
 			return m_component;
 		}
@@ -524,7 +524,7 @@ namespace castor
 		}
 
 	private:
-		float m_component;
+		float m_component{};
 	};
 	static_assert( sizeof( ColourComponent ) == sizeof( float ) );
 	/**

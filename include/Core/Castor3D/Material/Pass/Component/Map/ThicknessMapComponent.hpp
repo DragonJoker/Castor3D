@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_AttenuationMapComponent_H___
-#define ___C3D_AttenuationMapComponent_H___
+#ifndef ___C3D_ThicknessMapComponent_H___
+#define ___C3D_ThicknessMapComponent_H___
 
 #include "Castor3D/Material/Pass/Component/PassMapComponent.hpp"
 
@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct AttenuationMapComponent
+	struct ThicknessMapComponent
 		: public PassMapComponent
 	{
 		static constexpr TextureFlag Attenuation = TextureFlag( 0x01u );
@@ -53,7 +53,7 @@ namespace castor3d
 
 			PassComponentUPtr createComponent( Pass & pass )const override
 			{
-				return castor::makeUniqueDerived< PassComponent, AttenuationMapComponent >( pass );
+				return castor::makeUniqueDerived< PassComponent, ThicknessMapComponent >( pass );
 			}
 
 			void createParsers( castor::AttributeParsers & parsers
@@ -120,7 +120,7 @@ namespace castor3d
 			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
-		C3D_API explicit AttenuationMapComponent( Pass & pass );
+		C3D_API explicit ThicknessMapComponent( Pass & pass );
 
 		C3D_API static castor::String const TypeName;
 

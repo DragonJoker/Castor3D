@@ -25,7 +25,6 @@
 #include "Castor3D/Material/Pass/Component/Lighting/ThicknessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/TransmittanceComponent.hpp"
-#include "Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/ClearcoatMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/ClearcoatRoughnessMapComponent.hpp"
@@ -43,6 +42,7 @@
 #include "Castor3D/Material/Pass/Component/Map/SheenRoughnessMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/SpecularFactorMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/SpecularMapComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/ThicknessMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/TransmissionMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/TransmittanceMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/AlphaTestComponent.hpp"
@@ -189,7 +189,7 @@ namespace castor3d
 		registerComponent< RoughnessMapComponent >();
 		registerComponent< TransmittanceMapComponent >();
 		registerComponent< TransmissionMapComponent >();
-		registerComponent< AttenuationMapComponent >();
+		registerComponent< ThicknessMapComponent >();
 		registerComponent< ClearcoatMapComponent >();
 		registerComponent< ClearcoatNormalMapComponent >();
 		registerComponent< ClearcoatRoughnessMapComponent >();

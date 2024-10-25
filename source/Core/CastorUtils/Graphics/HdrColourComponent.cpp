@@ -19,6 +19,7 @@ namespace castor
 		: m_component{ hdrcol::removeGamma( rhs.value(), gamma ) }
 	{
 	}
+
 	bool operator==( HdrColourComponent const & lhs, HdrColourComponent const & rhs )
 	{
 		float uiA;

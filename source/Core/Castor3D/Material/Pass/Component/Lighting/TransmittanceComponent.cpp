@@ -31,7 +31,7 @@ namespace castor
 		bool operator()( castor3d::TransmittanceComponent const & object
 			, StringStream & file )override
 		{
-			return writeOpt( file, cuT( "transmittance" ), object.getTransmittance(), 1.0f );
+			return writeOpt( file, cuT( "transmittance" ), object.getTransmittance(), castor3d::TransmittanceComponent::Default );
 		}
 	};
 }
@@ -100,7 +100,7 @@ namespace castor3d
 		}
 		else
 		{
-			inits.emplace_back( sdw::makeExpr( 1.0_f ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ TransmittanceComponent::Default } ) );
 		}
 	}
 
@@ -128,7 +128,7 @@ namespace castor3d
 		if ( !type.hasMember( "transmittance" ) )
 		{
 			type.declMember( "transmittance", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( 1.0_f ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ TransmittanceComponent::Default } ) );
 		}
 	}
 
@@ -149,7 +149,7 @@ namespace castor3d
 		, PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( pass.getId() );
-		data.write( materialShader.getMaterialChunk(), 1.0f, 0u );
+		data.write( materialShader.getMaterialChunk(), TransmittanceComponent::Default, 0u );
 	}
 
 	bool TransmittanceComponent::Plugin::isComponentNeeded( TextureCombine const & textures

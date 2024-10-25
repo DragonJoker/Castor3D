@@ -21,7 +21,7 @@ namespace castor3d
 	struct RoughnessData
 	{
 		explicit RoughnessData( std::atomic_bool & dirty
-			, float value = 1.0f )
+			, float value )
 			: factor{ dirty, value }
 			, mode{ dirty, RoughnessMode::eRoughness }
 		{
@@ -99,7 +99,7 @@ namespace castor3d
 		}
 
 		C3D_API explicit RoughnessComponent( Pass & pass
-			, float defaultValue = 1.0f );
+			, float defaultValue = Default );
 
 		C3D_API void accept( ConfigurationVisitorBase & vis )override;
 
@@ -147,6 +147,7 @@ namespace castor3d
 		}
 
 		C3D_API static castor::String const TypeName;
+		C3D_API static float constexpr Default{ 1.0f };
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;

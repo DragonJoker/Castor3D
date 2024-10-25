@@ -305,13 +305,6 @@ namespace castor3d
 	//@{
 	/**
 	\~english
-	\brief		Component holding attenuation map.
-	\~french
-	\brief		Composant détenant la texture d'atténuation.
-	*/
-	struct AttenuationMapComponent;
-	/**
-	\~english
 	\brief		Component holding clearcoat map.
 	\~french
 	\brief		Composant détenant la texture de clearcoat.
@@ -431,6 +424,13 @@ namespace castor3d
 	struct SpecularFactorMapComponent;
 	/**
 	\~english
+	\brief		Component holding thickness map.
+	\~french
+	\brief		Composant détenant la texture d'épaisseur.
+	*/
+	struct ThicknessMapComponent;
+	/**
+	\~english
 	\brief		Component holding the transmission map.
 	\~french
 	\brief		Composant détenant la texture de transmission.
@@ -444,7 +444,6 @@ namespace castor3d
 	*/
 	struct TransmittanceMapComponent;
 
-	CU_DeclareSmartPtr( castor3d, AttenuationMapComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, ClearcoatMapComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, ClearcoatNormalMapComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, ClearcoatRoughnessMapComponent, C3D_API );
@@ -462,6 +461,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, SheenRoughnessMapComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SpecularFactorMapComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SpecularMapComponent, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ThicknessMapComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TransmissionMapComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TransmittanceMapComponent, C3D_API );
 	//@}

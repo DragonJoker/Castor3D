@@ -14,9 +14,11 @@ namespace castor3d
 {
 	struct AttenuationData
 	{
-		explicit AttenuationData( std::atomic_bool & dirty )
-			: colour{ dirty, castor::RgbColour{ 1.0f, 1.0f, 1.0f } }
-			, distance{ dirty, std::numeric_limits< float >::infinity() }
+		explicit AttenuationData( std::atomic_bool & dirty
+			, castor::RgbColour col
+			, float dist )
+			: colour{ dirty, std::move( col ) }
+			, distance{ dirty, dist }
 		{
 		}
 
@@ -116,6 +118,9 @@ namespace castor3d
 		}
 
 		C3D_API static castor::String const TypeName;
+		C3D_API static float constexpr DefaultComponent{ 1.0f };
+		C3D_API static castor::RgbColour constexpr DefaultColour{ DefaultComponent, DefaultComponent, DefaultComponent };
+		C3D_API static float constexpr DefaultDistance{ std::numeric_limits< float >::infinity() };
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;

@@ -30,8 +30,8 @@ namespace castor
 		bool operator()( castor3d::AttenuationComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, cuT( "attenuation_colour" ), object.getAttenuationColour(), castor::RgbColour{} )
-				&& writeOpt( file, cuT( "attenuation_distance" ), object.getAttenuationDistance(), std::numeric_limits< float >::infinity() );
+			return writeNamedSubOpt( file, cuT( "attenuation_colour" ), object.getAttenuationColour(), castor3d::AttenuationComponent::DefaultColour )
+				&& writeOpt( file, cuT( "attenuation_distance" ), object.getAttenuationDistance(), castor3d::AttenuationComponent::DefaultDistance );
 		}
 	};
 }
@@ -120,7 +120,7 @@ namespace castor3d
 		}
 		else
 		{
-			inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
+			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ AttenuationComponent::DefaultComponent } ) ) );
 			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
 		}
 	}
@@ -153,7 +153,7 @@ namespace castor3d
 		{
 			type.declMember( "attenuationColour", ast::type::Kind::eVec3F );
 			type.declMember( "attenuationDistance", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
+			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ AttenuationComponent::DefaultComponent } ) ) );
 			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
 		}
 	}
@@ -181,10 +181,8 @@ namespace castor3d
 	{
 		auto data = buffer.getData( pass.getId() );
 		VkDeviceSize offset{};
-		offset += data.write( materialShader.getMaterialChunk(), 0.0f, offset );
-		offset += data.write( materialShader.getMaterialChunk(), 0.0f, offset );
-		offset += data.write( materialShader.getMaterialChunk(), 0.0f, offset );
-		offset += data.write( materialShader.getMaterialChunk(), 0.0f, offset );
+		offset += data.write( materialShader.getMaterialChunk(), AttenuationComponent::DefaultColour, offset );
+		offset += data.write( materialShader.getMaterialChunk(), AttenuationComponent::DefaultDistance, offset );
 	}
 
 	bool AttenuationComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -199,9 +197,8 @@ namespace castor3d
 	castor::String const AttenuationComponent::TypeName = C3D_MakePassLightingComponentName( "attenuation" );
 
 	AttenuationComponent::AttenuationComponent( Pass & pass )
-		: BaseDataPassComponentT{ pass
-			, TypeName
-			, { TransmissionComponent::TypeName } }
+		: BaseDataPassComponentT{ pass, TypeName, { TransmissionComponent::TypeName }
+			, AttenuationComponent::DefaultColour, AttenuationComponent::DefaultDistance }
 	{
 	}
 

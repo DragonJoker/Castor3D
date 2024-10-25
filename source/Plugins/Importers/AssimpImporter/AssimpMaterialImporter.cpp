@@ -23,7 +23,6 @@
 #include <Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/ThicknessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ClearcoatMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ClearcoatRoughnessMapComponent.hpp>
@@ -38,6 +37,7 @@
 #include <Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/SheenRoughnessMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/SpecularMapComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Map/ThicknessMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/TransmissionMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/TransmittanceMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Other/AlphaTestComponent.hpp>
@@ -161,7 +161,7 @@ namespace c3d_assimp
 				, m_specularMapPlugin{ m_result.getComponentPlugin< castor3d::SpecularMapComponent >() }
 				, m_transmissionMapPlugin{ m_result.getComponentPlugin< castor3d::TransmissionMapComponent >() }
 				, m_transmittanceMapPlugin{ m_result.getComponentPlugin< castor3d::TransmittanceMapComponent >() }
-				, m_attenuationMapPlugin{ m_result.getComponentPlugin< castor3d::AttenuationMapComponent >() }
+				, m_thicknessMapPlugin{ m_result.getComponentPlugin< castor3d::ThicknessMapComponent >() }
 				, m_clearcoatMapPlugin{ m_result.getComponentPlugin< castor3d::ClearcoatMapComponent >() }
 				, m_clearcoatNormalMapPlugin{ m_result.getComponentPlugin< castor3d::ClearcoatNormalMapComponent >() }
 				, m_clearcoatRoughnessMapPlugin{ m_result.getComponentPlugin< castor3d::ClearcoatRoughnessMapComponent >() }
@@ -178,7 +178,7 @@ namespace c3d_assimp
 				, m_specularMapFlags{ m_specularMapPlugin.getTextureFlags() }
 				, m_transmissionMapFlags{ m_transmissionMapPlugin.getTextureFlags() }
 				, m_transmittanceMapFlags{ m_transmittanceMapPlugin.getTextureFlags() }
-				, m_attenuationMapFlags{ m_attenuationMapPlugin.getTextureFlags() }
+				, m_thicknessMapFlags{ m_thicknessMapPlugin.getTextureFlags() }
 				, m_clearcoatMapFlags{ m_clearcoatMapPlugin.getTextureFlags() }
 				, m_clearcoatNormalMapFlags{ m_clearcoatNormalMapPlugin.getTextureFlags() }
 				, m_clearcoatRoughnessMapFlags{ m_clearcoatRoughnessMapPlugin.getTextureFlags() }
@@ -195,7 +195,7 @@ namespace c3d_assimp
 				, m_specularBaseConfiguration{ m_specularMapPlugin.getBaseTextureConfiguration() }
 				, m_transmissionBaseConfiguration{ m_transmissionMapPlugin.getBaseTextureConfiguration() }
 				, m_transmittanceBaseConfiguration{ m_transmittanceMapPlugin.getBaseTextureConfiguration() }
-				, m_attenuationBaseConfiguration{ m_attenuationMapPlugin.getBaseTextureConfiguration() }
+				, m_thicknessBaseConfiguration{ m_thicknessMapPlugin.getBaseTextureConfiguration() }
 				, m_clearcoatBaseConfiguration{ m_clearcoatMapPlugin.getBaseTextureConfiguration() }
 				, m_clearcoatNormalBaseConfiguration{ m_clearcoatNormalMapPlugin.getBaseTextureConfiguration() }
 				, m_clearcoatRoughnessBaseConfiguration{ m_clearcoatRoughnessMapPlugin.getBaseTextureConfiguration() }
@@ -311,7 +311,7 @@ namespace c3d_assimp
 					, hasOpacityTex );
 				loadTexture( trsInfo, getRemap( m_transmissionMapFlags, m_transmissionBaseConfiguration )
 					, hasOpacityTex );
-				loadTexture( thkInfo, getRemap( m_attenuationMapFlags, m_attenuationBaseConfiguration )
+				loadTexture( thkInfo, getRemap( m_thicknessMapFlags, m_thicknessBaseConfiguration )
 					, hasOpacityTex );
 				loadTexture( cctInfo, getRemap( m_clearcoatMapFlags, m_clearcoatBaseConfiguration )
 					, hasOpacityTex );
@@ -1232,7 +1232,7 @@ namespace c3d_assimp
 			castor3d::PassComponentPlugin const & m_specularMapPlugin;
 			castor3d::PassComponentPlugin const & m_transmissionMapPlugin;
 			castor3d::PassComponentPlugin const & m_transmittanceMapPlugin;
-			castor3d::PassComponentPlugin const & m_attenuationMapPlugin;
+			castor3d::PassComponentPlugin const & m_thicknessMapPlugin;
 			castor3d::PassComponentPlugin const & m_clearcoatMapPlugin;
 			castor3d::PassComponentPlugin const & m_clearcoatNormalMapPlugin;
 			castor3d::PassComponentPlugin const & m_clearcoatRoughnessMapPlugin;
@@ -1249,7 +1249,7 @@ namespace c3d_assimp
 			castor3d::PassComponentTextureFlag m_specularMapFlags;
 			castor3d::PassComponentTextureFlag m_transmissionMapFlags;
 			castor3d::PassComponentTextureFlag m_transmittanceMapFlags;
-			castor3d::PassComponentTextureFlag m_attenuationMapFlags;
+			castor3d::PassComponentTextureFlag m_thicknessMapFlags;
 			castor3d::PassComponentTextureFlag m_clearcoatMapFlags;
 			castor3d::PassComponentTextureFlag m_clearcoatNormalMapFlags;
 			castor3d::PassComponentTextureFlag m_clearcoatRoughnessMapFlags;
@@ -1266,7 +1266,7 @@ namespace c3d_assimp
 			castor3d::TextureConfiguration m_specularBaseConfiguration;
 			castor3d::TextureConfiguration m_transmissionBaseConfiguration;
 			castor3d::TextureConfiguration m_transmittanceBaseConfiguration;
-			castor3d::TextureConfiguration m_attenuationBaseConfiguration;
+			castor3d::TextureConfiguration m_thicknessBaseConfiguration;
 			castor3d::TextureConfiguration m_clearcoatBaseConfiguration;
 			castor3d::TextureConfiguration m_clearcoatNormalBaseConfiguration;
 			castor3d::TextureConfiguration m_clearcoatRoughnessBaseConfiguration;

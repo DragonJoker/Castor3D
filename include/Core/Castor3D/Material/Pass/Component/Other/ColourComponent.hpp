@@ -80,7 +80,7 @@ namespace castor3d
 		}
 
 		C3D_API explicit ColourComponent( Pass & pass
-			, castor::HdrRgbColour defaultValue = castor::HdrRgbColour{ castor::RgbColour{ 1.0f, 1.0f, 1.0f }, 2.2f } );
+			, castor::HdrRgbColour defaultValue = DefaultColour );
 
 		C3D_API void accept( ConfigurationVisitorBase & vis )override;
 
@@ -102,6 +102,8 @@ namespace castor3d
 		using PassComponent::setColour;
 
 		C3D_API static castor::String const TypeName;
+		C3D_API static float constexpr DefaultComponent{ 1.0f };
+		C3D_API static castor::HdrRgbColour const DefaultColour;
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;

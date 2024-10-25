@@ -148,7 +148,7 @@ namespace castor3d
 	void createDefaultTextureComponent( Pass & pass )
 	{
 		ComponentT * component = createPassComponent< ComponentT >( pass );
-		PassMapDefaultImageParams imageParams = component->createDefaultImage( *getEngine( pass ) );
+		PassMapDefaultImageParams imageParams = component->createDefaultImage();
 		const PassComponentPlugin & plugin = component->getPlugin();
 		TextureConfiguration config;
 		plugin.fillTextureConfiguration( config, 0U );

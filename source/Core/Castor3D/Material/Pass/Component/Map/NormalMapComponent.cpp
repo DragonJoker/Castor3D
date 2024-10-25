@@ -391,7 +391,7 @@ namespace castor3d
 		vis.visit( cuT( "2 Channels" ), configuration.normal2Channels );
 	}
 
-	PassMapDefaultImageParams NormalMapComponent::createDefaultImage( Engine & engine )const
+	PassMapDefaultImageParams NormalMapComponent::createDefaultImage()const
 	{
 		castor::String name{ cuT( "DefaultNormal" ) };
 		castor::Point4f defaultNml{ 0.5, 0.5, 1.0, 0.0 };

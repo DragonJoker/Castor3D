@@ -80,7 +80,7 @@ namespace castor3d
 		}
 
 		C3D_API explicit SpecularComponent( Pass & pass
-			, castor::RgbColour defaultValue = Default );
+			, castor::RgbColour defaultValue = DefaultColour );
 
 		C3D_API void accept( ConfigurationVisitorBase & vis )override;
 
@@ -112,7 +112,7 @@ namespace castor3d
 
 		C3D_API static castor::String const TypeName;
 		static float constexpr DefaultComponent = 1.0f;
-		C3D_API static castor::RgbColour const Default;
+		C3D_API static castor::RgbColour constexpr DefaultColour{ DefaultComponent, DefaultComponent, DefaultComponent };
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;

@@ -30,10 +30,10 @@ namespace castor
 		bool operator()( castor3d::IridescenceComponent const & object
 			, StringStream & file )override
 		{
-			return write( file, cuT( "iridescence_factor" ), object.getFactor() )
-				&& writeOpt( file, cuT( "iridescence_ior" ), object.getIor(), 1.3f )
-				&& writeOpt( file, cuT( "iridescence_min_thickness" ), object.getMinThickness(), 100.0f )
-				&& writeOpt( file, cuT( "iridescence_max_thickness" ), object.getMaxThickness(), 400.0f );
+			return write( file, cuT( "iridescence_factor" ), object.getFactor(), castor3d::IridescenceComponent::DefaultFactor )
+				&& writeOpt( file, cuT( "iridescence_ior" ), object.getIor(), castor3d::IridescenceComponent::DefaultIor )
+				&& writeOpt( file, cuT( "iridescence_min_thickness" ), object.getMinThickness(), castor3d::IridescenceComponent::DefaultMinThickness )
+				&& writeOpt( file, cuT( "iridescence_max_thickness" ), object.getMaxThickness(), castor3d::IridescenceComponent::DefaultMaxThickness );
 		}
 	};
 }
@@ -168,11 +168,11 @@ namespace castor3d
 		}
 		else
 		{
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultFactor } ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultIor } ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultMinThickness } ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultMaxThickness } ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultMaxThickness } ) );
 			inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 			inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		}
@@ -213,10 +213,10 @@ namespace castor3d
 			type.declMember( "iridescenceIor", ast::type::Kind::eFloat );
 			type.declMember( "iridescenceMinThickness", ast::type::Kind::eFloat );
 			type.declMember( "iridescenceMaxThickness", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultFactor } ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultIor } ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultMinThickness } ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ IridescenceComponent::DefaultMaxThickness } ) );
 		}
 	}
 
@@ -253,10 +253,10 @@ namespace castor3d
 	{
 		auto data = buffer.getData( pass.getId() );
 		VkDeviceSize offset{};
-		offset += data.write( materialShader.getMaterialChunk(), 0.0f, offset );
-		offset += data.write( materialShader.getMaterialChunk(), 0.0f, offset );
-		offset += data.write( materialShader.getMaterialChunk(), 0.0f, offset );
-		data.write( materialShader.getMaterialChunk(), 0.0f, offset );
+		offset += data.write( materialShader.getMaterialChunk(), IridescenceComponent::DefaultFactor, offset );
+		offset += data.write( materialShader.getMaterialChunk(), IridescenceComponent::DefaultIor, offset );
+		offset += data.write( materialShader.getMaterialChunk(), IridescenceComponent::DefaultMinThickness, offset );
+		data.write( materialShader.getMaterialChunk(), IridescenceComponent::DefaultMaxThickness, offset );
 	}
 
 	bool IridescenceComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -305,7 +305,9 @@ namespace castor3d
 	castor::String const IridescenceComponent::TypeName = C3D_MakePassLightingComponentName( "iridescence" );
 
 	IridescenceComponent::IridescenceComponent( Pass & pass )
-		: BaseDataPassComponentT{ pass, TypeName }
+		: BaseDataPassComponentT{ pass, TypeName, {}
+			, IridescenceComponent::DefaultFactor, IridescenceComponent::DefaultIor
+			, IridescenceComponent::DefaultMinThickness, IridescenceComponent::DefaultMaxThickness }
 	{
 	}
 

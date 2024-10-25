@@ -14,9 +14,11 @@ namespace castor3d
 {
 	struct SheenData
 	{
-		explicit SheenData( std::atomic_bool & dirty )
-			: factor{ dirty, castor::HdrRgbColour{ 0.0f, 0.0f, 0.0f } }
-			, roughness{ dirty, 0.0f }
+		explicit SheenData( std::atomic_bool & dirty
+			, castor::HdrRgbColour fac
+			, float rgh )
+			: factor{ dirty, std::move( fac ) }
+			, roughness{ dirty, rgh }
 		{
 		}
 
@@ -116,6 +118,9 @@ namespace castor3d
 		}
 
 		C3D_API static castor::String const TypeName;
+		C3D_API static float constexpr DefaultComponent{ 0.0f };
+		C3D_API static castor::HdrRgbColour constexpr DefaultFactor{ DefaultComponent, DefaultComponent, DefaultComponent };
+		C3D_API static float constexpr DefaultRoughness{ 0.0f };
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;

@@ -94,6 +94,7 @@ namespace castor3d
 		}
 
 		C3D_API static castor::String const TypeName;
+		C3D_API static float constexpr Default = 1.0f;
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;
