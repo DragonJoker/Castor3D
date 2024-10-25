@@ -32,15 +32,15 @@ namespace castor
 		{
 			if ( object.isShininess() )
 			{
-				return write( file, cuT( "shininess" ), object.getShininess() );
+				return write( file, cuT( "shininess" ), object.getShininess(), ( 1.0f - castor3d::RoughnessComponent::Default ) * castor3d::MaxPhongShininess );
 			}
 
 			if ( object.isGlossiness() )
 			{
-				return write( file, cuT( "glossiness" ), object.getGlossiness() );
+				return write( file, cuT( "glossiness" ), object.getGlossiness(), 1.0f - castor3d::RoughnessComponent::Default );
 			}
 
-			return write( file, cuT( "roughness" ), object.getRoughness() );
+			return write( file, cuT( "roughness" ), object.getRoughness(), castor3d::RoughnessComponent::Default );
 		}
 	};
 }
@@ -144,7 +144,7 @@ namespace castor3d
 		}
 		else
 		{
-			inits.emplace_back( sdw::makeExpr( 1.0_f ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ RoughnessComponent::Default } ) );
 			inits.emplace_back( sdw::makeExpr( 0_u ) );
 		}
 	}
@@ -176,7 +176,7 @@ namespace castor3d
 		{
 			type.declMember( "roughness", ast::type::Kind::eFloat );
 			type.declMember( "roughnessMode", ast::type::Kind::eUInt32 );
-			inits.emplace_back( sdw::makeExpr( 1.0_f ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ RoughnessComponent::Default } ) );
 			inits.emplace_back( sdw::makeExpr( 0_u ) );
 		}
 	}
@@ -208,7 +208,7 @@ namespace castor3d
 		, PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( pass.getId() );
-		auto offset = data.write( materialShader.getMaterialChunk(), 1.0f, 0u );
+		auto offset = data.write( materialShader.getMaterialChunk(), RoughnessComponent::Default, 0u );
 		data.write( materialShader.getMaterialChunk(), 0u, offset );
 	}
 
@@ -225,7 +225,8 @@ namespace castor3d
 
 	RoughnessComponent::RoughnessComponent( Pass & pass
 		, float defaultValue )
-		: BaseDataPassComponentT< RoughnessData >{ pass, TypeName, {}, defaultValue }
+		: BaseDataPassComponentT< RoughnessData >{ pass, TypeName, {}
+			, defaultValue }
 	{
 	}
 

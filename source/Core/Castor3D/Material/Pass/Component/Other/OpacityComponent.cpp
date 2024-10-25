@@ -35,8 +35,8 @@ namespace castor
 
 			if ( object.getOpacity() < 1 )
 			{
-				result = write( file, cuT( "opacity" ), object.getOpacity() )
-					&& write( file, cuT( "bw_accumulation" ), object.getBWAccumulationOperator() );
+				result = write( file, cuT( "opacity" ), object.getOpacity(), castor3d::OpacityComponent::DefaultOpacity )
+					&& write( file, cuT( "bw_accumulation" ), object.getBWAccumulationOperator(), castor3d::OpacityComponent::DefaultBwAccumulationOperator );
 			}
 
 			return result;
@@ -150,8 +150,8 @@ namespace castor3d
 		}
 		else
 		{
-			inits.emplace_back( sdw::makeExpr( 1.0_f ) );
-			inits.emplace_back( sdw::makeExpr( 0_u ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ OpacityComponent::DefaultOpacity } ) );
+			inits.emplace_back( sdw::makeExpr( sdw::UInt{ OpacityComponent::DefaultBwAccumulationOperator } ) );
 		}
 	}
 
@@ -182,8 +182,8 @@ namespace castor3d
 		{
 			type.declMember( "opacity", ast::type::Kind::eFloat );
 			type.declMember( "bwAccumulation", ast::type::Kind::eUInt );
-			inits.emplace_back( sdw::makeExpr( 1.0_f ) );
-			inits.emplace_back( sdw::makeExpr( 0_u ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ OpacityComponent::DefaultOpacity } ) );
+			inits.emplace_back( sdw::makeExpr( sdw::UInt{ OpacityComponent::DefaultBwAccumulationOperator } ) );
 		}
 	}
 
@@ -211,7 +211,7 @@ namespace castor3d
 			, CSCNSection::ePass
 			, cuT( "bw_accumulation" )
 			, opacmp::parserPassBWAccumulationOperator
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >( castor::makeRange( 0u, 8u ) ) } );
+			, { castor::makeParameter< castor::ParameterType::eUInt32 >( castor::makeRange( MinBwAccumulationOperator, MaxBwAccumulationOperator ) ) } );
 	}
 
 	void OpacityComponent::Plugin::zeroBuffer( Pass const & pass
@@ -220,8 +220,8 @@ namespace castor3d
 	{
 		auto data = buffer.getData( pass.getId() );
 		VkDeviceSize offset{};
-		offset += data.write( materialShader.getMaterialChunk(), 1.0f, offset );
-		data.write( materialShader.getMaterialChunk(), 0u, offset );
+		offset += data.write( materialShader.getMaterialChunk(), OpacityComponent::DefaultOpacity, offset );
+		data.write( materialShader.getMaterialChunk(), OpacityComponent::DefaultBwAccumulationOperator, offset );
 	}
 
 	bool OpacityComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -235,7 +235,11 @@ namespace castor3d
 	castor::String const OpacityComponent::TypeName = C3D_MakePassOtherComponentName( "opacity" );
 
 	OpacityComponent::OpacityComponent( Pass & pass )
-		: BaseDataPassComponentT< OpacityData >{ pass, TypeName }
+		: BaseDataPassComponentT< OpacityData >{ pass, TypeName, {}
+			, OpacityComponent::DefaultOpacity
+			, castor::makeRangedValue( OpacityComponent::DefaultBwAccumulationOperator
+				, OpacityComponent::MinBwAccumulationOperator
+				, OpacityComponent::MaxBwAccumulationOperator ) }
 	{
 	}
 

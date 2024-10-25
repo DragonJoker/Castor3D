@@ -17,16 +17,22 @@
 #include "Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/LightingModelComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/ColourMapComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/EmissiveMapComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/NormalMapComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/OcclusionMapComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/RoughnessMapComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/SpecularMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/AlphaTestComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/ColourComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/DefaultReflRefrComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/ReflectionComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp"
-#include "Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp"
-#include "Castor3D/Material/Pass/Component/Map/ColourMapComponent.hpp"
-#include "Castor3D/Material/Pass/Component/Map/NormalMapComponent.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -186,9 +192,15 @@ namespace castor3d
 		createComponent< TexturesComponent >();
 		createComponent< ColourComponent >();
 		createComponent< NormalComponent >();
+		createComponent< RoughnessComponent >();
+		createComponent< SpecularComponent >();
 
 		createDefaultTextureComponent< ColourMapComponent >( *this );
+		createDefaultTextureComponent< EmissiveMapComponent >( *this );
+		createDefaultTextureComponent< OcclusionMapComponent >( *this );
 		createDefaultTextureComponent< NormalMapComponent >( *this );
+		createDefaultTextureComponent< RoughnessMapComponent >( *this );
+		createDefaultTextureComponent< SpecularMapComponent >( *this );
 	}
 
 	Pass::Pass( Material & parent

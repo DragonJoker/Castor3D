@@ -28,8 +28,8 @@ namespace castor
 		bool operator()( castor3d::AmbientComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, cuT( "ambient_colour" ), object.getAmbientColour(), castor::RgbColour::fromComponents( 1.0f, 1.0f, 1.0f ) )
-				&& writeOpt( file, cuT( "ambient_factor" ), object.getAmbientFactor(), 1.0f );
+			return writeNamedSubOpt( file, cuT( "ambient_colour" ), object.getAmbientColour(), castor3d::AmbientComponent::DefaultColour )
+				&& writeOpt( file, cuT( "ambient_factor" ), object.getAmbientFactor(), castor3d::AmbientComponent::DefaultFactor );
 		}
 	};
 }
@@ -108,8 +108,8 @@ namespace castor3d
 		}
 		else
 		{
-			inits.emplace_back( sdw::makeExpr( vec3( 1.0_f ) ) );
-			inits.emplace_back( sdw::makeExpr( 1.0_f ) );
+			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ AmbientComponent::DefaultComponent } ) ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ AmbientComponent::DefaultFactor } ) );
 		}
 	}
 
@@ -141,8 +141,8 @@ namespace castor3d
 		{
 			type.declMember( "ambientColour", ast::type::Kind::eVec3F );
 			type.declMember( "ambientFactor", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( vec3( 1.0_f ) ) );
-			inits.emplace_back( sdw::makeExpr( 1.0_f ) );
+			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ AmbientComponent::DefaultComponent } ) ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ AmbientComponent::DefaultFactor } ) );
 		}
 	}
 
@@ -174,8 +174,8 @@ namespace castor3d
 	{
 		auto data = buffer.getData( pass.getId() );
 		VkDeviceSize offset{};
-		offset += data.write( materialShader.getMaterialChunk(), castor::RgbColour::fromComponents( 1.0f, 1.0f, 1.0f ), offset );
-		data.write( materialShader.getMaterialChunk(), 1.0f, offset );
+		offset += data.write( materialShader.getMaterialChunk(), AmbientComponent::DefaultColour, offset );
+		data.write( materialShader.getMaterialChunk(), AmbientComponent::DefaultFactor, offset );
 	}
 
 	bool AmbientComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -189,7 +189,8 @@ namespace castor3d
 	castor::String const AmbientComponent::TypeName = C3D_MakePassLightingComponentName( "ambient" );
 
 	AmbientComponent::AmbientComponent( Pass & pass )
-		: BaseDataPassComponentT{ pass, TypeName }
+		: BaseDataPassComponentT{ pass, TypeName, {}
+			, AmbientComponent::DefaultColour, AmbientComponent::DefaultFactor }
 	{
 	}
 

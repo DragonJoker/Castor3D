@@ -14,9 +14,11 @@ namespace castor3d
 {
 	struct EmissiveData
 	{
-		explicit EmissiveData( std::atomic_bool & dirty )
-			: colour{ dirty, castor::RgbColour{ 1.0f, 1.0f, 1.0f } }
-			, factor{ dirty, 1.0f }
+		explicit EmissiveData( std::atomic_bool & dirty
+			, castor::RgbColour col
+			, float fac )
+			: colour{ dirty, std::move( col ) }
+			, factor{ dirty, fac }
 		{
 		}
 
@@ -116,6 +118,9 @@ namespace castor3d
 		}
 
 		C3D_API static castor::String const TypeName;
+		C3D_API static float constexpr DefaultFactor{ 0.0f };
+		C3D_API static float constexpr DefaultComponent{ 1.0f };
+		C3D_API static castor::RgbColour constexpr DefaultColour{ DefaultComponent, DefaultComponent, DefaultComponent };
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;

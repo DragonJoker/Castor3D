@@ -1,4 +1,4 @@
-#include "Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/ThicknessMapComponent.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
@@ -17,18 +17,18 @@
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 
-CU_ImplementSmartPtr( castor3d, AttenuationMapComponent )
+CU_ImplementSmartPtr( castor3d, ThicknessMapComponent )
 
 namespace castor
 {
 	template<>
-	class TextWriter< castor3d::AttenuationMapComponent >
-		: public TextWriterT< castor3d::AttenuationMapComponent >
+	class TextWriter< castor3d::ThicknessMapComponent >
+		: public TextWriterT< castor3d::ThicknessMapComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs
 			, uint32_t mask = 0u )
-			: TextWriterT< castor3d::AttenuationMapComponent >{ tabs }
+			: TextWriterT< castor3d::ThicknessMapComponent >{ tabs }
 			, m_mask{ mask }
 		{
 		}
@@ -38,7 +38,7 @@ namespace castor
 			return writeMask( file, cuT( "thickness_mask" ), m_mask );
 		}
 
-		bool operator()( castor3d::AttenuationMapComponent const & object
+		bool operator()( castor3d::ThicknessMapComponent const & object
 			, StringStream & file )override
 		{
 			return true;
@@ -63,13 +63,13 @@ namespace castor3d
 			}
 			else if ( !blockContext->pass )
 			{
-				auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( AttenuationMapComponent::TypeName );
+				auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( ThicknessMapComponent::TypeName );
 				plugin.fillTextureConfiguration( blockContext->configuration
 					, params[0]->get< uint32_t >() );
 			}
 			else
 			{
-				auto & plugin = blockContext->pass->pass->getComponentPlugin( AttenuationMapComponent::TypeName );
+				auto & plugin = blockContext->pass->pass->getComponentPlugin( ThicknessMapComponent::TypeName );
 				plugin.fillTextureConfiguration( blockContext->configuration
 					, params[0]->get< uint32_t >() );
 			}
@@ -78,7 +78,7 @@ namespace castor3d
 
 		static CU_ImplementAttributeParserBlock( parserTexRemapAttenuation, SceneImportContext )
 		{
-			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( AttenuationMapComponent::TypeName );
+			auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( ThicknessMapComponent::TypeName );
 			blockContext->textureRemapIt = blockContext->textureRemaps.try_emplace( plugin.getTextureFlags() ).first;
 			blockContext->textureRemapIt->second = TextureConfiguration{};
 		}
@@ -92,7 +92,7 @@ namespace castor3d
 			}
 			else
 			{
-				auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( AttenuationMapComponent::TypeName );
+				auto & plugin = getEngine( *blockContext )->getPassComponentsRegister().getPlugin( ThicknessMapComponent::TypeName );
 				plugin.fillTextureConfiguration( blockContext->textureRemapIt->second
 					, params[0]->get< uint32_t >() );
 			}
@@ -102,7 +102,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void AttenuationMapComponent::ComponentsShader::applyTexture( shader::PassShaders const & passShaders
+	void ThicknessMapComponent::ComponentsShader::applyTexture( shader::PassShaders const & passShaders
 		, shader::TextureConfigurations const & textureConfigs
 		, shader::TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -121,14 +121,14 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void AttenuationMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void ThicknessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.try_emplace( cuT( "thickness" )
 			, getTextureFlags()
 			, []( TextureContext & blockContext )
 			{
-				auto const & component = getPassComponent< AttenuationMapComponent >( blockContext );
+				auto const & component = getPassComponent< ThicknessMapComponent >( blockContext );
 				component.fillChannel( blockContext.configuration
 					, 0x0000FF00u );
 			} );
@@ -158,7 +158,7 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 	}
 
-	bool AttenuationMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
+	bool ThicknessMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
@@ -166,25 +166,25 @@ namespace castor3d
 			|| hasAny( textures, getTextureFlags() );
 	}
 
-	void AttenuationMapComponent::Plugin::createMapComponent( Pass & pass
+	void ThicknessMapComponent::Plugin::createMapComponent( Pass & pass
 		, castor::Vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( castor::makeUniqueDerived< PassComponent, AttenuationMapComponent >( pass ) );
+		result.push_back( castor::makeUniqueDerived< PassComponent, ThicknessMapComponent >( pass ) );
 	}
 
-	bool AttenuationMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
+	bool ThicknessMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
 		, uint32_t mask
 		, castor::String const & tabs
 		, castor::StringStream & file )const
 	{
-		return castor::TextWriter< AttenuationMapComponent >{ tabs, mask }( file );
+		return castor::TextWriter< ThicknessMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
 
-	castor::String const AttenuationMapComponent::TypeName = C3D_MakePassMapComponentName( "attenuation" );
+	castor::String const ThicknessMapComponent::TypeName = C3D_MakePassMapComponentName( "attenuation" );
 
-	AttenuationMapComponent::AttenuationMapComponent( Pass & pass )
+	ThicknessMapComponent::ThicknessMapComponent( Pass & pass )
 		: PassMapComponent{ pass
 			, TypeName
 			, Attenuation
@@ -192,12 +192,12 @@ namespace castor3d
 	{
 	}
 
-	PassComponentUPtr AttenuationMapComponent::doClone( Pass & pass )const
+	PassComponentUPtr ThicknessMapComponent::doClone( Pass & pass )const
 	{
-		return castor::makeUniqueDerived< PassComponent, AttenuationMapComponent >( pass );
+		return castor::makeUniqueDerived< PassComponent, ThicknessMapComponent >( pass );
 	}
 
-	void AttenuationMapComponent::doFillConfig( TextureConfiguration & configuration
+	void ThicknessMapComponent::doFillConfig( TextureConfiguration & configuration
 		, ConfigurationVisitorBase & vis )const
 	{
 		vis.visit( cuT( "Thickness" ) );

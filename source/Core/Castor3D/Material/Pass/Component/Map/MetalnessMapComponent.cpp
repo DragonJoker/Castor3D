@@ -220,7 +220,7 @@ namespace castor3d
 		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
-	PassMapDefaultImageParams MetalnessMapComponent::createDefaultImage( Engine & engine )const
+	PassMapDefaultImageParams MetalnessMapComponent::createDefaultImage()const
 	{
 		castor::String name{ cuT( "DefaultMetalness" ) };
 		castor::ByteArray data;

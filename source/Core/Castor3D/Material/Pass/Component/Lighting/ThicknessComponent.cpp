@@ -30,7 +30,7 @@ namespace castor
 		bool operator()( castor3d::ThicknessComponent const & object
 			, StringStream & file )override
 		{
-			return writeOpt( file, cuT( "thickness_factor" ), object.getThicknessFactor(), 0.0f );
+			return writeOpt( file, cuT( "thickness_factor" ), object.getThicknessFactor(), castor3d::ThicknessComponent::Default );
 		}
 	};
 }
@@ -99,7 +99,7 @@ namespace castor3d
 		}
 		else
 		{
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ ThicknessComponent::Default } ) );
 		}
 	}
 
@@ -129,7 +129,7 @@ namespace castor3d
 		if ( !type.hasMember( "thicknessFactor" ) )
 		{
 			type.declMember( "thicknessFactor", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ ThicknessComponent::Default } ) );
 		}
 	}
 
@@ -150,7 +150,7 @@ namespace castor3d
 		, PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( pass.getId() );
-		data.write( materialShader.getMaterialChunk(), 0.0f, 0u );
+		data.write( materialShader.getMaterialChunk(), ThicknessComponent::Default, 0u );
 	}
 
 	bool ThicknessComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -167,7 +167,8 @@ namespace castor3d
 	ThicknessComponent::ThicknessComponent( Pass & pass )
 		: BaseDataPassComponentT{ pass
 			, TypeName
-			, { AttenuationComponent::TypeName } }
+			, { AttenuationComponent::TypeName }
+			, ThicknessComponent::Default }
 	{
 	}
 

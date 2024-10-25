@@ -32,8 +32,8 @@ namespace castor
 		bool operator()( castor3d::SheenComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSub( file, cuT( "sheen_colour" ), object.getSheenFactor() )
-				&& writeOpt( file, cuT( "sheen_roughness" ), object.getRoughnessFactor(), 0.0f );
+			return writeNamedSubOpt( file, cuT( "sheen_colour" ), object.getSheenFactor(), castor3d::SheenComponent::DefaultFactor )
+				&& writeOpt( file, cuT( "sheen_roughness" ), object.getRoughnessFactor(), castor3d::SheenComponent::DefaultRoughness );
 		}
 	};
 }
@@ -120,8 +120,8 @@ namespace castor3d
 		}
 		else
 		{
-			inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ SheenComponent::DefaultComponent } ) ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ SheenComponent::DefaultRoughness } ) );
 		}
 	}
 
@@ -153,8 +153,8 @@ namespace castor3d
 		{
 			type.declMember( "sheenFactor", ast::type::Kind::eVec3F );
 			type.declMember( "sheenRoughness", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( vec3( sdw::Float{ SheenComponent::DefaultComponent } ) ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ SheenComponent::DefaultRoughness } ) );
 		}
 	}
 
@@ -181,10 +181,8 @@ namespace castor3d
 	{
 		auto data = buffer.getData( pass.getId() );
 		VkDeviceSize offset{};
-		offset += data.write( materialShader.getMaterialChunk(), 0.0f, offset );
-		offset += data.write( materialShader.getMaterialChunk(), 0.0f, offset );
-		offset += data.write( materialShader.getMaterialChunk(), 0.0f, offset );
-		data.write( materialShader.getMaterialChunk(), 0.0f, offset );
+		offset += data.write( materialShader.getMaterialChunk(), SheenComponent::DefaultFactor, offset );
+		data.write( materialShader.getMaterialChunk(), SheenComponent::DefaultRoughness, offset );
 	}
 
 	bool SheenComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -198,7 +196,8 @@ namespace castor3d
 	castor::String const SheenComponent::TypeName = C3D_MakePassLightingComponentName( "sheen" );
 
 	SheenComponent::SheenComponent( Pass & pass )
-		: BaseDataPassComponentT{ pass, TypeName }
+		: BaseDataPassComponentT{ pass, TypeName, {}
+			, SheenComponent::DefaultFactor, SheenComponent::DefaultRoughness }
 	{
 	}
 

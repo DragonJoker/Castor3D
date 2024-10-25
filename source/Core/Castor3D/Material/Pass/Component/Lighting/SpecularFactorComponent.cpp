@@ -166,9 +166,7 @@ namespace castor3d
 
 	SpecularFactorComponent::SpecularFactorComponent( Pass & pass
 		, float defaultValue )
-		: BaseDataPassComponentT{ pass
-			, TypeName
-			, { SpecularComponent::TypeName }
+		: BaseDataPassComponentT{ pass, TypeName, { SpecularComponent::TypeName }
 			, defaultValue }
 	{
 	}

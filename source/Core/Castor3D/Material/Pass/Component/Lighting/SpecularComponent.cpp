@@ -37,7 +37,7 @@ namespace castor
 		bool operator()( castor3d::SpecularComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, cuT( "specular_colour" ), object.getSpecular(), castor3d::SpecularComponent::Default );
+			return writeNamedSubOpt( file, cuT( "specular_colour" ), object.getSpecular(), castor3d::SpecularComponent::DefaultColour );
 		}
 	};
 }
@@ -156,7 +156,7 @@ namespace castor3d
 		, PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( pass.getId() );
-		data.write( materialShader.getMaterialChunk(), SpecularComponent::Default, 0u );
+		data.write( materialShader.getMaterialChunk(), SpecularComponent::DefaultColour, 0u );
 	}
 
 	bool SpecularComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -168,11 +168,11 @@ namespace castor3d
 	//*********************************************************************************************
 
 	castor::String const SpecularComponent::TypeName = C3D_MakePassLightingComponentName( "specular" );
-	castor::RgbColour const SpecularComponent::Default = { DefaultComponent, DefaultComponent, DefaultComponent };
 
 	SpecularComponent::SpecularComponent( Pass & pass
 		, castor::RgbColour defaultValue )
-		: BaseDataPassComponentT{ pass, TypeName, {}, defaultValue }
+		: BaseDataPassComponentT{ pass, TypeName, {}
+			, defaultValue }
 	{
 	}
 

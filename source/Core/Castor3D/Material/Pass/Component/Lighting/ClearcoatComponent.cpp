@@ -32,8 +32,8 @@ namespace castor
 		bool operator()( castor3d::ClearcoatComponent const & object
 			, StringStream & file )override
 		{
-			return writeOpt( file, cuT( "clearcoat_factor" ), object.getClearcoatFactor(), 0.0f )
-				&& writeOpt( file, cuT( "clearcoat_roughness_factor" ), object.getRoughnessFactor(), 0.0f );
+			return writeOpt( file, cuT( "clearcoat_factor" ), object.getClearcoatFactor(), castor3d::ClearcoatComponent::DefaultFactor )
+				&& writeOpt( file, cuT( "clearcoat_roughness_factor" ), object.getRoughnessFactor(), castor3d::ClearcoatComponent::DefaultRoughness );
 		}
 	};
 }
@@ -143,7 +143,7 @@ namespace castor3d
 			}
 			else
 			{
-				inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+				inits.emplace_back( sdw::makeExpr( sdw::Float{ ClearcoatComponent::DefaultFactor } ) );
 			}
 		}
 
@@ -153,7 +153,7 @@ namespace castor3d
 		}
 		else
 		{
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ ClearcoatComponent::DefaultRoughness } ) );
 		}
 	}
 
@@ -186,8 +186,8 @@ namespace castor3d
 		{
 			type.declMember( "clearcoatFactor", ast::type::Kind::eFloat );
 			type.declMember( "clearcoatRoughness", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ ClearcoatComponent::DefaultFactor } ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ ClearcoatComponent::DefaultRoughness } ) );
 		}
 	}
 
@@ -214,8 +214,8 @@ namespace castor3d
 	{
 		auto data = buffer.getData( pass.getId() );
 		VkDeviceSize offset{};
-		offset += data.write( materialShader.getMaterialChunk(), 0.0f, offset );
-		data.write( materialShader.getMaterialChunk(), 0.0f, offset );
+		offset += data.write( materialShader.getMaterialChunk(), ClearcoatComponent::DefaultFactor, offset );
+		data.write( materialShader.getMaterialChunk(), ClearcoatComponent::DefaultRoughness, offset );
 	}
 
 	bool ClearcoatComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -229,7 +229,8 @@ namespace castor3d
 	castor::String const ClearcoatComponent::TypeName = C3D_MakePassLightingComponentName( "clearcoat" );
 
 	ClearcoatComponent::ClearcoatComponent( Pass & pass )
-		: BaseDataPassComponentT{ pass, TypeName }
+		: BaseDataPassComponentT{ pass, TypeName, {}
+			, ClearcoatComponent::DefaultFactor, ClearcoatComponent::DefaultRoughness }
 	{
 	}
 

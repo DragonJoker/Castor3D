@@ -243,5 +243,13 @@ namespace castor3d
 		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
+	PassMapDefaultImageParams OcclusionMapComponent::createDefaultImage()const
+	{
+		castor::String name{ cuT( "DefaultOcclusion" ) };
+		castor::ByteArray data{ 255u };
+		return { name
+			, castor::ImageCreateParams{ getFormatName( castor::PixelFormat::eR8_UNORM ), data } };
+	}
+
 	//*********************************************************************************************
 }

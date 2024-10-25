@@ -203,5 +203,13 @@ namespace castor3d
 		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
 	}
 
+	PassMapDefaultImageParams EmissiveMapComponent::createDefaultImage()const
+	{
+		castor::String name{ cuT( "DefaultEmissive" ) };
+		castor::ByteArray data{ 255u, 255u, 255u, 0u };
+		return { name
+			, castor::ImageCreateParams{ getFormatName( castor::PixelFormat::eR8G8B8A8_UNORM ), data } };
+	}
+
 	//*********************************************************************************************
 }

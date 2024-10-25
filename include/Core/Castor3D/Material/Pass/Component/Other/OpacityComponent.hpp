@@ -14,9 +14,11 @@ namespace castor3d
 {
 	struct OpacityData
 	{
-		explicit OpacityData( std::atomic_bool & dirty )
-			: opacity{ dirty, 1.0f }
-			, bwAccumulationOperator{ dirty, castor::makeRangedValue( 1u, 0u, 8u ) }
+		explicit OpacityData( std::atomic_bool & dirty
+			, float opa
+			, castor::RangedValue< uint32_t > acc )
+			: opacity{ dirty, opa }
+			, bwAccumulationOperator{ dirty, std::move( acc ) }
 		{
 		}
 
@@ -118,6 +120,10 @@ namespace castor3d
 		}
 
 		C3D_API static castor::String const TypeName;
+		C3D_API static float constexpr DefaultOpacity{ 1.0f };
+		C3D_API static uint32_t constexpr DefaultBwAccumulationOperator{ 1u };
+		C3D_API static uint32_t constexpr MinBwAccumulationOperator{ 0u };
+		C3D_API static uint32_t constexpr MaxBwAccumulationOperator{ 8u };
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;

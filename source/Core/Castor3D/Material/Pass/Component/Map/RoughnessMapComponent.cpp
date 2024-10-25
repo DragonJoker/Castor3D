@@ -276,7 +276,7 @@ namespace castor3d
 		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
-	PassMapDefaultImageParams RoughnessMapComponent::createDefaultImage( Engine & engine )const
+	PassMapDefaultImageParams RoughnessMapComponent::createDefaultImage()const
 	{
 		castor::String name{ cuT( "DefaultRoughness" ) };
 		castor::ByteArray data;
