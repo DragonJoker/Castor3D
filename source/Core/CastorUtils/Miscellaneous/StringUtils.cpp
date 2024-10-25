@@ -433,40 +433,6 @@ namespace castor
 			}
 		};
 
-		template<> struct StringConverter< char, wchar_t >
-		{
-			static void convert( std::basic_string_view< char > strIn
-				, std::basic_string< wchar_t > & strOut )
-			{
-				if ( !strIn.empty() )
-				{
-					using TmpInCPtr = char8_t const *;
-					std::u8string tmpIn{ TmpInCPtr( strIn.data() ), strIn.size() };
-					std::u16string tmpOut;
-					StringConverter< char8_t, char16_t >::convert( tmpIn, tmpOut );
-
-					for ( auto c : tmpOut )
-					{
-						strOut += wchar_t( c );
-					}
-				}
-			}
-		};
-
-		template<> struct StringConverter< char, char32_t >
-		{
-			static void convert( std::basic_string_view< char > strIn
-				, std::basic_string< char32_t > & strOut )
-			{
-				if ( !strIn.empty() )
-				{
-					using TmpInCPtr = char8_t const *;
-					std::u8string tmpIn{ TmpInCPtr( strIn.data() ), strIn.size() };
-					StringConverter< char8_t, char32_t >::convert( tmpIn, strOut );
-				}
-			}
-		};
-
 		template<> struct StringConverter< wchar_t, char >
 		{
 			static void convert( std::basic_string_view< wchar_t > strIn
