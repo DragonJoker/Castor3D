@@ -43,6 +43,9 @@ namespace c3d_gltf
 			, castor3d::Pass & pass )const;
 		void doImportIorData( fastgltf::Material const & impMaterial
 			, castor3d::Pass & pass )const;
+
+	private:
+		castor::ImageLoaderConfig m_loadConfig;
 	};
 }
 

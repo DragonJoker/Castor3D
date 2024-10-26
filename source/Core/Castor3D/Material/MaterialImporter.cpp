@@ -172,7 +172,8 @@ namespace castor3d
 		return result;
 	}
 
-	castor::ImageRPtr MaterialImporter::loadImage( castor::Path const & path )const
+	castor::ImageRPtr MaterialImporter::loadImage( castor::Path const & path
+		, castor::ImageLoaderConfig const & loadConfig )const
 	{
 		castor::ImageRPtr result{};
 		castor::Path relative;
@@ -182,24 +183,42 @@ namespace castor3d
 		{
 			result = loadImage( relative.getFileName()
 				, castor::ImageCreateParams{ folder / relative
-					, { false, false, false } } );
+					, castor::move( loadConfig ) } );
 		}
 
 		return result;
 	}
 
+	castor::ImageRPtr MaterialImporter::loadImage( castor::Path const & path )const
+	{
+		return loadImage( path
+			, { false, false, false } );
+	}
+
 	castor::ImageRPtr MaterialImporter::loadImage( castor::String const & name
 		, castor::String type
-		, castor::ByteArray data )const
+		, castor::ByteArray data
+		, castor::ImageLoaderConfig const & loadConfig )const
 	{
 		return loadImage( name
 			, castor::ImageCreateParams{ castor::move( type )
 				, castor::move( data )
-				, { false, false, false } } );
+				, castor::move( loadConfig ) } );
+	}
+
+	castor::ImageRPtr MaterialImporter::loadImage( castor::String name
+		, castor::String type
+		, castor::ByteArray data )const
+	{
+		return loadImage( std::move( name )
+			, std::move( type )
+			, std::move( data )
+			, { false, false, false } );
 	}
 
 	TextureSourceInfo MaterialImporter::loadTexture( castor::Path const & path
-		, TextureConfiguration const & config )const
+		, TextureConfiguration const & config
+		, castor::ImageLoaderConfig const & loadConfig )const
 	{
 		auto image = loadImage( path );
 
@@ -208,18 +227,29 @@ namespace castor3d
 			CU_Exception( "Couldn't find image at path [" + castor::toUtf8( path ) + "]" );
 		}
 
-		bool allowCompression = !checkFlag( config.textureSpace, TextureSpace::eTangentSpace );
+		auto loaderConfig = loadConfig;
+		loaderConfig.allowCompression = loaderConfig.allowCompression
+			&& !checkFlag( config.textureSpace, TextureSpace::eTangentSpace );
 		return TextureSourceInfo{ image->getName()
 			, config
 			, image->getPath().getPath()
 			, image->getPath().getFileName( true )
-			, { allowCompression, true, true } };
+			, std::move( loaderConfig ) };
+	}
+
+	TextureSourceInfo MaterialImporter::loadTexture( castor::Path const & path
+		, TextureConfiguration const & config )const
+	{
+		return loadTexture( path
+			, config
+			, { true, true, true } );
 	}
 
 	TextureSourceInfo MaterialImporter::loadTexture( castor::String name
 		, castor::String type
 		, castor::ByteArray data
-		, TextureConfiguration const & config )const
+		, TextureConfiguration const & config
+		, castor::ImageLoaderConfig const & loadConfig )const
 	{
 		if ( auto image = loadImage( name, type, data );
 			!image )
@@ -227,12 +257,43 @@ namespace castor3d
 			CU_Exception( "Couldn't load image [" + castor::toUtf8( name ) + "]" );
 		}
 
-		bool allowCompression = !checkFlag( config.textureSpace, TextureSpace::eTangentSpace );
+		auto loaderConfig = loadConfig;
+		loaderConfig.allowCompression = loaderConfig.allowCompression
+			&& !checkFlag( config.textureSpace, TextureSpace::eTangentSpace );
 		return TextureSourceInfo{ castor::move( name )
 			, config
 			, castor::move( type )
 			, castor::move( data )
-			, { allowCompression, true, true } };
+			, castor::move( loaderConfig ) };
+	}
+
+	TextureSourceInfo MaterialImporter::loadTexture( castor::String name
+		, castor::String type
+		, castor::ByteArray data
+		, TextureConfiguration const & config )const
+	{
+		return loadTexture( std::move( name )
+			, std::move( type )
+			, std::move( data )
+			, config
+			, { true, true, true } );
+	}
+
+	void MaterialImporter::loadTexture( castor::Path const & path
+		, TextureConfiguration const & config
+		, PassTextureConfig const & passConfig
+		, Pass & pass
+		, castor::ImageLoaderConfig const & loadConfig )const
+	{
+		try
+		{
+			pass.registerTexture( loadTexture( path, config, loadConfig )
+				, passConfig );
+		}
+		catch ( std::exception & exc )
+		{
+			log::error << exc.what() << std::endl;
+		}
 	}
 
 	void MaterialImporter::loadTexture( castor::Path const & path
@@ -240,9 +301,27 @@ namespace castor3d
 		, PassTextureConfig const & passConfig
 		, Pass & pass )const
 	{
+		return loadTexture( path
+			, config
+			, passConfig
+			, pass
+			, { true, true, true } );
+	}
+
+	void MaterialImporter::loadTexture( castor::String name
+		, castor::String type
+		, castor::ByteArray data
+		, TextureConfiguration const & config
+		, PassTextureConfig const & passConfig
+		, Pass & pass
+		, castor::ImageLoaderConfig const & loadConfig )const
+	{
 		try
 		{
-			pass.registerTexture( loadTexture( path, config )
+			pass.registerTexture( loadTexture( castor::move( name )
+					, castor::move( type )
+					, castor::move( data )
+					, config )
 				, passConfig );
 		}
 		catch ( std::exception & exc )
@@ -258,18 +337,13 @@ namespace castor3d
 		, PassTextureConfig const & passConfig
 		, Pass & pass )const
 	{
-		try
-		{
-			pass.registerTexture( loadTexture( castor::move( name )
-					, castor::move( type )
-					, castor::move( data )
-					, config )
-				, passConfig );
-		}
-		catch ( std::exception & exc )
-		{
-			log::error << exc.what() << std::endl;
-		}
+		return loadTexture( std::move( name )
+			, std::move( type )
+			, std::move( data )
+			, config
+			, passConfig
+			, pass
+			, { true, true, true } );
 	}
 
 	bool MaterialImporter::convertToNormalMap( castor::Path & path

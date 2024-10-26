@@ -15,7 +15,7 @@ namespace castor
 
 	namespace txtpass
 	{
-		bool isSerialisable( TextureUnit const & unit )
+		static bool isSerialisable( TextureUnit const & unit )
 		{
 			return unit.getData().base->sourceInfo.isSerialisable();
 		}
