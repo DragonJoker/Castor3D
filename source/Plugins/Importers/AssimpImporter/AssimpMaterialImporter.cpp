@@ -396,8 +396,7 @@ namespace c3d_assimp
 				if ( result )
 				{
 					auto component = m_result.createComponent< castor3d::RoughnessComponent >();
-					component->setGlossiness( true );
-					component->setRoughness( 1.0f - value );
+					component->setGlossiness( 1.0f - value );
 				}
 
 				return result;
@@ -413,7 +412,7 @@ namespace c3d_assimp
 					float factor{ 1.0f };
 					m_material.Get( AI_MATKEY_SHININESS_STRENGTH, factor );
 					auto component = m_result.createComponent< castor3d::RoughnessComponent >();
-					component->setRoughness( 1.0f - ( ( value * factor ) / castor3d::MaxPhongShininess ) );
+					component->setShininess( value * factor );
 				}
 
 				return result;
@@ -620,6 +619,9 @@ namespace c3d_assimp
 						component->setEmissive( castor::RgbColour{ m_emissiveMult * emissive.r
 							, m_emissiveMult * emissive.g
 							, m_emissiveMult * emissive.b } );
+						float emissiveIntensity = 1.0f;
+						m_material.Get( AI_MATKEY_EMISSIVE_INTENSITY, emissiveIntensity );
+						component->setEmissiveFactor( emissiveIntensity );
 					}
 				}
 			}
