@@ -182,7 +182,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const ThicknessMapComponent::TypeName = C3D_MakePassMapComponentName( "attenuation" );
+	castor::String const ThicknessMapComponent::TypeName = C3D_MakePassMapComponentName( "thickness" );
 
 	ThicknessMapComponent::ThicknessMapComponent( Pass & pass )
 		: PassMapComponent{ pass
