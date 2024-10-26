@@ -59,7 +59,8 @@ namespace castor
 
 				if ( result )
 				{
-					result = writeNamedSubOpt( file, cuT( "orientation" ), node.getOrientation(), castor::Quaternion::identity() )
+					result = writeOpt( file, cuT( "visible" ), node.isVisible(), true )
+						&& writeNamedSubOpt( file, cuT( "orientation" ), node.getOrientation(), castor::Quaternion::identity() )
 						&& writeNamedSubOpt( file, cuT( "position" ), node.getPosition() * m_scale, castor::Point3f{} )
 						&& writeNamedSubOpt( file, cuT( "scale" ), node.getScale() * m_scale, castor::Point3f{ 1.0f, 1.0f, 1.0f } );
 				}

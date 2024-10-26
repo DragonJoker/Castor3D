@@ -2389,6 +2389,19 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
+		static CU_ImplementAttributeParserBlock( parserNodeVisible, NodeContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing [visible] parameter." ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->isVisible );
+			}
+		}
+		CU_EndAttribute()
+
 		static CU_ImplementAttributeParserBlock( parserNodePosition, NodeContext )
 		{
 			if ( params.empty() )
@@ -2462,14 +2475,14 @@ namespace castor3d
 
 		static CU_ImplementAttributeParserBlock( parserNodeEnd, NodeContext )
 		{
-			auto sceneNode = blockContext->scene->scene->createSceneNode( blockContext->name
+			SceneNodeUPtr sceneNode = blockContext->scene->scene->createSceneNode( blockContext->name
 				, *blockContext->scene->scene
 				, blockContext->parentNode
 				, blockContext->position
 				, blockContext->orientation
 				, blockContext->scale
 				, blockContext->isStatic );
-
+			sceneNode->setVisible( blockContext->isVisible );
 			auto name = sceneNode->getName();
 			auto node = blockContext->scene->scene->addSceneNode( name, sceneNode, true );
 			sceneNode.reset();
@@ -5507,6 +5520,7 @@ namespace castor3d
 		{
 			BlockParserContextT< NodeContext > context{ result, CSCNSection::eNode, CSCNSection::eScene };
 			context.addParser( cuT( "static" ), parserNodeStatic, { makeParameter< ParameterType::eBool >() } );
+			context.addParser( cuT( "visible" ), parserNodeVisible, { makeParameter< ParameterType::eBool >() } );
 			context.addParser( cuT( "parent" ), parserNodeParent, { makeParameter< ParameterType::eName >() } );
 			context.addParser( cuT( "position" ), parserNodePosition, { makeParameter< ParameterType::ePoint3F >() } );
 			context.addParser( cuT( "orientation" ), parserNodeOrientation, { makeParameter< ParameterType::ePoint3F >(), makeParameter< ParameterType::eFloat >() } );
