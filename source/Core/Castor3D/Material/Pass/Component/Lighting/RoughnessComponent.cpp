@@ -32,15 +32,15 @@ namespace castor
 		{
 			if ( object.isShininess() )
 			{
-				return write( file, cuT( "shininess" ), object.getShininess(), ( 1.0f - castor3d::RoughnessComponent::Default ) * castor3d::MaxPhongShininess );
+				return writeOpt( file, cuT( "shininess" ), object.getShininess(), ( 1.0f - castor3d::RoughnessComponent::Default ) * castor3d::MaxPhongShininess );
 			}
 
 			if ( object.isGlossiness() )
 			{
-				return write( file, cuT( "glossiness" ), object.getGlossiness(), 1.0f - castor3d::RoughnessComponent::Default );
+				return writeOpt( file, cuT( "glossiness" ), object.getGlossiness(), 1.0f - castor3d::RoughnessComponent::Default );
 			}
 
-			return write( file, cuT( "roughness" ), object.getRoughness(), castor3d::RoughnessComponent::Default );
+			return writeOpt( file, cuT( "roughness" ), object.getRoughness(), castor3d::RoughnessComponent::Default );
 		}
 	};
 }
