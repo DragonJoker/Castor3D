@@ -75,6 +75,7 @@ namespace castor3d
 	{
 		TextureSourceInfo sourceInfo{ std::move( name ), std::move( config ), std::move( imageParams ) };
 		PassTextureConfig passConfig{ getEngine( pass )->getDefaultSampler() };
+		sourceInfo.setSerialisable( false );
 		pass.registerTexture( std::move( sourceInfo ), std::move( passConfig ) );
 	}
 
