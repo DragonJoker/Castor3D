@@ -139,6 +139,7 @@ namespace c3d_assimp
 				, castor3d::SamplerObs sampler
 				, AssimpMaterialImporter const & importer
 				, float emissiveMult
+				, bool disableImageCompression
 				, castor::Map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 				, castor3d::Pass & result )
 				: m_material{ material }
@@ -146,6 +147,7 @@ namespace c3d_assimp
 				, m_sampler{ sampler }
 				, m_importer{ importer }
 				, m_emissiveMult{ emissiveMult }
+				, m_loadConfig{ !disableImageCompression, true, true }
 				, m_textureRemaps{ textureRemaps }
 				, m_shadingModel{ shadingMode }
 				, m_isPbr{ detectPbr() }
@@ -219,10 +221,11 @@ namespace c3d_assimp
 				, castor3d::SamplerObs sampler
 				, AssimpMaterialImporter const & importer
 				, float emissiveMult
+				, bool disableImageCompression
 				, castor::Map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 				, castor3d::Pass & pass )
 			{
-				MaterialParser parser{ material, scene, shadingMode, sampler, importer, emissiveMult, textureRemaps, pass };
+				MaterialParser parser{ material, scene, shadingMode, sampler, importer, emissiveMult, disableImageCompression, textureRemaps, pass };
 				parser.parseDatas();
 				parser.finish();
 				pass.prepareTextures();
@@ -782,7 +785,8 @@ namespace c3d_assimp
 								sourceInfo = castor::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( cuT( "Image" ) + castor::string::toString( id )
 									, castor::makeString( texture->achFormatHint )
 									, castor::move( data )
-									, texConfig ) );
+									, texConfig
+									, m_loadConfig ) );
 							}
 						}
 						else if ( auto texture = m_scene.GetEmbeddedTexture( castor::toUtf8( info.name ).c_str() ) )
@@ -1218,6 +1222,7 @@ namespace c3d_assimp
 			castor3d::SamplerObs m_sampler;
 			AssimpMaterialImporter const & m_importer;
 			float m_emissiveMult;
+			castor::ImageLoaderConfig m_loadConfig;
 			castor::Map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > m_textureRemaps;
 			aiShadingMode m_shadingModel{};
 			bool m_isPbr;
@@ -1331,13 +1336,15 @@ namespace c3d_assimp
 		}
 
 		float emissiveMult = 1.0f;
-		float value;
+		float fvalue;
 
-		if ( m_parameters.get( cuT( "emissive_mult" ), value )
-			&& std::abs( value - 1.0f ) > std::numeric_limits< float >::epsilon() )
+		if ( m_parameters.get( cuT( "emissive_mult" ), fvalue )
+			&& std::abs( fvalue - 1.0f ) > std::numeric_limits< float >::epsilon() )
 		{
-			emissiveMult = value;
+			emissiveMult = fvalue;
 		}
+
+		bool disableImageCompression = m_parameters.get< bool >( cuT( "disable_image_compression" ) );
 
 		int ishadingMode{};
 		it->second->Get( AI_MATKEY_SHADING_MODEL, ishadingMode );
@@ -1349,6 +1356,7 @@ namespace c3d_assimp
 			, getEngine()->getDefaultSampler()
 			, *this
 			, emissiveMult
+			, disableImageCompression
 			, m_textureRemaps
 			, *pass );
 		return true;

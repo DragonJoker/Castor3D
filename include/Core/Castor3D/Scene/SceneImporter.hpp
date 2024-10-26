@@ -170,6 +170,7 @@ namespace castor3d
 		float roll{ 0.0f };
 		bool noOptimisations{ false };
 		bool ignoreVertexColour{ false };
+		bool disableImageCompression{ false };
 		float emissiveMult{ 1.0f };
 		castor::Map< PassComponentTextureFlag, TextureConfiguration >::iterator textureRemapIt;
 		castor::String centerCamera{};

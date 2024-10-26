@@ -1684,6 +1684,19 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
+		static CU_ImplementAttributeParserBlock( parserSceneImportDisableImageCompression, SceneImportContext )
+		{
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing name parameter" ) );
+			}
+			else
+			{
+				params[0]->get( blockContext->disableImageCompression );
+			}
+		}
+		CU_EndAttribute()
+
 		static CU_ImplementAttributeParserBlock( parserSceneImportEnd, SceneImportContext )
 		{
 			Engine * engine = getEngine( *blockContext );
@@ -1744,6 +1757,11 @@ namespace castor3d
 				if ( !blockContext->preferredImporter.empty() )
 				{
 					parameters.add( cuT( "preferred_importer" ), blockContext->preferredImporter );
+				}
+
+				if ( blockContext->disableImageCompression )
+				{
+					parameters.add( cuT( "disable_image_compression" ), blockContext->disableImageCompression );
 				}
 
 				SceneImporter importer{ *engine };
@@ -5476,6 +5494,7 @@ namespace castor3d
 			context.addParser( cuT( "recenter_camera" ), parserSceneImportCenterCamera, { makeParameter< ParameterType::eName >() } );
 			context.addParser( cuT( "preferred_importer" ), parserSceneImportPreferredImporter, { makeParameter< ParameterType::eName >() } );
 			context.addParser( cuT( "ignore_vertex_colour" ), parserSceneImportIgnoreVertexColour, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			context.addParser( cuT( "disable_image_compression" ), parserSceneImportDisableImageCompression, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 			context.addPushParser( cuT( "texture_remap_config" ), CSCNSection::eTextureRemap, parserSceneImportTexRemap );
 			context.addPopParser( cuT( "}" ), parserSceneImportEnd );
 		}
