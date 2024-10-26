@@ -188,7 +188,7 @@ namespace castor3d
 
 	RefractionComponent::RefractionComponent( Pass & pass )
 		: BaseDataPassComponentT< RefractionData >{ pass, TypeName, {}
-			, RefractionComponent::Default }
+			, 1.0f }
 	{
 	}
 
