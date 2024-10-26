@@ -7,9 +7,19 @@
 #include <CastorUtils/Data/Text/TextRgbaColour.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
+#include <Castor3D/Material/Texture/TextureUnit.hpp>
+
 namespace castor
 {
 	using namespace castor3d;
+
+	namespace txtpass
+	{
+		bool isSerialisable( TextureUnit const & unit )
+		{
+			return unit.getData().base->sourceInfo.isSerialisable();
+		}
+	}
 
 	TextWriter< Pass >::TextWriter( String const & tabs
 		, Path const & folder
@@ -33,11 +43,14 @@ namespace castor
 			{
 				for ( auto unit : pass )
 				{
-					result = result
-						&& writeSub( file
-							, *unit
-							, m_folder
-							, m_subfolder );
+					if ( txtpass::isSerialisable( *unit ) )
+					{
+						result = result
+							&& writeSub( file
+								, *unit
+								, m_folder
+								, m_subfolder );
+					}
 				}
 			}
 		}
