@@ -19,7 +19,7 @@ namespace castor3d::shader
 			, sdw::ShaderWriter & writer
 			, Materials const & materials
 			, Utils & utils
-			, BRDFHelpers & brdf
+			, BRDFHelpers & brdfHelpers
 			, Shadow & shadowModel
 			, Lights & lights
 			, bool enableVolumetric );
@@ -28,7 +28,7 @@ namespace castor3d::shader
 			, sdw::ShaderWriter & writer
 			, Materials const & materials
 			, Utils & utils
-			, BRDFHelpers & brdf
+			, BRDFHelpers & brdfHelpers
 			, Shadow & shadowModel
 			, Lights & lights
 			, bool enableVolumetric );
@@ -57,12 +57,12 @@ namespace castor3d::shader
 			, LightSurface const & lightSurface
 			, sdw::Float const & isLit
 			, sdw::Vec3 output )override;
-		C3D_API sdw::Vec3 doGetDiffuseBrdf( BlendComponents const & components
+		C3D_API sdw::Vec3 doGetDiffuseResult( BlendComponents const & components
 			, DirectLighting const & lighting
 			, IndirectLighting const & indirect
 			, sdw::Float const & ambientOcclusion
 			, sdw::Vec3 const & reflectedDiffuse )override;
-		C3D_API sdw::Vec3 doGetSpecularBrdf( BlendComponents const & components
+		C3D_API sdw::Vec3 doGetSpecularResult( BlendComponents const & components
 			, DirectLighting const & lighting
 			, IndirectLighting const & indirect
 			, sdw::Float const & ambientOcclusion

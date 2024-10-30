@@ -158,7 +158,7 @@ namespace castor3d::shader
 		FI;
 	}
 
-	sdw::Vec3 PbrLightingModel::doGetDiffuseBrdf( BlendComponents const & components
+	sdw::Vec3 PbrLightingModel::doGetDiffuseResult( BlendComponents const & components
 		, DirectLighting const & lighting
 		, IndirectLighting const & indirect
 		, sdw::Float const & ambientOcclusion
@@ -168,7 +168,7 @@ namespace castor3d::shader
 			+ ( reflectedDiffuse * ambientOcclusion * lighting.ambient() ) );
 	}
 
-	sdw::Vec3 PbrLightingModel::doGetSpecularBrdf( BlendComponents const & components
+	sdw::Vec3 PbrLightingModel::doGetSpecularResult( BlendComponents const & components
 		, DirectLighting const & lighting
 		, IndirectLighting const & indirect
 		, sdw::Float const & ambientOcclusion

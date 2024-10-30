@@ -19,18 +19,18 @@ namespace castor3d::shader
 	//*********************************************************************************************
 
 	PhongLightingModel::PhongLightingModel( LightingModelID lightingModelId
-		, sdw::ShaderWriter & m_writer
+		, sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
-		, BRDFHelpers & brdf
+		, BRDFHelpers & brdfHelpers
 		, Shadow & shadowModel
 		, Lights & lights
 		, bool enableVolumetric )
 		: LightingModel{ lightingModelId
-			, m_writer
+			, writer
 			, materials
 			, utils
-			, brdf
+			, brdfHelpers
 			, shadowModel
 			, lights
 			, false
@@ -50,7 +50,7 @@ namespace castor3d::shader
 		, sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
-		, BRDFHelpers & brdf
+		, BRDFHelpers & brdfHelpers
 		, Shadow & shadowModel
 		, Lights & lights
 		, bool enableVolumetric )
@@ -59,7 +59,7 @@ namespace castor3d::shader
 			, writer
 			, materials
 			, utils
-			, brdf
+			, brdfHelpers
 			, shadowModel
 			, lights
 			, enableVolumetric );
@@ -127,7 +127,7 @@ namespace castor3d::shader
 		FI;
 	}
 
-	sdw::Vec3 PhongLightingModel::doGetDiffuseBrdf( BlendComponents const & components
+	sdw::Vec3 PhongLightingModel::doGetDiffuseResult( BlendComponents const & components
 		, DirectLighting const & lighting
 		, IndirectLighting const & indirect
 		, sdw::Float const & ambientOcclusion
@@ -137,7 +137,7 @@ namespace castor3d::shader
 			+ lighting.ambient() * indirect.ambient() * ambientOcclusion );
 	}
 
-	sdw::Vec3 PhongLightingModel::doGetSpecularBrdf( BlendComponents const & components
+	sdw::Vec3 PhongLightingModel::doGetSpecularResult( BlendComponents const & components
 		, DirectLighting const & lighting
 		, IndirectLighting const & indirect
 		, sdw::Float const & ambientOcclusion
