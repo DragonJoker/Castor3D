@@ -21,25 +21,6 @@ namespace castor3d::shader
 	{
 	}
 
-	sdw::RetVec2 BRDFHelpers::hammersley( sdw::UInt const & pi
-		, sdw::UInt const & pn )
-	{
-		if ( !m_hammersley )
-		{
-			m_hammersley = m_writer.implementFunction< sdw::Vec2 >( "c3d_hammersley"
-				, [this]( sdw::UInt const & i
-					, sdw::UInt const & n )
-				{
-					m_writer.returnStmt( vec2( m_writer.cast< sdw::Float >( i ) / m_writer.cast< sdw::Float >( n )
-						, radicalInverse( i ) ) );
-				}
-				, sdw::InUInt{ m_writer, "i" }
-				, sdw::InUInt{ m_writer, "n" } );
-		}
-
-		return m_hammersley( pi, pn );
-	}
-
 	sdw::RetFloat BRDFHelpers::visibilitySmithGGXCorrelated( sdw::Float const & pNdotV
 		, sdw::Float const & pNdotL
 		, sdw::Float const & proughness )
@@ -65,6 +46,32 @@ namespace castor3d::shader
 		}
 
 		return m_visibilitySmithGGXCorrelated( pNdotV, pNdotL, proughness );
+	}
+
+	sdw::RetFloat BRDFHelpers::visibilityBeckmann( sdw::Float const & pNdotL
+		, sdw::Float const & pNdotV
+		, sdw::Float const & pNdotH
+		, sdw::Float const & pVdotH )
+	{
+		if ( !m_visibilityBeckmann )
+		{
+			m_visibilityBeckmann = m_writer.implementFunction< sdw::Float >( "c3d_visibilityBeckmann"
+				, [this]( sdw::Float const & NdotL
+					, sdw::Float const & NdotV
+					, sdw::Float const & NdotH
+					, sdw::Float const & VdotH )
+				{
+					auto x = m_writer.declLocale( "x"
+						, 2.0_f * NdotH * VdotH );
+					m_writer.returnStmt( min( 1.0_f, min( x * NdotV, x * NdotL ) ) );
+				}
+				, sdw::InFloat{ m_writer, "NdotL" }
+				, sdw::InFloat{ m_writer, "NdotV" }
+				, sdw::InFloat{ m_writer, "NdotH" }
+				, sdw::InFloat{ m_writer, "VdotH" } );
+		}
+
+		return m_visibilityBeckmann( pNdotL, pNdotV, pNdotH, pVdotH );
 	}
 
 	sdw::RetFloat BRDFHelpers::visibilityAshikhmin( sdw::Float const & pNdotL
@@ -111,6 +118,30 @@ namespace castor3d::shader
 		}
 
 		return m_visibilitySheen( pNdotV, pNdotL, proughness );
+	}
+
+	sdw::RetFloat BRDFHelpers::distributionBeckmann( sdw::Float const & pNdotH
+		, sdw::Float const & palpha )
+	{
+		if ( !m_distributionBeckmann )
+		{
+			m_distributionBeckmann = m_writer.implementFunction< sdw::Float >( "c3d_distributionBeckmann"
+				, [this]( sdw::Float const & NdotH
+					, sdw::Float const & alpha )
+				{
+					auto cos2 = m_writer.declLocale( "cos2"
+						, NdotH * NdotH );
+					auto tan2 = m_writer.declLocale( "tan2Alpha"
+						, ( cos2 - 1.0_f ) / cos2 );
+					auto denom = m_writer.declLocale( "denom"
+						, castor::Pi< float > * alpha * cos2 * cos2 );
+					m_writer.returnStmt( exp( tan2 / alpha ) / denom );
+				}
+				, sdw::InFloat{ m_writer, "NdotH" }
+				, sdw::InFloat{ m_writer, "alpha" } );
+		}
+
+		return m_distributionBeckmann( pNdotH, palpha );
 	}
 
 	sdw::RetFloat BRDFHelpers::distributionGGX( sdw::Float const & pNdotH
@@ -238,7 +269,7 @@ namespace castor3d::shader
 		return m_importanceSampleCharlie( pxi, proughness );
 	}
 
-	sdw::Vec4 BRDFHelpers::getImportanceSample( MicrofacetDistributionSample const & pis
+	sdw::RetVec4 BRDFHelpers::getImportanceSample( MicrofacetDistributionSample const & pis
 		, sdw::Vec3 const & pn )
 	{
 		if ( !m_getImportanceSample )
@@ -275,6 +306,25 @@ namespace castor3d::shader
 		}
 
 		return m_getImportanceSample( pis, pn );
+	}
+
+	sdw::RetVec2 BRDFHelpers::hammersley( sdw::UInt const & pi
+		, sdw::UInt const & pn )
+	{
+		if ( !m_hammersley )
+		{
+			m_hammersley = m_writer.implementFunction< sdw::Vec2 >( "c3d_hammersley"
+				, [this]( sdw::UInt const & i
+					, sdw::UInt const & n )
+				{
+					m_writer.returnStmt( vec2( m_writer.cast< sdw::Float >( i ) / m_writer.cast< sdw::Float >( n )
+						, radicalInverse( i ) ) );
+				}
+				, sdw::InUInt{ m_writer, "i" }
+				, sdw::InUInt{ m_writer, "n" } );
+		}
+
+		return m_hammersley( pi, pn );
 	}
 
 	sdw::RetFloat BRDFHelpers::radicalInverse( sdw::UInt const & pinBits )

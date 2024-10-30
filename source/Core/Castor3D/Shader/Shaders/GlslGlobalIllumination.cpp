@@ -1,7 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
 
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
-#include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
+#include "Castor3D/Shader/Shaders/GlslDiffuseBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
@@ -20,19 +20,22 @@ namespace castor3d
 	namespace shader
 	{
 		GlobalIllumination::GlobalIllumination( sdw::ShaderWriter & writer
+			, DiffuseBRDF * diffuseBrdf
 			, Utils & utils )
 			: m_writer{ writer }
+			, m_diffuseBrdf{ diffuseBrdf }
 			, m_utils{ utils }
 		{
 		}
 
 		GlobalIllumination::GlobalIllumination( sdw::ShaderWriter & writer
+			, DiffuseBRDF * diffuseBrdf
 			, Utils & utils
 			, uint32_t & bindingIndex
 			, uint32_t setIndex
 			, SceneFlags sceneFlags
 			, IndirectLightingData const & indirectLighting )
-			: GlobalIllumination{ writer, utils }
+			: GlobalIllumination{ writer, diffuseBrdf, utils }
 		{
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
@@ -79,7 +82,6 @@ namespace castor3d
 
 		void GlobalIllumination::computeCombinedDifSpec( SceneFlags sceneFlags
 			, bool hasDiffuseGI
-			, CookTorranceBRDF & cookTorrance
 			, LightSurface lightSurface
 			, sdw::Float roughness
 			, sdw::CombinedImage2DRgba32 brdfMap
@@ -103,10 +105,14 @@ namespace castor3d
 			computeAmbient( sceneFlags
 				, indirectLighting
 				, debugOutput );
-			indirectLighting.diffuseColour() = ( hasDiffuseGI
-				? cookTorrance.computeDiffuse( normalize( indirectLighting.diffuseColour() )
+			indirectLighting.diffuseColour() = ( ( hasDiffuseGI && m_diffuseBrdf )
+				? m_diffuseBrdf->compute( normalize( indirectLighting.diffuseColour() )
 					, length( indirectLighting.diffuseColour() )
-					, lightSurface.difF().value() )
+					, 1.0_f//lightSurface.NdotL().value()
+					, 1.0_f//lightSurface.NdotV().value()
+					, 1.0_f//lightSurface.LdotV().value()
+					, lightSurface.difF().value()
+					, roughness )
 				: vec3( 0.0_f ) );
 			debugOutput.registerOutput( cuT( "Indirect" ), cuT( "Diffuse" ), indirectLighting.diffuseColour() );
 		}

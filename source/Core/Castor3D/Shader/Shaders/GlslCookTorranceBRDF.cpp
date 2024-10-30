@@ -1,30 +1,17 @@
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
-#include "Castor3D/Shader/Shaders/GlslLight.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
-#include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
-#include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-
-#include <CastorUtils/Math/Angle.hpp>
-
-#include <ShaderWriter/Source.hpp>
 
 namespace castor3d::shader
 {
-	//*********************************************************************************************
-
 	CookTorranceBRDF::CookTorranceBRDF( sdw::ShaderWriter & writer
 		, BRDFHelpers & brdf )
-		: m_writer{ writer }
+		: SpecularBRDF{ writer }
 		, m_brdf{ brdf }
 	{
 	}
 
-	sdw::RetVec3 CookTorranceBRDF::computeSpecular( sdw::Vec3 const & pradiance
+	sdw::RetVec3 CookTorranceBRDF::compute( sdw::Vec3 const & pradiance
 		, sdw::Float const & pintensity
 		, sdw::Float const & pNdotL
 		, sdw::Float const & pNdotH
@@ -32,9 +19,9 @@ namespace castor3d::shader
 		, sdw::Vec3 const & pF
 		, sdw::Float const & proughness )
 	{
-		if ( !m_computeCookTorranceSpecular )
+		if ( !m_compute )
 		{
-			m_computeCookTorranceSpecular = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeCookTorranceSpecular"
+			m_compute = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeCookTorrance"
 				, [this]( sdw::Vec3 const & radiance
 					, sdw::Float const & intensity
 					, sdw::Float const & NdotL
@@ -72,7 +59,7 @@ namespace castor3d::shader
 				, sdw::InFloat{ m_writer, "roughness" } );
 		}
 
-		return m_computeCookTorranceSpecular( pradiance
+		return m_compute( pradiance
 			, pintensity
 			, pNdotL
 			, pNdotH
@@ -80,33 +67,4 @@ namespace castor3d::shader
 			, pF
 			, proughness );
 	}
-
-	sdw::RetVec3 CookTorranceBRDF::computeDiffuse( sdw::Vec3 const & pradiance
-		, sdw::Float const & pintensity
-		, sdw::Vec3 const & pF )
-	{
-		if ( !m_computeCookTorranceDiffuse )
-		{
-			m_computeCookTorranceDiffuse = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeCookTorranceDiffuse"
-				, [this]( sdw::Vec3 radiance
-					, sdw::Float const & intensity
-					, sdw::Vec3 const & F )
-				{
-					// Lambertian BRDF
-					auto kD = m_writer.declLocale( "kD"
-						, vec3( 1.0_f ) - F );
-					radiance = max( radiance * intensity * kD, vec3( 0.0_f ) );
-					m_writer.returnStmt( ( radiance / sdw::Float{ castor::Pi< float > } ) );
-				}
-				, sdw::InVec3( m_writer, "radiance" )
-				, sdw::InFloat( m_writer, "intensity" )
-				, sdw::InVec3{ m_writer, "F" } );
-		}
-
-		return m_computeCookTorranceDiffuse( pradiance
-			, pintensity
-			, pF );
-	}
-
-	//***********************************************************************************************
 }

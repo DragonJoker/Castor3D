@@ -1,17 +1,11 @@
 #include "Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp"
 
-#include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
+#include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslLambertianBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslOrenNayarBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
-#include "Castor3D/Shader/Shaders/GlslReflection.hpp"
-#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
-#include "Castor3D/Shader/Shaders/GlslSurface.hpp"
-#include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
-#include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-
-#include <ShaderWriter/Source.hpp>
 
 namespace castor3d::shader
 {
@@ -19,7 +13,7 @@ namespace castor3d::shader
 		, sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
-		, BRDFHelpers & brdf
+		, BRDFHelpers & brdfHelpers
 		, Shadow & shadowModel
 		, Lights & lights
 		, bool enableVolumetric )
@@ -27,7 +21,7 @@ namespace castor3d::shader
 			, writer
 			, materials
 			, utils
-			, brdf
+			, brdfHelpers
 			, shadowModel
 			, lights
 			, true
@@ -35,8 +29,9 @@ namespace castor3d::shader
 			, true
 			, enableVolumetric
 			, cuT( "c3d_pbr_" ) }
-		, m_cookTorrance{ writer, brdf }
-		, m_sheen{ writer, brdf }
+		, m_specular{ castor::makeUniqueDerived< SpecularBRDF, CookTorranceBRDF >( writer, brdfHelpers ) }
+		, m_diffuse{ castor::makeUniqueDerived< DiffuseBRDF, EnergyConservativeOrenNayarBRDF >( writer ) }
+		, m_sheen{ writer, brdfHelpers }
 	{
 	}
 
@@ -49,7 +44,7 @@ namespace castor3d::shader
 		, sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
-		, BRDFHelpers & brdf
+		, BRDFHelpers & brdfHelpers
 		, Shadow & shadowModel
 		, Lights & lights
 		, bool enableVolumetric )
@@ -58,7 +53,7 @@ namespace castor3d::shader
 			, writer
 			, materials
 			, utils
-			, brdf
+			, brdfHelpers
 			, shadowModel
 			, lights
 			, enableVolumetric );
@@ -96,9 +91,13 @@ namespace castor3d::shader
 		, sdw::Vec3 output )
 	{
 		auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
-			, m_cookTorrance.computeDiffuse( radiance
+			, m_diffuse->compute( radiance
 				, intensity
-				, lightSurface.difF().value() ) );
+				, doGetNdotL( lightSurface, components ).value()
+				, lightSurface.NdotV().value()
+				, lightSurface.LdotV().value()
+				, lightSurface.difF().value()
+				, components.roughness ) );
 		output = doGetNdotL( lightSurface, components ).value() * rawDiffuse;
 		return rawDiffuse;
 	}
@@ -110,7 +109,7 @@ namespace castor3d::shader
 		, sdw::Float const & isLit
 		, sdw::Vec3 output )
 	{
-		output = m_cookTorrance.computeSpecular( radiance
+		output = m_specular->compute( radiance
 			, intensity
 			, doGetNdotL( lightSurface, components ).value()
 			, doGetNdotH( lightSurface, components ).value()
@@ -130,7 +129,7 @@ namespace castor3d::shader
 		IF( m_writer, components.clearcoatFactor != 0.0_f )
 		{
 			lightSurface.updateN( derivVec3( components.clearcoatNormal ) );
-			output = m_cookTorrance.computeSpecular( radiance
+			output = m_specular->compute( radiance
 				, intensity
 				, doGetNdotL( lightSurface, components ).value()
 				, doGetNdotH( lightSurface, components ).value()

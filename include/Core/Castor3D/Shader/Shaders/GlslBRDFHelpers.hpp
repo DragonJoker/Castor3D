@@ -38,29 +38,41 @@ namespace castor3d::shader
 	public:
 		C3D_API explicit BRDFHelpers( sdw::ShaderWriter & writer );
 
-		C3D_API sdw::RetVec2 hammersley( sdw::UInt const & i
-			, sdw::UInt const & n );
+		// Visibility (Geometry) functions
 		C3D_API sdw::RetFloat visibilitySmithGGXCorrelated( sdw::Float const & NdotV
 			, sdw::Float const & NdotL
 			, sdw::Float const & roughness );
+		C3D_API sdw::RetFloat visibilityBeckmann( sdw::Float const & NdotL
+			, sdw::Float const & NdotV
+			, sdw::Float const & NdotH
+			, sdw::Float const & VdotH );
 		C3D_API sdw::RetFloat visibilityAshikhmin( sdw::Float const & NdotL
 			, sdw::Float const & NdotV );
 		C3D_API sdw::RetFloat visibilitySheen( sdw::Float const & NdotV
 			, sdw::Float const & NdotL
 			, sdw::Float const & roughness );
 
+		// Distribution functions
+		C3D_API sdw::RetFloat distributionBlinn( sdw::Float const & NdotH
+			, sdw::Float const & alpha );
+		C3D_API sdw::RetFloat distributionBeckmann( sdw::Float const & NdotH
+			, sdw::Float const & alpha );
 		C3D_API sdw::RetFloat distributionGGX( sdw::Float const & NdotH
 			, sdw::Float const & alpha );
 		C3D_API sdw::RetFloat distributionCharlie( sdw::Float const & NdotH
 			, sdw::Float const & alpha );
 
+		// Importance sampling
 		C3D_API RetMicrofacetDistributionSample importanceSampleGGX( sdw::Vec2 const & xi
 			, sdw::Float const & roughness );
 		C3D_API RetMicrofacetDistributionSample importanceSampleCharlie( sdw::Vec2 const & xi
 			, sdw::Float const & roughness );
-		C3D_API sdw::Vec4 getImportanceSample( MicrofacetDistributionSample const & is
+		C3D_API sdw::RetVec4 getImportanceSample( MicrofacetDistributionSample const & is
 			, sdw::Vec3 const & n );
 
+		// Other functions
+		C3D_API sdw::RetVec2 hammersley( sdw::UInt const & i
+			, sdw::UInt const & n );
 	private:
 		sdw::RetFloat radicalInverse( sdw::UInt const & inBits );
 		sdw::RetFloat lambdaSheenNumericHelper( sdw::Float const & cosTheta
@@ -70,21 +82,16 @@ namespace castor3d::shader
 
 	private:
 		sdw::ShaderWriter & m_writer;
-		sdw::Function< sdw::Float
-			, sdw::InUInt > m_radicalInverse;
-		sdw::Function< sdw::Float
-			, sdw::InFloat
-			, sdw::InFloat > m_lambdaSheenNumericHelper;
-		sdw::Function< sdw::Float
-			, sdw::InFloat
-			, sdw::InFloat > m_lambdaSheen;
-		sdw::Function< sdw::Vec2
-			, sdw::InUInt
-			, sdw::InUInt > m_hammersley;
+
 		sdw::Function< sdw::Float
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InFloat > m_visibilitySmithGGXCorrelated;
+		sdw::Function< sdw::Float
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat > m_visibilityBeckmann;
 		sdw::Function< sdw::Float
 			, sdw::InFloat
 			, sdw::InFloat > m_visibilityAshikhmin;
@@ -92,12 +99,20 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InFloat > m_visibilitySheen;
+
+		sdw::Function< sdw::Float
+			, sdw::InFloat
+			, sdw::InFloat > m_distributionBlinn;
+		sdw::Function< sdw::Float
+			, sdw::InFloat
+			, sdw::InFloat > m_distributionBeckmann;
 		sdw::Function< sdw::Float
 			, sdw::InFloat
 			, sdw::InFloat > m_distributionGGX;
 		sdw::Function< sdw::Float
 			, sdw::InFloat
 			, sdw::InFloat > m_distributionCharlie;
+
 		sdw::Function< MicrofacetDistributionSample
 			, sdw::InVec2
 			, sdw::InFloat > m_importanceSampleGGX;
@@ -107,6 +122,18 @@ namespace castor3d::shader
 		sdw::Function< sdw::Vec4
 			, InMicrofacetDistributionSample
 			, sdw::InVec3 > m_getImportanceSample;
+
+		sdw::Function< sdw::Vec2
+			, sdw::InUInt
+			, sdw::InUInt > m_hammersley;
+		sdw::Function< sdw::Float
+			, sdw::InUInt > m_radicalInverse;
+		sdw::Function< sdw::Float
+			, sdw::InFloat
+			, sdw::InFloat > m_lambdaSheenNumericHelper;
+		sdw::Function< sdw::Float
+			, sdw::InFloat
+			, sdw::InFloat > m_lambdaSheen;
 	};
 }
 
