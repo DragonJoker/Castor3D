@@ -21,7 +21,7 @@ namespace castor3d::shader
 			, sdw::ShaderWriter & writer
 			, Materials const & materials
 			, Utils & utils
-			, BRDFHelpers & brdf
+			, BRDFHelpers & brdfHelpers
 			, Shadow & shadowModel
 			, Lights & lights
 			, bool enableVolumetric );
@@ -30,7 +30,7 @@ namespace castor3d::shader
 			, sdw::ShaderWriter & writer
 			, Materials const & materials
 			, Utils & utils
-			, BRDFHelpers & brdf
+			, BRDFHelpers & brdfHelpers
 			, Shadow & shadowModel
 			, Lights & lights
 			, bool enableVolumetric );
@@ -77,7 +77,8 @@ namespace castor3d::shader
 			, sdw::Vec3 const & reflectedSpecular )override;
 
 	public:
-		CookTorranceBRDF m_cookTorrance;
+		SpecularBRDFUPtr m_specular;
+		DiffuseBRDFUPtr m_diffuse;
 		SheenBRDF m_sheen;
 	};
 }

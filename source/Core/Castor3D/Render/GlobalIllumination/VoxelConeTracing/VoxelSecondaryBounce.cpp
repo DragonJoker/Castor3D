@@ -137,7 +137,7 @@ namespace castor3d
 				, 0u ) );
 
 			shader::Utils utils{ writer };
-			shader::GlobalIllumination indirect{ writer, utils };
+			shader::GlobalIllumination indirect{ writer, nullptr, utils };
 
 			writer.implementMainT< sdw::VoidT >( 64u, [&]( sdw::ComputeIn in )
 				{

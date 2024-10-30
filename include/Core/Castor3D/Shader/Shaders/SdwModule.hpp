@@ -191,6 +191,7 @@ namespace castor3d::shader
 	class ClusteredLights;
 	class DebugOutput;
 	class DebugOutputCategory;
+	class DiffuseBRDF;
 	class Fog;
 	class Lights;
 	class LightsBuffer;
@@ -200,6 +201,7 @@ namespace castor3d::shader
 	class ReflectionModel;
 	class Shadow;
 	class ShadowsBuffer;
+	class SpecularBRDF;
 	class SssProfiles;
 	class SssTransmittance;
 	class SubmeshShaders;
@@ -216,11 +218,13 @@ namespace castor3d::shader
 	template< typename DataT >
 	class BufferT;
 
+	CU_DeclareSmartPtr( castor3d::shader, DiffuseBRDF, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, LightsBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, LightingModel, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, Material, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, Shadow, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, ShadowsBuffer, C3D_API );
+	CU_DeclareSmartPtr( castor3d::shader, SpecularBRDF, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, SssTransmittance, C3D_API );
 
 	using ReflectionModelPtr = castor::RawUniquePtr< ReflectionModel >;

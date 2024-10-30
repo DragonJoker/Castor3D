@@ -18,8 +18,10 @@ namespace castor3d::shader
 	{
 	public:
 		C3D_API explicit GlobalIllumination( sdw::ShaderWriter & writer
+			, DiffuseBRDF * diffuseBrdf
 			, Utils & utils );
 		C3D_API explicit GlobalIllumination( sdw::ShaderWriter & writer
+			, DiffuseBRDF * diffuseBrdf
 			, Utils & utils
 			, uint32_t & bindingIndex
 			, uint32_t setIndex
@@ -28,7 +30,6 @@ namespace castor3d::shader
 
 		C3D_API void computeCombinedDifSpec( SceneFlags sceneFlags
 			, bool hasDiffuseGI
-			, CookTorranceBRDF & cookTorrance
 			, LightSurface lightSurface
 			, sdw::Float roughness
 			, sdw::CombinedImage2DRgba32 brdfMap
@@ -103,6 +104,7 @@ namespace castor3d::shader
 
 	private:
 		sdw::ShaderWriter & m_writer;
+		DiffuseBRDF * m_diffuseBrdf;
 		Utils & m_utils;
 		sdw::Function< sdw::Vec4
 			, sdw::InVec3 > m_evalSH;
